@@ -1,0 +1,104 @@
+server:
+  port: 8080
+#Local
+#tenants:
+#  datasources:
+#    "db-skynet":
+#      jdbcUrl: jdbc:mysql://127.0.0.1:3306/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      username: root
+#      password: "copsis123"
+#      databaseName: quattro00031
+#    "sio4rd":
+#      jdbcUrl: jdbc:mysql://127.0.0.1:3307/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
+#      driverClassName: com.mysql.cj.jdbc.Driver
+#      username: root
+#      password: "copsis123"
+#      databaseName: quattro00031
+#QA y Produccion
+tenants:
+  datasources:
+    "quattrocrm-db1-v1":
+      jdbcUrl: jdbc:mysql://10.65.240.40:3306/quattro00001?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E#"
+      databaseName: quattro00001
+    "quattrocrm-db2-v1":
+      jdbcUrl: jdbc:mysql://10.65.240.37:3306/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E#"
+      databaseName: quattro00031
+    "quattrocrm-db3":
+      jdbcUrl: jdbc:mysql://10.65.240.3:3306/quattro00081?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E#"
+      databaseName: quattro00081
+    "quattrocrm-db4":
+      jdbcUrl: jdbc:mysql://10.65.240.24:3306/quattro00011?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E#"
+      databaseName: quattro00011
+    "quattrocrm-db5":
+      jdbcUrl: jdbc:mysql://10.65.240.56:3306/quattro00161?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E$"
+      databaseName: quattro00161
+    "quattrocrm-db6":
+      jdbcUrl: jdbc:mysql://10.65.240.58:3306/quattro00241?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E$"
+      databaseName: quattro00241
+    "quattrocrm-db7":
+      jdbcUrl: jdbc:mysql://10.65.240.252:3306/quattro00321?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E$"
+      databaseName: quattro00321      
+    "db-skynet":
+      jdbcUrl: jdbc:mysql://10.2.112.234:3306/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "copsis123"
+      databaseName: quattro00011
+    "sio4rd":
+      jdbcUrl: jdbc:mysql://10.2.112.3:3306/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "copsis123"
+      databaseName: quattro00031    
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - refresh
+        - bus-refresh
+        - beans
+        - env
+spring:
+  cloud:
+    gcp:
+      sql:
+        database-name: quattro00011
+        instance-connection-name: sio4-168120:us-central1:db-skynet
+  application:
+    name: multi-tenant-app
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    enabled: false
+  eureka:
+    client:
+      registerWithEureka: true
+      fetchRegistry: true
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
