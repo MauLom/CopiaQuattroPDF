@@ -31,15 +31,6 @@ public class LectorPDFController  extends HttpServlet {
 
 		try (PrintWriter out = response.getWriter()) {
 			try {
-				// Obtener IP
-				//IipAddress iIpAddress = new IpAddress(request);
-
-				// Validar acceso al API
-				//IaccessAPI iAccessAPI = new AccessAPI();
-
-				//if (!iAccessAPI.allowAccess(iIpAddress.getIpAddress())) {
-					//out.println("{\"error\": \"1000: Access denied\"}");
-				//} else {
 					// Get post/get parameters
 					BufferedReader reader = request.getReader();
 					String jsonObject = reader.readLine();
@@ -47,12 +38,8 @@ public class LectorPDFController  extends HttpServlet {
 					while ((line = reader.readLine()) != null) {
 						jsonObject += line;
 					}
-				
 					JSONObject jsonObj = new JSONObject(jsonObject);
-
 					String url = jsonObj.getString("url");
-					 
-
 					try {
 						IdentificaPolizaService textPdf = new IdentificaPolizaService();
 					     JSONObject obj = textPdf.QueCIA(url);
@@ -60,7 +47,7 @@ public class LectorPDFController  extends HttpServlet {
 					} catch (Exception ex) {
 						out.println("{\"error\": \"1002: " + ex.getMessage() + "\"}");
 					}
-				//}
+
 			} catch (Exception ex) {
 				out.println("{\"error\": \"1003: " + ex.getMessage() + "\"}");
 			}

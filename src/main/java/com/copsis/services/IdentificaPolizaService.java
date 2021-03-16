@@ -31,12 +31,10 @@ public class IdentificaPolizaService {
              String contenido = pdfStripper.getText(pdDoc);
              
              boolean encontro = false;
-             System.out.println("entro");
+      
              // ENTRADA PARA QUALITAS
              if (encontro == false) {
-              
                  if (contenido.contains("qualitas")) {
-                	
                 	 qualitasModel datosQualitas = new qualitasModel(pdfStripper, pdDoc, contenido);
                      jsonObject = datosQualitas.procesa();
                      encontro = true;

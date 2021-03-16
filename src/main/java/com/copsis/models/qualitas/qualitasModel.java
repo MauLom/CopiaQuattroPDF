@@ -24,18 +24,14 @@ public class qualitasModel {
 	    public JSONObject procesa() {
 	        JSONObject jsonObject = new JSONObject();
 	        try {
-
 	            if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")) {
-	            	 
 	                pagIni = identifica.pagFinRango(stripper, doc, "OFICINA DE");
 	                pagFin = identifica.pagFinRango(stripper, doc, "IMPORTE TOTAL");
 	               
 	                if (pagIni < pagFin) {
-	       
 	                   qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(identifica.caratula(pagIni, pagFin, stripper, doc));
 	                    jsonObject = datosQualitasAutos.procesar();
 	                } else {
-	               	 
 	                	qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(identifica.caratula(1, 2, stripper, doc));
 	                    jsonObject = datosQualitasAutos.procesar();
 	                }
