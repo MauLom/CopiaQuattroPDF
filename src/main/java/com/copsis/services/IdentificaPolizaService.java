@@ -8,19 +8,22 @@ import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
+import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.qualitas.qualitasModel;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
 public class IdentificaPolizaService {
 
-	public IdentificaPolizaService() {
-
-	}
 	
-    public JSONObject QueCIA(String pathFile) throws FileNotFoundException, IOException {
+    public JSONObject QueCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
         JSONObject jsonObject = new JSONObject();
         try {
-         	 final URL scalaByExampleUrl = new URL(pathFile);
+         	 final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
              final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
              final PDFTextStripper pdfStripper = new PDFTextStripper();
              COSDocument cosDoc = documentToBeParsed.getDocument();
@@ -46,7 +49,7 @@ public class IdentificaPolizaService {
             pdDoc.close();
             return jsonObject;
 		} catch (Exception ex) {
-			  jsonObject.put("error", "IdentificaPoliza.QueCIA - pathFile=" + pathFile + " - catch:" + ex.getMessage() + " | " + ex.getCause());
+			  jsonObject.put("error", "IdentificaPoliza.QueCIA - pathFile=" + pdfForm.getUrl() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 	            return jsonObject;
 		}
    
