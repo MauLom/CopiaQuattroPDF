@@ -2,8 +2,9 @@ package com.copsis.models.qualitas;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.json.JSONObject;
 
+
+import com.copsis.models.EstructuraJsonModel;
 import com.copsis.services.IdentificaPolizaService;
 
 public class qualitasModel {
@@ -12,7 +13,7 @@ public class qualitasModel {
 	    private PDFTextStripper stripper;
 	    private PDDocument doc;
 	    private String contenido;
-
+	 	 private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	    public qualitasModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 	        this.stripper = pdfStripper;
 	        this.doc = pdDoc;
@@ -21,8 +22,8 @@ public class qualitasModel {
 	    private int pagIni = 0;
 	    private int pagFin = 0;
 
-	    public JSONObject procesa() {
-	        JSONObject jsonObject = new JSONObject();
+	    public EstructuraJsonModel procesa() {
+	   
 	        try {
 	            if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")) {
 	                pagIni = identifica.pagFinRango(stripper, doc, "OFICINA DE");
@@ -30,16 +31,20 @@ public class qualitasModel {
 	               
 	                if (pagIni < pagFin) {
 	                   qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(identifica.caratula(pagIni, pagFin, stripper, doc));
-	                    jsonObject = datosQualitasAutos.procesar();
+	                   modelo = datosQualitasAutos.procesar();
 	                } else {
 	                	qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(identifica.caratula(1, 2, stripper, doc));
-	                    jsonObject = datosQualitasAutos.procesar();
+	                	modelo = datosQualitasAutos.procesar();
 	                }
-	            }
-	            return jsonObject;
+	           
+	        }else {
+            	modelo.setError(qualitasModel.this.getClass().getTypeName() +" | "+ "No se pudo leer");
+            	
+            }
+	            return modelo;
 	        } catch (Exception ex) {
-	            jsonObject.put("error", "DatosQualitas.procesa: " + ex.getMessage());
-	            return jsonObject;
+	        	modelo.setError(qualitasModel.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;
+	           return modelo;
 	        }
 	    }
 

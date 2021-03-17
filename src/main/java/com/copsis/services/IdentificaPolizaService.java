@@ -7,10 +7,10 @@ import java.net.URL;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
+import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.qualitas.qualitasModel;
 
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class IdentificaPolizaService {
 
-	
-    public JSONObject QueCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
-        JSONObject jsonObject = new JSONObject();
+	 private EstructuraJsonModel modelo = new EstructuraJsonModel();
+	 
+    public EstructuraJsonModel QueCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
+
         try {
+
          	 final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
              final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
              final PDFTextStripper pdfStripper = new PDFTextStripper();
@@ -39,7 +41,7 @@ public class IdentificaPolizaService {
              if (encontro == false) {
                  if (contenido.contains("qualitas")) {
                 	 qualitasModel datosQualitas = new qualitasModel(pdfStripper, pdDoc, contenido);
-                     jsonObject = datosQualitas.procesa();
+                	 modelo = datosQualitas.procesa();
                      encontro = true;
                  }
              }
@@ -47,10 +49,11 @@ public class IdentificaPolizaService {
         	
         	
             pdDoc.close();
-            return jsonObject;
+     
+            return modelo;
 		} catch (Exception ex) {
-			  jsonObject.put("error", "IdentificaPoliza.QueCIA - pathFile=" + pdfForm.getUrl() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
-	            return jsonObject;
+			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;
+	       return modelo;
 		}
    
        

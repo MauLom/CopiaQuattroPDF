@@ -1,14 +1,14 @@
 package com.copsis.models.qualitas;
 
 import java.math.BigDecimal;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayList;
 
 import com.copsis.models.DatosToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
+
+import java.util.List;
 
 public class qualitasAutosModel {
 
@@ -26,11 +26,11 @@ public class qualitasAutosModel {
 	    private float restoPrimaTotal = 0, restoDerecho = 0, restoIva = 0, restoRecargo = 0, restoPrimaNeta = 0, restoAjusteUno = 0, restoAjusteDos = 0, restoCargoExtra = 0;
 
 	    
-	    public JSONObject procesar() {
+	    public  EstructuraJsonModel procesar() {
 	        String newcontenido = "";
-	        JSONObject jsonObject = new JSONObject();
-	        JSONArray jsonArrayCob = new JSONArray();
-	        JSONArray jsonArrayRec = new JSONArray();
+	        
+	        
+	        
 	        contenido = fn.fixContenido(contenido);
 	        contenido = contenido
 	                .replace("Hasta  las", "Hasta las")
@@ -49,6 +49,10 @@ public class qualitasAutosModel {
 
 	            //tipo
 	            modelo.setTipo(1);
+	            
+	            //ramo
+	            modelo.setRamo("Autos");
+	            
 
 	            //fecha_emision
 	            inicio = contenido.indexOf("IMPORTE TOTAL");
@@ -642,40 +646,38 @@ public class qualitasAutosModel {
 	                    newcontenido = newcontenido.split("Servicios de Asistencia Vial")[0].trim();
 	                }
 
-	                for (String x : newcontenido.split("\r\n")) {
+	                List<EstructuraCoberturasModel> coberturas = new  ArrayList<>() ;
+	                
+	                for (String x : newcontenido.split("\r\n")) { 
 	                    EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                    switch (x.split("###").length) {
 	                        case 4:
 	                            cobertura.setNombre(x.split("###")[0].trim());
 	                            cobertura.setSa(fn.formatoTexto(x.split("###")[1].trim()));
 	                            cobertura.setDeducible(x.split("###")[2].trim());
-	                            jsonArrayCob.put(new JSONObject(cobertura));
+	                            coberturas.add(cobertura);
 	                            break;
 	                        case 3:
 	                            cobertura.setNombre(x.split("###")[0].trim());
 	                            cobertura.setSa(fn.formatoTexto(x.split("###")[1].trim()));
-	                            jsonArrayCob.put(new JSONObject(cobertura));
+	                            coberturas.add(cobertura);
 	                            break;
 	                    }
+	                    
 	                }
+	               
+	             
+	              modelo.setCoberturas(coberturas);
 	            }
-	            if (jsonArrayCob.length() > 0) {
-	                for (int i = 0; i < jsonArrayCob.length(); i++) {
 
-	                    JSONObject datos = new JSONObject();
-	                    datos = jsonArrayCob.getJSONObject(i);
-	                    if (datos.has("idx")) {
-	                        datos.put("idx", i);
-	                    }
-
-	                }
-	            }
-	            modelo.setCoberturas(jsonArrayCob);
-	            //CALCULO RESTO DE RECIBOS
+	     
+	            List<EstructuraRecibosModel> recibos = new  ArrayList<>() ;
+	            
+	         
+	            EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+	            
 	            switch (modelo.getForma_pago()) {
 	                case 1:
-	                    if (jsonArrayRec.length() == 0) {
-	                        EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 	                        recibo.setRecibo_id("");
 	                        recibo.setSerie("1/1");
 	                        recibo.setVigencia_de(modelo.getVigencia_de());
@@ -691,15 +693,14 @@ public class qualitasAutosModel {
 	                        recibo.setAjuste_uno(new BigDecimal(modelo.getAjuste_uno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setAjuste_dos(new BigDecimal(modelo.getAjuste_dos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setCargo_extra(new BigDecimal(modelo.getCargo_extra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        jsonArrayRec.put(new JSONObject(recibo));
-	                    }
+	                       
+	                        recibos.add(recibo);
+	                    
 	                    break;
 	                case 2:
-	                    if (jsonArrayRec.length() == 1) {
-	                        EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 	                        recibo.setRecibo_id("");
 	                        recibo.setSerie("2/2");
-	                        recibo.setVigencia_de(jsonArrayRec.getJSONObject(0).getString("vigencia_a"));
+	                        recibo.setVigencia_de(modelo.getVigencia_a());
 	                        recibo.setVigencia_a(modelo.getVigencia_a());
 	                        recibo.setVencimiento("");
 	                        recibo.setPrima_neta(new BigDecimal(restoPrimaNeta).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
@@ -710,67 +711,16 @@ public class qualitasAutosModel {
 	                        recibo.setAjuste_uno(new BigDecimal(restoAjusteUno).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setAjuste_dos(new BigDecimal(restoAjusteDos).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setCargo_extra(new BigDecimal(restoCargoExtra).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        jsonArrayRec.put(new JSONObject(recibo));
-	                    }
+	                        recibos.add(recibo);
+	                    
 	                    break;
-	                case 3:
-	                case 4:
-	                    if (jsonArrayRec.length() >= 1) {
-	                        int restoRec = (fn.getTotalRec(modelo.getForma_pago()) - jsonArrayRec.length());
-	                        int totalRec = fn.getTotalRec(modelo.getForma_pago());
-	                        int meses = fn.monthAdd(modelo.getForma_pago());//MESES A AGREGAR POR RECIBO
-	                        for (int i = jsonArrayRec.length(); i <= restoRec; i++) {
-	                            EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-	                            recibo.setRecibo_id("");
-	                            recibo.setSerie(i + 1 + "/" + totalRec);
-	                            recibo.setVigencia_de(jsonArrayRec.getJSONObject(i - 1).getString("vigencia_a"));
-	                            if (jsonArrayRec.getJSONObject(i - 1).getString("vigencia_a").length() == 10) {
-	                                recibo.setVigencia_a(fn.dateAdd(jsonArrayRec.getJSONObject(i - 1).getString("vigencia_a"), meses, 2));
-	                            }
-	                            recibo.setVencimiento("");
-	                            recibo.setPrima_neta(new BigDecimal(restoPrimaNeta / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setPrima_total(new BigDecimal(restoPrimaTotal / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setRecargo(new BigDecimal((restoRecargo / (restoRec))).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setDerecho(new BigDecimal((restoDerecho / (restoRec))).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setIva(new BigDecimal((restoIva / (restoRec))).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setAjuste_uno(new BigDecimal(restoAjusteUno / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setAjuste_dos(new BigDecimal(restoAjusteDos / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setCargo_extra(new BigDecimal(restoCargoExtra / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            jsonArrayRec.put(new JSONObject(recibo));
-	                        }
-	                    }
-	                    break;
-	                case 5:
-	                case 6://QUINCENAL, SEMANAL  NINGUN PDF DE FORMA DE PAGO SE QUEDA PENDIENTE ESTE CASO
-	                    if (jsonArrayRec.length() >= 1) {
-	                        int restoRec = (fn.getTotalRec(modelo.getForma_pago()) - jsonArrayRec.length());
-	                        int totalRec = fn.getTotalRec(modelo.getForma_pago());
-	                        for (int i = jsonArrayRec.length(); i <= restoRec; i++) {
-	                            EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-	                            recibo.setSerie(i + 1 + "/" + totalRec);
-	                            recibo.setRecibo_id("");
-	                            recibo.setVigencia_de(jsonArrayRec.getJSONObject(i - 1).getString("vigencia_a"));
-	                            recibo.setVigencia_a("");
-	                            recibo.setVencimiento("");
-	                            recibo.setPrima_neta(new BigDecimal(restoPrimaNeta / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setPrima_total(new BigDecimal(restoPrimaTotal / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setRecargo(new BigDecimal(restoRecargo / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setDerecho(new BigDecimal((restoDerecho / (restoRec))).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setIva(new BigDecimal(restoIva / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setAjuste_uno(new BigDecimal(restoAjusteUno / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setAjuste_dos(new BigDecimal((restoAjusteDos / (restoRec))).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            recibo.setCargo_extra(new BigDecimal(restoCargoExtra / (restoRec)).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                            jsonArrayRec.put(new JSONObject(recibo));
-	                        }
-	                    }
-	                    break;
+	                
 	            }
-	            modelo.setRecibos(jsonArrayRec);
-	            return jsonObject = new JSONObject(modelo);
+	            modelo.setRecibos(recibos);
+	            return  modelo;
 	        } catch (Exception ex) {
-	            jsonObject = new JSONObject(modelo);
-	            jsonObject.put("error", "DatosQualitasAutos.procesar: " + ex.getMessage() + " | " + ex.getCause());
-	            return jsonObject;
+	        	 modelo.setError(qualitasAutosModel.this.getClass().getTypeName() +" | "+ ex.getMessage() + " | " + ex.getCause());
+	            return modelo;
 	        }
 	    }
 	    
