@@ -407,6 +407,17 @@ public class DataToolsModel {
 	        return textonuevo;
 	    }
 
+	    
+	    public int recorreContenido(String texto, String search) {
+	        int result = 0;
+	        for (int i = 1; i < texto.trim().split("@@@").length; i++) {
+	            if (texto.trim().split("@@@")[i].contains(search)) {
+	                result = i;
+	                break;
+	            }
+	        }
+	        return result;
+	    }
 
 	    public Boolean sexo(String texto) {
 	        Boolean result = false;

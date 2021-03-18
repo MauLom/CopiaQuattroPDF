@@ -649,13 +649,13 @@ public class qualitasAutosModel {
 	                    switch (x.split("###").length) {
 	                        case 4:
 	                            cobertura.setNombre(x.split("###")[0].trim());
-	                            cobertura.setSa(fn.formatoTexto(x.split("###")[1].trim()));
+	                            cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(),' ',""));
 	                            cobertura.setDeducible(x.split("###")[2].trim());
 	                            coberturas.add(cobertura);
 	                            break;
 	                        case 3:
 	                            cobertura.setNombre(x.split("###")[0].trim());
-	                            cobertura.setSa(fn.formatoTexto(x.split("###")[1].trim()));
+	                            cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(),' ',""));
 	                            coberturas.add(cobertura);
 	                            break;
 	                            default:
