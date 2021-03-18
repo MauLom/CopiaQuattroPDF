@@ -41,9 +41,6 @@ public class LectorPDFController   {
 			return new CopsisResponse.Builder().ok(false).status(HttpStatus.BAD_REQUEST).message("No cuenta con los parametros suficientes").build();
 		}
 
-//		if(pdfForm.getUrl() == null) {
-//			return new CopsisResponse.Builder().ok(false).status(HttpStatus.BAD_REQUEST).message("No cuenta con los parametros suficientes").build();
-//		}
 		  return new CopsisResponse.Builder()
 				.ok(true)
 				.status(HttpStatus.OK)

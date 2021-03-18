@@ -508,7 +508,6 @@ public class qualitasAutosModel {
 	                    }
 	                }
 	            }
-
 	            //vigencia_de
 	            inicio = contenido.lastIndexOf("Desde las");
 	            if (inicio > -1) {
@@ -535,7 +534,6 @@ public class qualitasAutosModel {
 	                    }
 	                }
 	            }
-
 	            //cp
 	            inicio = contenido.lastIndexOf("C.P");
 	            index = 3;
@@ -692,10 +690,8 @@ public class qualitasAutosModel {
 	                        recibo.setPrima_total(new BigDecimal(modelo.getPrima_total()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setAjuste_uno(new BigDecimal(modelo.getAjuste_uno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setAjuste_dos(new BigDecimal(modelo.getAjuste_dos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setCargo_extra(new BigDecimal(modelo.getCargo_extra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                       
-	                        recibos.add(recibo);
-	                    
+	                        recibo.setCargo_extra(new BigDecimal(modelo.getCargo_extra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
+	                        recibos.add(recibo);	                    
 	                    break;
 	                case 2:
 	                        recibo.setRecibo_id("");
@@ -711,8 +707,7 @@ public class qualitasAutosModel {
 	                        recibo.setAjuste_uno(new BigDecimal(restoAjusteUno).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setAjuste_dos(new BigDecimal(restoAjusteDos).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setCargo_extra(new BigDecimal(restoCargoExtra).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibos.add(recibo);
-	                    
+	                        recibos.add(recibo);	                    
 	                    break;
 	                
 	            }

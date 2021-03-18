@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class IdentificaPolizaService {
 
-	 private EstructuraJsonModel modelo = new EstructuraJsonModel();
+	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
     public EstructuraJsonModel QueCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
 
