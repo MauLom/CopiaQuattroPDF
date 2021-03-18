@@ -70,7 +70,7 @@ public class EstructuraJsonModel {
     private List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
     private List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
     
-    private String cte_nomina = "";
+    private String cteNomina = "";
     private String contratante = "";
     private String nomina = "";
     private String ramo ="";

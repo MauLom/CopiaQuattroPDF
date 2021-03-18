@@ -7,14 +7,14 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.services.IdentificaPolizaService;
 
-public class qualitasModel {
+public class QualitasModel {
 	
 	   private IdentificaPolizaService identifica = new IdentificaPolizaService();
 	    private PDFTextStripper stripper;
 	    private PDDocument doc;
 	    private String contenido;
 	 	 private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	    public qualitasModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
+	    public QualitasModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 	        this.stripper = pdfStripper;
 	        this.doc = pdDoc;
 	        this.contenido = contenido;
@@ -38,12 +38,12 @@ public class qualitasModel {
 	                }
 	           
 	        }else {
-            	modelo.setError(qualitasModel.this.getClass().getTypeName() +" | "+ "No se pudo leer");
+            	modelo.setError(QualitasModel.this.getClass().getTypeName() +" | "+ "No se pudo leer");
             	
             }
 	            return modelo;
 	        } catch (Exception ex) {
-	        	modelo.setError(qualitasModel.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;
+	        	modelo.setError(QualitasModel.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;
 	           return modelo;
 	        }
 	    }

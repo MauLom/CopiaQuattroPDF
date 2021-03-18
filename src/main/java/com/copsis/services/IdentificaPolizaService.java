@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.qualitas.qualitasModel;
+import com.copsis.models.qualitas.QualitasModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ public class IdentificaPolizaService {
              // ENTRADA PARA QUALITAS
              if (encontro == false) {
                  if (contenido.contains("qualitas")) {
-                	 qualitasModel datosQualitas = new qualitasModel(pdfStripper, pdDoc, contenido);
+                	 QualitasModel datosQualitas = new QualitasModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosQualitas.procesa();
                      encontro = true;
                  }

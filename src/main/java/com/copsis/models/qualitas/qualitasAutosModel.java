@@ -132,7 +132,7 @@ public class qualitasAutosModel {
 	                    }
 	                }
 	                if (newcontenido.contains("RENUEVA")) {
-	                    modelo.setCte_nomina(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
+	                    modelo.setCteNomina(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
 	                }
 	            }
 
@@ -357,6 +357,8 @@ public class qualitasAutosModel {
 	                                modelo.setCveAgente(dato.split("###")[1].trim());
 	                                modelo.setAgente(dato.split("###")[2].trim());
 	                                break;
+	                             default:
+	                            	 break;
 	                        }
 	                    }
 	                }
@@ -656,6 +658,8 @@ public class qualitasAutosModel {
 	                            cobertura.setSa(fn.formatoTexto(x.split("###")[1].trim()));
 	                            coberturas.add(cobertura);
 	                            break;
+	                            default:
+	                            	break;
 	                    }
 	                    
 	                }

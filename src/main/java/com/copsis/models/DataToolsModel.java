@@ -1,7 +1,7 @@
 package com.copsis.models;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -183,14 +183,21 @@ public class DataToolsModel {
 
 			String resul = "";
 			try {
+				;
+				if(fecha.split("/")[1].length() > 2) {
+					fecha = fecha.split("/")[0] +"/" +formatMonth(fecha.split("/")[1])  +"/"+ fecha.split("/")[2];
+				}
+				
 				DateFormat formatter;
 				Date date;
 				formatter = new SimpleDateFormat(format);
 				date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				resul = simpleDateFormat.format(date).toUpperCase();
+	
 				return resul;
 			} catch (Exception ex) {
+			       resul = ex.getMessage();
 				return resul;
 
 			}
@@ -585,6 +592,7 @@ public class DataToolsModel {
 	
 
 	    public String dateAdd(String fecha, int cuantos, int caso) {
+	    	
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	        LocalDate date = LocalDate.parse(fecha);
 	        switch (caso) {
