@@ -22,10 +22,8 @@ public class qualitasAutosModel {
 	    private int donde = 0, index = 0;
 	    private int inicio = 0, inicioaux = 0, fin = 0;
 	    private String texto = "", subtxt = "";
-	    private float restoPrimaTotal = 0, restoDerecho = 0, restoIva = 0, restoRecargo = 0, restoPrimaNeta = 0, restoAjusteUno = 0, restoAjusteDos = 0, restoCargoExtra = 0;
-
-	    
-	    public  EstructuraJsonModel procesar() {
+	
+		public  EstructuraJsonModel procesar() {
 	        String newcontenido = "";
 	        
 	        
@@ -69,7 +67,7 @@ public class qualitasAutosModel {
 	                                x = x.split("A ")[1];
 	                                x = x.replace(" DE ", "/");
 	                                if (x.split("/").length > 2) {
-	                                    modelo.setFecha_emision(fn.formatDate_MonthCadena(x));
+	                                    modelo.setFechaEmision(fn.formatDate(x,"dd-MM-yy"));
 	                                }
 
 	                            }
@@ -84,8 +82,7 @@ public class qualitasAutosModel {
 	            inicio = contenido.lastIndexOf("ENDOSO###INCISO");
 	            fin = contenido.lastIndexOf("INFORMACIÓN DEL ASEGURADO");
 
-	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = "";
+	            if (inicio > 0 &&  fin > 0 &&  inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                  
@@ -503,7 +500,7 @@ public class qualitasAutosModel {
 	                if (newcontenido.contains("Plazo")) {
 	                    newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
 	                    if (newcontenido.length() == 11) {
-	                        modelo.setVigencia_a(fn.formatDate_MonthCadena(newcontenido));
+	                        modelo.setVigenciaA(fn.formatDate(newcontenido,"dd-MM-yy"));
 	                    }
 	                }
 	            }
@@ -515,7 +512,7 @@ public class qualitasAutosModel {
 	                if (newcontenido.contains("Servicio")) {
 	                    newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
 	                    if (newcontenido.split("###").length == 2) {
-	                        newcontenido = fn.formatDate_MonthCadena(newcontenido.split("###")[0].trim());
+	                        newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(),  "dd-MM-yy");
 	                        if (newcontenido.length() == 10) {
 	                            modelo.setVigenciaDe(newcontenido);
 	                        }
@@ -523,12 +520,12 @@ public class qualitasAutosModel {
 	                } else {
 	                    if (newcontenido.contains("Hasta las")) {
 	                        newcontenido = newcontenido.split("Hasta las")[0].split("del")[1].replace("###", "").trim();
-	                        modelo.setVigencia_de(fn.formatDate_MonthCadena(newcontenido));
+	                        modelo.setVigenciaDe(fn.formatDate(newcontenido, "dd-MM-yy"));
 	                        if (modelo.getVigenciaA().length() > 0) {
 	                        } else {
-	                            newcontenido = "";
+	                            
 	                            newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9)).replace("del:", "del").replace("Servic  i o  :", "Servicio:");
-	                            modelo.setVigencia_a(fn.formatDate_MonthCadena(newcontenido.split("\r\n")[0].split("Hasta las")[1].split("del")[1].replace("###", "").trim()));
+	                            modelo.setVigenciaA(fn.formatDate(newcontenido.split("\r\n")[0].split("Hasta las")[1].split("del")[1].replace("###", "").trim(),"dd-MM-yy"));
 	                        }
 	                    }
 	                }
@@ -599,7 +596,7 @@ public class qualitasAutosModel {
 	            inicio = contenido.indexOf("Serie:");
 	            fin = contenido.indexOf("Motor:");
 	       
-	            if (inicio > 0 & fin > 0 & inicio < fin) {
+	            if (inicio > 0 &&  fin > 0 &&  inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).split("Serie:")[1].replace("###", "").trim();
 	                modelo.setSerie(newcontenido);
 	              
@@ -682,32 +679,23 @@ public class qualitasAutosModel {
 	                        if (recibo.getVigencia_de().length() > 0) {
 	                            recibo.setVencimiento(fn.dateAdd(recibo.getVigencia_de(), 30, 1));
 	                        }
-	                        recibo.setPrima_neta((BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setDerecho(new BigDecimal(modelo.getDerecho()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setRecargo(new BigDecimal(modelo.getRecargo()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setIva(new BigDecimal(modelo.getIva()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setPrima_total((BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_uno((BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_dos((BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setPrima_neta(BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setDerecho(BigDecimal.valueOf(modelo.getDerecho()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setRecargo(BigDecimal.valueOf(modelo.getRecargo()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setIva(BigDecimal.valueOf(modelo.getIva()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setPrima_total(BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjuste_uno(BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjuste_dos(BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setCargo_extra(BigDecimal.valueOf(modelo.getCargoExtra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
 	                        recibos.add(recibo);	                    
 	                    break;
 	                case 2:
-	                        recibo.setRecibo_id("");
-	                        recibo.setSerie("2/2");
-	                        recibo.setVigencia_de(modelo.getVigenciaA());
-	                        recibo.setVigencia_a(modelo.getVigenciaA());
-	                        recibo.setVencimiento("");
-	                        recibo.setPrima_neta(new BigDecimal(restoPrimaNeta).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setPrima_total(new BigDecimal(restoPrimaTotal).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setRecargo(new BigDecimal(restoRecargo).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setDerecho(new BigDecimal(restoDerecho).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setIva(new BigDecimal(restoIva).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_uno(new BigDecimal(restoAjusteUno).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_dos(new BigDecimal(restoAjusteDos).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setCargo_extra(new BigDecimal(restoCargoExtra).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibos.add(recibo);	                    
-	                    break;
+	                	break;
+	                	
+					case 3:case 4:
+						break;	            
+	                    default:
+	                    	break;
 	                
 	            }
 	            modelo.setRecibos(recibos);

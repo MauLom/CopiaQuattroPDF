@@ -1,6 +1,6 @@
 package com.copsis.services;
 
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -21,7 +21,7 @@ public class IdentificaPolizaService {
 
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
-    public EstructuraJsonModel queCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
+    public EstructuraJsonModel queCIA( PdfForm pdfForm) throws  IOException {
 
         try {
 
@@ -45,7 +45,11 @@ public class IdentificaPolizaService {
                      encontro = true;
                  }
              }
-             
+
+             if (encontro == false) {
+                 // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					
+            		modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +"No se logró identificar el PDF.");;
+             }
         	
         	
             pdDoc.close();

@@ -6,13 +6,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 
 
 public class DataToolsModel {
-	
+
+
 	  public boolean isNumeric(String value) {// validacion de si es numero
 	        try {
 	            Double.parseDouble(value);
@@ -36,7 +36,7 @@ public class DataToolsModel {
 	                    .replace("###", "").trim();
 
 	            if (texto.contains("-")) {
-	                resultado = -1 * Double.parseDouble(texto.replaceAll("-", ""));
+	                resultado = -1 * Double.parseDouble(texto.replace("-", ""));
 	            } else {
 	                resultado = Double.parseDouble(texto);
 	            }
@@ -55,7 +55,7 @@ public class DataToolsModel {
 	                    .replace("###", "").trim();
 
 	            if (texto.contains("-")) {
-	                resultado = -1 * Float.parseFloat(texto.replaceAll("-", ""));
+	                resultado = -1 * Float.parseFloat(texto.replace("-", ""));
 	            } else {
 	                resultado = Float.parseFloat(texto);
 	            }
@@ -67,41 +67,32 @@ public class DataToolsModel {
 
 	    }
 	    
-	    public BigDecimal castBigDecimal (String valor , int tipo) {
-	    	 BigDecimal formateado = null;
-	    	valor =valor.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace(" ", "")
-                    .replace("###", "").trim();
-	    	switch(tipo) {
-	    	case 1://PARA FLOAT
-	    		formateado = new  BigDecimal(valor);
-	    		
-	    		break;
-	    	case 2://PARA DOUBLE
-	    		formateado = new  BigDecimal(valor);
-	    		
-	    		break;
-	    	}
-	    	 return formateado;
-	    }
-	    
-	    
+		public BigDecimal castBigDecimal(String valor) {
+			BigDecimal resulDecimal = null;
+			valor = valor.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace(" ", "")
+					.replace("###", "").trim();
+			
+				resulDecimal = new BigDecimal(valor);
+
+			return resulDecimal;
+		}
 
 
 	  
 
-	    public String elimina_spacios(String texto) {
+	    public String eliminaSpacios(String texto) {
 	        String result = "";
-	        int counter_space = 0;
+	        int counterspace = 0;
 	        for (int i = 0; i < texto.length(); i++) {
 	            if (texto.charAt(i) == ' ') {
-	                if (counter_space < 1) {
-	                    counter_space = 1;
+	                if (counterspace < 1) {
+	                	counterspace = 1;
 	                    if (result.length() > 0 ) {
 	                        result += Character.toString(texto.charAt(i));
 	                    }
 	                }
 	            } else {
-	                counter_space = 0;
+	            	counterspace = 0;
 	                result += Character.toString(texto.charAt(i));
 	            }
 	        }
@@ -109,19 +100,19 @@ public class DataToolsModel {
 	    }
 
 	   
-	    public String elimina_spacioCaracteres(String texto) {
+	    public String eliminaSpacioCaracteres(String texto) {
 	        String result = "";
-	        int counter_space = 0;
+	        int counterspace = 0;
 	        for (int i = 0; i < texto.length(); i++) {
 	            if (texto.charAt(i) == '_' ) {
-	                if (counter_space < 1) {
-	                    counter_space = 1;
+	                if (counterspace < 1) {
+	                	counterspace = 1;
 	                    if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
 	                        result += Character.toString(texto.charAt(i));
 	                    }
 	                }
 	            } else {
-	                counter_space = 0;
+	            	counterspace = 0;
 	                result += Character.toString(texto.charAt(i));
 	            }
 	        }
@@ -188,15 +179,23 @@ public class DataToolsModel {
 	        return result;
 	    }
 	    
-	    public String formatDate(String formatear) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
+		public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
 
-	        String result = "";
-	        String day = formatear.split("/")[0];
-	        String month = formatear.split("/")[1];
-	        String year = formatear.split("/")[2];
-	        result = year + "-" + month + "-" + day;
-	        return result;
-	    }
+			String resul = "";
+			try {
+				DateFormat formatter;
+				Date date;
+				formatter = new SimpleDateFormat(format);
+				date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resul = simpleDateFormat.format(date).toUpperCase();
+				return resul;
+			} catch (Exception ex) {
+				return resul;
+
+			}
+
+		}
 	    
 
 	  
@@ -251,6 +250,9 @@ public class DataToolsModel {
 	            case "DICIEMBRE":
 	                dato = "12";
 	                break;
+	            default:
+	                dato = "0";
+	                break;
 	        }
 	        return dato;
 	    }
@@ -288,12 +290,9 @@ public class DataToolsModel {
 	                moneda = 4;
 	                break;
 	            default:
-	                if (texto.length() == 0) {
-	                    moneda = 5;
-	                } else {
-	                    moneda = 5;
-	                }
+	                    moneda = 5;	                
 	                break;
+	                
 	        }
 
 	        return moneda;
@@ -357,14 +356,17 @@ public class DataToolsModel {
 	            case "SEMANAL VITRO":
 	                dato = 6;
 	                break;
+	            default:
+	                dato = 0;
+	                break;
 	        }
 	        return dato;
 	    }
 
 
-	    public int getTotalRec(int forma_pago) { //se le pasa como parametro jsonObject.getInt("forma_pago")
+	    public int getTotalRec(int formapago) { //se le pasa como parametro jsonObject.getInt("forma_pago")
 	        int result = 0;
-	        switch (forma_pago) {
+	        switch (formapago) {
 	            case 1:
 	                result = 1;
 	                break;
@@ -405,17 +407,17 @@ public class DataToolsModel {
 
 	    public String formatoTexto(String contenido) { // REMPLAZA LOS DOBLES O MAS ESPACIOS JUNTOS ESPACIOS POR 1
 	        String result = "";
-	        int counter_space = 0;
+	        int counterspace = 0;
 	        for (int i = 0; i < contenido.length(); i++) {
 	            if (contenido.charAt(i) == ' ') {
-	                if (counter_space < 1) {
-	                    counter_space = 1;
+	                if (counterspace < 1) {
+	                	counterspace = 1;
 	                    if (result.length() > 0 ) {
 	                        result += Character.toString(contenido.charAt(i));
 	                    }
 	                }
 	            } else {
-	                counter_space = 0;
+	            	counterspace = 0;
 	                result += Character.toString(contenido.charAt(i));
 	            }
 	        }
@@ -492,15 +494,15 @@ public class DataToolsModel {
 	    }
 
 	    public String remplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
-	        boolean encontro_grupo = false;
+	        boolean encontrogrupo = false;
 	        int par = 0;
 	        String newdato = "";
 	        for (int i = 0; i < dato.length(); i++) {
 	            if (dato.charAt(i) == ' ') {
-	                if (encontro_grupo == false) {
+	                if (encontrogrupo == false) {
 	                    par = par + 1;
 	                    if (par == 2) {
-	                        encontro_grupo = true;
+	                    	encontrogrupo = true;
 	                        newdato = newdato.trim();
 	                        newdato += "###";
 	                    } else {
@@ -509,7 +511,7 @@ public class DataToolsModel {
 	                }
 	            } else {
 	                par = 0;
-	                encontro_grupo = false;
+	                encontrogrupo = false;
 	                newdato += Character.toString(dato.charAt(i));
 	            }
 	        }
@@ -528,10 +530,10 @@ public class DataToolsModel {
 	    }
 
 	    public String fixContenido(String contenido) {
-	        String cont_Fix = contenido.replace("\n", "\r\n");
+	        String contFix = contenido.replace("\n", "\r\n");
 	        String texto = "";
-	        if (cont_Fix.contains("\r\r\n")) {
-	            texto = cont_Fix.replace("\r\r\n", "\r\n");
+	        if (contFix.contains("\r\r\n")) {
+	            texto = contFix.replace("\r\r\n", "\r\n");
 	        } else {
 	            texto = contenido.replace("\n", "\r\n");
 	        }
@@ -573,6 +575,9 @@ public class DataToolsModel {
 	            case "TABIQUE DE CARGA":
 	                result = 4;
 	                break;
+                default:
+                    result = 1;
+                	break;
 	        }
 	        return result;
 	    }
@@ -591,13 +596,16 @@ public class DataToolsModel {
 	                LocalDate dateNew1 = date.plusMonths(cuantos);
 	                fecha = dateNew1.format(formatter);
 	                break;
+	            default:
+	                fecha = "";
+                	break;
 	        }
 	        return fecha;
 	    }
 
-	    public int monthAdd(int forma_pago) {
+	    public int monthAdd(int formapago) {
 	        int meses = 0;
-	        switch (forma_pago) {
+	        switch (formapago) {
 	            case 2:
 	                meses = 6;
 	                break;
@@ -611,6 +619,9 @@ public class DataToolsModel {
 	            case 6:
 	                meses = 0;
 	                break;
+	            default:
+                    meses = 0;
+                	break;
 	        }
 	        return meses;
 	    }

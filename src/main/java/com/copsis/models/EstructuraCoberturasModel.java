@@ -1,6 +1,5 @@
 package com.copsis.models;
 
-import org.json.JSONArray;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

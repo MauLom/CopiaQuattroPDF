@@ -2,4 +2,4 @@
 mvn sonar:sonar \
   -Dsonar.projectKey=quattro-pdf \
   -Dsonar.host.url=http://localhost:9000 \
-  -Dsonar.login=197b58657f8fe1e47a5da7b2b815f0dcf3e741ba
+  -Dsonar.login=ca7f1f0ca53cfbcd61e79455b061b43633c931b5
