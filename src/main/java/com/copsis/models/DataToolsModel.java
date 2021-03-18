@@ -80,17 +80,31 @@ public class DataToolsModel {
 
 	  
 
-	    public String eliminaSpacios(String texto) {
+	    public String eliminaSpacios(String texto,char delimiter,String valor) {
 	        String result = "";
+	       
 	        int counterspace = 0;
 	        for (int i = 0; i < texto.length(); i++) {
-	            if (texto.charAt(i) == ' ') {
-	                if (counterspace < 1) {
-	                	counterspace = 1;
-	                    if (result.length() > 0 ) {
-	                        result += Character.toString(texto.charAt(i));
-	                    }
-	                }
+	            if (texto.charAt(i) == delimiter) {
+	            	if(valor.length() > 0) {
+	            		counterspace = counterspace +1;
+	            		  if (counterspace == 2) {
+		                    
+	            			  result = result.trim();
+	            			  result += "###";
+		                    } else {
+		                    	result += Character.toString(result.charAt(i));
+		                    }	            		
+	            	}else {
+	            	    if (counterspace < 1) {
+		                	counterspace = 1;
+		                	
+		                    if (result.length() > 0 ) {
+		                        result += Character.toString(texto.charAt(i));
+		                    }
+		                }
+	            	}
+	            
 	            } else {
 	            	counterspace = 0;
 	                result += Character.toString(texto.charAt(i));
@@ -100,25 +114,7 @@ public class DataToolsModel {
 	    }
 
 	   
-	    public String eliminaSpacioCaracteres(String texto) {
-	        String result = "";
-	        int counterspace = 0;
-	        for (int i = 0; i < texto.length(); i++) {
-	            if (texto.charAt(i) == '_' ) {
-	                if (counterspace < 1) {
-	                	counterspace = 1;
-	                    if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
-	                        result += Character.toString(texto.charAt(i));
-	                    }
-	                }
-	            } else {
-	            	counterspace = 0;
-	                result += Character.toString(texto.charAt(i));
-	            }
-	        }
-	        return result;
-	    }
-
+	
 	    public String gatos(String texto) {// QUITA ### AL INICIO Y FINAL
 	        String newtexto = "";
 	        int longText = 0;
@@ -157,24 +153,23 @@ public class DataToolsModel {
 	        return newtext;
 	    }
 
-	    public int recorreContenido(String texto, String search) {
-	        int result = 0;
-	        for (int i = 1; i < texto.trim().split("@@@").length; i++) {
-	            if (texto.trim().split("@@@")[i].contains(search)) {
-	                result = i;
-	                break;
-	            }
-	        }
-	        return result;
-	    }
+	  
 
 	    public int searchTwoTexts(String texto, String textOne, String textTwo) {
 	        int result = 0;
 	        for (int i = 1; i < texto.trim().split("@@@").length; i++) {
-	            if (texto.trim().split("@@@")[i].contains(textOne) && texto.trim().split("@@@")[i].contains(textTwo)) {
-	                result = i;
-	                break;
-	            }
+	        	if(texto.length() > 0) {
+	        		   if (texto.trim().split("@@@")[i].contains(textOne) && texto.trim().split("@@@")[i].contains(textTwo)) {
+	   	                result = i;
+	   	                break;
+	   	            }
+	        	}else{
+	        		if (texto.trim().split("@@@")[i].contains(textOne)) {
+		                result = i;
+		                break;
+		            }
+	        	}
+	         
 	        }
 	        return result;
 	    }
@@ -412,26 +407,6 @@ public class DataToolsModel {
 	        return textonuevo;
 	    }
 
-	    public String formatoTexto(String contenido) { // REMPLAZA LOS DOBLES O MAS ESPACIOS JUNTOS ESPACIOS POR 1
-	        String result = "";
-	        int counterspace = 0;
-	        for (int i = 0; i < contenido.length(); i++) {
-	            if (contenido.charAt(i) == ' ') {
-	                if (counterspace < 1) {
-	                	counterspace = 1;
-	                    if (result.length() > 0 ) {
-	                        result += Character.toString(contenido.charAt(i));
-	                    }
-	                }
-	            } else {
-	            	counterspace = 0;
-	                result += Character.toString(contenido.charAt(i));
-	            }
-	        }
-	        return result;
-	    }
-
-	
 
 	    public Boolean sexo(String texto) {
 	        Boolean result = false;
@@ -500,41 +475,7 @@ public class DataToolsModel {
 	        return dato;
 	    }
 
-	    public String remplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
-	        boolean encontrogrupo = false;
-	        int par = 0;
-	        String newdato = "";
-	        for (int i = 0; i < dato.length(); i++) {
-	            if (dato.charAt(i) == ' ') {
-	                if (encontrogrupo == false) {
-	                    par = par + 1;
-	                    if (par == 2) {
-	                    	encontrogrupo = true;
-	                        newdato = newdato.trim();
-	                        newdato += "###";
-	                    } else {
-	                        newdato += Character.toString(dato.charAt(i));
-	                    }
-	                }
-	            } else {
-	                par = 0;
-	                encontrogrupo = false;
-	                newdato += Character.toString(dato.charAt(i));
-	            }
-	        }
-	        return newdato;
-	    }
 
-	    public int equals(String contenido, String texto) {
-	        int aqui = 0;
-	        for (int i = 0; i < contenido.trim().split("@@@").length; i++) {
-	            if (contenido.trim().split("@@@")[i].trim().equals(texto)) {
-	                aqui = i;
-	                break;
-	            }
-	        }
-	        return aqui;
-	    }
 
 	    public String fixContenido(String contenido) {
 	        String contFix = contenido.replace("\n", "\r\n");

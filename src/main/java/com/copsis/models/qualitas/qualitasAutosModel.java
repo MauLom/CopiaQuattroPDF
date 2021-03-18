@@ -676,21 +676,21 @@ public class qualitasAutosModel {
 	            
 	            switch (modelo.getFormaPago()) {
 	                case 1:
-	                        recibo.setRecibo_id("");
+	                        recibo.setReciboId("");
 	                        recibo.setSerie("1/1");
-	                        recibo.setVigencia_de(modelo.getVigenciaDe());
-	                        recibo.setVigencia_a(modelo.getVigenciaA());
-	                        if (recibo.getVigencia_de().length() > 0) {
-	                            recibo.setVencimiento(fn.dateAdd(recibo.getVigencia_de(), 30, 1));
+	                        recibo.setVigenciaDe(modelo.getVigenciaDe());
+	                        recibo.setVigenciaA(modelo.getVigenciaA());
+	                        if (recibo.getVigenciaDe().length() > 0) {
+	                            recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 	                        }
-	                        recibo.setPrima_neta(BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setPrimaneta(BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setDerecho(BigDecimal.valueOf(modelo.getDerecho()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setRecargo(BigDecimal.valueOf(modelo.getRecargo()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setIva(BigDecimal.valueOf(modelo.getIva()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setPrima_total(BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_uno(BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_dos(BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setCargo_extra(BigDecimal.valueOf(modelo.getCargoExtra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
+	                        recibo.setPrimaTotal(BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjusteUno(BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjusteDos(BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setCargoExtra(BigDecimal.valueOf(modelo.getCargoExtra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
 	                        recibos.add(recibo);	                    
 	                    break;
 	                case 2:

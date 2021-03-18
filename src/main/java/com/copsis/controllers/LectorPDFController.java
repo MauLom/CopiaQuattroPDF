@@ -25,7 +25,7 @@ import com.copsis.services.IdentificaPolizaService;
 public class LectorPDFController   {
 	
 	@Autowired
-	private IdentificaPolizaService indentPoliza;
+	private IdentificaPolizaService identificaPolizaService;
 
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,7 +34,7 @@ public class LectorPDFController   {
 		  return new CopsisResponse.Builder()
 				.ok(true)
 				.status(HttpStatus.OK)
-				.result(indentPoliza.queCIA(pdfForm)).build();
+				.result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
 	}
 
 }

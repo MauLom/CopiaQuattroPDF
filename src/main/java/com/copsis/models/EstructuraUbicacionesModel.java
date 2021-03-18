@@ -6,8 +6,8 @@ import lombok.Data;
 public class EstructuraUbicacionesModel {
 	private String nombre = "";
 	private String calle = "";
-	private String no_externo = "";
-	private String no_interno = "";
+	private String noExterno = "";
+	private String noInterno = "";
 	private String colonia = "";
 	private int niveles = 0;
 	private String giro = "";

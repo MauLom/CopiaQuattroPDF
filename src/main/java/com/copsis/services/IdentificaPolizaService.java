@@ -21,7 +21,7 @@ public class IdentificaPolizaService {
 
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
-    public EstructuraJsonModel queCIA( PdfForm pdfForm) throws  IOException {
+    public EstructuraJsonModel queIndentificaPoliza( PdfForm pdfForm) throws  IOException {
 
         try {
 
