@@ -2,8 +2,7 @@ package com.copsis.models.qualitas;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-
-import com.copsis.models.DatosToolsModel;
+import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class qualitasAutosModel {
 
-	    private DatosToolsModel fn = new DatosToolsModel();
+	    private DataToolsModel fn = new DataToolsModel();
 	    private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	    public String contenido = "";
 
@@ -129,10 +128,10 @@ public class qualitasAutosModel {
 	                newcontenido = contenido.substring(inicio + 13, fin);
 
 	                if (newcontenido.contains("RENUEVA")) {
-	                    modelo.setCte_nombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
+	                    modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
 	                } else {
 	                    if (newcontenido.split("\r\n")[1].length() > 0) {
-	                        modelo.setCte_nombre(newcontenido.split("\r\n")[1].replace("@@@", ""));
+	                        modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", ""));
 	                    }
 	                }
 	                if (newcontenido.contains("RENUEVA")) {
@@ -253,7 +252,7 @@ public class qualitasAutosModel {
 
 	                }
 	            }
-	            modelo.setCte_direccion(texto);
+	            modelo.setCteDireccion(texto);
 
 	            //rfc
 	            inicio = contenido.indexOf("R.F.C.:");
@@ -286,7 +285,7 @@ public class qualitasAutosModel {
 	            if (inicio > -1) {
 	                newcontenido = contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10)).replace("###", "").replace(",", "").trim();
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setPrima_neta(Float.parseFloat(newcontenido));
+	                    modelo.setPrimaneta(Float.parseFloat(newcontenido));
 	                }
 	            }
 
@@ -331,7 +330,7 @@ public class qualitasAutosModel {
 	            if (inicio > -1) {
 	                newcontenido = contenido.substring(inicio + 13, contenido.indexOf("\r\n", inicio + 13)).replace("###", "").replace(",", "").trim();
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setPrima_total(Float.parseFloat(newcontenido));
+	                    modelo.setPrimaTotal(Float.parseFloat(newcontenido));
 	                }
 	            }
 
@@ -345,20 +344,20 @@ public class qualitasAutosModel {
 	                        switch (dato.split("###").length) {
 	                            case 1:
 	                                if (dato.contains("Agente:")) {
-	                                    modelo.setCve_agente(dato.split("te:")[1].trim().split(" ")[0].trim());
+	                                    modelo.setCveAgente(dato.split("te:")[1].trim().split(" ")[0].trim());
 	                                }
-	                                if (modelo.getCve_agente().length() > 0) {
-	                                    modelo.setAgente(dato.split(modelo.getCve_agente())[1].trim());
+	                                if (modelo.getCveAgente().length() > 0) {
+	                                    modelo.setAgente(dato.split(modelo.getCveAgente())[1].trim());
 	                                }
 	                                break;
 	                            case 2:
 	                                if (dato.split("###")[0].trim().equals("Agente:")) {
-	                                    modelo.setCve_agente(dato.split("###")[1].trim().split(" ")[0].trim());
-	                                    modelo.setAgente(dato.split("###")[1].trim().split(modelo.getCve_agente())[1].trim());
+	                                    modelo.setCveAgente(dato.split("###")[1].trim().split(" ")[0].trim());
+	                                    modelo.setAgente(dato.split("###")[1].trim().split(modelo.getCveAgente())[1].trim());
 	                                }
 	                                break;
 	                            case 3:
-	                                modelo.setCve_agente(dato.split("###")[1].trim());
+	                                modelo.setCveAgente(dato.split("###")[1].trim());
 	                                modelo.setAgente(dato.split("###")[2].trim());
 	                                break;
 	                        }
@@ -379,7 +378,7 @@ public class qualitasAutosModel {
 	                        } else if (dato.contains("Clave")) {
 	                            if (dato.split("###").length == 4) {
 	                                if (dato.split("###")[2].contains("Teléfono:")) {
-	                                    modelo.setCve_agente(dato.split("###")[1].trim());
+	                                    modelo.setCveAgente(dato.split("###")[1].trim());
 	                                }
 	                            }
 	                        }
@@ -411,7 +410,7 @@ public class qualitasAutosModel {
 	                    if (newcontenido.contains("Forma de:")) {
 	                        newcontenido = newcontenido.split("Forma de:")[1];
 	                    }
-	                    modelo.setForma_pago(fn.fPago(newcontenido));
+	                    modelo.setFormaPago(fn.formaPago(newcontenido));
 	                } else if (newcontenido.contains("Forma de:")) {
 
 	                    newcontenido = newcontenido.split("Forma de:")[1].replace("###", "").trim();
@@ -419,11 +418,11 @@ public class qualitasAutosModel {
 	                    if (newcontenido.contains("Primer pago")) {
 	                        newcontenido = contenido.substring(inicio, inicio + 300).split("\r\n")[2];
 	                        if (newcontenido.contains("Gastos por Expedición")) {
-	                            modelo.setForma_pago(fn.fPago(newcontenido.split("###")[0].trim()));
+	                            modelo.setFormaPago(fn.formaPago(newcontenido.split("###")[0].trim()));
 	                        }
 
 	                    } else {
-	                        modelo.setForma_pago(fn.fPago(newcontenido));
+	                        modelo.setFormaPago(fn.formaPago(newcontenido));
 	                    }
 
 	                } else if (newcontenido.contains("Forma de Pago:")) {
@@ -431,7 +430,7 @@ public class qualitasAutosModel {
 	                    newcontenido = contenido.substring(inicio, inicio + 600).split("\r\n")[1];
 	                    newcontenido = newcontenido.split("Forma de Pago:")[0].split("###")[0].trim();
 
-	                    modelo.setForma_pago(fn.fPago(newcontenido));
+	                    modelo.setFormaPago(fn.formaPago(newcontenido));
 	                }
 	            }
 
@@ -443,18 +442,18 @@ public class qualitasAutosModel {
 	            if (fin > -1) {
 	                index = contenido.substring(fin - 150, fin).split("\r\n").length - 1;
 	                newcontenido = contenido.substring(fin - 150, fin).split("\r\n")[index].trim().split(" ")[0].replace("###", "").replace("@@@", "").trim();
-	                modelo.setForma_pago(fn.fPago(newcontenido));
+	                modelo.setFormaPago(fn.formaPago(newcontenido));
 	            }
 
-	            if (modelo.getForma_pago() == 0) {
+	            if (modelo.getFormaPago() == 0) {
 	                inicio = contenido.lastIndexOf("Pago:");
 
 	                if (inicio > -1) {
 	                    newcontenido = contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].replace("###", "").trim();
 	                    if (newcontenido.contains("12")) {
-	                        modelo.setForma_pago(fn.fPago(newcontenido.split("12")[0].trim()));
+	                        modelo.setFormaPago(fn.formaPago(newcontenido.split("12")[0].trim()));
 	                    } else {
-	                        modelo.setForma_pago(fn.fPago(newcontenido));
+	                        modelo.setFormaPago(fn.formaPago(newcontenido));
 	                    }
 
 	                }
@@ -473,7 +472,7 @@ public class qualitasAutosModel {
 	                    newcontenido = newcontenido.split("Tasa Financiamiento")[0].trim();
 	                }
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setPrimer_prima_total(Float.parseFloat(newcontenido));
+	                    modelo.setPrimerPrimatotal(Float.parseFloat(newcontenido));
 	                }
 	            }
 
@@ -490,7 +489,7 @@ public class qualitasAutosModel {
 	                    newcontenido = newcontenido.split("Gastos por")[0].trim();
 	                }
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setSub_prima_total(Float.parseFloat(newcontenido));
+	                    modelo.setSubPrimatotal(Float.parseFloat(newcontenido));
 	                }
 	            }
 	            /**
@@ -518,14 +517,14 @@ public class qualitasAutosModel {
 	                    if (newcontenido.split("###").length == 2) {
 	                        newcontenido = fn.formatDate_MonthCadena(newcontenido.split("###")[0].trim());
 	                        if (newcontenido.length() == 10) {
-	                            modelo.setVigencia_de(newcontenido);
+	                            modelo.setVigenciaDe(newcontenido);
 	                        }
 	                    }
 	                } else {
 	                    if (newcontenido.contains("Hasta las")) {
 	                        newcontenido = newcontenido.split("Hasta las")[0].split("del")[1].replace("###", "").trim();
 	                        modelo.setVigencia_de(fn.formatDate_MonthCadena(newcontenido));
-	                        if (modelo.getVigencia_a().length() > 0) {
+	                        if (modelo.getVigenciaA().length() > 0) {
 	                        } else {
 	                            newcontenido = "";
 	                            newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9)).replace("del:", "del").replace("Servic  i o  :", "Servicio:");
@@ -674,30 +673,30 @@ public class qualitasAutosModel {
 	         
 	            EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 	            
-	            switch (modelo.getForma_pago()) {
+	            switch (modelo.getFormaPago()) {
 	                case 1:
 	                        recibo.setRecibo_id("");
 	                        recibo.setSerie("1/1");
-	                        recibo.setVigencia_de(modelo.getVigencia_de());
-	                        recibo.setVigencia_a(modelo.getVigencia_a());
+	                        recibo.setVigencia_de(modelo.getVigenciaDe());
+	                        recibo.setVigencia_a(modelo.getVigenciaA());
 	                        if (recibo.getVigencia_de().length() > 0) {
 	                            recibo.setVencimiento(fn.dateAdd(recibo.getVigencia_de(), 30, 1));
 	                        }
-	                        recibo.setPrima_neta(new BigDecimal(modelo.getPrima_neta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setPrima_neta((BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setDerecho(new BigDecimal(modelo.getDerecho()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setRecargo(new BigDecimal(modelo.getRecargo()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setIva(new BigDecimal(modelo.getIva()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setPrima_total(new BigDecimal(modelo.getPrima_total()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_uno(new BigDecimal(modelo.getAjuste_uno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjuste_dos(new BigDecimal(modelo.getAjuste_dos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setCargo_extra(new BigDecimal(modelo.getCargo_extra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
+	                        recibo.setPrima_total((BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjuste_uno((BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setAjuste_dos((BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
+	                        recibo.setCargo_extra(BigDecimal.valueOf(modelo.getCargoExtra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
 	                        recibos.add(recibo);	                    
 	                    break;
 	                case 2:
 	                        recibo.setRecibo_id("");
 	                        recibo.setSerie("2/2");
-	                        recibo.setVigencia_de(modelo.getVigencia_a());
-	                        recibo.setVigencia_a(modelo.getVigencia_a());
+	                        recibo.setVigencia_de(modelo.getVigenciaA());
+	                        recibo.setVigencia_a(modelo.getVigenciaA());
 	                        recibo.setVencimiento("");
 	                        recibo.setPrima_neta(new BigDecimal(restoPrimaNeta).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
 	                        recibo.setPrima_total(new BigDecimal(restoPrimaTotal).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
