@@ -21,7 +21,7 @@ public class IdentificaPolizaService {
 
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
-    public EstructuraJsonModel QueCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
+    public EstructuraJsonModel queCIA( PdfForm pdfForm) throws FileNotFoundException, IOException {
 
         try {
 

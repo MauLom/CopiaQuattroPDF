@@ -27,24 +27,19 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/pdf/lector-pdf")
-@RequiredArgsConstructor
 public class LectorPDFController   {
 	
 	@Autowired
-	private IdentificaPolizaService textPdf;
+	private IdentificaPolizaService indentPoliza;
 
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CopsisResponse> lectorpdf (@RequestBody PdfForm pdfForm,BindingResult bindingResult,@RequestHeader HttpHeaders headers) throws FileNotFoundException, IOException {
-		if(bindingResult.hasErrors()) {
-			
-			return new CopsisResponse.Builder().ok(false).status(HttpStatus.BAD_REQUEST).message("No cuenta con los parametros suficientes").build();
-		}
-
+	public ResponseEntity<CopsisResponse> lectorpdf (@RequestBody PdfForm pdfForm) throws FileNotFoundException, IOException {
+		
 		  return new CopsisResponse.Builder()
 				.ok(true)
 				.status(HttpStatus.OK)
-				.result(textPdf.QueCIA(pdfForm)).build();
+				.result(indentPoliza.queCIA(pdfForm)).build();
 	}
 
 }
