@@ -26,20 +26,12 @@ public class qualitasAutosModel {
 		public  EstructuraJsonModel procesar() {
 	        String newcontenido = "";
 	        
-	        
-	        
-	        contenido = fn.fixContenido(contenido);
+	        contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 	        contenido = contenido
-	                .replace("Hasta  las", "Hasta las")
 	                .replace("IMPORTE TOTAL.", "IMPORTE TOTAL")
-	                .replace("RENUEVA  A :", "RENUEVA A:")
-	                .replace("Inicial :", "Inicial:")
-	                .replace("DEL  ASEGURADO", "DEL ASEGURADO")
 	                .replace("RREENNUUEEVVAA", "RENUEVA")
 	                .replace("MEsutnaidciop i:o:", "Municipio:")
-	                .replace("Domicilio :", "Domicilio:")
 	                .replace("Expedición.", "Expedición");
-
 	        try {
 	            //cia
 	            modelo.setCia(29);
@@ -466,7 +458,7 @@ public class qualitasAutosModel {
 	                index = 11;
 	            }
 	            if (inicio > -1) {
-	                newcontenido = fn.cleanString(contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index)).replace("###", ""));
+	                newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index)).replace("###", "");
 	                if (newcontenido.contains("Tasa Financiamiento")) {
 	                    newcontenido = newcontenido.split("Tasa Financiamiento")[0].trim();
 	                }
@@ -483,7 +475,7 @@ public class qualitasAutosModel {
 	                index = 22;
 	            }
 	            if (inicio > -1) {
-	                newcontenido = fn.cleanString(contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + 19)).replace("###", ""));
+	                newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + 19)).replace("###", "");
 	                if (newcontenido.contains("Gastos por")) {
 	                    newcontenido = newcontenido.split("Gastos por")[0].trim();
 	                }
