@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,43 @@ public class DataToolsModel {
 		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
 				.replace("MXN", "").trim();
 		return texto;
+	}
+
+	public List<ReplaceModel> remplazosGenerales() {
+		List<ReplaceModel> remplazoDeA = new ArrayList<ReplaceModel>();
+		try {
+			remplazoDeA.add(new ReplaceModel("\r\r\n", "\r\n"));
+			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
+			remplazoDeA.add(new ReplaceModel(" :", ":"));
+			remplazoDeA.add(new ReplaceModel("(", ""));
+			remplazoDeA.add(new ReplaceModel(")", ""));
+			remplazoDeA.add(new ReplaceModel("$", ""));
+			remplazoDeA.add(new ReplaceModel("MXP", ""));
+			remplazoDeA.add(new ReplaceModel("/", "-"));
+			remplazoDeA.add(new ReplaceModel(".:", ":"));
+			remplazoDeA.add(new ReplaceModel("..:", ":"));
+			remplazoDeA.add(new ReplaceModel("...:", ":"));
+			remplazoDeA.add(new ReplaceModel("....:", ":"));
+			remplazoDeA.add(new ReplaceModel("             ", " "));
+			remplazoDeA.add(new ReplaceModel("            ", " "));
+			remplazoDeA.add(new ReplaceModel("           ", " "));
+			remplazoDeA.add(new ReplaceModel("          ", " "));
+			remplazoDeA.add(new ReplaceModel("         ", " "));
+			remplazoDeA.add(new ReplaceModel("        ", " "));
+			remplazoDeA.add(new ReplaceModel("       ", " "));
+			remplazoDeA.add(new ReplaceModel("      ", " "));
+			remplazoDeA.add(new ReplaceModel("     ", " "));
+			remplazoDeA.add(new ReplaceModel("    ", " "));
+			remplazoDeA.add(new ReplaceModel("   ", " "));
+			remplazoDeA.add(new ReplaceModel("  ", " "));
+			remplazoDeA.add(new ReplaceModel("######", "###"));
+			remplazoDeA.add(new ReplaceModel("#########", "###"));
+			remplazoDeA.add(new ReplaceModel("############", "###"));
+			return remplazoDeA;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return remplazoDeA;
+		}
 	}
 
 	public String remplazarMultiple(String texto, List<ReplaceModel> datos) {
