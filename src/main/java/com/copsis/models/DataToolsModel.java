@@ -140,18 +140,7 @@ public class DataToolsModel {
 	    }
 
 
-	    public String extraigoText(String texto) {
-	        String newtext = "";
-	        for (int i = 0; i < texto.length(); i++) {
-	            try {
-	                if (Double.parseDouble(Character.toString(texto.charAt(i))) >= 0) {
-	                }
-	            } catch (java.lang.NumberFormatException e) {
-	                newtext += texto.charAt(i);
-	            }
-	        }
-	        return newtext;
-	    }
+	
 
 	  
 
