@@ -32,16 +32,7 @@ public class DataToolsModel {
 	    public Double castDouble(String texto) {
 	        Double resultado = null;
 	        try {
-	            texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace(" ", "")
-	                    .replace("###", "").trim();
-
-	            if (texto.contains("-")) {
-	                resultado = -1 * Double.parseDouble(texto.replace("-", ""));
-	            } else {
-	                resultado = Double.parseDouble(texto);
-	            }
-
-	            return resultado;
+	            return Double.parseDouble(texto);
 	        } catch (Exception ex) {
 	            return resultado;
 	        }
@@ -51,16 +42,7 @@ public class DataToolsModel {
 	    public Float castFloat(String texto) {
 	        Float resultado = null;
 	        try {
-	            texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace(" ", "")
-	                    .replace("###", "").trim();
-
-	            if (texto.contains("-")) {
-	                resultado = -1 * Float.parseFloat(texto.replace("-", ""));
-	            } else {
-	                resultado = Float.parseFloat(texto);
-	            }
-
-	            return resultado;
+	            return  Float.parseFloat(texto);
 	        } catch (Exception ex) {
 	            return resultado;
 	        }
@@ -68,13 +50,12 @@ public class DataToolsModel {
 	    }
 	    
 		public BigDecimal castBigDecimal(String valor) {
-			BigDecimal resulDecimal = null;
-			valor = valor.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace(" ", "")
-					.replace("###", "").trim();
-			
-				resulDecimal = new BigDecimal(valor);
-
-			return resulDecimal;
+			BigDecimal resultado = null;
+			 try {
+			return new BigDecimal(valor) ;
+			  } catch (Exception ex) {
+		            return resultado;
+		    }
 		}
 
 
