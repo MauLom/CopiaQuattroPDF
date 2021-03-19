@@ -97,10 +97,10 @@ public class DataToolsModel {
 
 	}
 
-	public BigDecimal castBigDecimal(String valor) {
+	public BigDecimal castBigDecimal(String valor,Integer rango) {
 		BigDecimal resultado = null;
 		try {
-			return new BigDecimal(valor);
+			return new BigDecimal(valor).setScale(rango, BigDecimal.ROUND_HALF_EVEN);;
 		} catch (Exception ex) {
 			return resultado;
 		}
