@@ -274,7 +274,7 @@ public class qualitasAutosModel {
 	            if (inicio > -1) {
 	                newcontenido = contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10)).replace("###", "").replace(",", "").trim();
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setPrimaneta(Float.parseFloat(newcontenido));
+	                    modelo.setPrimaneta(fn.castFloat(newcontenido));
 	                }
 	            }
 
@@ -283,7 +283,7 @@ public class qualitasAutosModel {
 	            if (inicio > -1) {
 	                newcontenido = contenido.substring(inicio + 19, contenido.indexOf("\r\n", inicio + 19)).replace("###", "").replace(",", "").trim();
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setRecargo(Float.parseFloat(newcontenido));
+	                    modelo.setRecargo(fn.castFloat(newcontenido));
 	                }
 	            }
 
@@ -295,7 +295,7 @@ public class qualitasAutosModel {
 	                    newcontenido = newcontenido.split("Pa")[0].trim();
 	                }
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setDerecho(Float.parseFloat(newcontenido));
+	                    modelo.setDerecho(fn.castFloat(newcontenido));
 	                }
 	            }
 
@@ -309,7 +309,7 @@ public class qualitasAutosModel {
 	                        newcontenido = newcontenido.split("Bitli")[0].trim();
 	                    }
 	                    if (fn.isNumeric(newcontenido)) {
-	                        modelo.setIva(Float.parseFloat(newcontenido));
+	                        modelo.setIva(fn.castFloat(newcontenido));
 	                    }
 	                }
 	            }
@@ -319,7 +319,7 @@ public class qualitasAutosModel {
 	            if (inicio > -1) {
 	                newcontenido = contenido.substring(inicio + 13, contenido.indexOf("\r\n", inicio + 13)).replace("###", "").replace(",", "").trim();
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setPrimaTotal(Float.parseFloat(newcontenido));
+	                    modelo.setPrimaTotal(fn.castFloat(newcontenido));
 	                }
 	            }
 
@@ -480,7 +480,7 @@ public class qualitasAutosModel {
 	                    newcontenido = newcontenido.split("Gastos por")[0].trim();
 	                }
 	                if (fn.isNumeric(newcontenido)) {
-	                    modelo.setSubPrimatotal(Float.parseFloat(newcontenido));
+	                    modelo.setSubPrimatotal(fn.castFloat(newcontenido));
 	                }
 	            }
 	            /**
@@ -675,14 +675,15 @@ public class qualitasAutosModel {
 	                        if (recibo.getVigenciaDe().length() > 0) {
 	                            recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 	                        }
-	                        recibo.setPrimaneta(BigDecimal.valueOf(modelo.getPrimaneta()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setDerecho(BigDecimal.valueOf(modelo.getDerecho()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setRecargo(BigDecimal.valueOf(modelo.getRecargo()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setIva(BigDecimal.valueOf(modelo.getIva()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setPrimaTotal(BigDecimal.valueOf(modelo.getPrimaTotal()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjusteUno(BigDecimal.valueOf(modelo.getAjusteUno()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setAjusteDos(BigDecimal.valueOf(modelo.getAjusteDos()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());
-	                        recibo.setCargoExtra(BigDecimal.valueOf(modelo.getCargoExtra()).setScale(2, BigDecimal.ROUND_HALF_EVEN).floatValue());	                       
+	                        recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(),2));
+	                        recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(),2));
+	                        recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(),2));
+	                        recibo.setIva(fn.castBigDecimal(modelo.getDerecho(),2));
+
+	                        recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
+	                        recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
+	                        recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
+	                        recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));	                       
 	                        recibos.add(recibo);	                    
 	                    break;
 	                case 2:

@@ -1,6 +1,7 @@
 package com.copsis.models;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -97,14 +98,30 @@ public class DataToolsModel {
 
 	}
 
-	public BigDecimal castBigDecimal(String valor,Integer rango) {
-		BigDecimal resultado = null;
-		try {
-			return new BigDecimal(valor).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-		} catch (Exception ex) {
-			return resultado;
-		}
-	}
+    public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
+        if (valueObj instanceof BigDecimal) {
+            return ((BigDecimal) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Long) {
+            return new BigDecimal(((Long) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Short) {
+            return new BigDecimal(((Short) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Integer) {
+            return new BigDecimal(((Integer) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Double) {
+        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Float) {
+        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof String) {
+            return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof BigInteger) {
+            return new BigDecimal(((BigInteger) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else if (valueObj instanceof Number) {
+            return new BigDecimal((((Number) valueObj).doubleValue())).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        } else {
+            return null;
+        }
+    }
+
 
 	public String eliminaSpacios(String texto, char delimiter, String valor) {
 		String result = "";
