@@ -3,7 +3,7 @@ package com.copsis.models;
 import lombok.Data;
 
 @Data
-public class Replace {
+public class ReplaceModel {
 	private String remplazaDe = "";
 	private String remplazaA = "";
 

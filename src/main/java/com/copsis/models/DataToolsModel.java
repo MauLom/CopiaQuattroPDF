@@ -25,9 +25,9 @@ public class DataToolsModel {
 		return texto;
 	}
 
-	public String remplazarMultiple(String texto, List<Replace> datos) {
+	public String remplazarMultiple(String texto, List<ReplaceModel> datos) {
 		try {
-			for (Replace r : datos) {
+			for (ReplaceModel r : datos) {
 				texto = texto.replaceAll(r.getRemplazaDe(), r.getRemplazaA());
 			}
 			return texto;
