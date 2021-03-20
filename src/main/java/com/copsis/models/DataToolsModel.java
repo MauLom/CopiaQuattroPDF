@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +21,11 @@ public class DataToolsModel {
 		}
 	}
 
-	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
-		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
-				.replace("MXN", "").trim();
-		return texto;
-	}
+//	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
+//		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
+//				.replace("MXN", "").trim();
+//		return texto;
+//	}
 
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<ReplaceModel>();
@@ -97,7 +98,7 @@ public class DataToolsModel {
 
 	}
 
-	public BigDecimal castBigDecimal(String valor,Integer rango) {
+	public BigDecimal castBigDecimal(String valor, Integer rango) {
 		BigDecimal resultado = null;
 		try {
 			return new BigDecimal(valor).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
@@ -208,6 +209,12 @@ public class DataToolsModel {
 	}
 
 	public String formatMonth(String mes) { // RECIBE Ene || ENE || ENERO 02
+		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO","SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
+		if (mes.length() == 3) {
+			meses = Arrays.asList("ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC");
+		}
+		return "0" + (meses.indexOf(mes.toUpperCase())+1);
+		/*
 		String dato = "";
 		switch (mes.toUpperCase()) {
 		case "ENE":
@@ -262,7 +269,8 @@ public class DataToolsModel {
 			dato = "0";
 			break;
 		}
-		return dato;
+		return dato;*/
+
 	}
 
 	public int moneda(String texto) {
@@ -487,16 +495,16 @@ public class DataToolsModel {
 		return dato;
 	}
 
-	public String fixContenido(String contenido) {
-		String contFix = contenido.replace("\n", "\r\n");
-		String texto = "";
-		if (contFix.contains("\r\r\n")) {
-			texto = contFix.replace("\r\r\n", "\r\n");
-		} else {
-			texto = contenido.replace("\n", "\r\n");
-		}
-		return texto;
-	}
+//	public String fixContenido(String contenido) {
+//		String contFix = contenido.replace("\n", "\r\n");
+//		String texto = "";
+//		if (contFix.contains("\r\r\n")) {
+//			texto = contFix.replace("\r\r\n", "\r\n");
+//		} else {
+//			texto = contenido.replace("\n", "\r\n");
+//		}
+//		return texto;
+//	}
 
 	public int material(String material) {
 		int result = 0;
