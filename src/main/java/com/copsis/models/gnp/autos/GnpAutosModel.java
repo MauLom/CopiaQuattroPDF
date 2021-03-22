@@ -7,8 +7,6 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
-import com.copsis.models.qualitas.qualitasAutosModel;
-
 public class GnpAutosModel {
 	//Clases
 	private DataToolsModel fn = new DataToolsModel();
@@ -84,7 +82,7 @@ public class GnpAutosModel {
 	                if (contenido.split("@@@")[donde].split("\r\n").length == 1) {
 	                    if (contenido.split("@@@")[donde].split("###").length == 3) {
 	                        if (contenido.split("@@@")[donde].split("###")[2].contains("del")
-	                                && contenido.split("@@@")[donde].split("###")[2].split("/").length == 3) {
+	                                && contenido.split("@@@")[donde].split("###")[2].split("-").length == 3) {
 	                            modelo.setVigenciaDe(fn.formatDate(contenido.split("@@@")[donde].split("###")[2].split("del")[1].trim(),"dd-MM-yy"));
 	                        }
 	                    }
@@ -107,9 +105,10 @@ public class GnpAutosModel {
 	            donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
 	            if (donde > 0) {
 	                if (contenido.split("@@@")[donde].split("\r\n").length > 1) {
+	                	newcontenido ="";
 	                    for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 	                        if (dato.split("###").length == 3) {
-	                            if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("/").length == 3) {
+	                            if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("-").length == 3) {
 	                                modelo.setVigenciaA(fn.formatDate(dato.split("###")[2].split("del")[1].trim(),"dd-MM-yy"));
 	                                modelo.setRfc(dato.split("###")[0].trim());
 	                                newcontenido = dato.split("###")[1].trim();

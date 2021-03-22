@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.gnp.autos.GnpAutos2Model;
 import com.copsis.models.gnp.autos.GnpAutosModel;
 
 public class GnpModel {
@@ -36,9 +37,9 @@ public class GnpModel {
 					}
 				} else {// AUTOS AZUL
 					pagFin = fn.pagFinRango(stripper, doc, "Clave");
+					System.out.println(pagFin);
 					if (pagFin > 0) {
-						// modelo = new DatosGnpAutos2(fn.caratula(1, pagFin, stripper,
-						// doc)).procesar();
+						 modelo = new GnpAutos2Model(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}
 				}
 			}

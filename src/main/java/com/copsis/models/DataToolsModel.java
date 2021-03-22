@@ -74,7 +74,7 @@ public class DataToolsModel {
 			for (ReplaceModel r : datos) {
 				
 				texto = texto.replace(r.getRemplazaDe(), r.getRemplazaA());
-				System.out.println(texto);
+				
 	
 			}
 			return texto;
@@ -109,7 +109,6 @@ public class DataToolsModel {
 	public Float castFloat(String texto) {
 		Float resultado = null;
 		try {
-			System.out.println( texto);
 			return Float.parseFloat(texto);
 		} catch (Exception ex) {
 			return resultado;
@@ -222,8 +221,8 @@ public class DataToolsModel {
 		String resul = "";
 		try {
 			;
-			if (fecha.split("/")[1].length() > 2) {
-				fecha = fecha.split("/")[0] + "/" + formatMonth(fecha.split("/")[1]) + "/" + fecha.split("/")[2];
+			if (fecha.split("-")[1].length() > 2) {
+				fecha = fecha.split("-")[0] + "-" + formatMonth(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
 
 			DateFormat formatter;
@@ -522,17 +521,7 @@ public class DataToolsModel {
 		return dato;
 	}
 
-	public String fixContenido(String contenido) {
-		String contFix = contenido.replace("\n", "\r\n");
-		String texto = "";
-		if (contFix.contains("\r\r\n")) {
-			texto = contFix.replace("\r\r\n", "\r\n");
-		} else {
-			texto = contenido.replace("\n", "\r\n");
-		}
-		return texto;
-	}
-
+	
 	public int material(String material) {
 		int result = 0;
 		switch (material) {
