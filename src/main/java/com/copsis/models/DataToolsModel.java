@@ -540,5 +540,11 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 		String date1 = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/([12][0-9]{3})$";
 		return date.matches(date1);
 	}
+	
+	public int ramoPoliza(String Contenido) {
+		int ramo =0;
+		
+		return ramo;
+	}
 
 }
