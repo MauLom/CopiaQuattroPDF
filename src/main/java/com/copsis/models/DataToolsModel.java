@@ -98,16 +98,19 @@ public class DataToolsModel {
 		}
 
 	}
-
+/*
+ BigInteger bi1 = new BigInteger("78945612312312312312312");  
+BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());  
+ **/
     public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
         if (valueObj instanceof BigDecimal) {
-            return ((BigDecimal) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Long) {
-            return new BigDecimal(((Long) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Short) {
-            return new BigDecimal(((Short) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Integer) {
-            return new BigDecimal(((Integer) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Double) {
         	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Float) {
@@ -115,9 +118,9 @@ public class DataToolsModel {
         } else if (valueObj instanceof String) {
             return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof BigInteger) {
-            return new BigDecimal(((BigInteger) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+            return BigDecimal.valueOf(((BigInteger) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
         } else if (valueObj instanceof Number) {
-            return new BigDecimal((((Number) valueObj).doubleValue())).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);       	
         } else {
             return null;
         }
@@ -142,13 +145,11 @@ public class DataToolsModel {
 				} else {
 					if (counterspace < 1) {
 						counterspace = 1;
-
 						if (result.length() > 0) {
 							result += Character.toString(texto.charAt(i));
 						}
 					}
 				}
-
 			} else {
 				counterspace = 0;
 				result += Character.toString(texto.charAt(i));
@@ -162,7 +163,6 @@ public class DataToolsModel {
 		int longText = 0;
 		texto = texto.trim();
 		longText = texto.length();
-
 		if (longText >= 3) {
 			if (texto.substring(longText - 3, longText).equals("###")) {
 				newtexto = texto.substring(0, longText - 3);
@@ -201,21 +201,18 @@ public class DataToolsModel {
 	}
 
 	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
-
 		String resul = "";
 		try {
 			;
 			if (fecha.split("/")[1].length() > 2) {
 				fecha = fecha.split("/")[0] + "/" + formatMonth(fecha.split("/")[1]) + "/" + fecha.split("/")[2];
 			}
-
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);
 			date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			resul = simpleDateFormat.format(date).toUpperCase();
-
 			return resul;
 		} catch (Exception ex) {
 			resul = ex.getMessage();
@@ -231,63 +228,6 @@ public class DataToolsModel {
 			meses = Arrays.asList("ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC");
 		}
 		return "0" + (meses.indexOf(mes.toUpperCase())+1);
-		/*
-		String dato = "";
-		switch (mes.toUpperCase()) {
-		case "ENE":
-		case "ENERO":
-			dato = "01";
-			break;
-		case "FEB":
-		case "FEBRERO":
-			dato = "02";
-			break;
-		case "MAR":
-		case "MARZO":
-			dato = "03";
-			break;
-		case "ABR":
-		case "ABRIL":
-			dato = "04";
-			break;
-		case "MAY":
-		case "MAYO":
-			dato = "05";
-			break;
-		case "JUN":
-		case "JUNIO":
-			dato = "06";
-			break;
-		case "JUL":
-		case "JULIO":
-			dato = "07";
-			break;
-		case "AGO":
-		case "AGOSTO":
-			dato = "08";
-			break;
-		case "SEP":
-		case "SEPTIEMBRE":
-			dato = "09";
-			break;
-		case "OCT":
-		case "OCTUBRE":
-			dato = "10";
-			break;
-		case "NOV":
-		case "NOVIEMBRE":
-			dato = "11";
-			break;
-		case "DIC":
-		case "DICIEMBRE":
-			dato = "12";
-			break;
-		default:
-			dato = "0";
-			break;
-		}
-		return dato;*/
-
 	}
 
 	public int moneda(String texto) {
@@ -511,17 +451,6 @@ public class DataToolsModel {
 		}
 		return dato;
 	}
-
-//	public String fixContenido(String contenido) {
-//		String contFix = contenido.replace("\n", "\r\n");
-//		String texto = "";
-//		if (contFix.contains("\r\r\n")) {
-//			texto = contFix.replace("\r\r\n", "\r\n");
-//		} else {
-//			texto = contenido.replace("\n", "\r\n");
-//		}
-//		return texto;
-//	}
 
 	public int material(String material) {
 		int result = 0;
