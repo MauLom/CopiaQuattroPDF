@@ -11,7 +11,7 @@ import java.util.List;
 
 public class qualitasAutosModel {
 
-	    private DataToolsModel fn = new DataToolsModel();
+      private DataToolsModel fn = new DataToolsModel();
 	    private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	    public String contenido = "";
 

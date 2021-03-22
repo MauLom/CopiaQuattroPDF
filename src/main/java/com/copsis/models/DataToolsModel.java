@@ -1,5 +1,6 @@
 package com.copsis.models;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
@@ -7,9 +8,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 public class DataToolsModel {
 
@@ -22,11 +25,11 @@ public class DataToolsModel {
 		}
 	}
 
-//	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
-//		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
-//				.replace("MXN", "").trim();
-//		return texto;
-//	}
+	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
+		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
+				.replace("MXN", "").trim();
+		return texto;
+	}
 
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<ReplaceModel>();
@@ -37,6 +40,7 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("(", ""));
 			remplazoDeA.add(new ReplaceModel(")", ""));
 			remplazoDeA.add(new ReplaceModel("$", ""));
+			remplazoDeA.add(new ReplaceModel(",", ""));
 			remplazoDeA.add(new ReplaceModel("MXP", ""));
 			remplazoDeA.add(new ReplaceModel("/", "-"));
 			remplazoDeA.add(new ReplaceModel(".:", ":"));
@@ -68,7 +72,10 @@ public class DataToolsModel {
 	public String remplazarMultiple(String texto, List<ReplaceModel> datos) {
 		try {
 			for (ReplaceModel r : datos) {
-				texto = texto.replaceAll(r.getRemplazaDe(), r.getRemplazaA());
+				
+				texto = texto.replace(r.getRemplazaDe(), r.getRemplazaA());
+				System.out.println(texto);
+	
 			}
 			return texto;
 		} catch (Exception e) {
@@ -79,6 +86,16 @@ public class DataToolsModel {
 
 	}
 
+	public Integer castInteger(String texto) {
+		Integer resultado = null;
+		try {
+			return Integer.parseInt(texto);
+		} catch (Exception ex) {
+			return resultado;
+		}
+
+	}
+	
 	public Double castDouble(String texto) {
 		Double resultado = null;
 		try {
@@ -92,40 +109,37 @@ public class DataToolsModel {
 	public Float castFloat(String texto) {
 		Float resultado = null;
 		try {
+			System.out.println( texto);
 			return Float.parseFloat(texto);
 		} catch (Exception ex) {
 			return resultado;
 		}
 
 	}
-/*
- BigInteger bi1 = new BigInteger("78945612312312312312312");  
-BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());  
- **/
-    public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
-        if (valueObj instanceof BigDecimal) {
-        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Long) {
-        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Short) {
-        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Integer) {
-        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Double) {
-        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Float) {
-        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof String) {
-            return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof BigInteger) {
-            return BigDecimal.valueOf(((BigInteger) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-        } else if (valueObj instanceof Number) {
-            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);       	
-        } else {
-            return null;
-        }
-    }
 
+	   public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
+	        if (valueObj instanceof BigDecimal) {
+	        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Long) {
+	        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Short) {
+	        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Integer) {
+	        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Double) {
+	        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Float) {
+	        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof String) {
+	            return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof BigInteger) {
+	        	 return new BigDecimal(((BigInteger) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        } else if (valueObj instanceof Number) {
+	            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);       	
+	        } else {
+	            return null;
+	        }
+	    }
 
 	public String eliminaSpacios(String texto, char delimiter, String valor) {
 		String result = "";
@@ -145,11 +159,13 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 				} else {
 					if (counterspace < 1) {
 						counterspace = 1;
+
 						if (result.length() > 0) {
 							result += Character.toString(texto.charAt(i));
 						}
 					}
 				}
+
 			} else {
 				counterspace = 0;
 				result += Character.toString(texto.charAt(i));
@@ -163,6 +179,7 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 		int longText = 0;
 		texto = texto.trim();
 		longText = texto.length();
+
 		if (longText >= 3) {
 			if (texto.substring(longText - 3, longText).equals("###")) {
 				newtexto = texto.substring(0, longText - 3);
@@ -201,18 +218,21 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 	}
 
 	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
+
 		String resul = "";
 		try {
 			;
 			if (fecha.split("/")[1].length() > 2) {
 				fecha = fecha.split("/")[0] + "/" + formatMonth(fecha.split("/")[1]) + "/" + fecha.split("/")[2];
 			}
+
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);
 			date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			resul = simpleDateFormat.format(date).toUpperCase();
+
 			return resul;
 		} catch (Exception ex) {
 			resul = ex.getMessage();
@@ -223,11 +243,61 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 	}
 
 	public String formatMonth(String mes) { // RECIBE Ene || ENE || ENERO 02
-		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO","SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
-		if (mes.length() == 3) {
-			meses = Arrays.asList("ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC");
+		String dato = "";
+		switch (mes.toUpperCase()) {
+		case "ENE":
+		case "ENERO":
+			dato = "01";
+			break;
+		case "FEB":
+		case "FEBRERO":
+			dato = "02";
+			break;
+		case "MAR":
+		case "MARZO":
+			dato = "03";
+			break;
+		case "ABR":
+		case "ABRIL":
+			dato = "04";
+			break;
+		case "MAY":
+		case "MAYO":
+			dato = "05";
+			break;
+		case "JUN":
+		case "JUNIO":
+			dato = "06";
+			break;
+		case "JUL":
+		case "JULIO":
+			dato = "07";
+			break;
+		case "AGO":
+		case "AGOSTO":
+			dato = "08";
+			break;
+		case "SEP":
+		case "SEPTIEMBRE":
+			dato = "09";
+			break;
+		case "OCT":
+		case "OCTUBRE":
+			dato = "10";
+			break;
+		case "NOV":
+		case "NOVIEMBRE":
+			dato = "11";
+			break;
+		case "DIC":
+		case "DICIEMBRE":
+			dato = "12";
+			break;
+		default:
+			dato = "0";
+			break;
 		}
-		return "0" + (meses.indexOf(mes.toUpperCase())+1);
+		return dato;
 	}
 
 	public int moneda(String texto) {
@@ -452,6 +522,17 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 		return dato;
 	}
 
+	public String fixContenido(String contenido) {
+		String contFix = contenido.replace("\n", "\r\n");
+		String texto = "";
+		if (contFix.contains("\r\r\n")) {
+			texto = contFix.replace("\r\r\n", "\r\n");
+		} else {
+			texto = contenido.replace("\n", "\r\n");
+		}
+		return texto;
+	}
+
 	public int material(String material) {
 		int result = 0;
 		switch (material) {
@@ -536,15 +617,33 @@ BigDecimal bd1 = BigDecimal.valueOf(bi1.longValue());
 		return meses;
 	}
 
-	public boolean isValidDate(String date) {// valida si es una fecha
-		String date1 = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/([12][0-9]{3})$";
-		return date.matches(date1);
-	}
-	
 	public int ramoPoliza(String Contenido) {
 		int ramo =0;
-		
 		return ramo;
 	}
+	
+	
+	   //Meodo que retorna la numero de pagina donde se encuentra ,el string a buscar
+    public int pagFinRango(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException {
+        int valor = 0;
+        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+            pdfStripper.setStartPage(i);
+            pdfStripper.setEndPage(i);
+            if (pdfStripper.getText(pdDoc).contains(buscar)) {
+                valor = i;
+                break;
+            }
+        }
+        return valor;
+    }
+
+    public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException { //DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS
+        stripper.setStartPage(inicio);
+        stripper.setEndPage(fin);
+        stripper.setParagraphStart("@@@");
+        stripper.setWordSeparator("###");
+        stripper.setSortByPosition(true);
+        return stripper.getText(doc);
+    }
 
 }
