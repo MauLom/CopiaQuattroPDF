@@ -72,7 +72,6 @@ public class GnpModel {
 		} catch (Exception ex) {
 			modelo.setError(
 					GnpModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
-			;
 			return modelo;
 		}
 	}

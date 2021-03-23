@@ -378,10 +378,8 @@ public class GnpVidaModel {
                     for (String dato : newcontenido.split("\n")) {
                     	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                         if (dato.split("###").length >= 2) {
-
                             cobertura.setNombre(dato.split("###")[0].replace("@@@", "").trim());
                             cobertura.setSa(dato.split("###")[1].replace("@@@", "").trim());
-
                             coberturas.add(cobertura);
                         }
                     }

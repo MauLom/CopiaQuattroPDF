@@ -230,7 +230,7 @@ public class GnpSaludModel {
 							}
 
 							break;
-						}
+						}                	
 					}
 
 					if (dato.contains("Fraccionado")) {
