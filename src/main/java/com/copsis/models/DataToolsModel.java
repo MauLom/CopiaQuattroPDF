@@ -40,7 +40,7 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("(", ""));
 			remplazoDeA.add(new ReplaceModel(")", ""));
 			remplazoDeA.add(new ReplaceModel("$", ""));
-			remplazoDeA.add(new ReplaceModel(",", ""));
+			remplazoDeA.add(new ReplaceModel("", ""));
 			remplazoDeA.add(new ReplaceModel("MXP", ""));
 			remplazoDeA.add(new ReplaceModel("/", "-"));
 			remplazoDeA.add(new ReplaceModel(".:", ":"));
@@ -89,7 +89,7 @@ public class DataToolsModel {
 	public Integer castInteger(String texto) {
 		Integer resultado = null;
 		try {
-			return Integer.parseInt(texto);
+			return Integer.parseInt(texto.replace(",", ""));
 		} catch (Exception ex) {
 			return resultado;
 		}
@@ -99,7 +99,7 @@ public class DataToolsModel {
 	public Double castDouble(String texto) {
 		Double resultado = null;
 		try {
-			return Double.parseDouble(texto);
+			return Double.parseDouble(texto.replace(",", ""));
 		} catch (Exception ex) {
 			return resultado;
 		}
@@ -109,7 +109,7 @@ public class DataToolsModel {
 	public Float castFloat(String texto) {
 		Float resultado = null;
 		try {
-			return Float.parseFloat(texto);
+			return Float.parseFloat(texto.replace(",", ""));
 		} catch (Exception ex) {
 			return resultado;
 		}
