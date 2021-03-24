@@ -146,7 +146,6 @@ public class GnpVidaModel {
                     }
                 } else if (newcontenido.split("@@@")[(donde - 1)].split("\r\n").length == 16) { //SEGUNDO CASO
                     for (int i = 0; i < newcontenido.split("@@@")[(donde - 1)].split("\r\n").length; i++) {
-                      	System.out.println(newcontenido.split("@@@")[(donde - 1)].split("\r\n")[i].split("###").length);
                         if (newcontenido.split("@@@")[(donde - 1)].split("\r\n")[i].split("###").length == 2) {
                             if (newcontenido.split("@@@")[(donde - 1)].split("\r\n")[i].split("###")[0].contains("C.P ")) {
                                 resultado = newcontenido.split("@@@")[(donde - 1)].split("\r\n")[i].split("###")[0].split("C.P ")[0].trim();

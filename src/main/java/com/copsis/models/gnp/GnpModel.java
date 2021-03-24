@@ -59,7 +59,6 @@ public class GnpModel {
 			 else if (contenido.contains("Coberturas Amparadas") && contenido.contains("Ubicación de los bienes asegurados")
 	                    || contenido.contains("Secciones Contratadas") && contenido.contains("Póliza de Seguro de Daños ")
 	                    || contenido.contains("secciones contratadas") && contenido.contains("Daños")) {
-				 System.out.println("entro aqui");
 				 pagFin = fn.pagFinRango(stripper, doc, "Clave");
 	                if (pagFin > 0) {
 	                	modelo = new GnpDiversosModel(fn.caratula(1, pagFin, stripper, doc), aseguradosCertificaSalud(stripper, doc, "Características del Riesgo",false),1).procesar();

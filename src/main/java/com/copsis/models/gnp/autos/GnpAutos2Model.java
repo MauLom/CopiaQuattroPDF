@@ -113,9 +113,7 @@ public class GnpAutos2Model {
                             }
                         }
                     }  
-                    System.out.println(dato);
                     if (dato.contains("R.F.C:")) {
-                    	System.out.println(dato.split("###").length);
                         if (dato.split("###").length == 5) {
                             if (dato.split("###")[0].contains("R.F.C:") && dato.split("###")[1].contains("Hasta")) {
                             	
