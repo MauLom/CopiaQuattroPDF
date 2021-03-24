@@ -497,8 +497,8 @@ public class GnpDiversosModel {
 				
 				}else {
 	
-					inicio = ubicaciones.indexOf("Descripción del Movimiento");
-					fin = ubicaciones.lastIndexOf("Resumen de secciones contratada");
+					inicio = ubicacionesT.indexOf("Descripción del Movimiento");
+					fin = ubicacionesT.lastIndexOf("Resumen de secciones contratada");
 					
 					resultado = "";
 					if(inicio > -1 && fin > inicio) {

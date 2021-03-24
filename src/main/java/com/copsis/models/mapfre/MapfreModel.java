@@ -36,7 +36,7 @@ public class MapfreModel {
 	                } else {
 	                    pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN ADICIONAL");
 	                    if (pagFin > 0) {
-	                       // jsonObject = new DatosMapfreAutos(identifica.caratula(1, pagFin, stripper, doc)).procesar();
+	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 	                    }
 	                }
 	            }

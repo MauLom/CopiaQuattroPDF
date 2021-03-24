@@ -244,14 +244,7 @@ public class GnpSaludModel {
 					}
 
 					if (dato.contains("Cesión de Comisión")) {
-						if (dato.split("Cesión de Comisión")[1].contains("−")) {
-							modelo.setAjusteUno(fn.castFloat(
-									dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")));
-						} else {
-							modelo.setAjusteUno(fn.castFloat(
-									dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")));
-						}
-
+							modelo.setAjusteUno(fn.castFloat(dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")));
 					}
 				}
 			}
@@ -367,7 +360,7 @@ public class GnpSaludModel {
 
 			for (String A : dtcoberturas.split("\n")) {
 				
-				if (A.contains("− Extranjero") || A.contains("− Extranjero")) {
+				if (A.contains("− Extranjero")) {
 					int n = A.split("###").length;
 					if (n == 7) {
 						modelo.setDeducibleExt(A.split("###")[3].trim());

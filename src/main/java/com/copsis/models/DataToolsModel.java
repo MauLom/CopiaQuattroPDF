@@ -32,7 +32,7 @@ public class DataToolsModel {
 	}
 
 	public List<ReplaceModel> remplazosGenerales() {
-		List<ReplaceModel> remplazoDeA = new ArrayList<ReplaceModel>();
+		List<ReplaceModel> remplazoDeA = new ArrayList<>();
 		try {
 			remplazoDeA.add(new ReplaceModel("\r\r\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
@@ -64,7 +64,6 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("############", "###"));
 			return remplazoDeA;
 		} catch (Exception e) {
-			// TODO: handle exception
 			return remplazoDeA;
 		}
 	}
@@ -79,9 +78,8 @@ public class DataToolsModel {
 			}
 			return texto;
 		} catch (Exception e) {
-			// System.out.println("retono" + e.getMessage());
 			return texto;
-			// TODO: handle exception
+
 		}
 
 	}

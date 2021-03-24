@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.gnp.GnpModel;
+import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.qualitas.QualitasModel;
 
 import lombok.RequiredArgsConstructor;
@@ -54,12 +55,23 @@ public class IdentificaPolizaService {
                      encontro = true;
                  }
              }
+             
+             // ENTRADA PARA MAPFRE
+             if (encontro == false) {
+                 if (contenido.length() > 502) {
+                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {                        
+                    	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenido);
+                    	 modelo = datosmapfre.procesa();
+                         encontro = true;
+                     }
+                 }
+             }
 
              
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					
-            		modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +"No se logró identificar el PDF.");;
+            		modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +" | " +"No se logró identificar el PDF.");;
              }
         	
         	
