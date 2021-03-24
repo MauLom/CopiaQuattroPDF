@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.mapfre.autos.MapfreAutosModel;
 
 public class MapfreModel {
 	// Clases
@@ -32,11 +33,13 @@ public class MapfreModel {
 	                    pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");
 	                    if (pagFin > 0) {	                    
 	                       // model = new DatosMapfreAutos2(identifica.caratula(1, pagFin, stripper, doc), identifica.recibos(stripper, doc, "Serie de recibo:")).procesar();
+	                   
+	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "Serie de recibo:", false) ).procesar();
 	                    }
 	                } else {
 	                    pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN ADICIONAL");
 	                    if (pagFin > 0) {
-	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
+	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),"").procesar();
 	                    }
 	                }
 	            }

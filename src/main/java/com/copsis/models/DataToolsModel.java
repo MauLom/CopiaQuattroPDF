@@ -561,7 +561,7 @@ public class DataToolsModel {
 		return result;
 	}
 
-	public String dateAdd(String fecha, int cuantos, int caso) {
+	public String recibo2(String fecha, int cuantos, int caso) {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(fecha);
@@ -608,7 +608,54 @@ public class DataToolsModel {
 		int ramo =0;
 		return ramo;
 	}
-	
+	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, Boolean tipo)
+			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
+		String x = "";
+		int listado = 0;
+
+		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+			pdfStripper.setStartPage(i);
+			pdfStripper.setEndPage(i);
+			if (pdfStripper.getText(pdDoc).contains(buscar)) {
+				if (tipo) {// asegurados
+					listado++;
+					if (listado == 2) {
+						PDFTextStripper s = new PDFTextStripper();
+						s.setParagraphStart("###");
+						s.setSortByPosition(true);
+						s = pdfStripper;
+						x += s.getText(pdDoc);
+						break;
+					}
+				} else {// certificado
+					PDFTextStripper s = new PDFTextStripper();
+					s.setParagraphStart("###");
+					s.setSortByPosition(true);
+					s = pdfStripper;
+					x += s.getText(pdDoc);
+
+				}
+			}
+
+		}
+		return x;
+	}
+	  public String dateAdd(String fecha, int cuantos, int caso) {
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        LocalDate date = LocalDate.parse(fecha);
+	        switch (caso) {
+	            case 1://DIAS
+	                LocalDate dateNew = date.plusDays(cuantos);
+	                fecha = dateNew.format(formatter);
+	                break;
+	            case 2://MESES
+	                LocalDate dateNew1 = date.plusMonths(cuantos);
+	                fecha = dateNew1.format(formatter);
+	                break;
+	        }
+	        return fecha;
+	    }
+
 	
 	   //Meodo que retorna la numero de pagina donde se encuentra ,el string a buscar
     public int pagFinRango(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException {
@@ -622,6 +669,16 @@ public class DataToolsModel {
             }
         }
         return valor;
+    }
+    public String fixContenido(String contenido) {
+        String cont_Fix = contenido.replace("\n", "\r\n");
+        String texto = "";
+        if (cont_Fix.contains("\r\r\n")) {
+            texto = cont_Fix.replace("\r\r\n", "\r\n");
+        } else {
+            texto = contenido.replace("\n", "\r\n");
+        }
+        return texto;
     }
 
     public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException { //DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS
