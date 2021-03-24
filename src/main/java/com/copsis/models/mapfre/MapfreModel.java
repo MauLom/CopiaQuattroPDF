@@ -42,7 +42,10 @@ public class MapfreModel {
 	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),"").procesar();
 	                    }
 	                }
-	            }
+	            } if (contenido.contains("END CAMBIO DE AGENT")) { //VIDA
+                    modelo  = new MapfreVidaModel(fn.caratula(2, 5, stripper, doc)).procesar();
+              
+                }
 
 			return modelo;
 		} catch (Exception ex) {
