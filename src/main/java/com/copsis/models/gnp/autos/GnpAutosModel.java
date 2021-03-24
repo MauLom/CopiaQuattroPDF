@@ -31,18 +31,7 @@ public class GnpAutosModel {
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(18);
-			inicio = contenido.indexOf("Expedición");
-
-			if (inicio > 0) {
-				newcontenido = contenido.split("Expedición")[1];
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains("/") & newcontenido.split("\n")[i].split("/").length > 2) {
-						modelo.setFechaEmision(
-								fn.formatDate(newcontenido.split("\n")[i].split("###")[2].trim(), "dd-MM-yy"));
-					}
-				}
-			}
-
+		
 			// poliza
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "No. Póliza");
@@ -381,6 +370,7 @@ public class GnpAutosModel {
 
 			modelo.setCoberturas(coberturas);
 
+            modelo.setFechaEmision(modelo.getVigenciaA());
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 

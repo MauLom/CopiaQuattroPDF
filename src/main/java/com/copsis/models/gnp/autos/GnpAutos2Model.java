@@ -32,16 +32,7 @@ public class GnpAutos2Model {
             //cia
             modelo.setCia(18);
 
-            String con = contenido.split("Expedición")[1].replace("\r\n", "###");
-            if (con.contains("I.V.A")) {
-                modelo.setFechaEmision(con.split("###")[3] + "-" + con.split("###")[2] + "-" + con.split("###")[1].trim());
-            } else {
-                if (con.split("###").length == 6) {
-                    modelo.setFechaEmision(fn.formatDate(contenido.split("Expedición")[1].replace("\r\n", "###").split("###")[3].trim(),"dd-MM-YY"));
-                } else if (con.split("###").length == 3) {
-                    modelo.setFechaEmision(fn.formatDate(contenido.split("Expedición")[1].replace("\r\n", "###").split("###")[2].trim(),"dd-MM-YY"));
-                }
-            }
+        
 
             //poliza		
             donde = 0;
@@ -356,6 +347,7 @@ public class GnpAutos2Model {
                 }
             }
 
+            modelo.setFechaEmision(modelo.getVigenciaA());
             //inciso
             modelo.setInciso(1);
 
