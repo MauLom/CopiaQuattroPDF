@@ -11,7 +11,7 @@ import java.util.List;
 
 public class qualitasAutosModel {
 
-	    private DataToolsModel fn = new DataToolsModel();
+      private DataToolsModel fn = new DataToolsModel();
 	    private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	    public String contenido = "";
 
@@ -57,8 +57,8 @@ public class qualitasAutosModel {
 	                            if (x.contains("A ")) {
 
 	                                x = x.split("A ")[1];
-	                                x = x.replace(" DE ", "/");
-	                                if (x.split("/").length > 2) {
+	                                x = x.replace(" DE ", "-");
+	                                if (x.split("-").length > 2) {
 	                                    modelo.setFechaEmision(fn.formatDate(x,"dd-MM-yy"));
 	                                }
 
