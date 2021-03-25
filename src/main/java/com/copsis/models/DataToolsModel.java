@@ -138,21 +138,52 @@ public class DataToolsModel {
 	        }
 	    }
 
+	   
+	   public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
+	        boolean encontro_grupo = false;
+	        int par = 0;
+	        String newdato = "";
+	        for (int i = 0; i < dato.length(); i++) {
+	            if (dato.charAt(i) == ' ') {
+	                if (encontro_grupo == false) {
+	                    par = par + 1;
+	                    if (par == 2) {
+	                        encontro_grupo = true;
+	                        newdato = newdato.trim();
+	                        newdato += "###";
+	                    } else {
+	                        newdato += Character.toString(dato.charAt(i));
+	                    }
+	                }
+	            } else {
+	                par = 0;
+	                encontro_grupo = false;
+	                newdato += Character.toString(dato.charAt(i));
+	            }
+	        }
+	        return newdato;
+	    }
+	   
+	   
 	public String eliminaSpacios(String texto, char delimiter, String valor) {
-		String result = "";
-
+		boolean encontro_grupo = false;
 		int counterspace = 0;
+		String result = "";
 		for (int i = 0; i < texto.length(); i++) {
-			if (texto.charAt(i) == delimiter) {
+			if (texto.charAt(i) == ' ' ) {
+		
 				if (valor.length() > 0) {
-					counterspace = counterspace + 1;
-					if (counterspace == 2) {
-
-						result = result.trim();
-						result += "###";
-					} else {
-						result += Character.toString(result.charAt(i));
-					}
+					   if (encontro_grupo == false) {
+						   counterspace = counterspace + 1;
+							if (counterspace == 2) {
+								 encontro_grupo = true;
+								result = result.trim();
+								result += "###";
+							} else {
+								result += Character.toString(texto.charAt(i));
+							}
+					   }
+					
 				} else {
 					if (counterspace < 1) {
 						counterspace = 1;
@@ -164,6 +195,7 @@ public class DataToolsModel {
 				}
 
 			} else {
+				encontro_grupo= false;
 				counterspace = 0;
 				result += Character.toString(texto.charAt(i));
 			}
@@ -690,4 +722,6 @@ public class DataToolsModel {
         return stripper.getText(doc);
     }
 
+    
+ 
 }

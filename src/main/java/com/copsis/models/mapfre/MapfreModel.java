@@ -26,8 +26,8 @@ public class MapfreModel {
 	
 	public EstructuraJsonModel procesa() {
 
-		try {
 
+		try {
 			  if (contenido.contains("AUTOMOVILES") || contenido.contains(" MOTOCICLETAS") || contenido.contains("SEGURO AUTOPLUS")) {	              
 	                if (contenido.contains("TIPO DE DOCUMENTO:") && contenido.contains("Nombre del agente:")) {
 	                    pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");
@@ -42,10 +42,17 @@ public class MapfreModel {
 	                    	modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),"").procesar();
 	                    }
 	                }
-	            } if (contenido.contains("END CAMBIO DE AGENT")) { //VIDA
-                    modelo  = new MapfreVidaModel(fn.caratula(2, 5, stripper, doc)).procesar();
+	            }
+			  if (contenido.contains("END CAMBIO DE AGENT") ||  contenido.contains("VIDA INDIVIDUAL") || contenido.contains("PREVICANCER") || contenido.contains("FUNERARIOS")) { //VIDA
+	            
+                    modelo  = new MapfreVidaModel(fn.caratula(1, 5, stripper, doc)).procesar();
               
                 }
+			  
+			  if(contenido.contains("GASTOS MÉDICOS")) {
+			        modelo  = new MapfreSaludModel(fn.caratula(1, 5, stripper, doc)).procesar();
+			  }
+			  
 
 			return modelo;
 		} catch (Exception ex) {

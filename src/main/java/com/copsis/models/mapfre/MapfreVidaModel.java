@@ -101,8 +101,13 @@ public class MapfreVidaModel {
 			} else {
 				dcl = "Contratante";
 			}
-			modelo.setIdCliente(contenido.split(st)[1].split(dcl)[0].replace("@@@", "").replace(":", "")
-					.replace("###", "").replace("\r\nPóliza Grupo", "").trim());
+			newcontenido=contenido.split(st)[1].split(dcl)[0].replace("@@@", "").replace(":", "").replace("###", "").replace("\r\nPóliza Grupo", "").trim();
+			if(newcontenido.length() > 100) {
+				modelo.setIdCliente(newcontenido.split("Tel")[0].replace("\r\n", ""));
+			}else {
+				modelo.setIdCliente(newcontenido);
+			}
+			
 			// cte_nombre
 			donde = 0;
 			donde = fn.searchTwoTexts(contenido, "Contratante:", "R.F.C");
@@ -650,8 +655,9 @@ public class MapfreVidaModel {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					switch (a.split("###").length) {
 					case 4:
+		
 						asegurado.setNacimiento(fn.formatDate(a.split("###")[1].trim(), "dd-MM-yy"));
-						asegurado.setNombre(a.split("###")[0].trim());
+						asegurado.setNombre(a.split("###")[0].trim().replace("###", ""));
 						asegurado.setSexo(1);
 						asegurado.setParentesco(
 								fn.parentesco(a.split("###")[3].replace("(A)", "").trim().toLowerCase()));
@@ -670,11 +676,17 @@ public class MapfreVidaModel {
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						if (dato.contains("Asegurado:") && dato.contains("R.F.C:")) {
-							asegurado.setNombre(dato.split("Asegurado:")[1].trim().split("R.F.C:")[0].trim());
+							System.out.println(dato);
+							asegurado.setNombre(dato.split("Asegurado:")[1].trim().split("R.F.C:")[0].replace("###", "").trim());
 							if (dato.split("###").length == 2) {
 								if (dato.split("###")[1].contains("Nac:")) {
 									asegurado.setNacimiento(
 											fn.formatDate(dato.split("###")[1].split("Nac:")[1].trim(), "dd-MM-yy"));
+								}
+							}
+							if (dato.split("###").length == 6) {
+								if (dato.contains("Nacimiento:")) {
+									asegurado.setNacimiento(fn.formatDate(dato.split("Nacimiento:")[1].replace("###", "").trim(),"dd-MM-yy"));
 								}
 							}
 							asegurado.setSexo(1);
@@ -705,7 +717,7 @@ public class MapfreVidaModel {
 						if (!a.contains("NOMBRE")) {
 							switch (a.split("###").length) {
 							case 5:
-								asegurado.setNombre(a.split("###")[0].trim());
+								asegurado.setNombre(a.split("###")[0].replace("###", "").trim());
 								asegurado.setParentesco(
 										fn.parentesco(a.split("###")[1].replace("(A)", "").trim().toLowerCase()));
 								asegurado.setSexo(1);
@@ -816,7 +828,7 @@ public class MapfreVidaModel {
 
 			} else {
 				if (modelo.getBeneficiarios().size() == 0) {
-					if (inicontenido.contains("BENEFICIARIOS") && inicontenido.contains("BENEFICIARIOS")
+					if (inicontenido.contains("BENEFICIARIOS") 
 							&& inicontenido.contains("LA DOCUMENTACION CONTRACTUAL")) {
 						String beng = RemplazaGrupoSpace(inicontenido.split("BENEFICIARIOS")[1].split("PORCENTAJE")[1]
 								.split("LA DOCUMENTACION CONTRACTUAL")[0]);

@@ -597,7 +597,6 @@ public class MapfreAutosModel {
 				break;
 			case 2:
 				if (recibosList.size() == 1) {
-
 					recibo.setSerie("2/2");
 					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
 					recibo.setVigenciaA(modelo.getVigenciaA());
@@ -614,7 +613,6 @@ public class MapfreAutosModel {
 
 				}
 				break;
-
 			}
 			modelo.setRecibos(recibosList);
 
