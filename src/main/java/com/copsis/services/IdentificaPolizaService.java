@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.gnp.GnpModel;
+import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.qualitas.QualitasModel;
 
 import lombok.RequiredArgsConstructor;
@@ -45,10 +47,31 @@ public class IdentificaPolizaService {
                      encontro = true;
                  }
              }
+             
+             if (encontro == false) {
+                 if (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP") || contenido.contains("Grupo Nacional Provincial S.A.B") || contenido.contains("Grupo Nacional Provincial")) {
+                	 GnpModel datosGnp = new GnpModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosGnp.procesa();
+                     encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA MAPFRE
+             if (encontro == false) {
+                 if (contenido.length() > 502) {
+                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {                        
+                    	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenido);
+                    	 modelo = datosmapfre.procesa();
+                         encontro = true;
+                     }
+                 }
+             }
+
+             
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					
-            		modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +"No se logró identificar el PDF.");;
+            		modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +" | " +"No se logró identificar el PDF.");;
              }
         	
         	
@@ -73,19 +96,7 @@ public class IdentificaPolizaService {
         return stripper.getText(doc);
     }
 
-    //Meodo que retorna la numero de pagina donde se encuentra ,el string a buscar
-    public int pagFinRango(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException {
-        int valor = 0;
-        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
-            pdfStripper.setStartPage(i);
-            pdfStripper.setEndPage(i);
-            if (pdfStripper.getText(pdDoc).contains(buscar)) {
-                valor = i;
-                break;
-            }
-        }
-        return valor;
-    }
+ 
         
 
 }
