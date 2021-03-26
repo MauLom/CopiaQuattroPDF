@@ -570,9 +570,7 @@ public class MapfreAutosModel {
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 			if (recibos.length() > 0) {
-		
-				 recibosList = recibosExtract();
-					System.out.println(recibosList.get(0).getReciboId());
+				 recibosList = recibosExtract();				
 			}
 
 			switch (modelo.getFormaPago()) {
@@ -649,7 +647,7 @@ public class MapfreAutosModel {
 		return newdato;
 	}
 
-	private ArrayList recibosExtract() {
+	private ArrayList<EstructuraRecibosModel> recibosExtract() {
 		recibos = fn.fixContenido(recibos);
 		List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
 		try {
@@ -770,7 +768,7 @@ public class MapfreAutosModel {
 				index++;
 			}
 
-			return (ArrayList) recibosLis;
+			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 
 		} catch (Exception ex) {
 			modelo.setError(

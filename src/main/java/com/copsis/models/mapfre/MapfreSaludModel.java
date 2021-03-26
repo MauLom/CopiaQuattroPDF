@@ -1,6 +1,7 @@
 package com.copsis.models.mapfre;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -99,15 +100,15 @@ public class MapfreSaludModel {
 
 	                            modelo.setRfc(dato.substring(inicio, fin).trim().replace("-", ""));
 	                        }
-	                        if (dato.contains("###C.P. :")) {
+	                        if (dato.contains("###C.P:")) {
 	                            // cp
-	                            inicio = dato.trim().indexOf("###C.P. :") + 9;
+	                            inicio = dato.trim().indexOf("###C.P:") + 8;
 	                            fin = dato.trim().length();
 
 	                            modelo.setCp(dato.substring(inicio, fin).trim());
 	                        } else if (contenido.split("@@@")[4].split("\r\n").length > 0) {
 	                            for (String linea : contenido.split("@@@")[4].split("\r\n")) {
-	                                if (linea.contains("###C.P. :")) {
+	                                if (linea.contains("###C.P:")) {
 	                                    if (linea.split("###").length == 2) {
 
 	                                        modelo.setCp(linea.split("###")[1].split(":")[1].trim());
@@ -447,7 +448,6 @@ public class MapfreSaludModel {
 	                newcontenido = fn.eliminaSpacios(inicontenido.split("ANEXO DE BENEFICIARIOS:")[1].split("@@@ANEXO ")[0],' ',"doble").replace("######", "###") ;
 	            	for (String ben : newcontenido.split("\n")) {
 	                	EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-	                    System.out.println("===> " + ben);
 	                	if (ben.contains("%")) {
 	                        if (ben.contains("BENEFICIARIO")) {
 	                        } else {
@@ -633,7 +633,6 @@ public class MapfreSaludModel {
 	              
 	                if (inicio > 0 && fin > 0 && inicio < fin) {
 	                    newcontenido = contenido.substring(inicio, fin).replace("ASEGURADOS###(Continuación", "");
-	                    System.out.println(newcontenido);
 	                    for (String x : newcontenido.split("\n")) {
 	                    	EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 	                        int nsp = x.split("###").length;
@@ -652,288 +651,261 @@ public class MapfreSaludModel {
 	            }
 
 	            if (modelo.getAsegurados().size() == 0) {
-
 	                inicio = inicontenido.indexOf("ASEGURADOS");
 	                fin = inicontenido.lastIndexOf("MATERNIDAD");
-	              
+	                
 	                if (inicio > 0 && fin > 0 && inicio < fin) {
-
-	                    String dato = inicontenido.substring(inicio, fin).replace("ASEGURADOS", "");
-	                    
-	                    System.out.println(dato);
-
-	                    donde = dato.indexOf("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD");
-
-	       
+	                   newcontenido=  inicontenido.substring(inicio, fin).replace("ASEGURADOS", "").replaceAll("  +", "###").trim();
+	                    donde = newcontenido.indexOf("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD");	       
 	                    if (donde > 0) {
-	                        newcontenido = dato.substring(donde, dato.indexOf("NETA"));
-	                    } else {
-	                    	newcontenido = dato;
-	                    }
-	                    newcontenido = fn.RemplazaGrupoSpace(newcontenido);
+	                        newcontenido = newcontenido.substring(donde, newcontenido.indexOf("NETA"));
+	                    } 
 	                    for (String x : newcontenido.split("\n")) {
-	                    	EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-	                    	
-	                        int nsp = x.split("###").length;
-
+	                    	EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();	                    	
+	                        int nsp = x.split("###").length;	                
 	                        if (x.contains("FECHA") && x.contains("Av.")) {
-
-	                        } else {
-	                        	System.out.println("========> " +x);
-	                            if (nsp == 4) {
-
-	                                if (fn.isNumeric(x.split("###")[3].trim())) {
-	                                    if (x.split("###")[3].trim().length() == 8) {
-	                                    	fecha = x.split("###")[4].substring(4, 8) + "-" + x.split("###")[4].substring(2, 4) + "-" +  x.split("###")[4].substring(0, 2);
-	                                    }
-
-	                                    if (fecha.contains("-")) {
-	                                        asegurado.setAntiguedad(fecha);
-	                                    }
-	                                }
-	                                asegurado.setNombre(x.split("###")[0].replace("@@@", "").substring(0, x.split("###")[0].replace("@@@", "").length() - 2));
-	                                asegurado.setSexo(fn.sexo(x.split("###")[2]) ? 1:0);
+	                        } else {	                      
+	                            if (nsp == 9) {
+	                            	asegurado.setNombre(x.split("###")[2]);
+	                            	asegurado.setNacimiento(fn.formatDate(x.split("###")[6].replace("/", "-"), "dd-mm-yy"));
+	                            	asegurado.setAntiguedad(fn.formatDate(x.split("###")[7].replace("/", "-"), "dd-mm-yy"));	                            	
+	                                asegurado.setSexo(fn.sexo(x.split("###")[3]) ? 1:0);
+	                                asegurado.setParentesco(fn.parentesco(x.split("###")[5]));
 	                                asegurados.add(asegurado);
 	                            	modelo.setAsegurados(asegurados);
 	                            }
-
 	                        }
 	                    }
-
 	                }
+	            }
+
+	            // sa deducible coaseguro, coaseguro_tope
+	            donde = fn.recorreContenido(contenido, "DEDUCIBLE  COAS         TOPE COAS ZONA HOSPITAL MÍNIMO"); // VALORES DE
+	            // NIVEL
+	            // RAIZ
+	            System.out.println(donde);
+	            if (donde > 0) {
+
+	                if (contenido.split("@@@")[donde].trim().split("\r\n").length > 2) {
+	                    if (contenido.split("@@@")[donde].trim().split("\r\n")[2].trim().contains("$")) {
+	                        resultado =contenido.split("@@@")[donde].trim().split("\r\n")[2].trim().trim()
+	                                        .replace("$", "");
+
+	                        if (resultado.split("###").length >= 1) {
+	                            modelo.setSa(resultado.split("###")[1]);
+	                            modelo.setDeducible(resultado.split("###")[2]);
+	                            modelo.setCoaseguro(resultado.split("###")[3]);
+	                            modelo.setCoaseguroTope(resultado.split("###")[4]);
+	                        }
+	                    } else if (contenido.split("@@@")[donde].trim().split("\r\n").length >= 4) { // valore a nivel raiz
+	                        resultado = contenido.split("@@@")[donde].trim().split("\r\n")[3].trim().replace("$", "");
+	                        if (resultado.split("###").length >= 1) {
+	                            modelo.setSa(resultado.split("###")[1]);
+	                            modelo.setDeducible(resultado.split("###")[2]);
+	                            modelo.setCoaseguro(resultado.split("###")[3]);
+	                            modelo.setCoaseguroTope(resultado.split("###")[4]);
+	                        }
+	                    }
+	                }
+	            } else {
 
 	            }
-//
-//	            // sa deducible coaseguro, coaseguro_tope
-//	            donde = fn.recorreContenido(contenido, "DEDUCIBLE  COAS         TOPE COAS ZONA HOSPITAL MÍNIMO"); // VALORES DE
-//
-//	            // NIVEL
-//	            // RAIZ
-//	            if (donde > 0) {
-//
-//	                if (contenido.split("@@@")[donde].trim().split("\r\n").length > 2) {
-//	                    if (contenido.split("@@@")[donde].trim().split("\r\n")[2].trim().contains("$")) {
-//	                        resultado =contenido.split("@@@")[donde].trim().split("\r\n")[2].trim().trim()
-//	                                        .replace("$", "");
-//
-//	                        if (resultado.split("###").length >= 1) {
-//	                            modelo.setSa(resultado.split("###")[1]);
-//	                            modelo.setDeducible(resultado.split("###")[2]);
-//	                            modelo.setCoaseguro(resultado.split("###")[3]);
-//	                            modelo.setCoaseguroTope(resultado.split("###")[4]);
-//	                        }
-//	                    } else if (contenido.split("@@@")[donde].trim().split("\r\n").length >= 4) { // valore a nivel raiz
-//	                        resultado = contenido.split("@@@")[donde].trim().split("\r\n")[3].trim().replace("$", "");
-//	                        if (resultado.split("###").length >= 1) {
-//	                            modelo.setSa(resultado.split("###")[1]);
-//	                            modelo.setDeducible(resultado.split("###")[2]);
-//	                            modelo.setCoaseguro(resultado.split("###")[3]);
-//	                            modelo.setCoaseguroTope(resultado.split("###")[4]);
-//	                        }
-//	                    }
-//	                }
-//	            } else {
-//
-//	            }
-//
-//	            int inicoberturas = contenido.indexOf("MÍNIMO") + 8;
-//	            int fincoberturas = contenido.indexOf("ANTERIORES") - 10;
-//	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-//	            if (inicoberturas > -1 && fincoberturas > -1 & inicoberturas < fincoberturas) {
-//	            	
-//	            	newcontenido =  contenido.substring(inicoberturas, fincoberturas);
-//	               
-//
-//	                for (String datod : newcontenido.split("\n")) {
-//	                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-//	                    Integer num = datod.split("###").length;
-//
-//	                    if (num == 10) {
-//
-//	                        if (datod.split("###")[0].length() == 16) {
-//	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[2] + " " + datod.split("###")[3]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[4]);
-//	                        	coberturas.add(cobertura);	                        	             
-//	                        } else if (datod.split("###")[0].length() == 23) {
-//	                        	
-//	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") + " " + datod.split("###")[2].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[5]);
-//	                        	coberturas.add(cobertura);
-//	                        } else {
-//	                        	
-//	                         	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[5]);
-//	                        	coberturas.add(cobertura);
-//	           
-//	                        }
-//
-//	                    }
-//	                    if (num == 9) {
-//
-//	                        if (datod.split("###")[0].length() == 16) {
-//	                         	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[4]);
-//	                        	coberturas.add(cobertura);
-//	
-//	                        } else if (datod.split("###")[0].length() == 27) {
-//	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[5]);
-//	                        	coberturas.add(cobertura);
-//	                        } else {
-//	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
-//	                        	cobertura.setCoaseguro(datod.split("###")[5]);
-//	                        	coberturas.add(cobertura);
-//	                        }
-//
-//	                    }
-//
-//	                    if (num == 8) {
-//
-//	                    	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
-//                        	cobertura.setDeducible(datod.split("###")[2] + " " + datod.split("###")[3]);
-//                        	cobertura.setCoaseguro(datod.split("###")[4]);
-//                        	coberturas.add(cobertura);
-//	                    }
-//	                    if (num == 4) {
-//	                    	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") + " " + datod.split("###")[2].replace("\r\n", "").replace("@@@", ""));
-//                           	coberturas.add(cobertura);
-//	                    }
-//	                    if (num == 3) {
-//	                      	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") );
-//                           	coberturas.add(cobertura);
-//	                    }
-//	                    if (num == 2) {
-//	                      	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
-//                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") );
-//                           	coberturas.add(cobertura);
-//	                    }
-//	                }
-//	                modelo.setCoberturas(coberturas);
-//	            } else {
-//	                donde =fn.recorreContenido(contenido, "COBERTURAS###Y###SERVICIOS");
-//	            
-//	                for (int i = 0; i < contenido.split("COBERTURAS###Y###SERVICIOS").length; i++) {
-//	                    if (contenido.split("COBERTURAS###Y###SERVICIOS")[i].contains("CONCEPTOS###ECONÓMICOS")) {
-//	                        newcontenido += contenido.split("COBERTURAS###Y###SERVICIOS")[i].split("CONCEPTOS###ECONÓMICOS")[0];
-//	                    }
-//	                    if (contenido.split("COBERTURAS###Y###SERVICIOS")[i].contains("@@@VER ANEXOS:")) {
-//	                    	newcontenido += contenido.split("COBERTURAS###Y###SERVICIOS")[i].split("@@@VER ANEXOS:")[0];
-//	                    }
-//	                }
-//	                for (String x : newcontenido.split("\r\n")) {
-//	                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-//	                    int numgatos = x.split("###").length;
-//
-//	                    if (x.contains("a###a###a###a###a###a") || x.contains("@@@COBERTURAS###SUMA###DEDUCIBLE") || x.contains("AMPARADAS###ASEGURADA###COASEGURO") || x.contains("(Continuación)")) {
-//	                    } else {
-//
-//	                        switch (numgatos) {
-//	                            case 2:
-//	                             	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
-//	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
-//	                               	coberturas.add(cobertura);
-//	                                break;
-//	                            case 3:
-//	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
-//	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
-//	                               	coberturas.add(cobertura);
-//	                                break;
-//
-//	                            case 5:
-//	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
-//	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
-//	                            	cobertura.setDeducible(x.split("###")[2]);
-//	                            	cobertura.setCoaseguro(x.split("###")[3]);
-//	                               	coberturas.add(cobertura);
-//	                                break;
-//	                            case 6:
-//	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
-//	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
-//	                            	cobertura.setDeducible(x.split("###")[2]);
-//	                            	cobertura.setCoaseguro(x.split("###")[3]);
-//	                               	coberturas.add(cobertura);
-//	                                break;
-//	                        }
-//
-//	                    }
-//	                }
-//	                modelo.setCoberturas(coberturas);
-//
-//	            }
-//	
-//	          
-//	            String fecha_emisi = "";
-//
-//	            inicio = contenido.indexOf("Emision");
-//	            String strb = "Emision";
-//	            if (inicio == -1) {
-//	                inicio = contenido.indexOf("Emision:");
-//	                if (inicio > 0) {
-//	                    strb = "";
-//	                }
-//	            }
-//
-//	            fin = contenido.indexOf("Prima Neta");
-//	            if (inicio > 0 && fin > 0 && inicio < fin) {
-//	                fecha_emisi = contenido.split(strb)[1].split("Prima Neta")[0].split("\n")[1].replace("@@@", "###").trim();
-//	                modelo.setFechaEmision(fn.formatDate(fecha_emisi.split("###")[1].trim(),"dd-MM-yy"));
-//
-//	            } else {
-//	                inicio = contenido.indexOf("EMISIÓN");
-//	                if (inicio > 0) {
-//	                    fecha_emisi = contenido.split("EMISIÓN")[1].split("\r\n")[0];
-//	                    modelo.setFechaEmision(fn.formatDate(fecha_emisi.split("###")[1],"dd-MM-yy"));
-//	                }
-//
-//	            }
-//
-//	            if (contenido.contains("Cliente MAPFRE")) {
-//	                modelo.setIdCliente(contenido.split("Cliente MAPFRE")[1].split("\r\n")[0].trim());
-//	                modelo.setRenovacion(contenido.split("Moneda")[1].split("###")[1].trim());
-//	            } else {
-//	                modelo.setIdCliente(contenido.split("CLIENTE###MAPFRE")[1].split("\r\n")[0].replace(":###", "").trim());
-//
-//	            }
-//	            List<EstructuraRecibosModel> recibos = new ArrayList<>();
-//				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-//	            switch (modelo.getFormaPago()) {
-//	                case 1:
-//	                	recibo.setReciboId("");
-//	    				recibo.setSerie("1/1");
-//	    				recibo.setVigenciaDe(modelo.getVigenciaDe());
-//	    				recibo.setVigenciaA(modelo.getVigenciaA());
-//	    				if (recibo.getVigenciaDe().length() > 0) {
-//	    					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-//	    				}
-//	    				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-//	    				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-//	    				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-//	    				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
-//
-//	    				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-//	    				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-//	    				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-//	    				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
-//	    				recibos.add(recibo);
-//	                    break;
-//	            }
-//
-//	           	modelo.setRecibos(recibos);
+
+	            int inicoberturas = inicontenido.indexOf("MÍNIMO") + 8;
+	            int fincoberturas = inicontenido.indexOf("ANTERIORES") - 10;
+
+	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+	            if (inicoberturas > -1 && fincoberturas > -1 & inicoberturas < fincoberturas) {
+	            	
+	            	newcontenido =  inicontenido.substring(inicoberturas, fincoberturas).replaceAll("  +", "###").trim();	  
+		            System.out.println(newcontenido);
+	                for (String datod : newcontenido.split("\n")) {
+	                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+	                    Integer num = datod.split("###").length;
+
+	                    if (num == 10) {
+
+	                        if (datod.split("###")[0].length() == 16) {
+	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[2] + " " + datod.split("###")[3]);
+	                        	cobertura.setCoaseguro(datod.split("###")[4]);
+	                        	coberturas.add(cobertura);	                        	             
+	                        } else if (datod.split("###")[0].length() == 23) {
+	                        	
+	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") + " " + datod.split("###")[2].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
+	                        	cobertura.setCoaseguro(datod.split("###")[5]);
+	                        	coberturas.add(cobertura);
+	                        } else {
+	                        	
+	                         	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
+	                        	cobertura.setCoaseguro(datod.split("###")[5]);
+	                        	coberturas.add(cobertura);
+	           
+	                        }
+
+	                    }
+	                    if (num == 9) {
+
+	                        if (datod.split("###")[0].length() == 16) {
+	                         	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
+	                        	cobertura.setCoaseguro(datod.split("###")[4]);
+	                        	coberturas.add(cobertura);
+	
+	                        } else if (datod.split("###")[0].length() == 27) {
+	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
+	                        	cobertura.setCoaseguro(datod.split("###")[5]);
+	                        	coberturas.add(cobertura);
+	                        } else {
+	                        	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+	                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+	                        	cobertura.setDeducible(datod.split("###")[3] + " " + datod.split("###")[4]);
+	                        	cobertura.setCoaseguro(datod.split("###")[5]);
+	                        	coberturas.add(cobertura);
+	                        }
+
+	                    }
+
+	                    if (num == 8) {
+
+	                    	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", ""));
+                        	cobertura.setDeducible(datod.split("###")[2] + " " + datod.split("###")[3]);
+                        	cobertura.setCoaseguro(datod.split("###")[4]);
+                        	coberturas.add(cobertura);
+	                    }
+	                    if (num == 4) {
+	                    	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") + " " + datod.split("###")[2].replace("\r\n", "").replace("@@@", ""));
+                           	coberturas.add(cobertura);
+	                    }
+	                    if (num == 3) {
+	                      	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") );
+                           	coberturas.add(cobertura);
+	                    }
+	                    if (num == 2) {
+	                      	cobertura.setNombre(datod.split("###")[0].replace("\r\n", "").replace("@@@", ""));
+                        	cobertura.setSa(datod.split("###")[1].replace("\r", "").replace("@@@", "") );
+                           	coberturas.add(cobertura);
+	                    }
+	                }
+	                modelo.setCoberturas(coberturas);
+	            } else {
+	                donde =fn.recorreContenido(contenido, "COBERTURAS###Y###SERVICIOS");
+	            
+	                for (int i = 0; i < contenido.split("COBERTURAS###Y###SERVICIOS").length; i++) {
+	                    if (contenido.split("COBERTURAS###Y###SERVICIOS")[i].contains("CONCEPTOS###ECONÓMICOS")) {
+	                        newcontenido += contenido.split("COBERTURAS###Y###SERVICIOS")[i].split("CONCEPTOS###ECONÓMICOS")[0];
+	                    }
+	                    if (contenido.split("COBERTURAS###Y###SERVICIOS")[i].contains("@@@VER ANEXOS:")) {
+	                    	newcontenido += contenido.split("COBERTURAS###Y###SERVICIOS")[i].split("@@@VER ANEXOS:")[0];
+	                    }
+	                }
+	                for (String x : newcontenido.split("\r\n")) {
+	                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+	                    int numgatos = x.split("###").length;
+
+	                    if (x.contains("a###a###a###a###a###a") || x.contains("@@@COBERTURAS###SUMA###DEDUCIBLE") || x.contains("AMPARADAS###ASEGURADA###COASEGURO") || x.contains("(Continuación)")) {
+	                    } else {
+
+	                        switch (numgatos) {
+	                            case 2:
+	                             	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
+	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
+	                               	coberturas.add(cobertura);
+	                                break;
+	                            case 3:
+	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
+	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
+	                               	coberturas.add(cobertura);
+	                                break;
+
+	                            case 5:
+	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
+	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
+	                            	cobertura.setDeducible(x.split("###")[2]);
+	                            	cobertura.setCoaseguro(x.split("###")[3]);
+	                               	coberturas.add(cobertura);
+	                                break;
+	                            case 6:
+	                               	cobertura.setNombre(x.split("###")[0].replace("@@@", ""));
+	                            	cobertura.setSa(x.split("###")[1].replace("\r\n", "").replace("@@@", ""));
+	                            	cobertura.setDeducible(x.split("###")[2]);
+	                            	cobertura.setCoaseguro(x.split("###")[3]);
+	                               	coberturas.add(cobertura);
+	                                break;
+	                        }
+
+	                    }
+	                }
+	                modelo.setCoberturas(coberturas);
+
+	            }
+	
+	          
+	        
+
+	            inicio = contenido.indexOf("Emision");
+	            String strb = "Emision";
+	            if (inicio == -1) {
+	                inicio = contenido.indexOf("Emision:");
+	                if (inicio > 0) {
+	                    strb = "";
+	                }
+	            }
+
+	            fin = contenido.indexOf("Prima Neta");
+	            if (inicio > 0 && fin > 0 && inicio < fin) {
+	                newcontenido = contenido.split(strb)[1].split("Prima Neta")[0].split("\n")[1].replace("@@@", "###").trim();
+	                modelo.setFechaEmision(fn.formatDate(newcontenido.split("###")[1].trim(),"dd-MM-yy"));
+
+	            } 
+	            if(modelo.getFechaEmision().length()  == 0) {
+	            	modelo.setFechaEmision(modelo.getVigenciaDe());
+	            }
+	      
+
+	            if (contenido.contains("Cliente MAPFRE")) {
+	                modelo.setIdCliente(contenido.split("Cliente MAPFRE")[1].split("\r\n")[0].trim());
+	                modelo.setRenovacion(contenido.split("Moneda")[1].split("###")[1].trim());
+	            } else {
+	                modelo.setIdCliente(contenido.split("CLIENTE###MAPFRE")[1].split("\r\n")[0].replace(":###", "").trim());
+
+	            }
+	            List<EstructuraRecibosModel> recibos = new ArrayList<>();
+				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+	            switch (modelo.getFormaPago()) {
+	                case 1:
+	                	recibo.setReciboId("");
+	    				recibo.setSerie("1/1");
+	    				recibo.setVigenciaDe(modelo.getVigenciaDe());
+	    				recibo.setVigenciaA(modelo.getVigenciaA());
+	    				if (recibo.getVigenciaDe().length() > 0) {
+	    					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+	    				}
+	    				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
+	    				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
+	    				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
+	    				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+
+	    				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
+	    				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
+	    				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
+	    				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+	    				recibos.add(recibo);
+	                    break;
+	            }
+
+	           	modelo.setRecibos(recibos);
 
 				
 	    		return modelo;
