@@ -3,6 +3,7 @@ package com.copsis.models;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -116,23 +117,23 @@ public class DataToolsModel {
 
 	   public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
 	        if (valueObj instanceof BigDecimal) {
-	        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Long) {
-	        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Short) {
-	        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Integer) {
-	        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
+	        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Double) {
-	        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Float) {
-	        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof String) {
-	            return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	            return new BigDecimal(((String) valueObj)).setScale(rango, RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof BigInteger) {
-	        	 return new BigDecimal(((BigInteger) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
+	        	 return new BigDecimal(((BigInteger) valueObj)).setScale(rango, RoundingMode.HALF_EVEN);
 	        } else if (valueObj instanceof Number) {
-	            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);       	
+	            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,RoundingMode.HALF_EVEN);       	
 	        } else {
 	            return null;
 	        }
@@ -142,33 +143,33 @@ public class DataToolsModel {
 	   public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
 	        boolean encontro_grupo = false;
 	        int par = 0;
-	        String newdato = "";
+	        StringBuilder newdato = new StringBuilder();
 	        for (int i = 0; i < dato.length(); i++) {
 	            if (dato.charAt(i) == ' ') {
 	                if (encontro_grupo == false) {
 	                    par = par + 1;
 	                    if (par == 2) {
 	                        encontro_grupo = true;
-	                        newdato = newdato.trim();
-	                        newdato += "###";
+	                        newdato.append(newdato.toString().trim());
+	                        newdato.append("###");
 	                    } else {
-	                        newdato += Character.toString(dato.charAt(i));
+	                        newdato.append(Character.toString(dato.charAt(i)));
 	                    }
 	                }
 	            } else {
 	                par = 0;
 	                encontro_grupo = false;
-	                newdato += Character.toString(dato.charAt(i));
+	                newdato.append(Character.toString(dato.charAt(i)));
 	            }
 	        }
-	        return newdato;
+	        return newdato.toString();
 	    }
 	   
 	   
 	public String eliminaSpacios(String texto, char delimiter, String valor) {
 		boolean encontro_grupo = false;
 		int counterspace = 0;
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < texto.length(); i++) {
 			if (texto.charAt(i) == ' ' ) {
 		
@@ -177,10 +178,10 @@ public class DataToolsModel {
 						   counterspace = counterspace + 1;
 							if (counterspace == 2) {
 								 encontro_grupo = true;
-								result = result.trim();
-								result += "###";
+								result.append(result.toString().trim());
+								result.append("###");
 							} else {
-								result += Character.toString(texto.charAt(i));
+								result.append(Character.toString(texto.charAt(i)));
 							}
 					   }
 					
@@ -189,7 +190,7 @@ public class DataToolsModel {
 						counterspace = 1;
 
 						if (result.length() > 0) {
-							result += Character.toString(texto.charAt(i));
+							result.append(Character.toString(texto.charAt(i)));
 						}
 					}
 				}
@@ -197,10 +198,10 @@ public class DataToolsModel {
 			} else {
 				encontro_grupo= false;
 				counterspace = 0;
-				result += Character.toString(texto.charAt(i));
+				result.append(Character.toString(texto.charAt(i)));
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
 	public String gatos(String texto) {// QUITA ### AL INICIO Y FINAL
@@ -458,19 +459,19 @@ public class DataToolsModel {
 	}
 
 	public String filtroPorRango(String texto, int rango) {
-		String textonuevo = "";
+		StringBuilder textonuevo = new StringBuilder();
 		for (int i = 0; i < texto.split("@@@").length; i++) {
 			if (i < rango) {
 				if (i == 0) {
-					textonuevo = texto.split("@@@")[i].trim();
+					textonuevo.append(texto.split("@@@")[i].trim());
 				} else {
-					textonuevo += "\r\n@@@" + texto.split("@@@")[i].trim();
+					textonuevo.append("\r\n@@@" + texto.split("@@@")[i].trim());
 				}
 			} else {
 				break;
 			}
 		}
-		return textonuevo;
+		return textonuevo.toString();
 	}
 
 	public int recorreContenido(String texto, String search) {
@@ -642,7 +643,7 @@ public class DataToolsModel {
 	}
 	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, Boolean tipo)
 			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
-		String x = "";
+		StringBuilder x = new StringBuilder();
 		int listado = 0;
 
 		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
@@ -656,7 +657,7 @@ public class DataToolsModel {
 						s.setParagraphStart("###");
 						s.setSortByPosition(true);
 						s = pdfStripper;
-						x += s.getText(pdDoc);
+						x.append(s.getText(pdDoc));
 						break;
 					}
 				} else {// certificado
@@ -664,13 +665,13 @@ public class DataToolsModel {
 					s.setParagraphStart("###");
 					s.setSortByPosition(true);
 					s = pdfStripper;
-					x += s.getText(pdDoc);
+					x.append(s.getText(pdDoc));
 
 				}
 			}
 
 		}
-		return x;
+		return x.toString();
 	}
 	  public String dateAdd(String fecha, int cuantos, int caso) {
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
