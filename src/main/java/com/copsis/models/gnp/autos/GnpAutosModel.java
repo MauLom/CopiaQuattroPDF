@@ -13,8 +13,12 @@ public class GnpAutosModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
-	private String contenido = "", newcontenido = "";
-	private int inicio = 0, fin = 0, donde = 0, longitud_texto = 0;
+	private String contenido = "";
+	private String newcontenido = "";
+	private int inicio = 0;
+	private int fin = 0;
+	private int donde = 0;
+	private int longitud_texto = 0;
 
 	// constructor
 	public GnpAutosModel(String contenido) {
@@ -22,6 +26,7 @@ public class GnpAutosModel {
 	}
 
 	public EstructuraJsonModel procesar() {
+		
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 
@@ -31,7 +36,7 @@ public class GnpAutosModel {
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(18);
-		
+
 			// poliza
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "No. Póliza");
@@ -370,7 +375,7 @@ public class GnpAutosModel {
 
 			modelo.setCoberturas(coberturas);
 
-            modelo.setFechaEmision(modelo.getVigenciaA());
+			modelo.setFechaEmision(modelo.getVigenciaA());
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 

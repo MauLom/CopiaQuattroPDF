@@ -15,10 +15,15 @@ public class MapfreVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
-	private String inicontenido = "", contenido = "", newcontenido = "",
-			resultado = "";;
-	private int inicio = 0, fin = 0, index = 0, donde = 0,longitud_split =0;
-
+	private String inicontenido = "";
+	private String contenido = "";
+	private String newcontenido = "";
+	private String resultado = "";
+	private int inicio = 0;
+	private int fin = 0;
+	private int index = 0;
+	private int donde = 0;
+	private int longitud_split = 0;
 
 	// constructor
 	public MapfreVidaModel(String contenido) {
@@ -101,13 +106,14 @@ public class MapfreVidaModel {
 			} else {
 				dcl = "Contratante";
 			}
-			newcontenido=contenido.split(st)[1].split(dcl)[0].replace("@@@", "").replace(":", "").replace("###", "").replace("\r\nPóliza Grupo", "").trim();
-			if(newcontenido.length() > 100) {
+			newcontenido = contenido.split(st)[1].split(dcl)[0].replace("@@@", "").replace(":", "").replace("###", "")
+					.replace("\r\nPóliza Grupo", "").trim();
+			if (newcontenido.length() > 100) {
 				modelo.setIdCliente(newcontenido.split("Tel")[0].replace("\r\n", ""));
-			}else {
+			} else {
 				modelo.setIdCliente(newcontenido);
 			}
-			
+
 			// cte_nombre
 			donde = 0;
 			donde = fn.searchTwoTexts(contenido, "Contratante:", "R.F.C");
@@ -651,11 +657,11 @@ public class MapfreVidaModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + index, fin).replace("@@@", "").replace("@@", "").trim();
 				for (String a : newcontenido.split("\n")) {
-				
+
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					switch (a.split("###").length) {
 					case 4:
-		
+
 						asegurado.setNacimiento(fn.formatDate(a.split("###")[1].trim(), "dd-MM-yy"));
 						asegurado.setNombre(a.split("###")[0].trim().replace("###", ""));
 						asegurado.setSexo(1);
@@ -677,7 +683,8 @@ public class MapfreVidaModel {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						if (dato.contains("Asegurado:") && dato.contains("R.F.C:")) {
 							System.out.println(dato);
-							asegurado.setNombre(dato.split("Asegurado:")[1].trim().split("R.F.C:")[0].replace("###", "").trim());
+							asegurado.setNombre(
+									dato.split("Asegurado:")[1].trim().split("R.F.C:")[0].replace("###", "").trim());
 							if (dato.split("###").length == 2) {
 								if (dato.split("###")[1].contains("Nac:")) {
 									asegurado.setNacimiento(
@@ -686,7 +693,8 @@ public class MapfreVidaModel {
 							}
 							if (dato.split("###").length == 6) {
 								if (dato.contains("Nacimiento:")) {
-									asegurado.setNacimiento(fn.formatDate(dato.split("Nacimiento:")[1].replace("###", "").trim(),"dd-MM-yy"));
+									asegurado.setNacimiento(fn.formatDate(
+											dato.split("Nacimiento:")[1].replace("###", "").trim(), "dd-MM-yy"));
 								}
 							}
 							asegurado.setSexo(1);
@@ -758,10 +766,10 @@ public class MapfreVidaModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
 			if (donde > 0) {
-	
+
 				for (String dato : inicontenido.split("@@@")[donde + 1].split("\r\n")) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					   newcontenido = RemplazaGrupoSpace(dato.trim());
+					newcontenido = RemplazaGrupoSpace(dato.trim());
 					if (newcontenido.split("###").length == 5) {
 						cobertura.setNombre(newcontenido.split("###")[0].replace("*", "").trim());
 						cobertura.setSa(newcontenido.split("###")[1].trim());
@@ -810,8 +818,9 @@ public class MapfreVidaModel {
 			;
 
 			if (contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS") > 0) {
-				String beneFi = RemplazaGrupoSpace( inicontenido.split("DESIGNACION DE LOS BENEFICIARIOS")[1].split("PARTICIPACIÓN")[1]
-						.split("En testimonio ")[0].replace("@@@", ""));
+				String beneFi = RemplazaGrupoSpace(
+						inicontenido.split("DESIGNACION DE LOS BENEFICIARIOS")[1].split("PARTICIPACIÓN")[1]
+								.split("En testimonio ")[0].replace("@@@", ""));
 				for (String ben : beneFi.split("\r\n")) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int tmben = ben.split("###").length;
@@ -828,7 +837,7 @@ public class MapfreVidaModel {
 
 			} else {
 				if (modelo.getBeneficiarios().size() == 0) {
-					if (inicontenido.contains("BENEFICIARIOS") 
+					if (inicontenido.contains("BENEFICIARIOS")
 							&& inicontenido.contains("LA DOCUMENTACION CONTRACTUAL")) {
 						String beng = RemplazaGrupoSpace(inicontenido.split("BENEFICIARIOS")[1].split("PORCENTAJE")[1]
 								.split("LA DOCUMENTACION CONTRACTUAL")[0]);
@@ -885,30 +894,30 @@ public class MapfreVidaModel {
 			return modelo;
 		}
 	}
-	
-	  public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
-	        boolean encontro_grupo = false;
-	        int par = 0;
-	        String newdato = "";
-	        for (int i = 0; i < dato.length(); i++) {
-	            if (dato.charAt(i) == ' ') {
-	                if (encontro_grupo == false) {
-	                    par = par + 1;
-	                    if (par == 2) {
-	                        encontro_grupo = true;
-	                        newdato = newdato.trim();
-	                        newdato += "###";
-	                    } else {
-	                        newdato += Character.toString(dato.charAt(i));
-	                    }
-	                }
-	            } else {
-	                par = 0;
-	                encontro_grupo = false;
-	                newdato += Character.toString(dato.charAt(i));
-	            }
-	        }
-	        return newdato;
-	    }
+
+	public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
+		boolean encontro_grupo = false;
+		int par = 0;
+		String newdato = "";
+		for (int i = 0; i < dato.length(); i++) {
+			if (dato.charAt(i) == ' ') {
+				if (encontro_grupo == false) {
+					par = par + 1;
+					if (par == 2) {
+						encontro_grupo = true;
+						newdato = newdato.trim();
+						newdato += "###";
+					} else {
+						newdato += Character.toString(dato.charAt(i));
+					}
+				}
+			} else {
+				par = 0;
+				encontro_grupo = false;
+				newdato += Character.toString(dato.charAt(i));
+			}
+		}
+		return newdato;
+	}
 
 }
