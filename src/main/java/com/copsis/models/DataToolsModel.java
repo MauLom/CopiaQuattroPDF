@@ -138,6 +138,28 @@ public class DataToolsModel {
 	            return null;
 	        }
 	    }
+	   
+	   
+	    public String elimina_spacios(String texto) {
+	        String result = "";
+	        int counter_space = 0;
+	        for (int i = 0; i < texto.length(); i++) {
+	            if (texto.charAt(i) == ' ') {
+	            	System.out.println(counter_space);
+	                if (counter_space < 1) {
+	                    counter_space = 1;
+	                    if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
+	                        result += Character.toString(texto.charAt(i));
+	                    }
+	                }
+	            } else {
+	                counter_space = 0;
+	                result += Character.toString(texto.charAt(i));
+	            }
+	        }
+	        return result;
+	    }
+
 
 	   
 	   public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
@@ -722,6 +744,7 @@ public class DataToolsModel {
         stripper.setSortByPosition(true);
         return stripper.getText(doc);
     }
+    
 
     
  
