@@ -1,5 +1,7 @@
 package com.copsis.models.gnp;
 
+import java.io.IOException;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 

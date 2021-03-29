@@ -1,6 +1,7 @@
 package com.copsis.models.mapfre.autos;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -13,24 +14,11 @@ public class MapfreAutosModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
-	private String inicontenido = "";
-	private String contenido = "";
-	private String newcontenido = "";
-	private String txtAux = "";
-	private String txt = "";
-	private String recibos = "";
-	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int index = 0;
-	private float restoPrimaTotal = 0;
-	private float restoDerecho = 0;
-	private float restoIva = 0;
-	private float restoRecargo = 0;
-	private float restoPrimaNeta = 0;
-	private float restoAjusteUno = 0;
-	private float restoAjusteDos = 0;
-	private float restoCargoExtra = 0;
+	private String inicontenido = "", contenido = "", newcontenido = "", txtAux = "", txt = "", recibos = "",
+			resultado = "";;
+	private int inicio = 0, fin = 0, index;
+	private float restoPrimaTotal = 0, restoDerecho = 0, restoIva = 0, restoRecargo = 0, restoPrimaNeta = 0,
+			restoAjusteUno = 0, restoAjusteDos = 0, restoCargoExtra = 0;
 
 	// constructor
 	public MapfreAutosModel(String contenido, String recibos) {
@@ -419,14 +407,14 @@ public class MapfreAutosModel {
 				if (txt.split("###").length == 1) {
 					modelo.setSerie(txt);
 				}
-			} else {
-				// serie
-				inicio = contenido.indexOf("de Serie:");
-				fin = contenido.indexOf("Remolque:");
-				if (inicio > -1 && fin > inicio) {
-					txt = fn.gatos(contenido.substring(inicio + 9, fin));
-					modelo.setSerie(txt);
-				}
+			}else {
+				 //serie
+	            inicio = contenido.indexOf("de Serie:");
+	            fin = contenido.indexOf("Remolque:");
+	            if (inicio > -1 && fin > inicio) {
+	                txt = fn.gatos(contenido.substring(inicio + 9, fin));
+	                modelo.setSerie(txt);
+	            }
 			}
 
 			// motor
@@ -582,9 +570,7 @@ public class MapfreAutosModel {
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 			if (recibos.length() > 0) {
-
-				recibosList = recibosExtract();
-				System.out.println(recibosList.get(0).getReciboId());
+				 recibosList = recibosExtract();				
 			}
 
 			switch (modelo.getFormaPago()) {
@@ -787,7 +773,7 @@ public class MapfreAutosModel {
 		} catch (Exception ex) {
 			modelo.setError(
 					MapfreAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-			return (ArrayList<EstructuraRecibosModel>) recibosLis;
+			return (ArrayList) recibosLis;
 		}
 
 	}

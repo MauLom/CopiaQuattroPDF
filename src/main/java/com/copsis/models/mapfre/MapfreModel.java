@@ -53,6 +53,11 @@ public class MapfreModel {
 			        modelo  = new MapfreSaludModel(fn.caratula(1, 5, stripper, doc)).procesar();
 			  }
 			  
+			  
+			  if (contenido.contains("MULTIPLE EMPRESARIAL") || contenido.contains("SEGUPYME") || contenido.contains("HOGAR")) { //EMPRESARIAL
+	              
+				  modelo = new MapfreDiversosModel(fn.caratula(1, 2, stripper, doc), fn.textoBusqueda(stripper, doc, "Serie de recibo:",false), fn.textoBusqueda(stripper, doc, "ESPECIFICACION DE BIENES CUBIERTOS PARA",false)).procesar();
+	            } 
 
 			return modelo;
 		} catch (Exception ex) {
