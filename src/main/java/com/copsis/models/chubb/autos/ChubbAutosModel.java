@@ -1,6 +1,7 @@
 package com.copsis.models.chubb.autos;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 import lombok.Data;
 
@@ -16,47 +18,47 @@ import lombok.Data;
 public class ChubbAutosModel {
 	// Clases
 	DataToolsModel fn = new DataToolsModel();
+	EstructuraJsonModel modelo = new EstructuraJsonModel();
 
 	// Variables
 	private String contenido;
 	private String recibos = "";
+	private int inicio = 0;
+	private int fin = 0;
+	String newcontenido = "";
+	BigDecimal restoPrimaTotal = BigDecimal.ZERO;
+	BigDecimal restoDerecho = BigDecimal.ZERO;
+	BigDecimal restoIva = BigDecimal.ZERO;
+	BigDecimal restoRecargo = BigDecimal.ZERO;
+	BigDecimal restoPrimaNeta = BigDecimal.ZERO;
+	BigDecimal restoAjusteUno = BigDecimal.ZERO;
+	BigDecimal restoAjusteDos = BigDecimal.ZERO;
+	BigDecimal restoCargoExtra = BigDecimal.ZERO;
 
 	public EstructuraJsonModel procesar() {
-		// Clases
-		EstructuraJsonModel modelo = new EstructuraJsonModel();
 		try {
-			// Clases
-			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
 			// Variables
-			String F_DEPAGO;
-			BigDecimal r_prima_neta;
-			BigDecimal r_recargo;
-			BigDecimal r_derecho;
-			BigDecimal r_iva;
-			BigDecimal r_prima_total;
-			BigDecimal r_ajuste2;
-			BigDecimal r_ajuste1;
-			int numero_recibo;
-			int inicio = 0;
-			int fin = 0;
-			int donde = 0;
-			String resultado = "";
-			String newcontenido = "";
+			/*
+			 * String F_DEPAGO; BigDecimal r_prima_neta; BigDecimal r_recargo; BigDecimal
+			 * r_derecho; BigDecimal r_iva; BigDecimal r_prima_total; BigDecimal r_ajuste2;
+			 * BigDecimal r_ajuste1; int numero_recibo;
+			 */
+
+			/* int donde = 0; */
+			// String resultado = "";
+			/*
+			 * float restoPrimaTotal = 0; float restoDerecho = 0; float restoIva = 0; float
+			 * restoRecargo = 0; float restoPrimaNeta = 0; float restoAjusteUno = 0; float
+			 * restoAjusteDos = 0; float restoCargoExtra = 0;
+			 */
 			String separador = "###";
 			String saltolinea = "\r\n";
-			float restoPrimaTotal = 0;
-			float restoDerecho = 0;
-			float restoIva = 0;
-			float restoRecargo = 0;
-			float restoPrimaNeta = 0;
-			float restoAjusteUno = 0;
-			float restoAjusteDos = 0;
-			float restoCargoExtra = 0;
 			List<String> conceptos;
+			List<String> conceptosFin;
 
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			System.out.println(contenido);
+			contenido = contenido.replace("Prima neta", "Prima Neta");
 
 			// tipo
 			modelo.setTipo(1);
@@ -72,68 +74,52 @@ public class ChubbAutosModel {
 					fn.moneda(contenido.split("Moneda:")[1].split("Forma de pago:")[0].replace("###", "").trim()));
 
 			// Renovacion
-			donde = 0;
-			donde = fn.recorreContenido(contenido, "Póliza anterior:");
-			System.out.println(donde);
-			if (donde > 0) {
-				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.split("###").length == 1) {
-						if (dato.split("###")[0].contains("anterior:")) {
-							modelo.setRenovacion(dato.split("###")[1].trim());
-						}
+			conceptos = Arrays.asList("Póliza anterior:###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Póliza anterior:###":
+						inicio = inicio + 19;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						modelo.setRenovacion(newcontenido.split("Moneda")[0].replace("###", "").trim());
+						break;
 					}
 				}
-
 			}
 
 			// Plan
-			donde = 0;
-			donde = fn.recorreContenido(contenido, "Paquete:");
-			if (donde > 0) {
-				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.split("###").length == 2) {
-						if (dato.split("###")[0].equals("Paquete:")) {
-							modelo.setPlan(dato.split("###")[1].trim());
-						}
-					} else if (dato.split("###").length == 7) {
-						if (dato.split("###")[5].equals("Paquete:")) {
-							modelo.setPlan(dato.split("###")[6].trim());
-						}
-					} else if (dato.split("###").length == 8) {
-						if (dato.split("###")[6].equals("Paquete:")) {
-							modelo.setPlan(dato.split("###")[7].trim());
-						}
+			conceptos = Arrays.asList("Paquete:###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Paquete:###":
+						inicio = inicio + 11;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						modelo.setPlan(newcontenido.split(saltolinea)[0].trim());
+						break;
 					}
 				}
 			}
 
 			// FormaPago
-				conceptos = Arrays.asList("Forma de pago:");
-				for (String x : conceptos) {
-					inicio = contenido.indexOf(x);
-					if (inicio > -1) {
-						switch (x) {
-						case "Forma de pago:":
-							inicio = inicio + 17;
-							newcontenido = contenido.substring(inicio, (inicio + 100));
-							System.out.println(newcontenido);
-							modelo.setFormaPago(fn.formaPago(newcontenido.split(saltolinea)[0].trim()));
-							break;
-						}
+			conceptos = Arrays.asList("Forma de pago:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Forma de pago:":
+						inicio = inicio + 14;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						modelo.setFormaPago(fn.formaPago(newcontenido.split(saltolinea)[0].trim()));
+						break;
 					}
 				}
-			
-//			inicio = contenido.indexOf("Forma de pago:");
-//			fin = contenido.indexOf("Fecha de emisión:");
-//			if (inicio > 0 && fin > 0 && inicio < fin) {
-//				String PAGO = contenido.split("Forma de pago:")[1].split("Fecha de emisión:")[0].replace(".", "")
-//						.replace("###", "").trim();
-//				System.out.println("---< " + PAGO);
-//				modelo.setFormaPago(fn.formaPago(PAGO.trim()));
-//			}
+			}
 
 			// poliza
-				conceptos = Arrays.asList("Póliza:###");
+			conceptos = Arrays.asList("Póliza:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1) {
@@ -141,7 +127,8 @@ public class ChubbAutosModel {
 					case "Póliza:###":
 						inicio = inicio + 10;
 						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setPoliza(newcontenido.split(separador)[0].trim() + " " + newcontenido.split(separador)[1].trim());
+						modelo.setPoliza(newcontenido.split(separador)[0].trim() + " "
+								+ newcontenido.split(separador)[1].trim());
 						break;
 					}
 				}
@@ -162,7 +149,7 @@ public class ChubbAutosModel {
 				}
 			}
 
-			//Contratante
+			// Contratante
 			conceptos = Arrays.asList("Propietario-Contratante:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
@@ -176,8 +163,8 @@ public class ChubbAutosModel {
 					}
 				}
 			}
-			
-			//CteNombre
+
+			// CteNombre
 			conceptos = Arrays.asList("Datos del asegurado y-o propietario");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
@@ -192,7 +179,7 @@ public class ChubbAutosModel {
 				}
 			}
 
-			// cte_direccion
+			// CteDireccion
 			conceptos = Arrays.asList("Domicilio:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
@@ -232,243 +219,567 @@ public class ChubbAutosModel {
 					case "Inciso:###":
 						inicio = inicio + 10;
 						newcontenido = contenido.substring(inicio, (inicio + 100));
-						if(NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
-							modelo.setInciso(Integer.parseInt(newcontenido.split(separador)[0].trim()));	
+						if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
+							modelo.setInciso(Integer.parseInt(newcontenido.split(separador)[0].trim()));
 						}
 						break;
 					}
 				}
 			}
+
+			// Primaneta
+			conceptos = Arrays.asList("Prima Neta###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Prima Neta###":
+						inicio = inicio + 13;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setPrimaneta(
+									Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+						break;
+					}
+				}
+			}
+
+			// PrimaTotal
+			conceptos = Arrays.asList("Prima total###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Prima total###":
+						inicio = inicio + 14;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setPrimaTotal(
+									Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+						break;
+					}
+				}
+			}
+
+			// iva
+			conceptos = Arrays.asList("I.V.A.###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "I.V.A.###":
+						inicio = inicio + 9;
+						newcontenido = contenido.substring(inicio, (inicio + 100));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setIva(Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+						break;
+					}
+				}
+			}
+
+			// CveAgente
+			conceptos = Arrays.asList("Clave interna del agente:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Clave interna del agente:":
+						inicio = inicio + 25;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setCveAgente(newcontenido.contains("-") ? newcontenido.split("-")[0].trim() : "");
+						break;
+					}
+				}
+			}
+
+			// Agente
+			conceptos = Arrays.asList("Clave interna del agente:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Clave interna del agente:":
+						inicio = inicio + 25;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setAgente(newcontenido.split(saltolinea)[0].contains("-")
+								? newcontenido.split(saltolinea)[0].split("-")[2].trim()
+								: "");
+						break;
+					}
+				}
+			}
+
+			// VigenciaDe
+			conceptos = Arrays.asList("Vigencia:###Del###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Vigencia:###Del###":
+						inicio = inicio + 18;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split(separador)[0]));
+						break;
+					}
+				}
+			}
+
+			// VigenciaA
+			conceptos = Arrays.asList("horas al###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "horas al###":
+						inicio = inicio + 11;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split(separador)[0].trim()));
+						break;
+					}
+				}
+			}
+			// Cp
+			conceptos = Arrays.asList("C.P:###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "C.P:###":
+						inicio = inicio + 7;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setCp(newcontenido.split(saltolinea)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// Recargo
+			conceptos = Arrays.asList("por pago fraccionado###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "por pago fraccionado###":
+						inicio = inicio + 23;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setRecargo(
+									Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+						break;
+					}
+				}
+			}
+
+			// Derecho
+			conceptos = Arrays.asList("Gastos de expedición###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Gastos de expedición###":
+						inicio = inicio + 23;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setDerecho(
+									Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+						break;
+					}
+				}
+			}
+
+			// Descripcion
+			conceptos = Arrays.asList("Descripción del vehículo*:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Descripción del vehículo*:":
+						inicio = inicio + 26;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// Clave
+			conceptos = Arrays.asList("Clave vehicular:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Clave vehicular:":
+						inicio = inicio + 16;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setClave(newcontenido.split(separador)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// Modelo
+			conceptos = Arrays.asList("Modelo:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Modelo:":
+						inicio = inicio + 7;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
+							modelo.setModelo(Integer.parseInt(newcontenido.split(separador)[0].trim()));
+						}
+						break;
+					}
+				}
+			}
+
+			// Serie
+			conceptos = Arrays.asList("Serie:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Serie:":
+						inicio = inicio + 6;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setSerie(newcontenido.split(saltolinea)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// Motor
+			conceptos = Arrays.asList("Motor:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Motor:":
+						inicio = inicio + 6;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setMotor(newcontenido.split(saltolinea)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// Placas
+			conceptos = Arrays.asList("Placas:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Placas:":
+						inicio = inicio + 7;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setPlacas(newcontenido.split(saltolinea)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// FechaEmision
+			conceptos = Arrays.asList("Fecha de emisión:###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Fecha de emisión:###":
+						inicio = inicio + 20;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
+						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido));
+						break;
+					}
+				}
+			}
+
+			// Marca
+			conceptos = Arrays.asList("Marca:");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Marca:":
+						inicio = inicio + 6;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setMarca(newcontenido.split(separador)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// IdCliente
+			conceptos = Arrays.asList("Asegurado:###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Asegurado:###":
+						inicio = inicio + 13;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						modelo.setIdCliente(newcontenido.split(separador)[0].trim());
+						break;
+					}
+				}
+			}
+
+			// AjusteUno
+			conceptos = Arrays.asList("Otros descuentos###");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1) {
+					switch (x) {
+					case "Otros descuentos###":
+						inicio = inicio + 19;
+						newcontenido = contenido.substring(inicio, (inicio + 150));
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setAjusteUno(
+									Float.parseFloat(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+
+						break;
+					}
+				}
+			}
+
+			// coberturas
+			List<EstructuraCoberturasModel> coberturas = new ArrayList<EstructuraCoberturasModel>();
+			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima");
+			conceptosFin = Arrays.asList("@@@Prima Neta###");
+			inicio = contenido.indexOf(conceptos.get(0));
+			fin = contenido.indexOf(conceptosFin.get(0));
+			if (inicio > -1 && fin > -1) {
+				inicio = inicio + 34;
+				newcontenido = contenido.substring(inicio, fin);
+				int i = 0;
+				for (String dato : newcontenido.split("\n")) {
+					if (dato.split("###").length >= 3) {
+						// Clases
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						cobertura.setNombre(dato.split("###")[0].trim());
+						cobertura.setDeducible(dato.split("###")[2].trim());
+						cobertura.setSa(dato.split("###")[1].trim());
+						i++;
+						cobertura.setIdx(i);
+						coberturas.add(cobertura);
+					}
+				}
+
+			}
+			modelo.setCoberturas(coberturas);
+
+			// recibos
+			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
+
+			if (!recibos.equals("")) {
+				recibosList = recibosExtract();
+			}
 			
-//            String a;
-//            if (contenido.indexOf("@@@Prima neta###") > 0) {
-//                a = "@@@Prima neta###";
-//            } else {
-//                a = "@@@Prima Neta###";
-//            }
-//
-//            //prima_neta
-//            modelo.setPrima_neta(Float.parseFloat(fn.cleanString(contenido.split(a)[1].split("Otros descuentos")[0].replace("###", "").trim())));
-//
-//            //prima_total
-//            inicio = contenido.indexOf("###Prima total###");
-//            fin = contenido.indexOf("@@@Página 1 de 2");
-//
-//            if (fin > 0) {
-//                inicio = contenido.indexOf("###Prima total###");
-//                if (inicio > 0) {
-//                    inicio = contenido.indexOf("###Prima total###") + 17;
-//                    fin = contenido.indexOf("@@@Página 1 de 2");
-//                    
-//                    if (inicio > 0 && fin > 0 && inicio < fin) {
-//                        modelo.setPrima_total(Float.parseFloat(fn.cleanString(contenido.substring(inicio, fin).replace("###", "").trim())));
-//                    }
-//
-//                }
-//
-//            } else {
-//                inicio = contenido.indexOf("Prima Total:###");
-//                if (inicio > -1) {
-//                    inicio = contenido.indexOf("Prima Total:###") + 12;
-//                    fin = contenido.indexOf("@@@página 1 de 2");
-//
-//                    if (inicio > 0 && fin > 0 && inicio < fin) {
-//                        String conte_prima = contenido.substring(inicio, fin).replace("###", "").trim();
-//                        if (conte_prima.contains("Encumplimientoalo")) {
-//                            modelo.setPrima_total(Float.parseFloat(fn.cleanString(conte_prima.split("\n")[0].trim())));
-//                        } else {
-//                            modelo.setPrima_total(Float.parseFloat(fn.cleanString(contenido.substring(inicio, fin).replace("###", "").trim())));
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-//
-//            this.limpio(inicio, fin);
-//            //iva
-//            inicio = contenido.indexOf("I.V.A.###");
-//            if (inicio > 0) {
-//                inicio = contenido.indexOf("I.V.A.###") + 9;
-//                modelo.setIva(Float.parseFloat(fn.cleanString(contenido.substring(inicio, inicio + 30).split("\r\n")[0])));
-//            }
-//
-//            inicio = 0;
-//
-//            inicio = contenido.indexOf("Clave interna del agente:");
-//            fin = contenido.indexOf("Descripción del vehículo");
-//
-//            if (inicio > 0 && fin > 0 && inicio < fin) {
-//                newcontenido = contenido.substring(inicio, fin);
-//                String ag = "";
-//                if (newcontenido.contains("- 0 -") == true) {
-//                    ag = "- 0 -";
-//                } else if (newcontenido.contains("###0 -") == true) {
-//                    ag = "###0 -";
-//                } else if (newcontenido.contains("- 1 -") == true) {
-//                    ag = "- 1 -";
-//                } else if (newcontenido.contains("- 2 -") == true) {
-//                    ag = "- 2 -";
-//                } else if (newcontenido.contains("- 3 -") == true) {
-//                    ag = "- 3 -";
-//                } else if (newcontenido.contains("###0###-") == true) {
-//                    ag = "###0###-";
-//                }
-//
-//                inicio = contenido.indexOf("Clave interna del agente:");
-//
-//                if (inicio > 0) {
-//                    String clav_agente = contenido.split("Clave interna del agente:")[1];
-//
-//                    if (clav_agente.contains("Descripción del vehículo") == true) {
-//                        String agente = contenido.split("Clave interna del agente:")[1].split("Descripción del vehículo")[0]
-//                                .split(ag)[1];
-//                        String cv_agente = contenido.split("Clave interna del agente:")[1].split("Descripción del vehículo")[0]
-//                                .split(ag)[0].replace("###", "");
-//                        // agente
-//                        modelo.setAgente(agente.replace("\r\n", "").replace("###", " ").replace("@@@", "").trim());
-//                      
-//                        modelo.setCve_agente(cv_agente.replace("Conducto:", "").replace("191748Conducto:", "").trim());
-//
-//                    } else {
-//
-//                    }
-//                }
-//
-//            }
-//
-//            String Vigenciaspolizas = contenido.split("Vigencia")[1].split("Inciso")[0].replace("Del", "").replace("al", "").replace("12:00 horas", "").replace(":", "").replace("######", "");
-//
-//            if (Vigenciaspolizas.split("###").length == 4) {
-//                //vigencia_de 
-//                modelo.setVigencia_de(fn.formatDate_MonthCadena(Vigenciaspolizas.split("###")[0]));
-//                //vigencia_a 
-//                modelo.setVigencia_a(fn.formatDate_MonthCadena(Vigenciaspolizas.split("###")[2].trim()));
-//            } else {
-//                //vigencia_de
-//                modelo.setVigencia_de(fn.formatDate_MonthCadena(Vigenciaspolizas.split("###")[0]));
-//                modelo.setVigencia_a(fn.formatDate_MonthCadena(Vigenciaspolizas.split("###")[1].trim()));
-//            }
-//
-//            //cp
-//            inicio = contenido.indexOf("###C.P.:###");
-//           if (inicio > -1) {
-//                newcontenido = contenido.substring(inicio + 11, inicio + 16);
-//                modelo.setCp(newcontenido.replace("\n\r", ""));
-//            }
-//
-//            //recargo = financiamiento pago fraccionado
-//            String recargo = contenido.split("Financiamiento por pago fraccionado")[1].split("Gastos de expedición")[0].split("\n")[0].replace("###", "");
-//
-//            modelo.setRecargo(Float.parseFloat(fn.cleanString(recargo.trim())));
-//            r_recargo = fn.cleanStringv2(recargo.trim());
-//
-//            inicio = contenido.indexOf("Gastos de expedición###");
-//            if (inicio > 0) {
-//                //derecho = gastos de expedicion
-//                inicio = contenido.indexOf("Gastos de expedición###") + 23;
-//                fin = contenido.indexOf("I.V.A.###");
-//                if (inicio > 0 && fin > 0 && inicio < fin) {
-//                    modelo.setDerecho(Float.parseFloat(fn.cleanString(contenido.substring(inicio, fin).trim())));
-//                }
-//
-//            }
-//
-//            this.limpio(inicio, fin);
-//
-//            inicio = contenido.indexOf("Modelo:");
-//
-//            if (inicio > 0) {
-//                String descriauto = contenido.split("Modelo:")[0];
-//
-//                if (descriauto.split("Clave interna del agente:")[1].split("\n")[2].split("###").length > 1) {
-//                    modelo.setDescripcion(descriauto.split("Clave interna del agente:")[1].split("\n")[2].split("###")[1].replace("\r", ""));
-//                } else {
-//
-//                    inicio = contenido.indexOf("Descripción del vehículo*:");
-//                    fin = contenido.indexOf("Modelo:");
-//                    if (inicio > 0 && fin > 0 && inicio < fin) {
-//                        newcontenido = contenido.substring(inicio, fin);
-//                        modelo.setDescripcion(newcontenido.replace("Descripción del vehículo*:", "").trim());
-//                    } else {
-//                        modelo.setDescripcion(descriauto.split("Clave interna del agente:")[1].split("\n")[2].split(":")[1].replace("\r", ""));
-//                    }
-//
-//                }
-//
-//            }
-//
-//            //clave
-//            donde = 0;
-//            donde = fn.recorreContenido(contenido, "Clave vehicular:");
-//
-//            if (donde > 0) {
-//                for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-//                    if (dato.contains("Clave vehicular:")) {
-//                        if (dato.split("###").length == 4) {
-//                            if (dato.split("###")[0].contains("Clave vehicular:")) {
-//                                modelo.setClave(dato.split("###")[0].split("vehicular:")[1].trim());
-//                            }
-//                        } else if (dato.split("###").length == 3) {
-//                            if (dato.split("###")[0].contains("Clave vehicular:")) {
-//                                modelo.setClave(dato.split("###")[0].split("vehicular:")[1].trim());
-//                            }
-//                        } else {
-//                            if (dato.split("###").length == 6) {
-//                                if (dato.split("###")[0].contains("Clave vehicular:")) {
-//                                    modelo.setClave(dato.split("###")[1].trim());
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            modelo.setModelo(Integer.parseInt(fn.cleanString(contenido.split("Modelo:")[1].split("Serie:")[0].replace("###", ""))));
-//            //serie
-//            modelo.setSerie(contenido.split("Serie:")[1].split("Marca:")[0].replace("###", "").replace("\r\n", "").replace("@@@", "").trim());
-//            //motor
-//            modelo.setMotor(contenido.split("Motor:")[1].split("Descripción de abreviaturas")[0].split("\n")[0].replace("###", "").replace("\r", ""));
-//            //placas
-//
-//            String placas = contenido.split("Placas:")[1].split("Desglose de coberturas")[0].replace("###", "").replace("\r\n", "").replace("@@@", "");
-//
-//            inicio = placas.indexOf("*Descripción de abreviaturas");
-//
-//            if (inicio > 0) {
-//                int infb= placas.indexOf("Uso");
-//                 if(infb  > 0){
-//                 modelo.setPlacas(placas.split("Uso")[0].replace("*", "").trim());
-//                 }else{
-//                 modelo.setPlacas(placas.split("Descripción de abreviaturas")[0].replace("*", "").trim());
-//                 }
-//                
-//            } else {
-//
-//                if (placas.split("###").length > 1) {
-//                    
-//                    modelo.setPlacas(placas);
-//                } else {
-//                    if (placas.length() > 20) {
-//                    } else {
-//                   
-//                        modelo.setPlacas(placas.trim());
-//                    }                  
-//                }
-//            }
-//            if(modelo.getPlacas().length()> 10){
-//             modelo.setPlacas(modelo.getPlacas().substring(0, 9));
-//            }
-//
-//            modelo.setFecha_emision(fn.formatDate_MonthCadena(contenido.split("Fecha de emisión:")[1].split("Referencia:")[0].replace("###", "").replace("DE", "/").replace(" ", "")));
-//            modelo.setMarca(contenido.split("Marca:")[1].split("Capacidad:")[0].replace("###", "").trim());
-//
-//            modelo.setId_cliente(contenido.split("Asegurado:")[1].split("Paquete:")[0].replace("###", "").trim());
+			switch (modelo.getFormaPago()) {
+			case 1:
+				if (recibosList.size() == 0) {
+					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+					recibo.setReciboId("");
+					recibo.setSerie("1/1");
+					recibo.setVigenciaDe(modelo.getVigenciaDe());
+					recibo.setVigenciaA(modelo.getVigenciaA());
+					if (recibo.getVigenciaDe().length() > 0) {
+						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+					}
+					recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta()));
+					recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho()));
+					recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo()));
+					recibo.setIva(fn.castBigDecimal(modelo.getIva()));
+					recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal()));
+					recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno()));
+					recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos()));
+					recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra()));
+					recibosList.add(recibo);
+				}
+				break;
+			case 2:
+				if (recibosList.size() == 1) {
+					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+					recibo.setReciboId("");
+					recibo.setSerie("2/2");
+					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
+					recibo.setVigenciaA(modelo.getVigenciaA());
+					recibo.setVencimiento("");
+					recibo.setPrimaneta(restoPrimaNeta);
+					recibo.setPrimaTotal(restoPrimaTotal);
+					recibo.setRecargo(restoRecargo);
+					recibo.setDerecho(restoDerecho);
+					recibo.setIva(restoIva);
+					recibo.setAjusteUno(restoAjusteUno);
+					recibo.setAjusteDos(restoAjusteDos);
+					recibo.setCargoExtra(restoCargoExtra);
+					recibosList.add(recibo);
+				}
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 6: // NINGUN PDF TRAE RECIBOS SE QUEDA PENDIENTE ESTE CASO
+				if (recibosList.size() >= 1) {
+					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
+					int totalRec = fn.getTotalRec(modelo.getFormaPago());
+					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
+						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+						recibo.setSerie(i + 1 + "/" + totalRec);
+						recibo.setReciboId("");
+						recibo.setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
+						recibo.setVigenciaA("");
+						recibo.setVencimiento("");
+						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec));
+						recibo.setRecargo(restoRecargo.divide(restoRec));
+						recibo.setDerecho(restoDerecho.divide(restoRec));
+						recibo.setIva(restoIva.divide(restoRec));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec));
+						recibosList.add(recibo);
+					}
+				}
+				break;
+
+			}
+			modelo.setRecibos(recibosList);
 
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
 					ChubbAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
+		}
+	}
+
+	private ArrayList<EstructuraRecibosModel> recibosExtract() {
+		List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
+		try {
+			//System.out.println(recibos);
+			recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
+			int index = 0;
+			int totalRec = fn.getTotalRec(modelo.getFormaPago());
+			int recibosSerie = 1;
+
+			ArrayList<String> series = new ArrayList<String>();
+			for (String a : recibos.split("AVISO DE COBRO")) {
+
+				if (index > 0 && a.contains("De recibo:")) {
+					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+					//
+					// recibo_id
+					inicio = a.indexOf("No. De recibo:");
+					String actualSerie = "";
+					fin = a.indexOf("Endoso:");
+					if (inicio > -1 && fin > inicio) {
+						newcontenido = fn.gatos(a.substring(inicio + 14, fin)).trim();
+						actualSerie = recibo.getReciboId();
+					}
+
+					if (index == 1 || !series.contains(actualSerie)) {
+
+						recibo.setSerie(actualSerie);
+						recibo.setSerie(recibosSerie + "/" + totalRec);
+
+						inicio = a.indexOf("No. De recibo:");
+						fin = a.indexOf("Endoso:");
+						if (inicio > -1 && fin > inicio) {
+							newcontenido = fn.gatos(a.substring(inicio + 14, fin)).trim();
+
+						}
+
+						if (a.contains("Vigencia") && a.contains("Inciso")) {
+							recibo.setVigenciaDe(fn.formatDate(
+									a.split("Del")[1].split("horas")[0].replace("12:00", "").replace("###", "").trim(),
+									"yyy-mm-dd"));
+							recibo.setVigenciaA(fn.formatDate(
+									a.split("al")[1].split("horas")[0].replace("12:00", "").replace("###", "").trim(),
+									"yyyy-mm-dd"));
+						}
+
+						inicio = a.indexOf("Total a pagar:");
+						if (inicio > -1) {
+							if (a.split("Total a pagar:")[1].contains("I.V.A.")) {
+								if (fn.cleanString(a.split("Total a pagar:")[1].split("I.V.A.")[0].replace("###", "")
+										.replace("$", "").trim()).contains("ABA")) {
+
+									recibo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(fn
+											.cleanString(a.split("Total a pagar:")[1].split("\n")[1].split("###")[3])),
+											2));
+									restoPrimaTotal = fn.castBigDecimal(modelo.getPrimaTotal())
+											.subtract(recibo.getPrimaTotal());
+								} else {
+
+									recibo.setPrimaTotal(fn.castBigDecimal(
+											fn.cleanString(a.split("Total a pagar:")[1].split("I.V.A.")[0]
+													.replace("###", "").replace("$", "").trim()),
+											2));
+									restoPrimaTotal = fn.castBigDecimal(modelo.getPrimaTotal())
+											.subtract(recibo.getPrimaTotal());
+								}
+							} else {
+								recibo.setPrimaTotal(fn.castBigDecimal(
+										fn.cleanString(
+												a.split("Total a pagar:")[1].split("###")[2].split("\r\n")[0].trim()),
+										2));
+								restoPrimaTotal = fn.castBigDecimal(modelo.getPrimaTotal())
+										.subtract(recibo.getPrimaTotal());
+							}
+						}
+
+						if (a.contains("Gastos de expedición")) {
+							if (a.split("Gastos de expedición")[1].contains("pago fraccioTnoadtoal")) {
+								recibo.setDerecho(fn.castBigDecimal(fn.cleanString(
+										a.split("Gastos de expedición")[1].split("pago fraccioTnoadtoal")[0]
+												.replace("###", "").replace("$", "").trim()),
+										2));
+								restoDerecho = fn.castBigDecimal(modelo.getDerecho()).subtract(recibo.getDerecho());
+							} else {
+								recibo.setDerecho(fn.castBigDecimal(fn.cleanString(
+										a.split("Gastos de expedición")[1].split("###")[2].split("\r\n")[0].trim()),
+										2));
+								restoDerecho = fn.castBigDecimal(modelo.getDerecho()).subtract(recibo.getDerecho());
+							}
+						}
+
+						if (a.contains("I.V.A")) {
+							recibo.setIva(fn.castBigDecimal(
+									fn.cleanString(a.split("I.V.A.")[1].split("###")[2].split("\r\n")[0].trim())));
+							restoIva = fn.castBigDecimal(modelo.getIva()).subtract(recibo.getIva());
+						}
+						System.out.println("aqui");
+						if (a.contains("Financiamiento")) {
+							recibo.setRecargo(fn.castBigDecimal(fn.cleanString(
+									a.split("Financiamiento")[1].split("###")[2].split("\r\n")[0].trim())));
+							restoRecargo = fn.castBigDecimal(modelo.getRecargo()).subtract(recibo.getRecargo());
+						}
+						System.out.println("aqui");
+						if (a.contains("Prima Neta")) {
+							recibo.setPrimaneta(fn.castBigDecimal(
+									fn.cleanString(a.split("Prima Neta")[1].split("###")[2].split("\r\n")[0].trim()),
+									2));
+							restoPrimaNeta = fn.castBigDecimal(modelo.getPrimaneta()).subtract(recibo.getPrimaneta());
+						}
+						System.out.println("aqui");
+						recibosLis.add(recibo);
+						series.add(actualSerie);
+					}
+				}
+				index++;
+			}
+			return (ArrayList<EstructuraRecibosModel>) recibosLis;
+		} catch (Exception ex) {
+			System.out.println("DatosChubb.getRecibos " + ex.getMessage() + " | " + ex.getCause());
+			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		}
 	}
 }

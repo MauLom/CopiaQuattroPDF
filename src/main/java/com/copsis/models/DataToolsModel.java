@@ -34,6 +34,10 @@ public class DataToolsModel {
 		return texto;
 	}
 
+	public String preparaPrimas(String texto) {// limpiar de signos los datos antes de convertir a numeros
+		return texto.replace(",", "").replace("MXP", "").replace("MXN", "").trim();
+	}
+
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<>();
 		try {
@@ -135,6 +139,30 @@ public class DataToolsModel {
 			return new BigDecimal(((BigInteger) valueObj)).setScale(rango, RoundingMode.HALF_EVEN);
 		} else if (valueObj instanceof Number) {
 			return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else {
+			return null;
+		}
+	}
+	
+	public BigDecimal castBigDecimal(Object valueObj) {
+		if (valueObj instanceof BigDecimal) {
+			return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Long) {
+			return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Short) {
+			return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Integer) {
+			return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Double) {
+			return BigDecimal.valueOf((Double) valueObj).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Float) {
+			return BigDecimal.valueOf((Float) valueObj).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof String) {
+			return new BigDecimal(((String) valueObj)).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof BigInteger) {
+			return new BigDecimal(((BigInteger) valueObj)).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Number) {
+			return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
 		} else {
 			return null;
 		}
@@ -266,11 +294,25 @@ public class DataToolsModel {
 		return result;
 	}
 
+	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018 //
+																// RETORNA 2018-02-02
+		String result = "";
+		String day = "";
+		if (formatear.split("-")[0].length() == 1) {
+			day = "0" + formatear.split("-")[0];
+		} else {
+			day = formatear.split("-")[0];
+		}
+		String month = formatMonth(formatear.split("-")[1]);
+		String year = formatear.split("-")[2];
+		result = year + "-" + month + "-" + day;
+		return result;
+	}
+
 	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
 
 		String resul = "";
 		try {
-			;
 			if (fecha.split("-")[1].length() > 2) {
 				fecha = fecha.split("-")[0] + "-" + formatMonth(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
@@ -433,6 +475,7 @@ public class DataToolsModel {
 		case "MENSUAL VITRO":
 		case "MENSUAL S/R DERP":
 		case "MEN.S/REC.":
+		case "MENSUAL S-R":
 			dato = 4;
 			break;
 		case "QUIN":
