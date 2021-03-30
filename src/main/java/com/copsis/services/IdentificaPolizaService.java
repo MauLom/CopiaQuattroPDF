@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.qualitas.QualitasModel;
@@ -38,6 +39,18 @@ public class IdentificaPolizaService {
              String contenido = pdfStripper.getText(pdDoc);
              
              boolean encontro = false;
+             
+             //CHUBB
+             if (encontro == false) {
+                 if (contenido.contains("Chubb")) {
+                     ChubbModel datosChubb = new ChubbModel();
+                     datosChubb.setPdfStripper(pdfStripper);
+                     datosChubb.setPdDoc(pdDoc);
+                     datosChubb.setContenido(contenido);
+                     modelo = datosChubb.procesa();
+                     encontro = true;
+                 }
+             }
       
              // ENTRADA PARA QUALITAS
              if (encontro == false) {

@@ -41,7 +41,8 @@ public class GnpSaludModel {
 		int longitud_texto = 0;
 		int donde = 0;
 		int dondeAux = 0;
-		String parte = "", agente = "";
+		String parte = "";
+		String agente = "";
 		boolean encontroNal = false;
 		boolean encontroExt = false;
 		int encontroNacional = 0;

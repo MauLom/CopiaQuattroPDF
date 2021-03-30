@@ -15,15 +15,15 @@ public class MapfreVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
-	private String inicontenido = "";
-	private String contenido = "";
-	private String newcontenido = "";
-	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int index = 0;
-	private int donde = 0;
-	private int longitud_split = 0;
+	private String inicontenido;
+	private String contenido;
+	private String newcontenido;
+	private String resultado;
+	private int inicio;
+	private int fin;
+	private int index;
+	private int donde;
+	private int longitud_split;
 
 	// constructor
 	public MapfreVidaModel(String contenido) {
