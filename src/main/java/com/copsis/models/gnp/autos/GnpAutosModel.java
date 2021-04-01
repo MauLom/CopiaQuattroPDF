@@ -140,7 +140,7 @@ public class GnpAutosModel {
 							modelo.setSerie(contenido.split("@@@")[donde + 1].split("###")[1].trim());
 							if (contenido.split("@@@")[donde + 1].split("###")[3].trim().equals("Neta")) {
 								modelo.setPrimaneta(
-										fn.castFloat(contenido.split("@@@")[donde + 1].split("###")[4].trim()));
+										fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde + 1].split("###")[4].trim())));
 							}
 						}
 					}
@@ -158,7 +158,7 @@ public class GnpAutosModel {
 				if (contenido.split("@@@")[donde].split("\r\n").length == 1) {
 					if (contenido.split("@@@")[donde].split("\r\n")[0].split("###").length == 5) {
 						if (contenido.split("@@@")[donde].split("###")[3].trim().equals("Fraccionado")) {
-							modelo.setRecargo(fn.castFloat(contenido.split("@@@")[donde].split("###")[4].trim()));
+							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde].split("###")[4].trim())));
 
 						}
 					}
@@ -179,7 +179,7 @@ public class GnpAutosModel {
 							}
 							if (contenido.split("@@@")[donde + 1].split("###")[4].trim().equals("Póliza")) {
 								modelo.setDerecho(
-										fn.castFloat(contenido.split("@@@")[donde + 1].split("###")[5].trim()));
+										fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde + 1].split("###")[5].trim())));
 
 							}
 							break;
@@ -190,9 +190,9 @@ public class GnpAutosModel {
 							modelo.setPlacas(contenido.split("@@@")[donde + 1].split("###")[1].trim());
 							modelo.setMotor(contenido.split("@@@")[donde + 1].split("###")[2].trim());
 							if (contenido.split("@@@")[donde + 1].split("###")[5].trim().equals("Póliza")) {
-								modelo.setDerecho(fn.castFloat(
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(
 										fn.remplazarMultiple(contenido.split("@@@")[donde + 1].split("###")[6].trim(),
-												fn.remplazosGenerales())));
+												fn.remplazosGenerales()))));
 							}
 							break;
 						}
@@ -205,7 +205,7 @@ public class GnpAutosModel {
 
 				newcontenido = contenido.split("I.V.A.")[1].split("\n")[0].replace("###", "").replace("$", "")
 						.replace(",", "").trim();
-				modelo.setIva(fn.castFloat(fn.remplazarMultiple(newcontenido, fn.remplazosGenerales())));
+				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(newcontenido, fn.remplazosGenerales()))));
 
 			}
 
@@ -220,25 +220,24 @@ public class GnpAutosModel {
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 						if (newcontenido.split("\n")[i].contains("Descripción")) {
-							modelo.setPrimaneta(fn.castFloat(fn.remplazarMultiple(
-									newcontenido.split("\n")[i].split("Neta")[1].replace("###", ""),
-									fn.remplazosGenerales())));
+							modelo.setPrimaneta(fn.castBigDecimal(
+									fn.preparaPrimas(fn.remplazarMultiple(newcontenido.split("\n")[i].split("Neta")[1].replace("###", ""),fn.remplazosGenerales()))));
 							modelo.setDescripcion(newcontenido.split("\n")[i + 1].split("###")[0]);
 							modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[1]);
 						}
 						if (newcontenido.split("\n")[i].contains("Modelo")) {
-							modelo.setDerecho(fn.castFloat(fn.remplazarMultiple(
+							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""),
-									fn.remplazosGenerales())));
+									fn.remplazosGenerales()))));
 							modelo.setModelo(fn.castInteger(fn.remplazarMultiple(
 									newcontenido.split("\n")[i + 1].split("###")[0], fn.remplazosGenerales())));
 							modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[1]);
 						}
 
 						if (newcontenido.split("\n")[i].contains("Importe")) {
-							modelo.setPrimaTotal(fn.castFloat(fn.remplazarMultiple(
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.split("\n")[i].split("Pagar")[1].replace("###", ""),
-									fn.remplazosGenerales())));
+									fn.remplazosGenerales()))));
 
 						}
 
@@ -257,8 +256,8 @@ public class GnpAutosModel {
 					if (contenido.split("@@@")[donde].split("###").length == 7) {
 						if (contenido.split("@@@")[donde].split("###")[5].trim().equals("Pagar")) {
 
-							modelo.setPrimaTotal(fn.castFloat(fn.remplazarMultiple(
-									contenido.split("@@@")[donde].split("###")[6].trim(), fn.remplazosGenerales())));
+							modelo.setPrimaTotal(fn.castBigDecimal( fn.preparaPrimas(fn.remplazarMultiple(
+									contenido.split("@@@")[donde].split("###")[6].trim(), fn.remplazosGenerales()))));
 						}
 					}
 				}
@@ -388,15 +387,15 @@ public class GnpAutosModel {
 				if (recibo.getVigenciaDe().length() > 0) {
 					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
 
-				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibos.add(recibo);
 				break;
 			}

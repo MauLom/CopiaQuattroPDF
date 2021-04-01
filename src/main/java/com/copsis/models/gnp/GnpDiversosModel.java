@@ -279,21 +279,21 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Prima Neta");
 			if (inicio > -1) {
 				resultado = fn.gatos(contenido.substring(inicio + 10, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setPrimaneta(fn.castFloat(resultado));
+				modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(resultado)));
 			}
 
 			// recargo
 			inicio = contenido.indexOf("Pago Fraccionado");
 			if (inicio > -1) {
 				resultado = fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setRecargo(fn.castFloat(resultado));
+				modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(resultado)));
 			}
 
 			// derecho
 			inicio = contenido.indexOf("Derecho de Póliza");
 			if (inicio > -1) {
 				resultado = fn.gatos(contenido.substring(inicio + 17, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setDerecho(fn.castFloat(resultado));
+				modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(resultado)));
 			}
 
 			// iva
@@ -304,14 +304,14 @@ public class GnpDiversosModel {
 				if (inicio > -1) {
 					resultado = fn.gatos(resultado.substring(inicio + 1, resultado.length()));
 				}
-				modelo.setIva(fn.castFloat(resultado));
+				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(resultado)));
 			}
 
 			// prima_total
 			inicio = contenidolower.indexOf("importe a pagar");
 			if (inicio > -1) {
 				resultado = fn.gatos(contenido.substring(inicio + 15, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setPrimaTotal(fn.castFloat(resultado));
+				modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(resultado)));
 			}
 
 			// LAS COBERTURAS(TITULOS O TUTULOS Y DESGLOCE)

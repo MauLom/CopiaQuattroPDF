@@ -158,7 +158,7 @@ public class GnpSaludModel {
 						switch (dato.split("###").length) {
 						case 4:
 							if (dato.split("###")[2].trim().equals("Prima Neta")) {
-								modelo.setPrimaneta(fn.castFloat(dato.split("###")[3].trim()));
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 							}
 							break;
 						}
@@ -171,7 +171,7 @@ public class GnpSaludModel {
 								modelo.setFormaPago(fn.formaPago(dato.trim().split("###")[4].trim()));
 							}
 							if (dato.split("###")[5].contains("de Póliza")) {
-								modelo.setDerecho(fn.castFloat(dato.split("###")[6].trim()));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[6].trim())));
 							}
 							break;
 						case 6:
@@ -192,7 +192,7 @@ public class GnpSaludModel {
 								newcontenido = fn.cleanString(dato.split("###")[6].split("I.V.A.")[1].trim());
 
 								if (fn.isNumeric(newcontenido)) {
-									modelo.setIva(fn.castFloat(newcontenido));
+									modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 								}
 							}
 							break;
@@ -209,7 +209,7 @@ public class GnpSaludModel {
 					if (dato.contains("de Póliza")) {
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Póliza")) {
-								modelo.setDerecho(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}
@@ -223,7 +223,7 @@ public class GnpSaludModel {
 								if (dato.trim().split(" ").length == 2) {
 									if (Double.parseDouble(
 											dato.trim().split(" ")[1].replace(".", "").replace(",", "").trim()) > 0) {
-										modelo.setIva(fn.castFloat(dato.trim().split(" ")[1].trim()));
+										modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.trim().split(" ")[1].trim())));
 									}
 								}
 							} catch (Exception e) {
@@ -235,7 +235,7 @@ public class GnpSaludModel {
 
 							if (fn.isNumeric(newcontenido)) {
 
-								modelo.setIva(fn.castFloat(newcontenido));
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 							}
 
 							break;
@@ -246,7 +246,7 @@ public class GnpSaludModel {
 						switch (dato.split("###").length) {
 						case 8:
 							if (dato.split("###")[6].trim().equals("Fraccionado")) {
-								modelo.setRecargo(fn.castFloat(dato.split("###")[7].trim()));
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
 							}
 							break;
 						}
@@ -254,7 +254,7 @@ public class GnpSaludModel {
 
 					if (dato.contains("Cesión de Comisión")) {
 						modelo.setAjusteUno(
-								fn.castFloat(dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")));
+								fn.castBigDecimal(fn.preparaPrimas(dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", ""))));
 					}
 				}
 			}
@@ -267,13 +267,13 @@ public class GnpSaludModel {
 					if (dato.contains("Pagar")) {
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Pagar")) {
-								modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}
 				}
 			}
-			if (modelo.getPrimaTotal() == 0) {
+			if (modelo.getPrimaTotal().floatValue() == 0) {
 				donde = 0;
 				donde = fn.recorreContenido(contenido, "Pagar");
 				if (donde > 0) {
@@ -282,12 +282,12 @@ public class GnpSaludModel {
 							switch (dato.split("###").length) {
 							case 2:
 								if (dato.split("###")[0].trim().equals("Pagar")) {
-									modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+									modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 								}
 								break;
 							case 4:
 								if (dato.split("###")[2].trim().equals("Pagar")) {
-									modelo.setPrimaTotal(fn.castFloat(dato.split("###")[3].trim()));
+									modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 								}
 								break;
 							}

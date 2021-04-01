@@ -146,7 +146,7 @@ public class GnpAutos2Model {
 					if (dato.contains("Prima Neta")) {
 						if (dato.split("###").length == 5) {
 							if (dato.split("###")[3].trim().equals("Prima Neta")) {
-								modelo.setPrimaneta(fn.castFloat(dato.split("###")[4].trim()));
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[4].trim())));
 							}
 						}
 					} else if (dato.contains("Forma de pago")) {
@@ -160,13 +160,13 @@ public class GnpAutos2Model {
 							if (dato.split("###")[1].trim().equals("Moneda")
 									&& dato.split("###")[3].trim().equals("Fraccionado")) {
 								modelo.setMoneda(fn.moneda(dato.split("###")[2].trim()));
-								modelo.setRecargo(fn.castFloat(dato.split("###")[4].trim()));
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[4].trim())));
 							}
 						}
 					} else if (dato.contains("de Póliza")) {
 						if (dato.split("###").length == 5) {
 							if (dato.split("###")[3].contains("de Póliza")) {
-								modelo.setDerecho(fn.castFloat(dato.split("###")[4].trim()));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[4].trim())));
 
 							}
 						}
@@ -174,14 +174,14 @@ public class GnpAutos2Model {
 					} else if (dato.contains("I.V.A.")) {
 						if (dato.split("###").length == 5) {
 							if (dato.split("###")[4].contains("I.V.A.")) {
-								modelo.setIva(fn.castFloat(dato.split("###")[4].split("I.V.A.")[1].trim()));
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[4].split("I.V.A.")[1].trim())));
 
 							}
 						}
 					} else if (dato.contains("a Pagar")) {
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("a Pagar")) {
-								modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}

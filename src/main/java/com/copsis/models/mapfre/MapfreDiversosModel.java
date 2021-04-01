@@ -1,5 +1,7 @@
 package com.copsis.models.mapfre;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +27,14 @@ public class MapfreDiversosModel {
 	private int inicio = 0;
 	private int fin = 0;
 	private int index = 0;
-	private float restoPrimaTotal = 0;
-	private float restoDerecho = 0;
-	private float restoIva = 0;
-	private float restoRecargo = 0;
-	private float restoPrimaNeta = 0;
-	private float restoAjusteUno = 0;
-	private float restoAjusteDos = 0;
-	private float restoCargoExtra = 0;
+	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
+	private BigDecimal restoDerecho = BigDecimal.ZERO;
+	private BigDecimal restoIva = BigDecimal.ZERO;
+	private BigDecimal restoRecargo = BigDecimal.ZERO;
+	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
+	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
+	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
+	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
 
 	// constructor
 	public MapfreDiversosModel(String contenido, String recibos, String Ubicaiones) {
@@ -225,11 +227,11 @@ public class MapfreDiversosModel {
 							.replace("######", "###");
 					switch (newcontenido.split("###").length) {
 					case 7:
-						modelo.setPrimaneta(fn.castFloat(newcontenido.split("###")[0].trim()));
-						modelo.setRecargo(fn.castFloat(newcontenido.split("###")[2].trim()));
-						modelo.setDerecho(fn.castFloat(newcontenido.split("###")[3].trim()));
-						modelo.setIva(fn.castFloat(newcontenido.split("###")[5].trim()));
-						modelo.setPrimaTotal(fn.castFloat(newcontenido.split("###")[6].trim()));
+						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[0].trim())));
+						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2].trim())));
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[3].trim())));
+						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[5].trim())));
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[6].trim())));
 						break;
 					}
 				}
@@ -504,14 +506,14 @@ public class MapfreDiversosModel {
 				if (recibo.getVigenciaDe().length() > 0) {
 					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibosList.add(recibo);
 				break;
 			case 2:
@@ -520,14 +522,14 @@ public class MapfreDiversosModel {
 					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
 					recibo.setVigenciaA(modelo.getVigenciaA());
 					recibo.setVencimiento("");
-					recibo.setPrimaneta(fn.castBigDecimal(restoPrimaNeta, 2));
-					recibo.setPrimaTotal(fn.castBigDecimal(restoPrimaTotal, 2));
-					recibo.setRecargo(fn.castBigDecimal(restoRecargo, 2));
-					recibo.setDerecho(fn.castBigDecimal(restoDerecho, 2));
-					recibo.setIva(fn.castBigDecimal(restoIva, 2));
-					recibo.setAjusteUno(fn.castBigDecimal(restoAjusteUno, 2));
-					recibo.setAjusteDos(fn.castBigDecimal(restoAjusteDos, 2));
-					recibo.setCargoExtra(fn.castBigDecimal(restoCargoExtra, 2));
+					recibo.setPrimaneta(restoPrimaNeta);
+					recibo.setPrimaTotal(restoPrimaTotal);
+					recibo.setRecargo(restoRecargo);
+					recibo.setDerecho(restoDerecho);
+					recibo.setIva(restoIva);
+					recibo.setAjusteUno(restoAjusteUno);
+					recibo.setAjusteDos(restoAjusteDos);
+					recibo.setCargoExtra(restoCargoExtra);
 					recibosList.add(recibo);
 
 				}
@@ -535,11 +537,11 @@ public class MapfreDiversosModel {
 			case 3:
 			case 4:
 				if (recibosList.size() >= 1) {
-					int restoRec = (fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
+					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
 					int totalRec = fn.getTotalRec(modelo.getFormaPago());
 					int meses = fn.monthAdd(modelo.getFormaPago());// MESES A AGREGAR POR RECIBO
 
-					for (int i = recibosList.size(); i <= restoRec; i++) {
+					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
 
 						recibo.setSerie(i + 1 + "/" + totalRec);
 						recibo.setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
@@ -547,14 +549,14 @@ public class MapfreDiversosModel {
 							recibo.setVigenciaA(fn.dateAdd(recibosList.get(i - 1).getVigenciaA(), meses, i));
 						}
 						recibo.setVencimiento("");
-						recibo.setPrimaneta(fn.castBigDecimal(restoPrimaNeta / restoRec, 2));
-						recibo.setPrimaTotal(fn.castBigDecimal(restoPrimaTotal / restoRec, 2));
-						recibo.setRecargo(fn.castBigDecimal(restoRecargo / restoRec, 2));
-						recibo.setDerecho(fn.castBigDecimal(restoDerecho / restoRec, 2));
-						recibo.setIva(fn.castBigDecimal(restoIva / restoRec, 2));
-						recibo.setAjusteUno(fn.castBigDecimal(restoAjusteUno / restoRec, 2));
-						recibo.setAjusteDos(fn.castBigDecimal(restoAjusteDos / restoRec, 2));
-						recibo.setCargoExtra(fn.castBigDecimal(restoCargoExtra / restoRec, 2));
+						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2,RoundingMode.HALF_EVEN));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setRecargo(restoRecargo.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setDerecho(restoDerecho.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setIva(restoIva.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_DOWN));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
 						recibosList.add(recibo);
 					}
 				}
@@ -563,19 +565,19 @@ public class MapfreDiversosModel {
 			case 5:
 			case 6:// QUINCENAL, SEMANAL NINGUN PDF DE FORMA DE PAGO SE QUEDA PENDIENTE ESTE CASO
 				if (recibosList.size() >= 1) {
-					int restoRec = (fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
+					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
 					int totalRec = fn.getTotalRec(modelo.getFormaPago());
-					for (int i = recibosList.size(); i <= restoRec; i++) {
+					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
 
 						recibo.setSerie(i + 1 + "/" + totalRec);
-						recibo.setPrimaneta(fn.castBigDecimal(restoPrimaNeta / restoRec, 2));
-						recibo.setPrimaTotal(fn.castBigDecimal(restoPrimaTotal / restoRec, 2));
-						recibo.setRecargo(fn.castBigDecimal(restoRecargo / restoRec, 2));
-						recibo.setDerecho(fn.castBigDecimal(restoDerecho / restoRec, 2));
-						recibo.setIva(fn.castBigDecimal(restoIva / restoRec, 2));
-						recibo.setAjusteUno(fn.castBigDecimal(restoAjusteUno / restoRec, 2));
-						recibo.setAjusteDos(fn.castBigDecimal(restoAjusteDos / restoRec, 2));
-						recibo.setCargoExtra(fn.castBigDecimal(restoCargoExtra / restoRec, 2));
+						recibo.setPrimaneta(restoPrimaNeta.divide(fn.castBigDecimal(restoRec), 2,RoundingMode.HALF_EVEN));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setRecargo(restoRecargo.divide(restoRec, 2,RoundingMode.HALF_EVEN));
+						recibo.setDerecho(restoDerecho.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setIva(restoIva.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_DOWN));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
 						recibosList.add(recibo);
 					}
 				}
@@ -603,8 +605,8 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = recibosText.substring(inicio + 13, recibosText.indexOf("\r\n", inicio));
 				if (newcontenido.split("###").length == 2) {
-					recibo.setPrimaneta(fn.castBigDecimal(newcontenido.split("###")[1], 2));
-					restoPrimaNeta = (modelo.getPrimaneta() - recibo.getPrimaneta().floatValue());
+					recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[1])));
+					restoPrimaNeta = modelo.getPrimaneta().subtract(recibo.getPrimaneta());
 				}
 			}
 
@@ -613,8 +615,8 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = fn.gatos(recibosText.substring(inicio + 19, inicio + 150).split("\r\n")[0]);
 				if (newcontenido.split("###").length == 2) {
-					recibo.setDerecho(fn.castBigDecimal(newcontenido.split("###")[1], 2));
-					restoDerecho = (modelo.getDerecho() - recibo.getDerecho().floatValue());
+					recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[1])));
+					restoDerecho = modelo.getDerecho().subtract(recibo.getDerecho());
 				}
 			}
 
@@ -623,8 +625,8 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = fn.gatos(recibosText.substring(inicio + 19, recibosText.indexOf("\r\n", inicio)));
 				if (newcontenido.split("###").length == 2) {
-					recibo.setRecargo(fn.castBigDecimal(newcontenido.split("###")[1], 2));
-					restoRecargo = (modelo.getRecargo() - recibo.getRecargo().floatValue());
+					recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[1])));
+					restoRecargo = modelo.getRecargo().subtract(recibo.getRecargo());
 				}
 			}
 
@@ -633,8 +635,8 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = recibosText.substring(inicio, recibosText.indexOf("\r\n", inicio));
 				if (newcontenido.split("###").length == 3) {
-					recibo.setIva(fn.castBigDecimal(newcontenido.split("###")[2], 2));
-					restoIva = (modelo.getIva() - recibo.getIva().floatValue());
+					recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2])));
+					restoIva = modelo.getIva().subtract(recibo.getIva());
 				}
 			}
 
@@ -643,8 +645,8 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = recibosText.substring(inicio, recibosText.indexOf("\r\n", inicio));
 				if (newcontenido.split("###").length == 3) {
-					recibo.setPrimaTotal(fn.castBigDecimal(newcontenido.split("###")[2], 2));
-					restoPrimaTotal = (modelo.getPrimaTotal() - recibo.getPrimaTotal().floatValue());
+					recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2])));
+					restoPrimaTotal = modelo.getPrimaTotal().subtract(recibo.getPrimaTotal());
 				}
 			}
 

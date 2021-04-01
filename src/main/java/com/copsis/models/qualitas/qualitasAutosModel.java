@@ -281,7 +281,7 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10))
 						.replace("###", "").replace(",", "").trim();
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setPrimaneta(fn.castFloat(newcontenido));
+					modelo.setPrimaneta(fn.castBigDecimal(newcontenido));
 				}
 			}
 
@@ -291,7 +291,7 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio + 19, contenido.indexOf("\r\n", inicio + 19))
 						.replace("###", "").replace(",", "").trim();
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setRecargo(fn.castFloat(newcontenido));
+					modelo.setRecargo(fn.castBigDecimal(newcontenido));
 				}
 			}
 
@@ -304,7 +304,7 @@ public class qualitasAutosModel {
 					newcontenido = newcontenido.split("Pa")[0].trim();
 				}
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setDerecho(fn.castFloat(newcontenido));
+					modelo.setDerecho(fn.castBigDecimal(newcontenido));
 				}
 			}
 
@@ -318,7 +318,7 @@ public class qualitasAutosModel {
 						newcontenido = newcontenido.split("Bitli")[0].trim();
 					}
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setIva(fn.castFloat(newcontenido));
+						modelo.setIva(fn.castBigDecimal(newcontenido));
 					}
 				}
 			}
@@ -329,7 +329,7 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio + 13, contenido.indexOf("\r\n", inicio + 13))
 						.replace("###", "").replace(",", "").trim();
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setPrimaTotal(fn.castFloat(newcontenido));
+					modelo.setPrimaTotal(fn.castBigDecimal(newcontenido));
 				}
 			}
 

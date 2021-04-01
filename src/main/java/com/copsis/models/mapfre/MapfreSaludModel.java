@@ -357,11 +357,11 @@ public class MapfreSaludModel {
 				for (String m : primas.split("\n")) {
 					int tm = m.split("###").length;
 					if (tm == 7) {
-						modelo.setPrimaneta((fn.castFloat((m.split("###")[0]))));
-						modelo.setDerecho((fn.castFloat(m.split("###")[3])));
-						modelo.setRecargo((fn.castFloat(m.split("###")[2])));
-						modelo.setIva((fn.castFloat(m.split("###")[5])));
-						modelo.setPrimaTotal((fn.castFloat(m.split("###")[6])));
+						modelo.setPrimaneta((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[0]))));
+						modelo.setDerecho((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[3]))));
+						modelo.setRecargo((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[2]))));
+						modelo.setIva((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[5]))));
+						modelo.setPrimaTotal((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[6]))));
 
 					}
 
@@ -375,28 +375,28 @@ public class MapfreSaludModel {
 
 					if (tm == 7) {
 						if (m.contains("NETA")) {
-							modelo.setPrimaneta((fn.castFloat((m.split("###")[6]))));
+							modelo.setPrimaneta((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[6]))));
 						}
 						if (m.contains("I.V.A")) {
-							modelo.setIva((fn.castFloat(m.split("###")[6].replace("%", ""))));
+							modelo.setIva((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[6].replace("%", "")))));
 						}
 						if (m.contains("TOTAL")) {
 
-							modelo.setPrimaTotal((fn.castFloat(m.split("###")[6].replace("$", "").trim())));
+							modelo.setPrimaTotal((fn.castBigDecimal(fn.preparaPrimas(m.split("###")[6].replace("$", "").trim()))));
 							if (m.split("###")[3].replace("$", "").trim().contains("|")) {
 								String valor = m.split("###")[3].replace("$", "").replace("|", "###");
 
-								modelo.setRecargo((fn.castFloat(valor.split("###")[1].trim())).floatValue());
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(valor.split("###")[1].trim())));
 							} else {
 								modelo.setRecargo(
-										(fn.castFloat(m.split("###")[3].replace("$", "").replace("0% |", "").trim())));
+										fn.castBigDecimal(fn.preparaPrimas(m.split("###")[3].replace("$", "").replace("0% |", "").trim())));
 							}
 
 						}
 					}
 					if (tm == 6) {
 						if (m.contains("EXPEDICIÓN")) {
-							modelo.setDerecho((fn.castFloat(m.split("###")[5])));
+							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(m.split("###")[5])));
 						}
 					}
 				}
@@ -938,15 +938,15 @@ public class MapfreSaludModel {
 				if (recibo.getVigenciaDe().length() > 0) {
 					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
 
-				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibos.add(recibo);
 				break;
 			}

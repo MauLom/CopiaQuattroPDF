@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,8 +45,6 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("\r\r\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel(" :", ":"));
-			remplazoDeA.add(new ReplaceModel("(", ""));
-			remplazoDeA.add(new ReplaceModel(")", ""));
 			remplazoDeA.add(new ReplaceModel("$", ""));
 			remplazoDeA.add(new ReplaceModel("", ""));
 			remplazoDeA.add(new ReplaceModel("MXP", ""));
@@ -143,7 +142,7 @@ public class DataToolsModel {
 			return null;
 		}
 	}
-	
+
 	public BigDecimal castBigDecimal(Object valueObj) {
 		if (valueObj instanceof BigDecimal) {
 			return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
@@ -303,28 +302,24 @@ public class DataToolsModel {
 		} else {
 			day = formatear.split("-")[0];
 		}
-		String month = formatMonth(formatear.split("-")[1]);
+		String month = mes(formatear.split("-")[1]);
 		String year = formatear.split("-")[2];
 		result = year + "-" + month + "-" + day;
 		return result;
 	}
 
 	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
-
 		String resul = "";
 		try {
 			if (fecha.split("-")[1].length() > 2) {
-				fecha = fecha.split("-")[0] + "-" + formatMonth(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
+				fecha = fecha.split("-")[0] + "-" + mes(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
-
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);
 			date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
 			simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			resul = simpleDateFormat.format(date).toUpperCase();
-
-			return resul;
+			return simpleDateFormat.format(date);
 		} catch (Exception ex) {
 			resul = ex.getMessage();
 			return resul;
@@ -333,62 +328,15 @@ public class DataToolsModel {
 
 	}
 
-	public String formatMonth(String mes) { // RECIBE Ene || ENE || ENERO 02
-		String dato = "";
-		switch (mes.toUpperCase()) {
-		case "ENE":
-		case "ENERO":
-			dato = "01";
-			break;
-		case "FEB":
-		case "FEBRERO":
-			dato = "02";
-			break;
-		case "MAR":
-		case "MARZO":
-			dato = "03";
-			break;
-		case "ABR":
-		case "ABRIL":
-			dato = "04";
-			break;
-		case "MAY":
-		case "MAYO":
-			dato = "05";
-			break;
-		case "JUN":
-		case "JUNIO":
-			dato = "06";
-			break;
-		case "JUL":
-		case "JULIO":
-			dato = "07";
-			break;
-		case "AGO":
-		case "AGOSTO":
-			dato = "08";
-			break;
-		case "SEP":
-		case "SEPTIEMBRE":
-			dato = "09";
-			break;
-		case "OCT":
-		case "OCTUBRE":
-			dato = "10";
-			break;
-		case "NOV":
-		case "NOVIEMBRE":
-			dato = "11";
-			break;
-		case "DIC":
-		case "DICIEMBRE":
-			dato = "12";
-			break;
-		default:
-			dato = "0";
-			break;
+	public String mes(String mes) { // RECIBE Ene || ENE || ENERO 02
+		mes = mes.toUpperCase();
+		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO",
+				"SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
+		if (mes.length() == 3) {
+			meses = Arrays.asList("ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC");
 		}
-		return dato;
+		return (meses.indexOf(mes) + 1) > 9 ? "" + (meses.indexOf(mes) + 1)
+				: "0" + (meses.indexOf(mes.toUpperCase()) + 1);
 	}
 
 	public int moneda(String texto) {

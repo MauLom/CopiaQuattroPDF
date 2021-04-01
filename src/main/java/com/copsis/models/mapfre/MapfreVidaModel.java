@@ -471,53 +471,53 @@ public class MapfreVidaModel {
 				case 7:
 					resultado = fn.cleanString(newcontenido.split("###")[0].replace("@@@", "").trim());
 					if (fn.isNumeric(resultado)) {
-						modelo.setPrimaneta(fn.castFloat(resultado));
+						modelo.setPrimaneta(fn.castBigDecimal(resultado));
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[2]);
 					if (fn.isNumeric(resultado)) {
-						modelo.setRecargo(fn.castFloat(resultado));
+						modelo.setRecargo(fn.castBigDecimal(resultado));
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[3]);
 					if (fn.isNumeric(resultado)) {
-						modelo.setDerecho(fn.castFloat(resultado));
+						modelo.setDerecho(fn.castBigDecimal(resultado));
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[5]);
 					if (fn.isNumeric(resultado)) {
-						modelo.setIva(fn.castFloat(resultado));
+						modelo.setIva(fn.castBigDecimal(resultado));
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[6]);
 					if (fn.isNumeric(resultado)) {
-						modelo.setPrimaTotal(fn.castFloat(resultado));
+						modelo.setPrimaTotal(fn.castBigDecimal(resultado));
 					}
 					break;
 
 				case 5:
 					resultado = fn.cleanString(newcontenido.split("###")[0].replace("@@@", "").trim());
 					if (fn.isNumeric(resultado)) {
-						modelo.setPrimaneta(fn.castFloat(resultado));
+						modelo.setPrimaneta(fn.castBigDecimal(resultado));
 					}
 
 					resultado = newcontenido.split("###")[1].trim();
 					if (resultado.split("###").length == 2) {
 						resultado = fn.cleanString(resultado.split("###")[1]);
 						if (fn.isNumeric(resultado)) {
-							modelo.setRecargo(fn.castFloat(resultado));
+							modelo.setRecargo(fn.castBigDecimal(resultado));
 						}
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[2].trim());
 					if (fn.isNumeric(resultado)) {
-						modelo.setDerecho(fn.castFloat(resultado));
+						modelo.setDerecho(fn.castBigDecimal(resultado));
 					}
 					resultado = newcontenido.split("###")[3].trim();
 					if (resultado.split("###").length == 2) {
 						resultado = fn.cleanString(resultado.split("###")[1]);
 						if (fn.isNumeric(resultado)) {
-							modelo.setIva(fn.castFloat(resultado));
+							modelo.setIva(fn.castBigDecimal(resultado));
 						}
 					}
 					resultado = fn.cleanString(newcontenido.split("###")[4].trim());
 					if (fn.isNumeric(resultado)) {
-						modelo.setPrimaTotal(fn.castFloat(resultado));
+						modelo.setPrimaTotal(fn.castBigDecimal(resultado));
 					}
 					break;
 				}
@@ -873,15 +873,15 @@ public class MapfreVidaModel {
 				if (recibo.getVigenciaDe().length() > 0) {
 					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
 
-				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibos.add(recibo);
 
 				break;

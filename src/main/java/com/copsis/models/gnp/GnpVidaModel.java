@@ -252,10 +252,10 @@ public class GnpVidaModel {
 									modelo.setFormaPago(fn.formaPago(dato.split("###")[5].trim()));
 								}
 								if (dato.split("###")[6].contains("Neta")) {
-									modelo.setPrimaneta(fn.castFloat(dato.split("###")[7].trim()));
+									modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
 								}
 								if (dato.split("###")[6].contains("Derecho de")) {
-									modelo.setDerecho(fn.castFloat(dato.split("###")[7].trim()));
+									modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
 								}
 							}
 
@@ -263,7 +263,7 @@ public class GnpVidaModel {
 
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Prima Neta")) {
-								modelo.setPrimaneta(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 
@@ -274,7 +274,7 @@ public class GnpVidaModel {
 									cuantos += 1;
 								}
 								if (dato.split("###")[2].contains("I.V.A")) {
-									modelo.setIva(fn.castFloat(dato.split("###")[3].trim()));
+									modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 								}
 							}
 						}
@@ -293,16 +293,16 @@ public class GnpVidaModel {
 									contenido.split("@@@")[(donde + 1)].split("\r\n")[0].split("###")[1].trim()));
 						}
 						if (contenido.split("@@@")[(donde + 1)].split("\r\n")[0].split("###")[2].contains("I.V.A.")) {
-							modelo.setIva(fn.castFloat(
-									contenido.split("@@@")[(donde + 1)].split("\r\n")[0].split("###")[3].trim()));
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(
+									contenido.split("@@@")[(donde + 1)].split("\r\n")[0].split("###")[3].trim())));
 						}
 					}
 
 					if (contenido.split("@@@")[(donde + 2)].split("\r\n")[0].split("###").length == 2) {
 						if (contenido.split("@@@")[(donde + 2)].split("\r\n")[0].split("###")[0]
 								.contains("Importe a pagar")) {
-							modelo.setPrimaTotal(fn.castFloat(
-									contenido.split("@@@")[(donde + 2)].split("\r\n")[0].split("###")[1].trim()));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(
+									contenido.split("@@@")[(donde + 2)].split("\r\n")[0].split("###")[1].trim())));
 						}
 					}
 
@@ -319,18 +319,18 @@ public class GnpVidaModel {
 						if (dato.contains("Fraccionado")) {
 							if (dato.split("###").length == 7) {
 								if (dato.split("###")[5].contains("Fraccionado")) {
-									modelo.setRecargo(fn.castFloat(dato.split("###")[6].trim()));
+									modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[6].trim())));
 								}
 							}
 						}
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Fraccionado")) {
-								modelo.setRecargo(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Importe a pagar")) {
-								modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}

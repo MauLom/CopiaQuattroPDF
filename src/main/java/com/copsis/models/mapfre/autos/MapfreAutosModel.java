@@ -1,5 +1,6 @@
 package com.copsis.models.mapfre.autos;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +24,14 @@ public class MapfreAutosModel {
 	private int inicio = 0;
 	private int fin = 0;
 	private int index;
-	private float restoPrimaTotal = 0;
-	private float restoDerecho = 0;
-	private float restoIva = 0;
-	private float restoRecargo = 0;
-	private float restoPrimaNeta = 0;
-	private float restoAjusteUno = 0;
-	private float restoAjusteDos = 0;
-	private float restoCargoExtra = 0;
+	private BigDecimal restoPrimaTotal =  BigDecimal.ZERO;
+	private BigDecimal restoDerecho = BigDecimal.ZERO;
+	private BigDecimal restoIva = BigDecimal.ZERO;
+	private BigDecimal restoRecargo = BigDecimal.ZERO;
+	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
+	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
+	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
+	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
 
 	// constructor
 	public MapfreAutosModel(String contenido, String recibos) {
@@ -105,7 +106,7 @@ public class MapfreAutosModel {
 					modelo.setCteNombre(newcontenido);
 				}
 			}
-
+			
 			// cte_direccion
 			inicio = contenido.indexOf("DOMICILIO:");
 			fin = contenido.indexOf("FOLIO");
@@ -144,14 +145,14 @@ public class MapfreAutosModel {
 			// prima_total
 			inicio = contenido.indexOf("Prima total:");
 			if (inicio > -1) {
-
 				txt = contenido.substring(inicio + 12, inicio + 200).trim().split("\r\n")[0].replace("@@@", "").trim();
+				
 				if (txt.split("###").length == 6) {
-					modelo.setPrimaneta(fn.castFloat(txt.split("###")[0]));
-					modelo.setRecargo(fn.castFloat(txt.split("###")[2]));
-					modelo.setDerecho(fn.castFloat(txt.split("###")[3]));
-					modelo.setIva(fn.castFloat(txt.split("###")[4]));
-					modelo.setPrimaTotal(fn.castFloat(txt.split("###")[5]));
+					modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[0])));
+					modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[2])));
+					modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[3])));
+					modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[4])));
+					modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[5])));
 				}
 				// rfc
 				inicio = contenido.indexOf("R.F.C:");
@@ -221,7 +222,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("###PRIMA###NETA:###") + 19;
 				newcontenido = contenido.substring(inicio, inicio + 20).split("\r\n")[0];
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setPrimaneta(fn.castFloat(newcontenido));
+					modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 				}
 
 				// prima_total
@@ -230,7 +231,7 @@ public class MapfreAutosModel {
 					newcontenido = contenido.substring(inicio + 14, inicio + 80).split("\r\n")[0].replace("###", "")
 							.replace(",", "");
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setPrimaTotal(fn.castFloat(newcontenido));
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 					}
 				}
 
@@ -240,7 +241,7 @@ public class MapfreAutosModel {
 					newcontenido = fn.gatos(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0]
 							.replace("##", "").replace(",", "").trim());
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setIva(fn.castFloat(newcontenido));
+						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 					}
 				}
 
@@ -249,18 +250,18 @@ public class MapfreAutosModel {
 
 				if (inicio > -1) {
 					newcontenido = fn
-							.gatos(contenido.substring(inicio + 29, inicio + 150).split("\r\n")[0].split("PRIMA")[0]);
+							.gatos(contenido.substring(inicio + 29, inicio + 150).split("\r\n")[0].split("PRIMA")[0]).trim();
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setRecargo(fn.castFloat(newcontenido));
+						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 					}
 				}
 
 				// derecho
 				inicio = contenido.indexOf("DE###EXPEDICIÓN:");
 				if (inicio > -1) {
-					newcontenido = fn.gatos(contenido.substring(inicio + 16, inicio + 150).split("\r\n")[0]);
+					newcontenido = fn.gatos(contenido.substring(inicio + 16, inicio + 150).split("\r\n")[0]).trim();
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setDerecho(fn.castFloat(newcontenido));
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 					}
 				}
 
@@ -587,7 +588,6 @@ public class MapfreAutosModel {
 
 			switch (modelo.getFormaPago()) {
 			case 1:
-
 				recibo.setReciboId("");
 				recibo.setSerie("1/1");
 				recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -595,14 +595,14 @@ public class MapfreAutosModel {
 				if (recibo.getVigenciaDe().length() > 0) {
 					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
-				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
-				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
-				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
-				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
-				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibosList.add(recibo);
 				break;
 			case 2:
@@ -611,14 +611,14 @@ public class MapfreAutosModel {
 					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
 					recibo.setVigenciaA(modelo.getVigenciaA());
 					recibo.setVencimiento("");
-					recibo.setPrimaneta(fn.castBigDecimal(restoPrimaNeta, 2));
-					recibo.setPrimaTotal(fn.castBigDecimal(restoPrimaTotal, 2));
-					recibo.setRecargo(fn.castBigDecimal(restoRecargo, 2));
-					recibo.setDerecho(fn.castBigDecimal(restoDerecho, 2));
-					recibo.setIva(fn.castBigDecimal(restoIva, 2));
-					recibo.setAjusteUno(fn.castBigDecimal(restoAjusteUno, 2));
-					recibo.setAjusteDos(fn.castBigDecimal(restoAjusteDos, 2));
-					recibo.setCargoExtra(fn.castBigDecimal(restoCargoExtra, 2));
+					recibo.setPrimaneta(restoPrimaNeta);
+					recibo.setPrimaTotal(restoPrimaTotal);
+					recibo.setRecargo(restoRecargo);
+					recibo.setDerecho(restoDerecho);
+					recibo.setIva(restoIva);
+					recibo.setAjusteUno(restoAjusteUno);
+					recibo.setAjusteDos(restoAjusteDos);
+					recibo.setCargoExtra(restoCargoExtra);
 					recibosList.add(recibo);
 
 				}
@@ -687,7 +687,7 @@ public class MapfreAutosModel {
 						if (newcontenido.split("###").length == 2) {
 							recibo.setPrimaneta(fn.castBigDecimal(
 									newcontenido.split("###")[1].replace(",", "").replace("MXN", "").trim(), 2));
-							restoPrimaNeta = (modelo.getPrimaneta() - recibo.getPrimaneta().floatValue());
+							restoPrimaNeta = modelo.getPrimaneta().subtract(recibo.getPrimaneta());
 						}
 					}
 
@@ -698,7 +698,7 @@ public class MapfreAutosModel {
 						if (newcontenido.split("###").length == 2) {
 							recibo.setDerecho(fn.castBigDecimal(
 									newcontenido.split("###")[1].replace(",", "").replace("MXN", "").trim(), 2));
-							restoDerecho = (modelo.getDerecho() - recibo.getDerecho().floatValue());
+							restoDerecho = modelo.getDerecho().subtract(recibo.getDerecho());
 						}
 					}
 
@@ -709,7 +709,7 @@ public class MapfreAutosModel {
 						if (newcontenido.split("###").length == 2) {
 							recibo.setRecargo(fn.castBigDecimal(
 									newcontenido.split("###")[1].replace(",", "").replace("MXN", "").trim(), 2));
-							restoRecargo = (modelo.getRecargo() - recibo.getRecargo().floatValue());
+							restoRecargo = modelo.getRecargo().subtract(recibo.getRecargo());
 						}
 					}
 
@@ -720,7 +720,7 @@ public class MapfreAutosModel {
 						if (newcontenido.split("###").length == 3) {
 							recibo.setIva(fn.castBigDecimal(
 									newcontenido.split("###")[2].replace(",", "").replace("MXN", "").trim(), 2));
-							restoIva = (modelo.getIva() - recibo.getIva().floatValue());
+							restoIva = modelo.getIva().subtract(recibo.getIva());
 						}
 					}
 
@@ -731,7 +731,7 @@ public class MapfreAutosModel {
 						if (newcontenido.split("###").length == 3) {
 							recibo.setPrimaTotal(fn.castBigDecimal(
 									newcontenido.split("###")[2].replace(",", "").replace("MXN", "").trim(), 2));
-							restoPrimaTotal = (modelo.getPrimaTotal() - recibo.getPrimaTotal().floatValue());
+							restoPrimaTotal = modelo.getPrimaTotal().subtract(recibo.getPrimaTotal());
 
 						}
 					}
@@ -745,7 +745,7 @@ public class MapfreAutosModel {
 							resultado = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[0]).trim();
 							if (resultado.length() == 9) {
 								recibo.setVigenciaDe("20" + resultado.split("-")[0] + "-"
-										+ fn.formatMonth(resultado.split("-")[1]) + "-" + resultado.split("-")[2]);
+										+ fn.mes(resultado.split("-")[1]) + "-" + resultado.split("-")[2]);
 							} else {
 								recibo.setVigenciaDe(resultado);
 							}
@@ -753,7 +753,7 @@ public class MapfreAutosModel {
 							resultado = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[1]).trim();
 							if (resultado.length() == 9) {
 								recibo.setVigenciaA("20" + resultado.split("-")[0] + "-"
-										+ fn.formatMonth(resultado.split("-")[1]) + "-" + resultado.split("-")[2]);
+										+ fn.mes(resultado.split("-")[1]) + "-" + resultado.split("-")[2]);
 							} else {
 								recibo.setVigenciaA(resultado);
 							}
