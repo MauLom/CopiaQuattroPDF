@@ -174,7 +174,6 @@ public class DataToolsModel {
 		int counter_space = 0;
 		for (int i = 0; i < texto.length(); i++) {
 			if (texto.charAt(i) == ' ') {
-				System.out.println(counter_space);
 				if (counter_space < 1) {
 					counter_space = 1;
 					if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
@@ -296,7 +295,7 @@ public class DataToolsModel {
 	}
 
 	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018 //
-																// RETORNA 2018-02-02
+							// RETORNA 2018-02-02
 		String result = "";
 		String day = "";
 		if (formatear.split("-")[0].length() == 1) {
@@ -305,6 +304,7 @@ public class DataToolsModel {
 			day = formatear.split("-")[0];
 		}
 		String month = mes(formatear.split("-")[1]);
+	
 		String year = formatear.split("-")[2];
 		result = year + "-" + month + "-" + day;
 		return result;
@@ -316,7 +316,6 @@ public class DataToolsModel {
 			if (fecha.split("-")[1].length() > 2) {
 				fecha = fecha.split("-")[0] + "-" + mes(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
-			System.out.println("-respuesta --->->" + fecha);
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);

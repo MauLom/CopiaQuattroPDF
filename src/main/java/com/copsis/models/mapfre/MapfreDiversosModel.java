@@ -696,7 +696,7 @@ public class MapfreDiversosModel {
 
 				recibo.setReciboId(newcontenido);
 			}
-
+			recibosLis.add(recibo);
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		} catch (Exception ex) {
 			modelo.setError(MapfreDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "

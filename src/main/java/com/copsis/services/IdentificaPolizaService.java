@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.axa.AxaModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.mapfre.MapfreModel;
@@ -77,6 +78,15 @@ public class IdentificaPolizaService {
                     	 modelo = datosmapfre.procesa();
                          encontro = true;
                      }
+                 }
+             }
+             
+             // ENTRADA PARA AXA
+             if (encontro == false) {
+                 if (contenido.contains("AXA Seguros, S.A. de C.V.") || contenido.contains("AXA SEGUROS, S.A. DE C.V") || contenido.contains("AXA Seguros, S.A de C.V.")) {
+                	 AxaModel datosAxa = new AxaModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosAxa.procesa();
+                     encontro = true;
                  }
              }
 
