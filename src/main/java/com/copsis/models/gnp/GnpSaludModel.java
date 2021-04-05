@@ -15,9 +15,16 @@ public class GnpSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	private String contenido = "", newcontenido = "", newcontenido1 = "", newcontenido2 = "", certificados = "",
-			txtasegurados = "", filtrado = "", contenidoCoberturas = "";
-	private int inicio = 0, fin = 0;
+	private String contenido = "";
+	private String newcontenido = "";
+	private String newcontenido1 = "";
+	private String newcontenido2 = "";
+	private String certificados = "";
+	private String txtasegurados = "";
+	private String filtrado = "";
+	private String contenidoCoberturas = "";
+	private int inicio = 0;
+	private int fin = 0;
 
 	public GnpSaludModel(String contenido, String certificados, String asegurados) {
 		this.contenido = contenido;
@@ -34,7 +41,8 @@ public class GnpSaludModel {
 		int longitud_texto = 0;
 		int donde = 0;
 		int dondeAux = 0;
-		String parte = "", agente = "";
+		String parte = "";
+		String agente = "";
 		boolean encontroNal = false;
 		boolean encontroExt = false;
 		int encontroNacional = 0;
@@ -117,13 +125,14 @@ public class GnpSaludModel {
 							}
 						}
 					} else if (dato.contains("R.F.C:") || dato.contains("R.F.C. :")) {
-						
+
 						if (dato.split("###").length == 5) {
 							if ((dato.split("###")[0].contains("R.F.C:") && dato.split("###")[1].contains("del"))
-									|| (dato.split("###")[0].contains("R.F.C. :") && dato.split("###")[1].contains("del"))) {
+									|| (dato.split("###")[0].contains("R.F.C. :")
+											&& dato.split("###")[1].contains("del"))) {
 								modelo.setRfc(dato.split("###")[0].split(":")[1].trim());
 								if (dato.split("###")[1].contains("hrs.")) {
-								
+
 									modelo.setVigenciaA(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
 											+ "-" + dato.split("###")[2].trim());
 								}
@@ -149,7 +158,7 @@ public class GnpSaludModel {
 						switch (dato.split("###").length) {
 						case 4:
 							if (dato.split("###")[2].trim().equals("Prima Neta")) {
-								modelo.setPrimaneta(fn.castFloat(dato.split("###")[3].trim()));
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 							}
 							break;
 						}
@@ -162,7 +171,7 @@ public class GnpSaludModel {
 								modelo.setFormaPago(fn.formaPago(dato.trim().split("###")[4].trim()));
 							}
 							if (dato.split("###")[5].contains("de Póliza")) {
-								modelo.setDerecho(fn.castFloat(dato.split("###")[6].trim()));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[6].trim())));
 							}
 							break;
 						case 6:
@@ -183,7 +192,7 @@ public class GnpSaludModel {
 								newcontenido = fn.cleanString(dato.split("###")[6].split("I.V.A.")[1].trim());
 
 								if (fn.isNumeric(newcontenido)) {
-									modelo.setIva(fn.castFloat(newcontenido));
+									modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 								}
 							}
 							break;
@@ -200,7 +209,7 @@ public class GnpSaludModel {
 					if (dato.contains("de Póliza")) {
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Póliza")) {
-								modelo.setDerecho(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}
@@ -214,7 +223,7 @@ public class GnpSaludModel {
 								if (dato.trim().split(" ").length == 2) {
 									if (Double.parseDouble(
 											dato.trim().split(" ")[1].replace(".", "").replace(",", "").trim()) > 0) {
-										modelo.setIva(fn.castFloat(dato.trim().split(" ")[1].trim()));
+										modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.trim().split(" ")[1].trim())));
 									}
 								}
 							} catch (Exception e) {
@@ -226,25 +235,26 @@ public class GnpSaludModel {
 
 							if (fn.isNumeric(newcontenido)) {
 
-								modelo.setIva(fn.castFloat(newcontenido));
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 							}
 
 							break;
-						}                	
+						}
 					}
 
 					if (dato.contains("Fraccionado")) {
 						switch (dato.split("###").length) {
 						case 8:
 							if (dato.split("###")[6].trim().equals("Fraccionado")) {
-								modelo.setRecargo(fn.castFloat(dato.split("###")[7].trim()));
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
 							}
 							break;
 						}
 					}
 
 					if (dato.contains("Cesión de Comisión")) {
-							modelo.setAjusteUno(fn.castFloat(dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")));
+						modelo.setAjusteUno(
+								fn.castBigDecimal(fn.preparaPrimas(dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", ""))));
 					}
 				}
 			}
@@ -257,13 +267,13 @@ public class GnpSaludModel {
 					if (dato.contains("Pagar")) {
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Pagar")) {
-								modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 							}
 						}
 					}
 				}
 			}
-			if (modelo.getPrimaTotal() == 0) {
+			if (modelo.getPrimaTotal().floatValue() == 0) {
 				donde = 0;
 				donde = fn.recorreContenido(contenido, "Pagar");
 				if (donde > 0) {
@@ -272,12 +282,12 @@ public class GnpSaludModel {
 							switch (dato.split("###").length) {
 							case 2:
 								if (dato.split("###")[0].trim().equals("Pagar")) {
-									modelo.setPrimaTotal(fn.castFloat(dato.split("###")[1].trim()));
+									modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
 								}
 								break;
 							case 4:
 								if (dato.split("###")[2].trim().equals("Pagar")) {
-									modelo.setPrimaTotal(fn.castFloat(dato.split("###")[3].trim()));
+									modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 								}
 								break;
 							}
@@ -359,15 +369,15 @@ public class GnpSaludModel {
 			}
 
 			for (String A : dtcoberturas.split("\n")) {
-				
+
 				if (A.contains("− Extranjero")) {
 					int n = A.split("###").length;
 					if (n == 7) {
 						modelo.setDeducibleExt(A.split("###")[3].trim());
-					}if (n == 6) {
-						modelo.setDeducibleExt(A.split("###")[2].trim());
 					}
-					else if (n == 5) {
+					if (n == 6) {
+						modelo.setDeducibleExt(A.split("###")[2].trim());
+					} else if (n == 5) {
 						modelo.setDeducibleExt(A.split("###")[2].trim());
 					} else {
 
@@ -428,18 +438,15 @@ public class GnpSaludModel {
 				dondeAux = fn.recorreContenido(contenido, "Plan###");
 			}
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-			
-	
+
 			if (donde > 0 && dondeAux > 0) {
-				
+
 				inicio = contenido.indexOf(contenido.split("@@@")[donde]);
 				fin = contenido.indexOf(contenido.split("@@@")[dondeAux]);
-				
-				
+
 				newcontenido = "";
 				filtrado = contenido.substring(inicio, fin).replace("@@@", "").trim();
-				
-			
+
 				if (filtrado.contains("Ver listado de Asegurados")) {// AL NO TRAER ASEGURADOS TRABAJAMOS CON LA
 																		// VARIABLE QUE LLEGA
 					if (txtasegurados.length() > 0) {
@@ -453,7 +460,7 @@ public class GnpSaludModel {
 						}
 					}
 				}
-				
+
 				for (String dato : filtrado.split("\r\n")) {
 					if (dato.trim().split("-").length == 3 || dato.trim().split("-").length == 5) {
 						if (dato.contains("CARTERA")) {
@@ -484,7 +491,7 @@ public class GnpSaludModel {
 				}
 
 				if (newcontenido.length() > 0) {
-				
+
 					for (String dato : newcontenido.split("\r\n")) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						switch (dato.split("###").length) {
@@ -830,47 +837,48 @@ public class GnpSaludModel {
 						nombre = fn.gatos(x.substring(inicio + 19, fin).trim());
 					}
 					inicio = x.indexOf("Nacimiento");
-					
+
 					if (inicio > -1) {
 						newcontenido = x.substring(inicio + 10, inicio + 150).split("\n")[0];
-						
+
 						if (newcontenido.contains("Importe")) {
-							
-							nacimiento = fn.formatDate(fn.gatos( newcontenido.split("Importe")[0].trim()).replace("###", "-"), "dd-MM-yy");
-									
+
+							nacimiento = fn.formatDate(
+									fn.gatos(newcontenido.split("Importe")[0].trim()).replace("###", "-"), "dd-MM-yy");
+
 						}
 					}
-				
+
 					inicio = x.indexOf("digo Cliente");
-					if(inicio == 0) {
+					if (inicio == 0) {
 						inicio = x.indexOf("Código Cliente");
 					}
-					
+
 					if (inicio > -1) {
-						
+
 						newcontenido = x.substring(inicio + 12, x.indexOf("\n", inicio + 12));
-				
+
 						if (newcontenido.contains("Prima")) {
 							certificado = fn.gatos(newcontenido.split("Prima")[0]);
 						}
 					}
 					inicio = x.indexOf("Sexo:");
-					
+
 					if (inicio > -1) {
 						newcontenido = fn.gatos(x.substring(inicio + 5, inicio + 150).split("\n")[0]).trim();
-		
+
 						sexo = (fn.sexo(newcontenido)) ? 1 : 0;
-					
+
 					}
 					if (nombre.length() > 0) {
-						
+
 						for (int i = 0; i < asegurados.size(); i++) {
-						if(asegurados.get(i).getNombre().equals(nombre)) {
-							EstructuraAseguradosModel asegurado = asegurados.get(i);
-							asegurado.setNacimiento(nacimiento);
-							asegurado.setSexo(sexo);
-							asegurado.setCertificado(certificado);
-						}
+							if (asegurados.get(i).getNombre().equals(nombre)) {
+								EstructuraAseguradosModel asegurado = asegurados.get(i);
+								asegurado.setNacimiento(nacimiento);
+								asegurado.setSexo(sexo);
+								asegurado.setCertificado(certificado);
+							}
 						}
 					}
 				}

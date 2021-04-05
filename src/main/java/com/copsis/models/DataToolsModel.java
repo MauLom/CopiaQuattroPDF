@@ -3,11 +3,13 @@ package com.copsis.models;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 public class DataToolsModel {
+	DateTimeFormatter formatter;
+	SimpleDateFormat simpleDateFormat;
 
 	public boolean isNumeric(String value) {// validacion de si es numero
 		try {
@@ -31,14 +35,16 @@ public class DataToolsModel {
 		return texto;
 	}
 
+	public String preparaPrimas(String texto) {// limpiar de signos los datos antes de convertir a numeros
+		return texto.replace(",", "").replace("MXP", "").replace("MXN", "").trim();
+	}
+
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<>();
 		try {
 			remplazoDeA.add(new ReplaceModel("\r\r\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel(" :", ":"));
-			remplazoDeA.add(new ReplaceModel("(", ""));
-			remplazoDeA.add(new ReplaceModel(")", ""));
 			remplazoDeA.add(new ReplaceModel("$", ""));
 			remplazoDeA.add(new ReplaceModel("", ""));
 			remplazoDeA.add(new ReplaceModel("MXP", ""));
@@ -71,10 +77,9 @@ public class DataToolsModel {
 	public String remplazarMultiple(String texto, List<ReplaceModel> datos) {
 		try {
 			for (ReplaceModel r : datos) {
-				
+
 				texto = texto.replace(r.getRemplazaDe(), r.getRemplazaA());
-				
-	
+
 			}
 			return texto;
 		} catch (Exception e) {
@@ -93,7 +98,7 @@ public class DataToolsModel {
 		}
 
 	}
-	
+
 	public Double castDouble(String texto) {
 		Double resultado = null;
 		try {
@@ -114,115 +119,135 @@ public class DataToolsModel {
 
 	}
 
-	   public  BigDecimal castBigDecimal(Object valueObj, Integer rango) {        
-	        if (valueObj instanceof BigDecimal) {
-	        	return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Long) {
-	        	return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Short) {
-	        	return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Integer) {
-	        	return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Double) {
-	        	 return  BigDecimal.valueOf((Double) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Float) {
-	        	 return  BigDecimal.valueOf((Float) valueObj).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof String) {
-	            return new BigDecimal(((String) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof BigInteger) {
-	        	 return new BigDecimal(((BigInteger) valueObj)).setScale(rango, BigDecimal.ROUND_HALF_EVEN);
-	        } else if (valueObj instanceof Number) {
-	            return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango,BigDecimal.ROUND_HALF_EVEN);       	
-	        } else {
-	            return null;
-	        }
-	    }
-	   
-	   
-	    public String elimina_spacios(String texto) {
-	        String result = "";
-	        int counter_space = 0;
-	        for (int i = 0; i < texto.length(); i++) {
-	            if (texto.charAt(i) == ' ') {
-	            	System.out.println(counter_space);
-	                if (counter_space < 1) {
-	                    counter_space = 1;
-	                    if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
-	                        result += Character.toString(texto.charAt(i));
-	                    }
-	                }
-	            } else {
-	                counter_space = 0;
-	                result += Character.toString(texto.charAt(i));
-	            }
-	        }
-	        return result;
-	    }
+	public BigDecimal castBigDecimal(Object valueObj, Integer rango) {
+		if (valueObj instanceof BigDecimal) {
+			return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Long) {
+			return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Short) {
+			return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Integer) {
+			return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Double) {
+			return BigDecimal.valueOf((Double) valueObj).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Float) {
+			return BigDecimal.valueOf((Float) valueObj).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof String) {
+			return new BigDecimal(((String) valueObj)).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof BigInteger) {
+			return new BigDecimal(((BigInteger) valueObj)).setScale(rango, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Number) {
+			return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(rango, RoundingMode.HALF_EVEN);
+		} else {
+			return null;
+		}
+	}
 
+	public BigDecimal castBigDecimal(Object valueObj) {
+		if (valueObj instanceof BigDecimal) {
+			return BigDecimal.valueOf(((BigDecimal) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Long) {
+			return BigDecimal.valueOf(((Long) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Short) {
+			return BigDecimal.valueOf(((Short) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Integer) {
+			return BigDecimal.valueOf(((Integer) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Double) {
+			return BigDecimal.valueOf((Double) valueObj).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Float) {
+			return BigDecimal.valueOf((Float) valueObj).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof String) {
+			return new BigDecimal(((String) valueObj)).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof BigInteger) {
+			return new BigDecimal(((BigInteger) valueObj)).setScale(2, RoundingMode.HALF_EVEN);
+		} else if (valueObj instanceof Number) {
+			return BigDecimal.valueOf(((Number) valueObj).longValue()).setScale(2, RoundingMode.HALF_EVEN);
+		} else {
+			return null;
+		}
+	}
 
-	   
-	   public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
-	        boolean encontro_grupo = false;
-	        int par = 0;
-	        String newdato = "";
-	        for (int i = 0; i < dato.length(); i++) {
-	            if (dato.charAt(i) == ' ') {
-	                if (encontro_grupo == false) {
-	                    par = par + 1;
-	                    if (par == 2) {
-	                        encontro_grupo = true;
-	                        newdato = newdato.trim();
-	                        newdato += "###";
-	                    } else {
-	                        newdato += Character.toString(dato.charAt(i));
-	                    }
-	                }
-	            } else {
-	                par = 0;
-	                encontro_grupo = false;
-	                newdato += Character.toString(dato.charAt(i));
-	            }
-	        }
-	        return newdato;
-	    }
-	   
-	   
+	public String elimina_spacios(String texto) {
+		String result = "";
+		int counter_space = 0;
+		for (int i = 0; i < texto.length(); i++) {
+			if (texto.charAt(i) == ' ') {
+				System.out.println(counter_space);
+				if (counter_space < 1) {
+					counter_space = 1;
+					if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
+						result += Character.toString(texto.charAt(i));
+					}
+				}
+			} else {
+				counter_space = 0;
+				result += Character.toString(texto.charAt(i));
+			}
+		}
+		return result;
+	}
+
+	public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
+		boolean encontro_grupo = false;
+		int par = 0;
+		StringBuilder newdato = new StringBuilder();
+		for (int i = 0; i < dato.length(); i++) {
+			if (dato.charAt(i) == ' ') {
+				if (encontro_grupo == false) {
+					par = par + 1;
+					if (par == 2) {
+						encontro_grupo = true;
+						newdato.append(newdato.toString().trim());
+						newdato.append("###");
+					} else {
+						newdato.append(Character.toString(dato.charAt(i)));
+					}
+				}
+			} else {
+				par = 0;
+				encontro_grupo = false;
+				newdato.append(Character.toString(dato.charAt(i)));
+			}
+		}
+		return newdato.toString();
+	}
+
 	public String eliminaSpacios(String texto, char delimiter, String valor) {
 		boolean encontro_grupo = false;
 		int counterspace = 0;
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < texto.length(); i++) {
-			if (texto.charAt(i) == ' ' ) {
-		
+			if (texto.charAt(i) == ' ') {
+
 				if (valor.length() > 0) {
-					   if (encontro_grupo == false) {
-						   counterspace = counterspace + 1;
-							if (counterspace == 2) {
-								 encontro_grupo = true;
-								result = result.trim();
-								result += "###";
-							} else {
-								result += Character.toString(texto.charAt(i));
-							}
-					   }
-					
+					if (encontro_grupo == false) {
+						counterspace = counterspace + 1;
+						if (counterspace == 2) {
+							encontro_grupo = true;
+							result.append(result.toString().trim());
+							result.append("###");
+						} else {
+							result.append(Character.toString(texto.charAt(i)));
+						}
+					}
+
 				} else {
 					if (counterspace < 1) {
 						counterspace = 1;
 
 						if (result.length() > 0) {
-							result += Character.toString(texto.charAt(i));
+							result.append(Character.toString(texto.charAt(i)));
 						}
 					}
 				}
 
 			} else {
-				encontro_grupo= false;
+				encontro_grupo = false;
 				counterspace = 0;
-				result += Character.toString(texto.charAt(i));
+				result.append(Character.toString(texto.charAt(i)));
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
 	public String gatos(String texto) {// QUITA ### AL INICIO Y FINAL
@@ -268,23 +293,33 @@ public class DataToolsModel {
 		return result;
 	}
 
-	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
+	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018 //
+																// RETORNA 2018-02-02
+		String result = "";
+		String day = "";
+		if (formatear.split("-")[0].length() == 1) {
+			day = "0" + formatear.split("-")[0];
+		} else {
+			day = formatear.split("-")[0];
+		}
+		String month = mes(formatear.split("-")[1]);
+		String year = formatear.split("-")[2];
+		result = year + "-" + month + "-" + day;
+		return result;
+	}
 
+	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
 		String resul = "";
 		try {
-			;
 			if (fecha.split("-")[1].length() > 2) {
-				fecha = fecha.split("-")[0] + "-" + formatMonth(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
+				fecha = fecha.split("-")[0] + "-" + mes(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
-
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);
 			date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			resul = simpleDateFormat.format(date).toUpperCase();
-
-			return resul;
+			simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			return simpleDateFormat.format(date);
 		} catch (Exception ex) {
 			resul = ex.getMessage();
 			return resul;
@@ -293,62 +328,15 @@ public class DataToolsModel {
 
 	}
 
-	public String formatMonth(String mes) { // RECIBE Ene || ENE || ENERO 02
-		String dato = "";
-		switch (mes.toUpperCase()) {
-		case "ENE":
-		case "ENERO":
-			dato = "01";
-			break;
-		case "FEB":
-		case "FEBRERO":
-			dato = "02";
-			break;
-		case "MAR":
-		case "MARZO":
-			dato = "03";
-			break;
-		case "ABR":
-		case "ABRIL":
-			dato = "04";
-			break;
-		case "MAY":
-		case "MAYO":
-			dato = "05";
-			break;
-		case "JUN":
-		case "JUNIO":
-			dato = "06";
-			break;
-		case "JUL":
-		case "JULIO":
-			dato = "07";
-			break;
-		case "AGO":
-		case "AGOSTO":
-			dato = "08";
-			break;
-		case "SEP":
-		case "SEPTIEMBRE":
-			dato = "09";
-			break;
-		case "OCT":
-		case "OCTUBRE":
-			dato = "10";
-			break;
-		case "NOV":
-		case "NOVIEMBRE":
-			dato = "11";
-			break;
-		case "DIC":
-		case "DICIEMBRE":
-			dato = "12";
-			break;
-		default:
-			dato = "0";
-			break;
+	public String mes(String mes) { // RECIBE Ene || ENE || ENERO 02
+		mes = mes.toUpperCase();
+		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO",
+				"SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
+		if (mes.length() == 3) {
+			meses = Arrays.asList("ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC");
 		}
-		return dato;
+		return (meses.indexOf(mes) + 1) > 9 ? "" + (meses.indexOf(mes) + 1)
+				: "0" + (meses.indexOf(mes.toUpperCase()) + 1);
 	}
 
 	public int moneda(String texto) {
@@ -435,6 +423,7 @@ public class DataToolsModel {
 		case "MENSUAL VITRO":
 		case "MENSUAL S/R DERP":
 		case "MEN.S/REC.":
+		case "MENSUAL S-R":
 			dato = 4;
 			break;
 		case "QUIN":
@@ -480,19 +469,19 @@ public class DataToolsModel {
 	}
 
 	public String filtroPorRango(String texto, int rango) {
-		String textonuevo = "";
+		StringBuilder textonuevo = new StringBuilder();
 		for (int i = 0; i < texto.split("@@@").length; i++) {
 			if (i < rango) {
 				if (i == 0) {
-					textonuevo = texto.split("@@@")[i].trim();
+					textonuevo.append(texto.split("@@@")[i].trim());
 				} else {
-					textonuevo += "\r\n@@@" + texto.split("@@@")[i].trim();
+					textonuevo.append("\r\n@@@" + texto.split("@@@")[i].trim());
 				}
 			} else {
 				break;
 			}
 		}
-		return textonuevo;
+		return textonuevo.toString();
 	}
 
 	public int recorreContenido(String texto, String search) {
@@ -573,7 +562,6 @@ public class DataToolsModel {
 		return dato;
 	}
 
-	
 	public int material(String material) {
 		int result = 0;
 		switch (material) {
@@ -617,7 +605,7 @@ public class DataToolsModel {
 
 	public String recibo2(String fecha, int cuantos, int caso) {
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(fecha);
 		switch (caso) {
 		case 1:// DIAS
@@ -659,12 +647,13 @@ public class DataToolsModel {
 	}
 
 	public int ramoPoliza(String Contenido) {
-		int ramo =0;
+		int ramo = 0;
 		return ramo;
 	}
+
 	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, Boolean tipo)
 			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
-		String x = "";
+		StringBuilder x = new StringBuilder();
 		int listado = 0;
 
 		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
@@ -678,73 +667,70 @@ public class DataToolsModel {
 						s.setParagraphStart("###");
 						s.setSortByPosition(true);
 						s = pdfStripper;
-						x += s.getText(pdDoc);
+						x.append(s.getText(pdDoc));
 						break;
 					}
-				} else {// certificado
+				} else {// certificado|busca paginas necesarias
 					PDFTextStripper s = new PDFTextStripper();
 					s.setParagraphStart("###");
 					s.setSortByPosition(true);
 					s = pdfStripper;
-					x += s.getText(pdDoc);
-
+					x.append(s.getText(pdDoc));
 				}
 			}
-
 		}
-		return x;
+		return x.toString();
 	}
-	  public String dateAdd(String fecha, int cuantos, int caso) {
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	        LocalDate date = LocalDate.parse(fecha);
-	        switch (caso) {
-	            case 1://DIAS
-	                LocalDate dateNew = date.plusDays(cuantos);
-	                fecha = dateNew.format(formatter);
-	                break;
-	            case 2://MESES
-	                LocalDate dateNew1 = date.plusMonths(cuantos);
-	                fecha = dateNew1.format(formatter);
-	                break;
-	        }
-	        return fecha;
-	    }
 
-	
-	   //Meodo que retorna la numero de pagina donde se encuentra ,el string a buscar
-    public int pagFinRango(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException {
-        int valor = 0;
-        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
-            pdfStripper.setStartPage(i);
-            pdfStripper.setEndPage(i);
-            if (pdfStripper.getText(pdDoc).contains(buscar)) {
-                valor = i;
-                break;
-            }
-        }
-        return valor;
-    }
-    public String fixContenido(String contenido) {
-        String cont_Fix = contenido.replace("\n", "\r\n");
-        String texto = "";
-        if (cont_Fix.contains("\r\r\n")) {
-            texto = cont_Fix.replace("\r\r\n", "\r\n");
-        } else {
-            texto = contenido.replace("\n", "\r\n");
-        }
-        return texto;
-    }
+	public String dateAdd(String fecha, int cuantos, int caso) {
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(fecha);
+		switch (caso) {
+		case 1:// DIAS
+			LocalDate dateNew = date.plusDays(cuantos);
+			fecha = dateNew.format(formatter);
+			break;
+		case 2:// MESES
+			LocalDate dateNew1 = date.plusMonths(cuantos);
+			fecha = dateNew1.format(formatter);
+			break;
+		}
+		return fecha;
+	}
 
-    public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException { //DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS
-        stripper.setStartPage(inicio);
-        stripper.setEndPage(fin);
-        stripper.setParagraphStart("@@@");
-        stripper.setWordSeparator("###");
-        stripper.setSortByPosition(true);
-        return stripper.getText(doc);
-    }
-    
+	// Meodo que retorna la numero de pagina donde se encuentra ,el string a buscar
+	public int pagFinRango(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException {
+		int valor = 0;
+		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+			pdfStripper.setStartPage(i);
+			pdfStripper.setEndPage(i);
+			if (pdfStripper.getText(pdDoc).contains(buscar)) {
+				valor = i;
+				break;
+			}
+		}
+		return valor;
+	}
 
-    
- 
+	public String fixContenido(String contenido) {
+		String cont_Fix = contenido.replace("\n", "\r\n");
+		String texto = "";
+		if (cont_Fix.contains("\r\r\n")) {
+			texto = cont_Fix.replace("\r\r\n", "\r\n");
+		} else {
+			texto = contenido.replace("\n", "\r\n");
+		}
+		return texto;
+	}
+
+	/* DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS */
+	public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException {
+		stripper.setStartPage(inicio);
+		stripper.setEndPage(fin);
+		stripper.setParagraphStart("@@@");
+		stripper.setWordSeparator("###");
+		stripper.setSortByPosition(true);
+		return stripper.getText(doc);
+	}
+
 }
