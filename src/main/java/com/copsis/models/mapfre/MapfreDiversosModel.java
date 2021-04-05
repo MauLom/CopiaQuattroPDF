@@ -17,7 +17,7 @@ public class MapfreDiversosModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
-	//private String inicontenido = "";
+	private String inicontenido = "";
 	private String contenido = "";
 	private String newcontenido = "";
 	private String seccion = "";
@@ -44,6 +44,7 @@ public class MapfreDiversosModel {
 	}
 
 	public EstructuraJsonModel procesar() {
+		inicontenido = fn.fixContenido(contenido);
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 
 		contenido = contenido.replace("Póliza Número    :", "Póliza Número:")
@@ -88,17 +89,18 @@ public class MapfreDiversosModel {
 
 			// cte_nombre
 			inicio = contenido.indexOf("Contratante:");
+		;
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0];
-				if (newcontenido.contains("R.F.C.")) {
+				if (newcontenido.contains("R.F.C")) {
 					modelo.setCteNombre(fn.gatos(
-							contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0].split("R.F.C.")[0].trim()));
+							contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0].split("R.F.C")[0].trim()));
 				}
 			} else {
-				inicio = contenido.indexOf("R.F.C.:");
+				inicio = contenido.indexOf("R.F.C:");
 				if (inicio > -1) {
 					modelo.setCteNombre(fn.gatos(
-							contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].split("R.F.C.:")[0].trim()));
+							contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].split("R.F.C:")[0].trim()));
 				}
 			}
 
@@ -142,8 +144,7 @@ public class MapfreDiversosModel {
 				switch (newcontenido.split("###").length) {
 				case 2:
 				case 3:
-					if (newcontenido.split("###")[0].contains("de:")) {
-						;
+					if (newcontenido.split("###")[0].contains("de:")) {					
 						modelo.setVigenciaDe(
 								fn.formatDate(newcontenido.split("###")[0].split("de:")[1].trim(), "dd-MM-YY"));
 					}
@@ -165,7 +166,7 @@ public class MapfreDiversosModel {
 					newcontenido = fn.RemplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
 					switch (newcontenido.split("###").length) {
 					case 3:
-						modelo.setVigenciaA(fn.formatDate(newcontenido.split("###")[0].trim(), "dd-MM-YY"));
+						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("###")[0].trim()));
 						modelo.setCveAgente(newcontenido.split("###")[1].trim());
 						modelo.setAgente(newcontenido.split("###")[2].trim());
 						break;
@@ -229,7 +230,7 @@ public class MapfreDiversosModel {
 					case 7:
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[0].trim())));
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2].trim())));
-						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[3].trim())));
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[3].trim())));;
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[5].trim())));
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[6].trim())));
 						break;
@@ -266,12 +267,12 @@ public class MapfreDiversosModel {
 			}
 
 			// renovacion
-			inicio = contenido.indexOf("SUMA ASEGURADA DEDUCIBLE");
-			fin = contenido.indexOf("ABREVIATURAS");
+			inicio = inicontenido.indexOf("SUMA ASEGURADA DEDUCIBLE");
+			fin = inicontenido.indexOf("ABREVIATURAS");
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").trim();
+				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
 				resultado = "";
 				for (String x : newcontenido.split("\r\n")) {
 					if (x.contains("BIENES Y RIESGOS CUBIERTOS") == false && x.contains("---") == false
@@ -308,15 +309,15 @@ public class MapfreDiversosModel {
 					}
 				}
 			} else {// SEGUNDO CASO
-				inicio = contenido.indexOf("BIENES Y RIESGOS");
-				fin = contenido.indexOf("ABREVIATURAS");
+				inicio = inicontenido.indexOf("BIENES Y RIESGOS");
+				fin = inicontenido.indexOf("ABREVIATURAS");
 
 				if (fin == -1) {
-					fin = contenido.indexOf("RENOVACION AUTOMATICA");
+					fin = inicontenido.indexOf("RENOVACION AUTOMATICA");
 				}
 
 				if (inicio > -1 && fin > inicio) {
-					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").trim();
+					newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
 
 					if (newcontenido.contains("RENOVACIÓN AUTOMÁTICA:")) {
 						newcontenido = newcontenido.split("RENOVACIÓN AUTOMÁTICA")[0];
@@ -325,11 +326,11 @@ public class MapfreDiversosModel {
 					for (String x : newcontenido.split("\r\n")) {
 
 						if (x.contains("SUMA ASEGURADA") == false && x.contains("---") == false) {
-							System.out.println(inicio + "---------------------_> " + x);
-							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-							x = fn.RemplazaGrupoSpace(x.trim());
-							x = x.replace("###$###", "###$ ");
 
+							
+							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+							x = fn.gatos( x.replaceAll("  +", "###").trim());
+							x = x.replace("###$###", "###$ ");
 							switch (x.split("###").length) {
 							case 2:
 								switch (x.split("###")[0].trim()) {
@@ -351,6 +352,7 @@ public class MapfreDiversosModel {
 									seccion = x.split("###")[0].trim();
 									break;
 								default:
+									
 									cobertura.setNombre(x.split("###")[0].trim());
 									cobertura.setSeccion(seccion);
 									cobertura.setSa(x.split("###")[1].trim());
@@ -375,6 +377,7 @@ public class MapfreDiversosModel {
 								case "XIII":
 								case "XIV":
 								case "XV":
+								
 									seccion = x.split("###")[0].trim();
 									cobertura.setSeccion(seccion);
 									cobertura.setNombre(x.split("###")[1].trim());
@@ -492,6 +495,7 @@ public class MapfreDiversosModel {
 
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+
 			if (recibosText.length() > 0) {
 				recibosList = recibosExtract();
 			}
@@ -499,22 +503,25 @@ public class MapfreDiversosModel {
 			// CALCULO RESTO DE RECIBOS
 			switch (modelo.getFormaPago()) {
 			case 1:
-				recibo.setReciboId("");
-				recibo.setSerie("1/1");
-				recibo.setVigenciaDe(modelo.getVigenciaDe());
-				recibo.setVigenciaA(modelo.getVigenciaA());
-				if (recibo.getVigenciaDe().length() > 0) {
-					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+				if(recibosList.size() ==  0) {
+					recibo.setReciboId("");
+					recibo.setSerie("1/1");
+					recibo.setVigenciaDe(modelo.getVigenciaDe());
+					recibo.setVigenciaA(modelo.getVigenciaA());
+					if (recibo.getVigenciaDe().length() > 0) {
+						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+					}
+					recibo.setPrimaneta(modelo.getPrimaneta());
+					recibo.setDerecho(modelo.getDerecho());
+					recibo.setRecargo(modelo.getRecargo());
+					recibo.setIva(modelo.getIva());
+					recibo.setPrimaTotal(modelo.getPrimaTotal());
+					recibo.setAjusteUno(modelo.getAjusteUno());
+					recibo.setAjusteDos(modelo.getAjusteDos());
+					recibo.setCargoExtra(modelo.getCargoExtra());
+					recibosList.add(recibo);					
 				}
-				recibo.setPrimaneta(modelo.getPrimaneta());
-				recibo.setDerecho(modelo.getDerecho());
-				recibo.setRecargo(modelo.getRecargo());
-				recibo.setIva(modelo.getDerecho());
-				recibo.setPrimaTotal(modelo.getPrimaTotal());
-				recibo.setAjusteUno(modelo.getAjusteUno());
-				recibo.setAjusteDos(modelo.getAjusteDos());
-				recibo.setCargoExtra(modelo.getCargoExtra());
-				recibosList.add(recibo);
+			
 				break;
 			case 2:
 				if (recibosList.size() == 1) {
@@ -635,6 +642,7 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = recibosText.substring(inicio, recibosText.indexOf("\r\n", inicio));
 				if (newcontenido.split("###").length == 3) {
+				
 					recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2])));
 					restoIva = modelo.getIva().subtract(recibo.getIva());
 				}
@@ -658,9 +666,11 @@ public class MapfreDiversosModel {
 						.split("Gasto de ")[0];
 				if (newcontenido.contains("Hasta: 12:00 horas del")) {
 					resultado = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[0]).trim();
+
 					recibo.setVigenciaDe(resultado);
-					resultado = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[1]).trim();
-					recibo.setVigenciaA(fn.formatDate(resultado, "dd-MM-yy"));
+					String resultado2 = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[1]).trim();
+					recibo.setVigenciaA(resultado2);
+	
 				}
 			}
 
@@ -680,8 +690,10 @@ public class MapfreDiversosModel {
 
 			// recibo_id
 			inicio = recibosText.indexOf("serie P No.");
+	
 			if (inicio > -1) {
 				newcontenido = fn.gatos(recibosText.substring(inicio + 11, recibosText.indexOf("\r\n", inicio + 11)));
+
 				recibo.setReciboId(newcontenido);
 			}
 

@@ -49,6 +49,8 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("", ""));
 			remplazoDeA.add(new ReplaceModel("MXP", ""));
 			remplazoDeA.add(new ReplaceModel("/", "-"));
+			remplazoDeA.add(new ReplaceModel("(", ""));
+			remplazoDeA.add(new ReplaceModel(")", ""));
 			remplazoDeA.add(new ReplaceModel(".:", ":"));
 			remplazoDeA.add(new ReplaceModel("..:", ":"));
 			remplazoDeA.add(new ReplaceModel("...:", ":"));
@@ -314,6 +316,7 @@ public class DataToolsModel {
 			if (fecha.split("-")[1].length() > 2) {
 				fecha = fecha.split("-")[0] + "-" + mes(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
+			System.out.println("-respuesta --->->" + fecha);
 			DateFormat formatter;
 			Date date;
 			formatter = new SimpleDateFormat(format);

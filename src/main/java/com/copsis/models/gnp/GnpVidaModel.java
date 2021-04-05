@@ -360,6 +360,7 @@ public class GnpVidaModel {
 			}
 
 			donde = fn.recorreContenido(contenido, "Asegurado s");
+
 			if (donde > 0) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				for (int i = 0; i < contenido.split("@@@")[donde].split("\r\n").length; i++) {
