@@ -1,6 +1,7 @@
 package com.copsis.models.gnp.autos;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -99,10 +100,13 @@ public class GnpAutosModel {
 			// cp
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
+			System.out.println("------------------->" + donde);
 			if (donde > 0) {
+				System.out.println("-------oooo-------->"+ contenido.split("@@@")[donde].split("\r\n").length);
 				if (contenido.split("@@@")[donde].split("\r\n").length > 1) {
 					newcontenido = "";
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+						System.out.println(dato +"----< " + dato.split("###").length );
 						if (dato.split("###").length == 3) {
 							if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("-").length == 3) {
 								modelo.setVigenciaA(
@@ -110,11 +114,16 @@ public class GnpAutosModel {
 								modelo.setRfc(dato.split("###")[0].trim());
 								newcontenido = dato.split("###")[1].trim();
 							}
-						} else if (dato.split("###").length == 2) {
+						} 
+						else if (dato.split("###").length == 2) {
 							if (dato.split("###")[1].contains("Duración:") && dato.split("###")[0].contains("C.P.")) {
-								modelo.setCp(dato.split("###")[0].split("C.P.")[1].trim());
-								newcontenido += " " + dato.split("###")[0].split("C.P.")[0].trim();
-							} else if (dato.split("###").length == 2) {
+								if(dato.contains("C.P.###Duración")) {								
+								}else {
+									modelo.setCp(dato.split("###")[0].split("C.P.")[1].trim());
+									newcontenido += " " + dato.split("###")[0].split("C.P.")[0].trim();
+								}						
+							} 
+								else if (dato.split("###").length == 2) {
 								if (dato.split("###")[0].trim().length() == 5) {
 									if (fn.isNumeric(dato.split("###")[0].trim())) {
 										modelo.setCp(dato.split("###")[0].trim());
@@ -126,6 +135,18 @@ public class GnpAutosModel {
 					modelo.setCteDireccion(newcontenido.replace(", C.P.", "").trim());
 				}
 			}
+
+			if(modelo.getCp().length() == 0) {
+				inicio  = contenido.indexOf("Referencia");
+				fin  = contenido.indexOf("Descripción");
+				if(inicio > 0 & fin > 0 & inicio < fin) {
+					newcontenido = contenido.substring(inicio,fin);
+					if(fn.isNumeric(newcontenido.split("Referencia")[1].replace("###", "").trim()))
+					modelo.setCp(newcontenido.split("Referencia")[1].replace("###", "").trim());
+				}
+				
+			}
+			
 
 			// descripcion (vehiculo)
 			// serie
@@ -159,7 +180,6 @@ public class GnpAutosModel {
 					if (contenido.split("@@@")[donde].split("\r\n")[0].split("###").length == 5) {
 						if (contenido.split("@@@")[donde].split("###")[3].trim().equals("Fraccionado")) {
 							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde].split("###")[4].trim())));
-
 						}
 					}
 					if (contenido.split("@@@")[donde + 1].split("\r\n").length == 1) {
@@ -327,17 +347,22 @@ public class GnpAutosModel {
 				}
 			}
 
+			///System.out.println("===> " +contenido);
+	
 			// plan
-			if (contenido.split("@@@")[1].contains("No. Póliza")
-					&& contenido.split("@@@")[1].contains("Regular Autos")) {
-				inicio = -1;
-				fin = -1;
-				inicio = contenido.split("@@@")[1].trim().indexOf("Regular Autos");
-				fin = contenido.split("@@@")[1].trim().indexOf("No. Póliza");
-				if (inicio > -1 && fin > inicio) {
-					modelo.setPlan(contenido.split("@@@")[1].trim().substring((inicio + 13), fin).trim());
-				}
+			
+			for (int j = 0; j < contenido.split("@@@").length; j++) {
+			  if(contenido.split("@@@") [j].contains("No. Póliza") && contenido.split("@@@") [j].contains("Regular Autos")) {
+					inicio = contenido.split("@@@")[j].trim().indexOf("Regular Autos");
+					fin = contenido.split("@@@")[j].trim().indexOf("No. Póliza");
+					
+					if (inicio > -1 && fin > inicio) {
+						modelo.setPlan(contenido.split("@@@")[j].trim().substring((inicio + 13), fin).trim());
+					}
+			  }				
 			}
+			
+
 
 			// conductor
 			donde = 0;
