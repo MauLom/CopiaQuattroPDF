@@ -195,14 +195,10 @@ public class AxaAutosModel {
 			if (donde > 0) {
 				if (contenido.split("@@@")[donde].split("\r\n").length == 2) {
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-						if (dato.contains("Agente:###") && dato.contains("OT:") && dato.split("###").length == 6) {
+						if (dato.contains("Agente:###")) {
 							modelo.setCveAgente(dato.split("###")[1].trim());
 							newcontenido = dato.split("###")[2].trim();
-						} else if (dato.contains("Agente:###") && dato.contains("No.")
-								&& dato.split("###").length == 4) {
-							modelo.setCveAgente(dato.split("###")[1].trim());
-							newcontenido = dato.split("###")[2].trim();
-						}
+						} 
 						if (dato.split("###").length == 1) {
 							newcontenido += " " + dato.trim();
 						}

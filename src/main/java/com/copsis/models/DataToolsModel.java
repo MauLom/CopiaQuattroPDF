@@ -106,6 +106,7 @@ public class DataToolsModel {
 		try {
 			return Double.parseDouble(texto.replace(",", ""));
 		} catch (Exception ex) {
+			System.out.println("==>" + ex.getMessage());
 			return resultado;
 		}
 
@@ -294,8 +295,7 @@ public class DataToolsModel {
 		return result;
 	}
 
-	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018 //
-							// RETORNA 2018-02-02
+	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018  // RETORNA 2018-02-02
 		String result = "";
 		String day = "";
 		if (formatear.split("-")[0].length() == 1) {

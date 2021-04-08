@@ -12,7 +12,7 @@ public class qualitasAutosModel {
 
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	public String contenido = "";
+	private String contenido = "";
 
 	public qualitasAutosModel(String contenido) {
 		this.contenido = contenido;
@@ -377,10 +377,10 @@ public class qualitasAutosModel {
 								}
 							}
 						} else if (dato.contains("Clave")) {
-							if (dato.split("###").length == 4) {
-								if (dato.split("###")[2].contains("Teléfono:")) {
+							if (dato.split("###").length == 4  && dato.split("###")[2].contains("Teléfono:")) {
+								
 									modelo.setCveAgente(dato.split("###")[1].trim());
-								}
+								
 							}
 						}
 					}

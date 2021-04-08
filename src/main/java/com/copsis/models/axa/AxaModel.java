@@ -5,7 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.gnp.GnpModel;
+
 
 public class AxaModel {
 	// Clases
@@ -15,7 +15,6 @@ public class AxaModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private int pagFin = 0;
 
 	// Constructor
 	public AxaModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
@@ -29,6 +28,31 @@ public class AxaModel {
 			if (contenido.contains("Datos del vehículo") && contenido.contains(" Vehicle description") == false) {	//AUTOS
 				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 1, stripper, doc), fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE",false));
                modelo = datosAxaAutos.procesar();
+            }else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
+            	AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
+            	  modelo = datosAxaSalud.procesar();
+            }
+			
+			else {
+                String tipos[] = {"PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA", "HOGAR INTEGRAL", " VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO"};
+                contenido = contenido.toUpperCase();
+                for (String tipo : tipos) {
+                    if (contenido.contains(tipo)) {
+                	  switch (tipo) {
+                	  case "TRADICIONALES DE VIDA":	//VIDA
+                		  AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
+                		  modelo = datosAxaVida.procesar();
+                		  break;
+                	   case "GASTOS M": //GASTOS MEDICOS
+                          	AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
+                          	 modelo = datosAxaSalud.procesar();
+                		   break;
+                	  
+                	  }
+                    }
+                	
+                }
+            	
             }
 			
 			return modelo;
