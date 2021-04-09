@@ -538,6 +538,8 @@ public class DataToolsModel {
 		case "HIJO A":
 		case "HIJA":
 		case "HIJO/A":
+		case "HIJO M":
+		case "HIJA F":
 			dato = 3;
 			break;
 		case "PADRE":
@@ -545,6 +547,7 @@ public class DataToolsModel {
 		case "MADRE":
 		case "ESPOSA":
 		case "ESPOSO":
+		case "ESPOSA F":
 		case "ASEGURADO":
 		case "DEPENDIENTES":
 		case "OTRO":
