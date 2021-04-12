@@ -5,6 +5,8 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.axa.salud.AxaSaludModel;
+import com.copsis.models.axa.salud.AxaSaludV2Model;
 
 
 public class AxaModel {
@@ -25,6 +27,7 @@ public class AxaModel {
 	
 	public EstructuraJsonModel procesa() {
 		try {
+		
 			if (contenido.contains("Datos del vehículo") && contenido.contains(" Vehicle description") == false) {	//AUTOS
 				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 1, stripper, doc), fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE",false));
                modelo = datosAxaAutos.procesar();
@@ -43,9 +46,17 @@ public class AxaModel {
                 		  AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
                 		  modelo = datosAxaVida.procesar();
                 		  break;
-                	   case "GASTOS M": //GASTOS MEDICOS
-                          	AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
-                          	 modelo = datosAxaSalud.procesar();
+                	   case "GASTOS M": //GASTOS MEDICOS --/(Se usara identificar la version 2 del pdf)Datos del contratante
+                		  
+                	          if(contenido.contains("DATOS DEL CONTRATANTE")) {
+                	
+                	        	  AxaSaludV2Model datosAxa2Salud = new AxaSaludV2Model(fn.caratula(1, 3, stripper, doc));
+                               	 modelo = datosAxa2Salud.procesar();
+                	          }else {
+                	        	  AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
+                               	 modelo = datosAxaSalud.procesar(); 
+                	          }
+                          	
                 		   break;
                 	  
                 	  }

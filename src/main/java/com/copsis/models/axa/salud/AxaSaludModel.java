@@ -1,4 +1,4 @@
-package com.copsis.models.axa;
+package com.copsis.models.axa.salud;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class AxaSaludModel {
 
@@ -279,6 +280,33 @@ public class AxaSaludModel {
 				modelo.setCoberturas(coberturas);
 			}
 			
+			
+			List<EstructuraRecibosModel> recibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			switch (modelo.getFormaPago()) {
+			case 1:
+
+				recibo.setReciboId("");
+				recibo.setSerie("1/1");
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+				recibo.setVigenciaA(modelo.getVigenciaA());
+				if (recibo.getVigenciaDe().length() > 0) {
+					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+				}
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getDerecho());
+
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
+				recibos.add(recibo);
+
+				break;
+			}
+			modelo.setRecibos(recibos);
 			
 
 			return modelo;
