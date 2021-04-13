@@ -62,7 +62,6 @@ public class AxaDiversosModel {
 				newcontenido = contenido.substring(inicio,fin);
 			
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
 					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains(textbusq)) {
 				
 						if(newcontenido.split("\n")[i+1].split("###").length > 1) {
