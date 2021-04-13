@@ -1,6 +1,5 @@
 package com.copsis.models.axa.salud;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,27 +15,12 @@ public class AxaSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	private String inicontenido = "";
 	private String contenido = "";
 	private String newcontenido = "";
 	private String newcontenidoEx = "";
-	private String recibosText = "";
-	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int donde = 0;
-	private int index = 0;
-	private int longAux = 0;
-	private int longitudTexto = 0;
-	private boolean segda_line_agente = false;
-	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-	private BigDecimal restoDerecho = BigDecimal.ZERO;
-	private BigDecimal restoIva = BigDecimal.ZERO;
-	private BigDecimal restoRecargo = BigDecimal.ZERO;
-	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
+
 
 	public AxaSaludModel(String contenido) {
 		this.contenido = contenido;
@@ -260,6 +244,8 @@ public class AxaSaludModel {
 			
 			inicio = contenido.indexOf("Coberturas###Amparadas");
 			fin = contenido.indexOf("Advertencia:");
+			
+		
 
 			if (inicio > 0 & fin > 0 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");

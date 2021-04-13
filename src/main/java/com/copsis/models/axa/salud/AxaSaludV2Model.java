@@ -169,7 +169,6 @@ public class AxaSaludV2Model {
 				if(newcontenido.split("\n")[i].contains("Coaseguro")) {
 					modelo.setCoaseguro(newcontenido.split("\n")[i].split("Coaseguro")[1].replace("###", "").replace("\r", ""));
 				}
-				System.out.println(newcontenido.split("\n")[i]);
 			}
 		}
 		
