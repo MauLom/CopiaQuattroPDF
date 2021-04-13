@@ -291,7 +291,7 @@ public class ChubbAutosModel {
 					case "Clave interna del agente:":
 						inicio = inicio + 25;
 						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setCveAgente(newcontenido.contains("-") ? newcontenido.split("-")[0].trim() : "");
+						modelo.setCveAgente(newcontenido.contains("-") ? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim() : "");
 						break;
 					}
 				}
@@ -302,12 +302,15 @@ public class ChubbAutosModel {
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1) {
+				
 					switch (x) {
 					case "Clave interna del agente:":
 						inicio = inicio + 25;
 						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+		
+						
 						modelo.setAgente(newcontenido.split(saltolinea)[0].contains("-")
-								? newcontenido.split(saltolinea)[0].split("-")[2].trim()
+								? newcontenido.split(saltolinea)[0].split("-")[newcontenido.split(saltolinea)[0].split("-").length -1].trim().replace("###", " ")
 								: "");
 						break;
 
@@ -405,7 +408,7 @@ public class ChubbAutosModel {
 					case "Descripción del vehículo*:":
 						inicio = inicio + 26;
 						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim());
+						modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
 						break;
 					}
 				}
