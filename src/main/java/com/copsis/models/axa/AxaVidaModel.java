@@ -261,11 +261,11 @@ public class AxaVidaModel {
 			inicio = contenido.indexOf("Fecha de Nacimiento");
 			fin = contenido.indexOf("Datos de la Póliza");
 
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Fecha de Nacimiento")
-							& newcontenido.split("\n")[i].contains("Edad")) {
+							&& newcontenido.split("\n")[i].contains("Edad")) {
 						asegurado.setNacimiento(fn.formatDate_MonthCadena(
 								newcontenido.split("\n")[i].split("Nacimiento")[1].split("Edad")[0].replace("###", "")
 										.replace("de", "").replaceAll("  +", "-").trim()));
@@ -324,7 +324,7 @@ public class AxaVidaModel {
 			fin = inicontenido.indexOf("ADVERTENCIA");
 	
 
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = inicontenido.split("Beneficiarios")[1].split("ADVERTENCIA")[0].replace("@@@", "")
 						.replace(")", "###").replace("(", "###").trim();
 				

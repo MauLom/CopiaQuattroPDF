@@ -43,7 +43,7 @@ public class AxaSaludV2Model {
 		fin = contenido.indexOf("Coberturas-Servicios");
 		
 
-		if (inicio > 0 & fin > 0 & inicio < fin) {
+		if (inicio > 0 && fin > 0 && inicio < fin) {
 			newcontenido = contenido.substring(inicio, fin);
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				if(newcontenido.split("\n")[i].contains("contratante") || newcontenido.split("\n")[i].contains("Póliza")) {
@@ -126,7 +126,7 @@ public class AxaSaludV2Model {
 			inicio = contenido.indexOf("Prima Neta");
 		}
 		fin = contenido.indexOf("HOJA 1 ");
-		if (inicio > 0 & fin > 0 & inicio < fin) {
+		if (inicio > 0 && fin > 0 && inicio < fin) {
 			newcontenido = contenido.substring(inicio, fin);
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				if(newcontenido.split("\n")[i].contains("Neta")) {
@@ -157,7 +157,7 @@ public class AxaSaludV2Model {
 //		System.out.println(contenido);
 		inicio = contenido.indexOf("Condiciones Contratadas");		
 		fin = contenido.indexOf("Coberturas-Servicios ");
-		if (inicio > 0 & fin > 0 & inicio < fin) {
+		if (inicio > 0 && fin > 0 && inicio < fin) {
 			newcontenido = contenido.substring(inicio, fin);
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				if(newcontenido.split("\n")[i].contains("SumaAsegurada")) {
@@ -178,7 +178,7 @@ public class AxaSaludV2Model {
 		List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 		inicio = contenido.indexOf("Relación###de###Asegurados");		
 		fin = contenido.indexOf("AXA###Seguros,###S.A.");
-		if (inicio > 0 & fin > 0 & inicio < fin) {
+		if (inicio > 0 && fin > 0 && inicio < fin) {
 			newcontenido = contenido.substring(inicio, fin);
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -204,7 +204,7 @@ public class AxaSaludV2Model {
 			
 			inicio = inicontenido.indexOf("Relación de Asegurados");
 			fin = inicontenido.indexOf("AXA Seguros, S.A. de C.V.");
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("T   it u  l ar", "Titular")
 						.replace("C   ó  n  y  uge", "Conyuge").replace("H   i j o", "Hijo").replaceAll("  +", "###").replace("/","-");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -261,7 +261,7 @@ public class AxaSaludV2Model {
 		inicio = contenido.indexOf("Coberturas-Servicios");
 		fin = contenido.indexOf("Costo por Servicio");
 
-		if (inicio > 0 & fin > 0 & inicio < fin) {
+		if (inicio > 0 && fin > 0 && inicio < fin) {
 			newcontenido = contenido.substring(inicio, fin);
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -301,7 +301,7 @@ public class AxaSaludV2Model {
 			inicio = inicontenido.indexOf("Coberturas/Servicios");
 			fin = inicontenido.indexOf("Costo por Servicio");
 
-					if (inicio > 0 & fin > 0 & inicio < fin) {
+					if (inicio > 0 && fin > 0 && inicio < fin) {
 						newcontenido = inicontenido.substring(inicio,fin).replaceAll("  +", "###").replace("@@@", "").replace("Tipo de Red###Abierta", "").replace("###Gama Hospitalaria###Esmeralda", "");
 						for (int i = 0; i < newcontenido.split("\n").length; i++) {
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();

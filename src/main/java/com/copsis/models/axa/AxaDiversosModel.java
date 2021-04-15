@@ -9,27 +9,25 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
 import com.copsis.models.EstructuraUbicacionesModel;
 
-import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy.SelfInjection.Split;
+
 
 public class AxaDiversosModel {
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	// Varaibles
-	public String inicontenido = "";
-	private String contenido = "";
-	public String newcontenido = "";
-	private String resultado = "";
-	private String textbusq = "";
+	private static String contenido = "";
+	
+	private static  String textbusq = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int donde = 0;
+
 	
 	public AxaDiversosModel(String contenido) {
-		this.contenido = contenido;
+		AxaDiversosModel.contenido = contenido;
 	}
 
 	public EstructuraJsonModel procesar() {
+		String newcontenido = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("D omicilio:", "Domicilio:").replace("F RESNOS", "FRESNOS")
 				.replace("P r i m a T o t a l", "Prima Total").replace("Prima###neta:", "Prima Neta:").replace("Prima neta:", "Prima Neta:")
@@ -58,7 +56,7 @@ public class AxaDiversosModel {
 			}
 			
 			
-			if(inicio > 0 & fin > 0 & inicio < fin) {
+			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);
 			
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -155,7 +153,7 @@ public class AxaDiversosModel {
 				}
 			}
 				
-			if(inicio > 0 & fin > 0 & inicio < fin) {
+			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {		
 					if(newcontenido.split("\n")[i].contains("Prima Neta")) {
@@ -190,7 +188,7 @@ public class AxaDiversosModel {
 			inicio = contenido.indexOf("Descripción de la ");
 			fin = contenido.indexOf("Paquete contratado:");
 			
-			if(inicio > 0 & fin > 0 & inicio < fin) {
+			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				newcontenido = contenido.substring(inicio,fin);				
@@ -209,7 +207,7 @@ public class AxaDiversosModel {
 			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Paquete contratado");
 			fin = contenido.indexOf("Prima Neta");
-			if(inicio > 0 & fin > 0 & inicio < fin) {
+			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();				
 				newcontenido = contenido.substring(inicio,fin);				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {

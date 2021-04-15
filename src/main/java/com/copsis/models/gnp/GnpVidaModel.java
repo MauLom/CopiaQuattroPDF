@@ -538,9 +538,9 @@ public class GnpVidaModel {
 			String beneficiarios1 = "";
 			inicio = contenido.indexOf("Beneficiarios de Ahorro Garantizado:");
 			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin + 10).replace("@@@", "").trim();
-				if (newcontenido.contains("Protección Contratada") & newcontenido.contains("Para mayor")) {
+				if (newcontenido.contains("Protección Contratada") && newcontenido.contains("Para mayor")) {
 					beneficiarios1 = newcontenido.split("Protección Contratada")[1].split("Para mayor")[0];
 				}
 			}

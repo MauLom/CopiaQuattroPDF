@@ -139,7 +139,7 @@ public class GnpAutosModel {
 			if(modelo.getCp().length() == 0) {
 				inicio  = contenido.indexOf("Referencia");
 				fin  = contenido.indexOf("Descripción");
-				if(inicio > 0 & fin > 0 & inicio < fin) {
+				if(inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio,fin);
 					if(fn.isNumeric(newcontenido.split("Referencia")[1].replace("###", "").trim()))
 					modelo.setCp(newcontenido.split("Referencia")[1].replace("###", "").trim());
@@ -235,7 +235,7 @@ public class GnpAutosModel {
 			if (modelo.getSerie().length() == 0 && modelo.getDescripcion().length() == 0) {
 				inicio = contenido.indexOf("VEHÍCULO###ASEGURADO");
 				fin = contenido.indexOf("DESGLOSE");
-				if (inicio > 0 & fin > 0 & inicio < fin) {
+				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 

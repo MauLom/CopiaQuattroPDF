@@ -443,8 +443,8 @@ public class GnpDiversosModel {
 							ubicacion.setColonia(x.split(",")[1].trim());
 						}
 					}
-					if (x.contains("C.P")) {
-						if (x.split("###").length == 2)
+					if (x.contains("C.P") && x.split("###").length == 2) {
+						
 							ubicacion.setCp(x.split("###")[0].split("C.P.")[1].trim());
 					}
 					index++;

@@ -19,6 +19,8 @@ import org.apache.pdfbox.text.PDFTextStripper;
 public class DataToolsModel {
 	DateTimeFormatter formatter;
 	SimpleDateFormat simpleDateFormat;
+	private static final  String rpl ="\r\r\n";
+	
 
 	public boolean isNumeric(String value) {// validacion de si es numero
 		try {
@@ -42,7 +44,7 @@ public class DataToolsModel {
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<>();
 		try {
-			remplazoDeA.add(new ReplaceModel("\r\r\n", "\r\n"));
+			remplazoDeA.add(new ReplaceModel(rpl, "\r\n"));
 			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel(" :", ":"));
 			remplazoDeA.add(new ReplaceModel("$", ""));
@@ -696,16 +698,14 @@ public class DataToolsModel {
 	public String dateAdd(String fecha, int cuantos, int caso) {
 		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(fecha);
-		switch (caso) {
-		case 1:// DIAS
+		if(caso ==1) {
 			LocalDate dateNew = date.plusDays(cuantos);
 			fecha = dateNew.format(formatter);
-			break;
-		case 2:// MESES
+		}else {
 			LocalDate dateNew1 = date.plusMonths(cuantos);
 			fecha = dateNew1.format(formatter);
-			break;
 		}
+	
 		return fecha;
 	}
 
@@ -726,8 +726,8 @@ public class DataToolsModel {
 	public String fixContenido(String contenido) {
 		String cont_Fix = contenido.replace("\n", "\r\n");
 		String texto = "";
-		if (cont_Fix.contains("\r\r\n")) {
-			texto = cont_Fix.replace("\r\r\n", "\r\n");
+		if (cont_Fix.contains(rpl)) {
+			texto = cont_Fix.replace(rpl, "\r\n");
 		} else {
 			texto = contenido.replace("\n", "\r\n");
 		}

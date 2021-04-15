@@ -63,8 +63,8 @@ public class AxaAutosModel {
 			// cte_direccion
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "Domicilio:###");
-			if (donde > 0) {
-				if (contenido.split("@@@")[donde].split("\r\n").length == 2) {
+			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length == 2) {
+
 					if (contenido.split("@@@")[donde].split("\r\n")[0].contains("Domicilio:###")) {
 						if (contenido.split("@@@")[donde].split("\r\n")[0].split("###")[0].trim()
 								.equals("Domicilio:") == false) {
@@ -95,7 +95,7 @@ public class AxaAutosModel {
 						}
 						modelo.setCteDireccion(newcontenido);
 					}
-				}
+				
 			}
 
 			// rfc

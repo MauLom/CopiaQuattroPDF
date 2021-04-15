@@ -728,7 +728,6 @@ public class MapfreSaludModel {
 																												// DE
 			// NIVEL
 			// RAIZ
-			System.out.println(donde);
 			if (donde > 0) {
 
 				if (contenido.split("@@@")[donde].trim().split("\r\n").length > 2) {
@@ -760,7 +759,7 @@ public class MapfreSaludModel {
 			int fincoberturas = inicontenido.indexOf("ANTERIORES") - 10;
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			if (inicoberturas > -1 && fincoberturas > -1 & inicoberturas < fincoberturas) {
+			if (inicoberturas > -1 && fincoberturas > -1 && inicoberturas < fincoberturas) {
 
 				newcontenido = inicontenido.substring(inicoberturas, fincoberturas).replaceAll("  +", "###").trim();
 				System.out.println(newcontenido);

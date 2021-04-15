@@ -35,7 +35,7 @@ public class AxaSaludModel {
 			inicio = contenido.indexOf("Póliza");
 			fin = contenido.indexOf("Solicitud");
 
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.split("Póliza:")[1].split("Solicitud")[0].replace("\r\n", "")
 						.replace("@@@", "").replace("###", "");
 				modelo.setPoliza(newcontenido);
@@ -43,11 +43,11 @@ public class AxaSaludModel {
 
 			inicio = contenido.indexOf("Contratante");
 			fin = contenido.indexOf("Tel:");
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	
-					if (newcontenido.split("\n")[i].contains("Nombre:") & newcontenido.split("\n")[i].contains("RFC")) {
+					if (newcontenido.split("\n")[i].contains("Nombre:") && newcontenido.split("\n")[i].contains("RFC")) {
 						String x = newcontenido.split("\n")[i].split("Nombre:")[1].split("RFC")[0].replace("\r", "")
 								.replace("###", "");
 						if (x.contains(",")) {
@@ -80,11 +80,11 @@ public class AxaSaludModel {
 
 			inicio = contenido.indexOf("Datos###de###la###Póliza");
 			fin = contenido.indexOf("Coberturas###Amparadas");
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains("Plan") & newcontenido.split("\n")[i].contains("Póliza")
-							& newcontenido.split("\n")[i].contains("Prima")) {
+					if (newcontenido.split("\n")[i].contains("Plan") && newcontenido.split("\n")[i].contains("Póliza")
+							&& newcontenido.split("\n")[i].contains("Prima")) {
 						modelo.setPlan(
 								newcontenido.split("\n")[i].split("Póliza:")[1].split("Prima")[0].replace("###", ""));
 						modelo.setPrimaneta((fn.castBigDecimal(fn.castDouble(
@@ -92,7 +92,7 @@ public class AxaSaludModel {
 					}
 
 					if (newcontenido.split("\n")[i].contains("Moneda:")
-							& newcontenido.split("\n")[i].contains("Financiamiento")) {
+							&& newcontenido.split("\n")[i].contains("Financiamiento")) {
 						modelo.setMoneda(
 								fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Financiamiento")[0]
 										.replace("###", "")));
@@ -105,7 +105,7 @@ public class AxaSaludModel {
 					}
 
 					if (newcontenido.split("\n")[i].contains("Vigencia")
-							& newcontenido.split("\n")[i].contains("Expedición")) {
+							&& newcontenido.split("\n")[i].contains("Expedición")) {
 						if (newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "")
 								.split("-").length == 6) {
 							modelo.setVigenciaDe(fn.formatDate_MonthCadena(
@@ -119,7 +119,7 @@ public class AxaSaludModel {
 											.replace("###", "").replace(",", "")))));
 						}
 					} else if (newcontenido.split("\n")[i].contains("Vigencia")
-							& newcontenido.split("\n")[i].contains("Financiamiento")) {
+							&& newcontenido.split("\n")[i].contains("Financiamiento")) {
 						String x = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
 								.replace("###", "").split("-")[2];
 						String x2 = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
@@ -138,14 +138,14 @@ public class AxaSaludModel {
 								.replace("\r", "").replace("###", "").replace("- ", "###").split("###")[1]));
 					}
 
-					if (newcontenido.split("\n")[i].contains("Pago") & newcontenido.split("\n")[i].contains("I.V.A:")) {
+					if (newcontenido.split("\n")[i].contains("Pago") && newcontenido.split("\n")[i].contains("I.V.A:")) {
 						modelo.setFormaPago(fn.formaPago(
 								newcontenido.split("\n")[i].split("Primas:")[1].split("Prima")[0].replace("###", "")));
 						modelo.setIva(
 								(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("I.V.A:")[1]
 										.replace("###", "").replace(",", "")))));
 					} else if (newcontenido.split("\n")[i].contains("Pago")
-							& newcontenido.split("\n")[i].contains("Expedición")) {
+							&& newcontenido.split("\n")[i].contains("Expedición")) {
 						modelo.setFormaPago(fn.formaPago(
 								newcontenido.split("\n")[i].split("Primas:")[1].split("Gastos")[0].replace("###", "")));
 						modelo.setIva(
@@ -169,13 +169,13 @@ public class AxaSaludModel {
 
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					
 					if (newcontenido.split("\n")[i].contains("Nombre:")
-							& newcontenido.split("\n")[i].contains("Parentesco:")) {
+							&& newcontenido.split("\n")[i].contains("Parentesco:")) {
 						newcontenidoEx = newcontenido.split("\n")[i].split("Nombre:")[1].split("Parentesco")[0];
 						if (newcontenido.contains(",")) {
 							newcontenidoEx = (newcontenidoEx.split(",")[1] + " " + newcontenidoEx.split(",")[0])
@@ -188,7 +188,7 @@ public class AxaSaludModel {
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("Parentesco:")[1]));
 					}
 					if (newcontenido.split("\n")[i].contains("Nacimiento:")
-							& newcontenido.split("\n")[i].contains("Edad:")) {
+							&& newcontenido.split("\n")[i].contains("Edad:")) {
 						newcontenidoEx = newcontenido.split("\n")[i].split("Nacimiento:")[1].split("Edad:")[0]
 								.replace("###", "");
 						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenidoEx));
@@ -202,7 +202,7 @@ public class AxaSaludModel {
 			if (modelo.getAsegurados().size() == 0) {
 				inicio = contenido.indexOf("Familia###Asegurada");
 				fin = contenido.indexOf("En###cumplimiento#");
-				if (inicio > 0 & fin > 0 & inicio < fin) {
+				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin);
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {			
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -247,7 +247,7 @@ public class AxaSaludModel {
 			
 		
 
-			if (inicio > 0 & fin > 0 & inicio < fin) {
+			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
