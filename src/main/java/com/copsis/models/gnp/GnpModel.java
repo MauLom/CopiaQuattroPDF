@@ -1,7 +1,5 @@
 package com.copsis.models.gnp;
 
-import java.io.IOException;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -33,11 +31,13 @@ public class GnpModel {
 
 			if (contenido.contains("Motor") && contenido.contains("Placas")) {
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
+					System.out.println("DATOS");
 					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
 					if (pagFin > 0) {
 						modelo = new GnpAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}
 				} else {// AUTOS AZUL
+				
 					pagFin = fn.pagFinRango(stripper, doc, "Clave");
 					if (pagFin > 0) {
 						modelo = new GnpAutos2Model(fn.caratula(1, pagFin, stripper, doc)).procesar();
@@ -48,8 +48,8 @@ public class GnpModel {
 				pagFin = fn.pagFinRango(stripper, doc, "Clave");
 				if (pagFin > 0) {
 					modelo = new GnpSaludModel(fn.caratula(1, pagFin, stripper, doc),
-							aseguradosCertificaSalud(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
-							aseguradosCertificaSalud(stripper, doc, "Asegurado (s)", true)).procesar();
+							fn.textoBusqueda(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
+							fn.textoBusqueda(stripper, doc, "Asegurado (s)", true)).procesar();
 				}
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida")) {
@@ -61,10 +61,10 @@ public class GnpModel {
 	                    || contenido.contains("secciones contratadas") && contenido.contains("Daños")) {
 				 pagFin = fn.pagFinRango(stripper, doc, "Clave");
 	                if (pagFin > 0) {
-	                	modelo = new GnpDiversosModel(fn.caratula(1, pagFin, stripper, doc), aseguradosCertificaSalud(stripper, doc, "Características del Riesgo",false),1).procesar();
+	                	modelo = new GnpDiversosModel(fn.caratula(1, pagFin, stripper, doc), fn.textoBusqueda(stripper, doc, "Características del Riesgo",false),1).procesar();
 	                }
 			 }else if (contenido.contains("Póliza de Seguro de Daños")) {
-				 modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc), aseguradosCertificaSalud(stripper, doc, "Características del Riesgo",false),2).procesar();
+				 modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc), fn.textoBusqueda(stripper, doc, "Características del Riesgo",false),2).procesar();
              
 			 }
 			return modelo;
@@ -75,37 +75,6 @@ public class GnpModel {
 		}
 	}
 
-	public String aseguradosCertificaSalud(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, Boolean tipo)
-			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
-		String x = "";
-		int listado = 0;
 
-		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
-			pdfStripper.setStartPage(i);
-			pdfStripper.setEndPage(i);
-			if (pdfStripper.getText(pdDoc).contains(buscar)) {
-				if (tipo) {// asegurados
-					listado++;
-					if (listado == 2) {
-						PDFTextStripper s = new PDFTextStripper();
-						s.setParagraphStart("###");
-						s.setSortByPosition(true);
-						s = pdfStripper;
-						x += s.getText(pdDoc);
-						break;
-					}
-				} else {// certificado
-					PDFTextStripper s = new PDFTextStripper();
-					s.setParagraphStart("###");
-					s.setSortByPosition(true);
-					s = pdfStripper;
-					x += s.getText(pdDoc);
-
-				}
-			}
-
-		}
-		return x;
-	}
 
 }
