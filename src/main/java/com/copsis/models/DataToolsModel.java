@@ -743,5 +743,47 @@ public class DataToolsModel {
 		stripper.setSortByPosition(true);
 		return stripper.getText(doc);
 	}
+	
+	
+	public int tipoPoliza(String contenido) {
+		int dato = 0;
+		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
+		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL",
+				"GASTOS M", "TRADICIONALES DE VIDA", "HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
+				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO" };
+
+		 boolean encontro = false;
+		for (String tipo : tipos) {
+			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
+				switch (tipo) {
+				case "DATOS DEL VEH":
+				case "AUTOMÓVILES":
+				case "SEGURO DE AUTOMÓVILES":				
+					dato = 1;
+					encontro = true;
+					break;
+				case "GASTOS MÉDICOS.":
+				case "GMM":
+				case "INDIVIDUAL/FAMILIAR":
+					dato = 2;
+					encontro = true;
+					break;
+				case "Vida":
+					dato = 3;
+					encontro = true;
+					break;
+				case "EMPRESARIAL":
+					dato = 4;
+					encontro = true;
+					break;
+				default:
+					dato = 0;
+					encontro = false;
+					break;
+				}
+			}
+		}
+		return dato;
+	}
 }

@@ -14,6 +14,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.axa.AxaModel;
+import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.mapfre.MapfreModel;
@@ -104,6 +105,28 @@ public class IdentificaPolizaService {
                 	 datosAba.setContenido(contenido);
                 	 modelo = datosAba.procesa();
                      encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA BANORTE
+             if (encontro == false) {
+
+                 if (contenido.contains("Banorte")
+                         || (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
+                         && contenido.contains("Datos del asegurado titular (Solicitante)")
+                         && contenido.contains("ASEGURADOS"))) {
+                	 if(contenido.contains("Estimado(a)")) {
+                		 contenido = caratula(3, 4, pdfStripper, pdDoc);
+//                		 System.out.println(contenido);
+                		 BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+                         modelo = datosBanort.procesar();
+                         encontro = true;
+                	 }else {
+                		 BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+                         modelo = datosBanort.procesar();
+                         encontro = true;
+                	 }
+                
                  }
              }
 

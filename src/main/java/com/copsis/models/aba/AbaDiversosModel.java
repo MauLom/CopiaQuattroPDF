@@ -172,7 +172,7 @@ public class AbaDiversosModel {
 						
 					}else {
 						if(x  > 2){
-							System.out.println("------------------_>" + x);
+
 							cobertura.setSeccion(seccion);
 				
 							if( x == 4) {
@@ -182,9 +182,9 @@ public class AbaDiversosModel {
 								cobertura.setDeducible(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-3]);
 							}
 							if(x == 3) {
-//								cobertura.setNombre(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-4]);
-//								cobertura.setSa(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-1]);
-//								cobertura.setCoaseguro(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-2]);
+								cobertura.setNombre(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-4]);
+								cobertura.setSa(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-1]);
+								cobertura.setCoaseguro(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-2]);
 							}
 						
 							coberturas.add(cobertura);
