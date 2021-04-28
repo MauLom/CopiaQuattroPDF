@@ -298,15 +298,6 @@ public class BanorteAutosModel {
 					   
 					}			
 				}
-				
-
-				
-				
-				
-				
-				
-
-			
 				return (ArrayList<EstructuraRecibosModel>) recibosLis;
 			} catch (Exception ex) {
 				modelo.setError(BanorteAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "

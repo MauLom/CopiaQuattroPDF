@@ -57,6 +57,7 @@ public class BanorteModel {
 				}
 				break;
 			case 3://Vida
+				modelo  = new BanorteVidaModel(fn.caratula(2, 3, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
 
 				break;
 			case 4://Diversos/Empresarial
