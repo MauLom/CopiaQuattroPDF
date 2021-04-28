@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -734,6 +735,12 @@ public class DataToolsModel {
 		return texto;
 	}
 
+	public Boolean isvalidCp(String codigoPostal) {
+		Boolean result = false;
+		 result = Pattern.matches("[0-9]{5}", codigoPostal);
+		return result;
+	}
+
 	/* DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS */
 	public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException {
 		stripper.setStartPage(inicio);
@@ -750,7 +757,8 @@ public class DataToolsModel {
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
 		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL",
-				"GASTOS M", "TRADICIONALES DE VIDA", "HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
+				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES", 
+				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
 				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO" };
 
 		 boolean encontro = false;
@@ -766,6 +774,7 @@ public class DataToolsModel {
 				case "GASTOS MÉDICOS.":
 				case "GMM":
 				case "INDIVIDUAL/FAMILIAR":
+				case "GASTOS MÉDICOS MAYORES":
 					dato = 2;
 					encontro = true;
 					break;

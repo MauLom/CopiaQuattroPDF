@@ -244,29 +244,18 @@ public class BanorteAutosModel {
 					}
 					break;
 				case 3:
-				case 4:
-					
-					
+				case 4:									
 					int tota_recibos =fn.getTotalRec(modelo.getFormaPago());
 					if(recibosList.size() > tota_recibos) {
-						for (int i = 0; i < recibosList.size(); i++) {
-					        List<EstructuraRecibosModel> recibosList2 = new ArrayList<>();
-							if(i > tota_recibos) {
-							
-								recibosList.remove(i);
-							
-							}
-							recibosList2 = recibosList;
+						for (int i = 0; i < recibosList.size(); i++) {					      
+							if(i >= tota_recibos) {							
+								recibosList.remove(i--);							
+							}				
 						}
-					}
-
-				
+					}				
 					break;
 	        	}
-	        	for (int i = 0; i < recibosList.size(); i++) {
-	        		System.out.println("----------> "+ i +"--->" + recibosList.get(i).getSerie());
-	        	}
-	        	
+	        
 	        	modelo.setRecibos(recibosList);
 	          
 	            

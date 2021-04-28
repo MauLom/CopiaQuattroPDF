@@ -26,7 +26,7 @@ public class BanorteModel {
 	public BanorteModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
-		this.contenido = contenido;
+		this.contenido = contenido.replace("GASTOS MEDICOS MAYORES", "GASTOS MÉDICOS MAYORES");
 	}
 	public EstructuraJsonModel procesar() {
 	
@@ -44,7 +44,17 @@ public class BanorteModel {
 					}					   
 				break;
 			case 2://Salud 
-
+				pagIni = fn.pagFinRango(stripper, doc, "LIZA INDIVIDUAL/FAMILIAR");
+				if(pagIni > 0) pagFin = fn.pagFinRango(stripper, doc, "La legislación citada y las abreviaturas que aparecen");
+				if(pagFin == 0) pagFin = fn.pagFinRango(stripper, doc, "En cumplimiento a lo dispuesto");
+				if(pagFin <= pagIni) {
+			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
+				}
+		
+				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
+				
+					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+				}
 				break;
 			case 3://Vida
 
