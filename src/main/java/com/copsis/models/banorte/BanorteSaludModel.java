@@ -55,7 +55,6 @@ public class BanorteSaludModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println("---------> "+ newcontenido.split("\n")[i]);
                     if(newcontenido.split("\n")[i].contains("CONTRATANTE") && newcontenido.split("\n")[i].contains("PÓLIZA")) {                   
                     	if(newcontenido.split("\n")[i+1].contains("apellido")) {
                     		modelo.setPoliza( newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1].trim());

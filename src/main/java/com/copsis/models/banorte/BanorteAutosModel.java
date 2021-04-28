@@ -57,7 +57,6 @@ public class BanorteAutosModel {
 
 	            // cia
 	            modelo.setCia(35);
-//	        	System.out.println("---> " + contenido);
 	            
 	            //Poliza
 	            inicio = contenido.indexOf("PÓLIZA DE SEGURO");
@@ -202,7 +201,6 @@ public class BanorteAutosModel {
 					recibosList = recibosExtract();
 					
 				}
-	            System.out.println(modelo.getFormaPago());
 	        	switch (modelo.getFormaPago()) {
 				case 1:
 					if(recibosList.size() ==  0) {
