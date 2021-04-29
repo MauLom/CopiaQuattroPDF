@@ -61,6 +61,11 @@ public class BanorteModel {
 
 				break;
 			case 4://Diversos/Empresarial
+				pagIni = fn.pagFinRango(stripper, doc, "DATOS DEL CONTRATANTE");
+				pagFin = fn.pagFinRango(stripper, doc, "nombre del Agente:");
+				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
+					modelo  = new BanorteDiversos(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+				}				
 				break;
 
 			default:

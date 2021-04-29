@@ -760,7 +760,8 @@ public class DataToolsModel {
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES", 
 				"VIDA",
 				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
-				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO" };
+				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
+				"EMPRESARIAL"};
 
 		 boolean encontro = false;
 		for (String tipo : tipos) {
@@ -784,6 +785,7 @@ public class DataToolsModel {
 					encontro = true;
 					break;
 				case "EMPRESARIAL":
+				case "CASA HABITACIÓN":
 					dato = 4;
 					encontro = true;
 					break;
