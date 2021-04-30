@@ -207,9 +207,8 @@ public class InbursaAutosModel {
             	if(newcontenido.length() > 200) {
             		newcontenido = newcontenido.substring(newcontenido.length()-200,newcontenido.length()).replace("@@@", "").replace("\r", "");
                     for (int j = 0; j < newcontenido.split("\n").length; j++) {    
-                		System.out.println("-------> " +  newcontenido.split("\n")[j]);
-                    	if(newcontenido.split("\n")[j].contains("CLAVE")) {
-                    
+   
+                    	if(newcontenido.split("\n")[j].contains("CLAVE")) {                   
                     		modelo.setCveAgente(fn.extraerNumeros( newcontenido.split("\n")[j-2]));
                     		if(modelo.getCveAgente().length() > 0) {
                     			String A = newcontenido.split("\n")[j-1].replace(" ", "###").split("###")[0].trim();
