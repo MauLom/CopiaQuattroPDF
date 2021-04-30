@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -798,4 +799,13 @@ public class DataToolsModel {
 		}
 		return dato;
 	}
+	
+	public String extraerNumeros(String cadena) {
+		String resultado = "";
+		Matcher m = Pattern.compile("-?\\d+(,\\d+)*?\\.?\\d+?").matcher(cadena);
+		while (m.find()) {
+			resultado = m.group();
+		}
+		return resultado.toString();
+	}	
 }

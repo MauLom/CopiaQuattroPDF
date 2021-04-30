@@ -17,6 +17,7 @@ import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
+import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.qualitas.QualitasModel;
 
@@ -110,14 +111,12 @@ public class IdentificaPolizaService {
              
              // ENTRADA PARA BANORTE
              if (encontro == false) {
-
                  if (contenido.contains("Banorte")
                          || (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
                          && contenido.contains("Datos del asegurado titular (Solicitante)")
                          && contenido.contains("ASEGURADOS"))) {
                 	 if(contenido.contains("Estimado(a)")) {
                 		 contenido = caratula(3, 4, pdfStripper, pdDoc);
-//                		 System.out.println(contenido);
                 		 BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
                          modelo = datosBanort.procesar();
                          encontro = true;
@@ -127,6 +126,14 @@ public class IdentificaPolizaService {
                          encontro = true;
                 	 }
                 
+                 }
+             }
+             // ENTRADA PARA INBURSA
+             if (encontro == false) {
+                 if (contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
+                	 InbursaModel datosInbursa = new InbursaModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosInbursa.procesar();
+                     encontro = true;
                  }
              }
 
