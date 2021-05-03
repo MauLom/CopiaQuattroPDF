@@ -146,12 +146,7 @@ public class InbursaSaludModel {
             	modelo.setAsegurados(asegurados);
             	
             	
-            	System.out.println(contenido);
-            	
-            	
-            	
-            	
-            	
+
             }
 	        
 	        

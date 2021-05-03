@@ -27,6 +27,7 @@ public class InbursaModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
+//			System.out.println(contenido);
 			
 			switch (fn.tipoPoliza(contenido)) {
 
@@ -36,6 +37,10 @@ public class InbursaModel {
 				break;
 			case 2:// Salud
 				modelo  = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				
+				break;
+			case 4:// Vida
+				modelo  = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				
 				break;
 			}
