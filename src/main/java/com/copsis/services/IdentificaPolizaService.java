@@ -19,6 +19,7 @@ import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
+import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.qualitas.QualitasModel;
 
 import lombok.RequiredArgsConstructor;
@@ -133,6 +134,17 @@ public class IdentificaPolizaService {
                  if (contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
                 	 InbursaModel datosInbursa = new InbursaModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosInbursa.procesar();
+                     encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA METLIFE
+             if (encontro == false) {
+                 if (contenido.split("@@@")[1].contains("MetLife México S.A.")
+                         || contenido.contains("www.metlife.com.mx")
+                         || contenido.contains("MetLife México")) {
+                	 MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosMetlife.procesar();
                      encontro = true;
                  }
              }
