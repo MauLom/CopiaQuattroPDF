@@ -30,7 +30,7 @@ public class AbaModel {
         	}
         
         	if(contenido.contains("Flexible óptimo") || contenido.contains("Vivienda") || contenido.contains("EMPRESARIAL") || contenido.contains("SEGURO DE CASA") ) {
-        		AbaDiversosModel datosAbaDiversos = new AbaDiversosModel(fn.caratula(1, 1, pdfStripper, pdDoc));
+        		AbaDiversosModel datosAbaDiversos = new AbaDiversosModel(fn.caratula(1, 5, pdfStripper, pdDoc));
         		modelo = datosAbaDiversos.procesar();
         	}
         	

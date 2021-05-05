@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -734,6 +736,12 @@ public class DataToolsModel {
 		return texto;
 	}
 
+	public Boolean isvalidCp(String codigoPostal) {
+		Boolean result = false;
+		 result = Pattern.matches("[0-9]{5}", codigoPostal);
+		return result;
+	}
+
 	/* DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS */
 	public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException {
 		stripper.setStartPage(inicio);
@@ -743,5 +751,67 @@ public class DataToolsModel {
 		stripper.setSortByPosition(true);
 		return stripper.getText(doc);
 	}
+	
+	
+	public int tipoPoliza(String contenido) {
+		int dato = 0;
+		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
+		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL",
+				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
+				"GASTOS MÉDICOS","TECHOS",
+				"VIDA",
+				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
+				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
+				"EMPRESARIAL"};
+
+		 boolean encontro = false;
+		for (String tipo : tipos) {	
+			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
+				switch (tipo) {
+				case "DATOS DEL VEH":
+				case "AUTOMÓVILES":
+				case "SEGURO DE AUTOMÓVILES":				
+					dato = 1;
+					encontro = true;
+					break;
+				case "GASTOS MÉDICOS":
+				case "GMM":
+				case "INDIVIDUAL/FAMILIAR":
+				case "GASTOS MÉDICOS MAYORES":
+					dato = 2;
+					encontro = true;
+					break;
+				case "EMPRESARIAL":
+				case "CASA HABITACIÓN":
+				case "TECHOS":
+					dato = 4;
+					encontro = true;
+					break;
+				case "VIDA":
+					dato = 3;
+					encontro = true;
+					break;
+			
+					
+				default:
+					dato = 0;
+					encontro = false;
+					break;
+				}
+			}
+		}
+		return dato;
+	}
+	
+	public String extraerNumeros(String cadena) {
+		String resultado = "";
+		Matcher m = Pattern.compile("-?\\d+(,\\d+)*?\\.[0-9]?\\d+?").matcher(cadena);
+		while (m.find()) {
+			resultado = m.group();
+		}
+		return resultado.toString();
+	}	
+	
+	
 }
