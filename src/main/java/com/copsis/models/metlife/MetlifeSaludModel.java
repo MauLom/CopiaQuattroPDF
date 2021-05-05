@@ -61,7 +61,7 @@ public class MetlifeSaludModel {
             // cia
             modelo.setCia(23);
             // poliza
-//            System.out.println("----------->" +contenido);
+
             
             inicio = contenido.indexOf("Nombre y Domicilio");
             fin = contenido.indexOf("ASEGURADOS DE LA POLIZA");

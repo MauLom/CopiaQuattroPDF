@@ -25,7 +25,7 @@ public class MetlifeModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-			
+//			System.out.println(contenido);
 			switch (fn.tipoPoliza(contenido)) {
 
 //			case 1:// Autos
@@ -36,8 +36,8 @@ public class MetlifeModel {
 				modelo  = new MetlifeSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				
 				break;
-//			case 4:// Vida
-//				modelo  = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+			case 5:// Vida
+				modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();
 //				
 //				break;
 			}
