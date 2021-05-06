@@ -764,7 +764,7 @@ public class DataToolsModel {
 				"VIDA","VIDA INDIVIDUAL",
 				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
 				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
-				"EMPRESARIAL"};
+				"EMPRESARIAL","DAÑOS"};
 
 		 boolean encontro = false;
 		for (String tipo : tipos) {
@@ -789,6 +789,7 @@ public class DataToolsModel {
 				case "EMPRESARIAL":
 				case "CASA HABITACIÓN":
 				case "TECHOS":
+				case "DAÑOS":
 					dato = 4;
 					encontro = true;
 					break;
