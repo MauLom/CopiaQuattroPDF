@@ -35,7 +35,6 @@ public class MetlifeVidaModel {
 	}
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		System.out.println("--------->"+ contenido);
 		try {
 			  // tipo
             modelo.setTipo(5);
@@ -196,84 +195,88 @@ public class MetlifeVidaModel {
 			//plazo_pago
 			modelo.setPlazoPago(modelo.getPlazo()-1);	
 			//beneficiarios
-			
-			inicio = contenido.indexOf("BENEFICIARIOS:");
-			if(inicio > -1) {
-				newcontenido = contenido.substring(inicio+14,contenido.length());
-				fin= newcontenido.indexOf("Lugar y Fecha");
-				if(fin > -1) {
-					
-					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
-					
-					newcontenido = newcontenido.substring(0,fin).replace("@@@","").trim();
-					
-					for(int i = 0;i < newcontenido.split("\n").length; i++) {
-						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-						String a = newcontenido.split("\n")[i].replace("%","").trim();
-						String b = "";
-							if(i+1 < newcontenido.split("\n").length) {
-								b = newcontenido.split("\n")[i+1].replace("%","").trim();
-							}
-														
-							if(i == 0) {
-								longitud_split = a.split(" ").length;
-								beneficiario.setPorcentaje( new Double(a.split(" ")[longitud_split-1]).intValue());
-								beneficiario.setParentesco(fn.parentesco(a.split(" ")[longitud_split-2].toLowerCase()));
-								beneficiario.setNombre(a.split(a.split(" ")[longitud_split-2])[0].trim());
-								beneficiario.setTipo(11);
-								
-//								jsonBen.put("porcentaje", new Double(a.split(" ")[longitud_split-1]).intValue());
-//								jsonBen.put("parentesco", fn.parent(a.split(" ")[longitud_split-2].toLowerCase()));
-//								jsonBen.put("nombre",a.split(a.split(" ")[longitud_split-2])[0].trim());
-//								jsonBen.put("tipo", 11);
-//								jsonBen.put("nacimiento","");
-//								jsonArrayBen.put(jsonBen);
-							}else if(a.contains("ASEGURADO DEPENDIENTE:")) {
-								longitud_split = b.split(" ").length;
-								jsonBen.put("porcentaje",0);
-								jsonBen.put("parentesco",1);
-								jsonBen.put("nombre",b.trim());
-								jsonBen.put("tipo", 10);	
-								jsonBen.put("nacimiento","");
-								jsonArrayBen.put(jsonBen);
-							}else if(a.contains("BENEFICIARIOS:")) {
-								longitud_split = b.split(" ").length;
-								jsonBen.put("porcentaje", new Double(b.split(" ")[longitud_split-1]).intValue());
-								jsonBen.put("parentesco", fn.parent(b.split(" ")[longitud_split-2].toLowerCase()));
-								jsonBen.put("nombre",b.split(b.split(" ")[longitud_split-2])[0].trim());
-								jsonBen.put("tipo", 12);
-								jsonBen.put("nacimiento","");
-								jsonArrayBen.put(jsonBen);
-							}else if(a.contains("EN CASO DE FALLECIMIENTO DEL PRIMER BENEFICIARIO EL SEGUNDO SER")) {
-								b = b.replace("(", " ").replace(")", "");
-								longitud_split = b.split(" ").length;
-								jsonBen.put("porcentaje",0);
-								jsonBen.put("parentesco", fn.parent(b.split(" ")[longitud_split-1].toLowerCase()));
-								jsonBen.put("nombre",b.split(b.split(" ")[longitud_split-1])[0].trim());
-								jsonBen.put("tipo", 12);
-								jsonBen.put("nacimiento","");
-								jsonArrayBen.put(jsonBen);
-							}							
-						}
-					}	
-				}else {
-					inicio = contenido.indexOf("y porcentaje de participación.");
-					fin = contenido.indexOf("@@@Para cualquier duda o aclaración");
-					if(inicio>-1 && fin>inicio)  {
-							newcontenido=contenido.substring(inicio+30, fin).trim();							
-							for( String dato: newcontenido.split("\n")) {
-								JSONObject jsonBen = new JSONObject( );
-								dato = fn.RemplazaGrupoSpace(dato);
-								jsonBen.put("nombre", dato.split("###")[0]);
-								jsonBen.put("parentesco",fn.parent(dato.split("###")[1].trim().toLowerCase()));
-								jsonBen.put("porcentaje",new Integer(dato.split("###")[2].replace("%","").trim()));
-								jsonBen.put("nacimiento","");
-								jsonBen.put("tipo",11);
-								jsonArrayBen.put(jsonBen);
-							}
-					}
-				}
-			modelo.setBeneficiarios(jsonArrayBen);
+//			
+//			inicio = contenido.indexOf("BENEFICIARIOS:");
+//			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
+//			if(inicio > -1) {
+//				newcontenido = contenido.substring(inicio+14,contenido.length());
+//				fin= newcontenido.indexOf("Lugar y Fecha");
+//				if(fin > -1) {
+//					
+//					
+//					
+//					newcontenido = newcontenido.substring(0,fin).replace("@@@","").trim();
+//					
+//					for(int i = 0;i < newcontenido.split("\n").length; i++) {
+//						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
+//						String a = newcontenido.split("\n")[i].replace("%","").trim();
+//						String b = "";
+//							if(i+1 < newcontenido.split("\n").length) {
+//								b = newcontenido.split("\n")[i+1].replace("%","").trim();
+//							}
+//														
+//							if(i == 0) {
+//								longitud_split = a.split(" ").length;
+//								beneficiario.setPorcentaje( new Double(a.split(" ")[longitud_split-1]).intValue());
+//								beneficiario.setParentesco(fn.parentesco(a.split(" ")[longitud_split-2].toLowerCase()));
+//								beneficiario.setNombre(a.split(a.split(" ")[longitud_split-2])[0].trim());
+//								beneficiario.setTipo(11);
+//								beneficiarios.add(beneficiario);
+//
+//							}
+//							else if(a.contains("ASEGURADO DEPENDIENTE:")) {
+//								longitud_split = b.split(" ").length;
+//								
+//								beneficiario.setPorcentaje(0);
+//								beneficiario.setParentesco(1);
+//								beneficiario.setNombre(b.trim());
+//								beneficiario.setTipo(11);
+//								beneficiarios.add(beneficiario);
+//							
+//							}else if(a.contains("BENEFICIARIOS:")) {
+//								longitud_split = b.split(" ").length;
+//								
+//								beneficiario.setPorcentaje(new Double(b.split(" ")[longitud_split-1]).intValue());
+//								beneficiario.setParentesco(fn.parentesco(b.split(" ")[longitud_split-2].toLowerCase()));
+//								beneficiario.setNombre(b.split(b.split(" ")[longitud_split-2])[0].trim());
+//								beneficiario.setTipo(12);
+//								beneficiarios.add(beneficiario);
+//								
+//				
+//							}else if(a.contains("EN CASO DE FALLECIMIENTO DEL PRIMER BENEFICIARIO EL SEGUNDO SER")) {
+//								b = b.replace("(", " ").replace(")", "");
+//								longitud_split = b.split(" ").length;
+//								beneficiario.setPorcentaje(0);
+//								beneficiario.setParentesco(fn.parentesco(b.split(" ")[longitud_split-2].toLowerCase()));
+//								beneficiario.setNombre(b.split(b.split(" ")[longitud_split-2])[0].trim());
+//								beneficiario.setTipo(12);
+//								beneficiarios.add(beneficiario);
+//								
+//								
+//								
+//							}							
+//						}
+//					}	
+//				}else {
+//					inicio = contenido.indexOf("y porcentaje de participación.");
+//					fin = contenido.indexOf("@@@Para cualquier duda o aclaración");
+//					if(inicio>-1 && fin>inicio)  {
+//							newcontenido=contenido.substring(inicio+30, fin).trim();							
+//							for( String dato: newcontenido.split("\n")) {
+//								EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
+//								
+//								beneficiario.setPorcentaje(new Integer(dato.split("###")[2].replace("%","").trim()));
+//								beneficiario.setParentesco(fn.parentesco(dato.split("###")[1].trim().toLowerCase()));
+//								beneficiario.setNombre(dato.split("###")[0]);
+//								beneficiario.setTipo(12);
+//								beneficiarios.add(beneficiario);
+//								
+//								
+//							
+//							}
+//					}
+//				}
+//			modelo.setBeneficiarios(beneficiarios);
 			
             
 			

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
@@ -145,6 +146,15 @@ public class IdentificaPolizaService {
                          || contenido.contains("MetLife México")) {
                 	 MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosMetlife.procesar();
+                     encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA ATLAS
+             if (encontro == false) {
+                 if (contenido.contains("Atlas") || contenido.contains("Atlas, S.A.") || contenido.contains("Seguros Atlas, S.A.")) {
+                	 AtlasModel datosAtlas = new AtlasModel(pdfStripper, pdDoc, contenido);
+                     modelo = datosAtlas.procesar();
                      encontro = true;
                  }
              }
