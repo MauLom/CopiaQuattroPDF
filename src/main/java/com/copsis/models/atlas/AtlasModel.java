@@ -23,11 +23,8 @@ public class AtlasModel {
 		}
 		
 		public EstructuraJsonModel procesar() {
-			try {
-		
-
+			try {		
 				switch (fn.tipoPoliza(contenido)) {
-
 				case 1:// Autos
 					modelo  = new AtlasAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO DE PAGO DE SEGURO DE AUTOS", false)).procesar();					
 					break;

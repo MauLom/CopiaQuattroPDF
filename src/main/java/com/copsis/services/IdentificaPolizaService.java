@@ -22,6 +22,8 @@ import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.qualitas.QualitasModel;
+import com.copsis.models.sisnova.SisnovaModel;
+import com.copsis.models.sisnova.SisnovaSaludModel;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -159,6 +161,15 @@ public class IdentificaPolizaService {
                  }
              }
 
+				 // ENTRADA PARA SISNOVA
+				 if (encontro == false) {
+				  contenido = rangoSimple(1, 3, pdfStripper, pdDoc);              
+				  if (contenido.contains("Servicios Integrales de Salud Nova") || contenido.contains("www.sisnova.com.mx")) {
+				    	  SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
+				    	  modelo = datosSisnova.procesar();
+				          encontro = true;
+				      }
+				  }
              
 
              if (encontro == false) {
@@ -184,5 +195,10 @@ public class IdentificaPolizaService {
         stripper.setWordSeparator("###");
         stripper.setSortByPosition(true);
         return stripper.getText(doc);
+    }
+    public String rangoSimple(int inicio, int fin, PDFTextStripper pdfStripper, PDDocument pdDoc) throws IOException { //DEVUELVE UN RANGO DE PAGINAS
+        pdfStripper.setStartPage(inicio);
+        pdfStripper.setEndPage(fin);
+        return pdfStripper.getText(pdDoc);
     }
 }
