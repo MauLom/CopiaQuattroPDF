@@ -45,7 +45,7 @@ public class IdentificaPolizaService {
              pdfStripper.setEndPage(1);
              pdfStripper.setParagraphStart("@@@");
              String contenido = pdfStripper.getText(pdDoc);
-             
+
              boolean encontro = false;
              
              //CHUBB

@@ -767,7 +767,8 @@ public class DataToolsModel {
 				"EMPRESARIAL"};
 
 		 boolean encontro = false;
-		for (String tipo : tipos) {				
+		for (String tipo : tipos) {
+	
 			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
 				switch (tipo) {
 				case "DATOS DEL VEH":

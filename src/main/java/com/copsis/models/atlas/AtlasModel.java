@@ -25,7 +25,7 @@ public class AtlasModel {
 		public EstructuraJsonModel procesar() {
 			try {
 		
-				
+		
 				switch (fn.tipoPoliza(contenido)) {
 
 				case 1:// Autos
@@ -33,6 +33,9 @@ public class AtlasModel {
 					break;
 				case 2:// Autos
 					modelo  = new AtlasSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+					break;
+				case 5:// Autos
+					modelo  = new AtlasVidaModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 					break;
 			
 				}
