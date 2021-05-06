@@ -1,13 +1,12 @@
 package com.copsis.models.atlas;
 
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.inbursa.InbursaSaludModel;
+
 
 public class AtlasAutosModel {
 	// Clases
@@ -20,15 +19,7 @@ public class AtlasAutosModel {
 	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int donde = 0;
-	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-	private BigDecimal restoDerecho = BigDecimal.ZERO;
-	private BigDecimal restoIva = BigDecimal.ZERO;
-	private BigDecimal restoRecargo = BigDecimal.ZERO;
-	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
+
 	
 	public AtlasAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
@@ -45,15 +36,14 @@ public class AtlasAutosModel {
 			//cia
 			modelo.setCia(33);
 			
-//			System.out.println("=============> "+contenido);
+
 			//Datos del Contrantante
 			inicio = contenido.indexOf("PÓLIZA");
             fin = contenido.indexOf("Coberturas Contratadas");
-        ;
+        
             if(inicio > 0 && fin > 0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {		
-//            		System.out.println("=============> " +newcontenido.split("\n")[i]);
             		if(newcontenido.split("\n")[i].contains("Póliza")) {
             			modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
             		  modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "").replace("-", "").replace(" ", ""));	

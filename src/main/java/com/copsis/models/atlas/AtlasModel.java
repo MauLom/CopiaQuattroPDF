@@ -31,6 +31,9 @@ public class AtlasModel {
 				case 1:// Autos
 					modelo  = new AtlasAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO DE PAGO DE SEGURO DE AUTOS", false)).procesar();					
 					break;
+				case 2:// Autos
+					modelo  = new AtlasSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+					break;
 			
 				}
 
