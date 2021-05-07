@@ -39,7 +39,7 @@ public class SisnovaSaludModel {
 				.replace("MONEDA", "Moneda").replace("TOTAL", "Total").replace("NETA", "Neta")
 				.replace("COBERTURAS AMPARADAS", "coberturas amparadas");
 		
-		System.out.println(contenido);
+
 		try {
 		    //mocia
             modelo.setCia(11);
@@ -171,7 +171,7 @@ public class SisnovaSaludModel {
             if(fin == -1) {
             	   fin = contenido.lastIndexOf("Servicios Integrales");
             }
-System.out.println("response ====> " + inicio +"--->"+ fin);
+
             if (inicio > 0 & fin > 0 & inicio < fin) {
                 newcontenido = "";
                 newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("     ", "").replace("   ", "").replace("@@@", "")).replace("\r", "");
