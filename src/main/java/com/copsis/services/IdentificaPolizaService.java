@@ -13,13 +13,17 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
+import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.qualitas.QualitasModel;
+import com.copsis.models.sisnova.SisnovaModel;
+import com.copsis.models.sisnova.SisnovaSaludModel;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -43,7 +47,7 @@ public class IdentificaPolizaService {
              pdfStripper.setEndPage(1);
              pdfStripper.setParagraphStart("@@@");
              String contenido = pdfStripper.getText(pdDoc);
-             
+
              boolean encontro = false;
              
              //CHUBB
@@ -136,7 +140,36 @@ public class IdentificaPolizaService {
                      encontro = true;
                  }
              }
+             
+             // ENTRADA PARA METLIFE
+             if (encontro == false) {
+                 if (contenido.split("@@@")[1].contains("MetLife México S.A.")
+                         || contenido.contains("www.metlife.com.mx")
+                         || contenido.contains("MetLife México")) {
+                	 MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosMetlife.procesar();
+                     encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA ATLAS
+             if (encontro == false) {
+                 if (contenido.contains("Atlas") || contenido.contains("Atlas, S.A.") || contenido.contains("Seguros Atlas, S.A.")) {
+                	 AtlasModel datosAtlas = new AtlasModel(pdfStripper, pdDoc, contenido);
+                     modelo = datosAtlas.procesar();
+                     encontro = true;
+                 }
+             }
 
+				 // ENTRADA PARA SISNOVA
+				 if (encontro == false) {
+				  contenido = rangoSimple(1, 3, pdfStripper, pdDoc);              
+				  if (contenido.contains("Servicios Integrales de Salud Nova") || contenido.contains("www.sisnova.com.mx")) {
+				    	  SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
+				    	  modelo = datosSisnova.procesar();
+				          encontro = true;
+				      }
+				  }
              
 
              if (encontro == false) {
@@ -162,5 +195,10 @@ public class IdentificaPolizaService {
         stripper.setWordSeparator("###");
         stripper.setSortByPosition(true);
         return stripper.getText(doc);
+    }
+    public String rangoSimple(int inicio, int fin, PDFTextStripper pdfStripper, PDDocument pdDoc) throws IOException { //DEVUELVE UN RANGO DE PAGINAS
+        pdfStripper.setStartPage(inicio);
+        pdfStripper.setEndPage(fin);
+        return pdfStripper.getText(pdDoc);
     }
 }

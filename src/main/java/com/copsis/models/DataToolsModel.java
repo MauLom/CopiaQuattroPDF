@@ -758,20 +758,23 @@ public class DataToolsModel {
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
 		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL",
+				"SEGURO DE AUTOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
-				"VIDA",
+				"VIDA","VIDA INDIVIDUAL",
 				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
 				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
-				"EMPRESARIAL"};
+				"EMPRESARIAL","DAÑOS"};
 
 		 boolean encontro = false;
-		for (String tipo : tipos) {	
+		for (String tipo : tipos) {
+	
 			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
 				switch (tipo) {
 				case "DATOS DEL VEH":
 				case "AUTOMÓVILES":
-				case "SEGURO DE AUTOMÓVILES":				
+				case "SEGURO DE AUTOMÓVILES":
+				case "SEGURO DE AUTOS":
 					dato = 1;
 					encontro = true;
 					break;
@@ -779,21 +782,22 @@ public class DataToolsModel {
 				case "GMM":
 				case "INDIVIDUAL/FAMILIAR":
 				case "GASTOS MÉDICOS MAYORES":
+				case "GASTOS M":
 					dato = 2;
 					encontro = true;
 					break;
 				case "EMPRESARIAL":
 				case "CASA HABITACIÓN":
 				case "TECHOS":
+				case "DAÑOS":
 					dato = 4;
 					encontro = true;
 					break;
 				case "VIDA":
-					dato = 3;
+				case "VIDA INDIVIDUAL":
+					dato = 5;
 					encontro = true;
 					break;
-			
-					
 				default:
 					dato = 0;
 					encontro = false;
