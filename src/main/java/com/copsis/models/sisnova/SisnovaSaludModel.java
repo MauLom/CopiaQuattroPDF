@@ -69,8 +69,7 @@ public class SisnovaSaludModel {
 							modelo.setRfc(newcontenido.split("\n")[i+2].split("###")[1].replace("###", "").trim().replace(" ", ""));	
 						} if(newcontenido.split("\n")[i+4].split("###").length == 2) {
 							modelo.setRfc(newcontenido.split("\n")[i+4].split("###")[1].replace("###", "").trim().replace(" ", ""));	
-						}
-						
+						}						
 					}
 					if(newcontenido.split("\n")[i].contains("Calle:")) {
 						resultado = newcontenido.split("\n")[i].split("Calle:")[1].split("###")[0];

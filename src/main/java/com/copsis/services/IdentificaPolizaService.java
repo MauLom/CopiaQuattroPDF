@@ -21,6 +21,7 @@ import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
+import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sisnova.SisnovaSaludModel;
@@ -161,15 +162,24 @@ public class IdentificaPolizaService {
                  }
              }
 
-				 // ENTRADA PARA SISNOVA
-				 if (encontro == false) {
-				  contenido = rangoSimple(1, 3, pdfStripper, pdDoc);              
-				  if (contenido.contains("Servicios Integrales de Salud Nova") || contenido.contains("www.sisnova.com.mx")) {
-				    	  SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
-				    	  modelo = datosSisnova.procesar();
-				          encontro = true;
-				      }
-				  }
+			 // ENTRADA PARA SISNOVA
+			 if (encontro == false) {
+			  contenido = rangoSimple(1, 3, pdfStripper, pdDoc);              
+			  if (contenido.contains("Servicios Integrales de Salud Nova") || contenido.contains("www.sisnova.com.mx")) {
+			    	  SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
+			    	  modelo = datosSisnova.procesar();
+			          encontro = true;
+			      }
+			  }
+			 
+			 // ENTRADA PARA MULTIVA
+	            if (encontro == false) {
+	                if (contenido.indexOf("Seguros Multiva") > -1 || contenido.indexOf("Multiva Seguros") > -1) {
+	                	MultivaModels datosMultiva = new MultivaModels(pdfStripper, pdDoc, contenido);
+	                	modelo = datosMultiva.procesar();
+	                    encontro = true;
+	                }
+	            }
              
 
              if (encontro == false) {
