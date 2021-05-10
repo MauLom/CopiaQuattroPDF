@@ -33,6 +33,9 @@ public class MultivaModels {
 			case 2:// Salud
 				modelo  = new MultivaSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
+			case 4:// Diversos
+				modelo  = new MultivaDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				break;
 	
 			}
 
