@@ -526,7 +526,7 @@ public class DataToolsModel {
 			result = false;
 			break;
 		default:
-			result = true;
+			result = false;
 			break;
 		}
 		return result;

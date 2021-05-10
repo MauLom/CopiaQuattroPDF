@@ -28,7 +28,10 @@ public class MultivaModels {
 		try {
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
-				modelo  = new MultivaAutosModels(fn.caratula(1, 2, stripper, doc)).procesar();				
+				modelo  = new MultivaAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				break;
+			case 2:// Salud
+				modelo  = new MultivaSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
 	
 			}

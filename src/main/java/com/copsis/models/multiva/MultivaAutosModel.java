@@ -8,7 +8,7 @@ import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.inbursa.InbursaAutosModel;
 
-public class MultivaAutosModels {
+public class MultivaAutosModel {
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -21,7 +21,7 @@ public class MultivaAutosModels {
 	private int fin = 0;
 	private int donde = 0;
 	
-	public MultivaAutosModels(String contenido) {
+	public MultivaAutosModel(String contenido) {
 		this.contenido = contenido;
 	}
 	
@@ -203,15 +203,12 @@ public class MultivaAutosModels {
 						coberturas.add(cobertura);
 					}
 				}
-	
-				
-//				System.out.println("=====>" + resultadoCbo.split("\n")[j]+"->" + sp);
 			}           
          	modelo.setCoberturas(coberturas);
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
-					MultivaAutosModels.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
+					MultivaAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 	}
