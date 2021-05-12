@@ -17,6 +17,7 @@ import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
+import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
@@ -180,7 +181,15 @@ public class IdentificaPolizaService {
 	                    encontro = true;
 	                }
 	            }
-             
+
+	            // ENTRADA PARA GMX
+	            if (encontro == false) {
+	                if (contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")) {
+	                	GmxModel datosGmx = new GmxModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosGmx.procesar();
+	                    encontro = true;
+	                }
+	            }
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					
