@@ -757,7 +757,7 @@ public class DataToolsModel {
 		int dato = 0;
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
-		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL",
+		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL","PLACAS",
 				"SEGURO DE AUTOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
@@ -768,13 +768,13 @@ public class DataToolsModel {
 
 		 boolean encontro = false;
 		for (String tipo : tipos) {
-	
 			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
 				switch (tipo) {
 				case "DATOS DEL VEH":
 				case "AUTOMÓVILES":
 				case "SEGURO DE AUTOMÓVILES":
 				case "SEGURO DE AUTOS":
+				case "PLACAS":
 					dato = 1;
 					encontro = true;
 					break;

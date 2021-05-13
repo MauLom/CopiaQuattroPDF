@@ -25,6 +25,7 @@ import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sisnova.SisnovaSaludModel;
+import com.copsis.models.zurich.ZurichModel;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -177,6 +178,16 @@ public class IdentificaPolizaService {
 	                if (contenido.indexOf("Seguros Multiva") > -1 || contenido.indexOf("Multiva Seguros") > -1) {
 	                	MultivaModels datosMultiva = new MultivaModels(pdfStripper, pdDoc, contenido);
 	                	modelo = datosMultiva.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            // ENTRADA PARA ZURICH
+	            if (encontro == false) {
+	            	
+	                if (contenido.contains("zurich") || contenido.contains("Zurich")) {
+	                	ZurichModel datosZurich = new ZurichModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosZurich.procesar();
 	                    encontro = true;
 	                }
 	            }

@@ -502,11 +502,10 @@ public class MapfreSaludModel {
 						resultado = contenido.split("@@@")[donde].split("\r\n")[i].trim();
 
 						if (resultado.split("###").length == 7) {
-
 							asegurado.setNombre(resultado.split("###")[1]);
 							asegurado.setParentesco(fn.parentesco(resultado.split("###")[4].toLowerCase()));
-							asegurado.setNacimiento(fn.formatDate(resultado.split("###")[5], "dd-MM-yy"));
-							asegurado.setAntiguedad(fn.formatDate(resultado.split("###")[6], "dd-MM-yy"));
+							asegurado.setNacimiento(fn.formatDate_MonthCadena(resultado.split("###")[5]));
+							asegurado.setAntiguedad(fn.formatDate_MonthCadena(resultado.split("###")[6]));
 							asegurado.setSexo(fn.sexo(resultado.split("###")[2]) ? 1 : 0);
 							asegurados.add(asegurado);
 
