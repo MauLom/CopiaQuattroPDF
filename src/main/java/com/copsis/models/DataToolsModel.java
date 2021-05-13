@@ -749,6 +749,7 @@ public class DataToolsModel {
 		stripper.setParagraphStart("@@@");
 		stripper.setWordSeparator("###");
 		stripper.setSortByPosition(true);
+		stripper.setShouldSeparateByBeads(false);
 		return stripper.getText(doc);
 	}
 	
