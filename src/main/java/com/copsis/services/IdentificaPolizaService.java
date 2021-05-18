@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.aig.AigModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
@@ -25,11 +26,10 @@ import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.sisnova.SisnovaModel;
-import com.copsis.models.sisnova.SisnovaSaludModel;
 import com.copsis.models.zurich.ZurichModel;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 
 @RequiredArgsConstructor
 @Service
@@ -182,7 +182,7 @@ public class IdentificaPolizaService {
 	                    encontro = true;
 	                }
 	            }
-<<<<<<< HEAD
+
 	            
 	            // ENTRADA PARA ZURICH
 	            if (encontro == false) {
@@ -194,7 +194,6 @@ public class IdentificaPolizaService {
 	                }
 	            }
              
-=======
 
 	            // ENTRADA PARA GMX
 	            if (encontro == false) {
@@ -204,7 +203,15 @@ public class IdentificaPolizaService {
 	                    encontro = true;
 	                }
 	            }
->>>>>>> QC-7727-migracion-lector-pdf-a-spring
+	            
+	            // ENTRADA PARA AIG
+	            if (encontro == false) {
+	                if (contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")) { //www.AIG.com.mx
+	                	AigModel datosAig = new AigModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosAig.procesar();
+	                    encontro = true;
+	                }
+	            }
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					
