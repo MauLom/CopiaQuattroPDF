@@ -43,7 +43,7 @@ public class AigAutosModel {
 	
 		try {
 			
-			System.out.println("---> " + contenido);
+
 			//tipo
 			modelo.setTipo(1);
 
@@ -112,7 +112,6 @@ public class AigAutosModel {
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring( inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println("=====>"+newcontenido.split("\n")[i]);
 					if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Prima Neta:")) {
 						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Total")[0].trim()));
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1])));
