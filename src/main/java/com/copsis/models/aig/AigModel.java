@@ -26,7 +26,13 @@ public class AigModel {
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 				modelo  = new AigAutosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
-				break;			
+				break;
+			case 2:// Autos
+				modelo  = new AigSaludModel(fn.caratula(1, 4, stripper, doc)).procesar();	
+				break;
+			case 4:// Autos
+				modelo  = new AigDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
+				break;	
 			}					
 			return modelo;
 		} catch (Exception ex) {
