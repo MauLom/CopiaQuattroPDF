@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.aig.AigModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
+import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
@@ -24,10 +26,10 @@ import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.sisnova.SisnovaModel;
-import com.copsis.models.sisnova.SisnovaSaludModel;
+import com.copsis.models.zurich.ZurichModel;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 
 @RequiredArgsConstructor
 @Service
@@ -41,7 +43,7 @@ public class IdentificaPolizaService {
 
          	 final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
              final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
-             final PDFTextStripper pdfStripper = new PDFTextStripper();
+             PDFTextStripper pdfStripper = new PDFTextStripper();
              COSDocument cosDoc = documentToBeParsed.getDocument();
              PDDocument pdDoc = new PDDocument(cosDoc);
              pdfStripper.setStartPage(1);
@@ -180,7 +182,36 @@ public class IdentificaPolizaService {
 	                    encontro = true;
 	                }
 	            }
+
+	            
+	            // ENTRADA PARA ZURICH
+	            if (encontro == false) {
+	            	
+	                if (contenido.contains("zurich") || contenido.contains("Zurich")) {
+	                	ZurichModel datosZurich = new ZurichModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosZurich.procesar();
+	                    encontro = true;
+	                }
+	            }
              
+
+	            // ENTRADA PARA GMX
+	            if (encontro == false) {
+	                if (contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")) {
+	                	GmxModel datosGmx = new GmxModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosGmx.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            // ENTRADA PARA AIG
+	            if (encontro == false) {
+	                if (contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")) { //www.AIG.com.mx
+	                	AigModel datosAig = new AigModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosAig.procesar();
+	                    encontro = true;
+	                }
+	            }
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					

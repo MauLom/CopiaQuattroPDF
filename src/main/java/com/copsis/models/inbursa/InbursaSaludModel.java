@@ -42,7 +42,7 @@ public class InbursaSaludModel {
 
 	        // cia
 	        modelo.setCia(35);
-//	    	System.out.println(contenido);
+
 	        
 	         //Datos del Contratante
             inicio = contenido.indexOf("PÓLIZA DE SEGUROS");

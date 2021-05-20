@@ -129,7 +129,7 @@ public class AtlasAutosModel {
             	modelo.setCoberturas(coberturas);
             }
             
-            System.out.println(contenido);
+           
             inicio = recibosText.indexOf("Agente");
             fin = recibosText.indexOf("Forma de pago");
             if(inicio > 0 && fin > 0 && inicio < fin) {
@@ -148,8 +148,7 @@ public class AtlasAutosModel {
                 	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
                 	for (int i = 0; i < newcontenido.split("\n").length; i++) {
                 		if(newcontenido.split("\n")[i].contains("Agente:")) {                			
-                			if(newcontenido.split("\n")[i].split("###").length > 2) {
-                				System.out.println(newcontenido.split("\n")[i]);
+                			if(newcontenido.split("\n")[i].split("###").length > 2) {         
                 				modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("###")[1]);	
                 			}
                 			

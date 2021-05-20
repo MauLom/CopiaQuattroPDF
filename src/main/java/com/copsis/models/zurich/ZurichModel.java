@@ -1,4 +1,4 @@
-package com.copsis.models.inbursa;
+package com.copsis.models.zurich;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -6,7 +6,8 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
-public class InbursaModel {
+public class ZurichModel {
+
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -17,41 +18,28 @@ public class InbursaModel {
 	private Integer pagIni =0;
 	private Integer pagFin =0;
 
-
-	
-	
-	public InbursaModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
+	public ZurichModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
 		this.contenido = contenido;
 	}
+	
 	public EstructuraJsonModel procesar() {
 		try {
-
 			
 			switch (fn.tipoPoliza(contenido)) {
-
 			case 1:// Autos
-				modelo  = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
-				
+				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
-			case 2:// Salud
-				modelo  = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
-				break;
-			case 4:// Vida
-				modelo  = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
-				break;
+			
 			}
-
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
-					InbursaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+					ZurichModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 		
 	}
-
+	
 }

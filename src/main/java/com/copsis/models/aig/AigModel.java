@@ -1,4 +1,4 @@
-package com.copsis.models.inbursa;
+package com.copsis.models.aig;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -6,7 +6,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
-public class InbursaModel {
+public class AigModel {
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -14,44 +14,32 @@ public class InbursaModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private Integer pagIni =0;
-	private Integer pagFin =0;
 
-
-	
-	
-	public InbursaModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
+	// Constructor
+	public AigModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
 		this.contenido = contenido;
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-
-			
 			switch (fn.tipoPoliza(contenido)) {
-
 			case 1:// Autos
-				modelo  = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
-				
+				modelo  = new AigAutosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
 				break;
-			case 2:// Salud
-				modelo  = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
+			case 2:// Autos
+				modelo  = new AigSaludModel(fn.caratula(1, 4, stripper, doc)).procesar();	
 				break;
-			case 4:// Vida
-				modelo  = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
-				break;
-			}
-
+			case 4:// Autos
+				modelo  = new AigDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
+				break;	
+			}					
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
-					InbursaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+					AigModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
-		
 	}
 
 }

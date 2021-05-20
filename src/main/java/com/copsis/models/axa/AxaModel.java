@@ -51,11 +51,11 @@ public class AxaModel {
 						case "GASTOS M": // GASTOS MEDICOS --/(Se usara identificar la version 2 del pdf)Datos del
 											// contratante
 							if (contenido.contains("DATOS DEL CONTRATANTE")) {
-								System.out.println("AXA1");
+							
 								AxaSaludV2Model datosAxa2Salud = new AxaSaludV2Model(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxa2Salud.procesar();
 							} else {
-								System.out.println("AXA2");
+								
 								AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxaSalud.procesar();
 							}
