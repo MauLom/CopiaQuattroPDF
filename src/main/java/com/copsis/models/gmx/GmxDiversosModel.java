@@ -31,16 +31,15 @@ public class GmxDiversosModel {
             //cia
             modelo.setCia(17);
             
-//            System.out.println("==>" + contenido);
             //Datos del contratante
             
             inicio = contenido.indexOf("POLIZA NUEVA");
             fin  = contenido.indexOf("Descripción de Bienes");
             if(inicio > 0 && fin > 0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").replace(" ", "###").trim() ;
-            	//System.out.println(newcontenido);
+    
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {
-				 System.out.println("======> " +newcontenido.split("\n")[i]);
+			
 				 if(newcontenido.split("\n")[i].contains("NÚMERO") && newcontenido.split("\n")[i].contains("PÓLIZA")) {
 					 modelo.setPoliza(newcontenido.split("\n")[i+2].split("###")[3]);
 				 }

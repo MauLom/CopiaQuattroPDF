@@ -27,7 +27,6 @@ public class MultivaAutosModel {
 	
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		System.out.println(contenido);
 		contenido = contenido.replace("12 Hrs.", "").replace("pago","Pago")
 				.replace("Cllave y Marca:", "Clave y Marca:")
 				.replace("MMooddeelloo::", "Modelo:")

@@ -761,7 +761,6 @@ public class MapfreSaludModel {
 			if (inicoberturas > -1 && fincoberturas > -1 && inicoberturas < fincoberturas) {
 
 				newcontenido = inicontenido.substring(inicoberturas, fincoberturas).replaceAll("  +", "###").trim();
-				System.out.println(newcontenido);
 				for (String datod : newcontenido.split("\n")) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					Integer num = datod.split("###").length;

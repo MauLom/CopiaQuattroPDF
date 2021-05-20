@@ -154,7 +154,7 @@ public class AxaSaludV2Model {
 		}
 		
 		//Sa,deducibel,coaseguro
-//		System.out.println(contenido);
+
 		inicio = contenido.indexOf("Condiciones Contratadas");		
 		fin = contenido.indexOf("Coberturas-Servicios ");
 		if (inicio > 0 && fin > 0 && inicio < fin) {

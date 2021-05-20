@@ -129,7 +129,7 @@ public class AtlasAutosModel {
             	modelo.setCoberturas(coberturas);
             }
             
-            System.out.println(contenido);
+           
             inicio = recibosText.indexOf("Agente");
             fin = recibosText.indexOf("Forma de pago");
             if(inicio > 0 && fin > 0 && inicio < fin) {

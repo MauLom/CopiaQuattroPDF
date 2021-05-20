@@ -27,7 +27,7 @@ public class InbursaModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-//			System.out.println(contenido);
+
 			
 			switch (fn.tipoPoliza(contenido)) {
 

@@ -45,7 +45,7 @@ public class InbursaAutosModel {
             // cia
             modelo.setCia(38);
             
-//            System.out.println(contenido);
+
             //Datos del Contratante
             inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
             fin = contenido.indexOf("COBERTURAS CONTRATADAS");
@@ -198,8 +198,7 @@ public class InbursaAutosModel {
             
             
             /*Agente y Cve*/
-//            System.out.println(contenido);
-            
+
             inicio = contenido.indexOf("NOMBRE DEL AGENTE");
             
             if(inicio > 0) {

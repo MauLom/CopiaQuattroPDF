@@ -100,13 +100,13 @@ public class GnpAutosModel {
 			// cp
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
-			System.out.println("------------------->" + donde);
+		
 			if (donde > 0) {
-				System.out.println("-------oooo-------->"+ contenido.split("@@@")[donde].split("\r\n").length);
+				
 				if (contenido.split("@@@")[donde].split("\r\n").length > 1) {
 					newcontenido = "";
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-						System.out.println(dato +"----< " + dato.split("###").length );
+					
 						if (dato.split("###").length == 3) {
 							if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("-").length == 3) {
 								modelo.setVigenciaA(
@@ -347,7 +347,7 @@ public class GnpAutosModel {
 				}
 			}
 
-			///System.out.println("===> " +contenido);
+		
 	
 			// plan
 			

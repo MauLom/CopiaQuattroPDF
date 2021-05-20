@@ -43,7 +43,7 @@ public class IdentificaPolizaService {
 
          	 final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
              final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
-             final PDFTextStripper pdfStripper = new PDFTextStripper();
+             PDFTextStripper pdfStripper = new PDFTextStripper();
              COSDocument cosDoc = documentToBeParsed.getDocument();
              PDDocument pdDoc = new PDDocument(cosDoc);
              pdfStripper.setStartPage(1);

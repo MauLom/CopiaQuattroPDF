@@ -25,7 +25,6 @@ public class MetlifeModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-//			System.out.println(contenido);
 			switch (fn.tipoPoliza(contenido)) {
 
 //			case 1:// Autos

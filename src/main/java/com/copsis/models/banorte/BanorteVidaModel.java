@@ -174,15 +174,7 @@ public class BanorteVidaModel {
         		modelo.setBeneficiarios(beneficiarios);
             }
             
-            inicio = recibosText.indexOf("Agente:");
-            fin = recibosText.indexOf("Moneda:");
-            if(inicio > 0 &&  fin >  0 && inicio < fin) {
-            	newcontenido = recibosText.substring(inicio, fin);
-            	for (int i = 0; i < newcontenido.split("\n").length; i++) {
-                       System.out.println("===> " +newcontenido.split("\n")[i]);		
-            	}
-                                    
-            }
+            
             
             
             

@@ -682,7 +682,6 @@ public class MapfreVidaModel {
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						if (dato.contains("Asegurado:") && dato.contains("R.F.C:")) {
-							System.out.println(dato);
 							asegurado.setNombre(
 									dato.split("Asegurado:")[1].trim().split("R.F.C:")[0].replace("###", "").trim());
 							if (dato.split("###").length == 2) {
