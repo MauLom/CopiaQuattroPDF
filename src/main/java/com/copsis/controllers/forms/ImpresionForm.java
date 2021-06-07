@@ -9,7 +9,7 @@ public class ImpresionForm {
 
 	private Integer tiporespuesta;//tipo de respuesta
 	private Integer tipoImpresion;//tipo de impresion
-	private Integer siniestroId;// sinietro Id
+	private Integer siniestroDocumentoID;// sinietro Id
     private List<UrlForm> urls;//Lista de urls de Pdf
 	
 	

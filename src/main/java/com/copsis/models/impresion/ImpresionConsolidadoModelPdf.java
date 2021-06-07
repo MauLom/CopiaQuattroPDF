@@ -32,7 +32,6 @@ public class ImpresionConsolidadoModelPdf {
 					list.sort(Comparator.comparing(UrlForm::getOrden));
 
 					for (UrlForm urlForm : list) {
-						System.out.println(urlForm.getUrl());
 
 						URL scalaByExampleUrl = new URL(urlForm.getUrl());
 
@@ -45,9 +44,9 @@ public class ImpresionConsolidadoModelPdf {
 					output = new ByteArrayOutputStream();
 					document.save(output);
 					
-					File ruta = new File ("/home/development/Videos/adan.pdf");
-					
-					document.save(ruta);
+//					File ruta = new File ("/home/development/Videos/ConsolidadoCop.pdf");
+//					
+//					document.save(ruta);
 					return output.toByteArray();
 				} finally {
 					document.close();

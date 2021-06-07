@@ -17,7 +17,6 @@ public class ImpresioneTipoService {
     }
 
 	public ImpresioneTipoService(ImpresionForm impresionForm ) {
-		System.out.println("DATOS");
 		switch (impresionForm.getTipoImpresion()) {
 	 	case 100:
 	 		ImpresionConsolidadoModelPdf  impresionConsolidao  = new ImpresionConsolidadoModelPdf();

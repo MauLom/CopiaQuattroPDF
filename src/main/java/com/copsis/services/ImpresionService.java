@@ -1,63 +1,67 @@
 package com.copsis.services;
 
 import java.util.Date;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-
+import com.copsis.clients.QuattroUploadClient;
+import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.ImpresionForm;
-import com.copsis.controllers.forms.UrlForm;
+import com.copsis.dto.AdjuntoDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class ImpresionService {
 
+	@Autowired
+	private QuattroUploadClient quattroUploadClient;
 
-	public UrlForm ImpresionServicePdf (ImpresionForm impresionForm) {	
-		String  folder ="";
-		String bucket ="";
-		
-		System.out.println("LLEGO AQUI");
-		 ImpresioneTipoService  impresioneTipoService  = new ImpresioneTipoService (impresionForm);
-			System.out.println("LLEGO AQUI " +  impresioneTipoService.getByteArrayPDF());
-		 byte[] byteArrayPDF = impresioneTipoService.getByteArrayPDF();
-		 
-		 switch (impresionForm.getTiporespuesta()) {
-		case 1:
-			Date date = new Date();
-            Integer year = date.getYear() + 1900;           
-            String mes = (date.getMonth() + 1) + "";
-            String fecha = "";
-            if (mes.length() == 1) {
-                mes = "0" + mes;
-            }
-            fecha = year.toString().substring(2, 4) + mes;
-            
-            String nombrePdf = SiO4EncryptorAES.encrypt("Consolidado_" +date ,com.copsis.encryptor.utils.Constants.ENCRYPTION_KEY);
-            
-          System.out.println("====> " + nombrePdf);
-            
-			
-			break;
+	public AdjuntoDTO ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
+		ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
+		AdjuntoForm adjuntoForm = new AdjuntoForm();
+		String folder = "h11fia";
+		String bucket = "quattrocrm-copsis";
+		AdjuntoDTO adjuntoDTO = new AdjuntoDTO();
 
-		default:
-			
-			
-			break;
+		if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {// Esto solo
+																										// aplicara para
+																										// impresion 100
+			adjuntoForm.setEntidadID(impresionForm.getSiniestroDocumentoID());
+			adjuntoForm.setEntidadTipo(21);
 		}
-		 
+
+		byte[] byteArrayPDF = impresioneTipoService.getByteArrayPDF();
+
 		switch (impresionForm.getTiporespuesta()) {
 		case 1:
-			 return impresionForm.getUrls().get(0) ;
+//			Date date = new Date();
+//			Integer year = date.getYear() + 1900;
+//			String mes = (date.getMonth() + 1) + "";
+//			if (mes.length() == 1) {
+//				mes = "0" + mes;
+//			}
+//			String fecha = year.toString().substring(2, 4) + mes;
+//			String nombrePdf = SiO4EncryptorAES.encrypt("Consolidado_" + date,
+//					com.copsis.encryptor.utils.Constants.ENCRYPTION_KEY);
+//			adjuntoForm.setB64(byteArrayPDF.toString());
+//			adjuntoForm.setFolder(folder);
+//			adjuntoForm.setBucket(bucket);
+//			adjuntoForm.setNombreOriginal(nombrePdf);
+//			adjuntoForm.setConcepto(nombrePdf);
+//
+//			adjuntoDTO = quattroUploadClient.getUploadAndAdjuntoByteArray(adjuntoForm, headers).getResult();
+
+			break;
+
 		default:
-			 return impresionForm.getUrls().get(0) ;
 
-
+			break;
 		}
 
-		 
+		return adjuntoDTO;
+
 	}
-	 
+
 }
