@@ -20,7 +20,7 @@ public class ImpresionService {
 	@Autowired
 	private QuattroUploadClient quattroUploadClient;
 
-	public AdjuntoDTO ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
+	public ImpresionForm ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
 		ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
 		AdjuntoForm adjuntoForm = new AdjuntoForm();
 
@@ -62,11 +62,13 @@ public class ImpresionService {
 			break;
 
 		default:
+			impresionForm.setUrls(null);
+			impresionForm.setByteArrayPDF(byteArrayPDF);
 
 			break;
 		}
 
-		return adjuntoDTO;
+		return impresionForm;
 
 	}
 

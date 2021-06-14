@@ -18,4 +18,5 @@ public class ImpresionForm {
     private String nombreOriginal;
     private String bucket;
     private String folder;
+	private byte[] byteArrayPDF;
 }
