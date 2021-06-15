@@ -20,11 +20,10 @@ public class ImpresionService {
 	@Autowired
 	private QuattroUploadClient quattroUploadClient;
 
-	public AdjuntoDTO ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
+	public ImpresionForm ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
 		ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
 		AdjuntoForm adjuntoForm = new AdjuntoForm();
-		String folder = "h11fia";
-		String bucket = "quattrocrm-copsis";
+
 		AdjuntoDTO adjuntoDTO = new AdjuntoDTO();
 
 		if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {// Esto solo
@@ -53,8 +52,8 @@ public class ImpresionService {
 						com.copsis.encryptor.utils.Constants.ENCRYPTION_KEY);
 			}
 			adjuntoForm.setB64(Base64.encodeBase64String(byteArrayPDF));
-			adjuntoForm.setFolder(folder);
-			adjuntoForm.setBucket(bucket);
+			adjuntoForm.setFolder(impresionForm.getFolder());
+			adjuntoForm.setBucket(impresionForm.getBucket());
 			adjuntoForm.setNombreOriginal(nombrePdf.length() > 50? nombrePdf.substring(0,50):nombrePdf);
 			adjuntoForm.setConcepto(nombrePdf.length() > 50? nombrePdf.substring(0,50):nombrePdf);
 			adjuntoForm.setD(impresionForm.getD());
@@ -63,11 +62,13 @@ public class ImpresionService {
 			break;
 
 		default:
+			impresionForm.setUrls(null);
+			impresionForm.setByteArrayPDF(byteArrayPDF);
 
 			break;
 		}
 
-		return adjuntoDTO;
+		return impresionForm;
 
 	}
 

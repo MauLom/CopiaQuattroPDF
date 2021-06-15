@@ -16,4 +16,7 @@ public class ImpresionForm {
     private List<UrlForm> urls;//Lista de urls de Pdf
     private String d;
     private String nombreOriginal;
+    private String bucket;
+    private String folder;
+	private byte[] byteArrayPDF;
 }
