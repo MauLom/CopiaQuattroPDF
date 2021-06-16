@@ -20,7 +20,7 @@ public class ImpresioneTipoService {
 		switch (impresionForm.getTipoImpresion()) {
 	 	case 100:
 	 		ImpresionConsolidadoModelPdf  impresionConsolidao  = new ImpresionConsolidadoModelPdf();
-	 		this.byteArrayPDF = impresionConsolidao.buildPDF(impresionForm);
+	 		this.byteArrayPDF = impresionConsolidao.buildPDF(impresionForm);	 		
 			break;
 
 		
