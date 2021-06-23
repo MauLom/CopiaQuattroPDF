@@ -19,4 +19,8 @@ public class ImpresionForm {
     private String bucket;
     private String folder;
 	private byte[] byteArrayPDF;
+	private String fecha;
+	private String tipoSiniestro;
+	private String asegurado;
+	private String saSiniestro;
 }
