@@ -3,6 +3,7 @@ package com.copsis.models.impresion;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.models.NumeroALetraModel;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
@@ -23,6 +25,7 @@ public class ImpresionInter {
 	private float fullWidth = 551;
 	List<LineStyle> lineBoders = new ArrayList<>();
 	List<Float> padding = new ArrayList<>();
+	NumeroALetraModel fnLetras = new NumeroALetraModel();
 
 	public byte[] buildPDF(ImpresionForm impresionForm) {
 
@@ -90,8 +93,9 @@ public class ImpresionInter {
 									+ " cual será entregado a sus beneficiarios designados en la",
 							black, false, "L", 12, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "póliza por la cantidad de: " + impresionForm.getSaSiniestro()
-							+ " (diez mil pesos 00/100 m.n.)", black, false, "L", 12, lineBoders, "", padding);
+					 DecimalFormat formateador = new DecimalFormat("#,##0.00");
+					communsPdf.setCell(baseRow, 100, "póliza por la cantidad de: " + formateador.format(Double.parseDouble( impresionForm.getSaSiniestro()))
+							+" (" + fnLetras.Convertir(impresionForm.getSaSiniestro(),false) +" ). ", black, false, "L", 12, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 20;
@@ -100,10 +104,10 @@ public class ImpresionInter {
 							true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,
-							"Lo anterior con fundamento en póliza vigente de seguro de grupo vida", black, false, "L",
+							"Lo anterior con fundamento en póliza vigente de seguro de grupo vida COPPEL, S.A. DE C.V., la", black, false, "L",
 							12, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "COPPEL, S.A. DE C.V. la cual se tiene contratada con " + impresionForm.getAseguradora(), black,
+					communsPdf.setCell(baseRow, 100, "cual se tiene contratada con " + impresionForm.getAseguradora() +".", black,
 							false, "L", 12, lineBoders, "", padding);
 					table.draw();
 
@@ -112,7 +116,7 @@ public class ImpresionInter {
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 100, document, page, false,
 							true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags("<b>ATENTAMENTE:<b>"), black, true, "L",
+					communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags("ATENTAMENTE:"), black, true, "L",
 							12, lineBoders, "", padding);
 					table.draw();
 
@@ -150,7 +154,7 @@ public class ImpresionInter {
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save(new File("/home/development/Music/pdfInter/pbrueba.pdf"));
+
 					return output.toByteArray();
 				} finally {
 					document.close();
