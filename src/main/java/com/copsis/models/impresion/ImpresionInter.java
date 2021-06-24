@@ -62,8 +62,8 @@ public class ImpresionInter {
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 100, document, page, false,
 							true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "Culiacán, Sinaloa a" + impresionForm.getFecha(), black, false,
-							"L", 12, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 100, "Culiacán, Sinaloa a " + impresionForm.getFecha(), black, false,
+							"L", 13, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 50;
@@ -71,10 +71,10 @@ public class ImpresionInter {
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 100, document, page, false,
 							true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "MARTHA ELENA JACOBO MEDINA", black, false, "L", 12, lineBoders,
+					communsPdf.setCell(baseRow, 100, "MARTHA ELENA JACOBO MEDINA", black, false, "L", 13, lineBoders,
 							"", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "Presente.", black, false, "L", 12, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 100, "Presente.", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 20;
@@ -86,16 +86,16 @@ public class ImpresionInter {
 							"Por medio de la presente se autoriza el pago de la reclamación de "
 									+ communsPdf.eliminaHtmlTags("<b>" + impresionForm.getTipoSiniestro() + "</b>")
 									+ " del siniestro a",
-							black, false, "L", 12, lineBoders, "", padding);
+							black, false, "L", 13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,
 							"nombre de: " + communsPdf.eliminaHtmlTags("<b>" + impresionForm.getAsegurado() + "</b>")
 									+ " cual será entregado a sus beneficiarios designados en la",
-							black, false, "L", 12, lineBoders, "", padding);
+							black, false, "L", 13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					 DecimalFormat formateador = new DecimalFormat("#,##0.00");
 					communsPdf.setCell(baseRow, 100, "póliza por la cantidad de: " + formateador.format(Double.parseDouble( impresionForm.getSaSiniestro()))
-							+" (" + fnLetras.Convertir(impresionForm.getSaSiniestro(),false) +" ). ", black, false, "L", 12, lineBoders, "", padding);
+							+" (" + fnLetras.Convertir(impresionForm.getSaSiniestro(),false).toUpperCase() +" ). ", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 20;
@@ -105,10 +105,10 @@ public class ImpresionInter {
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,
 							"Lo anterior con fundamento en póliza vigente de seguro de grupo vida COPPEL, S.A. DE C.V., la", black, false, "L",
-							12, lineBoders, "", padding);
+							13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, "cual se tiene contratada con " + impresionForm.getAseguradora() +".", black,
-							false, "L", 12, lineBoders, "", padding);
+							false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 25;
@@ -118,6 +118,9 @@ public class ImpresionInter {
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags("ATENTAMENTE:"), black, true, "L",
 							12, lineBoders, "", padding);
+					baseRow = communsPdf.setRow(table, 15);
+					File firma = new File(getClass().getClassLoader().getResource("imgInter/imgF.png").toURI());
+					communsPdf.setCell(baseRow, 40, ImageUtils.readImage(firma), 6, 37, black);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 25;
@@ -126,11 +129,11 @@ public class ImpresionInter {
 							true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, "Lic. José María Espinosa de los Monteros Saldaña", black, false,
-							"L", 12, lineBoders, "", padding);
+							"L", 13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,
 							"Interprotección Sinaloa, Agente de Seguros y de Fianzas, S.A. de C.V.", black, false, "L",
-							12, lineBoders, "", padding);
+							13, lineBoders, "", padding);
 					table.draw();
 
 					yStart = 100;
@@ -139,22 +142,22 @@ public class ImpresionInter {
 							true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, "Interprotección,Agente de Seguros y de Fianzas,S.A de C.V.",
-							black, false, "C", 12, lineBoders, "", padding);
+							black, false, "C", 13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "(667) 752 0585", black, false, "C", 12, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 100, "(667) 752 0585", black, false, "C", 13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,
 							"Paseo Niños Héroes No.700-5 Pte., Centro Culiacán,80000,Culiacán, Sin.", black, false, "C",
-							12, lineBoders, "", padding);
+							13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 45, "www.inter.mx", black, false, "R", 12, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 45, "www.inter.mx", black, false, "R", 13, lineBoders, "", padding);
 					communsPdf.setCell(baseRow, 15, ImageUtils.readImage(redes), 6, 37, black);
-					communsPdf.setCell(baseRow, 40, "interprotección", black, false, "L", 12, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 40, "interprotección", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-
+			
 					return output.toByteArray();
 				} finally {
 					document.close();
