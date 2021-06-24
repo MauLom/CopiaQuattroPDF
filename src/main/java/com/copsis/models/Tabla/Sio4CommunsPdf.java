@@ -198,6 +198,14 @@ public class Sio4CommunsPdf {
                     cell.setLeftPadding(0);
                     cell.setRightPadding(0);
                     break;
+                case 6:
+                    cell.setValign(VerticalAlignment.MIDDLE);
+                    cell.setAlign(HorizontalAlignment.RIGHT);
+                    cell.setTopPadding(0);
+                    cell.setBottomPadding(0);
+                    cell.setLeftPadding(0);
+                    cell.setRightPadding(2);
+                    break;
 
             }
 
@@ -262,7 +270,7 @@ public class Sio4CommunsPdf {
         return cell;
     }
 
-    public static String eliminaHtmlTags(String value) {
+    public String eliminaHtmlTags(String value) {
         value = value.replaceAll("(\\r\\n|\\n|\\n\\n)", "<br/>")
                 .replaceAll("\n\n|\n", "\\n")
                 .replaceAll("&quot;", "\"")
@@ -292,7 +300,7 @@ public class Sio4CommunsPdf {
         return value.replaceAll("&nbsp;", " ");
     }
 
-    public static String eliminaHtmlTags2(String value) {
+    public  String eliminaHtmlTags2(String value) {
         value = value.replaceAll("(\\r\\n|\\n|\\n\\n)", "<br/>")
                 .replaceAll("\n\n|\n", "\\n")
                 .replaceAll("&quot;", "\"")

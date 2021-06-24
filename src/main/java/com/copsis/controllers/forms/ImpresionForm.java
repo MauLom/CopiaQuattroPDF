@@ -23,4 +23,5 @@ public class ImpresionForm {
 	private String tipoSiniestro;
 	private String asegurado;
 	private String saSiniestro;
+	private String aseguradora;
 }
