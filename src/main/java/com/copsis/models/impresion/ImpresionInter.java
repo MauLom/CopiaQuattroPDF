@@ -157,7 +157,7 @@ public class ImpresionInter {
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save(new File("/home/development/Music/pdfInter/Carta Finiquito.pdf"));
+			
 					return output.toByteArray();
 				} finally {
 					document.close();
