@@ -54,3 +54,9 @@ tenants:
       username: root
       password: "cop$i$12E$"
       databaseName: quattro00321
+    "quattrocrm-db8":
+      jdbcUrl: jdbc:mysql://10.65.240.47:3306/quattro00022?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E$"
+      databaseName: quattro00022

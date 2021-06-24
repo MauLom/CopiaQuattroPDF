@@ -59,7 +59,13 @@ tenants:
       driverClassName: com.mysql.cj.jdbc.Driver
       username: root
       password: "cop$i$12E$"
-      databaseName: quattro00321      
+      databaseName: quattro00321
+    "quattrocrm-db8":
+      jdbcUrl: jdbc:mysql://127.0.0.1:3318/quattro00022?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "cop$i$12E$"
+      databaseName: quattro00022
     "db-skynet":
       jdbcUrl: jdbc:mysql://127.0.0.1:3306/quattro00031?allowPublicKeyRetrieval=true&useSSL=false
       driverClassName: com.mysql.cj.jdbc.Driver
