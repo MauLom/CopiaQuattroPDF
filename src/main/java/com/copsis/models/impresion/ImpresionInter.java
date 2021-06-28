@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.NumeroALetraModel;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
@@ -51,10 +52,10 @@ public class ImpresionInter {
 					BaseTable table;
 					Row<PDPage> baseRow;
 
-					File logo = new File(getClass().getClassLoader().getResource("imgInter/interLogo.png").toURI());
+					//File logo = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/interLogo.png");
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 250, document, page, false, true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, ImageUtils.readImage(logo), 0, 0, black);
+					communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/interLogo.png"), 0, 0, black);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 100;
@@ -119,8 +120,8 @@ public class ImpresionInter {
 					communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags("ATENTAMENTE:"), black, true, "L",
 							12, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
-					File firma = new File(getClass().getClassLoader().getResource("imgInter/imgF.png").toURI());
-					communsPdf.setCell(baseRow, 40, ImageUtils.readImage(firma), 6, 37, black);
+					//File firma = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/imgF.png");
+					communsPdf.setCell(baseRow, 40, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/imgF.png"), 6, 37, black);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 25;
@@ -137,7 +138,7 @@ public class ImpresionInter {
 					table.draw();
 
 					yStart = 100;
-					File redes = new File(getClass().getClassLoader().getResource("imgInter/redes.png").toURI());
+					//File redes = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/redes.png");
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 50, document, page, false,
 							true);
 					baseRow = communsPdf.setRow(table, 15);
@@ -151,12 +152,13 @@ public class ImpresionInter {
 							13, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 45, "www.inter.mx", black, false, "R", 13, lineBoders, "", padding);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage(redes), 6, 37, black);
+					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/redes.png"), 6, 37, black);
 					communsPdf.setCell(baseRow, 40, "interprotección", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
+				
 			
 					return output.toByteArray();
 				} finally {
@@ -166,8 +168,9 @@ public class ImpresionInter {
 			}
 
 		} catch (Exception ex) {
-			System.out.println("Error en la impresion de Sio4CertificadoInterPdf  ==> " + ex.getMessage());
-			return pdfArray;
+			
+			throw new GeneralServiceException("00001", "Ocurrio un error en el servicio ImpresionInter: "+ ex.getMessage());
+			
 		}
 
 	}
