@@ -36,5 +36,14 @@ public class LectorPDFController   {
 				.status(HttpStatus.OK)
 				.result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
 	}
+	@PostMapping(name = "/lectorCertificados", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CopsisResponse> lectorCertificadospdf (@RequestBody PdfForm pdfForm) throws  IOException {
+		
+		  return new CopsisResponse.Builder()
+				.ok(true)
+				.status(HttpStatus.OK)
+				.result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
+	}
+
 
 }
