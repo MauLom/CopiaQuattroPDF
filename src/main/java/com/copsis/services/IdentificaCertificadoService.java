@@ -1,6 +1,7 @@
 package com.copsis.services;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 
 import org.apache.pdfbox.cos.COSDocument;
@@ -27,9 +28,15 @@ public class IdentificaCertificadoService {
              PDDocument pdDoc = new PDDocument(cosDoc);
              pdfStripper.setStartPage(1);
              pdfStripper.setEndPage(1);
+             pdfStripper.setSortByPosition(true);
              pdfStripper.setParagraphStart("@@@");
+             pdfStripper.setWordSeparator("###");
+  
+             pdfStripper.setAddMoreFormatting(true);
              String contenido = pdfStripper.getText(pdDoc);
              boolean encontro = false;
+             
+        
              
              if (encontro == false) {
             	 if (contenido.contains("zurich") || contenido.contains("Zurich")) {

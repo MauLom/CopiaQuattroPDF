@@ -33,6 +33,8 @@ public class ZurichCertificadoGrupo {
 
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = contenido.replace("Empleados ###y ###sus", "Empleados y sus");
+			
 		try {
 			inicio = contenido.indexOf("Categoria");
 			if (inicio > 0) {
@@ -47,65 +49,53 @@ public class ZurichCertificadoGrupo {
 						.replace("\r", "").trim();
 				modelo.setSubgrupo(newcontenido);
 			}
-
 			inicio = contenido.indexOf("Plan:");
 			if (inicio > 0) {
 				newcontenido = contenido.split("Plan:")[1].split("\n")[0].replace("@@@", "").replace("###", "")
 						.replace("\r", "").trim();
 				modelo.setPlan(newcontenido);
 			}
-
+			
 			for (int i = 0; i < contenido.split("Asegurado").length; i++) {
 
 				if (contenido.split("Asegurado")[i].contains("Empleados y sus")) {
-					newcontenido += contenido.split("Asegurado")[i].split("Empleados y sus")[0].replace(" ", "###")
+					newcontenido += contenido.split("Asegurado")[i].split("Empleados y sus")[0].replace("@@@", "").replace("ITULAR", "###TITULAR")
+							.replace("ONYUGE", "###CONYUGE").replace("###T###", "###")
 							.replace("\r", "");
 				}
 			}
+
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			JSONObject jdatos = new JSONObject();
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 
 				if (newcontenido.split("\n")[i].split("-").length > 3) {
 
 					asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 1]));
-
 					asegurado.setAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-							.split("###")[newcontenido.split("\n")[i].split("###").length - 2]));
-
-					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 3]
-							.split("-").length > 2) {
+							.split("###")[newcontenido.split("\n")[i].split("###").length - 2]));			
 						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 								.split("###")[newcontenido.split("\n")[i].split("###").length - 3]));
-					} else {
 						asegurado.setEdad(newcontenido.split("\n")[i]
-								.split("###")[newcontenido.split("\n")[i].split("###").length - 3]);
-
-					}
-					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 4]
-							.contains("TITULAR")) {
+								.split("###")[newcontenido.split("\n")[i].split("###").length - 4]);
+					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 5].contains("TITULAR")) {
 						asegurado.setParentesco(1);
-
 						asegurado.setNombre(
-								newcontenido.split("\n")[i].split("TITULAR")[0].replace("@@@", "").replace("###", " "));
-
-					}
-					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 4]
+								newcontenido.split("\n")[i].split("TITULAR")[0].replace("@@@", "").replace("###", " ").trim());
+					}else if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 5]
 							.contains("CONYUGE")) {
 						asegurado.setParentesco(2);
+						asegurado.setNombre(
+								newcontenido.split("\n")[i].split("CONYUGE")[0].replace("@@@", "").replace("###", " ").trim());
+					}else {
+						asegurado.setParentesco(3);		
+						asegurado.setNombre(newcontenido.split("\n")[i].split(asegurado.getEdad())[0].replace("@@@", "").replace("###", " ").trim());
 					}
-					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 4]
-							.contains("HIJO") || newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 4]
-									.contains("HIJA")) {
-						asegurado.setParentesco(3);
-					}
-
 					asegurados.add(asegurado);
-				} else {
-
-				}
+				} 
 
 			}
 
