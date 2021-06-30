@@ -30,7 +30,7 @@ public class ZurichCertificadoModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-			//System.out.println("--->" + textoBusqueda(stripper, doc,"Datos del Contratante"));
+		
 			
 		
 		
@@ -60,8 +60,10 @@ public class ZurichCertificadoModel {
 
 				// certificado|busca paginas necesarias
 					PDFTextStripper s = new PDFTextStripper();
-					s.setParagraphStart("###");
+					//s.setParagraphStart("###");
+					 s.setWordSeparator("###");
 					s.setParagraphStart("@@@");
+			
 					s.setSortByPosition(true);			
 					s = pdfStripper;
 					x.append(s.getText(pdDoc));
