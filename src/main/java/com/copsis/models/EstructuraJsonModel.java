@@ -64,6 +64,8 @@ public class EstructuraJsonModel {
     private int retiro = 0;
     private int tipovida = 0;
     private int aportacion = 0;
+    private String subgrupo = "";
+    private String categoria= "";
   
     private List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
     private List<EstructuraRecibosModel> recibos = new ArrayList<>();

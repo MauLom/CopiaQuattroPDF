@@ -33,6 +33,7 @@ public class IdentificaCertificadoService {
              
              if (encontro == false) {
             	 if (contenido.contains("zurich") || contenido.contains("Zurich")) {
+            		
             		 ZurichCertificadoModel datosZurich = new ZurichCertificadoModel(pdfStripper, pdDoc, contenido);
 	                    modelo = datosZurich.procesar();
 	                    encontro = true;

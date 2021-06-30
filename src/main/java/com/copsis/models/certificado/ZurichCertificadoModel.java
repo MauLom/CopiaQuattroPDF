@@ -30,13 +30,14 @@ public class ZurichCertificadoModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
+			//System.out.println("--->" + textoBusqueda(stripper, doc,"Datos del Contratante"));
 			
-			switch (fn.tipoPoliza(contenido)) {
-			case 1:// Autos
-				modelo  = new ZurichCertificadoGrupo(textoBusqueda(stripper, doc,"Certificado Individual","Zurich Vida Compañía")).procesar();				
-				break;
+		
+		
+				modelo  = new ZurichCertificadoGrupo(textoBusqueda(stripper, doc,"Certificado Individual")).procesar();				
+
 			
-			}
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
@@ -47,7 +48,7 @@ public class ZurichCertificadoModel {
 	}
 	
 	
-	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar,String fintxvbq)
+	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar)
 			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
 		StringBuilder x = new StringBuilder();
 		int listado = 0;
@@ -55,11 +56,13 @@ public class ZurichCertificadoModel {
 		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
 			pdfStripper.setStartPage(i);
 			pdfStripper.setEndPage(i);
-			if (pdfStripper.getText(pdDoc).contains(buscar)  && pdfStripper.getText(pdDoc).contains(fintxvbq)) {
+			if (pdfStripper.getText(pdDoc).contains(buscar)) {
+
 				// certificado|busca paginas necesarias
 					PDFTextStripper s = new PDFTextStripper();
 					s.setParagraphStart("###");
-					s.setSortByPosition(true);
+					s.setParagraphStart("@@@");
+					s.setSortByPosition(true);			
 					s = pdfStripper;
 					x.append(s.getText(pdDoc));
 				
