@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.certificado.ZurichCertificadoGrupo;
 
 public class ZurichModel {
 
@@ -28,8 +29,8 @@ public class ZurichModel {
 		try {
 			
 			switch (fn.tipoPoliza(contenido)) {
-			case 1:// Autos
-				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+			case 2:// Autos
+				modelo  = new ZurichCertificadoGrupo(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
 			
 			}
