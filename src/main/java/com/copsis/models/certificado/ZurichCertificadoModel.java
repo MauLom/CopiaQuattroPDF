@@ -1,5 +1,7 @@
 package com.copsis.models.certificado;
 
+import java.io.IOException;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -31,7 +33,7 @@ public class ZurichCertificadoModel {
 			
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
-				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				modelo  = new ZurichCertificadoGrupo(textoBusqueda(stripper, doc,"Certificado Individual","Zurich Vida Compañía")).procesar();				
 				break;
 			
 			}
@@ -43,5 +45,29 @@ public class ZurichCertificadoModel {
 		}
 		
 	}
+	
+	
+	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar,String fintxvbq)
+			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
+		StringBuilder x = new StringBuilder();
+		int listado = 0;
+
+		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+			pdfStripper.setStartPage(i);
+			pdfStripper.setEndPage(i);
+			if (pdfStripper.getText(pdDoc).contains(buscar)  && pdfStripper.getText(pdDoc).contains(fintxvbq)) {
+				// certificado|busca paginas necesarias
+					PDFTextStripper s = new PDFTextStripper();
+					s.setParagraphStart("###");
+					s.setSortByPosition(true);
+					s = pdfStripper;
+					x.append(s.getText(pdDoc));
+				
+			}
+		}
+		return x.toString();
+	}
+	
+	
 
 }

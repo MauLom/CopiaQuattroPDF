@@ -17,9 +17,9 @@ public class ZurichCertificadoGrupo {
 	private int inicio = 0;
 	private int fin = 0;
 	
-	public ZurichCertificadoGrupo(String contenido, String recibos) {
+	public ZurichCertificadoGrupo(String contenido) {
 		this.contenido = contenido;
-		this.recibosText = recibos;
+		//this.recibosText = recibos;
 	}
 	
 	public EstructuraJsonModel procesar() {

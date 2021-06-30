@@ -6,11 +6,16 @@ import java.net.URL;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.certificado.ZurichCertificadoModel;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
 public class IdentificaCertificadoService {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 public EstructuraJsonModel queIndentificaCertificado( PdfForm pdfForm) throws  IOException {
