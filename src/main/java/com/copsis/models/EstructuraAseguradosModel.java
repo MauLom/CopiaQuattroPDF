@@ -10,7 +10,7 @@ public class EstructuraAseguradosModel {
 	private int sexo = 0;
 	private int parentesco = 0;
 	private String certificado = "";
-	private String alta = "";
-	private String edad = "";
+	private String fechaAlta = "";
+	private Integer edad = 0;
 
 }

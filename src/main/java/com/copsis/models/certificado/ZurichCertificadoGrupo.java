@@ -75,12 +75,12 @@ public class ZurichCertificadoGrupo {
 
 					asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 1]));
-					asegurado.setAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+					asegurado.setFechaAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 2]));			
 						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 								.split("###")[newcontenido.split("\n")[i].split("###").length - 3]));
-						asegurado.setEdad(newcontenido.split("\n")[i]
-								.split("###")[newcontenido.split("\n")[i].split("###").length - 4]);
+						asegurado.setEdad(Integer.parseInt( newcontenido.split("\n")[i]
+								.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
 					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 5].contains("TITULAR")) {
 						asegurado.setParentesco(1);
 						asegurado.setNombre(
@@ -92,13 +92,13 @@ public class ZurichCertificadoGrupo {
 								newcontenido.split("\n")[i].split("CONYUGE")[0].replace("@@@", "").replace("###", " ").trim());
 					}else {
 						asegurado.setParentesco(3);		
-						asegurado.setNombre(newcontenido.split("\n")[i].split(asegurado.getEdad())[0].replace("@@@", "").replace("###", " ").trim());
+						asegurado.setNombre(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+								.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].replace("@@@", "").replace("###", " ").trim());
 					}
 					asegurados.add(asegurado);
 				} 
 
 			}
-
 			modelo.setAsegurados(asegurados);
 
 			return modelo;
