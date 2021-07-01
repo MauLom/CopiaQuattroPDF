@@ -516,6 +516,7 @@ public class DataToolsModel {
 		case "HIJO":
 		case "MLO":
 		case "MASC.":
+		case "M":
 			result = true;
 			break;
 		case "FEMENINO":

@@ -1,5 +1,7 @@
 package com.copsis.models;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
@@ -12,5 +14,9 @@ public class EstructuraAseguradosModel {
 	private String certificado = "";
 	private String fechaAlta = "";
 	private Integer edad = 0;
+    private BigDecimal primaneta = BigDecimal.ZERO;
+	private String sa = "";
+	private String cobertura = "";
+	
 
 }

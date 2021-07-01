@@ -44,6 +44,7 @@ public class IdentificaCertificadoService {
             		 ZurichCertificadoModel datosZurich = new ZurichCertificadoModel(pdfStripper, pdDoc, contenido);
 	                    modelo = datosZurich.procesar();
 	                    encontro = true;
+	                    pdDoc.close();
 	                }
             	 
              }
