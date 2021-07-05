@@ -63,9 +63,9 @@ public class ZurichAsegurados {
 						asegurado.setAntiguedad(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -7 ]));
 
 						if(newcontenido.split("\n")[i+1].split("-").length == 1) {
-							asegurado.setNombre((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8] +" " + newcontenido.split("\n")[i+1]).replace("+", "").replace("  ", "").trim());
+							asegurado.setNombre((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8] +" " + newcontenido.split("\n")[i+1]).replace("+", "").replace("  ", " ").trim());
 						}else {
-							asegurado.setNombre(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8].replace("+","").replace("  ", "").trim());
+							asegurado.setNombre(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8].replace("+","").replace("  ", " ").trim());
 						}
 
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -9].trim()));
