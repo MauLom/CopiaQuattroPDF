@@ -23,6 +23,9 @@ public class ZurichCertificadoGrupo {
 	private String newcontenido = "";
 	private String recibosText = "";
 	private String resultado = "";
+	private String subgrupo = "";
+	private String valorsubgrupo = "";
+	private String categoria = "";
 	private int inicio = 0;
 	private int fin = 0;
 
@@ -33,46 +36,50 @@ public class ZurichCertificadoGrupo {
 
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		contenido = contenido.replace("Empleados ###y ###sus", "Empleados y sus");
+		contenido = contenido.replace("Empleados ###y ###sus", "Empleados y sus").replace("NacionalSubgrupo:", "Subgrupo:");
 			
 		try {
-			inicio = contenido.indexOf("Categoria");
-			if (inicio > 0) {
-				newcontenido = contenido.split("Categoria")[1].split("\n")[0].replace("@@@", "").replace("###", "")
-						.replace("\r", "").trim();
-				modelo.setCategoria(newcontenido);
-			}
+		
 
-			inicio = contenido.indexOf("Subgrupo");
-			if (inicio > 0) {
-				newcontenido = contenido.split("Subgrupo")[1].split("\n")[0].replace("@@@", "").replace("###", "")
-						.replace("\r", "").trim();
-				modelo.setSubgrupo(newcontenido);
-			}
 			inicio = contenido.indexOf("Plan:");
 			if (inicio > 0) {
 				newcontenido = contenido.split("Plan:")[1].split("\n")[0].replace("@@@", "").replace("###", "")
 						.replace("\r", "").trim();
 				modelo.setPlan(newcontenido);
 			}
-			
-			for (int i = 0; i < contenido.split("Asegurado").length; i++) {
 
-				if (contenido.split("Asegurado")[i].contains("Empleados y sus")) {
-					newcontenido += contenido.split("Asegurado")[i].split("Empleados y sus")[0].replace("@@@", "").replace("ITULAR", "###TITULAR")
+			for (int i = 0; i < contenido.split("Certificado Individual").length; i++) {
+				
+				
+			
+				if (contenido.split("Certificado Individual")[i].contains("Empleados y sus")) {
+					newcontenido += contenido.split("Certificado Individual")[i].split("Empleados y sus")[0].replace("@@@", "").replace("ITULAR", "###TITULAR")
 							.replace("ONYUGE", "###CONYUGE").replace("###T###", "###")
 							.replace("\r", "");
 				}
 			}
+
+
 
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			JSONObject jdatos = new JSONObject();
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-
-				if (newcontenido.split("\n")[i].split("-").length > 3) {
-
+		        
+				if(newcontenido.split("\n")[i].contains("Subgrupo")) {
+					valorsubgrupo= newcontenido.split("\n")[i].split("\n")[0].split("Subgrupo")[1];
+				}
+				if(newcontenido.split("\n")[i].contains("Categoria")) {
+					categoria= newcontenido.split("\n")[i].split("\n")[0].split("Categoria")[1];
+				}
+		
+		
+				
+				if (newcontenido.split("\n")[i].split("-").length > 4) {
+		
+					asegurado.setSubgrupo( valorsubgrupo.trim());
+					asegurado.setCategoría( categoria.trim());
 					asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 1]));
 					asegurado.setFechaAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
@@ -95,12 +102,13 @@ public class ZurichCertificadoGrupo {
 						asegurado.setNombre(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
 								.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].replace("@@@", "").replace("###", " ").trim());
 					}
+				
 					asegurados.add(asegurado);
 				} 
 
 			}
 			modelo.setAsegurados(asegurados);
-
+		
 			return modelo;
 		} catch (Exception ex) {
 

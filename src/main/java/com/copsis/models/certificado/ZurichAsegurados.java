@@ -17,6 +17,9 @@ public class ZurichAsegurados {
 		private String newcontenido = "";
 		private String recibosText = "";
 		private String resultado = "";
+		private String resultadoName = "";
+		private String subgrupo= "";
+		private String categoria = "";
 		private int inicio = 0;
 		private int fin = 0;
 
@@ -29,39 +32,26 @@ public class ZurichAsegurados {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			try {
 				
-				inicio = contenido.indexOf("Contratante");
-				fin = contenido.indexOf("Certificado");
-				
-				if(inicio > 0 && fin >  0 && inicio < fin) {
-					newcontenido = contenido.substring(inicio, fin).replace("@@@","").replace("\r", "").trim();
-					
-					for (int i = 0; i < newcontenido.split("\n").length; i++) {				
-						if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Subgrupo")  && newcontenido.split("\n")[i].contains("Categoría"))
-						{
-							if(newcontenido.split("\n")[i+1].length() > 5) {
-								modelo.setContratante(newcontenido.split("\n")[i+1].split("###")[0].trim());
-								modelo.setSubgrupo(newcontenido.split("\n")[i+1].split("###")[1].trim());
-								modelo.setCategoria(newcontenido.split("\n")[i+1].split("###")[2].trim());
-							}else {
-								modelo.setContratante(newcontenido.split("\n")[i+2].split("###")[0].trim());
-								modelo.setSubgrupo(newcontenido.split("\n")[i+2].split("###")[1].trim());
-								modelo.setCategoria(newcontenido.split("\n")[i+2].split("###")[2].trim());
-							}				
-						}
-					}
-				}
-				
+		
 				
 				newcontenido ="";
-				for (int i = 0; i < contenido.split("Certificado").length; i++) {
+				for (int i = 0; i < contenido.split("Contratante").length; i++) {
 
-					if (contenido.split("Certificado")[i].contains("Total de Asegurados")) {
-						newcontenido += contenido.split("Certificado")[i].replace("@@@", "").replace("\r", "").split("Total de Asegurados")[0].replace("TITU", "TITULAR")
-								.replace("CONY", "CONYUGUE");
+					if (contenido.split("Contratante")[i].contains("Total de Asegurados")) {
+						newcontenido += contenido.split("Contratante")[i].replace("@@@", "").replace("\r", "").split("Total de Asegurados")[0].replace("TITU", "TITULAR")
+								.replace("CONY", "CONYUGUE").replace("Alta-Baja", "");
 					}
 				}
+		
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+
+			
+				if(newcontenido.split("\n")[i].contains("Subgrupo")) {
+					System.out.println(newcontenido.split("\n")[i+1]);
+					subgrupo = newcontenido.split("\n")[i+1].split("###")[1];
+					categoria = newcontenido.split("\n")[i+1].split("###")[2];
+				}
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();					
 					if(newcontenido.split("\n")[i].split("-").length > 3) {											
 						asegurado.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -1 ].replace("Pesos", "").trim())));
@@ -71,16 +61,18 @@ public class ZurichAsegurados {
 						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -5 ]) ? 1 : 0 );
 						asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -6 ]));
 						asegurado.setAntiguedad(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -7 ]));
-						System.out.println(newcontenido.split("\n")[i+2].length() +"==>"+ newcontenido.split("\n")[i+2].split("-").length);
-						if(newcontenido.split("\n")[i+2].length() > 0 && newcontenido.split("\n")[i+2].split("-").length == 1 ) {
-							asegurado.setNombre(((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8] +"" +  newcontenido.split("\n")[i+2]).replace("+", "")).trim());
+
+						if(newcontenido.split("\n")[i+1].split("-").length == 1) {
+							asegurado.setNombre((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8] +" " + newcontenido.split("\n")[i+1]).replace("+", "").trim());
 						}else {
-							asegurado.setNombre((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8].replace("+", "")).trim());
+							asegurado.setNombre(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8].replace("+","").trim());
 						}
+
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -9].trim()));
 						asegurado.setCertificado(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -10].trim());
 						
-						System.out.println(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -9]);
+						asegurado.setSubgrupo(subgrupo.trim());
+						asegurado.setCategoría(categoria.trim());
 						asegurados.add(asegurado);
 					}
 					

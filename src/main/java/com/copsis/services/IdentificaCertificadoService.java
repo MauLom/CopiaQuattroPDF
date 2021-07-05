@@ -28,11 +28,7 @@ public class IdentificaCertificadoService {
              PDDocument pdDoc = new PDDocument(cosDoc);
              pdfStripper.setStartPage(1);
              pdfStripper.setEndPage(1);
-             pdfStripper.setSortByPosition(true);
-             pdfStripper.setParagraphStart("@@@");
-             pdfStripper.setWordSeparator("###");
-  
-             pdfStripper.setAddMoreFormatting(true);
+     ;
              String contenido = pdfStripper.getText(pdDoc);
              boolean encontro = false;
              
