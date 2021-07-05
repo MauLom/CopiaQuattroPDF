@@ -17,6 +17,8 @@ public class EstructuraAseguradosModel {
     private BigDecimal primaneta = BigDecimal.ZERO;
 	private String sa = "";
 	private String cobertura = "";
+	private String subgrupo = "";
+	private String categoría = "";
 	
 
 }

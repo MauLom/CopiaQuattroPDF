@@ -35,6 +35,7 @@ public class ZurichCertificadoModel {
 			if(contenido.contains("Detalle de Sumas Aseguradas")) {
 				modelo = new ZurichAsegurados(textoBusqueda(stripper, doc, "Detalle de Sumas Aseguradas")).procesar();	
 			}else {	
+			
 				modelo = new ZurichCertificadoGrupo(textoBusqueda(stripper, doc, "Certificado Individual")).procesar();
 			}
 			return modelo;
@@ -46,34 +47,22 @@ public class ZurichCertificadoModel {
 
 	}
 
-	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { // BUSCA
-																													// UNA
-																													// PAGINA
-																													// QUE
-																													// CONTENGA
-																													// LO
-																													// BUSCADO
-		StringBuilder x = new StringBuilder();
-		int listado = 0;
-
-		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
-			pdfStripper.setStartPage(i);
-			pdfStripper.setEndPage(i);
-			if (pdfStripper.getText(pdDoc).contains(buscar)) {
-
-				// certificado|busca paginas necesarias
+	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
+        String x = "";
+        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+            pdfStripper.setStartPage(i);
+            pdfStripper.setEndPage(i);
+	
+			if (pdfStripper.getText(pdDoc).contains(buscar) ) {
 				PDFTextStripper s = new PDFTextStripper();
-				// s.setParagraphStart("###");
-				s.setWordSeparator("###");
-				s.setParagraphStart("@@@");
-
-				s.setSortByPosition(true);
 				s = pdfStripper;
-				x.append(s.getText(pdDoc));
-
+				s.setSortByPosition(true);
+				s.setParagraphStart("@@@");
+				  s.setWordSeparator("###");
+				x += s.getText(pdDoc) ;
 			}
 		}
-		return x.toString();
-	}
+        return x;
+    }
 
 }
