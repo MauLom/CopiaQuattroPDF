@@ -121,10 +121,10 @@ public class ImpresionInter {
 							12, lineBoders, "", padding);
 					baseRow = communsPdf.setRow(table, 15);
 					//File firma = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/imgF.png");
-					communsPdf.setCell(baseRow, 40, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/imgF.png"), 6, 37, black);
+					communsPdf.setCell(baseRow, 40, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/imgFirma.png"), 6, 37, black);
 					table.draw();
 
-					yStart -= table.getHeaderAndDataHeight() + 25;
+					yStart -= table.getHeaderAndDataHeight() + 15;
 
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 100, document, page, false,
 							true);
