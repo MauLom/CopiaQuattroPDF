@@ -18,7 +18,7 @@ public class EstructuraAseguradosModel {
 	private String sa = "";
 	private String cobertura = "";
 	private String subgrupo = "";
-	private String categoría = "";
+	private String categoria = "";
 	
 
 }
