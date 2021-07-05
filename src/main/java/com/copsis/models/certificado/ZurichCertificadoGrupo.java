@@ -79,7 +79,7 @@ public class ZurichCertificadoGrupo {
 				if (newcontenido.split("\n")[i].split("-").length > 4) {
 		
 					asegurado.setSubgrupo( valorsubgrupo.trim());
-					asegurado.setCategoría( categoria.trim());
+					asegurado.setCategoria( categoria.trim());
 					asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 1]));
 					asegurado.setFechaAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
@@ -91,16 +91,16 @@ public class ZurichCertificadoGrupo {
 					if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 5].contains("TITULAR")) {
 						asegurado.setParentesco(1);
 						asegurado.setNombre(
-								newcontenido.split("\n")[i].split("TITULAR")[0].replace("@@@", "").replace("###", " ").trim());
+								newcontenido.split("\n")[i].split("TITULAR")[0].replace("@@@", "").replace("###", " ").trim().replace("  ", ""));
 					}else if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 5]
 							.contains("CONYUGE")) {
 						asegurado.setParentesco(2);
 						asegurado.setNombre(
-								newcontenido.split("\n")[i].split("CONYUGE")[0].replace("@@@", "").replace("###", " ").trim());
+								newcontenido.split("\n")[i].split("CONYUGE")[0].replace("@@@", "").replace("###", " ").trim().replace("  ", ""));
 					}else {
 						asegurado.setParentesco(3);		
 						asegurado.setNombre(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
-								.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].replace("@@@", "").replace("###", " ").trim());
+								.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].replace("@@@", "").replace("###", " ").trim().replace("  ", ""));
 					}
 				
 					asegurados.add(asegurado);
