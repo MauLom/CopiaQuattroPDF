@@ -31,7 +31,23 @@ public class ZurichAsegurados {
 		public EstructuraJsonModel procesar() {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			try {
+				inicio = contenido.indexOf("Contratante");
+				fin = contenido.indexOf("Certificado");
 				
+				if(inicio > 0 && fin >  0 && inicio < fin) {
+					newcontenido = contenido.substring(inicio, fin).replace("@@@","").replace("\r", "").trim();
+					
+					for (int i = 0; i < newcontenido.split("\n").length; i++) {				
+						if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Subgrupo")  && newcontenido.split("\n")[i].contains("Categoría"))
+						{
+							if(newcontenido.split("\n")[i+1].length() > 5) {
+								modelo.setContratante(newcontenido.split("\n")[i+1].split("###")[0].trim());
+							}else {
+								modelo.setContratante(newcontenido.split("\n")[i+2].split("###")[0].trim());
+							}				
+						}
+					}
+				}
 		
 				
 				newcontenido ="";
