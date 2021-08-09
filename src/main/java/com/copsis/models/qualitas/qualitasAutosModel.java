@@ -41,6 +41,7 @@ public class qualitasAutosModel {
 
 			// ramo
 			modelo.setRamo("Autos");
+			System.out.println(contenido);
 
 			// fecha_emision
 			inicio = contenido.indexOf("IMPORTE TOTAL");

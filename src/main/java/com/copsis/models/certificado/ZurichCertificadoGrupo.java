@@ -48,10 +48,7 @@ public class ZurichCertificadoGrupo {
 				modelo.setPlan(newcontenido);
 			}
 
-			for (int i = 0; i < contenido.split("Certificado Individual").length; i++) {
-				
-				
-			
+			for (int i = 0; i < contenido.split("Certificado Individual").length; i++) {					
 				if (contenido.split("Certificado Individual")[i].contains("Empleados y sus")) {
 					newcontenido += contenido.split("Certificado Individual")[i].split("Empleados y sus")[0].replace("@@@", "").replace("ITULAR", "###TITULAR")
 							.replace("ONYUGE", "###CONYUGE").replace("###T###", "###")
