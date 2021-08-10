@@ -54,7 +54,6 @@ public class IdentificaPolizaService {
              String contenidoAux="";
 
              boolean encontro = false;
-             
              //CHUBB
              if (encontro == false) {
                  if (contenido.contains("Chubb")) {
@@ -87,7 +86,7 @@ public class IdentificaPolizaService {
              // ENTRADA PARA MAPFRE
              if (encontro == false) {
                  if (contenido.length() > 502) {
-                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {                        
+                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {    
                     	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenido);
                     	 modelo = datosmapfre.procesa();
                          encontro = true;
