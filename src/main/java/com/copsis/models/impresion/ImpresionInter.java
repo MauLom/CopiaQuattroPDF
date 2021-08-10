@@ -55,7 +55,7 @@ public class ImpresionInter {
 					//File logo = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/interLogo.png");
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 250, document, page, false, true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/interLogo.png"), 0, 0, black);
+					communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/LOGO-INTER-SINALOA.png"), 0, 0, black);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 100;
@@ -137,29 +137,28 @@ public class ImpresionInter {
 							13, lineBoders, "", padding);
 					table.draw();
 
-					yStart = 100;
+					yStart = 90;
 					//File redes = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/redes.png");
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 50, document, page, false,
 							true);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "Interprotección,Agente de Seguros y de Fianzas,S.A de C.V.",
-							black, false, "C", 13, lineBoders, "", padding);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "(667) 752 0585", black, false, "C", 13, lineBoders, "", padding);
-					baseRow = communsPdf.setRow(table, 15);
+					baseRow = communsPdf.setRow(table, 12);
+					communsPdf.setCell(baseRow, 100, "Interprotección Sinaloa, Agente de Seguros y de Fianzas SA de CV",
+							black, true, "C", 13, lineBoders, "", padding);
+					baseRow = communsPdf.setRow(table, 12);
+					communsPdf.setCell(baseRow, 50, "667 752 0585 / 90|", black, true, "R", 13, lineBoders, "", padding);
+					communsPdf.setCell(baseRow, 50, "800 000 312", black, false, "l", 13, lineBoders, "", padding);
+					baseRow = communsPdf.setRow(table, 12);
 					communsPdf.setCell(baseRow, 100,
-							"Paseo Niños Héroes No.700-5 Pte., Centro Culiacán,80000,Culiacán, Sin.", black, false, "C",
+							"Blvd. Paseo Niños Héroes #700 Int. 5, Colonia Centro, CP.80000, Culiacán, Sinaloa", black, false, "C",
 							13, lineBoders, "", padding);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 45, "www.inter.mx", black, false, "R", 13, lineBoders, "", padding);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/redes.png"), 6, 37, black);
-					communsPdf.setCell(baseRow, 40, "interprotección", black, false, "L", 13, lineBoders, "", padding);
+//					baseRow = communsPdf.setRow(table, 15);
+//					communsPdf.setCell(baseRow, 45, "www.inter.mx", black, false, "R", 13, lineBoders, "", padding);
+//					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/redes.png"), 6, 37, black);
+//					communsPdf.setCell(baseRow, 40, "interprotección", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-				
-			
 					return output.toByteArray();
 				} finally {
 					document.close();
