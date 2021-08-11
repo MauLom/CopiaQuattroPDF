@@ -32,6 +32,7 @@ public class QualitasModel {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
 
+		
 				if (pagIni < pagFin) {
 					qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
 							fn.caratula(pagIni, pagFin, stripper, doc));

@@ -42,6 +42,7 @@ public class qualitasAutosModel {
 			// ramo
 			modelo.setRamo("Autos");
 
+
 			// fecha_emision
 			inicio = contenido.indexOf("IMPORTE TOTAL");
 			fin = contenido.lastIndexOf("www.qualitas.com.mx");

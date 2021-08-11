@@ -25,6 +25,7 @@ import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
+import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.zurich.ZurichModel;
 
@@ -50,9 +51,9 @@ public class IdentificaPolizaService {
              pdfStripper.setEndPage(1);
              pdfStripper.setParagraphStart("@@@");
              String contenido = pdfStripper.getText(pdDoc);
+             String contenidoAux="";
 
              boolean encontro = false;
-             
              //CHUBB
              if (encontro == false) {
                  if (contenido.contains("Chubb")) {
@@ -85,10 +86,40 @@ public class IdentificaPolizaService {
              // ENTRADA PARA MAPFRE
              if (encontro == false) {
                  if (contenido.length() > 502) {
-                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {                        
+                     if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {    
                     	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenido);
                     	 modelo = datosmapfre.procesa();
                          encontro = true;
+                     }
+                 }
+             }
+             
+             // ENTRADA PARA SEGUROS MONTERREY
+             if (encontro == false) {
+                 if (contenido.contains("Seguros a\r\n" + "Monterrey")
+                         || contenido.contains("Seguros Monterrey")
+                         || contenido.contains("Seguros a Monterrey")
+                         || contenido.contains("@@@Seguros a\n" + "Monterrey")) {
+                	 SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosSegurosMty.procesa();
+                     encontro = true;
+                 } else if (contenido.contains("COLECTIVO EMPRESARIAL")) {
+                	 SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosSegurosMty.procesa();
+                     encontro = true;
+                 } else {
+
+                     contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);
+
+                     if (contenidoAux.contains("Seguros a\r\n" + "Monterrey")
+                             || contenidoAux.contains("Seguros Monterrey")
+                             || contenidoAux.contains("Seguros a Monterrey")
+                             || contenidoAux.contains("@@@Seguros a\n" + "Monterrey")
+                             || contenidoAux.contains("SEGUROS MONTERREY")) {
+                    	 SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
+                    	 modelo = datosSegurosMty.procesa();
+                         encontro = true;
+
                      }
                  }
              }

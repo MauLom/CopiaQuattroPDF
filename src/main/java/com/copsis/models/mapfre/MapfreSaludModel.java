@@ -88,6 +88,10 @@ public class MapfreSaludModel {
 				}
 
 			}
+		
+			if(contenido.contains("PÓLIZA-ENDOSO") &&  modelo.getPoliza().length() == 0) {
+				modelo.setPoliza(contenido.split("PÓLIZA-ENDOSO")[1].split("-")[0].replace("###", ""));				
+			}
 
 			if (fn.filtroPorRango(contenido, 6).indexOf("Contratante: ") > -1) {
 
