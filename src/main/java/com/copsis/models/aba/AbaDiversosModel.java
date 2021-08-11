@@ -69,7 +69,7 @@ public class AbaDiversosModel {
 						modelo.setCp( newcontenido.split("\n")[i].split("C.P:")[1].split("###")[1]);
 					}
 					if(newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Pago")){
-						modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("Forma")[0].replace("###", ""));
+						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("Forma")[0].replace("###", ""));
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Pago:")[1].replace("###", "").replace("\r", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("emisión:")){
@@ -112,6 +112,17 @@ public class AbaDiversosModel {
 				
 			}
 			
+			/*nombre del  agente*/
+		System.out.println(contenido);
+		inicio = contenido.indexOf("Nombre del agente");
+		fin = contenido.indexOf("AVISO###IMPORTANTE:");
+		if(inicio >  0 && fin >  0 && inicio < fin) {
+			newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+			for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				
+			}
+		}
+			
 			//proceso de ubicaciones
 
 			
@@ -122,7 +133,7 @@ public class AbaDiversosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	;
+	
 					
 					if(newcontenido.split("\n")[i].contains("C.P.")) {
 						ubicacion.setCp(newcontenido.split("\n")[i].split("C.P.")[1]);
