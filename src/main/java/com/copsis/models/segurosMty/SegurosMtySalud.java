@@ -264,7 +264,6 @@ public class SegurosMtySalud {
          }
 			return modelo;
 		} catch (Exception ex) {
-			System.out.println("error ==> " + ex.getLocalizedMessage());
 			modelo.setError(
 					SegurosMtySalud.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
