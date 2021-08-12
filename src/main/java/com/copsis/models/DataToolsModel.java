@@ -819,5 +819,14 @@ public class DataToolsModel {
 		return resultado.toString();
 	}	
 	
+	public String numTx (String cadena) {
+		 Pattern p = Pattern.compile("-?\\d+(,\\d+)*?\\.?\\d+?");
+		 String resultado = "";
+	        Matcher m = p.matcher(cadena);
+	        while (m.find()) {  
+	        	resultado = m.group();
+	        }
+	        return resultado.toString();
+	}
 	
 }

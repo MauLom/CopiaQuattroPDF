@@ -20,6 +20,7 @@ import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
+import com.copsis.models.hdi.HdiModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
@@ -209,6 +210,18 @@ public class IdentificaPolizaService {
 	                if (contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")) { //www.AIG.com.mx
 	                	AigModel datosAig = new AigModel(pdfStripper, pdDoc, contenido);
 	                    modelo = datosAig.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            // ENTRADA PARA HDI
+	            if (encontro == false) {
+	                if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
+	                        || contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
+	                        || contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
+	                        || contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+	                	HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
+	                	modelo = datosHdi.procesar();
 	                    encontro = true;
 	                }
 	            }
