@@ -5,12 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.banorte.BanorteAutosModel;
-import com.copsis.models.banorte.BanorteDiversos;
-import com.copsis.models.banorte.BanorteModel;
-import com.copsis.models.banorte.BanorteSaludModel;
-import com.copsis.models.banorte.BanorteVidaModel;
-import com.copsis.models.sisnova.SisnovaSaludModel;
+
 
 public class HdiModel {
 	// Clases

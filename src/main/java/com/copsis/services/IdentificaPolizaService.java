@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
@@ -52,6 +53,7 @@ public class IdentificaPolizaService {
              pdfStripper.setParagraphStart("@@@");
              String contenido = pdfStripper.getText(pdDoc);
 
+             String contenidoAux="";
              boolean encontro = false;
              
              //CHUBB
@@ -114,6 +116,23 @@ public class IdentificaPolizaService {
                 	 datosAba.setContenido(contenido);
                 	 modelo = datosAba.procesa();
                      encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA AFIRME
+             if (encontro == false) {
+                 contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
+
+                 if (contenido.contains("AFIRME GRUPO FINANCIERO") || contenido.contains("Afirme Grupo Financiero")) {
+                	 AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosAfirme.procesar();
+                     encontro = true;
+                 } else {
+                     if (contenidoAux.contains("AFIRME GRUPO FINANCIERO") || contenidoAux.contains("Afirme Grupo Financiero")) {
+                    	 AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
+                    	 modelo = datosAfirme.procesar();
+                         encontro = true;
+                     }
                  }
              }
              
