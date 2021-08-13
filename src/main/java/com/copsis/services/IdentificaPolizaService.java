@@ -55,7 +55,6 @@ public class IdentificaPolizaService {
              String contenido = pdfStripper.getText(pdDoc);
              String contenidoAux="";
 
-             String contenidoAux="";
              boolean encontro = false;
              //CHUBB
              if (encontro == false) {
