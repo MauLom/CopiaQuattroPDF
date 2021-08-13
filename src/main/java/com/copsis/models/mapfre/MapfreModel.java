@@ -43,13 +43,12 @@ public class MapfreModel {
 	                    }
 	                }
 	            }
-			  if (contenido.contains("END CAMBIO DE AGENT") ||  contenido.contains("VIDA INDIVIDUAL") || contenido.contains("PREVICANCER") || contenido.contains("FUNERARIOS") ||  contenido.contains("SEGURO DE VIDA")) { //VIDA
-	            
+			  if (contenido.contains("END CAMBIO DE AGENT") ||  contenido.contains("VIDA INDIVIDUAL") || contenido.contains("PREVICANCER") || contenido.contains("FUNERARIOS") ||  contenido.contains("SEGURO DE VIDA")) { //VIDA	            
                     modelo  = new MapfreVidaModel(fn.caratula(1, 5, stripper, doc)).procesar();
               
                 }
 			  
-			  if(contenido.contains("GASTOS MÉDICOS")) {
+			  if(contenido.contains("GASTOS MÉDICOS")  || contenido.contains("PROTECCION MEDICA A TU MEDIDA")) {
 			        modelo  = new MapfreSaludModel(fn.caratula(1, 5, stripper, doc)).procesar();
 			  }
 			  
