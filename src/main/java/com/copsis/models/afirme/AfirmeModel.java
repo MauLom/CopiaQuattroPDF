@@ -5,7 +5,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.hdi.HdiAutosModel;
 
 public class AfirmeModel {
 	// Clases
@@ -16,7 +15,7 @@ public class AfirmeModel {
 	private PDDocument doc;
 	private String contenido;
 	private Integer pagIni =0;
-	private Integer pagFin =0;
+
 	
 	public AfirmeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
@@ -26,10 +25,11 @@ public class AfirmeModel {
 	public EstructuraJsonModel procesar() {
 	
 		try {
-System.out.println(fn.tipoPoliza(contenido));
+	
 			switch (fn.tipoPoliza(contenido)) {
 			case 1://Autos
-				modelo  = new AfirmeAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();								  
+				pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+				modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();								  
 				break;		
 			default:
 				break;

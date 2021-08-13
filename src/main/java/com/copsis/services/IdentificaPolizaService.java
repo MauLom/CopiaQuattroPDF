@@ -121,9 +121,10 @@ public class IdentificaPolizaService {
              
              // ENTRADA PARA AFIRME
              if (encontro == false) {
+            	 
                  contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
 
-                 if (contenido.contains("AFIRME GRUPO FINANCIERO") || contenido.contains("Afirme Grupo Financiero")) {
+                 if (contenido.contains("AFIRME GRUPO FINANCIERO") || contenido.contains("Afirme Grupo Financiero") || contenido.contains("www.afirme.com")) {
                 	 AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosAfirme.procesar();
                      encontro = true;
