@@ -45,7 +45,8 @@ public class AbaDiversosModel {
 			
 			if(inicio > 0 &&  fin >  0 && inicio < fin ) {
 				newcontenido = contenido.substring(inicio,fin);
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {									
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {		
+
 					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0].replace("###", ""));
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("DEL")[1].split("HORAS")[0].replace("12:00", "").replace("###", "").trim()));
@@ -69,22 +70,32 @@ public class AbaDiversosModel {
 						modelo.setCp( newcontenido.split("\n")[i].split("C.P:")[1].split("###")[1]);
 					}
 					if(newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Pago")){
-						modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("Forma")[0].replace("###", ""));
+						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("Forma")[0].replace("###", ""));
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Pago:")[1].replace("###", "").replace("\r", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("emisión:")){
 						String x=newcontenido.split("\n")[i].split("emisión:")[1].replace(" ", "###");
-						x = x.split("###")[0] +"-"+ x.split("###")[1] +"-"+ x.split("###")[2].trim();				
+				
+					 if( x.split("###")[0].length() > 1 ) {
+							x = x.split("###")[0] +"-"+ x.split("###")[1] +"-"+ x.split("###")[2].trim();
+					 }else {						
+							x = x.split("###")[1] +"-"+ x.split("###")[2] +"-"+ x.split("###")[3].trim();							
+					 }					
 						modelo.setFechaEmision(fn.formatDate_MonthCadena(x));
-						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].replace("###", "").replace("\r", "").trim()));						
+						
+						if(newcontenido.split("\n")[i].contains("Moneda")) {
+							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].replace("###", "").replace("\r", "").trim()));
+						}
+												
+					}
+					if(newcontenido.split("\n")[i].contains("Moneda:") && modelo.getMoneda() == 0){
+				
+						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("###")[1].trim()));
 					}
 				}			
 			}
 			
 			//PRIMAS
-			
-
-			
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Prima Total");
 			
@@ -112,6 +123,19 @@ public class AbaDiversosModel {
 				
 			}
 			
+			/*nombre del  agente*/
+		inicio = contenido.indexOf("Nombre del agente");
+		fin = contenido.indexOf("AVISO###IMPORTANTE:");
+		if(inicio >  0 && fin >  0 && inicio < fin) {
+			newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+			for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				if(newcontenido.split("\n")[i].contains("Nombre del agente")) {
+					modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[1]);
+				}
+
+			}
+		}
+			
 			//proceso de ubicaciones
 
 			
@@ -122,7 +146,7 @@ public class AbaDiversosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	;
+	
 					
 					if(newcontenido.split("\n")[i].contains("C.P.")) {
 						ubicacion.setCp(newcontenido.split("\n")[i].split("C.P.")[1]);

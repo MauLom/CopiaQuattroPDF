@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
+import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
@@ -20,6 +21,7 @@ import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
+import com.copsis.models.hdi.HdiModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
@@ -53,6 +55,7 @@ public class IdentificaPolizaService {
              String contenido = pdfStripper.getText(pdDoc);
              String contenidoAux="";
 
+             String contenidoAux="";
              boolean encontro = false;
              //CHUBB
              if (encontro == false) {
@@ -144,6 +147,23 @@ public class IdentificaPolizaService {
                 	 datosAba.setContenido(contenido);
                 	 modelo = datosAba.procesa();
                      encontro = true;
+                 }
+             }
+             
+             // ENTRADA PARA AFIRME
+             if (encontro == false) {
+                 contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
+
+                 if (contenido.contains("AFIRME GRUPO FINANCIERO") || contenido.contains("Afirme Grupo Financiero")) {
+                	 AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
+                	 modelo = datosAfirme.procesar();
+                     encontro = true;
+                 } else {
+                     if (contenidoAux.contains("AFIRME GRUPO FINANCIERO") || contenidoAux.contains("Afirme Grupo Financiero")) {
+                    	 AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
+                    	 modelo = datosAfirme.procesar();
+                         encontro = true;
+                     }
                  }
              }
              
@@ -240,6 +260,18 @@ public class IdentificaPolizaService {
 	                if (contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")) { //www.AIG.com.mx
 	                	AigModel datosAig = new AigModel(pdfStripper, pdDoc, contenido);
 	                    modelo = datosAig.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            // ENTRADA PARA HDI
+	            if (encontro == false) {
+	                if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
+	                        || contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
+	                        || contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
+	                        || contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+	                	HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
+	                	modelo = datosHdi.procesar();
 	                    encontro = true;
 	                }
 	            }
