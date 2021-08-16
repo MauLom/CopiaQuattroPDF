@@ -110,7 +110,6 @@ public class MapfreSaludModel {
 							inicio = dato.trim().indexOf("R.F.C.") + 6;
 							fin = dato.trim().length();
 
-							System.out.println(dato.substring(inicio, fin));
 							modelo.setRfc(dato.substring(inicio, fin).trim().replace("-", ""));
 						}
 						if (dato.contains("###C.P:")) {
@@ -175,7 +174,7 @@ public class MapfreSaludModel {
 							String info = contenido.substring(ind, ind + 400);
 
 							for (String a : info.split("\r\n")) {
-								System.out.println("-----< " + a);
+	
 								//int ga = info.split("###").length;
 
 								if (a.contains("@@@CONTRATANTE:")) {
