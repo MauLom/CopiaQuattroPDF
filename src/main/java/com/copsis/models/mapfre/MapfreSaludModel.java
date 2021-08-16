@@ -36,6 +36,7 @@ public class MapfreSaludModel {
 	public EstructuraJsonModel procesar() {
 		inicontenido = fn.fixContenido(contenido);
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = contenido.replace("R.F.C:", "R.F.C.");
 		try {
 
 			modelo.setTipo(3);
@@ -102,11 +103,11 @@ public class MapfreSaludModel {
 						if (dato.contains("Contratante: ")) {
 							// cte_nombre
 							inicio = dato.indexOf("Contratante: ") + 13;
-							fin = dato.indexOf("R.F.C:");
+							fin = dato.indexOf("R.F.C.");
 
 							modelo.setCteNombre(dato.trim().substring(inicio, fin).trim().replace("###", ""));
 							// rfc
-							inicio = dato.trim().indexOf("R.F.C:") + 6;
+							inicio = dato.trim().indexOf("R.F.C.") + 6;
 							fin = dato.trim().length();
 
 							modelo.setRfc(dato.substring(inicio, fin).trim().replace("-", ""));
@@ -141,12 +142,12 @@ public class MapfreSaludModel {
 								if (dato.contains("Contratante: ")) {
 									// cte_nombre
 									inicio = dato.indexOf("Contratante: ") + 13;
-									fin = dato.indexOf("R.F.C:");
+									fin = dato.indexOf("R.F.C.");
 
 									modelo.setCteNombre(dato.trim().substring(inicio, fin).trim().replace("###", ""));
 
 									// rfc
-									inicio = dato.trim().indexOf("R.F.C:") + 6;
+									inicio = dato.trim().indexOf("R.F.C.") + 6;
 									fin = dato.trim().length();
 									modelo.setRfc(dato.substring(inicio, fin).trim().replace("-", ""));
 								}
@@ -173,6 +174,7 @@ public class MapfreSaludModel {
 							String info = contenido.substring(ind, ind + 400);
 
 							for (String a : info.split("\r\n")) {
+	
 								//int ga = info.split("###").length;
 
 								if (a.contains("@@@CONTRATANTE:")) {

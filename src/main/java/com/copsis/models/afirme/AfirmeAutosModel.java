@@ -61,6 +61,15 @@ public class AfirmeAutosModel {
 							modelo.setCteNombre(newcontenido.split("\n")[i+2].split("Y-O")[0].trim());							
 						}
 					}
+					
+					if(modelo.getCteNombre().length()  ==  0) {
+						if(newcontenido.split("\n")[i].contains("Tipo y Clase:")){
+							modelo.setCteNombre( newcontenido.split("\n")[i].split("tipo y Clase:")[0].replace("###", "").trim());
+							
+						}
+						
+					}
+					
 					if(newcontenido.split("\n")[i].contains("Modelo")){
 						modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo:")[1].split("###")[1]));
 						newdireccion = newcontenido.split("\n")[i].split("Modelo:")[0].replace("###", "");
