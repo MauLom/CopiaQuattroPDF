@@ -193,16 +193,21 @@ public class impresionConsetimientoPdf {
 					
 					
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow,40, "Fecha de término de vigencia del consentimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,40, "Fecha de término de vigencia del consentimiento:", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 25);
+					communsPdf.setCell(baseRow,100, "Tipo de afiliación: prestación laboral", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					
 					table.draw();
 					
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
+//					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
+					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
 					return output.toByteArray();
 				}finally {
 					document.close();
