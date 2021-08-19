@@ -149,12 +149,60 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,40, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,60, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,100, "Llenar estos datos en caso de ser extranjero", bgColor, true,"L", 10, lineBoders, "", padding2,bgColorA);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,30, "Domicilio en su país de origen", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,10, "No.", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Colonia", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,15, "Código postal", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,25, "Delegación o municipio", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+			
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,30, "Calle", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,10, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+			
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,30, "Ciudad", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,30, "Estado", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,15, "País", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,25, "Teléfono", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,30, "Calle", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,30, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);					
+					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+			
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "Fecha de nacimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "Fecha de inicio de vigencia del consentimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "Fecha de término de vigencia del consentimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					table.draw();
 					
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
+					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
 					return output.toByteArray();
 				}finally {
 					document.close();
