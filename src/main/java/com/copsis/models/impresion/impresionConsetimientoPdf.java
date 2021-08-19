@@ -28,10 +28,12 @@ public class impresionConsetimientoPdf {
 	private float fullWidth = 551;
 	List<LineStyle> lineBoders = new ArrayList<>();
 	List<LineStyle> lineBoders2 = new ArrayList<>();
+	List<LineStyle> lineBoders3 = new ArrayList<>();
 	
 	List<Float> padding = new ArrayList<>();
 	List<Float> padding2 = new ArrayList<>();
 	List<Float> padding3 = new ArrayList<>();
+	
 
 	public byte[] buildPDF(ImpresionForm impresionForm) {
 		byte[] pdfArray = null;
@@ -46,6 +48,14 @@ public class impresionConsetimientoPdf {
 		lineBoders2.add(new LineStyle(new Color(0, 0, 143), 0));
 		lineBoders2.add(new LineStyle(new Color(255, 255, 255), 0));
 		lineBoders2.add(new LineStyle(new Color(0, 0, 143), 0));
+		
+		
+		// Solo son 4 L,R,T,B
+		lineBoders3.add(new LineStyle(new Color(255, 255, 255), 0));
+		lineBoders3.add(new LineStyle(new Color(255, 255, 255), 0));
+		lineBoders3.add(new LineStyle(new Color(0, 0, 143), 0));
+		lineBoders3.add(new LineStyle(new Color(0, 0, 143), 0));
+		
 
 		// Paddings son 4 L,R,T,B
 		padding.add(0f);
@@ -201,13 +211,53 @@ public class impresionConsetimientoPdf {
 					baseRow = communsPdf.setRow(table, 25);
 					communsPdf.setCell(baseRow,100, "Tipo de afiliación: prestación laboral", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,100, "Coberturas amparadas", bgColor, true,"L", 10, lineBoders, "", padding2,bgColorA);
+
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,90, "Regla para determinar la Suma Asegurada", azul, false,"R", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,10, "Incluido", azul, false,"c", 10, lineBoders, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "a) Fallecimiento", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "b) Indemnización por Muerte Accidental (DI)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "c) Pérdidas Orgánicas (PO)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "d) Cobertura por Invalidez Total y Permanente (BITP)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "e) Beneficio Seguro Saldado por Invalidez Total (SSIT)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "Tu médico 24 horas ®", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,40, "g) Servicio de Asistencia Funeraria", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,45, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+					
+					
+					
+					
 					table.draw();
 					
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-//					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
-					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
+					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
+//					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
 					return output.toByteArray();
 				}finally {
 					document.close();
