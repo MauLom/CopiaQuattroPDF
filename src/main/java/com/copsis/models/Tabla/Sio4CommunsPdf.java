@@ -16,9 +16,11 @@ public class Sio4CommunsPdf {
 	private final Color textColor = Color.black;
     private final Color bgColor = new Color(255, 255, 255, 0);
     private final Integer fontsize = 9;
-    private final float topPadding = 3.5f;
+
  
     private LineStyle lineGris = new LineStyle(new Color(196, 196, 196), 0);//para la cotizacion inter 37;
+    private LineStyle lineAzul = new LineStyle(new Color(0, 0, 143), 0);//para la cotizacion inter 37;
+    private LineStyle lineBlanco = new LineStyle(new Color(255, 255, 255), 0);//para la cotizacion inter 37;
  
 
     public Sio4CommunsPdf() {
@@ -208,6 +210,24 @@ public class Sio4CommunsPdf {
             }
 
         }
+        if( cotizacion == 103) {
+
+            switch (tipo) {
+            case 1:
+            	   cell.setLeftBorderStyle(lineBlanco);
+                   cell.setRightBorderStyle(lineAzul);
+                   cell.setBottomBorderStyle(lineBlanco);
+                   cell.setTopBorderStyle(lineBlanco);
+            	break;
+            	default:
+                    cell.setLeftBorderStyle(lineAzul);
+                    cell.setRightBorderStyle(lineAzul);
+                    cell.setBottomBorderStyle(lineAzul);
+                    cell.setTopBorderStyle(lineAzul);
+            		break;
+            }
+        }
+        
         return cell;
     }
 
