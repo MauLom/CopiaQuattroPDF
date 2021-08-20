@@ -24,4 +24,19 @@ public class ImpresionForm {
 	private String asegurado;
 	private String saSiniestro;
 	private String aseguradora;
+	private String contrannte;
+	private String categoria;
+	private String nopoliza;
+	private String rfc;
+	private boolean sexo;
+	private String calle;
+	private String noExterior;
+	private String noInterior;
+	private String colonia;
+	private String municipo;
+	private String estado;
+	private String cp;
+	private String nacimiento;
+	private String vigenciaDe;
+	private String vigenciaA;
 }

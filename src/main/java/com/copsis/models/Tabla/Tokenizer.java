@@ -200,7 +200,7 @@ public class Tokenizer {
 											tokens.add(new Token(TokenType.TEXT, sb.toString()));
 											sb.delete(0, sb.length());
 										}
-										tokens.add(new Token(TokenType.CLOSE_TAG, "b"));
+										tokens.add(new Token(TokenType.CLOSE_TAG, "s"));
 										textIndex += 3;
 										consumed = true;
 									}else if ('p' == lookahead2) {
