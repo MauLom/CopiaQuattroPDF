@@ -29,6 +29,7 @@ public class impresionConsetimientoPdf {
     private final Color bgColorAb = new Color(203, 203, 228, 0);
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 	private float  yStartNewPage = 760, yStart = 760, bottomMargin = 26;
+	private float  yStartStar = 0;
 	private float fullWidth = 562;
 	List<LineStyle> lineBoders = new ArrayList<>();
 	List<LineStyle> lineBoders2 = new ArrayList<>();
@@ -145,6 +146,8 @@ public class impresionConsetimientoPdf {
 					Row<PDPage> baseRow;
 					BaseTable table2;
 					Row<PDPage> baseRow2;
+					BaseTable table3;
+					Row<PDPage> baseRow3;
 
 					
 					 
@@ -168,7 +171,7 @@ public class impresionConsetimientoPdf {
 					
 					baseRow = communsPdf.setRow(table, 10);
 					baseRow = communsPdf.setRow(table, 15);
-					baseRow2 = communsPdf.setRow(table2, 6);
+					baseRow2 = communsPdf.setRow(table2, 7);
 					baseRow2 = communsPdf.setRow(table2, 15);
 					communsPdf.setCell(baseRow,10, "No. Póliza", azul, false,"L", 10, lineBoders, "", padding,bgColor);
 					communsPdf.setCell(baseRow,40, impresionForm.getNopoliza(), azul, false,"L", 10, lineBoders, "", padding,bgColor);
@@ -196,7 +199,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,50, "Género", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					baseRow = communsPdf.setRow(table, 18);
 					communsPdf.setCell(baseRow,50, impresionForm.getRfc(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2108/Polizas/2108/+Ah3YmYnsB7kNAvh9C5xuMWQp2V2qTNIO9cC4TPXTDNo8XiddxVbN2lPyMkwsc24/TipoSexo2.png").scale(130, 120), 0, 103, black);
+					communsPdf.setCell(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-mf.png").scale(130, 120), 0, 103, black);
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow,50, "Fecha de nacimiento", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
@@ -257,30 +260,44 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,15, "País", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,25, "Teléfono", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow,30, "Calle", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,30, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,30, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);					
 					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-			
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,30, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,30, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					
+				     table.draw();
+				
+ 					yStart -= table.getHeaderAndDataHeight();
+ 					yStartStar = yStart;
+ 				
+					
+					
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);									
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de nacimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día " + "<s>" +impresionForm.getNacimiento().split("-")[0]+"</s>", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día     "  +impresionForm.getNacimiento().split("-")[0], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes     "  +impresionForm.getNacimiento().split("-")[1], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Año     "  +impresionForm.getNacimiento().split("-")[2], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
+				
+				
 					
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de inicio de vigencia del consentimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día    " + impresionForm.getVigenciaDe().split("-")[0], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes    " +impresionForm.getVigenciaDe().split("-")[1], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Año    "+  impresionForm.getVigenciaDe().split("-")[2], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
 					
 					
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de término de vigencia del consentimiento:", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día", azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes", azul, false,"L", 10, lineBoders33, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día   "  +impresionForm.getVigenciaA().split("-")[0] , azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes   " +impresionForm.getVigenciaA().split("-")[1], azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes   " + impresionForm.getVigenciaA().split("-")[2], azul, false,"L", 10, lineBoders33, "", padding3,bgColor);
 					
 					baseRow = communsPdf.setRow(table, 25);
 					communsPdf.setCell(baseRow,100, "Tipo de afiliación: prestación laboral", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
@@ -301,23 +318,23 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,45, "b) Indemnización por Muerte Accidental (DI)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,40, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
 					//communsPdf.setCell(baseRow,15, "Si", azul, false,"L", 10, lineBoders4, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2108/Polizas/2108/+Ah3YmYnsB7kNAvh9C5xuNm3aNi0w4ULyx6XkRHSNXj5jfMImEPyiZhJND13bkJ/SINO.png").scale(70, 40), 1, 103, black);
+					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-si-no.png").scale(70, 40), 1, 103, black);
 					
 					baseRow = communsPdf.setRow(table, 17);
 					communsPdf.setCell(baseRow,45, "c) Pérdidas Orgánicas (PO)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,40, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2108/Polizas/2108/+Ah3YmYnsB7kNAvh9C5xuNm3aNi0w4ULyx6XkRHSNXj5jfMImEPyiZhJND13bkJ/SINO.png").scale(70, 40), 1, 103, black);
+					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-si-no.png").scale(70, 40), 1, 103, black);
 					
 					
 					baseRow = communsPdf.setRow(table, 17);
 					communsPdf.setCell(baseRow,45, "d) Cobertura por Invalidez Total y Permanente (BITP)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,40, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2108/Polizas/2108/+Ah3YmYnsB7kNAvh9C5xuNm3aNi0w4ULyx6XkRHSNXj5jfMImEPyiZhJND13bkJ/SINO.png").scale(70, 40), 1, 103, black);
+					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-si-no.png").scale(70, 40), 1, 103, black);
 					
 					baseRow = communsPdf.setRow(table, 17);
 					communsPdf.setCell(baseRow,45, "e) Beneficio Seguro Saldado por Invalidez Total (SSIT)", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,40, "", azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2108/Polizas/2108/+Ah3YmYnsB7kNAvh9C5xuNm3aNi0w4ULyx6XkRHSNXj5jfMImEPyiZhJND13bkJ/SINO.png").scale(70, 40), 1, 103, black);
+					communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-si-no.png").scale(70, 40), 1, 103, black);
 					
 					baseRow = communsPdf.setRow(table, 17);
 					communsPdf.setCell(baseRow,45, "f)Tu médico 24 horas ®", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
@@ -331,9 +348,38 @@ public class impresionConsetimientoPdf {
 					
 					baseRow = communsPdf.setRow(table, 5);
 					communsPdf.setCell(baseRow,100, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					
+			
 					table.draw();
 					
+					PDPageContentStream content0 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+ 					table3 = new BaseTable(yStartStar, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
+ 					table3.setTableContentStream(content0);
+					baseRow3 = communsPdf.setRow(table3, 15);
+					communsPdf.setCell(baseRow3,43, ":", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,21, "_______________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_______________", azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_____________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					baseRow3 = communsPdf.setRow(table3, 5);
+					
+					baseRow3 = communsPdf.setRow(table3, 15);
+					communsPdf.setCell(baseRow3,43, ":", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,21, "_______________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_______________", azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_____________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					
+	                 baseRow3 = communsPdf.setRow(table3, 5);
+					
+					baseRow3 = communsPdf.setRow(table3, 15);
+					communsPdf.setCell(baseRow3,43, ":", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,21, "_______________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_______________", azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow3,20, "_____________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
+					table3.draw();
+					
+//				     try (PDPageContentStream content0 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
+//	                        communsPdf.drawBox(content0, azul, 260, (yStart-305), 80 , 0.5f);
+//	                      
+//	                    }
 					
 					/**Pagina 2*/
 					
@@ -489,9 +535,35 @@ public class impresionConsetimientoPdf {
 					table.draw();
 
 					
-				
+					  int nume = document.getNumberOfPages();
+	                    int pos = document.getNumberOfPages() - 1;
+	                    String total = Integer.toString(nume);
+	                    for (int v = 0; v < nume; v++) {
+	                        PDPage page2 = document.getPage(v);
+	                        try (PDPageContentStream content = new PDPageContentStream(document, page2, PDPageContentStream.AppendMode.PREPEND, true, true)) {
+	                            int u = 1;
+	                            u += v;
+	                            String numeF = Integer.toString(u);
+	                            communsPdf.drawText(content, false, 575, 754,   numeF + "/" + total,azul);
+	                            
+	                            
+	                          
+	                        }
+	                    }
                     
-                    
+	                   
+	                    
+								  int nume2 = document.getNumberOfPages();
+								    int pos2 = document.getNumberOfPages() - 1;
+									
+								    for (int v = 0; v < nume2; v++) {	                    
+									table = new BaseTable(750, 750, bottomMargin, 110, 400, document, document.getPage(v), true,true);
+									baseRow = communsPdf.setRow(table, 10);
+									communsPdf.setCell(baseRow,100, "Datos del Integrante", bgColor, true,"L", 10, lineBoders, "", padding2,bgColorA).setTextRotated(true);
+								table.draw();
+								}
+	                	
+	                 
                     
 					
 					
