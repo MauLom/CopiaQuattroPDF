@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.util.Matrix;
 
 
 public class Sio4CommunsPdf {
@@ -53,6 +54,48 @@ public class Sio4CommunsPdf {
         content.setNonStrokingColor(textColor);
         content.showText(texto);
         content.endText();
+
+    }
+    
+    public final void drawText(PDPageContentStream content, Boolean bold, float x, float y, String texto,Color cltxt) throws IOException {
+        content.beginText();
+        content.newLineAtOffset(x, y);
+        if (bold) {
+            content.setFont(PDType1Font.HELVETICA_BOLD, fontsize);
+        } else {
+            content.setFont(PDType1Font.HELVETICA, fontsize);
+        }
+        content.setWordSpacing(0);
+        content.setLeading(8.5f);
+        content.setNonStrokingColor(cltxt);
+        content.showText(texto);
+        content.setTextMatrix(new Matrix(12, 0, 0, 12, 0, 10 * 1.5f));
+        content.endText();
+
+    }
+    public final void drawText(PDPageContentStream contentStream, Boolean bold, float x, float y, String texto,Color cltxtm,Boolean rotate) throws IOException {
+    	contentStream.saveGraphicsState();
+    	contentStream.beginText();
+    	// set font and font size
+    	 if (bold) {
+    		 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontsize);
+         } else {
+        	 contentStream.setFont(PDType1Font.HELVETICA, fontsize);
+         }
+    	// set text color to red
+    	contentStream.setNonStrokingColor(cltxtm);
+    	if (rotate) {
+    	    // rotate the text according to the page rotation
+    	
+    	    contentStream.setTextRotation(-1.57f, 594, 200);
+    	} else {
+    	    contentStream.setTextTranslation(30,
+    	            200);
+    	}
+    	contentStream.drawString(texto);
+    	contentStream.endText();
+    	contentStream.restoreGraphicsState();
+    	contentStream.close();
 
     }
 

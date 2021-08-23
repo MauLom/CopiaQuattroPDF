@@ -544,24 +544,25 @@ public class impresionConsetimientoPdf {
 	                            int u = 1;
 	                            u += v;
 	                            String numeF = Integer.toString(u);
-	                            communsPdf.drawText(content, false, 575, 754,   numeF + "/" + total,azul);
-	                            
-	                            
-	                          
+	                            communsPdf.drawText(content, false, 575, 754,   numeF + "/" + total,azul);	                          
 	                        }
 	                    }
                     
+	                    
+	                    int nume2 = document.getNumberOfPages();
+	                    int pos2 = document.getNumberOfPages() - 1;
+	                    String total2 = Integer.toString(nume);
+	                    for (int v = 0; v < nume2; v++) {
+	                        PDPage page3 = document.getPage(v);
+	                        try (PDPageContentStream content = new PDPageContentStream(document, page3, PDPageContentStream.AppendMode.PREPEND, true, true)) {
+	                            int u = 1;
+	                            u += v;
+	                            String numeF = Integer.toString(u);
+	                            communsPdf.drawText(content, false, 500, 754,"VI-557• ENER0 2019",azul,true);	                          
+	                        }
+	                    }
 	                   
 	                    
-								  int nume2 = document.getNumberOfPages();
-								    int pos2 = document.getNumberOfPages() - 1;
-									
-								    for (int v = 0; v < nume2; v++) {	                    
-									table = new BaseTable(750, 750, bottomMargin, 110, 400, document, document.getPage(v), true,true);
-									baseRow = communsPdf.setRow(table, 10);
-									communsPdf.setCell(baseRow,100, "Datos del Integrante", bgColor, true,"L", 10, lineBoders, "", padding2,bgColorA).setTextRotated(true);
-								table.draw();
-								}
 	                	
 	                 
                     
