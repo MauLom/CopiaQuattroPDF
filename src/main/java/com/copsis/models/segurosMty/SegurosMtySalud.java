@@ -47,8 +47,11 @@ public class SegurosMtySalud {
 		modelo.setMoneda(1);
 		//Datos del contrante
 	
+
 		inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");
 		fin = contenido.indexOf("COBERTURA BÁSICA");
+		
+
 		
 		if(inicio > 0 && fin > 0 && inicio <fin) {
 			newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");

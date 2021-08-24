@@ -1,56 +1,28 @@
 package com.copsis.models.Tabla;
 
 
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
-import com.kenai.jffi.Array;
-
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
+
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.util.Matrix;
 
 
 public class Sio4CommunsPdf {
 	private final Color textColor = Color.black;
     private final Color bgColor = new Color(255, 255, 255, 0);
     private final Integer fontsize = 9;
-    private final float topPadding = 3.5f;
-    private final boolean bold = false;
-    private final String alignment = "L";
-    private Color gray2 = new Color(239, 239, 239);
-    private Color naranja = new Color(247, 150, 70);
 
-    private LineStyle leftBorderStyle = new LineStyle(new Color(51, 153, 102), 0);
-    private LineStyle rightBorderStyle = new LineStyle(new Color(51, 153, 102), 0);
-    private LineStyle topBorderStyle = new LineStyle(new Color(51, 153, 102), 0);
-    private LineStyle bottomBorderStyle = new LineStyle(new Color(51, 153, 102), 0);
-    private LineStyle rightBorderStyle2 = new LineStyle(new Color(255, 255, 255), 0);
-    private LineStyle leftBorderStyle2 = new LineStyle(new Color(255, 255, 255), 0);
-    private LineStyle rightBorderStyle3 = new LineStyle(new Color(83, 183, 174), 0);
-    private LineStyle leftBorderStyle3 = new LineStyle(new Color(83, 183, 174), 0);
-    private LineStyle leftblack = new LineStyle(new Color(0, 0, 0), 0);
-    private LineStyle lineBlack2 = new LineStyle(new Color(0, 0, 0), 0);
-    private LineStyle lineBlack3 = new LineStyle(new Color(0, 0, 0), 1);
-
+ 
     private LineStyle lineGris = new LineStyle(new Color(196, 196, 196), 0);//para la cotizacion inter 37;
-    private LineStyle lineAzulb = new LineStyle(new Color(35, 41, 88), 0);//para la cotizacion inter 37;
-    private LineStyle linewhite = new LineStyle(new Color(255, 255, 255), 0);
-
-    private LineStyle lineAzulC = new LineStyle(new Color(35, 81, 115), 0);//para la cotizacion inter 46;
-    private LineStyle lineAzulv = new LineStyle(new Color(173, 216, 230), 0);//para la impresion 49
-
-    private LineStyle lineNaranja = new LineStyle(new Color(247, 150, 70), 2);//para la impresion 49
-    private LineStyle lineGraopc = new LineStyle(new Color(166, 166, 166), 0);//para la impresion 49
-
-    private LineStyle lineNaranja2 = new LineStyle(new Color(131, 120, 111), 0);
-     private LineStyle lineNaranja3 = new LineStyle(new Color(245, 145, 0), 0);
+    private LineStyle lineAzul = new LineStyle(new Color(0, 0, 143), 0);//para la cotizacion inter 37;
+    private LineStyle lineBlanco = new LineStyle(new Color(255, 255, 255), 0);//para la cotizacion inter 37;
+ 
 
     public Sio4CommunsPdf() {
     }
@@ -82,6 +54,48 @@ public class Sio4CommunsPdf {
         content.setNonStrokingColor(textColor);
         content.showText(texto);
         content.endText();
+
+    }
+    
+    public final void drawText(PDPageContentStream content, Boolean bold, float x, float y, String texto,Color cltxt) throws IOException {
+        content.beginText();
+        content.newLineAtOffset(x, y);
+        if (bold) {
+            content.setFont(PDType1Font.HELVETICA_BOLD, fontsize);
+        } else {
+            content.setFont(PDType1Font.HELVETICA, fontsize);
+        }
+        content.setWordSpacing(0);
+        content.setLeading(8.5f);
+        content.setNonStrokingColor(cltxt);
+        content.showText(texto);
+        content.setTextMatrix(new Matrix(12, 0, 0, 12, 0, 10 * 1.5f));
+        content.endText();
+
+    }
+    public final void drawText(PDPageContentStream contentStream, Boolean bold, float x, float y, String texto,Color cltxtm,Boolean rotate) throws IOException {
+    	contentStream.saveGraphicsState();
+    	contentStream.beginText();
+    	// set font and font size
+    	 if (bold) {
+    		 contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontsize);
+         } else {
+        	 contentStream.setFont(PDType1Font.HELVETICA, fontsize);
+         }
+    	// set text color to red
+    	contentStream.setNonStrokingColor(cltxtm);
+    	if (rotate) {
+    	    // rotate the text according to the page rotation
+    	
+    	    contentStream.setTextRotation(-1.57f, 594, 200);
+    	} else {
+    	    contentStream.setTextTranslation(30,
+    	            200);
+    	}
+    	contentStream.drawString(texto);
+    	contentStream.endText();
+    	contentStream.restoreGraphicsState();
+    	contentStream.close();
 
     }
 
@@ -133,13 +147,42 @@ public class Sio4CommunsPdf {
 	        cell.setRightPadding(padding.get(1));
 	        cell.setTopPadding(padding.get(2));
 	        cell.setBottomPadding(padding.get(3));
-	     
-	        cell.setTextColor(textColor);
+	
+	        cell.setTextColor(black);
 	        cell.setFillColor(bgColor);
-	        cell.setFontSize(fontsize);
-	        cell.setTopPadding(topPadding);
+	        cell.setFontSize(fontsize2);
+	     
 	       this.setAligment(cell, aligconte);
-	      //  this.setAligment(cell, aligconte2);
+	    
+	        return cell;
+				
+	}
+    
+    public Cell<PDPage> setCell(Row<PDPage> row, int width, String content, Color black, boolean bold, String aligconte,
+			int fontsize2, List<LineStyle> line, String aligconte2, List<Float> padding,Color bgColor2) {
+		  Cell<PDPage> cell = row.createCell(width, content);
+	        if (bold) {
+	            cell.setFont(PDType1Font.HELVETICA_BOLD);
+	        } else {
+	            cell.setFont(PDType1Font.HELVETICA);
+	        }
+	        
+	        cell.setLeftBorderStyle(line.get(0));
+	        cell.setRightBorderStyle(line.get(1));
+	        cell.setBottomBorderStyle(line.get(2));
+	        cell.setTopBorderStyle(line.get(3));
+	        
+	        cell.setLeftPadding(padding.get(0));
+	        cell.setRightPadding(padding.get(1));
+	        cell.setTopPadding(padding.get(2));
+	        cell.setBottomPadding(padding.get(3));
+	
+	        cell.setTextColor(black);
+	        cell.setFillColor(bgColor2);
+	        cell.setFontSize(fontsize2);
+	     
+	       this.setAligment(cell, aligconte);
+	    
 	        return cell;
 				
 	}
@@ -210,6 +253,24 @@ public class Sio4CommunsPdf {
             }
 
         }
+        if( cotizacion == 103) {
+
+            switch (tipo) {
+            case 1:
+            	   cell.setLeftBorderStyle(lineBlanco);
+                   cell.setRightBorderStyle(lineAzul);
+                   cell.setBottomBorderStyle(lineBlanco);
+                   cell.setTopBorderStyle(lineBlanco);
+            	break;
+            	default:
+                    cell.setLeftBorderStyle(lineAzul);
+                    cell.setRightBorderStyle(lineAzul);
+                    cell.setBottomBorderStyle(lineAzul);
+                    cell.setTopBorderStyle(lineAzul);
+            		break;
+            }
+        }
+        
         return cell;
     }
 
