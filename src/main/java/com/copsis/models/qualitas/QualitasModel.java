@@ -32,15 +32,25 @@ public class QualitasModel {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
 
-		
-				if (pagIni < pagFin) {
-					qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
-							fn.caratula(pagIni, pagFin, stripper, doc));
-					modelo = datosQualitasAutos.procesar();
-				} else {
-					qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc));
-					modelo = datosQualitasAutos.procesar();
+			
+				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
+				System.out.println("PASO AQUI");
+					qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
+							fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
+					modelo = datosQualitasMotosAutos.procesar();
+				}else {
+					
+					if (pagIni < pagFin) {
+						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
+								fn.caratula(pagIni, pagFin, stripper, doc));
+						modelo = datosQualitasAutos.procesar();
+					} else {
+						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc));
+						modelo = datosQualitasAutos.procesar();
+					}
 				}
+				
+				
 
 			} else {
 				modelo.setError(QualitasModel.this.getClass().getTypeName() + " | " + "No se pudo leer");
