@@ -267,6 +267,22 @@ public class qualitasAutosModel {
 						.replace("###", "").replace("-", "").trim();
 				modelo.setRfc(newcontenido);
 			}
+		
+			if (modelo.getRfc().length()  == 0) {
+				inicio = contenido.indexOf("R.F.C:");
+				fin = contenido.indexOf("VEHÍCULO ASEGURADO");
+				if (inicio > 0 && fin > 0 && inicio < fin) {
+					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+					for (int i = 0; i < newcontenido.split("\n").length; i++) {						
+						if(newcontenido.split("\n")[i].contains("R.F.C:")) {
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
+						}
+					
+					}
+             
+				}
+
+			}
 
 			// moneda
 			inicio = contenido.indexOf("MONEDA");
