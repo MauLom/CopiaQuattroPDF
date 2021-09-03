@@ -28,6 +28,26 @@ public class AxaSaludModel {
 
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		  contenido = contenido.replace("Datos de la Póliza", "Datos###de###la###Póliza")
+	                .replace("Coberturas Amparadas", "Coberturas###Amparadas")
+	                .replace("Familia Asegurada", "Familia###Asegurada")
+	                .replace("En cumplimiento", "En###cumplimiento#")
+	                .replace("A B R ", "ABR ")
+	                .replace("TITULAR M", "###TITULAR###M###")
+	                .replace("PROTECCION DENTAL SIN COSTO", "PROTECCION DENTAL###SIN COSTO")
+	                .replace("T###el:", "Tel:")
+	                .replace("N###om###bre:", "Nombre:")
+	                .replace("D###om###icilio:", "Domicilio:")
+	                .replace("C.P.", "C.P:")
+	                .replace("C###oberturas###Am###paradas", "Coberturas###Amparadas")
+	                .replace("M###oneda:", "Moneda:")
+	                .replace("V###igencia###:", "Vigencia:")
+	                .replace("I.V###.A###:", "I.V.A:")
+	                .replace("#Prim###as:", "Primas:")
+	                .replace("T###otal:", "Total:")
+	                .replace("C###.P:", "C.P:")
+	                .replace("A###gente:", "Agente:")
+	                .replace("U###tilidad:", "Utilidad:");
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(20);
@@ -114,28 +134,31 @@ public class AxaSaludModel {
 							modelo.setVigenciaA(fn.formatDate_MonthCadena(
 									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0]
 											.replace("###", "").replace(" - ", "###").split("###")[1]));
+							modelo.setFechaEmision(modelo.getVigenciaDe());
 							modelo.setDerecho(
 									(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1]
 											.replace("###", "").replace(",", "")))));
 						}
 					} else if (newcontenido.split("\n")[i].contains("Vigencia")
 							&& newcontenido.split("\n")[i].contains("Financiamiento")) {
-						String x = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
-								.replace("###", "").split("-")[2];
-						String x2 = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
-								.replace("###", "").split(x)[1];
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
-								newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
-										.replace("###", "").split(x)[0] + "" + x));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length())));
+					     String x = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
+	                                .replace("###", "").split("-")[2];
+	                        String x2 = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
+	                                .replace("###", "").split(x)[1].trim();
+	                        modelo.setVigenciaDe(fn.formatDate_MonthCadena(
+	                                newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
+	                                        .replace("###", "").split(x)[0].trim() + "" + x));
+	                        modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length()).replace(" ", "")));
+	                         modelo.setFechaEmision(modelo.getVigenciaDe());
 						modelo.setRecargo(
 								(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1]
 										.replace("###", "").replace(",", "")))));
 					} else if (newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1]
-								.replace("###", "").replace(" - ", "###").trim().split("###")[0]));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1]
-								.replace("\r", "").replace("###", "").replace("- ", "###").split("###")[1]));
+                                .replace("###", "").replace(" - ", "###").trim().split("###")[0]));
+                        modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1]
+                                .replace("\r", "").replace("###", "").replace("- ", "###").split("###")[1]));
+                            modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 
 					if (newcontenido.split("\n")[i].contains("Pago") && newcontenido.split("\n")[i].contains("I.V.A:")) {
@@ -163,6 +186,20 @@ public class AxaSaludModel {
 				}
 			}
 
+
+            inicio = contenido.indexOf("Agente:");
+            fin = contenido.indexOf("Utilidad:");
+            if (inicio > 0 && fin > 0 && inicio < fin) {
+                newcontenido = contenido.substring(inicio, fin);
+                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                     if (newcontenido.split("\n")[i].contains("Agente:")){
+                      modelo.setCveAgente( newcontenido.split("\n")[i].split("###")[1]);
+                     }
+                     
+                 }
+
+            }
+			
 			// Proceso de Asegurados
 			inicio = contenido.indexOf("Datos###del###Asegurado");
 			fin = contenido.indexOf("Datos###de###la###Póliza");
@@ -197,11 +234,89 @@ public class AxaSaludModel {
 				asegurados.add(asegurado);
 				modelo.setAsegurados(asegurados);
 			}
+			
+			
+			
+			   // proceso de Asegurados version 2
+            if (modelo.getAsegurados().size() == 0) {
+                inicio = contenido.indexOf("Familia###Asegurada");
+                fin = contenido.indexOf("En###cumplimiento#");
+                if (fin == -1) {
+                    fin = contenido.indexOf("Endosos###contenidos###en###la###Póliza");
+                }
+                if (inicio > 0 && fin > 0 && inicio < fin) {
+                    newcontenido = contenido.substring(inicio, fin).replace(" - ", "-");
+                    for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                        EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+
+                        if (newcontenido.split("\n")[i].split("-").length > 2) {
+
+                            if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim().split("-").length > 3) {
+                                String numero = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim().split("-")[2].split(" ")[0];
+                                asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim().split(numero)[0].replace(" ", "") + numero));
+                                asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim().split(" ")[4]));
+                            } else {
+
+                                asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()));
+                                if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim().contains("-")) {
+                                    asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+                                            .split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()));
+                                } else {
+                                    asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+                                            .split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
+                                }
+//                                
+                            }
+
+                            if (newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].split("###")[0].contains(",")) {
+                                String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+                                        .split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
+                                        .split("###")[0];
+                                asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
+                                String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
+                                        .split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
+
+                                if (x2.split("###").length > 1) {
+
+                                    asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim())? 1:0);
+
+                                    asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
+                                } else {
+                                    if (newcontenido.split("\n")[i].contains("TITULAR")) {
+                                        asegurado.setParentesco(1);
+                                        asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[1].split(" ")[1].trim().toLowerCase())? 1:0);
+
+                                    }
+                                }
+
+                            } else {
+
+                                if (newcontenido.split("\n")[i].contains(",")) {
+                                    asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].split(",")[1] + "" + newcontenido.split("\n")[i].split("###")[0].split(",")[0]);
+                                    asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[1].trim()));
+                                    asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim())? 1:0);
+
+                                }
+                            }
+
+                            asegurados.add(asegurado);
+                        }
+
+                    }
+
+                	modelo.setAsegurados(asegurados);
+                }
+
+            }
+			
 
 			// proceso de Asegurados version 2
 			if (modelo.getAsegurados().size() == 0) {
 				inicio = contenido.indexOf("Familia###Asegurada");
 				fin = contenido.indexOf("En###cumplimiento#");
+				  if (fin == -1) {
+	                    fin = contenido.indexOf("Endosos###contenidos###en###la###Póliza");
+	                }
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin);
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {			
@@ -244,6 +359,9 @@ public class AxaSaludModel {
 			
 			inicio = contenido.indexOf("Coberturas###Amparadas");
 			fin = contenido.indexOf("Advertencia:");
+			   if (fin == -1) {
+	                fin = contenido.indexOf("Se hace del conocimient");
+	            }
 			
 		
 
