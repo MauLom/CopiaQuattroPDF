@@ -99,14 +99,13 @@ public class qualitasAutosMotosModel {
 					if(newcontenido.split("\n")[i].contains("Hasta las 12:00")) {
 						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1]));
 					}
-					
-					
-					
-					
+
 					
 				}
 				
 			}
+			
+			modelo.setMoneda(1);
 			
 			inicio = agente.indexOf("Agente");
 			fin  = agente.indexOf("En###cumplimiento");
