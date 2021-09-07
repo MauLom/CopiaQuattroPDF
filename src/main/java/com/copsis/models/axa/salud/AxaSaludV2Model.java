@@ -8,7 +8,6 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
-import com.copsis.models.axa.AxaVidaModel;
 
 public class AxaSaludV2Model {
 	// Clases
@@ -21,7 +20,7 @@ public class AxaSaludV2Model {
 	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int donde = 0;
+	
 
 
 	public AxaSaludV2Model(String contenido) {
@@ -200,16 +199,18 @@ public class AxaSaludV2Model {
 			String nombre ="";
 			String fecha_n ="";
 			String fecha_a ="";
-			String fecha_p ="";
+		
 			
 			inicio = inicontenido.indexOf("Relación de Asegurados");
 			fin = inicontenido.indexOf("AXA Seguros, S.A. de C.V.");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("T   it u  l ar", "Titular")
-						.replace("C   ó  n  y  uge", "Conyuge").replace("H   i j o", "Hijo").replaceAll("  +", "###").replace("/","-");
+						.replace("C   ó  n  y  uge", "Conyuge").replace("H   i j o", "Hijo").replaceAll("  +", "###").replace("/","-")
+						.replace("######", "###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					int x = newcontenido.split("\n")[i].split("###").length;
+					
 					if (newcontenido.split("\n")[i].split("-").length > 5) {
 						if(x == 13) {
 							nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
@@ -243,6 +244,23 @@ public class AxaSaludV2Model {
 							asegurado.setAntiguedad(fn.formatDate_MonthCadena(fecha_a));
 							asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[4]));
 							asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[1]) ? 1:0);
+							asegurados.add(asegurado);
+						}
+						
+						if(x == 15) {						
+							nombre = newcontenido.split("\n")[i].replace("A ###", "A").split("###")[0].replace("@@@", "").trim();										
+						    asegurado.setNombre((nombre.split(",")[1] +" "+ nombre.split(",")[0]).trim());
+							fecha_n = newcontenido.split("\n")[i].split("###")[5]+""+newcontenido.split("\n")[i].split("###")[6] +""+ newcontenido.split("\n")[i].split("###")[7].replace(" ", "");										
+							asegurado.setNacimiento(fn.formatDate_MonthCadena(fecha_n));
+							fecha_a =newcontenido.split("\n")[i].split("###")[8].replace(" ", "");														
+							asegurado.setAntiguedad(fn.formatDate_MonthCadena(fecha_a));
+							asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[4]));
+							if(newcontenido.split("\n")[i].split("###")[1].length() >  3) {
+								asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
+							}else {
+								asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[1]) ? 1:0);	
+							}
+							
 							asegurados.add(asegurado);
 						}
 					}
