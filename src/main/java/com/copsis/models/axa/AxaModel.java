@@ -34,11 +34,12 @@ public class AxaModel {
 			} else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
 				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 				modelo = datosAxaSalud.procesar();
+				System.out.println("paso 3");
 			}
 
 			else {
 				String tipos[] = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
-						"HOGAR INTEGRAL", " VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
+						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO" };
 				contenido = contenido.toUpperCase();
 				for (String tipo : tipos) {
@@ -48,14 +49,19 @@ public class AxaModel {
 							AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
 							modelo = datosAxaVida.procesar();
 							break;
+						case "VEHICLE DESCRIPTION":
+							
+							AxaAutos2Model datosAxaAutos = new AxaAutos2Model(fn.caratula(1, 1, stripper, doc));
+							modelo = datosAxaAutos.procesar();
+							break;
 						case "GASTOS M": // GASTOS MEDICOS --/(Se usara identificar la version 2 del pdf)Datos del
 											// contratante
 							if (contenido.contains("DATOS DEL CONTRATANTE")) {
-							
+						
 								AxaSaludV2Model datosAxa2Salud = new AxaSaludV2Model(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxa2Salud.procesar();
 							} else {
-								
+				
 								AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxaSalud.procesar();
 							}
