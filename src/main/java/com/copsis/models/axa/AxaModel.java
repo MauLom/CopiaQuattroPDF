@@ -51,7 +51,7 @@ public class AxaModel {
 							break;
 						case "VEHICLE DESCRIPTION":
 							
-							AxaAutos2Model datosAxaAutos = new AxaAutos2Model(fn.caratula(1, 1, stripper, doc));
+							AxaAutos2Model datosAxaAutos = new AxaAutos2Model(fn.caratula(1, 4, stripper, doc));
 							modelo = datosAxaAutos.procesar();
 							break;
 						case "GASTOS M": // GASTOS MEDICOS --/(Se usara identificar la version 2 del pdf)Datos del
