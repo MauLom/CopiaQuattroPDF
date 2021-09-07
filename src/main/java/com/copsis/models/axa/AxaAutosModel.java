@@ -3,6 +3,7 @@ package com.copsis.models.axa;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -598,18 +599,20 @@ public class AxaAutosModel {
 			// if(recibos.length() > 0) jsonArrayRec = getRecibos();
 
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
-			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			
 
 		
 			if (recibosText.length() > 0) {
 				recibosList = recibosExtract();
-		
+				
+				
 			}
 
 			// **************************************RECIBOS
 			switch (modelo.getFormaPago()) {
 			case 1:
 				if (recibosList.size() == 0) {
+					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 					recibo.setReciboId("");
 					recibo.setSerie("1/1");
 					recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -630,6 +633,7 @@ public class AxaAutosModel {
 				break;
 			case 2:
 				if (recibosList.size() == 1) {
+					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 					recibo.setSerie("2/2");
 					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
 					recibo.setVigenciaA(modelo.getVigenciaA());
@@ -650,16 +654,13 @@ public class AxaAutosModel {
 				if (recibosList.size() >= 1) {
 					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
 					int totalRec = fn.getTotalRec(modelo.getFormaPago());
-					int meses = fn.monthAdd(modelo.getFormaPago());// MESES A AGREGAR POR RECIBO
-
-					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
-
-						recibo.setSerie(i + 1 + "/" + totalRec);
-						recibo.setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
-						if (recibosList.get(i - 1).getVigenciaA().length() == 10) {
-							recibo.setVigenciaA(fn.dateAdd(recibosList.get(i - 1).getVigenciaA(), meses, i));
-						}
-						recibo.setVencimiento("");
+					int meses = fn.monthAdd(modelo.getFormaPago());// MESES A AGREGAR POR RECIBOs
+					int ct =recibosList.size();
+					int x=0;
+					for (int i = 0; i < restoRec.intValue(); i++) {
+						x++;
+						EstructuraRecibosModel recibo = new EstructuraRecibosModel();						
+						recibo.setSerie((x+ct) + "/" + totalRec);
 						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2,RoundingMode.HALF_EVEN));
 						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
 						recibo.setRecargo(restoRecargo.divide(restoRec,2,RoundingMode.HALF_EVEN));
@@ -668,8 +669,24 @@ public class AxaAutosModel {
 						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
 						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_DOWN));
 						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibosList.add(recibo);
+						recibosList.add(recibo);						
+					} 
+					
+					int t = 0;
+					for (int i = 0; i < recibosList.size(); i++) {
+						t++;
+						if (i >= ct) {
+							recibosList.get(i).setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
+							if (recibosList.get(i - 1).getVigenciaA().length() == 10) {
+								recibosList.get(i)
+										.setVigenciaA(fn.dateAdd(recibosList.get(i - 1).getVigenciaA(), meses, 2));
+							}
+						}
 					}
+					
+
+						
+					
 				}
 
 				break;
@@ -679,6 +696,7 @@ public class AxaAutosModel {
 					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
 					int totalRec = fn.getTotalRec(modelo.getFormaPago());
 					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
+						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 						recibo.setSerie(i + 1 + "/" + totalRec);
 						recibo.setPrimaneta(restoPrimaNeta.divide(fn.castBigDecimal(restoRec), 2,RoundingMode.HALF_EVEN));
 						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
@@ -711,11 +729,10 @@ public class AxaAutosModel {
 			int index = 0;
 			int totalRec = fn.getTotalRec(modelo.getFormaPago());
 			int recibosSerie = 1;
-			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			
 			for (String a : recibosText.split("RECIBO PROVISIONAL DE PAGO")) {
-
-				if (index > 0) {
-
+				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+				if (index > 0) {				
 					// serie
 					recibo.setSerie(recibosSerie + "/" + totalRec);
 
@@ -816,14 +833,15 @@ public class AxaAutosModel {
 					newcontenido = fn.cleanString(newcontenido);
 					if (fn.isNumeric(newcontenido))
 					recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-					restoPrimaNeta = modelo.getPrimaneta().subtract(recibo.getPrimaneta());			
+					restoPrimaNeta = modelo.getPrimaneta().subtract(recibo.getPrimaneta());		
+					recibosLis.add(recibo);
 					recibosSerie++;
-				
+					
 				}
 				index++;
 			
 			}
-			recibosLis.add(recibo);
+			
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		} catch (Exception ex) {
 			modelo.setError(
