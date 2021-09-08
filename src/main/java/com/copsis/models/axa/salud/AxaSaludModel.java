@@ -60,6 +60,18 @@ public class AxaSaludModel {
 						.replace("@@@", "").replace("###", "");
 				modelo.setPoliza(newcontenido);
 			}
+			
+			
+			inicio = contenido.indexOf("POLIZA");
+			fin = contenido.indexOf("Contratante");
+			if (inicio > 0 && fin > 0 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				  if(newcontenido.split("\n")[i].contains("Grupo")) {
+					  modelo.setError("La póliza corresponde al ramo de grupo");
+				  }
+				}							
+			}
 
 			inicio = contenido.indexOf("Contratante");
 			fin = contenido.indexOf("Tel:");
