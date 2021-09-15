@@ -160,14 +160,14 @@ public class impresionConsetimientoPdf {
 					baseRow = communsPdf.setRow(table, 15);
 			
 					communsPdf.setCell(baseRow,10, "Contratante", azul, false,"L", 10, lineBoders, "", padding,bgColor);
-					communsPdf.setCell(baseRow, 40, impresionForm.getContrannte(), azul, false,"L", 13, lineBoders, "", padding,bgColor);
-					communsPdf.setCell(baseRow, 10, "Categoría", azul, false,"L", 10, lineBoders, "", padding,bgColor).setLeftPadding(6f);;
-					communsPdf.setCell(baseRow, 40, impresionForm.getCategoria(), azul, false,"L", 13, lineBoders, "", padding,bgColor);
+					communsPdf.setCell(baseRow, 50, impresionForm.getContrannte(), azul, false,"L", 7, lineBoders, "", padding,bgColor);
+					communsPdf.setCell(baseRow, 10, "Categoría", azul, false,"L", 10, lineBoders, "", padding,bgColor).setLeftPadding(6f);
+					communsPdf.setCell(baseRow, 30, impresionForm.getCategoria(), azul, false,"L", 10, lineBoders, "", padding,bgColor);
 					/***/
 					communsPdf.setCell(baseRow2,10, "", azul, false,"L", 13, lineBoders6, "", padding,bgColor);
-					communsPdf.setCell(baseRow2, 40, "", azul, false,"L", 13, lineBoders61, "", padding,bgColor);
+					communsPdf.setCell(baseRow2, 50, "", azul, false,"L", 13, lineBoders61, "", padding,bgColor);
 					communsPdf.setCell(baseRow2, 10, "", azul, false,"L", 12, lineBoders6, "", padding,bgColor);
-					communsPdf.setCell(baseRow2, 40, "", azul, false,"L", 13, lineBoders61, "", padding,bgColor);
+					communsPdf.setCell(baseRow2, 30, "", azul, false,"L", 13, lineBoders61, "", padding,bgColor);
 					
 					baseRow = communsPdf.setRow(table, 10);
 					baseRow = communsPdf.setRow(table, 15);
@@ -199,7 +199,12 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,50, "Género", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					baseRow = communsPdf.setRow(table, 18);
 					communsPdf.setCell(baseRow,50, impresionForm.getRfc(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-mf.png").scale(130, 120), 0, 103, black);
+					if(impresionForm.isSexo()) {
+						communsPdf.setCell(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-mm.png").scale(130, 120), 0, 103, black);
+					}else {
+						communsPdf.setCell(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/log-ff.png").scale(130, 120), 0, 103, black);
+					}
+					
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow,50, "Fecha de nacimiento", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
@@ -350,7 +355,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,100, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 			
 					table.draw();
-					
+//					
 					PDPageContentStream content0 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
  					table3 = new BaseTable(yStartStar, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
  					table3.setTableContentStream(content0);
@@ -376,10 +381,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow3,20, "_____________"  , azul, false,"l", 10, lineBoders, "", padding3,bgColor);
 					table3.draw();
 					
-//				     try (PDPageContentStream content0 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
-//	                        communsPdf.drawBox(content0, azul, 260, (yStart-305), 80 , 0.5f);
-//	                      
-//	                    }
+
 					
 					/**Pagina 2*/
 					
@@ -570,8 +572,8 @@ public class impresionConsetimientoPdf {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
-//					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
+//					document.save(new File("/home/desarrollo8/Documentos/impresion.pdf"));
+////					document.save(new File("/home/desrrollo8/Documentos/impresion.pdf"));
 					return output.toByteArray();
 				}finally {
 					document.close();
@@ -618,4 +620,20 @@ public class impresionConsetimientoPdf {
 
 	    
 	 }
+	 
+	 private String sizeByteArray(long bytesize, String type) {
+			String size = bytesize + " bytes";
+			try {
+				if (type.equals("GB")) {
+					size = (double) bytesize / (1024 * 1024 * 1024) + " GB";
+				} else if (type.equals("MB")) {
+					size = (double) bytesize / (1024 * 1024) + " MB";
+				} else if (type.equals("KB")) {
+					size = (double) bytesize / 1024 + " KB";
+				}
+				return size;
+			} catch (Exception e) {
+				throw new GeneralServiceException("00001", "Error al calcular el tamaño.");
+			}
+		}
 }
