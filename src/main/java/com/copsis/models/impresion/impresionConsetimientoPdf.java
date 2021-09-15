@@ -190,7 +190,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,75, "Nombre(s), apellido paterno, apellido materno", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,25, "Empleado No.", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow,75, impresionForm.getContrannte(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,75, impresionForm.getContrannte(), azul, false,"L", 9, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					
 					
@@ -285,24 +285,24 @@ public class impresionConsetimientoPdf {
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);									
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de nacimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día     "  +impresionForm.getNacimiento().split("-")[0], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día     "  + impresionForm.getNacimiento().split("-")[2], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,20, "Mes     "  +impresionForm.getNacimiento().split("-")[1], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Año     "  +impresionForm.getNacimiento().split("-")[2], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Año     "  +impresionForm.getNacimiento().split("-")[0], azul, false,"l", 10, lineBoders31, "", padding3,bgColor);
 				
 				
 					
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de inicio de vigencia del consentimiento:", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día    " + impresionForm.getVigenciaDe().split("-")[0], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes    " +impresionForm.getVigenciaDe().split("-")[1], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Año    "+  impresionForm.getVigenciaDe().split("-")[2], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día     "  +  impresionForm.getVigenciaDe().split("-")[0], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes     "  +impresionForm.getVigenciaDe().split("-")[1], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Año     "  +impresionForm.getVigenciaDe().split("-")[2], azul, false,"L", 10, lineBoders31, "", padding3,bgColor);
 					
 					
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,40, "Fecha de término de vigencia del consentimiento:", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Día   "  +impresionForm.getVigenciaA().split("-")[0] , azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes   " +impresionForm.getVigenciaA().split("-")[1], azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,20, "Mes   " + impresionForm.getVigenciaA().split("-")[2], azul, false,"L", 10, lineBoders33, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Día     "   +  impresionForm.getVigenciaA().split("-")[0] , azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes     "   +impresionForm.getVigenciaA().split("-")[1], azul, false,"L", 10, lineBoders32, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,20, "Mes     "   +impresionForm.getVigenciaA().split("-")[2], azul, false,"L", 10, lineBoders33, "", padding3,bgColor);
 					
 					baseRow = communsPdf.setRow(table, 25);
 					communsPdf.setCell(baseRow,100, "Tipo de afiliación: prestación laboral", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
