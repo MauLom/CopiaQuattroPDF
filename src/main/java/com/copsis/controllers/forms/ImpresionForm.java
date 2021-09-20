@@ -2,6 +2,7 @@ package com.copsis.controllers.forms;
 
 import java.util.List;
 
+import com.copsis.clients.projections.BeneficiarioProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -35,8 +36,9 @@ public class ImpresionForm {
 	private String colonia;
 	private String municipo;
 	private String estado;
-	private String cp;
+	private String cp;	
 	private String nacimiento;
 	private String vigenciaDe;
 	private String vigenciaA;
+	private List<BeneficiarioProjection> Beneficiarios;
 }
