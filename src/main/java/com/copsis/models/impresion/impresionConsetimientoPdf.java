@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -435,7 +440,27 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,30, "Fecha de nacimiento", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,17, "Parentesco", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,18, "% de participación", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
+					table.draw();
 					
+					yStart -= table.getHeaderAndDataHeight();
+					
+					
+			  if(impresionForm.getBeneficiarios().size() > 0 ) {
+							 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
+							 int  x=1;
+						for (int i = 0; i < impresionForm.getBeneficiarios().size(); i++) {
+							
+							baseRow = communsPdf.setRow(table, 20);
+							communsPdf.setCell(baseRow,5,x +"°" , azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,30, impresionForm.getBeneficiarios().get(i).getNombres(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"yyyy-MM-dd"), azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,17, impresionForm.getBeneficiarios().get(i).getParentesco(), azul, false,"L", 10, lineBoders3, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,18, impresionForm.getBeneficiarios().get(i).getPorcentaje() +" %", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+							x++;
+						}
+							table.draw();
+				}else {
+					 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow,5, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,30, "", azul, true,"C", 10, lineBoders, "", padding3,bgColor);
@@ -473,8 +498,11 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,30, "", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,17, "", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,18, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
+					table.draw();
+					}
+					yStart -= table.getHeaderAndDataHeight();
 					
-					
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow,100, "Datos de los beneficiarios", bgColor, true,"L", 10, lineBoders, "", padding2,bgColorA);
 					
@@ -640,7 +668,31 @@ public class impresionConsetimientoPdf {
 
 	    
 	 }
-	 
+		private static String formarDate(String dateD, String format) {
+			SimpleDateFormat formatter = null;
+			Date date = null;
+			try {
+				formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				date = formatter.parse(dateD);
+			} catch (ParseException e) {
+				throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
+			}
+
+			DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+			sym.setMonths(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+					"Septiembre", "Octubre", "Noviembre", "Diciembre" });
+
+			sym.setShortMonths(
+					new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" });
+
+			if (format.equals("")) {
+				formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", sym);
+			} else {
+				formatter = new SimpleDateFormat(format, sym);
+			}
+
+			return formatter.format(date);
+		}
 	 private String sizeByteArray(long bytesize, String type) {
 			String size = bytesize + " bytes";
 			try {
