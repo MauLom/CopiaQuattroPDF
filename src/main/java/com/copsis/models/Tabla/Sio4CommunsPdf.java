@@ -87,7 +87,7 @@ public class Sio4CommunsPdf {
     	if (rotate) {
     	    // rotate the text according to the page rotation
     	
-    	    contentStream.setTextRotation(-1.57f, 594, 200);
+    	    contentStream.setTextRotation(-1.57f, 594, 130);
     	} else {
     	    contentStream.setTextTranslation(30,
     	            200);
@@ -177,6 +177,7 @@ public class Sio4CommunsPdf {
 	        cell.setTopPadding(padding.get(2));
 	        cell.setBottomPadding(padding.get(3));
 	
+	        
 	        cell.setTextColor(black);
 	        cell.setFillColor(bgColor2);
 	        cell.setFontSize(fontsize2);
@@ -262,6 +263,12 @@ public class Sio4CommunsPdf {
                    cell.setBottomBorderStyle(lineBlanco);
                    cell.setTopBorderStyle(lineBlanco);
             	break;
+            case 2:
+         	   cell.setLeftBorderStyle(lineBlanco);
+                cell.setRightBorderStyle(lineBlanco);
+                cell.setBottomBorderStyle(lineBlanco);
+                cell.setTopBorderStyle(lineBlanco);
+         	break;
             	default:
                     cell.setLeftBorderStyle(lineAzul);
                     cell.setRightBorderStyle(lineAzul);
