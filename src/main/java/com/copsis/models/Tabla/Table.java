@@ -53,6 +53,7 @@ public abstract class Table <T extends PDPage>  {
     private boolean drawDebug;
     private boolean remBordes;
     private boolean cellCallH;
+    private float op;
 
     /**
      * @deprecated Use one of the constructors that pass a {@link PageProvider}
@@ -214,8 +215,9 @@ public abstract class Table <T extends PDPage>  {
         return yStart;
     }
 
-    public void remoBordes(boolean rowBorder) {
+    public void remoBordes(boolean rowBorder,float op) {
         this.remBordes = rowBorder;
+        this.op=op;
     }
 
     private void drawRow(Row<T> row) throws IOException {
@@ -253,12 +255,13 @@ public abstract class Table <T extends PDPage>  {
             row.removeTopBorders();
         }
 
+        
         if (drawLines) {
 
             if (remBordes) {
-                drawVerticalLines2(row);
+            	drawVerticalLines2(row);
             } else {
-                drawVerticalLines(row);
+                drawVerticalLines(row,op);
             }
         }
 
@@ -422,7 +425,7 @@ public abstract class Table <T extends PDPage>  {
                             cursorX += cell.getHorizontalFreeSpace();
                             break;
                         case JUSTIFY:
-                            System.out.println("--->" + cell.getHorizontalFreeSpace());
+
                             cursorX += cell.getHorizontalFreeSpace()/1;
                             break;
                     }
@@ -614,8 +617,7 @@ public abstract class Table <T extends PDPage>  {
 
     }
 
-    private void drawVerticalLines(Row<T> row) throws IOException {
-
+    private void drawVerticalLines(Row<T> row,float op) throws IOException {
         float xStart = margin;
 
         // give an extra margin to the latest cell
@@ -626,8 +628,13 @@ public abstract class Table <T extends PDPage>  {
             Cell<T> cell = cellIterator.next();
 
             fillCellColor(cell, yStart, xStart, cellIterator);
-
-            drawCellBorders(row, cell, xStart, xEnd);
+            if(op == 1) {
+            	
+                drawCellBorders2(row, cell, xStart, xEnd);
+            }else{
+            	 drawCellBorders(row, cell, xStart, xEnd);
+            }
+           
             xStart += getWidth(cell, cellIterator);
         }
 
@@ -637,7 +644,6 @@ public abstract class Table <T extends PDPage>  {
 
         float xStart = margin;
 
-        // give an extra margin to the latest cell
         float xEnd = row.xEnd();
 
         Iterator<Cell<T>> cellIterator = row.getCells().iterator();
@@ -646,7 +652,8 @@ public abstract class Table <T extends PDPage>  {
 
             fillCellColor(cell, yStart, xStart, cellIterator);
 
-            //drawCellBorders(row, cell, xStart, xEnd);
+           
+       
             xStart += getWidth(cell, cellIterator);
         }
 
@@ -683,6 +690,41 @@ public abstract class Table <T extends PDPage>  {
         if (leftBorder != null) {
             float x = xStart + leftBorder.getWidth() / 2;
             drawLine(x, yStart, x, yEnd + (bottomBorder == null ? 0 : bottomBorder.getWidth()), leftBorder);
+        }
+
+    }
+    
+    private void drawCellBorders2(Row<T> row, Cell<T> cell, float xStart, float xEnd) throws IOException {
+
+        float yEnd = yStart - row.getHeight();
+
+        // top
+        LineStyle topBorder = cell.getTopBorder();
+        if (topBorder != null) {
+            float y = yStart - topBorder.getWidth() / 2;
+            drawLine(xStart, y, xStart + cell.getWidth(), y, topBorder);
+        }
+
+        // right
+        LineStyle rightBorder = cell.getRightBorder();
+        if (rightBorder != null) {
+            float x = xStart + cell.getWidth() - rightBorder.getWidth() / 2;
+            drawLine(x, yStart - (topBorder == null ? 0 : topBorder.getWidth()), x,( yEnd-0.8f), rightBorder);
+        }
+
+        // bottom
+        LineStyle bottomBorder = cell.getBottomBorder();
+        if (bottomBorder != null) {
+            float y = yEnd + bottomBorder.getWidth() / 2;
+            drawLine(xStart, y, xStart + cell.getWidth() - (rightBorder == null ? 0 : rightBorder.getWidth()), y,
+                    bottomBorder);
+        }
+
+        // left
+        LineStyle leftBorder = cell.getLeftBorder();
+        if (leftBorder != null) {
+            float x = xStart + leftBorder.getWidth() / 2;
+            drawLine(x, yStart, x, (yEnd-0.8f) + (bottomBorder == null ? 0 : bottomBorder.getWidth()), leftBorder);
         }
 
     }
