@@ -158,11 +158,11 @@ public class Row<T extends PDPage>  {
 	                maxheight = cellHeight;
 	            }
 	        }
-	        //	System.out.println("row0--->" + maxheight);
+	        
 	        if (maxheight > height) {
 	            this.height = maxheight + this.lineSpacing;
 	        }
-	        //System.out.println("row--->" + height);
+	  
 	        return height;
 	    }
 
