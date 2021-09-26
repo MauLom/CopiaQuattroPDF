@@ -278,7 +278,7 @@ public class impresionConsetimientoPdf {
 					baseRow2 = communsPdf.setRow(table2, 7);
 					baseRow2 = communsPdf.setRow(table2, 15);
 					communsPdf.setCell(baseRow,10, "No. Póliza", azul, false,"L", 10, lineBoders, "", padding,bgColor);
-					communsPdf.setCell(baseRow,40, impresionForm.getNopoliza(), azul, false,"L", 10, lineBoders, "", padding,bgColor).setBottomPadding(5f);
+					communsPdf.setCell(baseRow,40, impresionForm.getNopoliza(), azul, false,"L", 10, lineBoders, "", padding,bgColor).setTopPadding(-0.5f);
 					
 					communsPdf.setCell(baseRow2,10, "", azul, false,"L", 13, lineBoders6, "", padding,bgColor);
 					communsPdf.setCell(baseRow2, 40, "", azul, false,"L", 13, lineBoders61, "", padding,bgColor);
@@ -298,7 +298,7 @@ public class impresionConsetimientoPdf {
 					baseRow = communsPdf.setRow(table, 15);	
 					
 					communsPdf.setCell(baseRow,75, impresionForm.getAsegurado(), azul, false,"L", 9, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,25, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,25, impresionForm.getNomina(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 									
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow,50, "RFC", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
@@ -490,7 +490,13 @@ public class impresionConsetimientoPdf {
 								 
 								
 							 }else {
-								 communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/logo-si-no.png").scale(60, 40), 1, 103, black).setLeftPadding(16f);
+								 if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+									 communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2109/Polizas/2109/dhd7xuhDqRRsXrMilIVOUo+PkOOMPjOEAgFFuMPDLu0dyS+FhVxhSdAaobuLjYY/SI.png").scale(60, 40), 1, 103, black).setLeftPadding(16f);	 
+								 }else {
+									 communsPdf.setCell(baseRow, 15, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2109/Polizas/2109/dhd7xuhDqRRsXrMilIVOUv8PqdQS5ACLtuslkwHG2y1yEWPdejQZ7f+V8t4K4Oy/NO.png").scale(60, 40), 1, 103, black).setLeftPadding(16f);
+									 
+								 }
+								 
 								 
 							 }
 						    
