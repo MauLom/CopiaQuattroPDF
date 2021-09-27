@@ -46,7 +46,7 @@ public class AxaSaludModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.split("Póliza:")[1].split("Solicitud")[0].replace("\r\n", "")
-						.replace("@@@", "").replace("###", "");
+						.replace("@@@", "").replace("###", "").replace("Contratante", "");
 				modelo.setPoliza(newcontenido);
 			}
 
@@ -72,7 +72,7 @@ public class AxaSaludModel {
 						String x = newcontenido.split("\n")[i].split("Nombre:")[1].split("RFC")[0].replace("\r", "")
 								.replace("###", "");
 						if (x.contains(",")) {
-							modelo.setCteNombre((x.split(",")[1] + " " + x.split(",")[0]).trim());
+							modelo.setCteNombre((x.split(",")[1] + " " + x.split(",")[0]).trim().replace("  ", " "));
 						} else {
 							modelo.setCteNombre(x.trim());
 						}
@@ -148,8 +148,8 @@ public class AxaSaludModel {
 								.replace("###", "").split(x)[1].trim();
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
 								newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
-										.replace("###", "").split(x)[0].trim() + "" + x));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length()).replace(" ", "")));
+										.replace("###", "").split(x)[0].trim() + "" + x).replace(" ", ""));
+						modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length()).replace(" ", "")).replace(" ", ""));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 						modelo.setRecargo(
 								(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1]
@@ -393,12 +393,14 @@ public class AxaSaludModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					
 					if (newcontenido.split("\n")[i].contains("Coberturas###Amparadas")) {
 
 					} else {
 						int sp = newcontenido.split("\n")[i].split("###").length;
-						if (sp == 2) {
+						if (sp == 2 &  newcontenido.split("\n")[i].length() > 20) {
+						
+							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
 							coberturas.add(cobertura);
