@@ -33,7 +33,7 @@ public class AxaSaludV2Model {
 	try {
 		modelo.setTipo(3);
 		modelo.setCia(20);
-
+		
 
 		inicio = contenido.indexOf("Datos###del###contratante###Póliza");
 		if(inicio == -1) {
@@ -117,9 +117,8 @@ public class AxaSaludV2Model {
 				
 			}
 		}
-		
-	
-		
+
+		modelo.setMoneda(1);
 		inicio = contenido.indexOf("Prima###Neta");
 		if(inicio ==  -1) {
 			inicio = contenido.indexOf("Prima Neta");
