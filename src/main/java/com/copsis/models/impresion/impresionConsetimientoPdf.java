@@ -481,11 +481,16 @@ public class impresionConsetimientoPdf {
 								 communsPdf.setCell(baseRow,47,"g) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 
-							  if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-								  communsPdf.setCell(baseRow4,38,"24 MS",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
-							  }else {
-								  communsPdf.setCell(baseRow4,38,"",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
-							  }
+							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")){
+								 communsPdf.setCell(baseRow4,38,"24 MS",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
+							 }else {
+								 if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+									  communsPdf.setCell(baseRow4,38,"24 MS",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
+								  }else {
+									  communsPdf.setCell(baseRow4,38,"",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
+								  }
+							 }
+							 
 						     
 							 communsPdf.setCell(baseRow,38, "", azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")){
