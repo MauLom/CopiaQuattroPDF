@@ -76,7 +76,7 @@ public class AxaSaludModel {
 						if (x.contains(",")) {
 							modelo.setCteNombre((x.split(",")[1] + " " + x.split(",")[0]).trim().replace("  ", " "));
 						} else {
-							System.out.println(newcontenido.split("\n")[i+1]);
+				
 							if(newcontenido.split("\n")[i+1].contains("SA DE CV")) {
 								modelo.setCteNombre(x.trim() +" " + newcontenido.split("\n")[i+1].split("###")[0].replace("@@@", "").trim());
 							}else {
@@ -95,7 +95,7 @@ public class AxaSaludModel {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").replace("\r", ""));
 					} else {
 						if (newcontenido.split("\n")[i].contains("Domicilio:")) {
-							System.out.println("--->"+newcontenido.split("\n")[i + 3]);
+					
 							String valor = "";
 							if( newcontenido.split("\n")[i + 2].length() > 15) {
 							 valor =  newcontenido.split("\n")[i + 2];
