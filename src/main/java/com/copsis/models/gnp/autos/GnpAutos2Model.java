@@ -27,7 +27,6 @@ public class GnpAutos2Model {
 	public EstructuraJsonModel procesar() {
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-//	System.out.println(contenido);
 
 		try {
 			
