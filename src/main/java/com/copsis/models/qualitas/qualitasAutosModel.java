@@ -421,7 +421,7 @@ public class qualitasAutosModel {
 
 			// forma_pago
 			inicio = contenido.indexOf("Tasa Financiamiento");
-System.out.println("----------> " + inicio);
+
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio, inicio + 200).split("\r\n")[1];
 			
@@ -474,7 +474,7 @@ System.out.println("----------> " + inicio);
 				if (inicio > -1) {
 					newcontenido = contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].replace("###", "")
 							.trim();
-					System.out.println("----------> " + newcontenido);
+				
 					if (newcontenido.contains("12")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("12")[0].trim()));
 					} else {
