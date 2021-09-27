@@ -36,7 +36,9 @@ public class AxaSaludModel {
 				.replace("C###oberturas###Am###paradas", "Coberturas###Amparadas").replace("M###oneda:", "Moneda:")
 				.replace("V###igencia###:", "Vigencia:").replace("I.V###.A###:", "I.V.A:")
 				.replace("#Prim###as:", "Primas:").replace("T###otal:", "Total:").replace("C###.P:", "C.P:")
-				.replace("A###gente:", "Agente:").replace("U###tilidad:", "Utilidad:");
+				.replace("A###gente:", "Agente:").replace("U###tilidad:", "Utilidad:")
+				.replace("N O R T E T R E S", "NORTE TRES")
+				.replace(" N U E V O P A R Q U E I N D U S T", "NUEVO PARQUE INDUSTRIAL");
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(20);
@@ -46,7 +48,7 @@ public class AxaSaludModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.split("Póliza:")[1].split("Solicitud")[0].replace("\r\n", "")
-						.replace("@@@", "").replace("###", "");
+						.replace("@@@", "").replace("###", "").replace("Contratante", "").replace("  ", "");
 				modelo.setPoliza(newcontenido);
 			}
 
@@ -69,12 +71,18 @@ public class AxaSaludModel {
 
 					if (newcontenido.split("\n")[i].contains("Nombre:")
 							&& newcontenido.split("\n")[i].contains("RFC")) {
-						String x = newcontenido.split("\n")[i].split("Nombre:")[1].split("RFC")[0].replace("\r", "")
-								.replace("###", "");
+				
+						String x = newcontenido.split("\n")[i].split("Nombre:")[1].split("RFC")[0].replace("\r", "").replace("###", "");
 						if (x.contains(",")) {
-							modelo.setCteNombre((x.split(",")[1] + " " + x.split(",")[0]).trim());
+							modelo.setCteNombre((x.split(",")[1] + " " + x.split(",")[0]).trim().replace("  ", " "));
 						} else {
-							modelo.setCteNombre(x.trim());
+				
+							if(newcontenido.split("\n")[i+1].contains("SA DE CV")) {
+								modelo.setCteNombre(x.trim() +" " + newcontenido.split("\n")[i+1].split("###")[0].replace("@@@", "").trim());
+							}else {
+								modelo.setCteNombre(x.trim());	
+							}
+							
 						}
 						modelo.setRfc(newcontenido.split("\n")[i].split("RFC")[1].replace(":", "").replace("\r", "")
 								.replace("###", ""));
@@ -87,12 +95,19 @@ public class AxaSaludModel {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").replace("\r", ""));
 					} else {
 						if (newcontenido.split("\n")[i].contains("Domicilio:")) {
+					
+							String valor = "";
+							if( newcontenido.split("\n")[i + 2].length() > 15) {
+							 valor =  newcontenido.split("\n")[i + 2];
+							}else {
+								valor =  newcontenido.split("\n")[i + 3];
+							}
 							modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + "  "
-									+ newcontenido.split("\n")[i + 2]).replaceAll("###", " ").replace("\r", "").trim());
+									+ valor).replaceAll("###", " ").replace("\r", "").replace("@@@", "").replace("   ", " ").trim());
 						}
 						if (newcontenido.split("\n")[i].contains("C.P:")) {
 							modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "")
-									.replace("Edo:", "").replace("\r", ""));
+									.replace("Edo:", "").replace("\r", "").replace("   ", ""));
 						}
 
 					}
@@ -127,11 +142,10 @@ public class AxaSaludModel {
 
 					if (newcontenido.split("\n")[i].contains("Vigencia")
 							&& newcontenido.split("\n")[i].contains("Expedición")) {
-						if (newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "")
-								.split("-").length == 6) {
+				
+						if (newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "").split("-").length == 6) {
 							modelo.setVigenciaDe(fn.formatDate_MonthCadena(
-									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0]
-											.replace("###", "").replace(" - ", "###").split("###")[0]));
+									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "").replace(" - ", "###").split("###")[0]));
 							modelo.setVigenciaA(fn.formatDate_MonthCadena(
 									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0]
 											.replace("###", "").replace(" - ", "###").split("###")[1]));
@@ -140,6 +154,18 @@ public class AxaSaludModel {
 									(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1]
 											.replace("###", "").replace(",", "")))));
 						}
+						if (newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "").split("-").length == 5) {
+							modelo.setVigenciaDe(fn.formatDate_MonthCadena(
+									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0].replace("###", "").replace("Del", "").replace("al", "###").replace(" - ", "###").split("###")[0].replace(" ", "")));
+							modelo.setVigenciaA(fn.formatDate_MonthCadena(
+									newcontenido.split("\n")[i].split("Vigencia:")[1].split("Gastos")[0]
+											.replace("###", "").replace("al", "###").replace(" - ", "###").split("###")[1].replace(" ", "")));
+							modelo.setFechaEmision(modelo.getVigenciaDe());
+							modelo.setDerecho(
+									(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1]
+											.replace("###", "").replace(",", "")))));
+						}
+						
 					} else if (newcontenido.split("\n")[i].contains("Vigencia")
 							&& newcontenido.split("\n")[i].contains("Financiamiento")) {
 						String x = newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
@@ -148,8 +174,8 @@ public class AxaSaludModel {
 								.replace("###", "").split(x)[1].trim();
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
 								newcontenido.split("\n")[i].split("Vigencia:")[1].split("Financiamiento")[0]
-										.replace("###", "").split(x)[0].trim() + "" + x));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length()).replace(" ", "")));
+										.replace("###", "").split(x)[0].trim() + "" + x).replace(" ", ""));
+						modelo.setVigenciaA(fn.formatDate_MonthCadena(x2.substring(1, x2.length()).replace(" ", "")).replace(" ", ""));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 						modelo.setRecargo(
 								(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1]
@@ -393,12 +419,14 @@ public class AxaSaludModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					
 					if (newcontenido.split("\n")[i].contains("Coberturas###Amparadas")) {
 
 					} else {
 						int sp = newcontenido.split("\n")[i].split("###").length;
-						if (sp == 2) {
+						if (sp == 2 &  newcontenido.split("\n")[i].length() > 20) {
+						
+							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
 							coberturas.add(cobertura);

@@ -29,6 +29,7 @@ public class GnpAutos2Model {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 
 		try {
+			
 			// tipo
 			modelo.setTipo(1);
 			// cia
@@ -40,9 +41,12 @@ public class GnpAutos2Model {
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 					if (dato.contains("Póliza No.")) {
-						if (dato.split("###").length == 4) {
+						if (dato.split("###").length == 4  || dato.split("###").length == 5) {
 							if (dato.split("###")[2].trim().equals("Póliza No.")) {
 								modelo.setPoliza(dato.split("###")[3].trim());
+							}
+							if (dato.split("###")[3].trim().equals("Póliza No.")) {
+								modelo.setPoliza(dato.split("###")[4].trim());
 							}
 						}
 					}

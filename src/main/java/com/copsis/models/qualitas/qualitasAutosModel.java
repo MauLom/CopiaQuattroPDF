@@ -424,6 +424,7 @@ public class qualitasAutosModel {
 
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio, inicio + 200).split("\r\n")[1];
+			
 
 				if (newcontenido.contains("Gastos por")) {
 					newcontenido = newcontenido.split("Gastos por")[0].replace("###", "").trim();
@@ -464,6 +465,8 @@ public class qualitasAutosModel {
 						.replace("###", "").replace("@@@", "").trim();
 				modelo.setFormaPago(fn.formaPago(newcontenido));
 			}
+			
+			
 
 			if (modelo.getFormaPago() == 0) {
 				inicio = contenido.lastIndexOf("Pago:");
@@ -471,10 +474,16 @@ public class qualitasAutosModel {
 				if (inicio > -1) {
 					newcontenido = contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].replace("###", "")
 							.trim();
+				
 					if (newcontenido.contains("12")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("12")[0].trim()));
 					} else {
-						modelo.setFormaPago(fn.formaPago(newcontenido));
+						if(newcontenido.contains("Pagos")) {
+							modelo.setFormaPago(fn.formaPago(newcontenido.split("Pagos")[0]));
+						}else {
+							modelo.setFormaPago(fn.formaPago(newcontenido));
+						}
+				
 					}
 
 				}
