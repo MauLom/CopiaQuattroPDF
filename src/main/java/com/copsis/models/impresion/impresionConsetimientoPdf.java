@@ -252,6 +252,8 @@ public class impresionConsetimientoPdf {
 					Row<PDPage> baseRow2;
 					BaseTable table3;
 					Row<PDPage> baseRow3;
+					BaseTable table4;
+					Row<PDPage> baseRow4;
 
 					
 					 
@@ -440,50 +442,67 @@ public class impresionConsetimientoPdf {
 					yStart -= table.getHeaderAndDataHeight();
 					
 					
-				
-					
+					table4 = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);	
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);	
+					
 					
 					 if(impresionForm.getCoberturas().size() > 0 ) {
 						 for (int i = 0; i < impresionForm.getCoberturas().size(); i++) {
 							 baseRow = communsPdf.setRow(table, 17);
+							 baseRow4 = communsPdf.setRow(table4, 17);
 						
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"a) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);							 
 							 }
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Indemnización por Muerte Accidental (DI)")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"b) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Pérdidas Orgánicas (PO)")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"c) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Cobertura por Invalidez Total y Permanente (BITP)")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"d) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Beneficio Seguro Saldado por Invalidez Total (SSIT)")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"e) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
-							 System.out.println(impresionForm.getCoberturas().get(i).getNombres().contains("24 horas"));
+					
 							 if(impresionForm.getCoberturas().get(i).getNombres().contains("Tu médico 24 horas")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"f) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Servicio de Asistencia Funeraria")) {
+								 communsPdf.setCell(baseRow4,47,"",azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 								 communsPdf.setCell(baseRow,47,"g) "+impresionForm.getCoberturas().get(i).getNombres(),azul, false,"L", 10, lineBoders65, "", padding3,bgColor);
 							 }
 							 
-							 
+							  if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+								  communsPdf.setCell(baseRow4,38,"24 MS",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
+							  }else {
+								  communsPdf.setCell(baseRow4,38,"",azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
+							  }
+						     
 							 communsPdf.setCell(baseRow,38, "", azul, false,"L", 10, lineBoders41, "", padding3,bgColor);
 							 if(impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")){
 								 if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+									 communsPdf.setCell(baseRow4,15,"",azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 communsPdf.setCell(baseRow,15, "Incluido", azul, false,"C", 10, lineBoders64, "", padding3,bgColor);
 								 }else {
+									 communsPdf.setCell(baseRow4,15,"",azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 
 								 }
 							 }else if(impresionForm.getCoberturas().get(i).getNombres().equals("Tu médico 24 horas ®")  || impresionForm.getCoberturas().get(i).getNombres().equals("Servicio de Asistencia Funeraria") ) {
 								 if(impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+									 communsPdf.setCell(baseRow4,15,"",azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 communsPdf.setCell(baseRow,15, "Incluido", azul, false,"C", 10, lineBoders64, "", padding3,bgColor);
 								 }else {
+									 communsPdf.setCell(baseRow4,15,"",azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 communsPdf.setCell(baseRow,15, "", azul, false,"L", 10, lineBoders64, "", padding3,bgColor);
 									 
 								 }
@@ -506,8 +525,16 @@ public class impresionConsetimientoPdf {
 										
 					baseRow = communsPdf.setRow(table, 5);
 					communsPdf.setCell(baseRow,100, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					
+					baseRow4 = communsPdf.setRow(table4, 5);
+					communsPdf.setCell(baseRow4,100, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					
+					
 					table.remoBordes(false, 1);
 					table.draw();
+					
+					table4.remoBordes(false, 1);
+					table4.draw();
 					
 					PDPageContentStream content0 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
  					table3 = new BaseTable(yStartStar, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
@@ -749,6 +776,7 @@ public class impresionConsetimientoPdf {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
+			     
 					return output.toByteArray();
 				}finally {
 					document.close();
