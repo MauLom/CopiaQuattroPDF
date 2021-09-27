@@ -608,9 +608,9 @@ public class impresionConsetimientoPdf {
 						for (int i = 0; i < 5; i++) {
 							baseRow = communsPdf.setRow(table, 20);
 							communsPdf.setCell(baseRow,5,  x +"°", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
-							communsPdf.setCell(baseRow,30, "", azul, true,"C", 10, lineBoders, "", padding3,bgColor);
-							communsPdf.setCell(baseRow,30, "", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
-							communsPdf.setCell(baseRow,17, "", azul, true,"L", 10, lineBoders3, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,30, "", azul, true,"C", 10, lineBoders112, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,30, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
+							communsPdf.setCell(baseRow,17, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
 							communsPdf.setCell(baseRow,18, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
 							x++;
 						}
