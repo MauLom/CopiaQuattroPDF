@@ -358,19 +358,25 @@ public class AxaSaludModel {
 							if (newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
 									.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
 											.split("###")[0].contains(",")) {
-//								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
-//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
-//												.split("###")[0];
-//								asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
-//								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
-//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
-//
-//								if (x2.split("###").length > 1) {
-//
+								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
+												.split("###")[0];
+								
+								
+								
+								asegurado.setNombre((x.split(",")[1] + " " + x.split(",")[0]).replace("  ", " "));
+								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
+										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].replace("######", "###").trim();
+								
+								System.out.println(x2.split("###")[1]);
+
+								if (x2.split("###").length > 1) {
+
 //									asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim()) ? 1 : 0);
-//
+
 //									asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
-//								} else {
+								} 
+//								else {
 //									if (newcontenido.split("\n")[i].contains("TITULAR")) {
 //										asegurado.setParentesco(1);
 //										asegurado.setSexo(
