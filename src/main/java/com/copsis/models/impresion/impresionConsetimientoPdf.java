@@ -615,7 +615,7 @@ public class impresionConsetimientoPdf {
 								baseRow = communsPdf.setRow(table, 20);
 								communsPdf.setCell(baseRow,5,x +"°" , azul, false,"C", 10, lineBoders, "", padding3,bgColor);
 								communsPdf.setCell(baseRow,30, impresionForm.getBeneficiarios().get(i).getNombres(), azul, false,"L", 10, lineBoders112, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"yyyy-MM-dd"), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
+								communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"dd-MM-yyyy"), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
 								communsPdf.setCell(baseRow,17, impresionForm.getBeneficiarios().get(i).getParentesco(), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
 								communsPdf.setCell(baseRow,18, impresionForm.getBeneficiarios().get(i).getPorcentaje() +" %", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
 								
@@ -738,7 +738,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,50, "Firma del Integrante del Grupo asegurado", azul, true,"L", 10, lineBoders, "", padding2,bgColorAb);
 					
 					baseRow = communsPdf.setRow(table, 80);
-					communsPdf.setCell(baseRow,50, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,50, impresionForm.getHashCode(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,50, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
 					table.draw();
 					
