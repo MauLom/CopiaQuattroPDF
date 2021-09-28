@@ -38,9 +38,10 @@ public class AxaSaludModel {
 				.replace("#Prim###as:", "Primas:").replace("T###otal:", "Total:").replace("C###.P:", "C.P:")
 				.replace("A###gente:", "Agente:").replace("U###tilidad:", "Utilidad:")
 				.replace("N O R T E T R E S", "NORTE TRES")
-				.replace(" N U E V O P A R Q U E I N D U S T", "NUEVO PARQUE INDUSTRIAL");
+				.replace(" N U E V O P A R Q U E I N D U S T", "NUEVO PARQUE INDUSTRIAL")
+				.replace("Endosos contenidos en la Póliza", "Endosos###contenidos###en###la###Póliza");
 		try {
-			modelo.setTipo(3);
+			modelo.setTipo(32324);
 			modelo.setCia(20);
 
 			inicio = contenido.indexOf("Póliza");
@@ -238,11 +239,12 @@ public class AxaSaludModel {
 				}
 
 			}
-
+//			System.out.println( contenido);
 			// Proceso de Asegurados
 			inicio = contenido.indexOf("Datos###del###Asegurado");
 			fin = contenido.indexOf("Datos###de###la###Póliza");
 
+		
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
@@ -278,16 +280,20 @@ public class AxaSaludModel {
 			if (modelo.getAsegurados().size() == 0) {
 				inicio = contenido.indexOf("Familia###Asegurada");
 				fin = contenido.indexOf("En###cumplimiento#");
+		
 				if (fin == -1) {
 					fin = contenido.indexOf("Endosos###contenidos###en###la###Póliza");
 				}
+			
 				if (inicio > 0 && fin > 0 && inicio < fin) {
-					newcontenido = contenido.substring(inicio, fin).replace(" - ", "-");
+					newcontenido =  contenido.substring(inicio, fin).replace(" - ", "-");
+		
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-
+					
 						if (newcontenido.split("\n")[i].split("-").length > 2) {
-
+							
+							                                                              								
 							if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length
 									- 1].trim().split("-").length > 3) {
 								String numero = newcontenido.split("\n")[i]
@@ -301,45 +307,78 @@ public class AxaSaludModel {
 										.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()
 												.split(" ")[4]));
 							} else {
-
-								asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()));
-								if (newcontenido.split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()
-												.contains("-")) {
-									asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-											.split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()));
-								} else {
-									asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-											.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
+				
+					
+								if( newcontenido.split("\n")[i]
+										.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim().length() > 5 ) {
+									asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+											.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()));
+									if (newcontenido.split("\n")[i]
+											.split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()
+													.contains("-")) {
+										asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+												.split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()));
+									} else {
+										asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+												.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
+									}
+									
+								}else {
+									asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+											.split("###")[newcontenido.split("\n")[i].split("###").length - 2].trim()));
+								
+									
+									
+									
+									if (newcontenido.split("\n")[i]
+											.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()
+													.contains("-")) {
+										asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+												.split("###")[newcontenido.split("\n")[i].split("###").length - 3].trim()));
+									} else {
+										if(newcontenido.split("\n")[i]
+												.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim().contains("-")) {
+											asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+													.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
+											
+										}else {
+											asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+													.split("###")[newcontenido.split("\n")[i].split("###").length - 5].trim()));
+										}
+										
+									}
+									
 								}
-//                                
+								
+								
+							
+                                
 							}
 
 							if (newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
 									.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
 											.split("###")[0].contains(",")) {
-								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
-												.split("###")[0];
-								asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
-								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
-
-								if (x2.split("###").length > 1) {
-
-									asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim()) ? 1 : 0);
-
-									asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
-								} else {
-									if (newcontenido.split("\n")[i].contains("TITULAR")) {
-										asegurado.setParentesco(1);
-										asegurado.setSexo(
-												fn.sexo(newcontenido.split("\n")[i].split("###")[1].split(" ")[1].trim()
-														.toLowerCase()) ? 1 : 0);
-
-									}
-								}
+//								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
+//												.split("###")[0];
+//								asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
+//								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
+//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
+//
+//								if (x2.split("###").length > 1) {
+//
+//									asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim()) ? 1 : 0);
+//
+//									asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
+//								} else {
+//									if (newcontenido.split("\n")[i].contains("TITULAR")) {
+//										asegurado.setParentesco(1);
+//										asegurado.setSexo(
+//												fn.sexo(newcontenido.split("\n")[i].split("###")[1].split(" ")[1].trim()
+//														.toLowerCase()) ? 1 : 0);
+//
+//									}
+//								}
 
 							} else {
 
@@ -365,77 +404,78 @@ public class AxaSaludModel {
 			}
 
 			// proceso de Asegurados version 2
-			if (modelo.getAsegurados().size() == 0) {
-				inicio = contenido.indexOf("Familia###Asegurada");
-				fin = contenido.indexOf("En###cumplimiento#");
-				if (fin == -1) {
-					fin = contenido.indexOf("Endosos###contenidos###en###la###Póliza");
-				}
-				if (inicio > 0 && fin > 0 && inicio < fin) {
-					newcontenido = contenido.substring(inicio, fin);
-					for (int i = 0; i < newcontenido.split("\n").length; i++) {
-						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-						if (newcontenido.split("\n")[i].split("-").length > 2) {
-							asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()));
-							asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
-							if (newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
-											.split("###")[0].contains(",")) {
-								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
-												.split("###")[0];
-								asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
-								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
-										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
-								if (x2.split("###").length > 1) {
-
-									asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim()) ? 1 : 0);
-
-									asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
-								}
-							}
-							asegurados.add(asegurado);
-						}
-					}
-					asegurados.get(0).setNombre(modelo.getCteNombre());
-					asegurados.get(0).setParentesco(1);
-					modelo.setAsegurados(asegurados);
-				}
-
-			}
-
-//			/**proceso para cober*/
-
-			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-
-			inicio = contenido.indexOf("Coberturas###Amparadas");
-			fin = contenido.indexOf("Advertencia:");
-			if (fin == -1) {
-				fin = contenido.indexOf("Se hace del conocimient");
-			}
-
-			if (inicio > 0 && fin > 0 && inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					
-					if (newcontenido.split("\n")[i].contains("Coberturas###Amparadas")) {
-
-					} else {
-						int sp = newcontenido.split("\n")[i].split("###").length;
-						if (sp == 2 &  newcontenido.split("\n")[i].length() > 20) {
-						
-							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
-							coberturas.add(cobertura);
-						}
-
-					}
-				}
-				modelo.setCoberturas(coberturas);
-			}
+//			if (modelo.getAsegurados().size() == 0) {
+//				inicio = contenido.indexOf("Familia###Asegurada");
+//				fin = contenido.indexOf("En###cumplimiento#");
+//				if (fin == -1) {
+//					fin = contenido.indexOf("Endosos###contenidos###en###la###Póliza");
+//				}
+//				if (inicio > 0 && fin > 0 && inicio < fin) {
+//					newcontenido = contenido.substring(inicio, fin);
+//					for (int i = 0; i < newcontenido.split("\n").length; i++) {
+//						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+//						System.out.println("=======> " + newcontenido.split("\n")[i]);
+//						if (newcontenido.split("\n")[i].split("-").length > 2) {
+//							asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+//									.split("###")[newcontenido.split("\n")[i].split("###").length - 1].trim()));
+//							asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+//									.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));
+//							if (newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+//									.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
+//											.split("###")[0].contains(",")) {
+//								String x = newcontenido.split("\n")[i].split(newcontenido.split("\n")[i]
+//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
+//												.split("###")[0];
+//								asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
+//								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
+//										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0].trim();
+//								if (x2.split("###").length > 1) {
+//
+//									asegurado.setSexo(fn.sexo(x2.split("###")[1].split(" ")[1].trim()) ? 1 : 0);
+//
+//									asegurado.setParentesco(fn.parentesco(x2.split("###")[1].trim()));
+//								}
+//							}
+//							asegurados.add(asegurado);
+//						}
+//					}
+//					asegurados.get(0).setNombre(modelo.getCteNombre());
+//					asegurados.get(0).setParentesco(1);
+//					modelo.setAsegurados(asegurados);
+//				}
+//
+//			}
+//
+////			/**proceso para cober*/
+//
+//			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+//
+//			inicio = contenido.indexOf("Coberturas###Amparadas");
+//			fin = contenido.indexOf("Advertencia:");
+//			if (fin == -1) {
+//				fin = contenido.indexOf("Se hace del conocimient");
+//			}
+//
+//			if (inicio > 0 && fin > 0 && inicio < fin) {
+//				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
+//				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+//					
+//					if (newcontenido.split("\n")[i].contains("Coberturas###Amparadas")) {
+//
+//					} else {
+//						int sp = newcontenido.split("\n")[i].split("###").length;
+//						if (sp == 2 &  newcontenido.split("\n")[i].length() > 20) {
+//						
+//							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+//							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+//							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
+//							coberturas.add(cobertura);
+//						}
+//
+//					}
+//				}
+//				modelo.setCoberturas(coberturas);
+//			}
 
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
@@ -466,6 +506,7 @@ public class AxaSaludModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 			modelo.setError(
 					AxaSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
