@@ -42,6 +42,7 @@ public class ImpresionForm {
 	private String vigenciaDe;
 	private String vigenciaA;
 	private String nomina;
+	private String correo;
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
 }

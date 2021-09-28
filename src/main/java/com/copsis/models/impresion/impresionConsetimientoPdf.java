@@ -327,7 +327,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,50, "País de nacimiento", azul, false,"L", 10, lineBoders2, "", padding3,bgColor);
 					
 					baseRow = communsPdf.setRow(table, 15);    	
-					communsPdf.setCell(baseRow,50, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					communsPdf.setCell(baseRow,50, impresionForm.getCorreo(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,50, "", azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					
 					baseRow = communsPdf.setRow(table, 15);
