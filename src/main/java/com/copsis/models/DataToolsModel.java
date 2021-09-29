@@ -831,4 +831,27 @@ public class DataToolsModel {
 	        return resultado.toString();
 	}
 	
+    public String elimgatos(String texto) {// QUITA ### AL INICIO Y FINAL
+        String newtexto = "";
+        int longText = 0;
+        texto = texto.trim();
+        longText = texto.length();
+
+        if (longText >= 3) {
+            if (texto.substring(longText - 3, longText).equals("###")) {
+                newtexto = texto.substring(0, longText - 3);
+            } else {
+                newtexto = texto;
+            }
+            longText = newtexto.length();
+            if (newtexto.length() >= 3) {
+                if (newtexto.substring(0, 3).equals("###")) {
+                    newtexto = newtexto.substring(3, longText);
+                }
+            }
+        } else {
+            newtexto = texto;
+        }
+        return newtexto;
+    }
 }
