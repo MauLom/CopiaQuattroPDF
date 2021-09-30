@@ -606,29 +606,55 @@ public class impresionConsetimientoPdf {
 					
 					
 			  if(impresionForm.getBeneficiarios().size() > 0 ) {
+				  int  total=  impresionForm.getBeneficiarios().size();
 							 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
 							 int  x=1;
-						for (int i = 0; i < 5; i++) {
-							
-							if(i < impresionForm.getBeneficiarios().size() ) {
-								
-								baseRow = communsPdf.setRow(table, 20);
-								communsPdf.setCell(baseRow,5,x +"°" , azul, false,"C", 10, lineBoders, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,30, impresionForm.getBeneficiarios().get(i).getNombres(), azul, false,"L", 10, lineBoders112, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"dd-MM-yyyy"), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,17, impresionForm.getBeneficiarios().get(i).getParentesco(), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,18, impresionForm.getBeneficiarios().get(i).getPorcentaje() +" %", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+						for (int i = 0; i < 10; i++) {
+							if( i < 5 ) {
+								if(i < 5 ) {
+									
+									baseRow = communsPdf.setRow(table, 20);
+									communsPdf.setCell(baseRow,5,x +"°" , azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,30, impresionForm.getBeneficiarios().get(i).getNombres(), azul, false,"L", 10, lineBoders112, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"dd-MM-yyyy"), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,17, impresionForm.getBeneficiarios().get(i).getParentesco(), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,18, impresionForm.getBeneficiarios().get(i).getPorcentaje() +" %", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+						
+								}else {
+									baseRow = communsPdf.setRow(table, 20);
+									communsPdf.setCell(baseRow,5, x +"°", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,30, "", azul, true,"C", 10, lineBoders112, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,30, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,17, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
+									communsPdf.setCell(baseRow,18, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
+								}
+								if(x ==  total) {
+									 break;
+								 }
 								
 							}else {
-								baseRow = communsPdf.setRow(table, 20);
-								communsPdf.setCell(baseRow,5, x +"°", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,30, "", azul, true,"C", 10, lineBoders112, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,30, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,17, "", azul, true,"L", 10, lineBoders11, "", padding3,bgColor);
-								communsPdf.setCell(baseRow,18, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
+								if(total >  5) {
+									 if(  i <  total  ) {
+										 if(i ==  total) {
+											 baseRow = communsPdf.setRow(table, 25);
+										 }else {
+											 baseRow = communsPdf.setRow(table, 20);
+										 }
+											communsPdf.setCell(baseRow,5,x +"°" , azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+											communsPdf.setCell(baseRow,30, impresionForm.getBeneficiarios().get(i).getNombres(), azul, false,"L", 10, lineBoders112, "", padding3,bgColor);
+											communsPdf.setCell(baseRow,30, formarDate(impresionForm.getBeneficiarios().get(i).getFecNacimiento(),"dd-MM-yyyy"), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
+											communsPdf.setCell(baseRow,17, impresionForm.getBeneficiarios().get(i).getParentesco(), azul, false,"L", 10, lineBoders11, "", padding3,bgColor);
+											communsPdf.setCell(baseRow,18, impresionForm.getBeneficiarios().get(i).getPorcentaje() +" %", azul, false,"C", 10, lineBoders, "", padding3,bgColor);
+									 }
+								
+									 if(i ==  total) {
+										 break;
+									 }
+									
+								}
 								
 							}
-					
+							
 							x++;
 						}
 						table.remoBordes(false, 1);
@@ -651,7 +677,7 @@ public class impresionConsetimientoPdf {
 						table.remoBordes(false, 1);
 					table.draw();
 					}
-					yStart -= table.getHeaderAndDataHeight();
+					yStart -= table.getHeaderAndDataHeight()+2;
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 15);
@@ -781,7 +807,7 @@ public class impresionConsetimientoPdf {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-			     
+			         document.save(new File("/home/desarrollo8/Documents/Consetimiento.pdf"));
 					return output.toByteArray();
 				}finally {
 					document.close();
