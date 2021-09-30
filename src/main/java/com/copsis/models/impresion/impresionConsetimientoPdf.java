@@ -807,7 +807,7 @@ public class impresionConsetimientoPdf {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);
-			         document.save(new File("/home/desarrollo8/Documents/Consetimiento.pdf"));
+			
 					return output.toByteArray();
 				}finally {
 					document.close();
