@@ -32,6 +32,7 @@ public class AxaSaludModel {
 				.replace("Familia Asegurada", "Familia###Asegurada").replace("En cumplimiento", "En###cumplimiento#")
 				.replace("A B R ", "ABR ").replace("TITULAR M", "###TITULAR###M###")
 				.replace("###ESPOSA F ###", "###ESPOSA###F###")
+				.replace("T I T ULAR F", "###TITULAR###F###")
 				.replace("PROTECCION DENTAL SIN COSTO", "PROTECCION DENTAL###SIN COSTO").replace("T###el:", "Tel:")
 				.replace("N###om###bre:", "Nombre:").replace("D###om###icilio:", "Domicilio:").replace("C.P.", "C.P:")
 				.replace("C###oberturas###Am###paradas", "Coberturas###Amparadas").replace("M###oneda:", "Moneda:")
@@ -299,7 +300,7 @@ public class AxaSaludModel {
 					
 						if (newcontenido.split("\n")[i].split("-").length > 2) {
 							
-							                                                              								
+							System.out.println( newcontenido.split("\n")[i]);                                                       								
 							if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length
 									- 1].trim().split("-").length > 3) {
 								String numero = newcontenido.split("\n")[i]
@@ -349,7 +350,7 @@ public class AxaSaludModel {
 											
 										}else {
 											asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
-													.split("###")[newcontenido.split("\n")[i].split("###").length - 5].trim()));
+													.split("###")[newcontenido.split("\n")[i].split("###").length - 5].replace(" ", "").trim()));
 										}
 										
 									}
@@ -368,7 +369,7 @@ public class AxaSaludModel {
 										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
 												.split("###")[0];
 								
-								
+								System.out.println(x);
 								
 								asegurado.setNombre((x.split(",")[1] + " " + x.split(",")[0]).replace("  ", " "));
 								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
