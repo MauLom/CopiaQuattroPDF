@@ -300,7 +300,7 @@ public class AxaSaludModel {
 					
 						if (newcontenido.split("\n")[i].split("-").length > 2) {
 							
-							System.out.println( newcontenido.split("\n")[i]);                                                       								
+					                                                       								
 							if (newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length
 									- 1].trim().split("-").length > 3) {
 								String numero = newcontenido.split("\n")[i]
@@ -369,7 +369,7 @@ public class AxaSaludModel {
 										.split("###")[newcontenido.split("\n")[i].split("###").length - 4])[0]
 												.split("###")[0];
 								
-								System.out.println(x);
+							
 								
 								asegurado.setNombre((x.split(",")[1] + " " + x.split(",")[0]).replace("  ", " "));
 								String x2 = newcontenido.split("\n")[i].split(newcontenido.trim().split("\n")[i]
