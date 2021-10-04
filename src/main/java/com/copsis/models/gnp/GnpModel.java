@@ -54,7 +54,7 @@ public class GnpModel {
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida")) {
 				contenido = "";
-				modelo = new GnpVidaModel(fn.caratula(1, 4, stripper, doc)).procesar();
+				modelo = new GnpVIdaModel2(fn.caratula(1, 4, stripper, doc)).procesar();
 			} // termina el codigo de vida
 			 else if (contenido.contains("Coberturas Amparadas") && contenido.contains("Ubicación de los bienes asegurados")
 	                    || contenido.contains("Secciones Contratadas") && contenido.contains("Póliza de Seguro de Daños ")
