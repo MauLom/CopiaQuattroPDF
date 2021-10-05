@@ -327,7 +327,7 @@ public class GnpSaludModel {
 			inicio  = contenido.indexOf("Clave");
 			if(inicio > 0) {
 				String cont =contenido.split("Clave")[1].split("\r\n")[0].replace("### ###", "###");
-				System.out.println(cont.split("###").length);
+		
 				if(cont.split("###").length > 2) {
 					modelo.setCveAgente(cont.split("###")[1]);
 				}else {

@@ -246,7 +246,6 @@ public class GnpVIdaModel2 {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 
 				for (String beneficiariod : b.split("\n")) {
-//					System.out.println("----------< " + b);
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int aseg = beneficiariod.split("###").length;
 					if (aseg == 4) {
