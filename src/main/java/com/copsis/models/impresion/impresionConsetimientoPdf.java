@@ -764,8 +764,8 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,50, "Firma del Integrante del Grupo asegurado", azul, true,"L", 10, lineBoders, "", padding2,bgColorAb);
 					
 					baseRow = communsPdf.setRow(table, 80);
+					communsPdf.setCell(baseRow,50,"" , azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,50, impresionForm.getHashCode(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
-					communsPdf.setCell(baseRow,50, "", azul, true,"L", 10, lineBoders, "", padding3,bgColor);
 					table.draw();
 					
 					
