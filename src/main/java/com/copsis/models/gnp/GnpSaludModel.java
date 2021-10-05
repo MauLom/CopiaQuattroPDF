@@ -323,8 +323,21 @@ public class GnpSaludModel {
 				}
 			}
 
+			
+			inicio  = contenido.indexOf("Clave");
+			if(inicio > 0) {
+				String cont =contenido.split("Clave")[1].split("\r\n")[0].replace("### ###", "###");
+		
+				if(cont.split("###").length > 2) {
+					modelo.setCveAgente(cont.split("###")[1]);
+				}else {
+					modelo.setCveAgente(fn.gatos(contenido.split("Clave")[1].split("\r\n")[0]));	
+				}
+				
+			}
+			
 			// cve_agente
-			modelo.setCveAgente(fn.gatos(contenido.split("Clave")[1].split("\r\n")[0]));
+			
 
 			// agente
 			inicio = contenido.lastIndexOf("Agente");
@@ -342,7 +355,7 @@ public class GnpSaludModel {
 					}
 				}
 				if (agente.length() > 0) {
-					modelo.setAgente(agente);
+					modelo.setAgente(agente.replace("### ###", ""));
 				}
 			}
 

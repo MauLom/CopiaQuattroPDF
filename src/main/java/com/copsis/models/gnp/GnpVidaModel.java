@@ -558,6 +558,7 @@ public class GnpVidaModel {
 				tip = 11;
 
 			}
+
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			for (String beneficiariod : b.split("\n")) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
