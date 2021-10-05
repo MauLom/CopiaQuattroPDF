@@ -10,27 +10,26 @@ import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class GnpVIdaModel2 {
-
-	// Clases
 		private DataToolsModel fn = new DataToolsModel();
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
-		// Varaibles
 		private String contenido = "";
-		private String newcontenido = "";
-		private int inicio = 0;
-		private int fin = 0;
-		int longitud_split = 0;
-		private String newcontenido1 = "";
-		private int donde = 0;
+
+	
+	
 		
 		public GnpVIdaModel2(String contenido){
 			this.contenido = contenido;
 		}
 		
 		public EstructuraJsonModel procesar() {
+			 String newcontenido;
+			 int inicio = 0;
+			 int fin = 0;
+
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("### ### ###", "###").replace("### ### ", "###").replace("######", "###")
 					.replace("E ###specificaciones del Plan", "Especificaciones del Plan");
+				
 		
 			try {
 				modelo.setTipo(5);
@@ -96,11 +95,9 @@ public class GnpVIdaModel2 {
 						}
 					}					
 				}
-				
-				System.out.println(contenido);
+		
 				inicio = contenido.lastIndexOf("Agente");
-				fin = contenido.lastIndexOf("Para mayor información contáctenos:");
-//				System.out.println(inicio  +"--->" + fin);
+				fin = contenido.lastIndexOf("Para mayor información contáctenos:");		
 				if(inicio > -1 || fin > -1 || inicio < fin) {
 					newcontenido =contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 					if(newcontenido.contains("Agente") && newcontenido.contains("Clave")) {
@@ -108,32 +105,26 @@ public class GnpVIdaModel2 {
 					}else {
 						newcontenido ="";
 						inicio = contenido.indexOf("Especificaciones del Plan");
-						fin = contenido.indexOf("Interior de la República o visite gnp.com.mx");
+						fin = contenido.indexOf("visite gnp.com.mx");
 						
-						System.out.println(inicio  +"--->" + fin);
+						
 						if(inicio > -1 || fin > -1 || inicio < fin) {
 							inicio = contenido.indexOf("Especificaciones del Plan");
-							fin = contenido.indexOf("Interior de la República o visite gnp.com.mx");
+							fin = contenido.indexOf("visite gnp.com.mx");
 						}
 				
 					}
 				}
-//			
-				
-//				if(inicio > -1 || fin > -1 || inicio < fin) {
-//					newcontenido =contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
-//					for (int i = 0; i < newcontenido.split("\n").length; i++) {
-//					
-//						if(newcontenido.split("\n")[i].contains("Agente")) {
-//			
-//						modelo.setAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Clave")[0].replace("###", "").trim());	
-//						}
-//						if(newcontenido.split("\n")[i].contains("Clave")) {
-//							modelo.setCveAgente(newcontenido.split("\n")[i].split("Clave")[1].split("###")[1]);
-//						}
-//					}
-//					
-//				}
+
+				if(inicio > -1 || fin > -1 || inicio < fin) {
+					newcontenido =contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("### ###", "###");					
+					for (int i = 0; i < newcontenido.split("\n").length; i++) {
+						if(newcontenido.split("\n")[i].contains("Agente") & newcontenido.split("\n")[i].contains("Clave")) {
+							modelo.setAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Clave")[0].replace("###", "").trim());	
+							modelo.setCveAgente(newcontenido.split("\n")[i].split("Clave")[1].split("###")[1]);
+						}					
+					}					
+				}
 				
 				inicio = contenido.indexOf("Asegurado s");
 				fin = contenido.indexOf("Coberturas");
@@ -237,33 +228,40 @@ public class GnpVIdaModel2 {
 
 				}
 				
-				
-				
-				
+
+			
 				if(b.length() == 0) {
 					inicio = contenido.indexOf("Beneficiarios");
 					fin = contenido.lastIndexOf("Para mayor información");
-					
-					
-					if(inicio > -1 || fin > -1 || inicio < fin) {
-						b = contenido.substring(inicio,fin);
+
+					if(inicio > fin) {					
+						fin = inicio +(contenido.split("Beneficiarios")[1].length()-1) ;
+					}
+					if(inicio > -1 && fin > -1 && inicio < fin) {
+						b = contenido.substring(inicio,fin);						
 					}
 				}
-
+				
+				if(b.length() > 0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
+
 				for (String beneficiariod : b.split("\n")) {
+//					System.out.println("----------< " + b);
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int aseg = beneficiariod.split("###").length;
 					if (aseg == 4) {
 						if (beneficiariod.contains("Nombre")) {
 						} else if (beneficiariod.contains("@@@")) {
-							beneficiario.setNombre(beneficiariod.split("###")[0].replace("@@@", "").trim());
-							beneficiario.setNacimiento(fn.formatDate(beneficiariod.split("###")[1], "dd-MM-yy"));
-							beneficiario.setParentesco(fn.parentesco(beneficiariod.split("###")[2].toLowerCase()));					
-							beneficiario.setPorcentaje(
-									fn.castDouble(beneficiariod.split("###")[3].replace("\r", "")).intValue());
-							beneficiario.setTipo(tip);
-							beneficiarios.add(beneficiario);
+							if(beneficiariod.split("-").length >  2) {
+								beneficiario.setNombre(beneficiariod.split("###")[0].replace("@@@", "").trim());
+								beneficiario.setNacimiento(fn.formatDate(beneficiariod.split("###")[1], "dd-MM-yy"));
+								beneficiario.setParentesco(fn.parentesco(beneficiariod.split("###")[2].toLowerCase()));					
+								beneficiario.setPorcentaje(
+										fn.castDouble(beneficiariod.split("###")[3].replace("\r", "")).intValue());
+								beneficiario.setTipo(tip);
+								beneficiarios.add(beneficiario);
+							}
+					
 						} else {
 							if(beneficiariod.split("-").length >  2) {
 								beneficiario.setNombre(beneficiariod.split("###")[0].replace("@@@", "").trim());
@@ -280,10 +278,11 @@ public class GnpVIdaModel2 {
 				}
 
 				modelo.setBeneficiarios(beneficiarios);
-				
+				}
+
 
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-				// coberturas{nombre sa deducible coaseguro}
+
 				newcontenido = "";
 				inicio = -1;
 				fin = -1;
