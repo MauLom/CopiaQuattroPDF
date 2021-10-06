@@ -771,7 +771,7 @@ public class impresionConsetimientoPdf {
 					communsPdf.setCell(baseRow,100, "Comentarios", azul, true,"L", 10, lineBoders, "", padding2,bgColorAb);
 					
 					if(impresionForm.getComentario().length() >= 123) {
-						baseRow = communsPdf.setRow(table, 21);
+						baseRow = communsPdf.setRow(table, 24);
 					}else {
 						baseRow = communsPdf.setRow(table, 15);
 					}
