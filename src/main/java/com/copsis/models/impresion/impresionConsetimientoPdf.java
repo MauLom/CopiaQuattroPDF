@@ -766,6 +766,18 @@ public class impresionConsetimientoPdf {
 					baseRow = communsPdf.setRow(table, 80);
 					communsPdf.setCell(baseRow,50,"" , azul, false,"L", 10, lineBoders, "", padding3,bgColor);
 					communsPdf.setCell(baseRow,50, impresionForm.getHashCode(), azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow,100, "Comentarios", azul, true,"L", 10, lineBoders, "", padding2,bgColorAb);
+					
+					if(impresionForm.getComentario().length() >= 123) {
+						baseRow = communsPdf.setRow(table, 21);
+					}else {
+						baseRow = communsPdf.setRow(table, 15);
+					}
+					communsPdf.setCell(baseRow,100,impresionForm.getComentario() , azul, false,"L", 10, lineBoders, "", padding3,bgColor);
+					table.remoBordes(false, 1);
+			
 					table.draw();
 					
 					
