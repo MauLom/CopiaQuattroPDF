@@ -73,7 +73,7 @@ public class AxaSaludV2Model {
 					modelo.setPlan(newcontenido.split("\n")[i + 1].split("###")[0].replace("@@@", ""));
 				}
 
-				System.out.println(newcontenido.split("\n")[i]);
+			
 				if (newcontenido.split("\n")[i].contains("C.P.") && newcontenido.split("\n")[i].contains("Fecha") &&  newcontenido.split("\n")[i].contains("vigencia")) {//C.P./fecha/vigencia
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "").trim());
 					resultado = newcontenido.split("\n")[i].split("Fecha")[0].replace(modelo.getCp(), "")
