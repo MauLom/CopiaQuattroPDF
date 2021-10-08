@@ -20,6 +20,8 @@ public class AxaSaludV2Model {
 	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
+	private boolean cp = false;
+	private boolean vigenciaD = false;
 	
 
 
@@ -70,7 +72,8 @@ public class AxaSaludV2Model {
 				else if (newcontenido.split("\n")[i].contains("plan")) {
 					modelo.setPlan(newcontenido.split("\n")[i + 1].split("###")[0].replace("@@@", ""));
 				}
-				
+
+				System.out.println(newcontenido.split("\n")[i]);
 				if (newcontenido.split("\n")[i].contains("C.P.") && newcontenido.split("\n")[i].contains("Fecha") &&  newcontenido.split("\n")[i].contains("vigencia")) {//C.P./fecha/vigencia
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "").trim());
 					resultado = newcontenido.split("\n")[i].split("Fecha")[0].replace(modelo.getCp(), "")
@@ -78,12 +81,18 @@ public class AxaSaludV2Model {
 					
 					//vigencias
 					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("vigencia")[1].replace("###", "").replace("\r", "")));
-
+                   cp=true;
+                   vigenciaD = true;
 				}	else if (newcontenido.split("\n")[i].contains("C.P.") && newcontenido.split("\n")[i].contains("vigencia")){
-			
-					
-
-					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("vigencia")[1].replace("###", "").trim().replace("\r", "")));					
+					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("vigencia")[1].replace("###", "").trim().replace("\r", "")));
+					vigenciaD = true;
+				}
+				
+				if (newcontenido.split("\n")[i].contains("C.P.") && cp == false) {
+					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "").trim());
+				}
+				if(newcontenido.split("\n")[i].contains("inicio de vigencia") && vigenciaD == false){
+					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("inicio de vigencia")[1].replace("###", "").trim().replace("\r", "")));					
 				}
 				
 				
