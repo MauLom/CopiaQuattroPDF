@@ -17,6 +17,8 @@ public class Sio4CommunsPdf {
 	private final Color textColor = Color.black;
     private final Color bgColor = new Color(255, 255, 255, 0);
     private final Integer fontsize = 9;
+    public  Integer impresiom = 0;
+    
 
  
     private LineStyle lineGris = new LineStyle(new Color(196, 196, 196), 0);//para la cotizacion inter 37;
@@ -150,7 +152,13 @@ public class Sio4CommunsPdf {
 	
 	        cell.setTextColor(black);
 	        cell.setFillColor(bgColor);
-	        cell.setFontSize(fontsize2);
+	       
+	        if(impresiom == 102) {
+	        	 cell.setFontSize(fontsize);
+	        }else {
+	        	 cell.setFontSize(fontsize2);
+	        }
+	       
 	     
 	       this.setAligment(cell, aligconte);
 	    

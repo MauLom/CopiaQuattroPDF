@@ -51,6 +51,7 @@ public class ImpresionInter {
 					document.addPage(page);
 					BaseTable table;
 					Row<PDPage> baseRow;
+					communsPdf.impresiom = 102;
 
 					//File logo = new File("https://storage.googleapis.com/quattrocrm-copsis/h11fia/recursosInter/interLogo.png");
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 250, document, page, false, true);
