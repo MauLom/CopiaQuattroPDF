@@ -75,6 +75,7 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("#########", "###"));
 			remplazoDeA.add(new ReplaceModel("############", "###"));
 			remplazoDeA.add(new ReplaceModel("### ### ### ", "###"));
+			remplazoDeA.add(new ReplaceModel("### ### ###","###"));
 			remplazoDeA.add(new ReplaceModel("### ### ### ### ### ", "###"));
 		
 			
@@ -88,6 +89,7 @@ public class DataToolsModel {
 		try {
 			for (ReplaceModel r : datos) {
 
+			
 				texto = texto.replace(r.getRemplazaDe(), r.getRemplazaA());
 
 			}
@@ -751,10 +753,13 @@ public class DataToolsModel {
 	public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException {
 		stripper.setStartPage(inicio);
 		stripper.setEndPage(fin);
-		stripper.setSortByPosition(true);
+		
+
 		stripper.setParagraphStart("@@@");
 		stripper.setWordSeparator("###");
-		stripper.setShouldSeparateByBeads(false);
+		
+		stripper.setSortByPosition(true);
+		
 		return stripper.getText(doc);
 	}
 	
