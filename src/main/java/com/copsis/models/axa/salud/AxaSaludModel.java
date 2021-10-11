@@ -26,6 +26,7 @@ public class AxaSaludModel {
 	}
 
 	public EstructuraJsonModel procesar() {
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Datos de la Póliza", "Datos###de###la###Póliza")
 				.replace("Coberturas Amparadas", "Coberturas###Amparadas")
@@ -33,6 +34,8 @@ public class AxaSaludModel {
 				.replace("A B R ", "ABR ").replace("TITULAR M", "###TITULAR###M###")
 				.replace("###ESPOSA F ###", "###ESPOSA###F###")
 				.replace("T I T ULAR F", "###TITULAR###F###")
+				.replace("T ITULAR F","###TITULAR###F###")
+				.replace("T I TULAR F","###TITULAR###F###")				          
 				.replace("PROTECCION DENTAL SIN COSTO", "PROTECCION DENTAL###SIN COSTO").replace("T###el:", "Tel:")
 				.replace("N###om###bre:", "Nombre:").replace("D###om###icilio:", "Domicilio:").replace("C.P.", "C.P:")
 				.replace("C###oberturas###Am###paradas", "Coberturas###Amparadas").replace("M###oneda:", "Moneda:")
@@ -42,6 +45,7 @@ public class AxaSaludModel {
 				.replace("N O R T E T R E S", "NORTE TRES")
 				.replace(" N U E V O P A R Q U E I N D U S T", "NUEVO PARQUE INDUSTRIAL")
 				.replace("Endosos contenidos en la Póliza", "Endosos###contenidos###en###la###Póliza");
+		System.out.println(contenido);
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(20);
@@ -95,7 +99,7 @@ public class AxaSaludModel {
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1].split("C.P:")[0]
 								+ "  " + newcontenido.split("\n")[i + 1] + "  " + newcontenido.split("\n")[i + 2])
 										.replaceAll("###", "").replace("\r", ""));
-						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").replace("\r", ""));
+						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").replace("\r", "").replaceAll("\u00a0", "").trim());
 					} else {
 						if (newcontenido.split("\n")[i].contains("Domicilio:")) {
 					
@@ -110,7 +114,7 @@ public class AxaSaludModel {
 						}
 						if (newcontenido.split("\n")[i].contains("C.P:")) {
 							modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "")
-									.replace("Edo:", "").replace("\r", "").replace("   ", ""));
+									.replace("Edo:", "").replace("\r", "").replace("   ", "").replaceAll("\u00a0", "").trim());
 						}
 
 					}
@@ -190,9 +194,9 @@ public class AxaSaludModel {
 										.replace("###", "").replace(",", "")))));
 					} else if (newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1]
-								.replace("###", "").replace(" - ", "###").trim().split("###")[0]));
+								.replace("###", "").replace(" - ", "###").trim().split("###")[0].replace(" ", "")));
 						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1]
-								.replace("\r", "").replace("###", "").replace("- ", "###").split("###")[1]));
+								.replace("\r", "").replace("###", "").replace("- ", "###").split("###")[1].replace(" ", "")));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 
