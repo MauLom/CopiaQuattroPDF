@@ -4,12 +4,13 @@ import java.io.IOException;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,12 +36,12 @@ public class LectorPDFController   {
 
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CopsisResponse> lectorpdf (@RequestBody PdfForm pdfForm) throws  IOException {
+	public ResponseEntity<CopsisResponse> lectorpdf (@RequestBody PdfForm pdfForm ,@RequestHeader HttpHeaders headers) throws  IOException {
 		
 		  return new CopsisResponse.Builder()
 				.ok(true)
 				.status(HttpStatus.OK)
-				.result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
+				.result(identificaPolizaService.queIndentificaPoliza(pdfForm,headers)).build();
 	}
 	
 	@PostMapping(value = "/lectorCertificados", consumes = MediaType.APPLICATION_JSON_VALUE)
