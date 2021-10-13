@@ -2,25 +2,16 @@ package com.copsis.services;
 
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import com.copsis.clients.QuattroPolizaClient;
-import com.copsis.clients.projections.CalculoRecibosCopsisResponse;
-import com.copsis.controllers.forms.ParametrosCalculoReciboForm;
 import com.copsis.controllers.forms.PdfForm;
-import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.EstructuraRecibosModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
@@ -39,7 +30,6 @@ import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.zurich.ZurichModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,8 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class IdentificaPolizaService {
-	@Autowired
-	public QuattroPolizaClient quattroPolizaClient;
+
 
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
