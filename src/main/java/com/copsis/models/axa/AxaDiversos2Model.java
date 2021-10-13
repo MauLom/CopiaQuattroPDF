@@ -1,6 +1,10 @@
 package com.copsis.models.axa;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class AxaDiversos2Model {
@@ -15,19 +19,20 @@ public class AxaDiversos2Model {
 	private int fin = 0;
 
 	
-	public AxaDiversos2Model(String contenido) {
-	 this.contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+	public AxaDiversos2Model(String contenidox) {
+	 this.contenido = fn.remplazarMultiple(contenidox, fn.remplazosGenerales());
+	 contenido = contenido.replace("C o b e r t u r a s", "Coberturas");
 	}
 
 	public EstructuraJsonModel procesar() {
-		//modelo.setTipo(7);
+
 		//Responsabilidad Civil, Comercio
 	
 		try {
-			modelo.setTipo(712);
+			modelo.setTipo(7);
 			modelo.setCia(20);
 			
-//		   System.out.println(contenido);
+
 			inicio = contenido.indexOf("Datos de la Póliza");
 			fin = contenido.indexOf("Datos Adicionales");
 			if(inicio > -1 && fin > -1 && inicio < fin) {
@@ -61,7 +66,7 @@ public class AxaDiversos2Model {
 				}
 			}
 			
-//			   System.out.println(contenido);
+
 			inicio = contenido.indexOf("Datos Adicionales");
 			fin = contenido.indexOf("Suma Asegurada Prima Neta");
 			if(inicio > -1 && fin > -1 && inicio < fin) {
@@ -73,23 +78,71 @@ public class AxaDiversos2Model {
 						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda")[1].split("Suma Asegurada")[0].replace("###", "").trim()));	
 					}
 					if(newcontenido.split("\n")[i].contains("Forma de Pago") && newcontenido.split("\n")[i].contains("Prima Neta")) {
-						System.out.println("===>"+newcontenido.split("\n")[i].split("Forma de Pago")[1].split("Prima Neta")[0].replace("###", "").trim());
+						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Forma de Pago")[1].split("Prima Neta")[0].replace("###", "").trim()));
+						
 					}
                     if(newcontenido.split("\n")[i].contains("Nombre del Agente")) {
-						
+                    	modelo.setAgente(newcontenido.split("\n")[i].split("Nombre del Agente")[1].replace("###", "").trim());
+//             
 					}
-                    if(newcontenido.split("\n")[i].contains("Número de Agente ")&& newcontenido.split("\n")[i].contains("Gastos por Expedición")  ) {
-						
+                    if(newcontenido.split("\n")[i].contains("Número de Agente")&& newcontenido.split("\n")[i].contains("Gastos por Expedición")  ) {
+                    	modelo.setCveAgente(newcontenido.split("\n")[i].split("Número de Agente")[1].split("Gastos por Expedición")[0].replace("###", "").trim());
+                       
 					}
                     if(newcontenido.split("\n")[i].contains("I.V.A.")) {
-						
+                    	modelo.setIva(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("I.V.A.")[1].split("###")[1].trim())));
+					
+					}
+                    if(newcontenido.split("\n")[i].contains("Prima Neta")) {
+                    	modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Prima Neta")[1].split("###")[1].trim())));
+					
+                    }
+                    if(newcontenido.split("\n")[i].contains("Gastos por Expedición")) {
+                    	modelo.setDerecho(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Gastos por Expedición")[1].split("###")[1].trim())));
+					
 					}
                     if(newcontenido.split("\n")[i].contains("Prima Total")) {
-						
+                    	modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Prima Total")[1].replace("###","").trim())));
+                   
 					}
 				}
 			}
 			
+			
+
+			
+			/*Proceoso para las  coberturas*/
+			inicio = contenido.indexOf("Coberturas");
+			fin = contenido.indexOf("Giro del Negocio");
+			if(inicio > -1 && fin > -1 && inicio < fin) {
+				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();				
+				newcontenido = contenido.substring(inicio,fin);				
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+				    int x = newcontenido.split("\n")[i].split("###").length;
+				    if(newcontenido.split("\n")[i].length() > 20) {
+				    	if(x == 2) {
+					    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+					    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
+					    	coberturas.add(cobertura);				
+					    }
+					    if(x == 3) {
+					    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+					    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);					    
+					    	coberturas.add(cobertura);
+					    }
+					    if(x == 4) {
+					    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+					    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+					    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
+					    	coberturas.add(cobertura);
+					    }
+				    }
+				    
+				}
+				modelo.setCoberturas(coberturas);
+			}
+		
 			
 			
 			
