@@ -295,13 +295,7 @@ public class IdentificaPolizaService {
         	
         	
             pdDoc.close();
-            if(modelo.getRecibos().size() == 0) {
-	        	if(this.isvalidCalcurecibos(modelo)) {
-	        		EstructuraRecibosModel recibo    = this.getRecibos(modelo,	 headers);	
-	        	}
-            	
-            }
-
+           
      
             return modelo;
 		} catch (Exception ex) {
@@ -310,73 +304,7 @@ public class IdentificaPolizaService {
 		}
     }
     
-    public EstructuraRecibosModel getRecibos (EstructuraJsonModel modelo ,HttpHeaders headers) {
 
-		try {
-	
-	    
-	    	
-	    	ParametrosCalculoReciboForm reciboForm = new ParametrosCalculoReciboForm();
-	    	reciboForm.setFormaPago(modelo.getFormaPago());
-	    	reciboForm.setPrimerRecibo(0.00);
-	    	reciboForm.setSubsecuentesRecibos(0.00);
-	    	reciboForm.setPrimaNeta(Double.parseDouble(modelo.getPrimaneta().toString()));
-	    	reciboForm.setAjustePrincipal(0.00);
-	    	reciboForm.setAjusteSecundario(0.00);
-	    	reciboForm.setGastoExtra(0.00);
-	    	reciboForm.setDerecho(Double.parseDouble(modelo.getDerecho().toString()));
-	    	reciboForm.setFinanciamiento(Double.parseDouble(modelo.getRecargo().toString()));
-	    	reciboForm.setIva(Double.parseDouble(modelo.getIva().toString()));
-	    	reciboForm.setPrimaTotal(Double.parseDouble(modelo.getPrimaTotal().toString()));
-	    	reciboForm.setVigDe(modelo.getVigenciaDe());
-	    	reciboForm.setVigA(modelo.getVigenciaA());
-	    	reciboForm.setAseguradoraId(modelo.getCia());
-	    	reciboForm.setRamoId(modelo.getTipo());
-	    	reciboForm.setD("0EJj8pXR0Se0NXuXrMFqJe4oC4FdVLeZ5iC++Sc6vqmQNmvG5wra25L/4ml97TC6");
-	    	
-	  
-	    	CalculoRecibosCopsisResponse  recibosResponse =	quattroPolizaClient.getRecibos(reciboForm,headers);
-	    	
-
-	    	List<EstructuraRecibosModel> recibos = new ArrayList<>();
-	    	for (int i = 0; i < recibosResponse.getResult().size(); i++) {
-	    		EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-	    		recibo.setSerie( recibosResponse.getResult().get(i).getSerie().toString());
-	    		recibo.setVigenciaDe( recibosResponse.getResult().get(i).getVigenciaDe().toString());
-	    		recibo.setVigenciaA( recibosResponse.getResult().get(i).getVigenciaDe().toString());
-	    		recibo.setVencimiento( recibosResponse.getResult().get(i).getVence().toString());
-	    		recibo.setPrimaneta(recibosResponse.getResult().get(i).getPrimaNeta());
-	    		recibo.setAjusteUno(recibosResponse.getResult().get(i).getAjuste1());
-	    		recibo.setAjusteDos(recibosResponse.getResult().get(i).getAjuste2());
-	    		recibo.setCargoExtra(recibosResponse.getResult().get(i).getCargoExtra());
-	    		recibo.setDerecho(recibosResponse.getResult().get(i).getDerecho());
-	    		recibo.setIva(recibosResponse.getResult().get(i).getIva());
-	    		recibo.setPrimaTotal(recibosResponse.getResult().get(i).getTotal());
-	    		recibo.setSerie(recibosResponse.getResult().get(i).getSerie().toString());
-	    		recibos.add(recibo);
-			}
-	    	modelo.setRecibos(recibos);
-	    	
-			return (EstructuraRecibosModel) recibos;
-	    	
-
-		} catch (Exception e) {
-			return null;
-			// TODO: handle exception
-		}
-    }
-     
-    public Boolean isvalidCalcurecibos(EstructuraJsonModel modelo) {
-    	Boolean resul =false;
-    	if(modelo.getFormaPago() !=0 && modelo.getVigenciaDe() !="" && modelo.getVigenciaDe().length() == 10
-    			&& modelo.getVigenciaA() !="" && modelo.getVigenciaA().length() == 10
-    			&& modelo.getFechaEmision() !="" && modelo.getFechaEmision().length() == 10) {
-    		resul =true;
-    	}
-    	
-    	return resul;
-    }
-    
     
     //Metodo agrega  separaciones de texto y inicios de parrafo.
     public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException { //DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS
