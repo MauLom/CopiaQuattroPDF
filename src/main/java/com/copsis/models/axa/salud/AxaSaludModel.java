@@ -52,7 +52,7 @@ public class AxaSaludModel {
 				.replace("Endosos contenidos en la Póliza", "Endosos###contenidos###en###la###Póliza");
 
 		try {
-			modelo.setTipo(32323);
+			modelo.setTipo(3);
 			modelo.setCia(20);
 
 			inicio = contenido.indexOf("Póliza");
