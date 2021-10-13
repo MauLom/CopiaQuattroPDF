@@ -45,6 +45,9 @@ public class ImpresionForm {
 	private String correo;
 	private String hashCode;
 	private String comentario;
+	private String ocupacion;
+	private String paisNacimiento;
+	private String telefono;
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
 }
