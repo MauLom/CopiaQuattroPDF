@@ -2,12 +2,12 @@ package com.copsis.services;
 
 
 import java.io.IOException;
-
 import java.net.URL;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
@@ -38,9 +38,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class IdentificaPolizaService {
 
+
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	 
-    public EstructuraJsonModel queIndentificaPoliza( PdfForm pdfForm) throws  IOException {
+    public EstructuraJsonModel queIndentificaPoliza( PdfForm pdfForm,HttpHeaders headers) throws  IOException {
 
         try {
 
@@ -283,6 +284,7 @@ public class IdentificaPolizaService {
         	
         	
             pdDoc.close();
+           
      
             return modelo;
 		} catch (Exception ex) {
@@ -290,6 +292,8 @@ public class IdentificaPolizaService {
 	       return modelo;
 		}
     }
+    
+
     
     //Metodo agrega  separaciones de texto y inicios de parrafo.
     public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException { //DEVUELVE UN CONTENIDO DE UN RANGO DE PAGINAS
