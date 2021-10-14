@@ -34,13 +34,15 @@ public class AxaModel {
 			} else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
 				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 				modelo = datosAxaSalud.procesar();
-				System.out.println("paso 3");
+		
 			}
 
 			else {
+		
 				String tipos[] = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
-						"PLANPROTEGE / COMERCIO" };
+						"PLANPROTEGE / COMERCIO",
+						"RESPONSABILIDAD CIVIL, COMERCIO"};
 				contenido = contenido.toUpperCase();
 				for (String tipo : tipos) {
 					if (contenido.contains(tipo)) {
@@ -66,12 +68,18 @@ public class AxaModel {
 								modelo = datosAxaSalud.procesar();
 							}
 							break;
-						case "HOGAR INTEGRAL": // HOGAR							
+						case "HOGAR INTEGRAL":
+						// HOGAR							
 							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, 3, stripper, doc));
 							modelo = datosAxaDiversos.procesar();
-							
+						
 							break;
+						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR							
+							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, 3, stripper, doc));
+								modelo = datosAxaDive.procesar();								
+								break;
 						}
+					
 					}
 				}
 			}
