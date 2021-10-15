@@ -65,11 +65,11 @@ public class BanorteDiversos {
 	            //Poliza
 	            inicio = contenido.indexOf("PÓLIZA DE SEGURO");
 	            fin = contenido.indexOf("DATOS DE LAS COBERTURAS");
-	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+	            if(inicio > -1 &&  fin >  -1 && inicio < fin) {
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").replace("A las 12 hrs desde:", "")
 	            			.replace("Hasta las 12 hrs:", "");	       
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	            	
+
 	            		
 	            		if(newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("OFICINA")) {
 	            			modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0].replace("-", ""));
@@ -81,6 +81,9 @@ public class BanorteDiversos {
 	            		else if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Social:")) {
 	            			modelo.setCteNombre(newcontenido.split("\n")[i].split("Social:")[1].trim());
 	            		}
+	            		if(newcontenido.split("\n")[i].contains("RFC:")) {
+	            			modelo.setRfc(contenido.split("RFC:")[1].split("\n")[0].replace("\r", "").trim());
+	            		}
 	            		
 	            		if(newcontenido.split("\n")[i].contains("Calle") && newcontenido.split("\n")[i].contains("Número:")) {
 	            			resultado = newcontenido.split("\n")[i].split("Número:")[1];
@@ -91,15 +94,18 @@ public class BanorteDiversos {
 	            		}
                        if(newcontenido.split("\n")[i].contains("Colonia") && newcontenido.split("\n")[i].contains("RFC")) {
                     	   resultado += " "+ newcontenido.split("\n")[i].split("Colonia:")[1].split("RFC")[0];
-                    	   modelo.setCteDireccion(resultado.replace("Estado:", "").replace(" Código Postal:", "").replace("###",""));
+                    	   modelo.setCteDireccion(resultado.replace("Estado:", "").replace(" Código Postal:", "").replace("###","").trim());
 	            		}
                        if(newcontenido.split("\n")[i].contains("Emisión:") ) {
                     	   modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].trim()));
                        }
                        if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Vigencia") ) {
                     	   modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].trim()));
-                    	   modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[0].trim()));
-                    	   modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1].trim()));
+      
+                    	   String x=newcontenido.split("\n")[i+1].replace("  ", "###");
+                    	   
+                    	   modelo.setVigenciaDe(fn.formatDate_MonthCadena(x.split("###")[0].trim()));
+                    	   modelo.setVigenciaA(fn.formatDate_MonthCadena(x.split("###")[1].trim()));
                     	   
                        }
                         if(newcontenido.split("\n")[i].contains("Pago:") ) {
@@ -107,7 +113,7 @@ public class BanorteDiversos {
                         
                        }
 	                    if(newcontenido.split("\n")[i].contains("Código Postal:") ) {
-	                    	modelo.setCp(newcontenido.split("\n")[i].split("Código Postal:")[1]);
+	                    	modelo.setCp(newcontenido.split("\n")[i].split("Código Postal:")[1].trim());
 	                    }
 	                    if(newcontenido.split("\n")[i].contains("Prima Neta") ) {
 	                    	if(newcontenido.split("\n")[i+1].contains("fraccionado")) {
@@ -147,29 +153,43 @@ public class BanorteDiversos {
 	            }
 	            
 	            
-	            /**/
+//	            /**/
 	            
 	            inicio = contenido.indexOf("DATOS DE LAS COBERTURAS");
 	            fin = contenido.indexOf("Seguros Banorte");
 	            if(inicio > fin) {
 	            	fin = contenido.indexOf("contrato de Seguros:");
 	            }
+
 	            
-	            
-	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+	            if(inicio > -1 &&  fin >  -1 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").trim();
+	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").trim()
+	            			.replace("ED IFICIOS", "EDIFICIOS")
+	            			.replace("ED ###IFICIOS", "EDIFICIOS")
+	            			.replace("CO NTENIDOS", "CONTENIDOS")
+	            			.replace("CO ###NTENIDOS", "CONTENIDOS")
+	            			.replace("IN CE NDIO", "INCENDIO")
+	            			.replace("IN C ENDIO", "INCENDIO")
+	            			.replace("AD ###JU ###NTA###", "ADJUNTA")
+	            			.replace("R IES ###GOS", "RIESGOS")
+	            			.replace("SE ###G ###UN ZONA###", "SEGUN ZONA");
+	            	
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	            		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();  	            		
 	            		if(newcontenido.split("\n")[i].split("###").length > 1) {
-	            			if(newcontenido.split("\n")[i].contains("IN CENDIO") || newcontenido.split("\n")[i].contains("SECCIÓN") ) {	            				
+	            			if(newcontenido.split("\n")[i].contains("INCENDIO") || newcontenido.split("\n")[i].contains("SECCIÓN")  || newcontenido.split("\n")[i].contains("ADJUNTA")) {	            				
 	            			}else {
-	            				cobertura.setNombre( newcontenido.split("\n")[i].split("###")[0]);
-	            				cobertura.setSa( newcontenido.split("\n")[i].split("###")[1]);
-	            				if( newcontenido.split("\n")[i].split("###").length > 2) {
-	            					cobertura.setDeducible( newcontenido.split("\n")[i].split("###")[2]);	
-	            				}	            				
-	            				coberturas.add(cobertura);
+	            				if(newcontenido.split("\n")[i].length() > 20) {
+	            					
+	            					cobertura.setNombre( newcontenido.split("\n")[i].split("###")[0]);
+		            				cobertura.setSa( newcontenido.split("\n")[i].split("###")[1]);
+		            				if( newcontenido.split("\n")[i].split("###").length > 2) {
+		            					cobertura.setDeducible( newcontenido.split("\n")[i].split("###")[2]);	
+		            				}	            				
+		            				coberturas.add(cobertura);
+	            				}
+	            			
 	            			}
 	            			
 	            		}
@@ -179,19 +199,9 @@ public class BanorteDiversos {
 	            
 	            List<EstructuraRecibosModel> recibosList = new ArrayList<>();    	    
 				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-				
-				
-				
-				
-	            
-	            
-	            if (recibosText.length() > 0) {
-					recibosList = recibosExtract();
-					
-				}
 	            switch (modelo.getFormaPago()) {
 				case 1:
-					if(recibosList.size() ==  0) {
+					
 						recibo.setReciboId("");
 						recibo.setSerie("1/1");
 						recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -208,58 +218,13 @@ public class BanorteDiversos {
 						recibo.setAjusteDos(modelo.getAjusteDos());
 						recibo.setCargoExtra(modelo.getCargoExtra());
 						recibosList.add(recibo);					
-					}else {
-						
-						int tota_recibos =fn.getTotalRec(modelo.getFormaPago());
-						if(recibosList.size() > tota_recibos) {
-							for (int i = 0; i < recibosList.size(); i++) {					      
-								if(i >= tota_recibos) {							
-									recibosList.remove(i--);							
-								}				
-							}
-						}				
-						break;
-		        	}
+					
 		        
 		        	modelo.setRecibos(recibosList);
-		          
-					
-				
-					break;
-				case 2:
-					if (recibosList.size() == 1) {
-						recibo.setSerie("2/2");
-						recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
-						recibo.setVigenciaA(modelo.getVigenciaA());
-						recibo.setVencimiento("");
-						recibo.setPrimaneta(restoPrimaNeta);
-						recibo.setPrimaTotal(restoPrimaTotal);
-						recibo.setRecargo(restoRecargo);
-						recibo.setDerecho(restoDerecho);
-						recibo.setIva(restoIva);
-						recibo.setAjusteUno(restoAjusteUno);
-						recibo.setAjusteDos(restoAjusteDos);
-						recibo.setCargoExtra(restoCargoExtra);
-						recibosList.add(recibo);
 
-					}
 					break;
-				case 3:
-				case 4:									
-					int tota_recibos =fn.getTotalRec(modelo.getFormaPago());
-					if(recibosList.size() > tota_recibos) {
-						for (int i = 0; i < recibosList.size(); i++) {					      
-							if(i >= tota_recibos) {							
-								recibosList.remove(i--);							
-							}				
-						}
-					}				
-					break;
-	        	}
-	        
-	        	modelo.setRecibos(recibosList);
-	            			
-	            
+					
+	            }
 	            
 				
 				return modelo;

@@ -29,6 +29,7 @@ import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
+import com.copsis.models.sura.SuraModel;
 import com.copsis.models.zurich.ZurichModel;
 
 import lombok.RequiredArgsConstructor;
@@ -276,6 +277,20 @@ public class IdentificaPolizaService {
 	                    encontro = true;
 	                }
 	            }
+	            
+	            if (encontro == false) {
+	                if (contenido.split("@@@")[3].contains("Seguros SURA S.A.")
+	                        || contenido.contains("Royal & SunAlliance Seguros")
+	                        || contenido.contains("Seguros SURA S.A. de C.V.")
+	                        || contenido.contains("Seguros SURA S.A. de C.V.")
+	                        || contenido.contains("@@@Seguros SURA S.A. de C.V.")) {
+	                	SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosSura.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            
 
              if (encontro == false) {
                  // VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF					

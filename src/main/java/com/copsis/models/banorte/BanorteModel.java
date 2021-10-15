@@ -29,7 +29,7 @@ public class BanorteModel {
 		this.contenido = contenido.replace("GASTOS MEDICOS MAYORES", "GASTOS MÉDICOS MAYORES");
 	}
 	public EstructuraJsonModel procesar() {
-	
+
 		try {
 
 			switch (fn.tipoPoliza(contenido)) {
@@ -56,7 +56,7 @@ public class BanorteModel {
 					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
 				}
 				break;
-			case 3://Vida
+			case 5://Vida
 				modelo  = new BanorteVidaModel(fn.caratula(2, 3, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
 
 				break;
