@@ -27,10 +27,16 @@ public class ZurichModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-			
 			switch (fn.tipoPoliza(contenido)) {
-			case 2:// Autos
+			case 1:// Autos
+				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				break;
+			case 2:// SALUD
 				modelo  = new ZurichCertificadoGrupo(fn.caratula(1, 2, stripper, doc)).procesar();				
+				break;
+				
+			case 4:// 
+				//modelo  = new ZurichDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
 			
 			}

@@ -35,6 +35,7 @@ public class MetlifeVidaModel {
 	}
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido =contenido.replace("R. F. C:", "RFC:");
 		try {
 			  // tipo
             modelo.setTipo(5);
@@ -131,6 +132,22 @@ public class MetlifeVidaModel {
 				modelo.setAsegurados(asegurados);
 			}
 		
+            
+            inicio = contenido.indexOf("RFC:");
+            fin = contenido.indexOf("SOLICITUD");
+            if(inicio > -1 &  fin  > -1  & inicio < fin)                      {
+            	newcontenido =contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+            	for (int i = 0; i < newcontenido.split("\n").length; i++) {  
+            		if(newcontenido.split("\n")[i].contains("RFC:")) {
+            		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1]);	
+            		}
+            	}            	
+            }
+            
+            
+            
+            
+            
             
             
             

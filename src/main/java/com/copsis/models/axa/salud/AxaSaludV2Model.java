@@ -75,7 +75,15 @@ public class AxaSaludV2Model {
 
 			
 				if (newcontenido.split("\n")[i].contains("C.P.") && newcontenido.split("\n")[i].contains("Fecha") &&  newcontenido.split("\n")[i].contains("vigencia")) {//C.P./fecha/vigencia
+				
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "").trim());
+					   if(modelo.getCp().length() > 5) {
+						      int sp = newcontenido.split("\n")[i].split("C.P.")[1].split("###").length;
+						      if(sp > 0) {
+						    	  modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0]);
+						      }
+						    }
+					
 					resultado = newcontenido.split("\n")[i].split("Fecha")[0].replace(modelo.getCp(), "")
 							.replace("C.P", "").replace("###", " ".replace("\r", ""));
 					
@@ -89,7 +97,15 @@ public class AxaSaludV2Model {
 				}
 				
 				if (newcontenido.split("\n")[i].contains("C.P.") && cp == false) {
+					
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "").trim());
+				    if(modelo.getCp().length() > 5) {
+				      int sp = newcontenido.split("\n")[i].split("C.P.")[1].split("###").length;
+				      if(sp > 0) {
+				    	  modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0]);
+				      }
+				    }
+					
 				}
 				if(newcontenido.split("\n")[i].contains("inicio de vigencia") && vigenciaD == false){
 					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("inicio de vigencia")[1].replace("###", "").trim().replace("\r", "")));					

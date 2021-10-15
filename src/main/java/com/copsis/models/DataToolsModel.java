@@ -773,13 +773,14 @@ public class DataToolsModel {
 				"SEGURO DE AUTOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
-				"VIDA","VIDA INDIVIDUAL",
+				"DAÑOS"
+,				"VIDA","VIDA INDIVIDUAL",
 				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
 				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
-				"EMPRESARIAL","DAÑOS"};
+				"EMPRESARIAL"};
 
 		 boolean encontro = false;
-		for (String tipo : tipos) {
+		for (String tipo : tipos) {	
 			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
 				switch (tipo) {
 				case "DATOS DEL VEH":
