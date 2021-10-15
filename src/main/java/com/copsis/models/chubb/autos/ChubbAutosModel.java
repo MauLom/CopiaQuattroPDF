@@ -129,7 +129,7 @@ public class ChubbAutosModel {
 					case "Póliza:###":
 						inicio = inicio + 10;
 						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setPoliza(newcontenido.split(separador)[0].trim() + " "
+						modelo.setPoliza(newcontenido.split(separador)[0].trim() + ""
 								+ newcontenido.split(separador)[1].trim());
 						break;
 					}
