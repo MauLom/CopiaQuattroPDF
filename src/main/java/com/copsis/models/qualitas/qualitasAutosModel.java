@@ -455,11 +455,12 @@ public class qualitasAutosModel {
 				}
 			}
 
+			
 			/**
 			 * **********para cuando trae para primer recibo y subsecuente*************
 			 */
 			fin = contenido.indexOf("Pagos Subsecuentes");
-			if (fin > -1) {
+			if (fin > -1 && modelo.getFormaPago() == 0) {
 				index = contenido.substring(fin - 150, fin).split("\r\n").length - 1;
 				newcontenido = contenido.substring(fin - 150, fin).split("\r\n")[index].trim().split(" ")[0]
 						.replace("###", "").replace("@@@", "").trim();
