@@ -37,7 +37,6 @@ public class MetlifeVidaModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido =contenido.replace("R. F. C:", "RFC:");
 		try {
-			System.out.println(contenido);
 			  // tipo
             modelo.setTipo(5);
             // cia

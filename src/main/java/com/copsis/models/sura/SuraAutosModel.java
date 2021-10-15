@@ -21,7 +21,10 @@ public class SuraAutosModel {
 			modelo.setTipo(1);
 			modelo.setCia(23);
 			
-			System.out.println(contenido);
+			
+			inicio = contenido.indexOf("");
+			
+			
 			
 			return modelo;
 		} catch (Exception e) {
