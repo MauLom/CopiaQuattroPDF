@@ -34,7 +34,6 @@ public class QualitasModel {
 
 			
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
-				System.out.println("PASO AQUI");
 					qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
 							fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
 					modelo = datosQualitasMotosAutos.procesar();
