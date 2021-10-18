@@ -769,6 +769,7 @@ public class DataToolsModel {
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
 		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL","PLACAS",
+				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
@@ -789,6 +790,7 @@ public class DataToolsModel {
 				case "SEGURO DE AUTOS":
 				case "PLACAS":
 				case "AUTO INDIVIDUAL":
+				case "AUTOS":
 					dato = 1;
 					encontro = true;
 					break;
