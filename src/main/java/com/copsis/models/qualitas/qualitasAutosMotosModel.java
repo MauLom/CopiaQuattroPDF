@@ -30,10 +30,12 @@ public class qualitasAutosMotosModel {
 		String newcontenido = "";
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		agente = fn.remplazarMultiple(agente, fn.remplazosGenerales());
+		agente = fn.remplazarMultiple(agente, fn.remplazosGenerales())
+				.replace("En cumplimiento", "En###cumplimiento");
 		contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
 				.replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición")
-				.replace("Dom i c il i o ","Domicilio ");
+				.replace("Dom i c il i o ","Domicilio ")
+				.replace("C.P:", "C.P.");
 		
 		try {
 			// cia
@@ -62,7 +64,7 @@ public class qualitasAutosMotosModel {
 						modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0]);
 					}
 					if(newcontenido.split("\n")[i].contains("R.F.C:")) {
-						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].trim());
+						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("-", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Domicilio")) {
 						newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ");
@@ -73,23 +75,43 @@ public class qualitasAutosMotosModel {
 						modelo.setCteDireccion(newDireccion.trim());
 					
 					}
+				
+					
 					if(newcontenido.split("\n")[i].contains("C.P.")) {
-						modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim());
+						if(newcontenido.split("C.P.")[1].split("###")[0].length() > 3) {
+							modelo.setCp(newcontenido.split("C.P.")[1].split("###")[0].trim());
+						}else {
+							modelo.setCp(newcontenido.split("C.P.")[1].split("###")[1].trim());
+						}
+						
 					
 					}
 					if(newcontenido.split("\n")[i].contains("DESCRIPCIÓN DEL VEHÍCULO ASEGURADO")) {
-						modelo.setDescripcion( newcontenido.split("\n")[i+1].trim());
+						modelo.setDescripcion( newcontenido.split("\n")[i+1].replace("###", "").trim());
 						
 					}
 					if(newcontenido.split("\n")[i].contains("Modelo")) {
-						modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split("Modelo:")[1].split("###")[0].trim()));
+						if(newcontenido.split("\n")[i].split("Modelo:")[1].split("###")[0].length() > 3) {
+							modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split("Modelo:")[1].split("###")[0].trim()));
+						}else {
+							modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split("Modelo:")[1].split("###")[1].trim()));
+						}
+					
 					}
 					if(newcontenido.split("\n")[i].contains("Placas")) {
-						modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].trim());
+						
+						if(newcontenido.split("\n")[i].split("Placas")[1].length() > 3) {
+							modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].trim());
+						}					
 					}
 					if(newcontenido.split("\n")[i].contains("Serie:") && newcontenido.split("\n")[i].contains("Motor:")) {
 						modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor:")[0].replace("###", "").trim());
-						modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].replace("###", "").trim());
+						if(newcontenido.split("\n")[i].split("Motor:")[1].contains("REPUVE")) {
+							modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].split("REPUVE")[0].replace("###", "").trim());
+						}else {
+							modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].replace("###", "").trim());
+						}
+						
 					}
 					if(newcontenido.split("\n")[i].contains("Desde las 12:00")) {
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1]));
@@ -109,13 +131,20 @@ public class qualitasAutosMotosModel {
 			
 			inicio = agente.indexOf("Agente");
 			fin  = agente.indexOf("En###cumplimiento");
+//			System.out.println(agente);
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido = agente.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split(" ")[0].replace("###","").trim());
+					System.out.println(newcontenido.split("\n")[i].split("Agente:")[1].split("###").length);
+					if(newcontenido.split("\n")[i].split("Agente:")[1].split("###").length > 2) {
+						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("###")[1].replace("###","").trim());
+					}else {
+						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split(" ")[0].replace("###","").trim());
+					}
+					
 					
 					if(modelo.getCveAgente().length() > 0) {
-						modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1]);
+						modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].replace("###", ""));
 					}
 					
 				}
@@ -141,7 +170,8 @@ public class qualitasAutosMotosModel {
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if(newcontenido.split("\n")[i].contains("Anual")) {
+				
+					if(newcontenido.split("\n")[i].contains("Anual")  || newcontenido.split("\n")[i].contains("CONTADO")) {
 						modelo.setFormaPago(1);
 					}
 					if(newcontenido.split("\n")[i].contains("Prima Neta")) {		
