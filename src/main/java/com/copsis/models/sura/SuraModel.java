@@ -26,9 +26,13 @@ public class SuraModel {
 		try {		
 
 			switch (fn.tipoPoliza(contenido)) {				
-			case 1:// Autos
+			case 1://Autos
 					modelo  = new SuraAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 				break;
+			case 2://Salud
+				modelo  = new SuraSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+			break;
+
 
 			}
 

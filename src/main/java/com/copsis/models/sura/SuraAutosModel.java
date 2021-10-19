@@ -25,7 +25,7 @@ public class SuraAutosModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("R. F. C:", "R.F.C:");
 			modelo.setTipo(1);
-			modelo.setCia(23);
+			modelo.setCia(88);
 		
 			inicio = contenido.indexOf("Seguro de Automóviles");
 			if (inicio == -1) {
