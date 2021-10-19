@@ -26,6 +26,7 @@ import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
+import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
@@ -278,6 +279,7 @@ public class IdentificaPolizaService {
 	                }
 	            }
 	            
+	            //ENTRADA PARA SURA
 	            if (encontro == false) {
 	                if (contenido.split("@@@")[3].contains("Seguros SURA S.A.")
 	                        || contenido.contains("Royal & SunAlliance Seguros")
@@ -290,6 +292,15 @@ public class IdentificaPolizaService {
 	                }
 	            }
 	            
+	            // ENTRADA PARA PRIMERO SEGUROS
+	            if (encontro == false) {
+	                if (contenido.contains("PRIMERO SEGUROS S.A. de C.V.")
+	                        || contenido.contains("Primero Seguros S.A. De C.V.")) {
+	                	PrimeroModel datosPrimero = new PrimeroModel(pdfStripper, pdDoc, contenido);
+	                	modelo = datosPrimero.procesar();
+	                    encontro = true;
+	                }
+	            }
 	            
 
              if (encontro == false) {
