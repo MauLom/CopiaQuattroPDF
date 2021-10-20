@@ -866,4 +866,61 @@ public class DataToolsModel {
         }
         return newtexto;
     }
+	
+	public String seccion(String res ) {
+		String number;
+		switch (res) {
+        case "I":
+        	number ="I";
+        	break;
+        case "II":
+        	number ="I";
+        	break;
+        case "III":
+        	number ="III";
+        	break;
+        case "IV":
+        	number ="IV";
+        	break;
+        case "V":
+        	number ="V";
+        	break;
+        case "VI":
+        	number ="VI";
+        	break;
+        	
+        case "VII":
+        	number ="VII";
+        	break;
+        case "VIII":
+        	number ="VIII";
+        	break;
+        case "IX":
+        	number ="IX";
+        	break;
+        case "X":
+        	number ="X";
+        	break;
+        case "XI":
+        	number ="XI";
+        	break;
+        case "XII":
+        	number ="XII";
+        	break;
+        case "XIII":
+        	number ="XIII";
+        	break;
+        case "XIV":
+        	number ="XIV";
+        	break;
+        case "XV":
+        	number ="XV";
+        	break;
+         default:
+        	 number ="";
+         break;
+		}
+		
+		return number;
+	}
 }

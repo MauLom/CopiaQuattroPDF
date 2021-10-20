@@ -52,12 +52,12 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("RFC:") || newcontenido.split("\n")[i].contains("Teléfono:")) {
 	                		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].split("Teléfono:")[0].replace("###", ""));
 	                	}
-	                	if(newcontenido.split("\n")[i].contains("Vigencia")) {
-	                		if(newcontenido.split("\n")[i+1].split("-").length > 3) {
+	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {
+	                		
 	                			modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0]);
 	                			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[2].strip()));
 	                			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[4].strip()));
-	                		}
+	                		
 	                	}
 	                }
 			   }
@@ -90,9 +90,82 @@ public class PrimeroDiversosModel {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				  if (inicio > 0 && fin > 0 && inicio < fin) {					 
 		                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-		                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
-		                	//System.out.println(newcontenido.split("\n")[i]);
+		                EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+		                for (int i = 0; i < newcontenido.split("\n").length; i++) {
+
+		                	if(newcontenido.split("\n")[i].contains("Giro") && newcontenido.split("\n")[i].contains("Ubicación del Riesgo")) {
+		                		ubicacion.setGiro(newcontenido.split("\n")[i].split("Giro")[1].replace("###", ""));
+		                	}
+		                	if(newcontenido.split("\n")[i].contains("Muro:")) {
+		                		ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split("Muro:")[1].replace(".", "###").split("###")[0].toLowerCase()));
+		                	}
+		                	if(newcontenido.split("\n")[i].contains("Techo:")) {
+		                		ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split("Techo:")[1].replace(".", "###").split("###")[0].toLowerCase()));
+		                	}
+		                	if(newcontenido.split("\n")[i].contains("Cp.")) {
+		                		ubicacion.setCp(newcontenido.split("\n")[i].split("Cp.")[1].replace(",", "###").split("###")[0].strip());
+		                	}
+		                   	if(newcontenido.split("\n")[i].contains("Niveles:")) {
+		                		ubicacion.setNiveles(Integer.parseInt( newcontenido.split("\n")[i].split("Niveles:")[1].replace(".", "###").split("###")[0].strip()));
+		                	}
+		                   	if(newcontenido.split("\n")[i].contains("Ubicación del Riesgo.")) {
+		                   	  ubicacion.setCalle( newcontenido.split("\n")[i+1]);
+		                   	}
+		     
+		              
 		                }
+		                ubicaciones.add(ubicacion);
+		                modelo.setUbicaciones(ubicaciones);
+		    
+				  }
+				  
+				  inicio = contenido.indexOf("Coberturas");
+				  fin = contenido.indexOf("Prima Neta");
+
+				  if (inicio > 0 && fin > 0 && inicio < fin) {	
+					  String secciont="";
+					  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					   newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+		                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
+		                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+		                	
+		                	if(newcontenido.split("\n")[i].contains("Coberturas Amparadas") || newcontenido.split("\n")[i].contains("Deducible")
+		                			|| newcontenido.split("\n")[i].contains("Sección") || newcontenido.split("\n")[i].contains("Coberturas")) {
+		                		System.out.println(newcontenido.split("\n")[i]);
+		                		
+		                	}else {
+		                		
+		                		int sp = newcontenido.split("\n")[i].split("###").length;
+		                		if(sp == 4) {
+		                			secciont =newcontenido.split("\n")[i].split("###")[0];	
+		                		}
+		                	
+		                		
+		                		System.out.println(secciont);
+		                		switch (sp) {
+								case  4:
+									cobertura.setSeccion(secciont);
+									cobertura.setNombre( newcontenido.split("\n")[i].split("###")[1]);
+									cobertura.setSa( newcontenido.split("\n")[i].split("###")[2]);
+									cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[3]);
+									coberturas.add(cobertura);
+//								
+									break;
+
+								case 3:
+										cobertura.setSeccion(secciont);
+									cobertura.setNombre( newcontenido.split("\n")[i].split("###")[0]);
+									cobertura.setSa( newcontenido.split("\n")[i].split("###")[1]);
+									cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2]);
+									coberturas.add(cobertura);
+									break;
+								}
+//		                		
+		                	}
+		                	
+		                }
+		                modelo.setCoberturas(coberturas);						
+				  
 				  }
 	            
 			
