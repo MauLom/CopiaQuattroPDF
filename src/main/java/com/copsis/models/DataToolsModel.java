@@ -555,6 +555,7 @@ public class DataToolsModel {
 		case "HIJO A":
 		case "HIJA":
 		case "HIJO/A":
+		case "HIJO-A":
 		case "HIJO M":
 		case "HIJA F":
 			dato = 3;

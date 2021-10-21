@@ -9,16 +9,16 @@ import com.copsis.models.mapfre.autos.MapfreAutosBModel;
 import com.copsis.models.mapfre.autos.MapfreAutosModel;
 
 public class MapfreModel {
-	// Clases
+
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	// Variables
+
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
 	private int pagFin = 0;
 
-	// Constructor
+
 	public MapfreModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
@@ -28,16 +28,28 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
+
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
-
-				if (contenido.contains("CONDUCTOR HABITUAL")) {
-					modelo = new MapfreAutosBModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				} else {
+				if (contenido.contains("CONTRATANTE Y CONDUCTOR")) {
 					pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");
+					if (pagFin == 0) {
+						pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN ADICIONAL");
+					}
 					modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "Serie de recibo:", false)).procesar();
+				} else {
+					modelo = new MapfreAutosBModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				}
+				break;
+				
+			case 2://Salud
+				modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				
+				break;
+			case 5://vida
+				modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				
 				break;
 			}
 			
