@@ -30,7 +30,6 @@ public class MapfreVidaBModel {
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### 00.00", "### 00.00###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println("---< "+newcontenido.split("\n")[i]);
 					if(newcontenido.split("\n")[i].contains("Póliza Número:")){
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").strip());
 					}
@@ -56,11 +55,10 @@ public class MapfreVidaBModel {
 						modelo.setMoneda(1);						
 					}
 					
-					System.out.println(newcontenido.split("\n")[i].contains("Prima neta:") +" "+ newcontenido.split("\n")[i].contains("Expedición") +" "+ newcontenido.split("\n")[i].contains("Prima Total:"));
+					
 					
 					if(newcontenido.split("\n")[i].contains("Prima neta:") && newcontenido.split("\n")[i].contains("Expedición") && newcontenido.split("\n")[i].contains("Prima Total:") ) {
-						int sp  = newcontenido.split("\n")[i+1].split("###").length;
-						System.out.println("---asasas-----> "+  fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[5])));
+						int sp  = newcontenido.split("\n")[i+1].split("###").length;						
 						switch (sp) {
 						case 6:
 				               modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
@@ -75,6 +73,31 @@ public class MapfreVidaBModel {
 					
 				}
 			}
+			
+//			System.out.println(contenido);
+			inicio = contenido.indexOf("PLAN DE SEGURO:");
+			fin = contenido.indexOf("DESCRIPCION DE COBERTURAS");
+			if (inicio > -1 & fin > -1 & inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
+					if(newcontenido.split("\n")[i].contains("PLAN DE SEGURO:")) {
+						modelo.setPlan(newcontenido.split("\n")[i].split("PLAN DE SEGURO:")[1].replace("####", "").strip());
+					}
+				}
+				
+			}
+			
+			inicio = contenido.indexOf("DESCRIPCION DE COBERTURAS");
+			fin = contenido.indexOf("EL PLAZO DE GRACIA");
+			if (inicio > -1 & fin > -1 & inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					System.out.println(newcontenido.split("\n")[i]);
+				}
+			}
+			
+			
 			return modelo;
 		} catch (Exception e) {
 			return modelo;

@@ -124,7 +124,21 @@ public class GnpSaludModel {
 								}
 							}
 						}
+						if (dato.split("###").length == 6) {
+							String res = dato.replace("### ###", "###") ;
+							dato = res;
+							if (dato.split("###")[0].contains("C.P")) {
+								newcontenido += " " + dato.split("###")[0].split("C.P")[0].trim();				
+								modelo.setCp(dato.split("C.P")[1].split("###")[0].strip());
+								if (dato.split("###")[1].contains("hrs.")) {
+									modelo.setVigenciaDe(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
+											+ "-" + dato.split("###")[2].trim());
+								}
+							}
+						}
 					} else if (dato.contains("R.F.C:") || dato.contains("R.F.C. :")) {
+
+                             dato = dato.replace("### ###", "###");
 
 						if (dato.split("###").length == 5) {
 							if ((dato.split("###")[0].contains("R.F.C:") && dato.split("###")[1].contains("del"))
@@ -154,22 +168,32 @@ public class GnpSaludModel {
 			donde = fn.recorreContenido(contenido, "Prima Neta");
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+				     
 					if (dato.contains("Prima Neta")) {
+					
+						dato =dato.replace("### ###" , "###").strip();
 						switch (dato.split("###").length) {
 						case 4:
 							if (dato.split("###")[2].trim().equals("Prima Neta")) {
 								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[3].trim())));
 							}
 							break;
+						case 5:
+							if (dato.contains("Prima Neta")) {
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[4].trim())));
+							}
+							break;
 						}
 					}
-
+			
 					if (dato.contains("Forma de pago")) {
+						
 						switch (dato.trim().split("###").length) {
 						case 7:
 							if (dato.trim().split("###")[3].trim().equals("Forma de pago")) {
 								modelo.setFormaPago(fn.formaPago(dato.trim().split("###")[4].trim()));
 							}
+							
 							if (dato.split("###")[5].contains("de Póliza")) {
 								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[6].trim())));
 							}
@@ -179,6 +203,15 @@ public class GnpSaludModel {
 									&& dato.split("###")[5].trim().equals("Recargo por Pago")) {
 								modelo.setFormaPago(fn.formaPago(dato.split("###")[4].trim()));
 							}
+							break;
+						case 9:
+	 
+							if(dato.contains("Forma de pago") && dato.contains("Recargo por Pago") ) {
+								modelo.setFormaPago(fn.formaPago(dato.split("Forma de pago")[1].split("Recargo por Pago")[0].replace("###", "").strip()));
+			
+							}
+							
+							
 							break;
 						}
 					}
@@ -203,13 +236,27 @@ public class GnpSaludModel {
 
 							}
 							break;
+						case 10:
+							if (dato.contains("Moneda")
+									&& dato.contains("Fraccionado")) {
+								modelo.setMoneda(fn.moneda(dato.split("Moneda")[1].split("Fraccionado")[0].replace("###", "").strip()));
+
+							}
+							break;
 						}
 					}
 
 					if (dato.contains("de Póliza")) {
+						dato =dato.replace("######### ###", "###").strip();
+
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Póliza")) {
 								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
+							}
+						}
+						if (dato.split("###").length == 3) {
+							if (dato.split("###")[1].contains("Póliza")) {
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[2].trim())));
 							}
 						}
 					}
@@ -355,7 +402,7 @@ public class GnpSaludModel {
 					}
 				}
 				if (agente.length() > 0) {
-					modelo.setAgente(agente.replace("### ###", ""));
+					modelo.setAgente((agente.replace("### ###", "")).replace("###", "").strip());
 				}
 			}
 
