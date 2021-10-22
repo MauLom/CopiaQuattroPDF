@@ -339,7 +339,7 @@ public class Cell <T extends PDPage> {
 	        }
 
 	        if (isTextRotated()) {
-	            // System.out.println("cell-%%%%%%--->1");
+
 	            try {
 	                // TODO: maybe find more optimal way then this
 	                return getFont().getStringWidth(getText()) / 100 * getFontSize() + getTopPadding()
@@ -349,7 +349,6 @@ public class Cell <T extends PDPage> {
 	                throw new IllegalStateException("Font not set.", e);
 	            }
 	        } else {
-	            // System.out.println("cell-%%%%%%%--->2");
 	            return getTextHeight();
 	        }
 	    }
