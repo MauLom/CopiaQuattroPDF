@@ -61,7 +61,6 @@ public class ChubbAutosModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("Prima neta", "Prima Neta").replace("Prima total", "Prima Total");
 
-			// System.out.println(contenido);
 			// tipo
 			modelo.setTipo(1);
 
@@ -587,8 +586,6 @@ public class ChubbAutosModel {
 
 			if (!recibos.equals("")) {
 				recibosList = recibosExtract();
-				System.out.println("aqui " + recibosList.size());
-				System.out.println("fpago" + modelo.getFormaPago());
 			}
 
 			switch (modelo.getFormaPago()) {
@@ -842,7 +839,6 @@ public class ChubbAutosModel {
 			}
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		} catch (Exception ex) {
-			System.out.println("DatosChubb.getRecibos " + ex.getMessage() + " | " + ex.getCause());
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		}
 	}

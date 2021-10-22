@@ -185,7 +185,6 @@ public class PrimeroAutosBModel {
 
 			return modelo;
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
 			modelo.setError(ex.getMessage());
 			return modelo;
 		}

@@ -63,8 +63,7 @@ public class ZurichAsegurados {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 			
-				if(newcontenido.split("\n")[i].contains("Subgrupo")) {
-					System.out.println(newcontenido.split("\n")[i+1]);
+				if(newcontenido.split("\n")[i].contains("Subgrupo")) {				
 					subgrupo = newcontenido.split("\n")[i+1].split("###")[1];
 					categoria = newcontenido.split("\n")[i+1].split("###")[2];
 				}

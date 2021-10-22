@@ -55,7 +55,6 @@ public class ImageUtils {
       float newImageWidth = imageWidth;
       float newImageHeight = imageHeight;
 
-//7 System.out.println("==========*****************==>"  +"IMg width "+newImageWidth +"==>height==>" + newImageHeight +" == wiiiiii  " + boundWidth +"  heigh>>>>  " + boundHeight  );
       // first check if we need to scale width
       if (imageWidth > boundWidth) {
          
@@ -73,7 +72,7 @@ public class ImageUtils {
           // scale width to maintain aspect ratio
           newImageWidth = (newImageHeight * imageWidth) / imageHeight;
       }
-      //System.out.println("==========Dimesniones==>"  +"IMg width "+newImageWidth +"==>height==>" + newImageHeight );
+
       float[] imageDimension = {newImageWidth, newImageHeight};
       return imageDimension;
   }

@@ -130,8 +130,6 @@ public class MapfreSaludBModel {
 						}else {
 							
 							int sp =newcontenido.split("\n")[i].split("###").length;
-							System.out.println(newcontenido.split("\n")[i] +" <===> " +sp);
-
 							switch (sp) {
 							case  5:
 								asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].split(newcontenido.split("\n")[i].split("###")[0].split(" ")[1])[1].strip());

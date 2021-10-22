@@ -24,7 +24,6 @@ public class MapfreVidaBModel {
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(22);
-//			System.out.println(contenido);
 			inicio = contenido.indexOf("SEGURO DE VIDA ");
 			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");
 			if (inicio > -1 & fin > -1 & inicio < fin) {
@@ -73,8 +72,7 @@ public class MapfreVidaBModel {
 					
 				}
 			}
-			
-//			System.out.println(contenido);
+
 			inicio = contenido.indexOf("PLAN DE SEGURO:");
 			fin = contenido.indexOf("DESCRIPCION DE COBERTURAS");
 			if (inicio > -1 & fin > -1 & inicio < fin) {
@@ -93,7 +91,7 @@ public class MapfreVidaBModel {
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
+			
 				}
 			}
 			

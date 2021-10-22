@@ -73,6 +73,7 @@ public class IdentificaPolizaService {
       
              // ENTRADA PARA QUALITAS
              if (encontro == false) {
+            
                  if (contenido.contains("qualitas")) {
                 	 QualitasModel datosQualitas = new QualitasModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosQualitas.procesa();

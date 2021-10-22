@@ -131,7 +131,6 @@ public class PrimeroDiversosModel {
 		                	
 		                	if(newcontenido.split("\n")[i].contains("Coberturas Amparadas") || newcontenido.split("\n")[i].contains("Deducible")
 		                			|| newcontenido.split("\n")[i].contains("Sección") || newcontenido.split("\n")[i].contains("Coberturas")) {
-		                		System.out.println(newcontenido.split("\n")[i]);
 		                		
 		                	}else {
 		                		

@@ -131,11 +131,10 @@ public class qualitasAutosMotosModel {
 			
 			inicio = agente.indexOf("Agente");
 			fin  = agente.indexOf("En###cumplimiento");
-//			System.out.println(agente);
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido = agente.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i].split("Agente:")[1].split("###").length);
+
 					if(newcontenido.split("\n")[i].split("Agente:")[1].split("###").length > 2) {
 						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("###")[1].replace("###","").trim());
 					}else {
