@@ -119,7 +119,7 @@ public class QuattroUploadClient {
 			if(adjuntoForm.getD() != null && !adjuntoForm.getD().equals("")) {
 				body.add("d", adjuntoForm.getD());	
 			}
-			System.out.println("body => " + body);
+
 			HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<QuattroUploadAdjuntoProjection> response = restTemplate
