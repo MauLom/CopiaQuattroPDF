@@ -33,6 +33,7 @@ public class MapfreSaludBModel {
 			modelo.setCia(22);
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
+
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {

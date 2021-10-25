@@ -116,7 +116,6 @@ public class DataToolsModel {
 		try {
 			return Double.parseDouble(texto.replace(",", ""));
 		} catch (Exception ex) {
-			System.out.println("==>" + ex.getMessage());
 			return resultado;
 		}
 
@@ -773,6 +772,7 @@ public class DataToolsModel {
 				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
+				"FUNERARIOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
 				"DAÑOS"
@@ -812,6 +812,7 @@ public class DataToolsModel {
 					break;
 				case "VIDA":
 				case "VIDA INDIVIDUAL":
+				case "FUNERARIOS":
 					dato = 5;
 					encontro = true;
 					break;
