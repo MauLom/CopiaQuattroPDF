@@ -116,7 +116,6 @@ public class DataToolsModel {
 		try {
 			return Double.parseDouble(texto.replace(",", ""));
 		} catch (Exception ex) {
-			System.out.println("==>" + ex.getMessage());
 			return resultado;
 		}
 
@@ -555,6 +554,7 @@ public class DataToolsModel {
 		case "HIJO A":
 		case "HIJA":
 		case "HIJO/A":
+		case "HIJO-A":
 		case "HIJO M":
 		case "HIJA F":
 			dato = 3;
@@ -769,8 +769,10 @@ public class DataToolsModel {
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
 		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL","PLACAS",
+				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
+				"FUNERARIOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
 				"DAÑOS"
@@ -789,6 +791,7 @@ public class DataToolsModel {
 				case "SEGURO DE AUTOS":
 				case "PLACAS":
 				case "AUTO INDIVIDUAL":
+				case "AUTOS":
 					dato = 1;
 					encontro = true;
 					break;
@@ -809,6 +812,7 @@ public class DataToolsModel {
 					break;
 				case "VIDA":
 				case "VIDA INDIVIDUAL":
+				case "FUNERARIOS":
 					dato = 5;
 					encontro = true;
 					break;
@@ -864,4 +868,61 @@ public class DataToolsModel {
         }
         return newtexto;
     }
+	
+	public String seccion(String res ) {
+		String number;
+		switch (res) {
+        case "I":
+        	number ="I";
+        	break;
+        case "II":
+        	number ="I";
+        	break;
+        case "III":
+        	number ="III";
+        	break;
+        case "IV":
+        	number ="IV";
+        	break;
+        case "V":
+        	number ="V";
+        	break;
+        case "VI":
+        	number ="VI";
+        	break;
+        	
+        case "VII":
+        	number ="VII";
+        	break;
+        case "VIII":
+        	number ="VIII";
+        	break;
+        case "IX":
+        	number ="IX";
+        	break;
+        case "X":
+        	number ="X";
+        	break;
+        case "XI":
+        	number ="XI";
+        	break;
+        case "XII":
+        	number ="XII";
+        	break;
+        case "XIII":
+        	number ="XIII";
+        	break;
+        case "XIV":
+        	number ="XIV";
+        	break;
+        case "XV":
+        	number ="XV";
+        	break;
+         default:
+        	 number ="";
+         break;
+		}
+		
+		return number;
+	}
 }

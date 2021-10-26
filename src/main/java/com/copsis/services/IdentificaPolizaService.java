@@ -26,6 +26,7 @@ import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
+import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
@@ -72,6 +73,7 @@ public class IdentificaPolizaService {
       
              // ENTRADA PARA QUALITAS
              if (encontro == false) {
+            
                  if (contenido.contains("qualitas")) {
                 	 QualitasModel datosQualitas = new QualitasModel(pdfStripper, pdDoc, contenido);
                 	 modelo = datosQualitas.procesa();
@@ -91,7 +93,9 @@ public class IdentificaPolizaService {
              if (encontro == false) {
                  if (contenido.length() > 502) {
                      if (contenido.indexOf("MAPFRE") > -1 || contenido.contains("Mapfre Tepeyac")) {    
-                    	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenido);
+                    	 contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
+                    	 
+                    	 MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenidoAux);
                     	 modelo = datosmapfre.procesa();
                          encontro = true;
                      }
@@ -278,6 +282,7 @@ public class IdentificaPolizaService {
 	                }
 	            }
 	            
+	            //ENTRADA PARA SURA
 	            if (encontro == false) {
 	                if (contenido.split("@@@")[3].contains("Seguros SURA S.A.")
 	                        || contenido.contains("Royal & SunAlliance Seguros")
@@ -290,6 +295,15 @@ public class IdentificaPolizaService {
 	                }
 	            }
 	            
+	            // ENTRADA PARA PRIMERO SEGUROS
+	            if (encontro == false) {
+	                if (contenido.contains("PRIMERO SEGUROS S.A. de C.V.")
+	                        || contenido.contains("Primero Seguros S.A. De C.V.")) {
+	                	PrimeroModel datosPrimero = new PrimeroModel(pdfStripper, pdDoc, contenido);
+	                	modelo = datosPrimero.procesar();
+	                    encontro = true;
+	                }
+	            }
 	            
 
              if (encontro == false) {

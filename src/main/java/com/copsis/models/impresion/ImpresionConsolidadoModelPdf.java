@@ -388,7 +388,7 @@ public class ImpresionConsolidadoModelPdf {
 			}
 		}
 
-		System.out.printf("Identified %d set(s) of identical objects in run.\n", duplicateSets.size());
+
 
 		for (List<COSBase> duplicateSet : duplicateSets) {
 			if (duplicateSet.size() > 1) {

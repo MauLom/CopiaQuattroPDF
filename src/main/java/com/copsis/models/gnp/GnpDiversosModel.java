@@ -818,8 +818,7 @@ public class GnpDiversosModel {
 				}
 			}
 			return a;
-		} catch (Exception ex) {
-			System.out.println("error.DatosGnpDanos.clearCoberturas: " + ex.getMessage() + " | " + ex.getCause());
+		} catch (Exception ex) {			
 			return a;
 		}
 	}

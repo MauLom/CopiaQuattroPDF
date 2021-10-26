@@ -31,7 +31,6 @@ public class GnpModel {
 
 			if (contenido.contains("Motor") && contenido.contains("Placas")) {
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
-					System.out.println("DATOS");
 					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
 					if (pagFin > 0) {
 						modelo = new GnpAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();

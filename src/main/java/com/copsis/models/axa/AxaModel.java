@@ -27,11 +27,18 @@ public class AxaModel {
 	public EstructuraJsonModel procesa() {
 		try {
 
-			if (contenido.contains("Datos del vehículo") && contenido.contains(" Vehicle description") == false) { // AUTOS
+
+			
+			if ((contenido.contains("Datos del vehículo")) && contenido.contains(" Vehicle description") == false) { // AUTOS
 				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 1, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false));
 				modelo = datosAxaAutos.procesar();
-			} else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
+			}else if( contenido.contains("Datos del Vehículo") && contenido.contains("AUTOMÓVILES/AUTO  COLECTIVA")  && contenido.contains(" Vehicle description") == false) {
+				
+				AxaAutos3Model datosAxaAutos = new AxaAutos3Model(fn.caratula(1, 4, stripper, doc));
+				modelo = datosAxaAutos.procesar();
+			}
+			else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
 				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 				modelo = datosAxaSalud.procesar();
 		

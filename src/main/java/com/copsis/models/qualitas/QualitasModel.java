@@ -59,7 +59,7 @@ public class QualitasModel {
 		} catch (Exception ex) {
 			modelo.setError(QualitasModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
-			;
+			
 			return modelo;
 		}
 	}
