@@ -67,7 +67,11 @@ public class AxaAutos2Model {
 						modelo.setMoneda(2);
 					}
 					if (newcontenido.split("\n")[i].contains("Vehicle ID Number:")) {
-						modelo.setSerie(newcontenido.split("\n")[i].split("Vehicle ID Number:")[1].replace("###", ""));
+						if(newcontenido.split("\n")[i].contains("Ocupantes")) {
+							modelo.setSerie(newcontenido.split("\n")[i].split("Vehicle ID Number:")[1].split("Ocupantes")[0].replace("###", ""));
+						}else {
+							modelo.setSerie(newcontenido.split("\n")[i].split("Vehicle ID Number:")[1].replace("###", ""));
+						}
 					}
 					if (newcontenido.split("\n")[i].contains("Placas") && newcontenido.split("\n")[i].contains("Plate No:")) {
 						modelo.setPlacas(newcontenido.split("\n")[i].split("Plate No:")[1].replace("###", ""));
