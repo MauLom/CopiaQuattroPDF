@@ -187,7 +187,6 @@ public class GnpSaludModel {
 					}
 			
 					if (dato.contains("Forma de pago")) {
-						System.out.println(dato);
 						switch (dato.trim().split("###").length) {
 						case 7:
 							if (dato.contains("Forma de pago")) {
