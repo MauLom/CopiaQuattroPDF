@@ -86,7 +86,7 @@ public class GnpSaludModel {
 					if (dato.contains("Vigencia")) {
 						switch (dato.trim().split("###").length) {
 						case 1:
-							modelo.setCteNombre(dato.trim().split("Vigencia")[0].trim());
+							modelo.setCteNombre(dato.trim().split("Vigencia")[0]);
 							break;
 						case 2:
 							if (dato.split("###")[1].contains("Vigencia")) {
@@ -144,7 +144,7 @@ public class GnpSaludModel {
 							if ((dato.split("###")[0].contains("R.F.C:") && dato.split("###")[1].contains("del"))
 									|| (dato.split("###")[0].contains("R.F.C. :")
 											&& dato.split("###")[1].contains("del"))) {
-								modelo.setRfc(dato.split("###")[0].split(":")[1].trim());
+								modelo.setRfc(dato.split("###")[0].split(":")[1].replace("-", "").trim());
 								if (dato.split("###")[1].contains("hrs.")) {
 
 									modelo.setVigenciaA(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
@@ -187,11 +187,10 @@ public class GnpSaludModel {
 					}
 			
 					if (dato.contains("Forma de pago")) {
-						
 						switch (dato.trim().split("###").length) {
 						case 7:
-							if (dato.trim().split("###")[3].trim().equals("Forma de pago")) {
-								modelo.setFormaPago(fn.formaPago(dato.trim().split("###")[4].trim()));
+							if (dato.contains("Forma de pago")) {
+								modelo.setFormaPago(fn.formaPago(dato.trim().split("Forma de pago")[1].split("###")[1].trim()));
 							}
 							
 							if (dato.split("###")[5].contains("de Póliza")) {
