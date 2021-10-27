@@ -120,14 +120,14 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio + 13, fin);
 
 				if (newcontenido.contains("RENUEVA")) {
-					modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
+					modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").strip());
 				} else {
 					if (newcontenido.split("\r\n")[1].length() > 0) {
-						modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", ""));
+						modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", "").replace("###", "").strip());
 					}
 				}
 				if (newcontenido.contains("RENUEVA")) {
-					modelo.setCteNomina(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
+					modelo.setCteNomina(newcontenido.split("RENUEVA")[0].replace("@@@", ""));
 				}
 			}
 
@@ -275,7 +275,7 @@ public class qualitasAutosModel {
 					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {						
 						if(newcontenido.split("\n")[i].contains("R.F.C:")) {
-							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("-", "").trim());
 						}
 					
 					}

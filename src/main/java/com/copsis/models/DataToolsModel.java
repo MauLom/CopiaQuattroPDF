@@ -71,12 +71,17 @@ public class DataToolsModel {
 			remplazoDeA.add(new ReplaceModel("    ", " "));
 			remplazoDeA.add(new ReplaceModel("   ", " "));
 			remplazoDeA.add(new ReplaceModel("  ", " "));
-			remplazoDeA.add(new ReplaceModel("######", "###"));
-			remplazoDeA.add(new ReplaceModel("#########", "###"));
 			remplazoDeA.add(new ReplaceModel("############", "###"));
-			remplazoDeA.add(new ReplaceModel("### ### ### ", "###"));
-			remplazoDeA.add(new ReplaceModel("### ### ###","###"));
+			remplazoDeA.add(new ReplaceModel("#########", "###"));
+			remplazoDeA.add(new ReplaceModel("######", "###"));
+			remplazoDeA.add(new ReplaceModel("### ### ### ### ### ### ### ###", "###"));
+			remplazoDeA.add(new ReplaceModel("### ### ### ### ### ### ###", "###"));	
+			remplazoDeA.add(new ReplaceModel("### ### ### ### ### ###", "###"));
 			remplazoDeA.add(new ReplaceModel("### ### ### ### ### ", "###"));
+			remplazoDeA.add(new ReplaceModel("### ### ###","###"));
+			remplazoDeA.add(new ReplaceModel("### ###","###"));
+
+		
 		
 			
 			return remplazoDeA;
