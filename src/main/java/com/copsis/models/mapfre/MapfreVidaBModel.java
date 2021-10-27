@@ -36,7 +36,7 @@ public class MapfreVidaBModel {
 				inicio = contenido.indexOf("PLAN SERVICIOS");
 			}
 			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");
-			System.out.println(inicio +"---> " + fin);
+	
 
 			
 			
@@ -138,7 +138,7 @@ public class MapfreVidaBModel {
 				}
 			}
 
-			System.out.println(contenido);
+		
 			inicio = contenido.indexOf("PLAN DE SEGURO:");
 			fin = contenido.indexOf("DESCRIPCION DE COBERTURAS");
 			if(fin  ==  -1) {
