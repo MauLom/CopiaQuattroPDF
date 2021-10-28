@@ -91,14 +91,18 @@ public class HdiAutosModel {
 							modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].replace("###", "").trim()));
 						}
 					}
-					
 					if (newcontenido.split("\n")[i].contains("Agente:")) {
 						if (newcontenido.split("\n")[i].split("###").length > 1) {
 							if(newcontenido.split("\n")[i].contains("Folio")) {
 								modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].trim().split(" ")[0]);
 								modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].split("Folio")[0].replace("###", "").trim());
 							}
+							if(newcontenido.split("\n")[i].contains("Tarifa")) {
+								modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].trim().split(" ")[0]);
+								modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].split("Tarifa")[0].replace("###", "").trim());
+							}
 						} else {
+			
 							modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].trim().split(" ")[0]);
 							modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].trim());
 						}
@@ -189,9 +193,21 @@ public class HdiAutosModel {
 							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
 							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));							
 						}
-					}						
+					}
+					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("de Póliza")) {
+
+						if(newcontenido.split("\n")[i+1].split("###").length ==  8) {
+							primas = false;
+							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
+							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
+							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
+							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));
+						}
+					}
 				}
 
+		
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(primas == true  ) {
 						if (newcontenido.split("\n")[i].contains("Prima Neta")) {
