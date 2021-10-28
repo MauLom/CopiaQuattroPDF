@@ -153,7 +153,7 @@ public class BanorteSaludModel {
                     	 modelo.setCteDireccion(resultado.replace("###", "").trim());                    	
                     }
                     
-//        System.out.println(newcontenido.split("\n")[i]);
+
                     if(newcontenido.split("\n")[i].contains("R.F.C:") && newcontenido.split("\n")[i].contains("VIGENCIA")){
                     	modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("VIGENCIA")[0].replace("###", "").trim());;
                     }
@@ -199,7 +199,7 @@ public class BanorteSaludModel {
 				
 			}
 			
-//			System.out.println(contenido);
+
 			inicio = contenido.indexOf("Clave del Agente:");
 			fin = contenido.indexOf("En testimonio de");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
