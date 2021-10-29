@@ -66,7 +66,15 @@ public class BanorteSaludModel {
                     	}
                     	else {                    	
                     	    modelo.setPoliza( newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1].trim());
-                            modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -3].replace("10", "").trim());              	
+                            
+
+                    	    if(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -3].length() > 20) {
+                    	    	modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -3].replace("10", "").trim());	
+                    	    }else {
+                    	    	modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -4].replace("10", "").trim());
+                    	    	
+                    	    }
+                    	                  	
                         }
                    }
                     
@@ -96,8 +104,9 @@ public class BanorteSaludModel {
                     		
                     	}
                     }
-                    if(newcontenido.split("\n")[i].contains("PLAN")){  
-                    	if( newcontenido.split("\n")[i+1].contains("PESOS")) {
+                    if(newcontenido.split("\n")[i].contains("PLAN")){ 
+                 
+                    	if( newcontenido.split("\n")[i+1].contains("PESOS") ||  newcontenido.split("\n")[i+1].contains("NACIONAL")) {
                     		modelo.setPlan( newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length-1]);
                     	}else if( newcontenido.split("\n")[i+2].contains("NACIONAL")) {
                     		String valor=newcontenido.split("\n")[i+2].replace(" ", "###");
@@ -105,8 +114,9 @@ public class BanorteSaludModel {
                     	}
                     	
                     }
-                    
+                   
                     if(newcontenido.split("\n")[i].contains("Domicilio:")){
+                    
                     	 if(newcontenido.split("\n")[i+1].contains("MONEDA")) {
                     		 resultado = newcontenido.split("\n")[i+1].split("MONEDA")[0].replace("###", "");	 
                     	 }else {                    		 
@@ -127,25 +137,42 @@ public class BanorteSaludModel {
                     	 if(newcontenido.split("\n")[i+3].contains("NACIONAL")) {
                     		 resultado += newcontenido.split("\n")[i+3].split("NACIONAL")[0];  
                     		 modelo.setMoneda(1);
-                    		 modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+3].split("NACIONAL")[1].replace("TOTAL", "").trim() ));
+                    	
+                    		 if(newcontenido.split("\n")[i+3].split("NACIONAL")[1].replace("TOTAL", "").trim().split("###").length > 2) {
+                    			 modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+3].split("NACIONAL")[1].split("###")[1].replace("TOTAL", "").trim() ));
+                    		 }else {
+                    			 modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+3].split("NACIONAL")[1].replace("TOTAL", "").trim() ));	 
+                    		 }
+                    		 
                     	 }
                     	 if(newcontenido.split("\n")[i+3].contains("PESOS")) {
                     		 resultado += " "+ newcontenido.split("\n")[i+3].split("PESOS")[0].replace("###", "");  
                     		 modelo.setMoneda(1);
                     		 modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+3].split("PESOS")[1].split("###")[1].replace("###", "").trim() ));
                     	 }
-                    	 modelo.setCteDireccion(resultado);                    	
+                    	 modelo.setCteDireccion(resultado.replace("###", "").trim());                    	
                     }
                     
+
                     if(newcontenido.split("\n")[i].contains("R.F.C:") && newcontenido.split("\n")[i].contains("VIGENCIA")){
                     	modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("VIGENCIA")[0].replace("###", "").trim());;
                     }
                     
+                    if(newcontenido.split("\n")[i].contains("R.F.C:") && newcontenido.split("\n")[i].contains("DESDE")){
+                    	modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("DESDE")[0].replace("###", "").trim());;
+                    }
+                    
                     if(newcontenido.split("\n")[i].contains("Electrónico:")){                    
                     	if(newcontenido.split("\n")[i].split("-").length > 1) {
-                    	 resultado = newcontenido.split("\n")[i].split("Electrónico:")[1].trim().replace(" ", "###");
-                    	 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[0]));
-                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[1]));
+                    	 resultado = newcontenido.split("\n")[i].split("Electrónico:")[1].strip().trim().replace(" ", "###");
+                    	 if(resultado.split("###")[0].contains("-")) {
+                    		 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[0]));
+                        	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[1])); 
+                    	 }else {
+                    		 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[1]));
+                        	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[2]));
+                    	 }
+                    	
                     	}
                     }
                     if(newcontenido.split("\n")[i].contains("R.F.C:") && newcontenido.split("\n")[i].split("-").length > 3){
@@ -158,12 +185,32 @@ public class BanorteSaludModel {
 							modelo.setRfc(newcontenido.split("\n")[i].split("###")[1]);
 							 modelo.setVigenciaDe(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[2]));
 	                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[3]));  
-						}
-                    	 
-                    	              
-                    }                                       
+						}                    	                     	           
+                    }    
+                    
+                    if(modelo.getVigenciaA().length() == 0 && modelo.getVigenciaDe().length() == 0 ) {
+    					if (newcontenido.split("\n")[i].split("-").length > 3) {
+    	                     String x = newcontenido.split("\n")[i].trim().replace(" ", "###");
+    						 modelo.setVigenciaDe(fn.formatDate_MonthCadena( x.split("###")[0]));
+	                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( x.split("###")[1]));
+    					}
+    				}
+				}
+				
+			}
+			
+
+			inicio = contenido.indexOf("Clave del Agente:");
+			fin = contenido.indexOf("En testimonio de");
+			if (inicio > 0 && fin > 0 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					if(newcontenido.split("\n")[i].contains("Clave del Agente:")) {
+						modelo.setAgente(newcontenido.split("\n")[i+1].split(modelo.getCveAgente())[0].trim() );
+					}
 				}
 			}
+			
 
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Si el contenido");

@@ -768,6 +768,25 @@ public class DataToolsModel {
 		return stripper.getText(doc);
 	}
 	
+	  public String recibos(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
+	        String x = "";
+	        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+
+	            pdfStripper.setStartPage(i);
+	            pdfStripper.setEndPage(i);
+
+	            if (pdfStripper.getText(pdDoc).contains(buscar)) {
+	                PDFTextStripper s = new PDFTextStripper();
+	                s.setParagraphStart("###");
+	                s.setSortByPosition(true);
+	                s = pdfStripper;
+	                x += s.getText(pdDoc);
+	            }
+	        }
+
+	        return x;
+	    }
+	
 	
 	public int tipoPoliza(String contenido) {
 		int dato = 0;
@@ -777,6 +796,7 @@ public class DataToolsModel {
 				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
+				"CONTRATANTE Y CONDUCTOR",
 				"FUNERARIOS",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
@@ -797,6 +817,7 @@ public class DataToolsModel {
 				case "PLACAS":
 				case "AUTO INDIVIDUAL":
 				case "AUTOS":
+				case "CONTRATANTE Y CONDUCTOR":
 					dato = 1;
 					encontro = true;
 					break;
@@ -930,4 +951,6 @@ public class DataToolsModel {
 		
 		return number;
 	}
+	
+	
 }

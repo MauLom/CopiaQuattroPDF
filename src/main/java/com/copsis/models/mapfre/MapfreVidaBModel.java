@@ -7,6 +7,7 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.afirme.AfirmeAutosBModel;
 
 public class MapfreVidaBModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -19,7 +20,10 @@ public class MapfreVidaBModel {
 
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", "Póliza Número:");
+		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", "Póliza Número:")
+				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
+				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
+				.replace("Prima Neta:", "Prima neta:").replace("Plan de Seguro:", "PLAN DE SEGURO:");
 		String newcontenido = "";
 		int inicio = 0;
 		int fin = 0;
@@ -28,50 +32,70 @@ public class MapfreVidaBModel {
 			modelo.setTipo(5);
 			modelo.setCia(22);
 			inicio = contenido.indexOf("SEGURO DE VIDA ");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("PLAN SERVICIOS");
+			}
 			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");
+	
+
 			
 			
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("### 00.00", "### 00.00###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
 					if (newcontenido.split("\n")[i].contains("Póliza Número:")) {
+						
 						modelo.setPoliza(
-								newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").strip());
+								newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Contratante:")
 							&& newcontenido.split("\n")[i].contains("R.F.C:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0]
-								.replace("###", "").strip());
-						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").strip());
+								.replace("###", "").replace("C.U.R.P:", "").trim());
+						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Domicilio:")
 							&& newcontenido.split("\n")[i].contains("Tel:")) {
 						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].split("Tel:")[0]
-								.replace("###", "").strip());
+								.replace("###", "").trim());
 					}
+			
+					
 					if (newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Clave de Agente:")) {
 						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
 								newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0]
-										.replace("###", "").strip()));
-						modelo.setCveAgente(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", "").strip());
-						modelo.setAgente(newcontenido.split("\n")[i + 1].split("###")[2].replace("###", "").strip());
+										.replace("###", "").trim()));
+						
+						modelo.setCveAgente(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", "").trim());
+						modelo.setAgente(newcontenido.split("\n")[i + 1].split("###")[2].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Hasta")) {
-						modelo.setVigenciaA(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0]
-										.replace("###", "").strip()));
+						if(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0].contains("-")) {
+							modelo.setVigenciaA(
+									fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0]
+											.replace("###", "").trim()));
+						}else {
+							modelo.setVigenciaA(
+									fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1]
+											.replace("###", "").trim()));
+						}
+						
 					}
+					
+
+	
 
 					if (newcontenido.split("\n")[i].contains("Fecha de Emisiòn:")
 							&& newcontenido.split("\n")[i].contains("Forma de Pago:")
 							&& newcontenido.split("\n")[i].contains("Moneda")) {
 						modelo.setFechaEmision(fn.formatDate_MonthCadena(
 								newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").replace(" ", ""))
-								.strip());
+								.trim());
 						modelo.setFormaPago(fn
-								.formaPago(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", "").strip()));
+								.formaPago(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", "").trim()));
 						modelo.setMoneda(1);
 					}
 
@@ -79,6 +103,7 @@ public class MapfreVidaBModel {
 							&& newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Prima Total:")) {
 						int sp = newcontenido.split("\n")[i + 1].split("###").length;
+
 						switch (sp) {
 						case 6:
 							modelo.setPrimaneta(fn
@@ -88,9 +113,23 @@ public class MapfreVidaBModel {
 							modelo.setDerecho(fn
 									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[3])));
 							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(
-									newcontenido.split("\n")[i + 1].split("###")[4].replace("Exento", "").strip())));
+									newcontenido.split("\n")[i + 1].split("###")[4].replace("Exento", "").trim())));
 							modelo.setPrimaTotal(fn
 									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[5])));
+
+							break;
+							
+						case 7:
+							modelo.setPrimaneta(fn
+									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
+							modelo.setRecargo(fn
+									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[2])));
+							modelo.setDerecho(fn
+									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[3])));
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(
+									newcontenido.split("\n")[i + 1].split("###")[5].replace("Exento", "").trim())));
+							modelo.setPrimaTotal(fn
+									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[6])));
 
 							break;
 						}
@@ -99,15 +138,20 @@ public class MapfreVidaBModel {
 				}
 			}
 
+		
 			inicio = contenido.indexOf("PLAN DE SEGURO:");
 			fin = contenido.indexOf("DESCRIPCION DE COBERTURAS");
+			if(fin  ==  -1) {
+				fin = contenido.indexOf("Asegurados que ampara");
+			}
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 					if (newcontenido.split("\n")[i].contains("PLAN DE SEGURO:")) {
 						modelo.setPlan(
-								newcontenido.split("\n")[i].split("PLAN DE SEGURO:")[1].replace("####", "").strip());
+								
+								newcontenido.split("\n")[i].split("PLAN DE SEGURO:")[1].replace("####", "").trim());
 					}
 				}
 
@@ -162,9 +206,9 @@ public class MapfreVidaBModel {
 					if(newcontenido.split("\n")[i].contains("PARENTESCO")) {}else {
 						int sp =newcontenido.split("\n")[i].split("###").length;
 						if(sp == 3) {
-							beneficiario.setNombre(newcontenido.split("\n")[i].split("###")[0].strip());
+							beneficiario.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 							beneficiario.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[0]));
-							beneficiario.setPorcentaje(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].strip()));
+							beneficiario.setPorcentaje(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].trim()));
 							beneficiarios.add(beneficiario);
 						}
 					}
@@ -174,7 +218,9 @@ public class MapfreVidaBModel {
 			
 
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			modelo.setError(MapfreVidaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
+					+ ex.getCause());
 			return modelo;
 		}
 

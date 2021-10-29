@@ -28,8 +28,14 @@ public class AfirmeModel {
 	
 			switch (fn.tipoPoliza(contenido)) {
 			case 1://Autos
-				pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
-				modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();								  
+				if(contenido.contains("AUTOMÓVILES RESIDENTES")) {
+						
+					modelo  = new AfirmeAutosBModel(fn.caratula(1, 2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();	
+				}else {
+					pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+					modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
+				}
+										  
 				break;		
 			default:
 				break;

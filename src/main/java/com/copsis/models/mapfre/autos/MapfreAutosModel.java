@@ -221,7 +221,7 @@ public class MapfreAutosModel {
 				// prima neta
 				inicio = contenido.indexOf("###PRIMA###NETA:###") + 19;
 				newcontenido = contenido.substring(inicio, inicio + 20).split("\r\n")[0];
-				if (fn.isNumeric(newcontenido)) {
+				if (fn.isNumeric(fn.cleanString( newcontenido))) {
 					modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 				}
 

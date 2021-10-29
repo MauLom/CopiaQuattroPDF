@@ -15,6 +15,7 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
+import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
@@ -301,6 +302,16 @@ public class IdentificaPolizaService {
 	                        || contenido.contains("Primero Seguros S.A. De C.V.")) {
 	                	PrimeroModel datosPrimero = new PrimeroModel(pdfStripper, pdDoc, contenido);
 	                	modelo = datosPrimero.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            
+	            // ARGOS
+	            if (encontro == false) {
+	                if (contenido.contains("Seguros Argos, S.A. de C.V.")) {
+	                    ArgosModel datosArgos = new ArgosModel(pdfStripper, pdDoc, contenido);
+	                    modelo = datosArgos.procesar();
 	                    encontro = true;
 	                }
 	            }
