@@ -1,7 +1,6 @@
 package com.copsis.models.gnp.autos;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -27,9 +26,10 @@ public class GnpAutosModel {
 	}
 
 	public EstructuraJsonModel procesar() {
-		
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = contenido.replace("Importe###por###Pagar", "Importe por Pagar").replace("Derecho###de###Póliza",
+				"Derecho de Póliza");
 
 		try {
 
@@ -100,13 +100,13 @@ public class GnpAutosModel {
 			// cp
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
-		
+
 			if (donde > 0) {
-				
+
 				if (contenido.split("@@@")[donde].split("\r\n").length > 1) {
 					newcontenido = "";
 					for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					
+
 						if (dato.split("###").length == 3) {
 							if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("-").length == 3) {
 								modelo.setVigenciaA(
@@ -114,16 +114,14 @@ public class GnpAutosModel {
 								modelo.setRfc(dato.split("###")[0].trim());
 								newcontenido = dato.split("###")[1].trim();
 							}
-						} 
-						else if (dato.split("###").length == 2) {
+						} else if (dato.split("###").length == 2) {
 							if (dato.split("###")[1].contains("Duración:") && dato.split("###")[0].contains("C.P.")) {
-								if(dato.contains("C.P.###Duración")) {								
-								}else {
+								if (dato.contains("C.P.###Duración")) {
+								} else {
 									modelo.setCp(dato.split("###")[0].split("C.P.")[1].trim());
 									newcontenido += " " + dato.split("###")[0].split("C.P.")[0].trim();
-								}						
-							} 
-								else if (dato.split("###").length == 2) {
+								}
+							} else if (dato.split("###").length == 2) {
 								if (dato.split("###")[0].trim().length() == 5) {
 									if (fn.isNumeric(dato.split("###")[0].trim())) {
 										modelo.setCp(dato.split("###")[0].trim());
@@ -136,17 +134,16 @@ public class GnpAutosModel {
 				}
 			}
 
-			if(modelo.getCp().length() == 0) {
-				inicio  = contenido.indexOf("Referencia");
-				fin  = contenido.indexOf("Descripción");
-				if(inicio > 0 && fin > 0 && inicio < fin) {
-					newcontenido = contenido.substring(inicio,fin);
-					if(fn.isNumeric(newcontenido.split("Referencia")[1].replace("###", "").trim()))
-					modelo.setCp(newcontenido.split("Referencia")[1].replace("###", "").trim());
+			if (modelo.getCp().length() == 0) {
+				inicio = contenido.indexOf("Referencia");
+				fin = contenido.indexOf("Descripción");
+				if (inicio > 0 && fin > 0 && inicio < fin) {
+					newcontenido = contenido.substring(inicio, fin);
+					if (fn.isNumeric(newcontenido.split("Referencia")[1].replace("###", "").trim()))
+						modelo.setCp(newcontenido.split("Referencia")[1].replace("###", "").trim());
 				}
-				
+
 			}
-			
 
 			// descripcion (vehiculo)
 			// serie
@@ -160,61 +157,75 @@ public class GnpAutosModel {
 							modelo.setDescripcion(contenido.split("@@@")[donde + 1].split("###")[0].trim());
 							modelo.setSerie(contenido.split("@@@")[donde + 1].split("###")[1].trim());
 							if (contenido.split("@@@")[donde + 1].split("###")[3].trim().equals("Neta")) {
-								modelo.setPrimaneta(
-										fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde + 1].split("###")[4].trim())));
+								modelo.setPrimaneta(fn.castBigDecimal(
+										fn.preparaPrimas(contenido.split("@@@")[donde + 1].split("###")[4].trim())));
 							}
 						}
 					}
 				}
 			}
 
-			// modelo
-			// placas
-			// derecho
-			// recargo
-			// motor
-			donde = 0;
-			donde = fn.recorreContenido(contenido, "Modelo###Placas###Motor###Fraccionado###");
-			if (donde > 0) {
-				if (contenido.split("@@@")[donde].split("\r\n").length == 1) {
-					if (contenido.split("@@@")[donde].split("\r\n")[0].split("###").length == 5) {
-						if (contenido.split("@@@")[donde].split("###")[3].trim().equals("Fraccionado")) {
-							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde].split("###")[4].trim())));
+	
+
+			inicio = contenido.indexOf("Modelo###Placas###Motor");
+			fin = contenido.indexOf("Importe por Pagar");
+
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
+					if (newcontenido.split("\n")[i].contains("Modelo") && newcontenido.split("\n")[i].contains("Placas")
+							&& newcontenido.split("\n")[i].contains("Motor")
+							&& newcontenido.split("\n")[i].contains("Derecho")) {
+						if (newcontenido.split("\n")[i].contains("Derecho de Póliza")) {
+							modelo.setDerecho(fn.castBigDecimal(
+									fn.preparaPrimas(newcontenido.split("\n")[i].split("Derecho de Póliza")[1]
+											.replace("###", "").trim())));
+						}
+
+						if (newcontenido.split("\n")[i + 1].contains("I.V.A.")) {
+							modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i + 1].split("###")[0]));
+							modelo.setPlacas(newcontenido.split("\n")[i + 1].split("###")[1]);
+							modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[2]);
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(
+									newcontenido.split("\n")[i + 1].split("I.V.A.")[1].replace("###", "").trim())));
 						}
 					}
-					if (contenido.split("@@@")[donde + 1].split("\r\n").length == 1) {
-						switch (contenido.split("@@@")[donde + 1].split("###").length) {
-						case 6:
-							modelo.setModelo(fn.castInteger(
-									fn.remplazarMultiple(contenido.split("@@@")[donde + 1].split("###")[0].trim(),
-											fn.remplazosGenerales())));
-							if (contenido.split("@@@")[donde + 1].split("###")[2].trim().equals("Derecho")) {
-								if (contenido.split("@@@")[donde + 1].split("###")[1].contains(" ")) {
-									modelo.setMotor(contenido.split("@@@")[donde + 1].split("###")[1].trim());
-								} else {
-									modelo.setPlacas(contenido.split("@@@")[donde + 1].split("###")[1].trim());
-								}
-							} else {
-								modelo.setMotor(contenido.split("@@@")[donde + 1].split("###")[1].trim());
-							}
-							if (contenido.split("@@@")[donde + 1].split("###")[4].trim().equals("Póliza")) {
-								modelo.setDerecho(
-										fn.castBigDecimal(fn.preparaPrimas(contenido.split("@@@")[donde + 1].split("###")[5].trim())));
 
-							}
-							break;
-						case 7:
-							modelo.setModelo(fn.castInteger(
-									fn.remplazarMultiple(contenido.split("@@@")[donde + 1].split("###")[0].trim(),
-											fn.remplazosGenerales())));
-							modelo.setPlacas(contenido.split("@@@")[donde + 1].split("###")[1].trim());
-							modelo.setMotor(contenido.split("@@@")[donde + 1].split("###")[2].trim());
-							if (contenido.split("@@@")[donde + 1].split("###")[5].trim().equals("Póliza")) {
-								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(
-										fn.remplazarMultiple(contenido.split("@@@")[donde + 1].split("###")[6].trim(),
-												fn.remplazosGenerales()))));
-							}
-							break;
+					if (newcontenido.split("\n")[i].contains("Modelo") && newcontenido.split("\n")[i].contains("Placas")
+							&& newcontenido.split("\n")[i].contains("Motor")
+							&& newcontenido.split("\n")[i].contains("Fraccionado")) {
+
+					
+						if (newcontenido.split("\n")[i].contains("Fraccionado")) {
+							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(
+									newcontenido.split("\n")[i].split("Fraccionado")[1].replace("###", "").trim())));
+						}
+						if (newcontenido.split("\n")[i + 1].contains("Derecho de Póliza")) {
+							int sp = newcontenido.split("\n")[i + 1].trim().split("###").length;
+			
+							switch (sp) {
+							case 4:
+								modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i + 1].split("###")[0]));
+								if(newcontenido.split("\n")[i + 1].split("###")[1].length() > 10) {
+									modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[1]);		
+								}else {
+									modelo.setPlacas(newcontenido.split("\n")[i + 1].split("###")[1]);
+								}
+							
+								modelo.setDerecho(fn.castBigDecimal(
+										fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("Derecho de Póliza")[1]
+												.replace("###", "").trim())));
+								break;
+							case 5:
+								modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i + 1].split("###")[0]));
+								modelo.setPlacas(newcontenido.split("\n")[i + 1].split("###")[1]);
+								modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[2]);
+								modelo.setDerecho(fn.castBigDecimal(
+										fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("Derecho de Póliza")[1]
+												.replace("###", "").trim())));
+								break;
+							}						
 						}
 					}
 				}
@@ -225,7 +236,8 @@ public class GnpAutosModel {
 
 				newcontenido = contenido.split("I.V.A.")[1].split("\n")[0].replace("###", "").replace("$", "")
 						.replace(",", "").trim();
-				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(newcontenido, fn.remplazosGenerales()))));
+				modelo.setIva(fn
+						.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(newcontenido, fn.remplazosGenerales()))));
 
 			}
 
@@ -240,8 +252,9 @@ public class GnpAutosModel {
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 						if (newcontenido.split("\n")[i].contains("Descripción")) {
-							modelo.setPrimaneta(fn.castBigDecimal(
-									fn.preparaPrimas(fn.remplazarMultiple(newcontenido.split("\n")[i].split("Neta")[1].replace("###", ""),fn.remplazosGenerales()))));
+							modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
+									newcontenido.split("\n")[i].split("Neta")[1].replace("###", ""),
+									fn.remplazosGenerales()))));
 							modelo.setDescripcion(newcontenido.split("\n")[i + 1].split("###")[0]);
 							modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[1]);
 						}
@@ -249,9 +262,7 @@ public class GnpAutosModel {
 							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""),
 									fn.remplazosGenerales()))));
-							modelo.setModelo(fn.castInteger(fn.remplazarMultiple(
-									newcontenido.split("\n")[i + 1].split("###")[0], fn.remplazosGenerales())));
-							modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[1]);
+
 						}
 
 						if (newcontenido.split("\n")[i].contains("Importe")) {
@@ -276,7 +287,7 @@ public class GnpAutosModel {
 					if (contenido.split("@@@")[donde].split("###").length == 7) {
 						if (contenido.split("@@@")[donde].split("###")[5].trim().equals("Pagar")) {
 
-							modelo.setPrimaTotal(fn.castBigDecimal( fn.preparaPrimas(fn.remplazarMultiple(
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									contenido.split("@@@")[donde].split("###")[6].trim(), fn.remplazosGenerales()))));
 						}
 					}
@@ -347,22 +358,19 @@ public class GnpAutosModel {
 				}
 			}
 
-		
-	
 			// plan
-			
+
 			for (int j = 0; j < contenido.split("@@@").length; j++) {
-			  if(contenido.split("@@@") [j].contains("No. Póliza") && contenido.split("@@@") [j].contains("Regular Autos")) {
+				if (contenido.split("@@@")[j].contains("No. Póliza")
+						&& contenido.split("@@@")[j].contains("Regular Autos")) {
 					inicio = contenido.split("@@@")[j].trim().indexOf("Regular Autos");
 					fin = contenido.split("@@@")[j].trim().indexOf("No. Póliza");
-					
+
 					if (inicio > -1 && fin > inicio) {
 						modelo.setPlan(contenido.split("@@@")[j].trim().substring((inicio + 13), fin).trim());
 					}
-			  }				
+				}
 			}
-			
-
 
 			// conductor
 			donde = 0;
