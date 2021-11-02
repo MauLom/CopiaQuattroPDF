@@ -167,6 +167,7 @@ public class BanorteAutosModel {
 	            if(fin == -1){
 	            	fin =contenido.indexOf("La Compañía podrá en cualquier");
 	            }
+	            System.out.println(inicio +"--->" + fin);
 
 	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

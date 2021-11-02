@@ -24,12 +24,14 @@ public class BanorteModel {
 	
 	
 	public BanorteModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
+
 		this.stripper = pdfStripper;
+		
 		this.doc = pdDoc;
 		this.contenido = contenido.replace("GASTOS MEDICOS MAYORES", "GASTOS MÉDICOS MAYORES");
 	}
 	public EstructuraJsonModel procesar() {
-
+	
 		try {
 
 			switch (fn.tipoPoliza(contenido)) {
@@ -50,10 +52,11 @@ public class BanorteModel {
 				if(pagFin <= pagIni) {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
 				}
-		
+
+				System.out.println("paso aqui model" +this.stripper.getWordSeparator() +"  <--- ");
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 				
-					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
 				}
 				break;
 			case 5://Vida

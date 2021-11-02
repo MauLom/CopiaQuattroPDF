@@ -7,6 +7,8 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy.SelfInjection.Split;
+
 public class MapfreAutosBModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -34,6 +36,8 @@ public class MapfreAutosBModel {
 				.replace("RC* A TERCEROS EN SUS BIENES", "RC* A TERCEROS EN SUS BIENES###")
 				.replace("RC* A TERCEROS EN SUS PERSONAS", "RC* A TERCEROS EN SUS PERSONAS###")
 				.replace("DSMGVDF**", "###DSMGVDF**")
+				.replace("SEGURO AUTOPLUS", "SEGURO DE AUTOMÓVILES")
+				.replace("PÓLIZA-ENDOSO", "PÓLIZA NÚMERO:")
 				;
 		String newcontenido = "";
 		int inicio = 0;
@@ -49,13 +53,24 @@ public class MapfreAutosBModel {
 			}
 			fin = contenido.indexOf("Coberturas Amparadas");
 			
-	
+			if(fin == -1) {
+				fin = contenido.indexOf("APFRE###MÉXICO,###S.A.");
+			}
+			
+System.out.println(inicio +" " +fin);
+		
 
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				System.out.println(newcontenido);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("PÓLIZA NÚMERO:")) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].replace("###", ""));
+						if(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].contains("-")) {
+							modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].split("-")[0].replace("###", "").trim());
+						}else {
+							modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].replace("###", ""));	
+						}
+						
 
 					}
 					if (newcontenido.split("\n")[i].contains("CONTRATANTE:") && newcontenido.split("\n")[i].contains("R.F.C:")) {

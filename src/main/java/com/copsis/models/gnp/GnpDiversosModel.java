@@ -274,6 +274,10 @@ public class GnpDiversosModel {
 					}
 				}
 			}
+			
+			if(modelo.getFechaEmision().length() == 0 ) {
+				modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
 
 			// prima_neta
 			inicio = contenido.indexOf("Prima Neta");

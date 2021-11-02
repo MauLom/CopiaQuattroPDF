@@ -15,6 +15,7 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
+import com.copsis.models.ana.AnaModel;
 import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
@@ -182,10 +183,12 @@ public class IdentificaPolizaService {
                          && contenido.contains("ASEGURADOS"))) {
                 	 if(contenido.contains("Estimado(a)")) {
                 		 contenido = caratula(3, 4, pdfStripper, pdDoc);
+                		
                 		 BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
                          modelo = datosBanort.procesar();
                          encontro = true;
                 	 }else {
+                		 
                 		 BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
                          modelo = datosBanort.procesar();
                          encontro = true;
@@ -312,6 +315,17 @@ public class IdentificaPolizaService {
 	                if (contenido.contains("Seguros Argos, S.A. de C.V.")) {
 	                    ArgosModel datosArgos = new ArgosModel(pdfStripper, pdDoc, contenido);
 	                    modelo = datosArgos.procesar();
+	                    encontro = true;
+	                }
+	            }
+	            
+	            // ENTRADA PARA ANA
+	            if (encontro == false) {
+	                if ((contenido.contains("ANA COMPAÑÍA DE SEGUROS") && contenido.contains("www.anaseguros.com.mx"))
+	                        || (contenido.contains("A.N.A. COMPAÑÍA") && contenido.contains("www.anaseguros.com.mx"))
+	                        || (contenido.contains("A.N.A. Compañía de Seguros") && contenido.contains("www.anaseguros.com.mx")) || (contenido.split("@@@")[2].contains("ANA COMPAÑÍA DE SEGUROS"))) {
+	                	AnaModel datosAna = new AnaModel(pdfStripper, pdDoc, contenido);
+	                	modelo = datosAna.procesar();
 	                    encontro = true;
 	                }
 	            }

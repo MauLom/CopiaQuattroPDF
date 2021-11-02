@@ -16,6 +16,7 @@ public class BanorteSaludModel {
 	private String contenido = "";
 	private String newcontenido = "";
 	private String recibosText = "";
+	private String coberturas ;
 	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
@@ -29,9 +30,11 @@ public class BanorteSaludModel {
 	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
 	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
 	
-	public BanorteSaludModel(String contenido, String recibos) {
+	public BanorteSaludModel(String contenido, String recibos,String Coberturas) {
 		this.contenido = contenido;
 		this.recibosText = recibos;
+		this.coberturas= Coberturas;
+		System.out.println(Coberturas);
 	}
 	
 	public EstructuraJsonModel procesar() {
@@ -46,8 +49,7 @@ public class BanorteSaludModel {
             // cia
             modelo.setCia(35);
             
-
-           
+          
            //Datos Generales
            inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
            fin = contenido.indexOf("NOMBRE DEL ASEGURADO");
@@ -251,6 +253,11 @@ public class BanorteSaludModel {
 
 			}
 	          
+			
+			
+			
+			
+			
 			if(modelo.getVigenciaDe().length() >  0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
@@ -278,7 +285,28 @@ public class BanorteSaludModel {
 					}
 					modelo.setAsegurados(asegurados);
 				}
-						
+				
+				
+//				newcontenido = coberturas.
+//						 replace("EMERGENC###I###A###EN###EL###EXTRANJERO", "EMERGENCIA EN EL EXTRANJERO")
+//						.replace("-###COBERTURA###TOTAL###EXTRANJERO###EXCLU###I###DO","COBERTURA TOTAL EXTRANJERO###EXCLUIDO")
+//						.replace("###COBERTURA###DE###EL###IMI###NAC###IÓN###DE###DEDUC###I###BLE###POR###ACC###I###DENTE###I###NCLU###I###DO", 
+//								"COBERTURA DE ELIMINACIÓN DE DEDUCIBLE POR ACCIDENTE###INCLUIDO")
+//						.replace("COBERTURA###DE###V###I###S###IÓN###I###NCREMENTAL###(OPERADOR###DENTEGRA###)###EXCLU###I###DO", 
+//								"COBERTURA DE VISIÓN INCREMENTAL (OPERADOR DENTEGRA)###EXCLUIDO")
+//						.replace("COBERTURA###BÁS###I###CA", "COBERTURA###BÁSICA")
+//						.replace("-###SUMA###ASEGURADA###", "SUMA ASEGURADA###")
+//						.replace("-###DEDUC###I###BLE###POR###ENFERMEDAD###Y###ACC###I###DENTE", "DEDUCIBLE POR ENFERMEDAD Y ACCIDENTE")
+//						.replace("-###COASEGURO###CON###TOPE###DE###", "COASEGURO CON TOPE DE###")
+//						.replace("-###I###NCREMENTO###AL###CATÁLOGO", "INCREMENTO ALCATÁLOGO###")
+//						.replace("-###BASE###DE###HONORAR###IOS###QU###I###RÚRGI###COS#", "BASE DE HONORARIOS QUIRÚRGICOS")
+//						;
+				
+				System.out.println(coberturas);
+			   inicio = newcontenido.indexOf("");
+			   fin = newcontenido.indexOf("");
+				
+			
            
             return modelo;
 		} catch (Exception ex) {
