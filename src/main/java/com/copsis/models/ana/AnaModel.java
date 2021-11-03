@@ -28,10 +28,10 @@ public class AnaModel {
 				if (contenido.split("\r\n")[5].contains("ANA COMPAÑÍA") 
 						|| contenido.split("\r\n")[5].contains("A.N.A. COMPAÑÍA") 
 						|| contenido.split("\r\n")[4].contains("ANA COMPAÑÍA")) {
-					System.out.println("paso aqui 0000 ");
+			
 //					modelo = new AnaAutosModelRoja(fn.caratula(1, 5, stripper, doc)).procesar();	
 				}else {
-					System.out.println("paso aqui");
+
 					modelo = new AnaAutosModelRoja(fn.caratula(1, 5, stripper, doc)).procesar();
 				}
 				break;

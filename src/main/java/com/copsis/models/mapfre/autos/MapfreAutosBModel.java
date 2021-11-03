@@ -57,12 +57,11 @@ public class MapfreAutosBModel {
 				fin = contenido.indexOf("APFRE###MÉXICO,###S.A.");
 			}
 			
-System.out.println(inicio +" " +fin);
-		
+
 
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-				System.out.println(newcontenido);
+
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("PÓLIZA NÚMERO:")) {
 						if(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].contains("-")) {

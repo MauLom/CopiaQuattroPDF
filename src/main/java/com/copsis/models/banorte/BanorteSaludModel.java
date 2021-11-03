@@ -34,7 +34,6 @@ public class BanorteSaludModel {
 		this.contenido = contenido;
 		this.recibosText = recibos;
 		this.coberturas= Coberturas;
-		System.out.println(Coberturas);
 	}
 	
 	public EstructuraJsonModel procesar() {
@@ -302,7 +301,7 @@ public class BanorteSaludModel {
 //						.replace("-###BASE###DE###HONORAR###IOS###QU###I###RÚRGI###COS#", "BASE DE HONORARIOS QUIRÚRGICOS")
 //						;
 				
-				System.out.println(coberturas);
+
 			   inicio = newcontenido.indexOf("");
 			   fin = newcontenido.indexOf("");
 				

@@ -53,7 +53,7 @@ public class BanorteModel {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
 				}
 
-				System.out.println("paso aqui model" +this.stripper.getWordSeparator() +"  <--- ");
+
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 				
 					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
