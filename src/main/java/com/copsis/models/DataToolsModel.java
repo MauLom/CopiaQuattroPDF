@@ -761,12 +761,36 @@ public class DataToolsModel {
 		
 
 		stripper.setParagraphStart("@@@");
-		stripper.setWordSeparator("###");
+	stripper.setWordSeparator("###");
 		
 		stripper.setSortByPosition(true);
 		
 		return stripper.getText(doc);
 	}
+	
+	 public String coberturas(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
+	        String x = "";
+		      
+     
+	        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+
+	            pdfStripper.setStartPage(i);
+	            pdfStripper.setEndPage(i);
+
+
+	            if (pdfStripper.getText(pdDoc).contains(buscar)) {
+	                PDFTextStripper s = new PDFTextStripper();
+//	                s.setParagraphStart("@@@");
+//                    s.setWordSeparator("###");
+	                s.setSortByPosition(true);
+	                s = pdfStripper;
+	                x += s.getText(pdDoc);
+	            }
+	        }
+
+	        return x;
+	    }
+	
 	
 	  public String recibos(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
 	        String x = "";
