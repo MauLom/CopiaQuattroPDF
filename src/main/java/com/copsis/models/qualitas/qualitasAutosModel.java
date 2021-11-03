@@ -112,18 +112,23 @@ public class qualitasAutosModel {
 				}
 			}
 
+			
+			
+//			System.out.println(contenido);
+			
+			
 			// cte_nombre
 			inicio = contenido.lastIndexOf("DEL ASEGURADO");
 			fin = contenido.lastIndexOf("Domicilio");
+			
 
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + 13, fin);
-
 				if (newcontenido.contains("RENUEVA")) {
-					modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").strip());
+					modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
 				} else {
 					if (newcontenido.split("\r\n")[1].length() > 0) {
-						modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", "").replace("###", "").strip());
+						modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", "").replace("###", "").trim());
 					}
 				}
 				if (newcontenido.contains("RENUEVA")) {
@@ -468,6 +473,7 @@ public class qualitasAutosModel {
 			}
 			
 
+			System.out.println("===> " +modelo.getFormaPago());
 
 			if (modelo.getFormaPago() == 0) {
 				inicio = contenido.lastIndexOf("Pago:");
@@ -475,6 +481,7 @@ public class qualitasAutosModel {
 				if (inicio > -1) {
 					newcontenido = contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].replace("###", "")
 							.trim();
+					System.out.println(newcontenido);
 			
 					if (newcontenido.contains("12")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("12")[0].trim()));
@@ -494,6 +501,19 @@ public class qualitasAutosModel {
 					}
 
 				}
+			}
+			if (modelo.getFormaPago() == 0) {
+				System.out.println(contenido);
+				inicio = contenido.indexOf("MONEDA");
+				fin = contenido.indexOf("IMPORTE TOTAL");
+				if(inicio > -1 && fin > -1) {
+					newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
+			
+			  modelo.setFormaPago(fn.formaPagoSring(newcontenido));
+					
+				}
+				
+				
 			}
 
 			// primer_prima_total

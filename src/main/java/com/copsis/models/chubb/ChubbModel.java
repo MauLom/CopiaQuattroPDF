@@ -21,11 +21,13 @@ public class ChubbModel {
 		EstructuraJsonModel modelo = new EstructuraJsonModel();
 		DataToolsModel fn = new DataToolsModel();
 		try {
+			System.out.println(contenido);
 			int pagFin = 0;
 			int pagIni = 0;
 			String[] tipos = { "HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA" };
 			for (String tipo : tipos) {
+				System.out.println(contenido.contains(tipo) +"---"+ tipo);
 				if (contenido.contains(tipo)) {
 					switch (tipo) {
 		                        case "HOGAR":
@@ -44,6 +46,7 @@ public class ChubbModel {
 		                            break;
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":
+					case "Placas:":
 						pagIni = fn.pagFinRango(pdfStripper, pdDoc, "CARÁTULA");
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "AVISO DE COBRO");
 
@@ -53,10 +56,9 @@ public class ChubbModel {
 							chubbAutos.setRecibos(fn.textoBusqueda(pdfStripper, pdDoc, "AVISO DE COBRO", false));
 							modelo = chubbAutos.procesar();
 						} else {
-							// DatosChubbAutos datosChubbAutos = new DatosChubbAutos(identifica.caratula(1,
-							// 6, pdfStripper, pdDoc), identifica.recibos(pdfStripper, pdDoc, "VISO DE
-							// COBRO"));
-							// jsonObject = datosChubbAutos.procesarV2();
+							ChubbAutosModel chubbAutos = new ChubbAutosModel();
+							chubbAutos.setContenido(fn.caratula(0, 3, pdfStripper, pdDoc));
+							modelo = chubbAutos.procesar();
 						}
 						break;
 //		                        case "EMPRESARIAL":

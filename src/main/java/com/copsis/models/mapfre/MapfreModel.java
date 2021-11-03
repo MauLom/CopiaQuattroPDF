@@ -28,7 +28,7 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
-
+System.out.println("--<- " +fn.tipoPoliza(contenido));
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 				if (contenido.contains("CONTRATANTE Y CONDUCTOR")) {

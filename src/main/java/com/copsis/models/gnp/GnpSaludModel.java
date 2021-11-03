@@ -34,7 +34,7 @@ public class GnpSaludModel {
 
 	public EstructuraJsonModel procesar() {
 
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("###−###", "");
 		txtasegurados = fn.remplazarMultiple(txtasegurados, fn.remplazosGenerales());
 
 		int longitud_split = 0;
@@ -129,7 +129,7 @@ public class GnpSaludModel {
 							dato = res;
 							if (dato.split("###")[0].contains("C.P")) {
 								newcontenido += " " + dato.split("###")[0].split("C.P")[0].trim();				
-								modelo.setCp(dato.split("C.P")[1].split("###")[0].strip());
+								modelo.setCp(dato.split("C.P")[1].split("###")[0].trim());
 								if (dato.split("###")[1].contains("hrs.")) {
 									modelo.setVigenciaDe(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
 											+ "-" + dato.split("###")[2].trim());
@@ -171,7 +171,7 @@ public class GnpSaludModel {
 				     
 					if (dato.contains("Prima Neta")) {
 					
-						dato =dato.replace("### ###" , "###").strip();
+						dato =dato.replace("### ###" , "###").trim();
 						switch (dato.split("###").length) {
 						case 4:
 							if (dato.split("###")[2].trim().equals("Prima Neta")) {
@@ -206,7 +206,7 @@ public class GnpSaludModel {
 						case 9:
 	 
 							if(dato.contains("Forma de pago") && dato.contains("Recargo por Pago") ) {
-								modelo.setFormaPago(fn.formaPago(dato.split("Forma de pago")[1].split("Recargo por Pago")[0].replace("###", "").strip()));
+								modelo.setFormaPago(fn.formaPago(dato.split("Forma de pago")[1].split("Recargo por Pago")[0].replace("###", "").trim()));
 			
 							}
 							
@@ -238,7 +238,7 @@ public class GnpSaludModel {
 						case 10:
 							if (dato.contains("Moneda")
 									&& dato.contains("Fraccionado")) {
-								modelo.setMoneda(fn.moneda(dato.split("Moneda")[1].split("Fraccionado")[0].replace("###", "").strip()));
+								modelo.setMoneda(fn.moneda(dato.split("Moneda")[1].split("Fraccionado")[0].replace("###", "").trim()));
 
 							}
 							break;
@@ -246,7 +246,7 @@ public class GnpSaludModel {
 					}
 
 					if (dato.contains("de Póliza")) {
-						dato =dato.replace("######### ###", "###").strip();
+						dato =dato.replace("######### ###", "###").trim();
 
 						if (dato.split("###").length == 2) {
 							if (dato.split("###")[0].contains("Póliza")) {
@@ -401,7 +401,7 @@ public class GnpSaludModel {
 					}
 				}
 				if (agente.length() > 0) {
-					modelo.setAgente((agente.replace("### ###", "")).replace("###", "").strip());
+					modelo.setAgente((agente.replace("### ###", "")).replace("###", "").trim());
 				}
 			}
 
@@ -413,6 +413,8 @@ public class GnpSaludModel {
 			String coaseguros = contenido.split("Coaseguro")[1].split("Agente")[0]
 					.replace("Sin Límite", "Sin Límite###").replace("dls ", "dls###").replace("pesos", "###pesos###")
 					.replace("######", "###").replace("SMGM", "###SMGM###");
+			
+
 			int A1 = coaseguros.indexOf("− Nacional");
 			int B2 = coaseguros.indexOf("− Extranjero");
 
@@ -420,68 +422,78 @@ public class GnpSaludModel {
 			if (B2 > 0 && A1 > 0) {
 				dtcoberturas = coaseguros.substring(A1, A1 + 100) + "\n" + coaseguros.substring(B2, B2 + 70);
 			} else {
-				if (A1 > 0) {
+	
+				if (A1 > -1) {
 					dtcoberturas = coaseguros.substring(A1, A1 + 100);
 				} else {
-					dtcoberturas = coaseguros.substring(B2, B2 + 100);
+					if (B2 > -1) {
+						dtcoberturas = coaseguros.substring(B2, B2 + 100);	
+					}
+					
 				}
 			}
+			
+			if(dtcoberturas.length() > 10) {
+				for (String A : dtcoberturas.split("\n")) {
 
-			for (String A : dtcoberturas.split("\n")) {
+					if (A.contains("− Extranjero")) {
+						int n = A.split("###").length;
+					
+						if (n == 7) {
+							modelo.setDeducibleExt(A.split("###")[3].trim());
+						}
+						if (n == 6) {
+							modelo.setDeducibleExt(A.split("###")[2].trim());
+						} else if (n == 5) {
+							modelo.setDeducibleExt(A.split("###")[2].trim());
+						} else {
 
-				if (A.contains("− Extranjero")) {
-					int n = A.split("###").length;
-					if (n == 7) {
-						modelo.setDeducibleExt(A.split("###")[3].trim());
+						}
 					}
-					if (n == 6) {
-						modelo.setDeducibleExt(A.split("###")[2].trim());
-					} else if (n == 5) {
-						modelo.setDeducibleExt(A.split("###")[2].trim());
-					} else {
-
-					}
-				}
-				if (A.contains("− Nacional") || (A.contains("− Nacional"))) {
-					int n = A.split("###").length;
-					if (n == 4) {
-						modelo.setSa(A.split("###")[1].trim());
-						modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
-						modelo.setCoaseguro(A.split("###")[3].replace("\r", "").trim());
-					} else if (n == 5) {
-						modelo.setSa(A.split("###")[1].trim());
-						modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
-						modelo.setCoaseguro(A.split("###")[4].replace("\r", "").trim());
-					} else if (n == 6) {
-						modelo.setSa(A.split("###")[1].trim());
-						if (A.split("###")[3].replace("\r", "").trim().equalsIgnoreCase("pesos")) {
+					if (A.contains("− Nacional") || (A.contains("− Nacional"))) {
+						int n = A.split("###").length;
+						if (n == 4) {
+							modelo.setSa(A.split("###")[1].trim());
+							modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
+							modelo.setCoaseguro(A.split("###")[3].replace("\r", "").trim());
+						} else if (n == 5) {
+							modelo.setSa(A.split("###")[1].trim());
 							modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
 							modelo.setCoaseguro(A.split("###")[4].replace("\r", "").trim());
-						} else {
-							if (A.split("###")[5].replace("\r", "").contains("%")) {
-								modelo.setDeducible(A.split("###")[3].replace("\r", "").trim());
-								modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
-							} else {
+						} else if (n == 6) {
+							modelo.setSa(A.split("###")[1].trim());
+							if (A.split("###")[3].replace("\r", "").trim().equalsIgnoreCase("pesos")) {
 								modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
-								modelo.setCoaseguro(A.split("###")[3].replace("\r", "").trim());
+								modelo.setCoaseguro(A.split("###")[4].replace("\r", "").trim());
+							} else {
+								if (A.split("###")[5].replace("\r", "").contains("%")) {
+									modelo.setDeducible(A.split("###")[3].replace("\r", "").trim());
+									modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
+								} else {
+									modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
+									modelo.setCoaseguro(A.split("###")[3].replace("\r", "").trim());
+								}
 							}
-						}
-					} else if (n == 10) {
-						modelo.setSa(A.split("###")[1].trim());
-						modelo.setDeducible(A.split("###")[3].replace("\r", "").trim());
-						modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
-					} else if (n == 7 || n == 9 || n == 8) {
-						modelo.setSa(A.split("###")[1].trim());
-						if (A.split("###")[5].contains("%")) {
-							modelo.setDeducible(A.split("###")[3].trim());
-							modelo.setCoaseguro(A.split("###")[5].trim());
-						} else {
-							modelo.setDeducible(A.split("###")[2].trim());
-							modelo.setCoaseguro(A.split("###")[4].trim());
+						} else if (n == 10) {
+							modelo.setSa(A.split("###")[1].trim());
+							modelo.setDeducible(A.split("###")[3].replace("\r", "").trim());
+							modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
+						} else if (n == 7 || n == 9 || n == 8) {
+							modelo.setSa(A.split("###")[1].trim());
+							if (A.split("###")[5].contains("%")) {
+								modelo.setDeducible(A.split("###")[3].trim());
+								modelo.setCoaseguro(A.split("###")[5].trim());
+							} else {
+								modelo.setDeducible(A.split("###")[2].trim());
+								modelo.setCoaseguro(A.split("###")[4].trim());
+							}
 						}
 					}
 				}
+				
 			}
+
+			
 			String a = contenido.split("Fecha de Expedición")[1].split("Moneda")[0];
 			modelo.setFechaEmision(a.split("###")[3] + "-" + a.split("###")[2] + "-" + a.split("###")[1]);
 
@@ -590,6 +602,7 @@ public class GnpSaludModel {
 			}
 			modelo.setAsegurados(asegurados);
 
+
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// coberturas{nombre sa deducible coaseguro}
 			String[] coberturasTxt = { "E mergencia de gastos médico s", "Emergencia de gastos médico s",
@@ -597,7 +610,7 @@ public class GnpSaludModel {
 					"C atastróficas Nacional", "Enfermedades Catastróficas", "n el Extranjero", "Asistencia en Viajes",
 					"A sistencia en Viajes", "Membresía Médica Móvil", "M embresía Médica Móvil",
 					"Cero Deducible por Accidente", "C ero Deducible por Accidente", "ero Deducible por Accidente",
-					"R espaldo por Fallecimiento" };
+					"R espaldo por Fallecimiento","Atención Hospitales" ,"Respaldo Hospitalario","Reducción de Deducible"};
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "Coaseguro");
 			dondeAux = fn.recorreContenido(contenido, "Agente");
@@ -611,6 +624,7 @@ public class GnpSaludModel {
 					for (String cobertura : coberturasTxt) {
 						newcontenido1 = "";
 						contenidoCoberturas = filtrado.split("Coaseguro")[1].split("Coberturas")[0].trim();
+
 						inicioCob = contenidoCoberturas.indexOf(cobertura);
 						if (inicioCob > -1) {
 
@@ -673,12 +687,14 @@ public class GnpSaludModel {
 								}
 							} else {// TODAS LAS DEMAS COBETURAS
 								if (newcontenido.contains(cobertura) == false) {
+				
 									newcontenido1 = contenidoCoberturas
 											.substring(inicioCob, contenidoCoberturas.indexOf("\r\n", inicioCob))
 											.trim();
 								}
 							}
 
+							
 							if (newcontenido1.length() > 0) {
 								if (newcontenido1.contains("Prima")) { // SI TRAE MAS CONTENIDO LA LINEA, SE REMUEVEN
 																		// EXTRAS
@@ -718,6 +734,7 @@ public class GnpSaludModel {
 
 								///////////////////////////////////////////////// SI LOS ULTIMOS 3 CARACTERES ES
 								///////////////////////////////////////////////// ### LOS QUITA
+					
 								longitud_texto = 0;
 								longitud_texto = newcontenido1.length();
 								if (newcontenido1.substring(longitud_texto - 3, longitud_texto).equals("###")) {
@@ -732,6 +749,7 @@ public class GnpSaludModel {
 						}
 					}
 
+		
 					String datotexto = "";
 					for (String dato : newcontenido.split("\r\n")) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -747,6 +765,7 @@ public class GnpSaludModel {
 						} else if (datotexto.contains("n el Extranjero") && datotexto.contains("ergen") == false) {
 							datotexto = "Enfermedades Catastróficas " + datotexto;
 						}
+
 
 						switch (datotexto.split("###").length) {
 						case 4:

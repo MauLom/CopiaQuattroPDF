@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 public class DataToolsModel {
 	DateTimeFormatter formatter;
 	SimpleDateFormat simpleDateFormat;
@@ -421,6 +423,7 @@ public class DataToolsModel {
 		case "SEMESTRAL":
 		case "SEMESTR":
 		case "SEMESTRAL S/R":
+		case "SEMESTRAL S-R":
 			dato = 2;
 			break;
 		case "TRIM":
@@ -428,6 +431,7 @@ public class DataToolsModel {
 		case "TRIMESTRAL":
 		case "Trimestral":
 		case "TRIMESTRAL S/R":
+		case "TRIMESTRAL S-R":
 		case "TRIMESTRAL SR DERP":
 		case "TRIMESTRAL 12 MESES":
 		case "TRIM.S/REC":
@@ -976,5 +980,35 @@ public class DataToolsModel {
 		return number;
 	}
 	
+	public int formaPagoSring(String x) { // FORMA DE PAGO
+		int dato = 0;
+		String tiposP[] = {"CONTADO","ANUAL","SEMESTRAL","TRIMESTRAL","MENSUAL","QUICENAL","SEMANAL"};
+		for (String tipo : tiposP) {	
+			System.out.println(  tipo);
+			if (x.toUpperCase().contains(tipo)) {
+				switch (tipo) {
+				case "CONTADO":
+					dato=1;
+					break;
+				case "SEMESTRAL":
+					dato=2;
+					break;
+				case "TRIMESTRAL":
+					dato=3;
+					break;
+				case "MENSUAL":
+					dato=4;
+					break;
+				case "QUICENAL":
+					dato=5;
+					break;
+				case "SEMANAL":
+					dato=6;
+					break;
+				}			
+			}				
+		}
+		return dato;
+	}
 	
 }
