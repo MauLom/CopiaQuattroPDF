@@ -28,7 +28,7 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
-System.out.println("--<- " +fn.tipoPoliza(contenido));
+
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 				if (contenido.contains("CONTRATANTE Y CONDUCTOR")) {
@@ -44,7 +44,13 @@ System.out.println("--<- " +fn.tipoPoliza(contenido));
 				break;
 				
 			case 2://Salud
-				modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+			
+				if(contenido.contains("INFORMACIÓN GENERAL") && contenido.contains("COBERTURAS Y SERVICIOS")) {
+					modelo = new MapfreSaludRojoModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				}else {
+					modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				}
+			
 				
 				break;
 			case 5://vida
