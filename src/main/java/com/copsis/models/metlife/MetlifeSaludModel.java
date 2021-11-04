@@ -68,11 +68,16 @@ public class MetlifeSaludModel {
             
             if(inicio > 0 && fin > 0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
-            	for (int i = 0; i < newcontenido.split("\n").length; i++) {            		
+            	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
+            		System.out.println(newcontenido.split("\n")[i]);
             			if( newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {
                 			modelo.setPoliza(newcontenido.split("\n")[i+2]);
                 			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
                 		}
+            			if(modelo.getPoliza().contains("Sucursal")) {
+            				modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].trim());
+                			modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0].replace("SR.", "").trim());
+            			}
             			if( newcontenido.split("\n")[i].contains("Sucursal")){
             				resultado =newcontenido.split("\n")[i+1].split("###")[0] 
             						+" "+ newcontenido.split("\n")[i+2].split("###")[0] 
@@ -81,7 +86,13 @@ public class MetlifeSaludModel {
             			}
             			
             			if( newcontenido.split("\n")[i].contains("C.P.")){
-            				modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1]);
+
+            				if(newcontenido.split("\n")[i].split("C.P.")[1].length() > 7) {
+            					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].substring(0,5));
+            				}else {
+            					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1]);
+            				}
+            			
             			}
             			
             			if( newcontenido.split("\n")[i].contains("Día") &&  newcontenido.split("\n")[i].contains("Mes")){            				
@@ -153,7 +164,7 @@ public class MetlifeSaludModel {
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {          
             		EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
             		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {
-            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").trim());
             			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
             			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1:0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");
