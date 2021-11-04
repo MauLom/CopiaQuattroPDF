@@ -53,6 +53,7 @@ public class ZurichAutosModel {
 	                modelo.setCp(newcontenido.split("###")[1]);
 	            }
 
+	          
 	            /**
 	             * DATOS DEL CONTRATANTE*
 	             */
@@ -75,6 +76,12 @@ public class ZurichAutosModel {
 	                                + newcontenido.split("\n")[i + 3].split("Documento")[0].replace("###", " ");
 	                        modelo.setCteDireccion(newcontenidoDire.replace("\r", "").replace("### ", " "));
 	                    }
+	                    
+	                    if (newcontenido.split("\n")[i].contains("R.F.C.") && newcontenido.split("\n")[i].contains("Producto")) {
+	                    	modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C.")[1].split("Producto")[0].replace("-", "").replace("###", "").trim());
+	                    }
+	                    
+	                    
 	                    if (newcontenido.split("\n")[i].contains("Moneda")) {
 	                        modelo.setMoneda(1);
 	                    }
