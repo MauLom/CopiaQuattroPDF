@@ -62,7 +62,6 @@ public class ZurichAutosModel {
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
 	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "").replace("12:00hrs", ""));
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	                	System.out.println(newcontenido.split("\n")[i]);
 	                    if (newcontenido.split("\n")[i].contains("Datos del Asegurado")) {
 	                        modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0]);
 	                        modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].replace(":", "").trim()));

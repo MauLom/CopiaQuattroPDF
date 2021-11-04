@@ -94,7 +94,7 @@ public class MapfreSaludRojoModel {
 			if(fin == -1) {
 				fin = contenido.indexOf("ENDOSO DEL FACTOR");
 			}
-			System.out.println(contenido);
+
 
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
