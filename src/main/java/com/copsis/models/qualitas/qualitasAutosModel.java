@@ -114,7 +114,6 @@ public class qualitasAutosModel {
 
 			
 			
-//			System.out.println(contenido);
 			
 			
 			// cte_nombre
