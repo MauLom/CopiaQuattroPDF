@@ -31,6 +31,7 @@ public class MapfreSaludBModel {
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(22);
+
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
 
