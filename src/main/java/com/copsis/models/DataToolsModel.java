@@ -984,7 +984,6 @@ public class DataToolsModel {
 		int dato = 0;
 		String tiposP[] = {"CONTADO","ANUAL","SEMESTRAL","TRIMESTRAL","MENSUAL","QUICENAL","SEMANAL"};
 		for (String tipo : tiposP) {	
-			System.out.println(  tipo);
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
 				case "CONTADO":

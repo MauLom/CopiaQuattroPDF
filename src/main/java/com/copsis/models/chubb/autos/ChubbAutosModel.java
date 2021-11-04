@@ -112,8 +112,7 @@ public class ChubbAutosModel {
 					switch (x) {
 					case "Forma de pago:":
 						inicio = inicio + 14;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0]).split(separador)[0];
-						System.out.println(newcontenido);
+						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0]).split(separador)[0];				
 						modelo.setFormaPago(fn.formaPago(newcontenido));
 						break;
 					}

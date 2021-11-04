@@ -473,7 +473,6 @@ public class qualitasAutosModel {
 			}
 			
 
-			System.out.println("===> " +modelo.getFormaPago());
 
 			if (modelo.getFormaPago() == 0) {
 				inicio = contenido.lastIndexOf("Pago:");
@@ -481,7 +480,7 @@ public class qualitasAutosModel {
 				if (inicio > -1) {
 					newcontenido = contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].replace("###", "")
 							.trim();
-					System.out.println(newcontenido);
+			
 			
 					if (newcontenido.contains("12")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("12")[0].trim()));
@@ -503,7 +502,6 @@ public class qualitasAutosModel {
 				}
 			}
 			if (modelo.getFormaPago() == 0) {
-				System.out.println(contenido);
 				inicio = contenido.indexOf("MONEDA");
 				fin = contenido.indexOf("IMPORTE TOTAL");
 				if(inicio > -1 && fin > -1) {

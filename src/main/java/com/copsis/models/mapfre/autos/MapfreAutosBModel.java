@@ -47,7 +47,6 @@ public class MapfreAutosBModel {
 			modelo.setTipo(1);
 			modelo.setCia(22);
 
-//			System.out.println(contenido);
 
 			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			if(inicio == -1) {
@@ -65,7 +64,7 @@ public class MapfreAutosBModel {
 				
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
+
 					if (newcontenido.split("\n")[i].contains("PÓLIZA NÚMERO:")) {
 						if(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].contains("-")) {
 							modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].split("-")[0].replace("###", "").trim());

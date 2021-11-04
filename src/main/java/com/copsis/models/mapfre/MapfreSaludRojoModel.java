@@ -75,15 +75,14 @@ public class MapfreSaludRojoModel {
 				}
 			}
 			
-//			System.out.println(contenido);
+
 			inicio = contenido.indexOf("FORMA DE PAGO:");
 			fin = contenido.indexOf("PRÁCTICA DE DEPORTE");
-			System.out.println(inicio +"---> "+ fin);
+
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {						
-					System.out.println( newcontenido.split("\n")[i]);
 				}
 			}
 			

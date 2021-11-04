@@ -21,13 +21,11 @@ public class ChubbModel {
 		EstructuraJsonModel modelo = new EstructuraJsonModel();
 		DataToolsModel fn = new DataToolsModel();
 		try {
-			System.out.println(contenido);
 			int pagFin = 0;
 			int pagIni = 0;
 			String[] tipos = { "HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA" };
 			for (String tipo : tipos) {
-				System.out.println(contenido.contains(tipo) +"---"+ tipo);
 				if (contenido.contains(tipo)) {
 					switch (tipo) {
 		                        case "HOGAR":
