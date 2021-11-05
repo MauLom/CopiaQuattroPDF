@@ -69,7 +69,6 @@ public class MetlifeSaludModel {
             if(inicio > 0 && fin > 0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
-            		System.out.println(newcontenido.split("\n")[i]);
             			if( newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {
                 			modelo.setPoliza(newcontenido.split("\n")[i+2]);
                 			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
