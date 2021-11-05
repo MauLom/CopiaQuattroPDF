@@ -303,13 +303,31 @@ public class AxaSaludV2Model {
 		inicio = contenido.indexOf("Coberturas-Servicios");
 		fin = contenido.indexOf("Costo por Servicio");
 
+
 		if (inicio > 0 && fin > 0 && inicio < fin) {
-			newcontenido = contenido.substring(inicio, fin);
+			newcontenido = contenido.substring(inicio, fin).replace("###D ###e acuerdo", "###De acuerdo".replace("\r", ""));
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(newcontenido.split("\n")[i].contains("Gama") || newcontenido.split("\n")[i].contains("Red") || newcontenido.split("\n")[i].contains("adicionales") || newcontenido.split("\n")[i].contains("Deducible") ) {					
 				}else {
+					
 					int x = newcontenido.split("\n")[i].split("###").length;
+
+					if(x == 3) {
+						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("@@@", ""));
+						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("@@@", ""));
+						cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("@@@", ""));
+
+						coberturas.add(cobertura);
+					}
+					if(x == 4) {
+						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("@@@", ""));
+						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("@@@", ""));
+						cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("@@@", ""));
+						cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[3].replace("@@@", "").replace("\r", ""));
+						coberturas.add(cobertura);
+					}
+					
 					if(x == 4) {
 						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("@@@", ""));
 						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("@@@", ""));
@@ -336,22 +354,25 @@ public class AxaSaludV2Model {
 			}
 			modelo.setCoberturas(coberturas);
 		}
+
 		
 		//proceso 2 para coberturas
 		
 		if(modelo.getCoberturas().size() == 0) {//version dos de coberturas si formato (### no tiene)
 			inicio = inicontenido.indexOf("Coberturas/Servicios");
 			fin = inicontenido.indexOf("Costo por Servicio");
-
+//System.out.println(inicio +"---< "+ fin);
 					if (inicio > 0 && fin > 0 && inicio < fin) {
 						newcontenido = inicontenido.substring(inicio,fin).replaceAll("  +", "###").replace("@@@", "").replace("Tipo de Red###Abierta", "").replace("###Gama Hospitalaria###Esmeralda", "");
 						for (int i = 0; i < newcontenido.split("\n").length; i++) {
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+//						System.out.println("°_°-°-°--°_|" +newcontenido.split("\n")[i]);
 							if(newcontenido.split("\n")[i].contains("Servicios Cobertura Básica") || newcontenido.split("\n")[i].contains("Tope de Coaseguro")
 							 || newcontenido.split("\n")[i].contains("Tabulador") || newcontenido.split("\n")[i].contains("adicionales")
 							  || newcontenido.split("\n")[i].contains("Servicios")
 							  ) {} else {
 								  int x = newcontenido.split("\n")[i].split("###").length;
+	
 
 								  if(newcontenido.split("\n")[i].contains("%")) {
 									

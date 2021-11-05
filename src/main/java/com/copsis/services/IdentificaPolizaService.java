@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.ImportacionValidacionModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
@@ -339,7 +340,9 @@ public class IdentificaPolizaService {
         	
             pdDoc.close();
            
-     
+//            ImportacionValidacionModel importacionValidacionModel = new ImportacionValidacionModel();
+//            System.out.println(importacionValidacionModel.isValidImportacion(modelo));
+            
             return modelo;
 		} catch (Exception ex) {
 			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;
