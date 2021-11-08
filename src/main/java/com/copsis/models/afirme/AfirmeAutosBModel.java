@@ -29,7 +29,7 @@ public class AfirmeAutosBModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 
             //tipo
-            modelo.setTipo(1232);
+            modelo.setTipo(1);
 
             //cia
             modelo.setCia(31);
@@ -154,13 +154,13 @@ public class AfirmeAutosBModel {
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
-                        modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replaceAll("###", ""));
+                        modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replaceAll("###", "").replace(":", "").trim());
                         modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Financiamiento")) {
                         newcontenidosp = newcontenido.split("\n")[i].split("Nombre:")[1].split("Financiamiento")[0];
 
-                        modelo.setAgente(newcontenidosp.replaceAll("\r", "").replaceAll("###", ""));
+                        modelo.setAgente(newcontenidosp.replaceAll("\r", "").replaceAll("###", "").trim().replace(",", " "));
                         modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1].replaceAll("###", ""))));
                     }
            
@@ -191,6 +191,8 @@ public class AfirmeAutosBModel {
             newcontenido = newcontenido.replace("@@@", "").replace("\r", "");
             List<EstructuraRecibosModel> recibosList = new ArrayList<>();
             EstructuraRecibosModel  recibo = new EstructuraRecibosModel();
+            
+       ;
             for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
            	
@@ -233,6 +235,8 @@ public class AfirmeAutosBModel {
              }
             recibosList.add(recibo);
             modelo.setRecibos(recibosList);
+            
+
           
             
             List<EstructuraRecibosModel> recibosvacio = new ArrayList<>();
@@ -253,10 +257,11 @@ public class AfirmeAutosBModel {
                     	recibo2.setPrimaTotal(modelo.getRecibos().get(0).getPrimaTotal());
                     	recibo2.setCargoExtra(modelo.getRecibos().get(0).getCargoExtra());
                     	recibosLi.add(recibo2);
-            	   }            
+            	   }  
+            	   modelo.setRecibos(recibosvacio);
+                   modelo.setRecibos(recibosLi);
             }
-            modelo.setRecibos(recibosvacio);
-            modelo.setRecibos(recibosLi);
+          
             
             
             

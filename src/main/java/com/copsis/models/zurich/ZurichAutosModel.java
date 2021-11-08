@@ -79,6 +79,15 @@ public class ZurichAutosModel {
 	                    
 	                    if (newcontenido.split("\n")[i].contains("R.F.C.") && newcontenido.split("\n")[i].contains("Producto")) {
 	                    	modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C.")[1].split("Producto")[0].replace("-", "").replace("###", "").trim());
+	                    	if(newcontenido.split("\n")[i].split("Producto")[1].length() >10) {
+	                    		if(newcontenido.split("\n")[i].split("Producto")[1].contains("Tu Auto Seguro Más")) {
+	                    			modelo.setPlan("Amplia");
+	                    		}else {
+	                    			if(newcontenido.split("\n")[i].split("Producto")[1].contains("Relax auto")) {
+	                    				modelo.setPlan("Amplia");
+		                    		}
+	                    		}
+	                    	}
 	                    }
 	                    
 	                    
@@ -113,7 +122,7 @@ public class ZurichAutosModel {
 	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", ""));
 	                for (String x : newcontenido.split("\n")) {
 	                    if (x.contains("Placas")) {
-	                        modelo.setPlacas(x.split("###")[0].replace("Placas", ""));
+	                        modelo.setPlacas(x.split("###")[0].replace("Placas:", ""));
 	                    }
 	                    if (x.contains("No. de Serie")) {
 	                        modelo.setSerie(x.split("###")[1]);

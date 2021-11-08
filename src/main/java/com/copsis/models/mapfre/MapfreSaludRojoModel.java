@@ -49,7 +49,7 @@ public class MapfreSaludRojoModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(newcontenido.split("\n")[i].contains("PÓLIZA-ENDOSO")) {
 						if(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().contains("-")) {
-							 modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().split("-")[0]);							 
+							 modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().replace("-", "/"));							 
 						}				
 					}
 					if(newcontenido.split("\n")[i].contains("FECHA DE EMISIÓN")) {
