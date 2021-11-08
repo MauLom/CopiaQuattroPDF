@@ -6,7 +6,6 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.EstructuraRecibosModel;
 import com.copsis.models.EstructuraUbicacionesModel;
 
 
@@ -231,30 +230,40 @@ public class AxaDiversosModel {
 //			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Paquete contratado");
 			fin = contenido.indexOf("Prima Neta");
-			System.out.println("=======> "+inicio +" "+ fin);
+			if(inicio > fin ) {
+				fin = contenido.lastIndexOf("Prima Neta");
+			}
+
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();				
 				newcontenido = contenido.substring(inicio,fin);				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				    int x = newcontenido.split("\n")[i].split("###").length;
-				    if(x == 2) {
-				    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-				    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
-				    	coberturas.add(cobertura);				
+				    if(newcontenido.split("\n")[i].contains("Suma Asegurada")) {
+				    	
+				    }else {
+
+				    	  if(x == 2) {
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
+						    	coberturas.add(cobertura);				
+						    }
+						    if(x == 3) {
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+						    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
+						    	coberturas.add(cobertura);
+						    }
+						    if(x == 4) {
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+						    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
+						    	coberturas.add(cobertura);
+						    }
 				    }
-				    if(x == 3) {
-				    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-				    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-				    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
-				    	coberturas.add(cobertura);
-				    }
-				    if(x == 4) {
-				    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-				    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-				    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
-				    	coberturas.add(cobertura);
-				    }
+				  
+				    
 				}
 				modelo.setCoberturas(coberturas);
 			}
