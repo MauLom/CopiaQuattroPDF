@@ -144,15 +144,19 @@ public class ZurichAutosModel {
 	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "").replace("###$", ""));
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Prima Neta")) {
-	                        
-	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1])));
+	                        System.out.println(newcontenido.split("\n")[i].split("###")[1] +"---> " +fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));
+	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));
 	                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
 	                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Financiamiento")) {
-	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1])));
-	                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
-	                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
+	                    	
+	                    	
+	                    		modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1])));
+		                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
+		                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
+	                    	
+	                        
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Prima Total")) {
 	                        
