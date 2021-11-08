@@ -168,7 +168,7 @@ public class MetlifeSaludModel {
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {          
             		EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
             		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {
-            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").trim());
+            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").replace("01", "").trim());
             			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
             			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1:0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");

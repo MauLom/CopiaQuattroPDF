@@ -76,6 +76,7 @@ public class AxaDiversosModel {
 					if (newcontenido.split("\n")[i].contains("Domicilio:")) {
 						String x = "";
 						if (newcontenido.split("\n")[i + 1].contains("C.P:")) {
+							
 							x = (newcontenido.split("\n")[i + 1].split("C.P:")[0]).replace("\r", "");
 						}
 						if (newcontenido.split("\n")[i + 1].contains("Vigencia")) {
@@ -90,20 +91,34 @@ public class AxaDiversosModel {
 					}
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
 						if(newcontenido.split("\n")[i].split("C.P:")[1].contains("Vigencia")) {
-							modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Vigencia")[0].trim());
+							if(newcontenido.split("\n")[i].split("C.P:")[1].split("Vigencia")[0].length() > 7) {
+            					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].substring(0,5));
+            				}else {
+            					modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Vigencia")[0].trim());
+            				}
+							
 						}
 						if(newcontenido.split("\n")[i].split("C.P:")[1].contains("Desde")) {
-							modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").trim());
+							if(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").length() > 7) {
+								modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].substring(0,5));
+							}else {
+								modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").trim());
+							}
+						
 						}						
 					}
 					if(newcontenido.split("\n")[i].contains("R.F.C:")) {
-						if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Desde")) {
+						if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Desde") && modelo.getRfc().length() == 0) {
 							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Desde")[0].replace("###", "").trim());
-						}if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Hasta")) {
+						}
+						if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Hasta")&& modelo.getRfc().length() == 0) {
 							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Hasta")[0].replace("###", "").trim());
 						}
 						else {
-							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("\r", "").replace("###", ""));
+							if( modelo.getRfc().length() == 0) {
+								modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("\r", "").replace("###", ""));
+							}
+							
 						}
 						
 					}
@@ -118,16 +133,16 @@ public class AxaDiversosModel {
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Moneda")) {
-						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+					modelo.setMoneda(1);
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Agente:")) {
 						
-						modelo.setAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("###")[newcontenido.split("\n")[i].split("Agente:")[1].split("###").length -2]).trim().replace("###", " "));
+						modelo.setAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("###")[newcontenido.split("\n")[i].split("Agente:")[1].split("###").length -2]).trim().replace("###", "").replace("  ", ""));
 					}
 				
 					if(newcontenido.split("\n")[i].contains("Número") && newcontenido.split("\n")[i].contains("Agente:")) {
-						modelo.setCveAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("No.")[0]).trim().replace("###", ""));
+						modelo.setCveAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("No.")[0]).trim().replace("###", "").replace("  ", ""));
 					}
 					if(newcontenido.split("\n")[i].contains("Subramo") && newcontenido.split("\n")[i].contains("pago")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("Folio:")[1].replace("###", "").replace("\r", "").trim()));
@@ -152,7 +167,16 @@ public class AxaDiversosModel {
 					fin = contenido.indexOf("AXA Seguros, S.A.");
 				}
 			}
-				
+
+			if(inicio > fin) {
+				inicio = contenido.indexOf("Prima Neta");
+				fin = contenido.indexOf("Prima Total");
+				if(fin > -1) {
+					fin =fin+100;
+				}
+			}
+			
+
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {		
@@ -187,7 +211,7 @@ public class AxaDiversosModel {
 			//Proceso para ubicaciones
 			inicio = contenido.indexOf("Descripción de la ");
 			fin = contenido.indexOf("Paquete contratado:");
-			
+	
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
@@ -197,16 +221,17 @@ public class AxaDiversosModel {
 						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i]));
 					}
 					if(newcontenido.split("\n")[i].contains("Niveles:")) {
-						ubicacion.setNiveles(fn.castInteger(newcontenido.split("\n")[i].split("Niveles:")[1].replace("\r", "").trim()).intValue());
+						ubicacion.setNiveles(fn.castInteger(newcontenido.split("\n")[i].split("Niveles:")[1].replace("\r", "").replace("###","").trim()).intValue());
 					}					
 				}
 				ubicaciones.add(ubicacion);
 				modelo.setUbicaciones(ubicaciones);
 			}
 			
-			/*Proceoso para las  coberturas*/
+//			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Paquete contratado");
 			fin = contenido.indexOf("Prima Neta");
+			System.out.println("=======> "+inicio +" "+ fin);
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();				
 				newcontenido = contenido.substring(inicio,fin);				
@@ -233,32 +258,32 @@ public class AxaDiversosModel {
 				}
 				modelo.setCoberturas(coberturas);
 			}
-		
-			List<EstructuraRecibosModel> recibos = new ArrayList<>();
-			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-			switch (modelo.getFormaPago()) {
-			case 1:
-
-				recibo.setReciboId("");
-				recibo.setSerie("1/1");
-				recibo.setVigenciaDe(modelo.getVigenciaDe());
-				recibo.setVigenciaA(modelo.getVigenciaA());
-				if (recibo.getVigenciaDe().length() > 0) {
-					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-				}
-				recibo.setPrimaneta(modelo.getPrimaneta());
-				recibo.setDerecho(modelo.getDerecho());
-				recibo.setRecargo(modelo.getRecargo());
-				recibo.setIva(modelo.getDerecho());
-				recibo.setPrimaTotal(modelo.getPrimaTotal());
-				recibo.setAjusteUno(modelo.getAjusteUno());
-				recibo.setAjusteDos(modelo.getAjusteDos());
-				recibo.setCargoExtra(modelo.getCargoExtra());
-				recibos.add(recibo);
-				break;
-			}
-			modelo.setRecibos(recibos);
-			
+//		
+//			List<EstructuraRecibosModel> recibos = new ArrayList<>();
+//			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+//			switch (modelo.getFormaPago()) {
+//			case 1:
+//
+//				recibo.setReciboId("");
+//				recibo.setSerie("1/1");
+//				recibo.setVigenciaDe(modelo.getVigenciaDe());
+//				recibo.setVigenciaA(modelo.getVigenciaA());
+//				if (recibo.getVigenciaDe().length() > 0) {
+//					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+//				}
+//				recibo.setPrimaneta(modelo.getPrimaneta());
+//				recibo.setDerecho(modelo.getDerecho());
+//				recibo.setRecargo(modelo.getRecargo());
+//				recibo.setIva(modelo.getDerecho());
+//				recibo.setPrimaTotal(modelo.getPrimaTotal());
+//				recibo.setAjusteUno(modelo.getAjusteUno());
+//				recibo.setAjusteDos(modelo.getAjusteDos());
+//				recibo.setCargoExtra(modelo.getCargoExtra());
+//				recibos.add(recibo);
+//				break;
+//			}
+//			modelo.setRecibos(recibos);
+//			
 			
 			
 			return modelo;
