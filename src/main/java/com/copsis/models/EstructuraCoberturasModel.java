@@ -16,4 +16,6 @@ public class EstructuraCoberturasModel  {
 	    private String coaseguro = "";
 	    private String copago = "";
 	    private String seccion = "";
+	    private String deducibleExt = "";
+	    private String coaseguroTope = "";
 }
