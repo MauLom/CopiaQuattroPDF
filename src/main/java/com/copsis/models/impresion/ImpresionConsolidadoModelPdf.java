@@ -1,7 +1,12 @@
 package com.copsis.models.impresion;
 
+import java.awt.Graphics2D;
+//
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -11,42 +16,28 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-
-import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.common.PDStream;
-
-import com.copsis.controllers.forms.ImpresionForm;
-import com.copsis.controllers.forms.UrlForm;
-import com.copsis.models.EstructuraAseguradosModel;
-
-import ch.qos.logback.core.util.Loader;
-
 import java.util.Map;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSObject;
 import org.apache.pdfbox.cos.COSStream;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
-import java.util.Collection;
-import java.util.Collections;
-import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.cos.COSArray;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-//
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
-import javax.imageio.ImageIO;
-import java.io.FileOutputStream;
-
+import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.controllers.forms.UrlForm;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PRStream;
 import com.itextpdf.text.pdf.PdfName;
