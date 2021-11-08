@@ -28,6 +28,7 @@ public class ChubbModel {
 			for (String tipo : tipos) {
 				if (contenido.contains(tipo)) {
 					switch (tipo) {
+					          case "EMPRESARIAL":
 		                        case "HOGAR":
 		                        case "SEGURO CONCRETA":
 		                            pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");

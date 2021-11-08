@@ -108,12 +108,17 @@ public class MetlifeSaludModel {
             /*primas*/
             inicio = contenido.indexOf("Forma de Pago");
             fin = contenido.indexOf("MetLife México, S.A. pagará los beneficios convenidos");
+           
 
             if (inicio > 0 & fin > 0 & inicio < fin) {
-            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
+            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual");
+            	modelo.setFormaPago(fn.formaPagoSring(newcontenido));
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
-                    if (newcontenido.split("\n")[i].contains("Agente")) {                    	
-                        modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[0].trim()));
+                    if (newcontenido.split("\n")[i].contains("Agente")) { 
+                    	if(modelo.getFormaPago() == 0) {
+                    		  modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[0].trim()));
+                    	}
+                      
                         modelo.setCveAgente(newcontenido.split("\n")[i + 1].split("###")[1].trim());
                         modelo.setMoneda(1);
                     }                    
@@ -163,7 +168,7 @@ public class MetlifeSaludModel {
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {          
             		EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
             		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {
-            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").trim());
+            			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").replace("01", "").trim());
             			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
             			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1:0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");

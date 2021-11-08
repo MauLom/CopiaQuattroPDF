@@ -982,7 +982,7 @@ public class DataToolsModel {
 	
 	public int formaPagoSring(String x) { // FORMA DE PAGO
 		int dato = 0;
-		String tiposP[] = {"CONTADO","ANUAL","SEMESTRAL","TRIMESTRAL","MENSUAL","QUICENAL","SEMANAL"};
+		String tiposP[] = {"CONTADO","ANUAL","SEMESTRAL","TRIMESTRAL","MENSUAL","QUINCENAL","SEMANAL"};
 		for (String tipo : tiposP) {	
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
@@ -998,7 +998,7 @@ public class DataToolsModel {
 				case "MENSUAL":
 					dato=4;
 					break;
-				case "QUICENAL":
+				case "QUINCENAL":
 					dato=5;
 					break;
 				case "SEMANAL":

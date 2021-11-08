@@ -54,6 +54,7 @@ public class ChubbDiversosModel {
 	            
 	            inicio =contenido.indexOf("POLIZA DE SEGURO");
 	            fin = contenido.indexOf("Características del riesgo");
+	         
 
 	            if(inicio > 0 && fin >  0 && inicio < fin) {
 	            	newcontenido = contenido.substring( inicio,fin);
