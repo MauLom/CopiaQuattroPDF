@@ -3,6 +3,7 @@ package com.copsis.services;
 import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionConsolidadoModelPdf;
 import com.copsis.models.impresion.ImpresionInter;
 import com.copsis.models.impresion.impresionConsetimientoPdf;
@@ -32,7 +33,14 @@ public class ImpresioneTipoService {
 			impresionConsetimientoPdf  ImpresionConsentimiento  = new impresionConsetimientoPdf();
 	 		this.byteArrayPDF = ImpresionConsentimiento.buildPDF(impresionForm);	 		
 			break;
-
+		case 104:
+			System.out.println("entro al switch");
+			ImpresionAmortizacionesPdf impresionAmortizacionesPdf = new ImpresionAmortizacionesPdf();
+	 		this.byteArrayPDF =  impresionAmortizacionesPdf.buildPDF(impresionForm);	 		
+			break;
+			
+		default:
+			break;
 		
 		}
 		
