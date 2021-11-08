@@ -339,10 +339,7 @@ public class IdentificaPolizaService {
         	
         	
             pdDoc.close();
-           
-//            ImportacionValidacionModel importacionValidacionModel = new ImportacionValidacionModel();
-//            System.out.println(importacionValidacionModel.isValidImportacion(modelo));
-            
+
             return modelo;
 		} catch (Exception ex) {
 			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() +" - catch:" + ex.getMessage() + " | " + ex.getCause());;

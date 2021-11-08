@@ -38,7 +38,6 @@ public class ImportacionValidacionModel {
 
 			return respuesta;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			return respuesta;
 		}
 	

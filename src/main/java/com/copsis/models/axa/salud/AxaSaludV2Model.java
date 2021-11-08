@@ -361,12 +361,12 @@ public class AxaSaludV2Model {
 		if(modelo.getCoberturas().size() == 0) {//version dos de coberturas si formato (### no tiene)
 			inicio = inicontenido.indexOf("Coberturas/Servicios");
 			fin = inicontenido.indexOf("Costo por Servicio");
-//System.out.println(inicio +"---< "+ fin);
+
 					if (inicio > 0 && fin > 0 && inicio < fin) {
 						newcontenido = inicontenido.substring(inicio,fin).replaceAll("  +", "###").replace("@@@", "").replace("Tipo de Red###Abierta", "").replace("###Gama Hospitalaria###Esmeralda", "");
 						for (int i = 0; i < newcontenido.split("\n").length; i++) {
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-//						System.out.println("°_°-°-°--°_|" +newcontenido.split("\n")[i]);
+
 							if(newcontenido.split("\n")[i].contains("Servicios Cobertura Básica") || newcontenido.split("\n")[i].contains("Tope de Coaseguro")
 							 || newcontenido.split("\n")[i].contains("Tabulador") || newcontenido.split("\n")[i].contains("adicionales")
 							  || newcontenido.split("\n")[i].contains("Servicios")
