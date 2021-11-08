@@ -1,13 +1,10 @@
 package com.copsis.models.banorte;
 
-import java.math.BigDecimal;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.axa.AxaAutosModel;
 
 public class BanorteModel {
 	// Clases

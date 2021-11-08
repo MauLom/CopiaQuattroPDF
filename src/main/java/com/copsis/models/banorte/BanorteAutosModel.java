@@ -1,20 +1,13 @@
 package com.copsis.models.banorte;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
-import com.copsis.models.axa.AxaModel;
-import com.copsis.models.axa.AxaVidaModel;
-import com.copsis.models.mapfre.MapfreDiversosModel;
 
 public class BanorteAutosModel {
 	// Clases
@@ -27,7 +20,6 @@ public class BanorteAutosModel {
 	private String resultado = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int donde = 0;
 	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
 	private BigDecimal restoDerecho = BigDecimal.ZERO;
 	private BigDecimal restoIva = BigDecimal.ZERO;
@@ -104,13 +96,13 @@ public class BanorteAutosModel {
 						}
                    
                         
-                        if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Derecho de Póliza:")){                                                
-							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Derecho")[0].replace("###", "").trim()));
+                        if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Derecho de Póliza:")){ 
+							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Derecho")[0].replace("###", "").replace(":", "").trim()));
 							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", ""))));
 						}
                         
 						if(newcontenido.split("\n")[i].contains("pago:") && newcontenido.split("\n")[i].contains("I.V.A:")){
-							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").trim()));
+							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim()));
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].split("###")[newcontenido.split("\n")[i].split("I.V.A:")[1].split("###").length -1].replace("###", "").trim())));						
 						}
 						 if(newcontenido.split("\n")[i].contains("Prima Total:")) {
@@ -118,7 +110,24 @@ public class BanorteAutosModel {
 						 }
 					}
 	            }
-	           
+	            
+
+	            inicio = contenido.indexOf("AVISO DE COBRO");
+	            fin = contenido.indexOf("Derecho Póliza");
+
+	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
+	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	     
+	            		if(newcontenido.split("\n")[i].contains("Contratante:") &&  newcontenido.split("\n")[i].contains("Agente:")) {
+	            			modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].replace("###", "").trim());
+	            		}
+	            		if(newcontenido.split("\n")[i].contains("Clave del Agente:") &&  newcontenido.split("\n")[i].contains("Oficina:")) {
+	            			modelo.setCveAgente(newcontenido.split("\n")[i].split("Clave del Agente:")[1].split("Oficina")[0].replace("###", "").trim());
+	            		}
+	            	}
+	            }
+	            
+
 	            //Informacion del vehiculo
 	            inicio = contenido.indexOf("DATOS DEL VEHÍCULO");
 	            fin = contenido.indexOf("No. Pedimento:");
