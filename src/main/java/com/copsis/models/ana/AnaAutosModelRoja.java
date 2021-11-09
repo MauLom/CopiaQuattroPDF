@@ -1,7 +1,6 @@
 package com.copsis.models.ana;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
