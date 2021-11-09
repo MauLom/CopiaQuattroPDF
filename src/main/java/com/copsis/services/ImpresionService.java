@@ -20,7 +20,7 @@ public class ImpresionService {
 	@Autowired
 	private QuattroUploadClient quattroUploadClient;
 
-	public ImpresionForm ImpresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
+	public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
 		ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
 		AdjuntoForm adjuntoForm = new AdjuntoForm();
 

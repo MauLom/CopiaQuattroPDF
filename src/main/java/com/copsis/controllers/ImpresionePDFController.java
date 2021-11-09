@@ -30,6 +30,6 @@ public class ImpresionePDFController {
 		  return new CopsisResponse.Builder()
 				.ok(true)
 				.status(HttpStatus.OK)
-				.result(impresionService.ImpresionServicePdf(impresionForm,headers)).build();
+				.result(impresionService.impresionServicePdf(impresionForm,headers)).build();
 	}
 }

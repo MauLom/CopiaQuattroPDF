@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.copsis.clients.projections.BeneficiarioProjection;
 import com.copsis.clients.projections.PaqueteCoberturaProjection;
+import com.copsis.dto.AmortizacionDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -50,4 +51,5 @@ public class ImpresionForm {
 	private String telefono;
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
+	private List<AmortizacionDTO> amortizacion;
 }
