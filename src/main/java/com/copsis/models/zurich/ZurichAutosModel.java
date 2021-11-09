@@ -108,10 +108,16 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("Nombre del Agente");
 	            fin = contenido.indexOf("Folio");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", ""));
+	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "")).replace("\r\n", "");
 	                modelo.setAgente(newcontenido.split("Nombre del Agente")[1].split("###")[1]);
-	                modelo.setCveAgente(newcontenido.split("Clave")[1].split("###")[1]);
-	                
+	                int sp = newcontenido.split("Clave:")[1].split("###").length;
+	                if(sp == 3) {
+	                	  modelo.setCveAgente(newcontenido.split("Clave:")[1].split("###")[2]);
+	                }
+	                if(sp == 2) {
+	                	  modelo.setCveAgente(newcontenido.split("Clave:")[1].split("###")[1]);
+	                }
+	                               	               
 	            }
 
 
@@ -143,23 +149,17 @@ public class ZurichAutosModel {
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
 	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "").replace("###$", ""));
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	                    if (newcontenido.split("\n")[i].contains("Prima Neta")) {
-	                        System.out.println(newcontenido.split("\n")[i].split("###")[1] +"---> " +fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));
+	                    if (newcontenido.split("\n")[i].contains("Prima Neta")) {	                    
 	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));
 	                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
 	                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Financiamiento")) {
-	                    	
-	                    	
 	                    		modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1])));
-		                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
-		                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
-	                    	
-	                        
+		                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
+		                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));	                    		                     
 	                    }
-	                    if (newcontenido.split("\n")[i].contains("Prima Total")) {
-	                        
+	                    if (newcontenido.split("\n")[i].contains("Prima Total")) {	                        
 	                        modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(newcontenido.split("\n")[i].split("###")[1])));
 	                    }
 	                    
