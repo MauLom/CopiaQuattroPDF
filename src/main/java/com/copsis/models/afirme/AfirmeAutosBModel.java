@@ -197,24 +197,18 @@ public class AfirmeAutosBModel {
             
        
             for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
             	if(newcontenido.split("\n")[i].contains("Fecha de Emisión:")){       
             		modelo.setFechaEmision(newcontenido.split("\n")[i].split("Fecha de Emisión:")[1]);
             	}
            	
-                if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {
-                           	
+                if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {                           	
                     recibo.setVigenciaDe( fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Del")[1].split("Inciso")[0].replace(":", "").replace("###", "").replace("/", "-").trim()));
-
                     if(newcontenido.split("\n")[i+1].contains("Al")){
-
                         recibo.setVigenciaA( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("Al")[1].replace(":", "").replace("###", "").replace("/", "-").trim()));
-                    }
-                
+                    }                
                 }
                 
-                 if (newcontenido.split("\n")[i].contains("Prima Neta:")) {
-                
+                 if (newcontenido.split("\n")[i].contains("Prima Neta:")) {                
                      recibo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.cleanString( newcontenido.split("\n")[i].split("Prima Neta:")[1].replace("###", "").trim()))));
                      if (newcontenido.split("\n")[i+1].contains("$")) {
                     	 recibo.setRecargo(BigDecimal.ZERO);
