@@ -152,7 +152,6 @@ public class AfirmeAutosBModel {
             if (inicio > 0 & fin > 0 & inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin + 50).replaceAll("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
                         modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replaceAll("###", "").replace(":", "").trim());
                         modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
@@ -161,19 +160,19 @@ public class AfirmeAutosBModel {
                         newcontenidosp = newcontenido.split("\n")[i].split("Nombre:")[1].split("Financiamiento")[0];
 
                         modelo.setAgente(newcontenidosp.replaceAll("\r", "").replaceAll("###", "").trim().replace(",", " "));
-                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1].replaceAll("###", ""))));
+                        modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1].replaceAll("###", ""))));
                     }
            
                     if (newcontenido.split("\n")[i].contains("pago") && newcontenido.split("\n")[i].contains("Expedición")) {
                         modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].split("Gastos")[0].trim()));
-                        modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1].replaceAll("###", ""))));
+                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1].replaceAll("###", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("Moneda") && newcontenido.split("\n")[i].contains("expedición")) {
                         modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Gastos")[0].trim()));
                         modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1].replace("$", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("I.V.A.:")) {
-                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.:")[1].replaceAll("###", ""))));
+                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.:")[1].replaceAll("###", "").trim())));
                     }
                     if (newcontenido.split("\n")[i].contains("Prima Total:")) {
                         modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Total:")[1].replaceAll("###", ""))));

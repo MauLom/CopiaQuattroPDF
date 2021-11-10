@@ -23,14 +23,21 @@ public class AigModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
+
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 				modelo  = new AigAutosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
 				break;
-			case 2:// Autos
-				modelo  = new AigSaludModel(fn.caratula(1, 4, stripper, doc)).procesar();	
+			case 2:// salud
+			
+				if(contenido.contains("Seguro de Accidentes Personales")) {
+					modelo  = new AigSaludBModel(fn.caratula(1, 4, stripper, doc)).procesar();
+				}else {
+					modelo  = new AigSaludModel(fn.caratula(1, 4, stripper, doc)).procesar();
+				}
+				
 				break;
-			case 4:// Autos
+			case 4:// diversos
 				modelo  = new AigDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
 				break;	
 			}					
