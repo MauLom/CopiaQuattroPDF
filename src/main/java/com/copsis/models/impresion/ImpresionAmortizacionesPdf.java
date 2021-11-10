@@ -86,7 +86,7 @@ public class ImpresionAmortizacionesPdf {
 				ByteArrayOutputStream output;
 				try (PDDocument document = new PDDocument()) {
 					try {
-						float calc = 0;
+						float height = 0;
 						output = new ByteArrayOutputStream();
 						PDPage page = new PDPage();
 						document.addPage(page);
@@ -103,101 +103,62 @@ public class ImpresionAmortizacionesPdf {
 						communsPdf.setCell(baseHeaderRow,100, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
 						header.draw();
 						
-						table = headerTable(document, page);							
+						table = headerTable(document, page);
 						table.draw();
-						
+
 						yStart -= table.getHeaderAndDataHeight();
-						calc = yStart;
+						height = yStart;
 						
-						
-						
+						table2 = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 						List<AmortizacionDTO> listAmortizacion = impresionForm.getAmortizacion(); 
-						
-						
-						
-						int x = 0;
-						boolean acomula = false;
-						float y = yStart;
-						while(x < listAmortizacion.size()) {
-							
-							acomula = true;
-							
-							table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
+						for (AmortizacionDTO amortizacionDTO : listAmortizacion) {
 							
 							baseRow = communsPdf.setRow(table, 20);
-							communsPdf.setCell(baseRow,3, listAmortizacion.get(x).getId().toString(), black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+							communsPdf.setCell(baseRow,3, amortizacionDTO.getId().toString(), black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);	
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getSeguroDanos().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getSeguroDanos().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,12,listAmortizacion.get(x).getAportacionCapital().toString(), black, false, "R", 8, cellStyle, "",paddingBody, bgColor);
+							communsPdf.setCell(baseRow,12,amortizacionDTO.getAportacionCapital().toString(), black, false, "R", 8, cellStyle, "",paddingBody, bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getCapital().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getCapital().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getInteres().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getInteres().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getIva().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getIva().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getPago().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getPago().toString(), black, false, "R", 8, cellStyle, "", paddingBody,bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getAbonoCapital().toString(), black, false, "R", 8, cellStyle, "", paddingBody, bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getAbonoCapital().toString(), black, false, "R", 8, cellStyle, "", paddingBody, bgColor);
 							
 							communsPdf.setCell(baseRow,1,"$", black, false, "C", 8, cellStyle, "", paddingBody2,bgColor);
-							communsPdf.setCell(baseRow,11,listAmortizacion.get(x).getCapitalNuevo().toString() , black, false, "R", 8, cellStyle, "", paddingBody, bgColor);
+							communsPdf.setCell(baseRow,11,amortizacionDTO.getCapitalNuevo().toString() , black, false, "R", 8, cellStyle, "", paddingBody, bgColor);
 							
-							
-							if(isEndOfPage(table)) {
-								
-								table.getRows().remove(table.getRows().size()-1);
-								table.draw();
-								page = new PDPage();
-								document.addPage(page);
-								headerTable(document, page);
-								
-								acomula = false;
-								
-							} else {
-															
-								table.draw();
-								yStart-=table.getHeaderAndDataHeight();
-								
-								System.out.println("acomula=> "+acomula);
-								
-								
-								
-								
-							}
-							if(acomula) {
-								x++;
-							}
-							if(x>900) {
-								table.draw();
-								break;
-							}
-							
+						
 						}
-						calc = y - yStart;
-						System.out.println("calc  ==> "+calc );
-						table2 = new BaseTable(y, y, bottomMargin, fullWidth, 30, document, page, true,true);
-						baseRow2 = communsPdf.setRow(table2, calc );
-						communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
-						table2.draw();
-						
-						
 
-						//table.draw();
+						yStart -= table.getHeaderAndDataHeight();						
+						height = height - yStart;
+						
+						baseRow2 = communsPdf.setRow(table2, height+30);
+						communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, borderTable, "", paddingBody, bgColor);
+						
+						table2.draw();
+						table.draw();
+						
 						document.save(new File("/home/development/Documents/prueba"));
 						return pdfArray;
 					} finally {
 //						document.close();
 					}
-				}
+				}				
 				
 			}catch (Exception ex) {
 				throw new GeneralServiceException("00001",
