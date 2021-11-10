@@ -150,8 +150,7 @@ public class AigSaludBModel {
 			fin = contenido.indexOf("Reducción en prima ");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("###", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
 					if(newcontenido.split("\n")[i].contains("Seguro:")) {
 						modelo.setCveAgente(newcontenido.split("\n")[i].split("Seguro:")[1].trim().split(" ")[0].trim());
 						modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].trim());
@@ -159,17 +158,16 @@ public class AigSaludBModel {
 				}
 			}
 
-			inicio = contenido.indexOf("Asegurados Adicionales");
-			fin = contenido.indexOf("Beneficiarios");
+			inicio = contenido.indexOf("Nombre del Asegurado:");
+			fin = contenido.indexOf("BENEFICIOS CUBIERTOS");
+
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:15","");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:15","");				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-					if (newcontenido.split("\n")[i].split("-").length > 2) {
-						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[1]);
-						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2]) ? 1 : 0);
-						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[3]));
+					if (newcontenido.split("\n")[i].contains("Asegurado:")) {
+						asegurado.setNombre(newcontenido.split("\n")[i].split("Asegurado:")[1].trim());				
 						asegurados.add(asegurado);
 					}
 				}
