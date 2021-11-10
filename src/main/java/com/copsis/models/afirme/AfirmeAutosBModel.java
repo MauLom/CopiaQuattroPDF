@@ -1,6 +1,8 @@
 package com.copsis.models.afirme;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -24,6 +26,7 @@ public class AfirmeAutosBModel {
 		 String newcontenidosp = "";
 		 int inicio = 0;
 		 int fin = 0;
+		 boolean recargo= false;
 
 		try {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
@@ -152,6 +155,7 @@ public class AfirmeAutosBModel {
             if (inicio > 0 & fin > 0 & inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin + 50).replaceAll("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                	
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
                         modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replaceAll("###", "").replace(":", "").trim());
                         modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
@@ -191,9 +195,12 @@ public class AfirmeAutosBModel {
             List<EstructuraRecibosModel> recibosList = new ArrayList<>();
             EstructuraRecibosModel  recibo = new EstructuraRecibosModel();
             
-       ;
+       
             for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
+            	if(newcontenido.split("\n")[i].contains("Fecha de Emisión:")){       
+            		modelo.setFechaEmision(newcontenido.split("\n")[i].split("Fecha de Emisión:")[1]);
+            	}
            	
                 if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {
                            	
@@ -209,8 +216,13 @@ public class AfirmeAutosBModel {
                  if (newcontenido.split("\n")[i].contains("Prima Neta:")) {
                 
                      recibo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.cleanString( newcontenido.split("\n")[i].split("Prima Neta:")[1].replace("###", "").trim()))));
+                     if (newcontenido.split("\n")[i+1].contains("$")) {
+                    	 recibo.setRecargo(BigDecimal.ZERO);
+                    	 recargo =true;
+                     }
                  }
-                 if (newcontenido.split("\n")[i].contains("Financiamiento:")) {
+
+                 if (newcontenido.split("\n")[i].contains("Financiamiento:") && recargo == false) {
                      if (newcontenido.split("\n")[i].contains("$")) {
                      } else {
                          if (newcontenido.split("\n")[i + 1].contains("$")) {
@@ -235,6 +247,7 @@ public class AfirmeAutosBModel {
             recibosList.add(recibo);
             modelo.setRecibos(recibosList);
             
+          
 
           
             
