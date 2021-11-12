@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
+import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.dto.AmortizacionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
@@ -97,11 +98,10 @@ public class ImpresionAmortizacionesPdf {
 				paddingBody2.add(7f);
 				paddingBody2.add(0f);
 
-		//byte[] pdfArray = null;
 			try {
 				ByteArrayOutputStream output;
 				try (PDDocument document = new PDDocument()) {
-					try {
+					try{
 						
 						output = new ByteArrayOutputStream();
 						PDPage page = new PDPage();
@@ -113,7 +113,7 @@ public class ImpresionAmortizacionesPdf {
 						Row<PDPage> baseRow2;
 
 						// PRODUCTO
-						getEncabezado(document, page);
+						getEncabezado(document, page , impresionForm);
 						// ENCABEZADO TABLA//
 						headerTable(document, page);
 						
@@ -126,7 +126,7 @@ public class ImpresionAmortizacionesPdf {
 						// CREACION DE CUERPO // 
 						while(x < listAmortizacion.size()) {
 							
-							isBold = (x==0)? true : false;
+							isBold = (x==0);
 							acomula = true;
 							AmortizacionDTO amortizacionDTO = listAmortizacion.get(x);
 							
@@ -168,11 +168,10 @@ public class ImpresionAmortizacionesPdf {
 								document.addPage(page);
 																
 								// PRODUCTO
-								getEncabezado(document, page);
+								getEncabezado(document, page, impresionForm);
 								// ENCABEZADO TABLA//
 								headerTable(document, page);
-								// NUEVO ENCABEZADO								
-								headerTable(document, page);
+							
 								// BORDE DEL CUERPO DE LA TABLA EN NUEVA PAGINA
 								table2 = new BaseTable(650, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 								baseRow2 = communsPdf.setRow(table2, 620);
@@ -199,13 +198,12 @@ public class ImpresionAmortizacionesPdf {
 							} 
 						}
 						document.save(new File("/home/development/Documents/prueba"));
-//						return pdfArray;
-						
+
 						output = new ByteArrayOutputStream();
 						document.save(output);
 						return output.toByteArray();
 					} finally {
-					//	document.close();
+						document.close();
 					}
 				}				
 				
@@ -245,7 +243,7 @@ public class ImpresionAmortizacionesPdf {
 	}
 	
 	
-	private void getEncabezado(PDDocument document, PDPage page) throws IOException   {
+	private void getEncabezado(PDDocument document, PDPage page,AmortizacionPdfForm impresionForm) throws IOException   {
 		
 		BaseTable table;
 		Row<PDPage> baseRow;
@@ -254,7 +252,7 @@ public class ImpresionAmortizacionesPdf {
 
 		baseRow = communsPdf.setRow(table, 20);
 		communsPdf.setCell(baseRow,10, "Producto: ", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,85, "CrediAuto Gana-Gana", black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,85, impresionForm.getProducto(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		yStart -= table.getHeaderAndDataHeight();
 		table.draw();
 		
@@ -268,20 +266,20 @@ public class ImpresionAmortizacionesPdf {
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 		baseRow = communsPdf.setRow(table, 20);
 		communsPdf.setCell(baseRow,25, "MONTO A FINANCIAR", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,15,"$ 400,000.00", black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
+		communsPdf.setCell(baseRow,15,"$ "+impresionForm.getMonto().toString(), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 		communsPdf.setCell(baseRow,60,"DATOS CONSIDERADOS PARA EL SEGURO", black, true, "L", 10, cellStyle, "", paddingHeadData2,bgColor);
 		
 		baseRow = communsPdf.setRow(table, 20);
 		communsPdf.setCell(baseRow,25, "PLAZO (meses)", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,15, "60", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,15, impresionForm.getPlazo().toString(), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,16, "Descripción:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-		communsPdf.setCell(baseRow,46, "MAZDA CX3 1 GRAND sdsdsdsdsdsdTOURING 5P L4 20.0L AC R16", black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,46, impresionForm.getDescripcion()+" "+impresionForm.getModelo(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		baseRow = communsPdf.setRow(table, 20);
 		communsPdf.setCell(baseRow,25, "TASA DE INTERÉS ANUAL", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,15, "15.99%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,15, impresionForm.getTasa().toString()+"%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,16, "Código Postal:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-		communsPdf.setCell(baseRow,50, "04100 Coyoacán, CDMX", black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,50, impresionForm.getCodigoPostal(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		table.draw();
 		yStart -= table.getHeaderAndDataHeight() + 20;

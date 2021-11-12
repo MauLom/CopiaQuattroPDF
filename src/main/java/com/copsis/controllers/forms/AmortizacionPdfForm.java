@@ -1,19 +1,16 @@
-package com.copsis.models.impresion;
+package com.copsis.controllers.forms;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import com.copsis.dto.AmortizacionDTO;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-@JsonInclude(Include.NON_NULL)
+@Getter
 public class AmortizacionPdfForm {
-	
+	@NotBlank(message = "¡El Producto no puede ir vacio!")
 	private String producto;
 	private Double monto;
 	private Integer plazo;
@@ -21,6 +18,5 @@ public class AmortizacionPdfForm {
 	private Integer modelo;
 	private String descripcion;
 	private String codigoPostal;
-	@Valid
 	private List<AmortizacionDTO> amortizacion;
 }
