@@ -32,7 +32,6 @@ public class ImpresioneTipoService {
 			ImpresionConsetimientoPdf  impresionConsetimientoPdf  = new ImpresionConsetimientoPdf();
 	 		this.byteArrayPDF = impresionConsetimientoPdf.buildPDF(impresionForm);	 		
 			break;
-
 		
 		}
 		
