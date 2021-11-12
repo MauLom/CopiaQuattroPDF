@@ -2,13 +2,12 @@ package com.copsis.models.afirme;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.EstructuraRecibosModel;
+import com.copsis.models.EstructuraRecibosAfirmeModel;
 
 public class AfirmeAutosBModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -152,12 +151,12 @@ public class AfirmeAutosBModel {
             inicio = contenido.indexOf("Agente:");
             fin = contenido.indexOf("Prima Total:");
 
-            if (inicio > 0 & fin > 0 & inicio < fin) {
+            if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin + 50).replaceAll("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                 	
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
-                        modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replaceAll("###", "").replace(":", "").trim());
+                        modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replace("###", "").replace(":", "").trim());
                         modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Financiamiento")) {
@@ -184,7 +183,7 @@ public class AfirmeAutosBModel {
                 }
             }
             
-            //Proceso de recibos
+
             for (int i = 0; i < recibos.split("RECIBO DE PRIMAS").length; i++) {
                 if (recibos.split("RECIBO DE PRIMAS")[i].contains("PARA USO EXCLUSIVO DEL BANCO")) {
                     newcontenido = recibos.split("RECIBO DE PRIMAS")[i].split("PARA USO EXCLUSIVO DEL BANCO")[0];
@@ -192,26 +191,30 @@ public class AfirmeAutosBModel {
             }
             
             newcontenido = newcontenido.replace("@@@", "").replace("\r", "");
-            List<EstructuraRecibosModel> recibosList = new ArrayList<>();
-            EstructuraRecibosModel  recibo = new EstructuraRecibosModel();
+            List<EstructuraRecibosAfirmeModel> recibosList = new ArrayList<>();
+
             
+            EstructuraRecibosAfirmeModel  recibo = new EstructuraRecibosAfirmeModel();
+            
+            if (modelo.getFormaPago() == 1) {
+				recibo.setSerie("1/1");
+			}
        
             for (int i = 0; i < newcontenido.split("\n").length; i++) {
-            	if(newcontenido.split("\n")[i].contains("Fecha de Emisión:")){       
-            		modelo.setFechaEmision(newcontenido.split("\n")[i].split("Fecha de Emisión:")[1]);
-            	}
+            
            	
                 if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {                           	
                     recibo.setVigenciaDe( fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Del")[1].split("Inciso")[0].replace(":", "").replace("###", "").replace("/", "-").trim()));
                     if(newcontenido.split("\n")[i+1].contains("Al")){
-                        recibo.setVigenciaA( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("Al")[1].replace(":", "").replace("###", "").replace("/", "-").trim()));
+                        recibo.setVigenciaA( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("Al")[1].replace(":", "").replace("###", "").replace("/", "-").trim()));                    
+                        recibo.setVence(modelo.getVigenciaDe());
                     }                
                 }
                 
                  if (newcontenido.split("\n")[i].contains("Prima Neta:")) {                
-                     recibo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.cleanString( newcontenido.split("\n")[i].split("Prima Neta:")[1].replace("###", "").trim()))));
+                     recibo.setPrimaNeta(fn.castBigDecimal(fn.castDouble(fn.cleanString( newcontenido.split("\n")[i].split("Prima Neta:")[1].replace("###", "").trim()))));
                      if (newcontenido.split("\n")[i+1].contains("$")) {
-                    	 recibo.setRecargo(BigDecimal.ZERO);
+                    	 recibo.setFinanciamiento(BigDecimal.ZERO);
                     	 recargo =true;
                      }
                  }
@@ -220,7 +223,7 @@ public class AfirmeAutosBModel {
                      if (newcontenido.split("\n")[i].contains("$")) {
                      } else {
                          if (newcontenido.split("\n")[i + 1].contains("$")) {
-                             recibo.setRecargo(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i + 1].replace("$", "").trim()))));
+                             recibo.setFinanciamiento(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i + 1].replace("$", "").trim()))));
                          }
                      }
                  }
@@ -235,40 +238,30 @@ public class AfirmeAutosBModel {
                      recibo.setIva(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split("IVA:")[1].replace("###", "").trim()))));
                  }
                  if (newcontenido.split("\n")[i].contains("Total:") && newcontenido.split("\n")[i].contains("$")) {
-                     recibo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split("Total:")[1].replace("###", "").trim()))));
+                     recibo.setTotal(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split("Total:")[1].replace("###", "").trim()))));
                  }
              }
             recibosList.add(recibo);
-            modelo.setRecibos(recibosList);
-            
-          
+            modelo.setRecibosAfirme(recibosList);
+                                        
+            List<EstructuraRecibosAfirmeModel> recibosvacio = new ArrayList<>();
+            List<EstructuraRecibosAfirmeModel> recibosLi = new ArrayList<>();
 
-          
-            
-            List<EstructuraRecibosModel> recibosvacio = new ArrayList<>();
-            List<EstructuraRecibosModel> recibosLi = new ArrayList<>();
-
-            if (fn.getTotalRec(modelo.getFormaPago()) == modelo.getRecibos().size()) {
-            	
-            }else {
-            	 
-            	
-            	   for (int i = 0; i < fn.getTotalRec(modelo.getFormaPago()); i++) {
-            			EstructuraRecibosModel  recibo2 = new EstructuraRecibosModel();        
-            			
-                    	recibo2.setPrimaneta(modelo.getRecibos().get(0).getPrimaneta());
-                    	recibo2.setRecargo(modelo.getRecibos().get(0).getRecargo());
-                    	recibo2.setDerecho(modelo.getRecibos().get(0).getDerecho());
-                    	recibo2.setIva(modelo.getRecibos().get(0).getIva());
-                    	recibo2.setPrimaTotal(modelo.getRecibos().get(0).getPrimaTotal());
-                    	recibo2.setCargoExtra(modelo.getRecibos().get(0).getCargoExtra());
-                    	recibosLi.add(recibo2);
-            	   }  
-            	   modelo.setRecibos(recibosvacio);
-                   modelo.setRecibos(recibosLi);
+            if (fn.getTotalRec(modelo.getFormaPago()) != 1) {
+            	 for (int i = 0; i < fn.getTotalRec(modelo.getFormaPago()); i++) {
+          		   EstructuraRecibosAfirmeModel  recibo2 = new EstructuraRecibosAfirmeModel();        
+                  	recibo2.setPrimaNeta(modelo.getRecibos().get(0).getPrimaneta());
+                  	recibo2.setFinanciamiento(modelo.getRecibos().get(0).getRecargo());
+                  	recibo2.setDerecho(modelo.getRecibos().get(0).getDerecho());
+                  	recibo2.setIva(modelo.getRecibos().get(0).getIva());
+                  	recibo2.setTotal(modelo.getRecibos().get(0).getPrimaTotal());
+                  	recibo2.setCargoExtra(modelo.getRecibos().get(0).getCargoExtra());
+                  	recibosLi.add(recibo2);
+          	   }  
+          	   modelo.setRecibosAfirme(recibosvacio);
+                 modelo.setRecibosAfirme(recibosLi);	
             }
-          
-            
+
             
             
 			
