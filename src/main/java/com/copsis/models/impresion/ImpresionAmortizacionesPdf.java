@@ -200,7 +200,6 @@ public class ImpresionAmortizacionesPdf {
 								x++;
 							} 
 						}
-						//document.save(new File("/home/development/Documents/prueba"));
 
 						output = new ByteArrayOutputStream();
 						document.save(output);
@@ -256,9 +255,9 @@ public class ImpresionAmortizacionesPdf {
 		String dateString = format.format(new Date());
 		
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-		baseRow = communsPdf.setRow(table, 80 );
-		communsPdf.setCell(baseRow,41, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
-		communsPdf.setCell(baseRow,59, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+		baseRow = communsPdf.setRow(table, 90 );
+		communsPdf.setCell(baseRow,42, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+		communsPdf.setCell(baseRow,58, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 		table.draw();
 		
 		table = new BaseTable(yStart-2, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
@@ -287,7 +286,7 @@ public class ImpresionAmortizacionesPdf {
 		
 		baseRow = communsPdf.setRow(table, 15);
 		communsPdf.setCell(baseRow,10, dateString, black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,30,"Válido 15 días desde su impresión.", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,40," Válido 15 días apartir de su impresión", black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		table.draw();
 		yStart -= table.getHeaderAndDataHeight() + 20;
