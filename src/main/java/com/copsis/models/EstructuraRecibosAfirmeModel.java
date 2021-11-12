@@ -11,8 +11,8 @@ public class EstructuraRecibosAfirmeModel {
 	private String vigenciaDe="";
 	private String vigenciaA="";
 	private String vence ="";
-	private String serie = "";
-    private String totalSerie = ""; 
+	private int serie ;
+    private int totalSerie; 
     private BigDecimal primaNeta = BigDecimal.ZERO;
 	private BigDecimal financiamiento = BigDecimal.ZERO;	
 	private BigDecimal derecho =BigDecimal.ZERO;	
