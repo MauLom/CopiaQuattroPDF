@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.models.impresion.ImpresionConsolidadoModelPdf;
 import com.copsis.models.impresion.ImpresionInter;
-import com.copsis.models.impresion.impresionConsetimientoPdf;
+import com.copsis.models.impresion.ImpresionConsetimientoPdf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,14 +25,12 @@ public class ImpresioneTipoService {
 	 		this.byteArrayPDF = impresionConsolidao.buildPDF(impresionForm);	 		
 			break;
 		case 102:
-			ImpresionInter impresioninter  = new ImpresionInter();
-	 		this.byteArrayPDF = impresioninter.buildPDF(impresionForm);	 		
+			ImpresionInter  impresionInter  = new ImpresionInter();
+	 		this.byteArrayPDF = impresionInter.buildPDF(impresionForm);	 		
 			break;
 		case 103:
-			impresionConsetimientoPdf  impresionConsentimiento  = new impresionConsetimientoPdf();
-	 		this.byteArrayPDF = impresionConsentimiento.buildPDF(impresionForm);	 		
-			break;
-		default:
+			ImpresionConsetimientoPdf  impresionConsetimientoPdf  = new ImpresionConsetimientoPdf();
+	 		this.byteArrayPDF = impresionConsetimientoPdf.buildPDF(impresionForm);	 		
 			break;
 		
 		}

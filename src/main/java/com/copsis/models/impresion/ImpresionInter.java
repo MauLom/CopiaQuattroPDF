@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class ImpresionInter {
 		padding.add(4f);
 		padding.add(0f);
 
-		byte[] pdfArray = null;
+
 		try {
 			ByteArrayOutputStream output;
 			try (PDDocument document = new PDDocument()) {

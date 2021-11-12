@@ -18,8 +18,6 @@ import java.util.regex.Pattern;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
 public class DataToolsModel {
 	DateTimeFormatter formatter;
 	SimpleDateFormat simpleDateFormat;
@@ -824,12 +822,13 @@ public class DataToolsModel {
 				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
-				"CONTRATANTE Y CONDUCTOR",
-				"FUNERARIOS",
+				"CONTRATANTE Y CONDUCTOR",				
+				"ACCIDENTES PERSONALES",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
-				"DAÑOS"
-,				"VIDA","VIDA INDIVIDUAL",
+				"DAÑOS",
+				"FUNERARIOS",
+				"VIDA","VIDA INDIVIDUAL",
 				"HOGAR INTEGRAL", " VEHICLE DESCRIPTION",
 				"PROTECCIÓN A BIENES EMPRESARIALES", "PLANPROTEGE / COMERCIO","CASA HABITACIÓN",
 				"EMPRESARIAL"};
@@ -854,6 +853,7 @@ public class DataToolsModel {
 				case "INDIVIDUAL/FAMILIAR":
 				case "GASTOS MÉDICOS MAYORES":
 				case "GASTOS M":
+				case "ACCIDENTES":
 					dato = 2;
 					encontro = true;
 					break;
