@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -21,7 +23,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 
 public class ImpresionAmortizacionesPdf {
 	
-	private  List<LineStyle> borderTable = new ArrayList<>();
+	private  List<LineStyle> borderWhite = new ArrayList<>();
 	private  List<LineStyle> cellStyle = new ArrayList<>();
 	
 	
@@ -42,6 +44,7 @@ public class ImpresionAmortizacionesPdf {
 	private final Color bgColor = new Color(255, 255, 255, 0 );
 	private final Color black = new Color(0, 0, 0, 1);
 	private final LineStyle lineStyle = new LineStyle(black,0);
+	private final LineStyle lineStyleWhite = new LineStyle(bgColor,0);
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 	
 	public byte[] buildPDF(AmortizacionPdfForm impresionForm) {
@@ -53,10 +56,10 @@ public class ImpresionAmortizacionesPdf {
 				cellStyle.add(lineStyle);
 				cellStyle.add(lineStyle);
 				
-				borderTable.add(lineStyle);
-				borderTable.add(lineStyle);
-				borderTable.add(lineStyle);
-				borderTable.add(lineStyle);
+				borderWhite.add(lineStyleWhite);
+				borderWhite.add(lineStyleWhite);
+				borderWhite.add(lineStyleWhite);
+				borderWhite.add(lineStyleWhite);
 				
 				
 				//**ENCABEZADO Data**/
@@ -175,7 +178,7 @@ public class ImpresionAmortizacionesPdf {
 								// BORDE DEL CUERPO DE LA TABLA EN NUEVA PAGINA
 								table2 = new BaseTable(650, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 								baseRow2 = communsPdf.setRow(table2, 620);
-								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
+								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 								table2.draw();	
 								
 								acomula = false;
@@ -185,7 +188,7 @@ public class ImpresionAmortizacionesPdf {
 									// BORDE DEL CUERPO DE TABLA PRIMER PAGINA
 									table2 = new BaseTable(650, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 									baseRow2 = communsPdf.setRow(table2, 620 );
-									communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
+									communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 									table2.draw();	
 								}
 								// PINTA LA DATA DE LA TABLA
@@ -197,7 +200,7 @@ public class ImpresionAmortizacionesPdf {
 								x++;
 							} 
 						}
-						document.save(new File("/home/development/Documents/prueba"));
+						//document.save(new File("/home/development/Documents/prueba"));
 
 						output = new ByteArrayOutputStream();
 						document.save(output);
@@ -223,7 +226,7 @@ public class ImpresionAmortizacionesPdf {
 		
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 		baseRow = communsPdf.setRow(table, 20 );
-		communsPdf.setCell(baseRow,100, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
+		communsPdf.setCell(baseRow,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 		table.draw();
 		
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
@@ -248,38 +251,43 @@ public class ImpresionAmortizacionesPdf {
 		BaseTable table;
 		Row<PDPage> baseRow;
 		yStart = 770;
-		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
-
-		baseRow = communsPdf.setRow(table, 20);
-		communsPdf.setCell(baseRow,10, "Producto: ", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,85, impresionForm.getProducto(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		yStart -= table.getHeaderAndDataHeight();
-		table.draw();
 		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		String dateString = format.format(new Date());
 		
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-		baseRow = communsPdf.setRow(table, 60 );
-		communsPdf.setCell(baseRow,41, "", black, false, "C", 8, borderTable, "", paddingHead2, bgColor);
+		baseRow = communsPdf.setRow(table, 80 );
+		communsPdf.setCell(baseRow,41, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+		communsPdf.setCell(baseRow,59, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 		table.draw();
 		
-		
-		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
-		baseRow = communsPdf.setRow(table, 20);
+		table = new BaseTable(yStart-2, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
+		baseRow = communsPdf.setRow(table, 15);
+		communsPdf.setCell(baseRow,10, "Producto: ", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,30, impresionForm.getProducto(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,70,"DATOS CONSIDERADOS PARA EL SEGURO", black, true, "L", 10, cellStyle, "", paddingHeadData2,bgColor);
+
+		baseRow = communsPdf.setRow(table, 15);
 		communsPdf.setCell(baseRow,25, "MONTO A FINANCIAR", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,15,"$ "+impresionForm.getMonto().toString(), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
-		communsPdf.setCell(baseRow,60,"DATOS CONSIDERADOS PARA EL SEGURO", black, true, "L", 10, cellStyle, "", paddingHeadData2,bgColor);
+		communsPdf.setCell(baseRow,16, "Descripción:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+		communsPdf.setCell(baseRow,44, impresionForm.getDescripcion()+" "+impresionForm.getModelo(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
-		baseRow = communsPdf.setRow(table, 20);
+		
+		baseRow = communsPdf.setRow(table, 15);
 		communsPdf.setCell(baseRow,25, "PLAZO (meses)", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,15, impresionForm.getPlazo().toString(), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,16, "Descripción:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-		communsPdf.setCell(baseRow,46, impresionForm.getDescripcion()+" "+impresionForm.getModelo(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,16, "Código Postal:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+		communsPdf.setCell(baseRow,44, impresionForm.getCodigoPostal(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
-		baseRow = communsPdf.setRow(table, 20);
+		
+		baseRow = communsPdf.setRow(table, 15);
 		communsPdf.setCell(baseRow,25, "TASA DE INTERÉS ANUAL", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,15, impresionForm.getTasa().toString()+"%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,16, "Código Postal:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-		communsPdf.setCell(baseRow,50, impresionForm.getCodigoPostal(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		
+		baseRow = communsPdf.setRow(table, 15);
+		communsPdf.setCell(baseRow,10, dateString, black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,30,"Válido 15 días desde su impresión.", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		table.draw();
 		yStart -= table.getHeaderAndDataHeight() + 20;
