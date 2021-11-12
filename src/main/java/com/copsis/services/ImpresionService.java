@@ -6,11 +6,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
 import com.copsis.clients.QuattroUploadClient;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.AdjuntoDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
+import com.copsis.models.impresion.AmortizacionPdfForm;
+import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -71,5 +75,14 @@ public class ImpresionService {
 		return impresionForm;
 
 	}
+	
+	public byte[] impresionAmortizacion(AmortizacionPdfForm amortizacionForm) {
+		ImpresionAmortizacionesPdf impresionAmortizacionesPdf = new ImpresionAmortizacionesPdf();
+		return impresionAmortizacionesPdf.buildPDF(amortizacionForm);
+	}
 
+	
+	
+	
+	
 }

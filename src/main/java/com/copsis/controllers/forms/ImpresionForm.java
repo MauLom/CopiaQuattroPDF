@@ -51,5 +51,4 @@ public class ImpresionForm {
 	private String telefono;
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
-	private List<AmortizacionDTO> amortizacion;
 }

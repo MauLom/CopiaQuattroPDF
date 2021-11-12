@@ -4,25 +4,19 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.AmortizacionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
-import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-
-//document.save(new File("/home/development/Documents"));
 
 public class ImpresionAmortizacionesPdf {
 	
@@ -48,7 +42,8 @@ public class ImpresionAmortizacionesPdf {
 	private final Color black = new Color(0, 0, 0, 1);
 	private final LineStyle lineStyle = new LineStyle(black,0);
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
-	public byte[] buildPDF(ImpresionForm impresionForm) {
+	
+	public byte[] buildPDF(AmortizacionPdfForm impresionForm) {
 						
 				//** BODY **// L,R,T,B
 				
@@ -102,7 +97,7 @@ public class ImpresionAmortizacionesPdf {
 				paddingBody2.add(7f);
 				paddingBody2.add(0f);
 
-		byte[] pdfArray = null;
+		//byte[] pdfArray = null;
 			try {
 				ByteArrayOutputStream output;
 				try (PDDocument document = new PDDocument()) {
@@ -204,7 +199,7 @@ public class ImpresionAmortizacionesPdf {
 							} 
 						}
 						document.save(new File("/home/development/Documents/prueba"));
-						//return pdfArray;
+//						return pdfArray;
 						
 						output = new ByteArrayOutputStream();
 						document.save(output);

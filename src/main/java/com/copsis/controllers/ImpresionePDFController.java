@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.CopsisResponse;
+import com.copsis.models.impresion.AmortizacionPdfForm;
 import com.copsis.services.ImpresionService;
 
 @RestController
@@ -31,5 +33,19 @@ public class ImpresionePDFController {
 				.ok(true)
 				.status(HttpStatus.OK)
 				.result(impresionService.impresionServicePdf(impresionForm,headers)).build();
+	}
+	
+	
+	@PostMapping(value = "amortizacion",consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CopsisResponse> impresionScotia (@RequestBody AmortizacionPdfForm impresionForm) {
+		try {
+			return new CopsisResponse.Builder()
+					.ok(true)
+					.status(HttpStatus.OK)
+					.result(impresionService.impresionAmortizacion(impresionForm)).build();
+		}catch(Exception ex) {
+			throw new GeneralServiceException("00000", "00000");
+		}
+		  
 	}
 }
