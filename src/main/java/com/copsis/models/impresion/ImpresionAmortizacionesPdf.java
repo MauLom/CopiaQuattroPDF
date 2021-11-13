@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +20,6 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 import com.copsis.utils.ErrorCode;
 import com.copsis.utils.FormatoFecha;
 
-
 public class ImpresionAmortizacionesPdf {
 	
 	private  List<LineStyle> borderWhite = new ArrayList<>();
@@ -39,7 +37,7 @@ public class ImpresionAmortizacionesPdf {
 	private float yStartNewPage = 760;
 	private float yStart = 770;
 	private float bottomMargin = 26;
-	private float fullWidth = 562;
+	private float fullWidth = 564;
 	float height = 0;
 	float heightBorder = 0;
 	private final Color bgColor = new Color(255, 255, 255, 0 );
@@ -201,7 +199,6 @@ public class ImpresionAmortizacionesPdf {
 								x++;
 							} 
 						}
-						document.save(new File("/home/marcos/Documentos/prueba"));
 						output = new ByteArrayOutputStream();
 						document.save(output);
 						return output.toByteArray();
@@ -254,9 +251,9 @@ public class ImpresionAmortizacionesPdf {
 		String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMM yyyy");
   
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-		baseRow = communsPdf.setRow(table, 87 );
+		baseRow = communsPdf.setRow(table, 87);
 		communsPdf.setCell(baseRow,43, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
-		communsPdf.setCell(baseRow,58, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+		communsPdf.setCell(baseRow,57, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 		table.draw();
 		
 		table = new BaseTable(yStart-2, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
@@ -269,7 +266,7 @@ public class ImpresionAmortizacionesPdf {
 		communsPdf.setCell(baseRow,20, "MONTO A FINANCIAR", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		communsPdf.setCell(baseRow,22,"$ "+formatoDinero(impresionForm.getMonto()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 		communsPdf.setCell(baseRow,15, "Descripción:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-		communsPdf.setCell(baseRow,43, impresionForm.getDescripcion()+" "+impresionForm.getModelo(), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,43,  ellipsize(impresionForm.getDescripcion()+" "+impresionForm.getModelo(),85), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		
 		baseRow = communsPdf.setRow(table, 15);
@@ -295,7 +292,29 @@ public class ImpresionAmortizacionesPdf {
 	private String formatoDinero(Double valor) {
 		return String.format("%,.2f", valor);
 	}
+	
 
+	private static int textWidth(String str) {
+		String mask = "[^iIl1\\.,']";
+	    return (str.length() - str.replaceAll(mask, "").length() / 2);
+	}
+
+	public static String ellipsize(String text, int max) {
+	    if (textWidth(text) <= max)
+	        return text;
+	    int end = text.lastIndexOf(' ', max - 3);
+	    if (end == -1)
+	        return text.substring(0, max-3) + "...";
+	    int newEnd = end;
+	    do {
+	        end = newEnd;
+	        newEnd = text.indexOf(' ', end + 1);
+	        if (newEnd == -1)
+	            newEnd = text.length();
+	    } while (textWidth(text.substring(0, newEnd) + "...") < max);
+
+	    return text.substring(0, end) + "...";
+	}
 	
 	private boolean isEndOfPage(BaseTable table) {
         float currentY = yStart - table.getHeaderAndDataHeight();
