@@ -2,6 +2,7 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -248,7 +249,7 @@ public class ImpresionAmortizacionesPdf {
 		BaseTable table;
 		Row<PDPage> baseRow;
 		yStart = 770;
-		String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMM yyyy");
+		String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
   
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 		baseRow = communsPdf.setRow(table, 87);
@@ -281,8 +282,7 @@ public class ImpresionAmortizacionesPdf {
 		communsPdf.setCell(baseRow,15, impresionForm.getTasa().toString()+"%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 		
 		baseRow = communsPdf.setRow(table, 15);
-		communsPdf.setCell(baseRow,11, dateString, black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-		communsPdf.setCell(baseRow,32," Válido 15 días apartir de su impresión.", black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+		communsPdf.setCell(baseRow,99,dateString +" Válido 15 días apartir de su impresión.", black, false, "R", 8, cellStyle, "", paddingHeadData, bgColor);
 		
 		table.draw();
 		yStart -= table.getHeaderAndDataHeight() + 20;
