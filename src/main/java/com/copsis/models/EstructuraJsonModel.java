@@ -69,6 +69,7 @@ public class EstructuraJsonModel {
   
     private List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
     private List<EstructuraRecibosModel> recibos = new ArrayList<>();
+    private List<EstructuraRecibosAfirmeModel> recibosAfirme = new ArrayList<>();
     private List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
     private List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
     private List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();

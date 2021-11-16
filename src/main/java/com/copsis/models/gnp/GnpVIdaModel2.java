@@ -52,11 +52,13 @@ public class GnpVIdaModel2 {
 								modelo.setCteNombre(newcontenido.split("\n")[i+2].replace("###", ""));
 							}
 						}
+						if(newcontenido.split("\n")[i].contains("R.F.C:") && newcontenido.split("\n")[i].contains("Desde")) {
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Desde")[0].replace("###", "").trim());
+						}
 						if(newcontenido.split("\n")[i].contains("C.P")) {
-			modelo.setCp(newcontenido.split("\n")[i].split("C.P")[1].split("###")[0].trim());
+							modelo.setCp(newcontenido.split("\n")[i].split("C.P")[1].split("###")[0].trim());
 							modelo.setCteDireccion((newcontenido.split("\n")[i].split("C.P")[0]
-									+" " + newcontenido.split("\n")[i+1].split("Día")[0]).replace("###", ""));
-				
+									+" " + newcontenido.split("\n")[i+1].split("Día")[0]).replace("###", ""));				
 						}
 						
 						if(newcontenido.split("\n")[i].contains("Desde el")) {
@@ -74,6 +76,10 @@ public class GnpVIdaModel2 {
 								if(newcontenido.split("\n")[i].contains("Anual")) {
 									modelo.setFormaPago(1);
 								}
+								if(modelo.getFormaPago() ==0 ) {
+								 modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i]));	
+								}
+								
 						}
 						if(newcontenido.split("\n")[i].contains("Prima Neta")) {							
 							modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta")[1].replace("###", ""))));
@@ -287,6 +293,10 @@ public class GnpVIdaModel2 {
 				fin = -1;
 				inicio = contenido.indexOf("Coberturas");
 				fin = contenido.indexOf("@@@Agente");
+				if(fin == -1) {
+				 fin = contenido.lastIndexOf("Agente");
+				}
+				
 				if (inicio == -1 && fin == -1 || inicio > -1 && fin == -1 || inicio == -1 && fin > -1) {
 					inicio = -1;
 					fin = -1;
