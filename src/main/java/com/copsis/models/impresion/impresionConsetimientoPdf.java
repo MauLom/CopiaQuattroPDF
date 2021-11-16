@@ -22,7 +22,7 @@ import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-public class impresionConsetimientoPdf {
+public class ImpresionConsetimientoPdf {
 	private Color black = new Color(0, 0, 0);
 	private Color azul = new Color(0, 0, 143);
 	private final Color bgColor = new Color(255, 255, 255, 0);
@@ -995,7 +995,6 @@ public class impresionConsetimientoPdf {
 			table.draw();
 
 		} catch (Exception ex) {
-			System.out.println("Error  en encabezado Sio4ConstaciaPdf +" + ex.getMessage());
 
 		}
 

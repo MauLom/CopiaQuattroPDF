@@ -33,10 +33,15 @@ public class PrimeroDiversosModel {
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	                	if(newcontenido.split("\n")[i].contains("SEGURO PARA DAÑOS")) {
-	                		modelo.setPoliza(newcontenido.split("\n")[i].split("SEGURO PARA DAÑOS")[1].split("###")[1].replace("-", "").strip());
-	                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split("SEGURO PARA DAÑOS")[1].split("###")[1]);
-	                	}
+	                	if(newcontenido.split("\n")[i].contains("SEGURO PARA DAÃ‘OS")) {	      
+	                		if(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘")[1].split("###").length > 1) {
+	                			modelo.setPoliza(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘OS")[1].split("###")[1].replace("-", "").trim());
+		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘OS")[1].split("###")[1]);
+	                		}else {
+	                			modelo.setPoliza(newcontenido.split("\n")[i+1].replace("-", "").trim());
+		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                			
+	                		}	                		
+	                	} 
 	                	if(newcontenido.split("\n")[i].contains("Fecha de Emisión")) {
 	                		modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split(" ")[0]));
 	                	}

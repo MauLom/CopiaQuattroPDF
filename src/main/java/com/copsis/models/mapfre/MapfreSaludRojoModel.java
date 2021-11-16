@@ -158,17 +158,18 @@ public class MapfreSaludRojoModel {
 			
 			
 			
+			 newcontenido ="";
 			 for (int i = 0; i < contenido.split("COBERTURAS Y SERVICIOS").length; i++) {
 	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("VER ANEXOS")) {
 	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("VER ANEXOS")[0];
 	                }
-	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("CONCEPTOS###ECONÓMICOS")) {
-	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("CONCEPTOS###ECONÓMICOS")[0];
+	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("CONCEPTOS###ECONÃ“MICOS")) {
+	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("CONCEPTOS###ECONÃ“MICOS")[0];
 	                }
 	            }
 	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", aed).replace("EndosoElemental", "Elemental")
 	            		.replace("EndosoAsistencia", "Asistencia")
-	            		.replace("Reducción de deducible por", "Reducción de deducible por accidente");
+	            		.replace("ReducciÃ³n de deducible por", "ReducciÃ³n de deducible por accidente");
 	          
 
 	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -176,19 +177,19 @@ public class MapfreSaludRojoModel {
 	               
 	                int sp = x.split("###").length;
 
-	                if (x.contains("COBERTURAS") || x.contains("COASEGURO") || x.contains("a###a") || x.contains("Continuación")) {
+	                if (x.contains("COBERTURAS") || x.contains("COASEGURO") || x.contains("a###a") || x.contains("ContinuaciÃ³n")) {
 	                } else {
 	                	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                    if (sp == 6 || sp ==5) {
 	                        cobertura.setNombre(x.split("###")[0]);
-	                        cobertura.setSa(x.split("###")[1]);
+	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 	                        cobertura.setDeducible(x.split("###")[2]);
 	                        cobertura.setCoaseguro(x.split("###")[3]);
 	                        coberturas.add(cobertura);	
 	                    }
 	                    if (sp == 3 || sp == 2) {
 	                        cobertura.setNombre(x.split("###")[0]);
-	                        cobertura.setSa(x.split("###")[1]);
+	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 	                        coberturas.add(cobertura);	
 	                    }
 	                }
