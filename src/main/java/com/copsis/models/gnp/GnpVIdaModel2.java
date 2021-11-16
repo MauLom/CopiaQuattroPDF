@@ -287,6 +287,10 @@ public class GnpVIdaModel2 {
 				fin = -1;
 				inicio = contenido.indexOf("Coberturas");
 				fin = contenido.indexOf("@@@Agente");
+				if(fin == -1) {
+				 fin = contenido.lastIndexOf("Agente");
+				}
+				
 				if (inicio == -1 && fin == -1 || inicio > -1 && fin == -1 || inicio == -1 && fin > -1) {
 					inicio = -1;
 					fin = -1;

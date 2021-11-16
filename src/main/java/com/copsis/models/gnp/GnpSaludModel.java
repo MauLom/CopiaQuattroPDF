@@ -285,6 +285,12 @@ public class GnpSaludModel {
 							}
 
 							break;
+						case 3:
+							newcontenido = fn.cleanString(dato.split("%")[1].replace("###", ""));
+							if (fn.isNumeric(newcontenido)) {
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+							}
+							break;
 						}
 					}
 
