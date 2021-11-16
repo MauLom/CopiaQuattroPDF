@@ -3,7 +3,6 @@ package com.copsis.services;
 import java.util.Date;
 
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,10 @@ import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.AdjuntoDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
+import com.copsis.exceptions.GeneralServiceException;
+import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
+import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ImpresionService {
 
-	@Autowired
-	private QuattroUploadClient quattroUploadClient;
+	private final QuattroUploadClient quattroUploadClient;
 
 	public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
 		ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
@@ -77,8 +78,14 @@ public class ImpresionService {
 	}
 	
 	public byte[] impresionAmortizacion(AmortizacionPdfForm amortizacionForm) {
-		ImpresionAmortizacionesPdf impresionAmortizacionesPdf = new ImpresionAmortizacionesPdf();
-		return impresionAmortizacionesPdf.buildPDF(amortizacionForm);
+		try {
+			ImpresionAmortizacionesPdf impresionAmortizacionesPdf = new ImpresionAmortizacionesPdf();
+			return impresionAmortizacionesPdf.buildPDF(amortizacionForm);
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
 	}
 
 	

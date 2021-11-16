@@ -103,8 +103,7 @@ public class ImpresionAmortizacionesPdf {
 			try {
 				ByteArrayOutputStream output;
 				try (PDDocument document = new PDDocument()) {
-					try{
-						
+					
 						output = new ByteArrayOutputStream();
 						PDPage page = new PDPage();
 						document.addPage(page);
@@ -202,9 +201,6 @@ public class ImpresionAmortizacionesPdf {
 						output = new ByteArrayOutputStream();
 						document.save(output);
 						return output.toByteArray();
-					} finally {
-						document.close();
-					}
 				}				
 				
 			}catch (Exception ex) {
