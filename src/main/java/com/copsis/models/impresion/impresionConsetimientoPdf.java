@@ -995,7 +995,6 @@ public class ImpresionConsetimientoPdf {
 			table.draw();
 
 		} catch (Exception ex) {
-			System.out.println("Error  en encabezado Sio4ConstaciaPdf +" + ex.getMessage());
 
 		}
 
