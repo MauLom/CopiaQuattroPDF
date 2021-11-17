@@ -14,11 +14,7 @@ public class AtlasAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";
 	private String recibosText = "";
-	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
 
 	
 	public AtlasAutosModel(String contenido, String recibos) {
@@ -26,6 +22,10 @@ public class AtlasAutosModel {
 		this.recibosText = recibos;
 	}
 	public EstructuraJsonModel procesar() {
+		String newcontenido = "";
+		String resultado = "";
+		int inicio = 0;
+		int fin = 0;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());	
 		contenido =contenido.replace("las 12:00 Hrs.del", "")
 				.replace("POLIZA", "PÓLIZA");
@@ -49,9 +49,9 @@ public class AtlasAutosModel {
             		  modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "").replace("-", "").replace(" ", ""));	
             		}            		
             		if(newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {
-            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split("Hasta:")[0].replace("###", "").trim()));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].split("Fecha")[0].replace("###", "").trim()));
-            			modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
+            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split("Hasta:")[0].replace("###", "").trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].split("Fecha")[0].replace("###", "").trim()));
+            			modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
             		}
 					if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Domicilio") &&  newcontenido.split("\n")[i].contains("RFC:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i+1]);

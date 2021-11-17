@@ -47,9 +47,9 @@ public class AfirmeAutosModel {
 					}
 					if(newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {						
 						if(newcontenido.split("\n")[i+1].split("-").length > 2) {
-							modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1].replace("###", "").trim()));
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1].replace("###", "").trim()));
 							modelo.setFechaEmision(modelo.getVigenciaDe());
-							modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim()));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim()));
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("Marca") && newcontenido.split("\n")[i].contains("Clave:")) {
@@ -173,6 +173,9 @@ public class AfirmeAutosModel {
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[2]);
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[3]);
 							coberturas.add(cobertura);
+							break;
+							
+						default:
 							break;
 						
 						}

@@ -34,7 +34,7 @@ public class ImpresionePDFController {
 	private final ImpresionService impresionService;
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CopsisResponse> impresionesMain (@RequestBody ImpresionForm impresionForm,	@RequestHeader HttpHeaders headers) {
+	public ResponseEntity<CopsisResponse> impresionesMain (@RequestBody ImpresionForm impresionForm,@RequestHeader HttpHeaders headers) {
 		try {
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionServicePdf(impresionForm,headers)).build();
 		}catch(ValidationServiceException ex) {

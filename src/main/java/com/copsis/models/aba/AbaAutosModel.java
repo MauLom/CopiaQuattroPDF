@@ -1,13 +1,11 @@
 package com.copsis.models.aba;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.chubb.ChubbDiversosModel;
 
 public class AbaAutosModel {
 	
@@ -17,11 +15,6 @@ public class AbaAutosModel {
 
 	// Variables
 	private String contenido;
-	private int inicio = 0;
-	private int fin = 0;
-	private String newcontenido = "";
-
-	
 
 	// constructor
 	public AbaAutosModel(String contenido ) {
@@ -30,6 +23,11 @@ public class AbaAutosModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
+		
+		int inicio = 0;
+		int fin = 0;
+		String newcontenido = "";
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("vehículo*:", "vehículo###:");
 		try {
@@ -48,8 +46,8 @@ public class AbaAutosModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
 					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza( newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0].replace("###", "").trim());
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Asegurado") && newcontenido.split("\n")[i].contains("Endoso:")) {
 						modelo.setEndoso( newcontenido.split("\n")[i].split("Endoso:")[1].replace(":", "").replace("\r","").replace("###", "").replace("", "".trim()));						

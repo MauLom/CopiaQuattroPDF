@@ -14,19 +14,18 @@ public class AigAutosModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	private String contenido = "";
-	private String newcontenido = "";
-	private String newCobertura = "";
+	private String contenido = "";	
 	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
 
-	
 	public AigAutosModel(String contenido) {
 		this.contenido = contenido;
 	}
 	
 	public EstructuraJsonModel procesar() {
+		String newCobertura = "";
+		String newcontenido = "";
+		int inicio = 0;
+		int fin = 0;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("DE LAS 12:00 HORAS del ", "").replace("A LAS 12:00 HORAS del", "###")
 				.replace(" de ", "-")
@@ -61,8 +60,8 @@ public class AigAutosModel {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA")[1].split("-")[2].trim());
 					}
 					if(newcontenido.split("\n")[i].contains("VIGENCIA DEL SEGURO")) {
-						modelo.setVigenciaDe( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[0].trim()));
-						modelo.setVigenciaA( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1].trim()));
+						modelo.setVigenciaDe( fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].trim()));
+						modelo.setVigenciaA( fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1].trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Nombre:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("Nombre:")[1].split("R.F.C:")[0].trim());

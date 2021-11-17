@@ -48,13 +48,13 @@ public class AfirmeAutosBModel {
                         modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split("Inciso:")[1].trim()));
                     }
                     if (newcontenido.split("\n")[i].contains("desde")) {
-                        modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
                     }
                     if (newcontenido.split("\n")[i].contains("Hasta")) {
-                        modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
                     }
                     if (newcontenido.split("\n")[i].contains("Emisión")) {
-                        modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
                     }
                 }
             }
@@ -209,12 +209,12 @@ public class AfirmeAutosBModel {
             
            	
                 if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {                           	
-                    recibo.setVigenciaDe( fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Del")[1].split("Inciso")[0].replace(":", "").replace("###", "").replace("/", "-").trim()));
+                    recibo.setVigenciaDe( fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Del")[1].split("Inciso")[0].replace(":", "").replace("###", "").replace("/", "-").trim()));
                
                 
                     if(newcontenido.split("\n")[i+1].contains("Al")){
                         
-                    	recibo.setVigenciaA( fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("Al")[1].replace(":", "").replace("###", "").replace("/", "-").trim()));                    
+                    	recibo.setVigenciaA( fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("Al")[1].replace(":", "").replace("###", "").replace("/", "-").trim()));                    
                     	recibo.setVence(modelo.getVigenciaDe());
                     }                
                 }

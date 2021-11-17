@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus;
 
 import com.copsis.dto.AdjuntoDTO;
 
-import lombok.Data;
-@Data
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 public class QuattroUploadAdjuntoProjection {
 	private Boolean ok;
 	private HttpStatus status;

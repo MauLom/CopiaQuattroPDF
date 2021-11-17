@@ -14,18 +14,20 @@ public class AigDiversosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";
-	private String newresultado = "";
 	private String newcoberturas = "";
 
-	private int inicio = 0;
-	private int fin = 0;
+	
 
 	public AigDiversosModel(String contenido) {
 		this.contenido = contenido;
 	}
 
 	public EstructuraJsonModel procesar() {
+		int inicio = 0;
+		int fin = 0;
+		String newcontenido = "";
+		String newresultado = "";
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("MENSUAL", "###MENSUAL###").replace("EDIFICIO", "EDIFICIO###")
 				.replace("CONTENIDOS", "CONTENIDOS###").replace("REMOCION DE ESCOMBROS", "REMOCION DE ESCOMBROS###")
@@ -68,8 +70,8 @@ public class AigDiversosModel {
 								+ newresultado.split("/")[2];
 						String b = newresultado.split("/")[3] + "-" + newresultado.split("/")[4] + "-"
 								+ newresultado.split("/")[5];
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(a));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(b));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(a));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(b));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 				}

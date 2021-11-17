@@ -12,13 +12,7 @@ public class AigSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	private String contenido = "";
-	private String newcontenido = "";
-
-	private int inicio = 0;
-	private int fin = 0;
-
-	
+	private String contenido = "";	
 	public AigSaludModel(String contenido) {
 		this.contenido = contenido;
 	}
@@ -26,6 +20,9 @@ public class AigSaludModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
+			String newcontenido = "";
+			int inicio = 0;
+			int fin = 0;
 
 			//tipo
 			modelo.setTipo(3);
@@ -43,14 +40,14 @@ public class AigSaludModel {
 					}
 					if( newcontenido.split("\n")[i].contains("Emisión:") && newcontenido.split("\n")[i].contains("Plan:")){
 						modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", ""));
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split("Plan:")[0].replace("###", "").trim() ));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split("Plan:")[0].replace("###", "").trim() ));
 					}
 					if( newcontenido.split("\n")[i].contains("Inicio de Viaje:") ) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));
 					}
 					
 					if (newcontenido.split("\n")[i].contains("Fin de Viaje:")) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));
 					}
 					if (newcontenido.split("\n")[i].contains("Nombre Completo:")) {
 						modelo.setCteNombre(newcontenido.split("Nombre Completo:")[1].replace("###", "").split("Prima")[0]);
@@ -76,7 +73,7 @@ public class AigSaludModel {
 					if(newcontenido.split("\n")[i].split("-").length > 2) {				
 						asegurado.setNombre( newcontenido.split("\n")[i].split("###")[1]);
 						asegurado.setSexo( fn.sexo(newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
-						asegurado.setNacimiento( fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[3]));
+						asegurado.setNacimiento( fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[3]));
 						asegurados.add(asegurado);
 					}
 				}

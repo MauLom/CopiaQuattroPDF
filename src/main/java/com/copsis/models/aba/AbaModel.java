@@ -5,8 +5,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.axa.AxaAutosModel;
-import com.copsis.models.chubb.ChubbModel;
 
 import lombok.Data;
 
@@ -34,17 +32,6 @@ public class AbaModel {
         		modelo = datosAbaDiversos.procesar();
         	}
         	
-        	
-        	
-        	
-//        	if(contenido.contains("Motor")) {
-//    			jsonObject = new DatosAbaAutos(identifica.caratula(1, 1, stripper, doc), identifica.recibos(stripper, doc, "AVISO DE COBRO")).procesar();
-//    		}else if(contenido.contains("EL SEGURO DE CASA") || contenido.contains("Flexible Premium") 
-//    		|| contenido.contains("Flexible óptimo") || contenido.contains("Vivienda:") || contenido.contains("EMPRESARIAL")) {
-//    			pagFin = identifica.pagFinRango(stripper, doc, "Conoce más sobre");
-//    			if(pagFin > 0) jsonObject = new DatosAbaDanos(identifica.caratula(1, pagFin, stripper, doc), identifica.recibos(stripper, doc, "AVISO DE COBRO")).procesar();
-//    		}
-//        			
         	return modelo;
 		} catch (Exception ex) {
 			modelo.setError(

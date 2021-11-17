@@ -80,9 +80,9 @@ public class AigSaludBModel {
 					}
 					if (newcontenido.split("\n")[i].split("-").length > 3) {
 						modelo.setVigenciaDe(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[0].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[0].trim()));
 						modelo.setVigenciaA(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 
 					}

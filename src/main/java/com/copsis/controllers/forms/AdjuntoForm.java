@@ -2,9 +2,11 @@ package com.copsis.controllers.forms;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class AdjuntoForm {
 	private MultipartFile file;
 	private String folder;

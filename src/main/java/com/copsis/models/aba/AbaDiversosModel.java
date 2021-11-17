@@ -16,13 +16,6 @@ public class AbaDiversosModel {
 
 	// Variables
 	private String contenido;
-	private int inicio = 0;
-	private int fin = 0;
-	private String newcontenido = "";
-	private String deducible ="";
-	private String nombre="";
-	private String sa;
-	
 
 	// constructor
 	public AbaDiversosModel(String contenido ) {
@@ -31,6 +24,11 @@ public class AbaDiversosModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
+		
+		int inicio = 0;
+		int fin = 0;
+		String newcontenido = "";
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
 			//tipo
@@ -49,8 +47,8 @@ public class AbaDiversosModel {
 
 					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0].replace("###", ""));
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("DEL")[1].split("HORAS")[0].replace("12:00", "").replace("###", "").trim()));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("HORAS AL")[1].split("HORAS")[0].replace("12:00", "").replace("###", "").trim()));					
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("DEL")[1].split("HORAS")[0].replace("12:00", "").replace("###", "").trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("HORAS AL")[1].split("HORAS")[0].replace("12:00", "").replace("###", "").trim()));					
 					}					
 					if(newcontenido.split("\n")[i].contains("Inciso") && newcontenido.split("\n")[i].contains("Endoso")) {
 						modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split("Inciso")[1].split("Asegurado")[0].replace("###", "").trim()));
@@ -81,7 +79,7 @@ public class AbaDiversosModel {
 					 }else {						
 							x = x.split("###")[1] +"-"+ x.split("###")[2] +"-"+ x.split("###")[3].trim();							
 					 }					
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(x));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(x));
 						
 						if(newcontenido.split("\n")[i].contains("Moneda")) {
 							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].replace("###", "").replace("\r", "").trim()));
