@@ -2,10 +2,8 @@ package com.copsis.models;
 
 import java.math.BigDecimal;
 
-import lombok.Getter;
-import lombok.Setter;
-@Getter
-@Setter
+import lombok.Data;
+@Data
 public class EstructuraRecibosAfirmeModel {
 
 	private String vigenciaDe="";
