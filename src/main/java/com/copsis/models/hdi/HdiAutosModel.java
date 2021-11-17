@@ -1,6 +1,5 @@
 package com.copsis.models.hdi;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +14,8 @@ public class HdiAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";
-	private String resultado = "";
-	private String resultadoCbo = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int donde = 0;
+
+
 	private Boolean primas = true;
 
 	public HdiAutosModel(String contenido) {
@@ -35,6 +30,11 @@ public class HdiAutosModel {
 				.replace("Individual", "")
 				.replace("C l a v e : ", "Clave:");
 		try {
+
+
+			 int inicio = 0;
+			 int fin = 0;
+			 String newcontenido = "";
 			// tipo
 			modelo.setTipo(1);
 			// cia
@@ -147,7 +147,7 @@ public class HdiAutosModel {
 					}
 					if(modelo.getSerie().length() == 0) {
 						if (newcontenido.split("\n")[i].contains("Serie:")) {
-							modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("###")[0].trim());
+							modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].	split("###")[0].trim());
 						}
 						
 					}
@@ -186,6 +186,7 @@ public class HdiAutosModel {
 					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("Total a Pagar")) {
 						
 						if(newcontenido.split("\n")[i].split("###").length ==  5) {
+				
 							primas = false;
 							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
 							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
@@ -194,25 +195,28 @@ public class HdiAutosModel {
 							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));							
 						}
 					}
-					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("de Póliza")) {
-
-						if(newcontenido.split("\n")[i+1].split("###").length ==  8) {
+					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("de Póliza") && newcontenido.split("\n")[i+1].split("###").length ==  8) {
 							primas = false;
 							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
+							modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1])) );
 							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
 							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
 							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
 							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));
-						}
 					}
 				}
 
 		
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if(primas == true  ) {
+					if (Boolean.TRUE.equals(primas)) {
+					
 						if (newcontenido.split("\n")[i].contains("Prima Neta")) {
 							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima Neta")[1].split("###")[1])));
 						}
+						if (newcontenido.split("\n")[i].contains("Descuento")) {
+							modelo.setAjusteUno( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Descuento")[1].split("###")[1])));
+						}
+						
 						if (newcontenido.split("\n")[i].contains("fraccionado")) {
 						
 							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Recargo por pago fraccionado")[1].split("###")[1])));
