@@ -9,9 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@JsonInclude(value = Include.NON_NULL)
+@Getter
+@Setter
 public class ImpresionForm {
 	private Integer tiporespuesta;//tipo de respuesta
 	private Integer tipoImpresion;//tipo de impresion
@@ -49,6 +51,6 @@ public class ImpresionForm {
 	private String ocupacion;
 	private String paisNacimiento;
 	private String telefono;
-	private List<BeneficiarioProjection> Beneficiarios;
-	private List<PaqueteCoberturaProjection> Coberturas;
+	private List<BeneficiarioProjection> beneficiarios;
+	private List<PaqueteCoberturaProjection> coberturas;
 }

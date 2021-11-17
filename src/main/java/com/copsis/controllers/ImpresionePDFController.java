@@ -1,6 +1,5 @@
 package com.copsis.controllers;
 
-import java.io.IOException;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -35,12 +34,15 @@ public class ImpresionePDFController {
 	private final ImpresionService impresionService;
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CopsisResponse> impresionesMain (@RequestBody ImpresionForm impresionForm,	@RequestHeader HttpHeaders headers) throws  IOException {
-		
-		  return new CopsisResponse.Builder()
-				.ok(true)
-				.status(HttpStatus.OK)
-				.result(impresionService.impresionServicePdf(impresionForm,headers)).build();
+	public ResponseEntity<CopsisResponse> impresionesMain (@RequestBody ImpresionForm impresionForm,	@RequestHeader HttpHeaders headers) {
+		try {
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionServicePdf(impresionForm,headers)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+		  
 	}
 	
 	@PostMapping(value = "amortizacion")
@@ -53,8 +55,7 @@ public class ImpresionePDFController {
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionAmortizacion(impresionForm)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
-		}
-		catch(Exception ex) {
+		}catch(Exception ex) {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 		  

@@ -204,7 +204,7 @@ public class ImpresionAmortizacionesPdf {
 				}				
 				
 			}catch (Exception ex) {
-				throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000,ex.getMessage());
+				throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00001,ex.getMessage());
 			}
 		
 	}
