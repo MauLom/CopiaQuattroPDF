@@ -55,8 +55,8 @@ public class MultivaSaludModel {
 					if(newcontenido.split("\n")[i].split("-").length  > 3) {
 						if(newcontenido.split("\n")[i].split("###")[2].contains("-")) {							 
 					     String b =newcontenido.split("\n")[i].split("###")[2].split("-")[2].substring(4,6) +"-" +newcontenido.split("\n")[i].split("###")[2].split("-")[3] +"-"+newcontenido.split("\n")[i].split("###")[2].split("-")[4];
-						 modelo.setVigenciaDe(fn.formatDate_MonthCadena(b));
-						 modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[4]));						
+						 modelo.setVigenciaDe(fn.formatDateMonthCadena(b));
+						 modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4]));						
 						}						
 					}					
 				}
@@ -73,8 +73,8 @@ public class MultivaSaludModel {
             		EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();            		
             		if(newcontenido.split("\n")[i].split("-").length > 3) {
                 		asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-                		asegurado.setAntiguedad(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[2]));
-                		asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[3]));
+                		asegurado.setAntiguedad(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[2]));
+                		asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3]));
                 		asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[4]));
                 		asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[6]) ? 1:0);
                 		asegurados.add(asegurado);

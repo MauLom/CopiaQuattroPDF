@@ -61,8 +61,8 @@ public class ChubbDiversosModel {
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	            		if(newcontenido.split("\n")[i].contains("Póliza:")  && newcontenido.split("\n")[i].contains("Vigencia")) {
 	            			modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].split("Vigencia:")[0].replace("###", ""));
-	            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
-	            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
+	            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
+	            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
 	            		}
 	            		if(newcontenido.split("\n")[i].contains("Asegurado:")  && newcontenido.split("\n")[i].contains("C.P:")) {
 	            			modelo.setCteNombre((newcontenido.split("\n")[i].split("Asegurado:")[1].split("C.P:")[0].replace("###", " ")).trim());
@@ -82,7 +82,7 @@ public class ChubbDiversosModel {
 	            		if(newcontenido.split("\n")[i].contains("emisión:") && newcontenido.split("\n")[i].contains("Descuento")) {
 	            			String x = newcontenido.split("\n")[i].split("emisión:")[1].split("Descuento")[0].replace("###", "").trim().replace(" ", "###");
 	            			x = x.split("###")[0] +"-"+x.split("###")[1] +"-"+ x.split("###")[2];
-	            			modelo.setFechaEmision(fn.formatDate_MonthCadena(x));
+	            			modelo.setFechaEmision(fn.formatDateMonthCadena(x));
 	            		}
 	            		if(newcontenido.split("\n")[i].contains("Paquete:")) {
 	            			modelo.setPlan(newcontenido.split("\n")[i].split("Paquete:")[1].replace("\r", "").replace("###", "").trim());

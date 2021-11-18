@@ -163,8 +163,7 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA BANORTE
-			if (!encontro && contenido.contains("Banorte")
-					|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
+			if (!encontro && contenido.contains("Banorte") || (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 							&& contenido.contains("Datos del asegurado titular (Solicitante)")
 							&& contenido.contains("ASEGURADOS"))) {
 				if (contenido.contains("Estimado(a)")) {

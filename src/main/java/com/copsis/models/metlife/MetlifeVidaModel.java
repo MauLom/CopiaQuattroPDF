@@ -85,7 +85,7 @@ public class MetlifeVidaModel {
 									if(contenido.split("@@@")[donde].split("\r\n")[i+1].trim().contains("Día")) {
 										if((i+2) < contenido.split("@@@")[donde].split("\r\n").length ) {
 											if(contenido.split("@@@")[donde].split("\r\n")[i+2].split("###").length == 5) {
-												resultado = fn.formatDate_MonthCadena(contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[1].trim() + "-" + contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[2].trim() + "-" + contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[3].trim()); 
+												resultado = fn.formatDateMonthCadena(contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[1].trim() + "-" + contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[2].trim() + "-" + contenido.split("@@@")[donde].split("\r\n")[i+2].split("###")[3].trim()); 
 											}else {
 												resultado = "";
 											}
@@ -158,7 +158,7 @@ public class MetlifeVidaModel {
 					if(x.split("\r\n")[0].trim().length() > 0 && index > 0) {							
 						longitud_split = x.split("\r\n")[0].trim().split(" ").length-1;	
 						y = x.split("\r\n")[0].trim().replace("MEXICO, D.F. A ", "").replace(" DE ", "-").replace(" DEL ","-").replace("###", "");						
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(y));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(y));
 						y = x.split("\r\n")[0].trim().split(" ")[longitud_split]; 
 						break;
 					}
@@ -184,13 +184,13 @@ public class MetlifeVidaModel {
 							if(x.contains("TEMPORAL")) {
 								if(x.split("###").length == 6) {
 									if(x.split("###")[2].trim().split(" ").length == 3){
-										String date = fn.formatDate_MonthCadena(x.split("###")[2].trim().replace(" ", "-"));
+										String date = fn.formatDateMonthCadena(x.split("###")[2].trim().replace(" ", "-"));
 										date2 = date;
 										date = date.replace(date.split("-")[0], y);
 										modelo.setVigenciaDe(date);
 									}
 									if(x.split("###")[3].trim().split(" ").length == 3) {
-										String date = fn.formatDate_MonthCadena(x.split("###")[3].trim().replace(" ", "-"));	
+										String date = fn.formatDateMonthCadena(x.split("###")[3].trim().replace(" ", "-"));	
 										date2 = date;
 									    yy = new Integer(y); 
 									    yy =yy+1;

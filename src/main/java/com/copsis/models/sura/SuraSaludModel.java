@@ -41,14 +41,14 @@ public class SuraSaludModel {
 					}
 					if (newcontenido.split("\n")[i].contains("Desde las")) {
 						modelo.setVigenciaDe(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].replace(" ", "").trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].replace(" ", "").trim()));
 						if (modelo.getVigenciaDe().length() > 0) {
 							modelo.setFechaEmision(modelo.getVigenciaDe());
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("Hasta las")) {
 						modelo.setVigenciaA(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].replace(" ", "").trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].replace(" ", "").trim()));
 					}
 					if (newcontenido.split("\n")[i].contains("Datos del contratante")) {
 	
@@ -107,13 +107,13 @@ public class SuraSaludModel {
 					if (newcontenido.split("\n")[i].split("-").length > 3) {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 						asegurado.setNacimiento(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
 						asegurado.setSexo(
 								fn.sexo(newcontenido.split("\n")[i].split("###")[2].toUpperCase().trim()) ? 1 : 0);
 						asegurado.setParentesco(
 								fn.parentesco(newcontenido.split("\n")[i].split("###")[3].toUpperCase().trim()));
 						asegurado.setAntiguedad(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[4].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].trim()));
 						asegurados.add(asegurado);
 					}
 				}

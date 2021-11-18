@@ -89,15 +89,15 @@ public class MultivaAutosModel {
             		}
             		if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta")) {
             			
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1].trim()));
-            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -2].trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1].trim()));
+            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -2].trim()));
             		}
             		if(newcontenido.split("\n")[i].contains("Emisión")) {
             			if(newcontenido.split("\n")[i].contains("-")) {
-            				modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("###", "")));	
+            				modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("###", "")));	
             			}
             			if(newcontenido.split("\n")[i+1].contains("-")) {
-            				modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1].replace("###", "")));	
+            				modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1].replace("###", "")));	
             			}
             			
             		}

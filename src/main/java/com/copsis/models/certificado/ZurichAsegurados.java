@@ -72,10 +72,10 @@ public class ZurichAsegurados {
 						asegurado.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -1 ].replace("Pesos", "").trim())));
 						asegurado.setSa(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2 ]);
 						asegurado.setCobertura(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -3 ]);						
-						asegurado.setFechaAlta(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -4 ]));
+						asegurado.setFechaAlta(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -4 ]));
 						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -5 ]) ? 1 : 0 );
 						asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -6 ]));
-						asegurado.setAntiguedad(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -7 ]));
+						asegurado.setAntiguedad(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -7 ]));
 
 						if(newcontenido.split("\n")[i+1].split("-").length == 1) {
 							asegurado.setNombre((newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -8] +" " + newcontenido.split("\n")[i+1]).replace("+", "").replace("  ", " ").trim());

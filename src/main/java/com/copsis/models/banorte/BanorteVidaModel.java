@@ -55,9 +55,9 @@ public class BanorteVidaModel {
 
 					if(newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("EMISIÓN") && newcontenido.split("\n")[i].contains("VIGENCIA")) {
 					   modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0]);
-					   modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
-					   modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[2]));
-					   modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[3]));
+					   modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
+					   modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2]));
+					   modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[3]));
 					}
 					if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("RFC:"))
 					{
@@ -122,7 +122,7 @@ public class BanorteVidaModel {
 
             		if(newcontenido.split("\n")[i].contains("Nombre")) {            			
             			asegurado.setNombre(newcontenido.split("\n")[i+1].split("###")[0]);
-            			asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));//              
+            			asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));//              
             			asegurados.add(asegurado);
             		}            	
             	}

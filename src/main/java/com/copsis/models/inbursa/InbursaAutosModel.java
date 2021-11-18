@@ -147,12 +147,12 @@ public class InbursaAutosModel {
             			 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("PRIMA TOTAL:")[1].replace("###", ""))));
             		 }
              		 if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("-")) { 
-             			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
-             			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("RENOVACION")[0].replace("###", "").trim()));
+             			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
+             			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("RENOVACION")[0].replace("###", "").trim()));
              		 }
              		 else if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta")) {  
-            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[0]));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
+            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0]));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
             			modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("###")[2].trim()));
             		 }            		 
             		 if(newcontenido.split("\n")[i].contains("CLAVE") && newcontenido.split("\n")[i].contains("ISIS:")) {

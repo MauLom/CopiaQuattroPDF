@@ -96,7 +96,7 @@ public class ImpresionInter {
 					baseRow = communsPdf.setRow(table, 15);
 					 DecimalFormat formateador = new DecimalFormat("#,##0.00");
 					communsPdf.setCell(baseRow, 100, "póliza por la cantidad de: " + formateador.format(Double.parseDouble( impresionForm.getSaSiniestro()))
-							+" (" + fnLetras.Convertir(impresionForm.getSaSiniestro(),false).toUpperCase() +" ). ", black, false, "L", 13, lineBoders, "", padding);
+							+" (" + fnLetras.convertir(impresionForm.getSaSiniestro(),false).toUpperCase() +" ). ", black, false, "L", 13, lineBoders, "", padding);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 20;

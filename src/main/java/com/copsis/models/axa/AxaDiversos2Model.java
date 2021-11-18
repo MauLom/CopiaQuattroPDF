@@ -44,12 +44,12 @@ public class AxaDiversos2Model {
 						
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i].contains("Expediente")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Emisión")[1].split("Expediente")[0].replace("###", "").trim()));
+						modelo.setFechaEmision(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Emisión")[1].split("Expediente")[0].replace("###", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Vigencia") ) {
 						String x = newcontenido.split("\n")[i+1].replace("a las 12 Hrs.", "");
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(x.split("###")[1].trim()));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(x.split("###")[3].trim()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[1].trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[3].trim()));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Datos Generales del Asegurado") && newcontenido.split("\n")[i+1].contains("RFC:") ) {

@@ -64,13 +64,13 @@ public class ZurichAutosModel {
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Datos del Asegurado")) {
 	                        modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0]);
-	                        modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].replace(":", "").trim()));
+	                        modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].replace(":", "").trim()));
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Hasta")) {
-	                        modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].replace(":", "").trim()));
+	                        modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].replace(":", "").trim()));
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Emisión")) {
-	                        modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("###", "").replace(":", "").trim()));
+	                        modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("###", "").replace(":", "").trim()));
 	                        newcontenidoDire = newcontenido.split("\n")[i].split("Duración")[0] + " " + newcontenido.split("\n")[i + 1] + " "
 	                                + newcontenido.split("\n")[i + 2].split("Moneda")[0] + " "
 	                                + newcontenido.split("\n")[i + 3].split("Documento")[0].replace("###", " ");

@@ -140,7 +140,7 @@ public class AxaVidaModel {
 					if (dato.contains("Inicio de Vigencia") && dato.split("###").length == 3) {
 						if (dato.split("###")[0].contains("Vigencia")) {
 							modelo.setVigenciaDe(
-									fn.formatDate_MonthCadena(dato.split("###")[0].split("Vigencia")[1].trim()));
+									fn.formatDateMonthCadena(dato.split("###")[0].split("Vigencia")[1].trim()));
 						}
 					}
 					if (dato.contains("Moneda")) {
@@ -180,7 +180,7 @@ public class AxaVidaModel {
 					Integer.parseInt(fn.cleanString(contenido.split("Anual")[1].split("\n")[1].split("###")[3]
 							.replace("Años", "").replace("Año", "").trim())));
 			modelo.setAportacion(1);
-			modelo.setFechaEmision(fn.formatDate_MonthCadena(
+			modelo.setFechaEmision(fn.formatDateMonthCadena(
 					contenido.split("Emisión")[1].split("Moneda")[0].replace("\r\n", "").trim()));
 
 			if (modelo.getFechaEmision().split("-").length == 3 && modelo.getFechaEmision().length() == 10
@@ -266,7 +266,7 @@ public class AxaVidaModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Fecha de Nacimiento")
 							&& newcontenido.split("\n")[i].contains("Edad")) {
-						asegurado.setNacimiento(fn.formatDate_MonthCadena(
+						asegurado.setNacimiento(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("Nacimiento")[1].split("Edad")[0].replace("###", "")
 										.replace("de", "").replaceAll("  +", "-").trim()));
 					}

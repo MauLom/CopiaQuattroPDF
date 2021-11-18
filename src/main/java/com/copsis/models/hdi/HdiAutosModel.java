@@ -78,17 +78,17 @@ public class HdiAutosModel {
 						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza:")[1].split("Vigencia")[0].replace("###", "").trim());
 						if(newcontenido.split("\n")[i].split("-").length > 3){
 							
-							modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
 							modelo.setFechaEmision(modelo.getVigenciaDe());
-							modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("###", "").trim()));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("###", "").trim()));
 						}
 						
 					}
 					if(modelo.getVigenciaA().length() == 0  && modelo.getVigenciaDe().length() == 0 ) {
 						if(newcontenido.split("\n")[i].split("-").length > 3){
-							modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[0].replace("###", "").trim()));
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[0].replace("###", "").trim()));
 							modelo.setFechaEmision(modelo.getVigenciaDe());
-							modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].replace("###", "").trim()));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].replace("###", "").trim()));
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("Agente:")) {

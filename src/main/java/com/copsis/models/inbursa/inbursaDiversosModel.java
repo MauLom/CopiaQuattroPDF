@@ -154,8 +154,8 @@ public class inbursaDiversosModel {
 	               				modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i].split("PRIMA TOTAL")[1].split("###")[1]).replace("###", ""))));
 		               			if(modelo.getPrimaTotal().toString().length() > 0) {
 		               				String x =newcontenido.split("\n")[i].split(fn.extraerNumeros(newcontenido.split("\n")[i].split("PRIMA TOTAL")[1].split("###")[1]).replace("###", ""))[1];
-		               				modelo.setVigenciaDe(fn.formatDate_MonthCadena(x.split("###")[0]));
-			               			modelo.setVigenciaA(fn.formatDate_MonthCadena(x.split("###")[1]));	               					                   		
+		               				modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[0]));
+			               			modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[1]));	               					                   		
 		               			}
 	               			}else {
 	               				modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("PRIMA TOTAL")[1].split("###")[1])));
@@ -169,12 +169,12 @@ public class inbursaDiversosModel {
 	               		}	               		
 	               		if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta")) {	               			
 	               			if(newcontenido.split("\n")[i+1].split("###")[0].contains("-") ) {
-	               				modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[0]));
-		               			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
+	               				modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0]));
+		               			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
 	               			}else {
 	               				if(newcontenido.split("\n")[i].split("Horas")[1].split("Hasta")[0].contains("-")) {
-	               					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Horas")[1].split("Hasta")[0].replace("###", "")));
-		            				modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("Horas")[1].replace("###", "").trim()));
+	               					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Horas")[1].split("Hasta")[0].replace("###", "")));
+		            				modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("Horas")[1].replace("###", "").trim()));
 	               				}
 	            				
 	               			}

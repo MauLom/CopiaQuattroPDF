@@ -332,7 +332,7 @@ public class ChubbAutosModel {
 					case "Vigencia:###Del###":
 						inicio = inicio + 18;
 						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split(separador)[0]));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
 						break;
 					}
 				}
@@ -347,7 +347,7 @@ public class ChubbAutosModel {
 					case "horas al###":
 						inicio = inicio + 11;
 						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split(separador)[0].trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
 						break;
 					}
 				}
@@ -506,7 +506,7 @@ public class ChubbAutosModel {
 						inicio = inicio + 20;
 						newcontenido = contenido.substring(inicio, (inicio + 150));
 						newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
 						break;
 					}
 				}

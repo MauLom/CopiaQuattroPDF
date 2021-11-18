@@ -77,11 +77,11 @@ public class ZurichCertificadoGrupo {
 		
 					asegurado.setSubgrupo( valorsubgrupo.trim());
 					asegurado.setCategoria( categoria.trim());
-					asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+					asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 1]));
-					asegurado.setFechaAlta(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+					asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i]
 							.split("###")[newcontenido.split("\n")[i].split("###").length - 2]));			
-						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i]
+						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i]
 								.split("###")[newcontenido.split("\n")[i].split("###").length - 3]));
 						asegurado.setEdad(Integer.parseInt( newcontenido.split("\n")[i]
 								.split("###")[newcontenido.split("\n")[i].split("###").length - 4].trim()));

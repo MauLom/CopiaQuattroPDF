@@ -97,15 +97,15 @@ public class BanorteDiversos {
                     	   modelo.setCteDireccion(resultado.replace("Estado:", "").replace(" Código Postal:", "").replace("###","").trim());
 	            		}
                        if(newcontenido.split("\n")[i].contains("Emisión:") ) {
-                    	   modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].trim()));
+                    	   modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].trim()));
                        }
                        if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Vigencia") ) {
                     	   modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].trim()));
       
                     	   String x=newcontenido.split("\n")[i+1].replace("  ", "###");
                     	   
-                    	   modelo.setVigenciaDe(fn.formatDate_MonthCadena(x.split("###")[0].trim()));
-                    	   modelo.setVigenciaA(fn.formatDate_MonthCadena(x.split("###")[1].trim()));
+                    	   modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[0].trim()));
+                    	   modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[1].trim()));
                     	   
                        }
                         if(newcontenido.split("\n")[i].contains("Pago:") ) {

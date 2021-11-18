@@ -167,11 +167,11 @@ public class BanorteSaludModel {
                     	if(newcontenido.split("\n")[i].split("-").length > 1) {
                     	 resultado = newcontenido.split("\n")[i].split("Electrónico:")[1].strip().trim().replace(" ", "###");
                     	 if(resultado.split("###")[0].contains("-")) {
-                    		 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[0]));
-                        	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[1])); 
+                    		 modelo.setVigenciaDe(fn.formatDateMonthCadena( resultado.split("###")[0]));
+                        	 modelo.setVigenciaA(fn.formatDateMonthCadena( resultado.split("###")[1])); 
                     	 }else {
-                    		 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[1]));
-                        	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[2]));
+                    		 modelo.setVigenciaDe(fn.formatDateMonthCadena( resultado.split("###")[1]));
+                        	 modelo.setVigenciaA(fn.formatDateMonthCadena( resultado.split("###")[2]));
                     	 }
                     	
                     	}
@@ -180,20 +180,20 @@ public class BanorteSaludModel {
 						if (newcontenido.split("\n")[i].split("###")[1].contains("-")) {
 						     modelo.setRfc(newcontenido.split("\n")[i].split("###")[0].replace("R.F.C:", "").trim());							
 							 resultado = newcontenido.split("\n")[i].split("###")[1].trim().replace(" ", "###");
-							 modelo.setVigenciaDe(fn.formatDate_MonthCadena( resultado.split("###")[0]));
-	                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( resultado.split("###")[1]));
+							 modelo.setVigenciaDe(fn.formatDateMonthCadena( resultado.split("###")[0]));
+	                    	 modelo.setVigenciaA(fn.formatDateMonthCadena( resultado.split("###")[1]));
 						}else {
 							modelo.setRfc(newcontenido.split("\n")[i].split("###")[1]);
-							 modelo.setVigenciaDe(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[2]));
-	                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[3]));  
+							 modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[2]));
+	                    	 modelo.setVigenciaA(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[3]));  
 						}                    	                     	           
                     }    
                     
                     if(modelo.getVigenciaA().length() == 0 && modelo.getVigenciaDe().length() == 0 ) {
     					if (newcontenido.split("\n")[i].split("-").length > 3) {
     	                     String x = newcontenido.split("\n")[i].trim().replace(" ", "###");
-    						 modelo.setVigenciaDe(fn.formatDate_MonthCadena( x.split("###")[0]));
-	                    	 modelo.setVigenciaA(fn.formatDate_MonthCadena( x.split("###")[1]));
+    						 modelo.setVigenciaDe(fn.formatDateMonthCadena( x.split("###")[0]));
+	                    	 modelo.setVigenciaA(fn.formatDateMonthCadena( x.split("###")[1]));
     					}
     				}
 				}
@@ -272,11 +272,11 @@ public class BanorteSaludModel {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						if(newcontenido.split("\n")[i].split("-").length > 2 ) {							
 							if(newcontenido.split("\n")[i].split("###")[1].contains("-")) {
-								asegurado.setNacimiento(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("###")[1]));
+								asegurado.setNacimiento(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[1]));
 								asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 							}else {
 								String x=newcontenido.split("\n")[i].split("###")[0].replace(" ", "###");
-								asegurado.setNacimiento(fn.formatDate_MonthCadena( x.split("###")[x.split("###").length -1]));
+								asegurado.setNacimiento(fn.formatDateMonthCadena( x.split("###")[x.split("###").length -1]));
 								asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].split(x.split("###")[x.split("###").length -1])[0]);
 							}							
 							asegurados.add(asegurado);												

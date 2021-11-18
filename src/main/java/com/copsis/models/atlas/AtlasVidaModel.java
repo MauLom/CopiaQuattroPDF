@@ -15,6 +15,8 @@ public class AtlasVidaModel {
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
 		// Varaibles
 		private String contenido = "";
+		private static final String AGENTE = "Agente:";
+		private static final String HASTA ="Hasta:";
 		
 
 		public AtlasVidaModel(String contenido) {
@@ -50,9 +52,9 @@ public class AtlasVidaModel {
 	            			modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
 	            		  modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "").replace("-", "").replace(" ", ""));	
 	            		}             		
-	            		if(newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {
-	            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split("Hasta:")[0].replace("###", "").trim()));
-	            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].split("Fecha")[0].replace("###", "").trim()));
+	            		if(newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(HASTA)) {
+	            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(HASTA)[0].replace("###", "").trim()));
+	            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(HASTA)[1].split("Fecha")[0].replace("###", "").trim()));
 	            			modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
 	            		}            		
 	            		if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Domicilio") &&  newcontenido.split("\n")[i].contains("RFC:")) {
@@ -61,9 +63,9 @@ public class AtlasVidaModel {
 							resultado.append(newcontenido.split("\n")[i+2] +" " + newcontenido.split("\n")[i+3]); 
 							modelo.setCteDireccion(resultado.toString().replace("###", " "));
 						}
-	            		if(newcontenido.split("\n")[i].contains("Producto:") && newcontenido.split("\n")[i].contains("Agente:") && newcontenido.split("\n")[i].contains("Orden:")) {
+	            		if(newcontenido.split("\n")[i].contains("Producto:") && newcontenido.split("\n")[i].contains(AGENTE) && newcontenido.split("\n")[i].contains("Orden:")) {
 							
-						    modelo.setCveAgente( newcontenido.split("\n")[i].split("Agente:")[1].replace("###", ""));
+						    modelo.setCveAgente( newcontenido.split("\n")[i].split(AGENTE)[1].replace("###", ""));
 						}
 	            		if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Prima Neta:")) {
 							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Prima")[0].replace("###", "")));
@@ -91,16 +93,14 @@ public class AtlasVidaModel {
 	            	}
 	            }
 	            
-	            inicio = contenido.indexOf("Hasta:");
+	            inicio = contenido.indexOf(HASTA);
 	           
 				if(inicio > -1) {
 					newcontenido = contenido.substring(inicio, contenido.indexOf("Fecha expedi", inicio));
-					if(newcontenido.contains("Hasta:")) {
-						if(modelo.getFechaEmision().length() > 0) {
-							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("Hasta:")[1].replace("###", "").trim()));
-							LocalDate date = LocalDate.parse(modelo.getFechaEmision());
-							modelo.setVigenciaA(modelo.getVigenciaA().replace(modelo.getVigenciaA().split("-")[0], String.valueOf(date.getYear() +1)));	
-						}
+					if(newcontenido.contains(HASTA) && modelo.getFechaEmision().length() > 0) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(HASTA)[1].replace("###", "").trim()));
+						LocalDate date = LocalDate.parse(modelo.getFechaEmision());
+						modelo.setVigenciaA(modelo.getVigenciaA().replace(modelo.getVigenciaA().split("-")[0], String.valueOf(date.getYear() +1)));	
 					}
 				}
 				
@@ -140,8 +140,8 @@ public class AtlasVidaModel {
 				modelo.setTipovida(tipoVida);
 				
 				//aportacion VITALICIO / AHORRO
-				if(tipoVida > 0) {
-					if(tipoVida == 1 || tipoVida == 3) modelo.setAportacion(1);
+				if(tipoVida > 0 && (tipoVida == 1 || tipoVida == 3)) {
+					modelo.setAportacion(1);
 				}
 
 				//retiro
@@ -182,22 +182,29 @@ public class AtlasVidaModel {
 				if(inicio > -1) {
 	
 					newcontenido = antcontenido.substring(inicio + 26, fin).trim();
-					resultado = new StringBuilder();
+					resultado.setLength(0); /** reinicio **/
 					for(String x: newcontenido.split("\r\n")) {
-						if(x.split("###").length == 2) resultado.append(x.split("###")[0] + "\r\n");
-						else resultado.append(x + "\r\n");
+						if(x.split("###").length == 2) {
+							resultado.append(x.split("###")[0] + "\r\n");
+						}else {
+							resultado.append(x + "\r\n");
+						}
 					}
-					if(resultado.contains("(HIJOS)")) resultado = resultado.split("HI")[0].replace("(", ")");
-					if(resultado.contains(" Y ")) {
+					if(resultado.toString().contains("(HIJOS)")) {
+						String auxStr = resultado.toString();
+						resultado.setLength(0);
+						resultado.append(auxStr.split("HI")[0].replace("(", ")"));
+					}
+					if(resultado.toString().contains(" Y ")) {
 						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 						EstructuraBeneficiariosModel beneficiario1 = new EstructuraBeneficiariosModel();
-						beneficiario.setNombre(resultado.split(" Y ")[0].replace(")", "").trim());
+						beneficiario.setNombre(resultado.toString().split(" Y ")[0].replace(")", "").trim());
 						beneficiario.setPorcentaje(50);
 						beneficiario.setParentesco(3);
 						beneficiario.setTipo(12);
 						beneficiarios.add(beneficiario);
 						
-						beneficiario1.setNombre(resultado.split(" Y ")[1].replace(")", "").replace("\r\n", " ").trim());
+						beneficiario1.setNombre(resultado.toString().split(" Y ")[1].replace(")", "").replace("\r\n", " ").trim());
 						beneficiario1.setPorcentaje(50);
 						beneficiario1.setParentesco(3);
 						beneficiario1.setTipo(12);
@@ -226,7 +233,7 @@ public class AtlasVidaModel {
 				}
 				modelo.setAsegurados(asegurados);
 				
-				inicio = contenido.lastIndexOf("Agente:");
+				inicio = contenido.lastIndexOf(AGENTE);
 				fin = contenido.lastIndexOf("En cumplimiento");
 				if(inicio > -1 && fin > inicio) {
 					newcontenido = fn.gatos(contenido.substring(inicio + 7, fin).replace("@@@", "").replace("\r\n", "").trim());

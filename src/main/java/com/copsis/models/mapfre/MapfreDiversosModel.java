@@ -163,10 +163,10 @@ public class MapfreDiversosModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + 15, fin).replace("@@@", "");
 				if (newcontenido.contains("de:")) {
-					newcontenido = fn.RemplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
+					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
 					switch (newcontenido.split("###").length) {
 					case 3:
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("###")[0].trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("###")[0].trim()));
 						modelo.setCveAgente(newcontenido.split("###")[1].trim());
 						modelo.setAgente(newcontenido.split("###")[2].trim());
 						break;
@@ -183,7 +183,7 @@ public class MapfreDiversosModel {
 			fin = contenido.indexOf("Prima neta:");
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = fn
-						.RemplazaGrupoSpace(
+						.remplazaGrupoSpace(
 								contenido.substring(inicio + 6, fin).replace("@@@", "").trim().split("\r\n")[0])
 						.replace("######", "###");
 				switch (newcontenido.split("###").length) {
@@ -224,7 +224,7 @@ public class MapfreDiversosModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
 				if (newcontenido.contains("otal:")) {
-					newcontenido = fn.RemplazaGrupoSpace(newcontenido.split("otal:")[1].replace("@@@", "").trim())
+					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("otal:")[1].replace("@@@", "").trim())
 							.replace("######", "###");
 					switch (newcontenido.split("###").length) {
 					case 7:
@@ -278,7 +278,7 @@ public class MapfreDiversosModel {
 					if (x.contains("BIENES Y RIESGOS CUBIERTOS") == false && x.contains("---") == false
 							&& x.contains("DEDUCIBLE") == false) {
 						resultado = x.trim();
-						resultado = fn.RemplazaGrupoSpace(resultado.trim());
+						resultado = fn.remplazaGrupoSpace(resultado.trim());
 						resultado = resultado.replace("A.###MIN", "A. MIN").replace("###DSMG", " DSMG")
 								.replace(".###MIN", ". MIN").replace(".###MAX", ". MAX");
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();

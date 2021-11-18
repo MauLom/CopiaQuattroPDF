@@ -100,8 +100,8 @@ public class SisnovaSaludModel {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if(newcontenido.split("\n")[i].split("-").length > 4) {					
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[1]);
-						asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").trim()));
-						asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[3].trim()));
+						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").trim()));
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].trim()));
 						asegurados.add(asegurado);
 					}
 				}
@@ -125,8 +125,8 @@ public class SisnovaSaludModel {
             	
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
-            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim()));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].replace("###", "").replace(" ", "").trim()));
+            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].replace("###", "").replace(" ", "").trim()));
             		}
             		if(newcontenido.split("\n")[i].contains("Plan:") && newcontenido.split("\n")[i].contains("Asegurada:") ) {
             			modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].split("###")[1]);

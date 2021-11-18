@@ -125,7 +125,7 @@ public class AxaAutosModel {
 					if (contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1].trim().split("/").length == 3
 							&& contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1]
 									.split("###").length == 2) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1].split("###")[1]
 										.trim()));
 					}
@@ -133,7 +133,7 @@ public class AxaAutosModel {
 				if (contenido.split("@@@")[donde + 1].split("\r\n").length == 1
 						&& contenido.split("@@@")[donde + 1].contains("Hasta:###")) {
 					modelo.setVigenciaA(
-							fn.formatDate_MonthCadena(contenido.split("@@@")[donde + 1].split("###")[1].trim()));
+							fn.formatDateMonthCadena(contenido.split("@@@")[donde + 1].split("###")[1].trim()));
 				}
 			}
 
@@ -379,7 +379,7 @@ public class AxaAutosModel {
 									.split("###").length == 2) {
 						
 					
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1].split("###")[1]
 										.trim()));
 					}
@@ -387,7 +387,7 @@ public class AxaAutosModel {
 				if (contenido.split("@@@")[donde + 1].split("\r\n").length == 1
 						&& contenido.split("@@@")[donde + 1].contains("Hasta:###")) {
 					modelo.setVigenciaA(
-							fn.formatDate_MonthCadena(contenido.split("@@@")[donde + 1].split("###")[1].trim()));
+							fn.formatDateMonthCadena(contenido.split("@@@")[donde + 1].split("###")[1].trim()));
 				}
 			}
 
@@ -551,7 +551,7 @@ public class AxaAutosModel {
 			inicio = contenido.indexOf("Emisión:");
 			if (inicio > -1) {
 				newcontenido = fn.gatos(contenido.substring(inicio + 8, inicio + 100).split("\n")[0].trim());
-				modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido));
+				modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
 			}
 
 			// id_cliente
@@ -761,12 +761,12 @@ public class AxaAutosModel {
 							case 2:
 								resultado = newcontenido.split("###")[0].trim();							
 								if (resultado.split("/").length == 3)
-									recibo.setVigenciaDe(fn.formatDate_MonthCadena(resultado.replace("/", "-")));
+									recibo.setVigenciaDe(fn.formatDateMonthCadena(resultado.replace("/", "-")));
 								
 								
 								resultado = newcontenido.split("###")[1].trim();
 								if (resultado.split("/").length == 3 && resultado.length() > 10)
-									recibo.setVigenciaA(fn.formatDate_MonthCadena(resultado.replace("/", "-")));
+									recibo.setVigenciaA(fn.formatDateMonthCadena(resultado.replace("/", "-")));
 								break;
 							}
 						}

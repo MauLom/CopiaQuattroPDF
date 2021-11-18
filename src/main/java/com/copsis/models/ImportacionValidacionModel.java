@@ -15,7 +15,7 @@ public class ImportacionValidacionModel {
 			if(poliza.getPlan().length() == 0) {
 				respuesta +="El plan no puede estar vacion\n";
 			}
-			if(poliza.getCoberturas().size() == 0) {
+			if(poliza.getCoberturas().isEmpty()) {
 				respuesta +="La poliza debe contener coberturas\n";
 			}
 			
@@ -28,13 +28,6 @@ public class ImportacionValidacionModel {
 			if(poliza.getMoneda() == 0){
 				respuesta +="La moneda no esta definida\n";
 			}
-			
-			
-			
-			
-			
-			
-		
 
 			return respuesta;
 		} catch (Exception e) {

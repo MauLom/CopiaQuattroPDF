@@ -65,7 +65,7 @@ public class MapfreVidaBModel {
 					
 					if (newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Clave de Agente:")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0]
 										.replace("###", "").trim()));
 						
@@ -75,11 +75,11 @@ public class MapfreVidaBModel {
 					if (newcontenido.split("\n")[i].contains("Hasta")) {
 						if(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0].contains("-")) {
 							modelo.setVigenciaA(
-									fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0]
+									fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[0]
 											.replace("###", "").trim()));
 						}else {
 							modelo.setVigenciaA(
-									fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1]
+									fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1]
 											.replace("###", "").trim()));
 						}
 						
@@ -91,7 +91,7 @@ public class MapfreVidaBModel {
 					if (newcontenido.split("\n")[i].contains("Fecha de Emisiòn:")
 							&& newcontenido.split("\n")[i].contains("Forma de Pago:")
 							&& newcontenido.split("\n")[i].contains("Moneda")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(
+						modelo.setFechaEmision(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").replace(" ", ""))
 								.trim());
 						modelo.setFormaPago(fn

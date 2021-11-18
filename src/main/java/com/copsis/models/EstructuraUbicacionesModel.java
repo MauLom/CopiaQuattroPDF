@@ -1,8 +1,10 @@
 package com.copsis.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class EstructuraUbicacionesModel {
 	private String nombre = "";
 	private String calle = "";

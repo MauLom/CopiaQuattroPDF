@@ -16,7 +16,10 @@ public class AbaDiversosModel {
 
 	// Variables
 	private String contenido;
-
+	private static final String SECCION = "SECCION"; 
+	private static final String SECCIONESAMPARADAS = "Secciones amparadas";
+	private static final String COSASEGURO = "Coaseguro";
+	private static final String MONEDA = "Moneda:";
 	// constructor
 	public AbaDiversosModel(String contenido ) {
 		this.contenido = contenido;
@@ -38,7 +41,7 @@ public class AbaDiversosModel {
 
 			//Datos de la poliza
 			inicio = contenido.indexOf("Póliza");
-			fin = contenido.indexOf("Coaseguro");
+			fin = contenido.indexOf(COSASEGURO);
 			
 			
 			if(inicio > 0 &&  fin >  0 && inicio < fin ) {
@@ -82,13 +85,13 @@ public class AbaDiversosModel {
 						modelo.setFechaEmision(fn.formatDateMonthCadena(x));
 						
 						if(newcontenido.split("\n")[i].contains("Moneda")) {
-							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].replace("###", "").replace("\r", "").trim()));
+							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split(MONEDA)[1].replace("###", "").replace("\r", "").trim()));
 						}
 												
 					}
-					if(newcontenido.split("\n")[i].contains("Moneda:") && modelo.getMoneda() == 0){
+					if(newcontenido.split("\n")[i].contains(MONEDA) && modelo.getMoneda() == 0){
 				
-						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("###")[1].trim()));
+						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split(MONEDA)[1].split("###")[1].trim()));
 					}
 				}			
 			}
@@ -139,7 +142,7 @@ public class AbaDiversosModel {
 			
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 			inicio = contenido.indexOf("riesgo");
-			fin = contenido.indexOf("Coaseguro");
+			fin = contenido.indexOf(COSASEGURO);
 			if(inicio >  0 && fin >  0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
@@ -165,11 +168,11 @@ public class AbaDiversosModel {
 			
 			
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			String  result="";
+			StringBuilder result = new StringBuilder();
 			
-			for (int i = 0; i < contenido.split("Secciones amparadas").length; i++) {
-				if(contenido.split("Secciones amparadas")[i].contains("Coaseguro") ) {
-					result +=contenido.split("Secciones amparadas")[i].split("Página")[0];
+			for (int i = 0; i < contenido.split(SECCIONESAMPARADAS).length; i++) {
+				if(contenido.split(SECCIONESAMPARADAS)[i].contains(COSASEGURO) ) {
+					result.append(contenido.split(SECCIONESAMPARADAS)[i].split("Página")[0]);
 	   
 				}
  			
@@ -177,50 +180,34 @@ public class AbaDiversosModel {
 			}
 			
 			String seccion="";
-
-			result = result.replace("\r", "").replace("@@@", "");
-			for (int i = 0; i < result.split("\n").length; i++) {
-				
-
-				if( result.split("\n")[i].contains("Secciones") || result.split("\n")[i].contains("Prima")) {
-					
-				}else {
+			String auxStr = result.toString();
+			result.setLength(0);
+			result.append(auxStr.replace("\r", "").replace("@@@", ""));
+			for (int i = 0; i < result.toString().split("\n").length; i++) {
+				if( !result.toString().split("\n")[i].contains("Secciones") && !result.toString().split("\n")[i].contains("Prima")) {					
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(result.split("\n")[i].contains("SECCION")) {
-						seccion = result.split("\n")[i].split("SECCION")[1].split(":")[0];
+					if(result.toString().split("\n")[i].contains(SECCION)) {
+						seccion = result.toString().split("\n")[i].split(SECCION)[1].split(":")[0];
 					}
-					int x= result.split("\n")[i].split("###").length;
-					if(result.split("\n")[i].contains("SECCION") ) {
-						
-					}else {
-						if(x  > 2){
-
-							cobertura.setSeccion(seccion);
-				
-							if( x == 4) {
-								cobertura.setNombre(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-4]);
-								cobertura.setSa(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-1]);
-								cobertura.setCoaseguro(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-2]);
-								cobertura.setDeducible(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-3]);
-							}
-							if(x == 3) {
-								cobertura.setNombre(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-4]);
-								cobertura.setSa(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-1]);
-								cobertura.setCoaseguro(result.split("\n")[i].split("###")[result.split("\n")[i].split("###").length-2]);
-							}
-						
-							coberturas.add(cobertura);
+					int x= result.toString().split("\n")[i].split("###").length;
+					if(!result.toString().split("\n")[i].contains(SECCION) && x  > 2) {						
+						cobertura.setSeccion(seccion);
+						if( x == 4) {
+							cobertura.setNombre(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-4]);
+							cobertura.setSa(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-1]);
+							cobertura.setCoaseguro(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-2]);
+							cobertura.setDeducible(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-3]);
 						}
+						if(x == 3) {
+							cobertura.setNombre(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-4]);
+							cobertura.setSa(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-1]);
+							cobertura.setCoaseguro(result.toString().split("\n")[i].split("###")[result.toString().split("\n")[i].split("###").length-2]);
+						}
+						coberturas.add(cobertura);
 					}
-					
-					
-				}						
-			}
-			
-		
+				}					
+			}		
 			modelo.setCoberturas(coberturas);
-			
-			
 			
 			return modelo;
 			

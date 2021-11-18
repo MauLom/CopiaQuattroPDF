@@ -319,7 +319,7 @@ public class DataToolsModel {
 		return result;
 	}
 
-	public String formatDateMonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018  // RETORNA 2018-02-02;
+	public String formatDateMonthCadena(String formatear) { /** RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018  // RETORNA 2018-02-02; **/
 		String result = "";
 		String day = "";
 		if (formatear.split("-")[0].length() == 1) {
@@ -360,7 +360,7 @@ public class DataToolsModel {
 
 	}
 
-	public String mes(String mes) { // RECIBE Ene || ENE || ENERO 02
+	public String mes(String mes) { /** RECIBE Ene || ENE || ENERO 02 */
 		mes = mes.toUpperCase();
 		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO",
 				"SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
@@ -687,10 +687,6 @@ public class DataToolsModel {
 		return meses;
 	}
 
-	public int ramoPoliza(String Contenido) {
-		int ramo = 0;
-		return ramo;
-	}
 
 	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, boolean tipo)
 			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
@@ -775,7 +771,7 @@ public class DataToolsModel {
 		
 
 		stripper.setParagraphStart("@@@");
-	stripper.setWordSeparator("###");
+		stripper.setWordSeparator("###");
 		
 		stripper.setSortByPosition(true);
 		
@@ -897,7 +893,7 @@ public class DataToolsModel {
 		while (m.find()) {
 			resultado = m.group();
 		}
-		return resultado.toString();
+		return resultado;
 	}	
 	
 	public String numTx (String cadena) {
@@ -907,8 +903,32 @@ public class DataToolsModel {
 	        while (m.find()) {  
 	        	resultado = m.group();
 	        }
-	        return resultado.toString();
+	        return resultado;
 	}
+	
+	public String elimgatos(String texto) {// QUITA ### AL INICIO Y FINAL
+        String newtexto = "";
+        int longText = 0;
+        texto = texto.trim();
+        longText = texto.length();
+
+        if (longText >= 3) {
+            if (texto.substring(longText - 3, longText).equals("###")) {
+                newtexto = texto.substring(0, longText - 3);
+            } else {
+                newtexto = texto;
+            }
+            longText = newtexto.length();
+            if (newtexto.length() >= 3) {
+                if (newtexto.substring(0, 3).equals("###")) {
+                    newtexto = newtexto.substring(3, longText);
+                }
+            }
+        } else {
+            newtexto = texto;
+        }
+        return newtexto;
+    }
 	
 	
 	public String seccion(String res ) {
@@ -967,7 +987,7 @@ public class DataToolsModel {
 		return number;
 	}
 	
-	public int formaPagoSring(String x) { // FORMA DE PAGO
+	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
 		String[] tiposP = {CONTADO,"ANUAL",SEMESTRAL,TRIMESTRAL,MENSUAL,QUINCENAL,SEMANAL};
 		for (String tipo : tiposP) {	

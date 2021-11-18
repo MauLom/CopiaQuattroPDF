@@ -122,13 +122,13 @@ public class AxaDiversosModel {
 						
 					}
 					if(newcontenido.split("\n")[i].contains("Desde")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("Hasta")) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("Emisión")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Moneda")) {

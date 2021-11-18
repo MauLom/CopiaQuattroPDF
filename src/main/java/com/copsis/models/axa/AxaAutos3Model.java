@@ -99,14 +99,14 @@ public class AxaAutos3Model {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				
 					if(newcontenido.split("\n")[i].contains("Vigencia:") && newcontenido.split("\n")[i].contains("al:")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Vigencia:")[1].split("al:")[0].replaceAll("###", "").replace("  ", "").strip()));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("al:")[1].replaceAll("###", "").replace("  ", "").strip()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Vigencia:")[1].split("al:")[0].replaceAll("###", "").replace("  ", "").strip()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("al:")[1].replaceAll("###", "").replace("  ", "").strip()));
 					}
 					if(newcontenido.split("\n")[i].contains("Forma de Pago:")){
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Forma de Pago:")[1].replace("###", "").strip()));
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de Emisión:")){						
-						modelo.setFechaEmision(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Fecha de Emisión:")[1].split("Póliza Ant:")[0].replaceAll("###", "").replace("  ", "").strip()));
+						modelo.setFechaEmision(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Fecha de Emisión:")[1].split("Póliza Ant:")[0].replaceAll("###", "").replace("  ", "").strip()));
 					}
 				}
 			}

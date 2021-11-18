@@ -97,8 +97,8 @@ public class AfirmeAutosBModel {
             /*poliza*/
             inicio = contenido.indexOf("DATOS DEL VEHÍCULO");
             fin = contenido.indexOf("COBERTURAS ");
-            if (inicio > 0 & fin > 0 & inicio < fin) {
-                newcontenido = contenido.substring(inicio, fin).replaceAll("@@@", "");
+            if (inicio > 0 && fin > 0 && inicio < fin) {
+                newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
                     if (newcontenido.split("\n")[i].contains("Marca") && newcontenido.split("\n")[i].contains("Modelo:") && newcontenido.split("\n")[i].contains("Tipo:")) {
@@ -106,7 +106,7 @@ public class AfirmeAutosBModel {
                         modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo:")[1].split("Tipo:")[0].replace("###", "").trim()));
                     }
                     if (newcontenido.split("\n")[i].contains("Versión") && newcontenido.split("\n")[i].contains("Serie:")) {
-                        modelo.setDescripcion(newcontenido.split("\n")[i].split("Versión:")[1].split("Número")[0].replaceAll("###", "").trim());
+                        modelo.setDescripcion(newcontenido.split("\n")[i].split("Versión:")[1].split("Número")[0].replace("###", "").trim());
                         modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", "").trim());
 
                     }
@@ -118,9 +118,9 @@ public class AfirmeAutosBModel {
             inicio = contenido.indexOf("COBERTURAS");
             fin = contenido.indexOf("Prima Neta");
 
-            if (inicio > 0 & fin > 0 & inicio < fin) {
+            if (inicio > 0 && fin > 0 && inicio < fin) {
           	  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-                newcontenido = contenido.substring(inicio, fin).replaceAll("@@@", "");
+                newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 
                 for (String split : newcontenido.split("\n")) {
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -152,33 +152,33 @@ public class AfirmeAutosBModel {
             fin = contenido.indexOf("Prima Total:");
 
             if (inicio > 0 && fin > 0 && inicio < fin) {
-                newcontenido = contenido.substring(inicio, fin + 50).replaceAll("@@@", "").replace("###", " ");
+                newcontenido = contenido.substring(inicio, fin + 50).replace("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                 	
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
                         modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replace("###", "").replace(":", "").trim());
-                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
+                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replace("###", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Financiamiento")) {
                         newcontenidosp = newcontenido.split("\n")[i].split("Nombre:")[1].split("Financiamiento")[0];
 
-                        modelo.setAgente(newcontenidosp.replaceAll("\r", "").replaceAll("###", "").trim().replace(",", " "));
-                        modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1].replaceAll("###", ""))));
+                        modelo.setAgente(newcontenidosp.replace("\r", "").replace("###", "").trim().replace(",", " "));
+                        modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento:")[1].replace("###", ""))));
                     }
            
                     if (newcontenido.split("\n")[i].contains("pago") && newcontenido.split("\n")[i].contains("Expedición")) {
                         modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].split("Gastos")[0].trim()));
-                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1].replaceAll("###", ""))));
+                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1].replace("###", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("Moneda") && newcontenido.split("\n")[i].contains("expedición")) {
                         modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Gastos")[0].trim()));
                         modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1].replace("$", ""))));
                     }
                     if (newcontenido.split("\n")[i].contains("I.V.A.:")) {
-                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.:")[1].replaceAll("###", "").trim())));
+                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.:")[1].replace("###", "").trim())));
                     }
                     if (newcontenido.split("\n")[i].contains("Prima Total:")) {
-                        modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Total:")[1].replaceAll("###", ""))));
+                        modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Total:")[1].replace("###", ""))));
                     }
                 }
             }

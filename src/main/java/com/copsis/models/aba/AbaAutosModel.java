@@ -15,7 +15,8 @@ public class AbaAutosModel {
 
 	// Variables
 	private String contenido;
-
+	private static final String PRIMANETA="Prima neta";
+	private static final String HORAS = "horas"; 
 	// constructor
 	public AbaAutosModel(String contenido ) {
 		this.contenido = contenido;
@@ -46,8 +47,8 @@ public class AbaAutosModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
 					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza( newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0].replace("###", "").trim());
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
-            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split(HORAS)[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(HORAS)[1].split(HORAS)[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Asegurado") && newcontenido.split("\n")[i].contains("Endoso:")) {
 						modelo.setEndoso( newcontenido.split("\n")[i].split("Endoso:")[1].replace(":", "").replace("\r","").replace("###", "").replace("", "".trim()));						
@@ -98,14 +99,14 @@ public class AbaAutosModel {
 			
 			
 			//PRIMAS
-			inicio = contenido.indexOf("Prima neta");
+			inicio = contenido.indexOf(PRIMANETA);
 			fin = contenido.indexOf("Página 1");
 			
 			if(inicio > 0 && fin > 0 && inicio < fin ) {
 				newcontenido = contenido.substring(inicio,fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
-					if(newcontenido.split("\n")[i].contains("Prima neta")) {
-						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima neta")[1].replace("###", "").replace("\r", "").trim())));
+					if(newcontenido.split("\n")[i].contains(PRIMANETA)) {
+						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(PRIMANETA)[1].replace("###", "").replace("\r", "").trim())));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("fraccionado")) {

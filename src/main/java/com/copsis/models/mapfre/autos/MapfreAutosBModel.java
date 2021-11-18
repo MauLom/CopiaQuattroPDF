@@ -91,12 +91,12 @@ public class MapfreAutosBModel {
 					}
 					
 					if (newcontenido.split("\n")[i].contains("Desde  de:") && newcontenido.split("\n")[i].contains("Clave de agente:") && newcontenido.split("\n")[i].contains("Nombre del agente:")  ) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Vigencia Desde  de:")[1].split("Clave de agente:")[0].replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Vigencia Desde  de:")[1].split("Clave de agente:")[0].replace("###", "")));
                         modelo.setFechaEmision(modelo.getVigenciaDe());
                         modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Hasta  de:")) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Hasta  de:")[1].split("###")[1].replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Hasta  de:")[1].split("###")[1].replace("###", "")));
 
 					}
 					if (newcontenido.split("\n")[i].contains("Forma de pago:")  && newcontenido.split("\n")[i].contains("Moneda")) {

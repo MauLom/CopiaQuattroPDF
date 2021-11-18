@@ -83,15 +83,15 @@ public class BanorteAutosModel {
 						//primas
 						if(newcontenido.split("\n")[i].contains("emisión:") && newcontenido.split("\n")[i].contains("Neta:")){
 					
-							modelo.setFechaEmision(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("emisión:")[1].split("Prima")[0]).replace("###", "").trim()));
+							modelo.setFechaEmision(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("emisión:")[1].split("Prima")[0]).replace("###", "").trim()));
 						    modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replace("###", ""))));
 						}
 					    if(newcontenido.split("\n")[i].contains("Inicio Vigencia:") && newcontenido.split("\n")[i].contains("Reducción:")){
-					    	modelo.setVigenciaDe(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Reducción")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
+					    	modelo.setVigenciaDe(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Reducción")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
 						    				
 						}
                         if(newcontenido.split("\n")[i].contains("Fin Vigencia:") && newcontenido.split("\n")[i].contains("Recargo:")){
-                        	modelo.setVigenciaA(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Recargo")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
+                        	modelo.setVigenciaA(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Recargo")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
                         	modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Recargo:")[1].split("###")[newcontenido.split("\n")[i].split("Recargo:")[1].split("###").length -1].replace("###", ""))));	
 						}
                    

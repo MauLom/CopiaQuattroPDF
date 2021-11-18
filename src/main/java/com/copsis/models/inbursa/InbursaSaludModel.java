@@ -88,8 +88,8 @@ public class InbursaSaludModel {
             			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1])));
             		}
 	        		 if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("-")) { 
-	          			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
-	          			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
+	          			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
+	          			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
 	          		 }
 	        		 if(newcontenido.split("\n")[i].contains("PRODUCTO")){            			
 	        			 modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").trim());
@@ -132,7 +132,7 @@ public class InbursaSaludModel {
             			asegurado.setNombre(newcontenido.split("\n")[i].split("Nombre:")[1].split("###")[1]);            		
             		}
             		if(newcontenido.split("\n")[i].contains("nacimiento:")) {
-            			asegurado.setNacimiento(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("nacimiento:")[1].split("###")[1]));            			
+            			asegurado.setNacimiento(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("nacimiento:")[1].split("###")[1]));            			
             		}
             		if(newcontenido.split("\n")[i].contains("Género:") && newcontenido.split("\n")[i].contains("Fecha:")) {
             			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("Género:")[1].split("###")[1]) ? 1 : 0);

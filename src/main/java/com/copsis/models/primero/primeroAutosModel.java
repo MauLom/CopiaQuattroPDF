@@ -61,12 +61,12 @@ public class primeroAutosModel {
 	                            modelo.setPolizaGuion(newcontenido.split("\n")[i + 1].split("###")[1]);
 	                        }
 	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {
-	                            modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[1].trim()));
-	                            modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));
+	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1].trim()));
+	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));
 	                            modelo.setFechaEmision(modelo.getVigenciaDe());
 	                        } else {
-	                            modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
-	                            modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[4].trim()));
+	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
+	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[4].trim()));
 	                            modelo.setFechaEmision(modelo.getVigenciaDe());
 	                        }
 	                    }
