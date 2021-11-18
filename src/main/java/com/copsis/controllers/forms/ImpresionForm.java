@@ -49,6 +49,7 @@ public class ImpresionForm {
 	private String ocupacion;
 	private String paisNacimiento;
 	private String telefono;
+	private String textoConsentimiento;
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
 }

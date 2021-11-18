@@ -875,11 +875,21 @@ public class ImpresionConsetimientoPdf {
 					baseRow.setLineSpacing(1.2f);
 					communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(newcontenido), azul, false, "L",
 							10, lineBoders2, "", padding2);
+					
+					StringBuilder conte= new StringBuilder();
 
-					newcontenido = "En \tcumplimiento a lo \tdispuesto en el \tartículo 202 de la Ley de \tInstituciones de \tSeguros y\n"
-							+ "de \tFianzas, la \tdocumentación contractual y la nota \ttécnica que \tintegran este \tproducto de\n"
-							+ "seguro, \tquedaron \tregistradas ante la \tComisión \tNacional de Seguros y Fianzas, a partir del\n"
-							+ "día \t12 de 03 de 2019, \tcon el \tnúmero \tCNSF-S0048-0243-2018 / CONDUSEF-003261-01.";
+					conte.append("En \tcumplimiento a lo \tdispuesto en el \tartículo 202 de la Ley de \tInstituciones de \tSeguros y\n");
+							conte.append( "de \tFianzas, la \tdocumentación contractual y la nota \ttécnica que \tintegran este \tproducto de\n");
+									conte.append( "seguro, \tquedaron \tregistradas ante la \tComisión \tNacional de Seguros y Fianzas,");
+							
+							if(impresionForm.getTextoConsentimiento().length() > 0) {
+								conte.append( impresionForm.getTextoConsentimiento() );	
+							}else {
+								conte.append( "a partir del\n"
+										+ "día \t12 de 03 de 2019, \tcon el \tnúmero \tCNSF-S0048-0243-2018 / CONDUSEF-003261-01.");
+							}
+							
+							
 					baseRow = communsPdf.setRow(table, 60);
 					baseRow.setLineSpacing(1.2f);
 					communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(newcontenido), azul, false, "L",
@@ -950,8 +960,9 @@ public class ImpresionConsetimientoPdf {
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-
+					conte =null;
 					return output.toByteArray();
+					
 				} finally {
 					document.close();
 				}
