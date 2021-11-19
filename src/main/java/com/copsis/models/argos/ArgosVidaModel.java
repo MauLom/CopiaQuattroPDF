@@ -12,6 +12,7 @@ public class ArgosVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
+	private static final String COBERTURAS = "Coberturas";
 
 	public ArgosVidaModel(String contenido) {
 		this.contenido = contenido;
@@ -28,9 +29,9 @@ public class ArgosVidaModel {
 			modelo.setTipo(5);
 			// cia
 			modelo.setCia(33);
-	
+
 			inicio = contenido.indexOf("Póliza No.");
-			fin = contenido.indexOf("Coberturas");
+			fin = contenido.indexOf(COBERTURAS);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
@@ -59,7 +60,7 @@ public class ArgosVidaModel {
 					if (newcontenido.split("\n")[i].contains("ANUAL")) {
 						modelo.setFormaPago(1);
 					}
-				
+
 					if (newcontenido.split("\n")[i].contains("Prima")
 							&& newcontenido.split("\n")[i + 1].contains("Día")) {
 
@@ -74,54 +75,44 @@ public class ArgosVidaModel {
 						int sp = fn
 								.cleanString(newcontenido.split("\n")[i + 1].split(modelo.getPrimaneta().toString())[1])
 								.split("###").length;
-						switch (sp) {
-						case 4:
+
+						if (sp == 4) {
 							modelo.setVigenciaDe(x.split("###")[3] + "-" + x.split("###")[2] + "-" + x.split("###")[1]);
-							break;
 						}
 
 					}
 				}
 			}
 			modelo.setMoneda(1);
-			
-			inicio = contenido.indexOf("Coberturas");
+
+			inicio = contenido.indexOf(COBERTURAS);
 			fin = contenido.indexOf("Nombre completo de");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
-				  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(newcontenido.split("\n")[i].contains("Coberturas")) {						
-					}else {
-						
-						int sp  = newcontenido.split("\n")[i].split("###").length;
-						
-						if (sp > 1) {
-							switch (sp) {
-							case 4:
-								cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-								coberturas.add(cobertura);
-								break;
-							}
+					if (!newcontenido.split("\n")[i].contains(COBERTURAS)) {
+
+						int sp = newcontenido.split("\n")[i].split("###").length;
+						if (sp == 4) {
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+							coberturas.add(cobertura);
+
 						}
-						
+
 					}
 				}
 				modelo.setCoberturas(coberturas);
 			}
-			
-//			System.out.println(contenido);
+
 			inicio = contenido.indexOf("Nombre completo de los beneficiarios");
 			fin = contenido.indexOf("Los siguientes endosos");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
-				}
 			}
 
 			return modelo;

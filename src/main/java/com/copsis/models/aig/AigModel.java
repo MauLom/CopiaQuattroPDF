@@ -40,6 +40,8 @@ public class AigModel {
 			case 4:// diversos
 				modelo  = new AigDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
 				break;	
+				default:
+					break;
 			}					
 			return modelo;
 		} catch (Exception ex) {

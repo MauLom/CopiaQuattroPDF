@@ -12,7 +12,8 @@ public class AigSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	private String contenido = "";	
+	private String contenido = "";
+	private static final String PLAN = "Plan:";
 	public AigSaludModel(String contenido) {
 		this.contenido = contenido;
 	}
@@ -38,9 +39,9 @@ public class AigSaludModel {
 					if( newcontenido.split("\n")[i].contains("Póliza:") &&  newcontenido.split("\n")[i].contains("Producto")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].split("Producto")[0].replace("###", "").trim());						
 					}
-					if( newcontenido.split("\n")[i].contains("Emisión:") && newcontenido.split("\n")[i].contains("Plan:")){
-						modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", ""));
-						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split("Plan:")[0].replace("###", "").trim() ));
+					if( newcontenido.split("\n")[i].contains("Emisión:") && newcontenido.split("\n")[i].contains(PLAN)){
+						modelo.setPlan(newcontenido.split("\n")[i].split(PLAN)[1].replace("###", ""));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split(PLAN)[0].replace("###", "").trim() ));
 					}
 					if( newcontenido.split("\n")[i].contains("Inicio de Viaje:") ) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));
@@ -72,7 +73,7 @@ public class AigSaludModel {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if(newcontenido.split("\n")[i].split("-").length > 2) {				
 						asegurado.setNombre( newcontenido.split("\n")[i].split("###")[1]);
-						asegurado.setSexo( fn.sexo(newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
+						asegurado.setSexo( fn.sexo(newcontenido.split("\n")[i].split("###")[2]).booleanValue() ? 1:0);
 						asegurado.setNacimiento( fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("###")[3]));
 						asegurados.add(asegurado);
 					}

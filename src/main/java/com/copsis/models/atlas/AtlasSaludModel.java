@@ -73,6 +73,7 @@ public class AtlasSaludModel {
 					if(newcontenido.split("\n")[i].contains("IVA:")) {
 						modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("IVA:")[1].replace("###", ""))));
 					}					
+					
 					if(newcontenido.split("\n")[i].contains("PLAN:")) {
 						modelo.setPlan(newcontenido.split("\n")[i].split("PLAN:")[1].replace("###", ""));
 					}

@@ -181,7 +181,7 @@ public class AbaDiversosModel {
 			
 			String seccion="";
 			String auxStr = result.toString();
-			result.setLength(0);
+			result = new StringBuilder();
 			result.append(auxStr.replace("\r", "").replace("@@@", ""));
 			for (int i = 0; i < result.toString().split("\n").length; i++) {
 				if( !result.toString().split("\n")[i].contains("Secciones") && !result.toString().split("\n")[i].contains("Prima")) {					
@@ -208,6 +208,8 @@ public class AbaDiversosModel {
 				}					
 			}		
 			modelo.setCoberturas(coberturas);
+			
+			result = null;
 			
 			return modelo;
 			

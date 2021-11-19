@@ -22,14 +22,11 @@ public class ArgosModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {		
-			switch (fn.tipoPoliza(contenido)) {
-			case 5:// Salud
-				modelo  = new ArgosVidaModel(fn.caratula(1, 5, stripper, doc)).procesar();					
-				break;
-	
-		
+			
+			if(fn.tipoPoliza(contenido) == 5) {
+				modelo  = new ArgosVidaModel(fn.caratula(1, 5, stripper, doc)).procesar();
 			}
-
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
