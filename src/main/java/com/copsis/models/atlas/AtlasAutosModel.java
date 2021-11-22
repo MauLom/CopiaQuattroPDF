@@ -2,6 +2,8 @@ package com.copsis.models.atlas;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -13,9 +15,6 @@ public class AtlasAutosModel {
 	// Varaibles
 	private String contenido = "";
 	private String recibosText = "";
-	private static final String HASTA = "Hasta:";
-	private static final String AGENTE = "Agente:";
-	private static final String NOMOTOR = "No. de Motor:";
 
 	public AtlasAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
@@ -48,12 +47,12 @@ public class AtlasAutosModel {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "")
 								.replace("-", "").replace(" ", ""));
 					}
-					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(HASTA)) {
+					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
 						modelo.setVigenciaDe(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(HASTA)[0]
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
 										.replace("###", "").trim()));
 						modelo.setVigenciaA(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(HASTA)[1].split("Fecha")[0]
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0]
 										.replace("###", "").trim()));
 						modelo.setFechaEmision(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
@@ -67,11 +66,11 @@ public class AtlasAutosModel {
 						modelo.setCteDireccion(resultado.replace("###", " "));
 					}
 					if (newcontenido.split("\n")[i].contains("Producto:")
-							&& newcontenido.split("\n")[i].contains(AGENTE)
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)
 							&& newcontenido.split("\n")[i].contains("Orden:")) {
 						modelo.setPlan(
 								newcontenido.split("\n")[i].split("Producto:")[1].split("Orden")[0].replace("###", ""));
-						modelo.setCveAgente(newcontenido.split("\n")[i].split(AGENTE)[1].replace("###", ""));
+						modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].replace("###", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("Moneda:")
 							&& newcontenido.split("\n")[i].contains("Prima Neta:")) {
@@ -105,10 +104,10 @@ public class AtlasAutosModel {
 								newcontenido.split("\n")[i].split("Total a pagar:")[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("Clave:")
-							|| newcontenido.split("\n")[i].contains(NOMOTOR)) {
+							|| newcontenido.split("\n")[i].contains(ConstantsValue.NO_MOTOR)) {
 						modelo.setClave(
-								newcontenido.split("\n")[i].split("Clave:")[1].split(NOMOTOR)[0].replace("###", ""));
-						modelo.setMotor(newcontenido.split("\n")[i].split(NOMOTOR)[1].replace("###", ""));
+								newcontenido.split("\n")[i].split("Clave:")[1].split(ConstantsValue.NO_MOTOR)[0].replace("###", ""));
+						modelo.setMotor(newcontenido.split("\n")[i].split(ConstantsValue.NO_MOTOR)[1].replace("###", ""));
 					}
 
 					if (newcontenido.split("\n")[i].contains("Descripción:")) {
@@ -161,8 +160,8 @@ public class AtlasAutosModel {
 				newcontenido = recibosText.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-					if (newcontenido.split("\n")[i].contains(AGENTE)) {
-						modelo.setAgente(newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[2]);
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)) {
+						modelo.setAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[2]);
 					}
 				}
 			}
@@ -172,9 +171,9 @@ public class AtlasAutosModel {
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
-						if (newcontenido.split("\n")[i].contains(AGENTE)
+						if (newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)
 								&& newcontenido.split("\n")[i].split("###").length > 2) {
-							modelo.setAgente(newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[1]);
+							modelo.setAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1]);
 
 						}
 					}

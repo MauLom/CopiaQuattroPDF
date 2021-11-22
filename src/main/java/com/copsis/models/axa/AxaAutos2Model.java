@@ -3,6 +3,7 @@ package com.copsis.models.axa;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -14,8 +15,6 @@ public class AxaAutos2Model {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 
 	private String contenido = "";
-	private static final String RFC = "R.F.C";
-	private static final String VEHICLEIDNUMBER= "Vehicle ID Number:";
 
 	public AxaAutos2Model(String contenido) {
 		this.contenido = contenido;
@@ -76,14 +75,13 @@ public class AxaAutos2Model {
 					if (newcontenido.split("\n")[i].contains("Currency")) {
 						modelo.setMoneda(2);
 					}
-					if (newcontenido.split("\n")[i].contains(VEHICLEIDNUMBER)) {
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.VEHICLE_ID_NUMBER)) {
 						if (newcontenido.split("\n")[i].contains("Ocupantes")) {
-							modelo.setSerie(
-									newcontenido.split("\n")[i].split(VEHICLEIDNUMBER)[1].split("Ocupantes")[0]
-											.replace("###", ""));
+							modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.VEHICLE_ID_NUMBER)[1]
+									.split("Ocupantes")[0].replace("###", ""));
 						} else {
-							modelo.setSerie(
-									newcontenido.split("\n")[i].split(VEHICLEIDNUMBER)[1].replace("###", ""));
+							modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.VEHICLE_ID_NUMBER)[1]
+									.replace("###", ""));
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("Placas")
@@ -135,13 +133,13 @@ public class AxaAutos2Model {
 				}
 			}
 
-			inicio = contenido.indexOf(RFC);
+			inicio = contenido.indexOf(ConstantsValue.RFC2);
 			fin = contenido.indexOf("Domicilio:");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains(RFC)) {
-						modelo.setRfc(newcontenido.split("\n")[i].split(RFC)[1].split("###")[1]);
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.RFC2)) {
+						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC2)[1].split("###")[1]);
 					}
 				}
 			}
@@ -192,31 +190,28 @@ public class AxaAutos2Model {
 
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 
-			switch (modelo.getFormaPago()) {
-			case 1:
-				if (recibosList.isEmpty()) {
-					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					recibo.setReciboId("");
-					recibo.setSerie("1/1");
-					recibo.setVigenciaDe(modelo.getVigenciaDe());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					if (recibo.getVigenciaDe().length() > 0) {
-						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-					}
-					recibo.setPrimaneta(modelo.getPrimaneta());
-					recibo.setDerecho(modelo.getDerecho());
-					recibo.setRecargo(modelo.getRecargo());
-					recibo.setIva(modelo.getIva());
-					recibo.setPrimaTotal(modelo.getPrimaTotal());
-					recibo.setAjusteUno(modelo.getAjusteUno());
-					recibo.setAjusteDos(modelo.getAjusteDos());
-					recibo.setCargoExtra(modelo.getCargoExtra());
-					recibosList.add(recibo);
+			if (modelo.getFormaPago() == 1 && recibosList.isEmpty()) {
+
+				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+				recibo.setReciboId("");
+				recibo.setSerie("1/1");
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+				recibo.setVigenciaA(modelo.getVigenciaA());
+				if (recibo.getVigenciaDe().length() > 0) {
+					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 				}
-				break;
-				default:
-					break;
+				recibo.setPrimaneta(modelo.getPrimaneta());
+				recibo.setDerecho(modelo.getDerecho());
+				recibo.setRecargo(modelo.getRecargo());
+				recibo.setIva(modelo.getIva());
+				recibo.setPrimaTotal(modelo.getPrimaTotal());
+				recibo.setAjusteUno(modelo.getAjusteUno());
+				recibo.setAjusteDos(modelo.getAjusteDos());
+				recibo.setCargoExtra(modelo.getCargoExtra());
+				recibosList.add(recibo);
+
 			}
+
 			modelo.setRecibos(recibosList);
 
 			return modelo;

@@ -3,6 +3,7 @@ package com.copsis.models.atlas;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -13,9 +14,7 @@ public class AtlasDiversosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
 	private String contenido = "";
-	private static final String SECCIONES = "Secciones";
-	private static final String HASTA = "Hasta:";
-	private static final String AGENTE = "Agente:";
+	
 
 	public AtlasDiversosModel(String contenido) {
 		this.contenido = contenido;
@@ -37,7 +36,7 @@ public class AtlasDiversosModel {
 
 			// Datos del Contrantante
 			inicio = contenido.indexOf("PÓLIZA");
-			fin = contenido.indexOf(SECCIONES);
+			fin = contenido.indexOf(ConstantsValue.SECCIONES);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
@@ -47,12 +46,12 @@ public class AtlasDiversosModel {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "")
 								.replace("-", "").replace(" ", ""));
 					}
-					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(HASTA)) {
+					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
 						modelo.setVigenciaDe(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(HASTA)[0]
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
 										.replace("###", "").trim()));
 						modelo.setVigenciaA(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(HASTA)[1].split("Fecha")[0]
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0]
 										.replace("###", "").trim()));
 						modelo.setFechaEmision(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
@@ -66,10 +65,10 @@ public class AtlasDiversosModel {
 						modelo.setCteDireccion(resultado.replace("###", " "));
 					}
 					if (newcontenido.split("\n")[i].contains("Producto:")
-							&& newcontenido.split("\n")[i].contains(AGENTE)
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)
 							&& newcontenido.split("\n")[i].contains("Orden:")) {
 
-						modelo.setCveAgente(newcontenido.split("\n")[i].split(AGENTE)[1].replace("###", ""));
+						modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].replace("###", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("Moneda:")
 							&& newcontenido.split("\n")[i].contains("Prima Neta:")) {
@@ -111,16 +110,16 @@ public class AtlasDiversosModel {
 			fin = contenido.indexOf("Seguros Atlas");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
-				inicio = newcontenido.indexOf(AGENTE);
+				inicio = newcontenido.indexOf(ConstantsValue.AGENTE);
 				if (inicio > 0) {
-					modelo.setAgente(newcontenido.split(AGENTE)[1].replace("###", "").trim());
+					modelo.setAgente(newcontenido.split(ConstantsValue.AGENTE)[1].replace("###", "").trim());
 				}
 			}
 
 			/**
 			 * Coberturas
 			 */
-			inicio = contenido.indexOf(SECCIONES);
+			inicio = contenido.indexOf(ConstantsValue.SECCIONES);
 			fin = contenido.indexOf("Idaseg");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -129,7 +128,7 @@ public class AtlasDiversosModel {
 				for (String txt : newcontenido.split("\r\n")) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					int sp = txt.split("###").length;
-					if (txt.contains(SECCIONES) && sp == 2) {
+					if (txt.contains(ConstantsValue.SECCIONES) && sp == 2) {
 						cobertura.setNombre(txt.split("###")[0].replace("@@@", ""));
 						cobertura.setSa(txt.split("###")[1]);
 						coberturas.add(cobertura);

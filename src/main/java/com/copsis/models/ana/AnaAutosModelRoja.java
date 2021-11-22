@@ -3,6 +3,7 @@ package com.copsis.models.ana;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -12,13 +13,7 @@ public class AnaAutosModelRoja {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
-	private static final String SUBSECUENTE = "Subsecuente";
-	private static final String PRIMANETA = "Prima Neta";
-	private static final String PRIMATOTAL = "Prima Total:";
-	private static final String RFC = "R.F.C:";
-	private static final String NOCLIENTE = "No.Cliente:";
-	private static final String PLACAS = "Placas:";
-	private static final String AGENTE = "Agente:";
+	
 
 	public AnaAutosModelRoja(String contenido) {
 		this.contenido = contenido;
@@ -34,8 +29,8 @@ public class AnaAutosModelRoja {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Fecha de Exp.", "Fecha de Expedición")
 				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", "Forma de pago")
-				.replace("Subsec:", SUBSECUENTE).replace("Prima Net a :", PRIMANETA)
-				.replace("Prima Tota l:", PRIMATOTAL);
+				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
+				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL );
 
 		try {
 			modelo.setTipo(1);
@@ -55,19 +50,19 @@ public class AnaAutosModelRoja {
 								.replace("###", "").trim());
 						modelo.setEndoso(newcontenido.split("\n")[i].split("Endoso:")[1].replace("###", "").trim());
 					}
-					if (newcontenido.split("\n")[i].contains(RFC) && newcontenido.split("\n")[i].contains(NOCLIENTE)
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.RFC) && newcontenido.split("\n")[i].contains(ConstantsValue.NO_CLIENTE)
 							&& newcontenido.split("\n")[i].contains("Pague")) {
-						modelo.setRfc(newcontenido.split("\n")[i].split(RFC)[1].split("No.Cliente")[0]
+						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].split("No.Cliente")[0]
 								.replace("###", "").trim());
-						modelo.setIdCliente(newcontenido.split("\n")[i].split(NOCLIENTE)[1].split("Pague")[0]
+						modelo.setIdCliente(newcontenido.split("\n")[i].split(ConstantsValue.NO_CLIENTE)[1].split("Pague")[0]
 								.replace("###", "").trim());
 					}
 
-					if (newcontenido.split("\n")[i].contains(RFC) && newcontenido.split("\n")[i].contains(NOCLIENTE)
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.RFC) && newcontenido.split("\n")[i].contains(ConstantsValue.NO_CLIENTE)
 							&& newcontenido.split("\n")[i].contains("Clave Agente")) {
-						modelo.setRfc(newcontenido.split("\n")[i].split(RFC)[1].split("No.Cliente")[0]
+						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].split("No.Cliente")[0]
 								.replace("###", "").trim());
-						modelo.setIdCliente(newcontenido.split("\n")[i].split(NOCLIENTE)[1].split("Clave Agente")[0]
+						modelo.setIdCliente(newcontenido.split("\n")[i].split(ConstantsValue.NO_CLIENTE)[1].split("Clave Agente")[0]
 								.replace("###", "").trim());
 					}
 
@@ -152,23 +147,23 @@ public class AnaAutosModelRoja {
 
 					}
 					if (newcontenido.split("\n")[i].contains("pago:")
-							&& newcontenido.split("\n")[i].contains(SUBSECUENTE)
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.SUBSECUENTE)
 							&& newcontenido.split("\n")[i].contains("I.V.A:")) {
 
 						modelo.setFormaPago(fn
-								.formaPago(newcontenido.split("\n")[i].split("Forma de pago:")[1].split(SUBSECUENTE)[0]
+								.formaPago(newcontenido.split("\n")[i].split("Forma de pago:")[1].split(ConstantsValue.SUBSECUENTE)[0]
 										.replace("###", "").replace(".", "").trim()));
 						modelo.setIva(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
 					}
 
 					if (newcontenido.split("\n")[i].contains("Prima Neta:")
-							&& newcontenido.split("\n")[i].contains(PRIMATOTAL)) {
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL)) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn
-								.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta:")[1].split(PRIMATOTAL)[0]
+								.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta:")[1].split(ConstantsValue.PRIMA_TOTAL)[0]
 										.replace("###", ""))));
 						modelo.setPrimaTotal(fn.castBigDecimal(
-								fn.preparaPrimas(newcontenido.split("\n")[i].split(PRIMATOTAL)[1].replace("###", ""))));
+								fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL)[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("Descripción:")) {
 						modelo.setDescripcion(
@@ -184,12 +179,12 @@ public class AnaAutosModelRoja {
 					}
 
 					if (newcontenido.split("\n")[i].contains("Serie:")
-							&& newcontenido.split("\n")[i].contains(PLACAS)) {
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS)) {
 						modelo.setSerie(
-								newcontenido.split("\n")[i].split("Serie:")[1].split(PLACAS)[0].replace("###", ""));
+								newcontenido.split("\n")[i].split("Serie:")[1].split(ConstantsValue.PLACAS)[0].replace("###", ""));
 
 						if (newcontenido.split("\n")[i].split("Placa")[1].length() > 7) {
-							modelo.setPlacas(newcontenido.split("\n")[i].split(PLACAS)[1].replace("###", "").trim());
+							modelo.setPlacas(newcontenido.split("\n")[i].split(ConstantsValue.PLACAS)[1].replace("###", "").trim());
 						}
 
 					}
@@ -207,15 +202,15 @@ public class AnaAutosModelRoja {
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-					if (newcontenido.split("\n")[i].contains(AGENTE)) {
-						if (newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[1].length() > 10) {
-							modelo.setCveAgente(newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[1]
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)) {
+						if (newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1].length() > 10) {
+							modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1]
 									.replace("###", "").substring(0, 5));
 							modelo.setAgente(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1]
 									.replace("###", "").trim());
 						} else {
-							modelo.setCveAgente(newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[1]);
-							modelo.setAgente(newcontenido.split("\n")[i].split(AGENTE)[1].split("###")[2]);
+							modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1]);
+							modelo.setAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[2]);
 						}
 
 					}

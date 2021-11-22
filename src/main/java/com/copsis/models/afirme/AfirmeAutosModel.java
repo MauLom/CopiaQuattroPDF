@@ -3,6 +3,7 @@ package com.copsis.models.afirme;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -14,11 +15,7 @@ public class AfirmeAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private static final String POLIZA ="Poliza:";
-	private static final String PRIMANETA ="Prima Neta";
-	private static final String INCISO ="Inciso:";
-	private static final String CLAVE ="Clave:";
-	private static final String CLAVECONDUCTO = "Clave y Nombre del Conducto:";
+	
 
 	public AfirmeAutosModel(String contenido) {
 		this.contenido = contenido;
@@ -32,8 +29,8 @@ public class AfirmeAutosModel {
 			int fin = 0;
 			
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			contenido = contenido.replace("Prima neta", PRIMANETA)
-					.replace("Póliza:", POLIZA);
+			contenido = contenido.replace("Prima neta", ConstantsValue.PRIMA_NETA )
+					.replace("Póliza:", ConstantsValue.POLIZA);
 			//tipo
             modelo.setTipo(1);
             //cia
@@ -47,9 +44,9 @@ public class AfirmeAutosModel {
             if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {			
-					if(newcontenido.split("\n")[i].contains(POLIZA) && newcontenido.split("\n")[i].contains(INCISO)) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split(POLIZA)[1].split(INCISO)[0].replace("-", "").replace("###", "").trim());
-						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(POLIZA)[1].split(INCISO)[0].replace("###", "").trim());
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA) && newcontenido.split("\n")[i].contains(ConstantsValue.INCISO)) {
+						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA)[1].split(ConstantsValue.INCISO)[0].replace("-", "").replace("###", "").trim());
+						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA)[1].split(ConstantsValue.INCISO)[0].replace("###", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:") && newcontenido.split("\n")[i+1].split("-").length > 2) {						
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1].replace("###", "").trim()));
@@ -57,9 +54,9 @@ public class AfirmeAutosModel {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim()));
 						
 					}
-					if(newcontenido.split("\n")[i].contains("Marca") && newcontenido.split("\n")[i].contains(CLAVE)) {
-						modelo.setMarca( newcontenido.split("\n")[i].split(CLAVE)[1]);
-						modelo.setClave( fn.numTx(newcontenido.split("\n")[i].split(CLAVE)[1]));
+					if(newcontenido.split("\n")[i].contains("Marca") && newcontenido.split("\n")[i].contains(ConstantsValue.CLAVE)) {
+						modelo.setMarca( newcontenido.split("\n")[i].split(ConstantsValue.CLAVE)[1]);
+						modelo.setClave( fn.numTx(newcontenido.split("\n")[i].split(ConstantsValue.CLAVE)[1]));
 					}
 					if(newcontenido.split("\n")[i].contains("ASEGURADO") && newcontenido.split("\n")[i+2].contains("Y-O")){
 						modelo.setCteNombre(newcontenido.split("\n")[i+2].split("Y-O")[0].trim());							
@@ -95,14 +92,14 @@ public class AfirmeAutosModel {
             
             /*Agente y Clave*/
    
-            inicio = contenido.indexOf(CLAVECONDUCTO);
+            inicio = contenido.indexOf(ConstantsValue.CLAVE_CONDUCTO);
             fin = contenido.indexOf("Artículo 20 de");
        
             if (inicio > 0 && fin > 0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains(CLAVECONDUCTO)) {			
-						String x= newcontenido.split("\n")[i].split(CLAVECONDUCTO)[1].replace(" ", "###");
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.CLAVE_CONDUCTO)) {			
+						String x= newcontenido.split("\n")[i].split(ConstantsValue.CLAVE_CONDUCTO)[1].replace(" ", "###");
 						modelo.setCveAgente(x.split("###")[1].trim());
 						modelo.setAgente(x.split(modelo.getCveAgente())[1].replace("###", " "));
 						
@@ -114,14 +111,14 @@ public class AfirmeAutosModel {
 
       
             //Primas
-            inicio = contenido.indexOf(PRIMANETA);
+            inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
             fin = contenido.indexOf("Artículo 25 de");
        
             if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains(PRIMANETA)) {
-						modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(PRIMANETA)[1].split("###")[1])));
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
+						modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].split("###")[1])));
 					}
 					if (newcontenido.split("\n")[i].contains("Financiamiento")) {						
 						modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento")[1].split("###")[1])));
@@ -150,7 +147,7 @@ public class AfirmeAutosModel {
           
             //Coberturas
             inicio = contenido.indexOf("DESGLOSE DE COBERTURAS");
-            fin = contenido.indexOf(PRIMANETA);
+            fin = contenido.indexOf(ConstantsValue.PRIMA_NETA);
             if (inicio > 0 && fin > 0 && inicio < fin) {
             	  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");

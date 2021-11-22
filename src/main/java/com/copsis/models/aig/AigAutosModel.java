@@ -3,6 +3,7 @@ package com.copsis.models.aig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -15,9 +16,7 @@ public class AigAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";	
-	private static final String RFC = "R.F.C:";
-	private static final String MONEDA="Moneda";
-	private static final String RIESGOSCUBIERTOS = "RIESGOS CUBIERTOS";
+	
 
 	public AigAutosModel(String contenido) {
 		this.contenido = contenido;
@@ -66,9 +65,9 @@ public class AigAutosModel {
 						modelo.setVigenciaDe( fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[0].trim()));
 						modelo.setVigenciaA( fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()));
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Nombre:") && newcontenido.toString().split("\n")[i].contains(RFC)) {
-						modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Nombre:")[1].split(RFC)[0].trim());
-						modelo.setRfc(newcontenido.toString().split("\n")[i].split(RFC)[1]);						
+					if(newcontenido.toString().split("\n")[i].contains("Nombre:") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.RFC)) {
+						modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Nombre:")[1].split(ConstantsValue.RFC)[0].trim());
+						modelo.setRfc(newcontenido.toString().split("\n")[i].split(ConstantsValue.RFC)[1]);						
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Código Postal:")) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("Código Postal:")[1].trim());
@@ -109,7 +108,7 @@ public class AigAutosModel {
 				}				
 			}
 			
-			inicio  = contenido.indexOf(MONEDA);
+			inicio  = contenido.indexOf(ConstantsValue.MONEDA);
 			fin = contenido.indexOf("Si su vehículo" );
 			
 			if(inicio >  0 && fin > 0 && inicio < fin) {
@@ -139,12 +138,12 @@ public class AigAutosModel {
 			}
 			
 			//PROCESO PARA LAS COBERTURAS
-			for (int i = 0; i < contenido.split(RIESGOSCUBIERTOS).length; i++) {		
-				if(contenido.split(RIESGOSCUBIERTOS)[i].contains(MONEDA)) {
-					newCobertura.append(contenido.split(RIESGOSCUBIERTOS)[i].split(MONEDA)[0]);
+			for (int i = 0; i < contenido.split(ConstantsValue.RIESGOS_CUBIERTOS).length; i++) {		
+				if(contenido.split(ConstantsValue.RIESGOS_CUBIERTOS)[i].contains(ConstantsValue.MONEDA)) {
+					newCobertura.append(contenido.split(ConstantsValue.RIESGOS_CUBIERTOS)[i].split(ConstantsValue.MONEDA)[0]);
 				}else
-					if(contenido.split(RIESGOSCUBIERTOS)[i].contains("En cumplimiento")) {
-            	   newCobertura.append(contenido.split(RIESGOSCUBIERTOS)[i].split("En cumplimiento")[0]);
+					if(contenido.split(ConstantsValue.RIESGOS_CUBIERTOS)[i].contains("En cumplimiento")) {
+            	   newCobertura.append(contenido.split(ConstantsValue.RIESGOS_CUBIERTOS)[i].split("En cumplimiento")[0]);
 				}
 			}
 			

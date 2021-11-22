@@ -33,7 +33,7 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("PÓLIZA No.");
 	            fin = contenido.indexOf("Datos del Asegurado");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", ""));
+	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", ""));
 	                
 	                modelo.setPoliza(newcontenido.split("PÓLIZA No.")[1].split("###")[1]);
 	                modelo.setEndoso(newcontenido.split("Endoso")[1].split("###")[1]);
@@ -60,7 +60,7 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("Datos del Asegurado");
 	            fin = contenido.indexOf("Descripción del Vehículo");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "").replace("12:00hrs", ""));
+	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", "").replace("12:00hrs", ""));
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Datos del Asegurado")) {
 	                        modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0]);
@@ -108,7 +108,7 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("Nombre del Agente");
 	            fin = contenido.indexOf("Folio");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "")).replace("\r\n", "");
+	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", "")).replace("\r\n", "");
 	                modelo.setAgente(newcontenido.split("Nombre del Agente")[1].split("###")[1]);
 	                int sp = newcontenido.split("Clave:")[1].split("###").length;
 	                if(sp == 3) {
@@ -125,7 +125,7 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("Descripción del Vehículo");
 	            fin = contenido.indexOf("Resumen de Valores");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", ""));
+	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", ""));
 	                for (String x : newcontenido.split("\n")) {
 	                    if (x.contains("Placas")) {
 	                        modelo.setPlacas(x.split("###")[0].replace("Placas:", ""));
@@ -147,7 +147,7 @@ public class ZurichAutosModel {
 	            inicio = contenido.indexOf("Resumen de Valores");
 	            fin = contenido.indexOf("Coberturas Amparadas");
 	            if (inicio > 0 & fin > 0 & inicio < fin) {
-	                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("@@@", "").replace("###$", ""));
+	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", "").replace("###$", ""));
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Prima Neta")) {	                    
 	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));

@@ -23,12 +23,11 @@ public class AfirmeModel {
 	public EstructuraJsonModel procesar() {	
 		try {
 			
-			Integer pagIni =0;
 			if(fn.tipoPoliza(contenido) == 1) { // autos
 				if(contenido.contains("AUTOMÓVILES RESIDENTES")) {
 					modelo  = new AfirmeAutosBModel(fn.caratula(1, 2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();	
 				}else {
-					pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+					Integer pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
 					modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
 				}
 			}

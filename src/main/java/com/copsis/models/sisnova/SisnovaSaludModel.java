@@ -173,7 +173,7 @@ public class SisnovaSaludModel {
 
             if (inicio > 0 & fin > 0 & inicio < fin) {
                 newcontenido = "";
-                newcontenido = fn.elimina_spacios(contenido.substring(inicio, fin).replace("     ", "").replace("   ", "").replace("@@@", "")).replace("\r", "");
+                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("     ", "").replace("   ", "").replace("@@@", "")).replace("\r", "");
 
                 for (String x : newcontenido.split("\n")) {
                     int sp = x.split("###").length;

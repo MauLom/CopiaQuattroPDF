@@ -3,6 +3,7 @@ package com.copsis.models.argos;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -12,7 +13,7 @@ public class ArgosVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
-	private static final String COBERTURAS = "Coberturas";
+	
 
 	public ArgosVidaModel(String contenido) {
 		this.contenido = contenido;
@@ -31,7 +32,7 @@ public class ArgosVidaModel {
 			modelo.setCia(33);
 
 			inicio = contenido.indexOf("Póliza No.");
-			fin = contenido.indexOf(COBERTURAS);
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
@@ -85,7 +86,7 @@ public class ArgosVidaModel {
 			}
 			modelo.setMoneda(1);
 
-			inicio = contenido.indexOf(COBERTURAS);
+			inicio = contenido.indexOf(ConstantsValue.COBERTURAS);
 			fin = contenido.indexOf("Nombre completo de");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
@@ -93,7 +94,7 @@ public class ArgosVidaModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if (!newcontenido.split("\n")[i].contains(COBERTURAS)) {
+					if (!newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS)) {
 
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						if (sp == 4) {

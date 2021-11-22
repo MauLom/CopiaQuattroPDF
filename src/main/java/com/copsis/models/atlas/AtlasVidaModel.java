@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
@@ -15,9 +16,6 @@ public class AtlasVidaModel {
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
 		// Varaibles
 		private String contenido = "";
-		private static final String AGENTE = "Agente:";
-		private static final String HASTA ="Hasta:";
-		
 
 		public AtlasVidaModel(String contenido) {
 			this.contenido = contenido;
@@ -52,9 +50,9 @@ public class AtlasVidaModel {
 	            			modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
 	            		  modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "").replace("-", "").replace(" ", ""));	
 	            		}             		
-	            		if(newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(HASTA)) {
-	            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(HASTA)[0].replace("###", "").trim()));
-	            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(HASTA)[1].split("Fecha")[0].replace("###", "").trim()));
+	            		if(newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
+	            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0].replace("###", "").trim()));
+	            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0].replace("###", "").trim()));
 	            			modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
 	            		}            		
 	            		if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Domicilio") &&  newcontenido.split("\n")[i].contains("RFC:")) {
@@ -63,9 +61,9 @@ public class AtlasVidaModel {
 							resultado.append(newcontenido.split("\n")[i+2] +" " + newcontenido.split("\n")[i+3]); 
 							modelo.setCteDireccion(resultado.toString().replace("###", " "));
 						}
-	            		if(newcontenido.split("\n")[i].contains("Producto:") && newcontenido.split("\n")[i].contains(AGENTE) && newcontenido.split("\n")[i].contains("Orden:")) {
+	            		if(newcontenido.split("\n")[i].contains("Producto:") && newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE) && newcontenido.split("\n")[i].contains("Orden:")) {
 							
-						    modelo.setCveAgente( newcontenido.split("\n")[i].split(AGENTE)[1].replace("###", ""));
+						    modelo.setCveAgente( newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].replace("###", ""));
 						}
 	            		if(newcontenido.split("\n")[i].contains("Moneda:") && newcontenido.split("\n")[i].contains("Prima Neta:")) {
 							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Prima")[0].replace("###", "")));
@@ -93,12 +91,12 @@ public class AtlasVidaModel {
 	            	}
 	            }
 	            
-	            inicio = contenido.indexOf(HASTA);
+	            inicio = contenido.indexOf(ConstantsValue.HASTA);
 	           
 				if(inicio > -1) {
 					newcontenido = contenido.substring(inicio, contenido.indexOf("Fecha expedi", inicio));
-					if(newcontenido.contains(HASTA) && modelo.getFechaEmision().length() > 0) {
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(HASTA)[1].replace("###", "").trim()));
+					if(newcontenido.contains(ConstantsValue.HASTA) && modelo.getFechaEmision().length() > 0) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(ConstantsValue.HASTA)[1].replace("###", "").trim()));
 						LocalDate date = LocalDate.parse(modelo.getFechaEmision());
 						modelo.setVigenciaA(modelo.getVigenciaA().replace(modelo.getVigenciaA().split("-")[0], String.valueOf(date.getYear() +1)));	
 					}
@@ -233,7 +231,7 @@ public class AtlasVidaModel {
 				}
 				modelo.setAsegurados(asegurados);
 				
-				inicio = contenido.lastIndexOf(AGENTE);
+				inicio = contenido.lastIndexOf(ConstantsValue.AGENTE);
 				fin = contenido.lastIndexOf("En cumplimiento");
 				if(inicio > -1 && fin > inicio) {
 					newcontenido = fn.gatos(contenido.substring(inicio + 7, fin).replace("@@@", "").replace("\r\n", "").trim());

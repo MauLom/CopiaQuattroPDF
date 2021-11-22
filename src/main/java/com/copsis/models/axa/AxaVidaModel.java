@@ -1,9 +1,9 @@
 package com.copsis.models.axa;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
@@ -17,20 +17,20 @@ public class AxaVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
-	public String inicontenido = "";
 	private String contenido = "";
-	public String newcontenido = "";
-	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int donde = 0;
-
 
 	public AxaVidaModel(String contenido) {
 		this.contenido = contenido;
 	}
 
 	public EstructuraJsonModel procesar() {
+		StringBuilder resultado = new StringBuilder();
+		String inicontenido = "";
+		String newcontenido = "";
+		int inicio = 0;
+		int fin = 0;
+		int donde = 0;
+
 		inicontenido = fn.fixContenido(contenido);
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
@@ -38,10 +38,10 @@ public class AxaVidaModel {
 			modelo.setTipo(5);
 			modelo.setCia(20);
 			newcontenido = fn.filtroPorRango(contenido, 5);
-			donde = fn.recorreContenido(newcontenido, "Contratante Póliza");
+			donde = fn.recorreContenido(newcontenido, ConstantsValue.CONTRATANTE_POLIZA);
 			if (donde > 0) {
 				for (String dato : newcontenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains("Contratante Póliza") && dato.split("###").length == 1) {
+					if (dato.contains(ConstantsValue.CONTRATANTE_POLIZA) && dato.split("###").length == 1) {
 						modelo.setPoliza(dato.split("Póliza")[1].trim());
 					}
 				}
@@ -49,19 +49,19 @@ public class AxaVidaModel {
 
 			donde = 0;
 			newcontenido = fn.filtroPorRango(contenido, 5);
-			if (fn.recorreContenido(newcontenido, "###RFC:###") > 0) {
-				donde = fn.recorreContenido(newcontenido, "###RFC:###");
+			if (fn.recorreContenido(newcontenido, ConstantsValue.RFC_HASH2) > 0) {
+				donde = fn.recorreContenido(newcontenido, ConstantsValue.RFC_HASH2);
 			} else if (fn.recorreContenido(newcontenido, "Contratante Póliza") > 0) {
 				donde = fn.recorreContenido(newcontenido, "Contratante Póliza");
 			}
 
 			if (donde > 0) {
 				for (String dato : newcontenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains("###RFC:###") && dato.split("###").length == 3) {
+					if (dato.contains(ConstantsValue.RFC_HASH2) && dato.split("###").length == 3) {
 						modelo.setCteNombre(dato.split("###")[0].split("bre")[1].trim());
 					}
-					if (dato.contains("Nombre") && dato.split("###").length == 2) {
-						inicio = dato.split("###")[0].trim().indexOf("Nombre") + 6;
+					if (dato.contains(ConstantsValue.NOMBRE) && dato.split("###").length == 2) {
+						inicio = dato.split("###")[0].trim().indexOf(ConstantsValue.NOMBRE) + 6;
 						fin = dato.split("###")[0].trim().length();
 						modelo.setCteNombre(dato.split("###")[0].substring(inicio, fin).trim());
 					}
@@ -70,51 +70,44 @@ public class AxaVidaModel {
 
 			donde = 0;
 			newcontenido = fn.filtroPorRango(contenido, 6);
-			donde = fn.recorreContenido(newcontenido, "Domicilio");
+			donde = fn.recorreContenido(newcontenido, ConstantsValue.DOMICILIO2);
 			if (donde > 0) {
 				for (int i = 0; i < newcontenido.split("@@@")[donde].split("\r\n").length; i++) {
-					if (newcontenido.split("@@@")[donde].split("\r\n")[i].contains("Domicilio")) {
-						switch (newcontenido.split("@@@")[donde].split("\r\n")[i].split("###").length) {
-						case 2:
-							if (newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[0]
-									.contains("Domicilio")) {
-								resultado = newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[0]
-										.split("cilio")[1].trim();
-							}
-							if ((i + 2) < newcontenido.split("@@@")[donde].split("\r\n").length) {
-								if (newcontenido.split("@@@")[donde].split("\r\n")[i + 2].split("###").length == 2) {
-									resultado += " "
-											+ newcontenido.split("@@@")[donde].split("\r\n")[i + 2].split("###")[0]
-													.trim();
-								}
-							}
-							if ((i + 1) < newcontenido.split("@@@")[donde].split("\r\n").length) {
-								if (newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###").length == 2) {
-									resultado += " "
-											+ newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[0]
-													.trim();
-								}
-								if (newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[1]
-										.contains("Edo.")) {
-									resultado += ", "
-											+ newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[1]
-													.split("Edo.")[1].trim();
-								}
-							}
-							modelo.setCteDireccion(resultado);
-							break;
+					if (newcontenido.split("@@@")[donde].split("\r\n")[i].contains("Domicilio")
+							&& newcontenido.split("@@@")[donde].split("\r\n")[i].split("###").length == 2) {
+
+						if (newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[0].contains("Domicilio")) {
+							resultado.append(newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[0]
+									.split("cilio")[1].trim());
 						}
+						if ((i + 2) < newcontenido.split("@@@")[donde].split("\r\n").length
+								&& newcontenido.split("@@@")[donde].split("\r\n")[i + 2].split("###").length == 2) {
+							resultado.append(" ").append(newcontenido.split("@@@")[donde].split("\r\n")[i + 2].split("###")[0].trim());
+							
+
+						}
+						if ((i + 1) < newcontenido.split("@@@")[donde].split("\r\n").length) {
+							if (newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###").length == 2) {
+								resultado.append(" ").append(newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[0].trim());
+							}
+							if (newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[1]
+									.contains("Edo.")) {
+								resultado.append(", ").append(newcontenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[1]
+										.split("Edo.")[1].trim());
+								
+							}
+						}
+						modelo.setCteDireccion(resultado.toString());
+
 					}
 
-					if (newcontenido.split("@@@")[donde].split("\r\n")[i].contains("###C.P.")) {
-						switch (newcontenido.split("@@@")[donde].split("\r\n")[i].split("###").length) {
-						case 2:
-							if (newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[1].contains("C.P.")) {
-								modelo.setCp(newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[1]
-										.split("C.P.")[1].trim());
-							}
-							break;
-						}
+					if (newcontenido.split("@@@")[donde].split("\r\n")[i].contains("###C.P.")
+							&& newcontenido.split("@@@")[donde].split("\r\n")[i].split("###").length == 2
+							&& newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[1].contains("C.P.")) {
+
+						modelo.setCp(newcontenido.split("@@@")[donde].split("\r\n")[i].split("###")[1].split("C.P.")[1]
+								.trim());
+
 					}
 				}
 			}
@@ -130,35 +123,28 @@ public class AxaVidaModel {
 			}
 
 			donde = 0;
-			if (fn.recorreContenido(contenido, "Inicio de Vigencia") > 0) {
-				donde = fn.recorreContenido(contenido, "Inicio de Vigencia");
+			if (fn.recorreContenido(contenido, ConstantsValue.INICIO_VIGENCIA) > 0) {
+				donde = fn.recorreContenido(contenido, ConstantsValue.INICIO_VIGENCIA);
 			} else if (fn.recorreContenido(contenido, "Prima semestral") > 0) {
 				donde = fn.recorreContenido(contenido, "Prima semestral");
 			}
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains("Inicio de Vigencia") && dato.split("###").length == 3) {
-						if (dato.split("###")[0].contains("Vigencia")) {
-							modelo.setVigenciaDe(
-									fn.formatDateMonthCadena(dato.split("###")[0].split("Vigencia")[1].trim()));
-						}
+					if (dato.contains("Inicio de Vigencia") && dato.split("###").length == 3
+							&& dato.split("###")[0].contains("Vigencia")) {
+						modelo.setVigenciaDe(
+								fn.formatDateMonthCadena(dato.split("###")[0].split("Vigencia")[1].trim()));
+
 					}
-					if (dato.contains("Moneda")) {
-						switch (dato.split("###").length) {
-						case 1:
-							modelo.setMoneda(fn.moneda(dato.split("neda")[1].trim()));
-							break;
-						}
+					if (dato.contains("Moneda") && dato.split("###").length == 1) {
+						modelo.setMoneda(fn.moneda(dato.split("neda")[1].trim()));
+
 					}
-					if (dato.contains("Frecuencia de Pago")) {
-						switch (dato.split("###").length) {
-						case 3:
-							if (dato.split("###")[0].contains("Primas")) {
-								modelo.setFormaPago(
-										fn.formaPago(dato.split("###")[0].split("Primas")[1].trim().toUpperCase()));
-							}
-							break;
-						}
+					if (dato.contains("Frecuencia de Pago") && dato.split("###").length == 3
+							&& dato.split("###")[0].contains("Primas")) {
+
+						modelo.setFormaPago(fn.formaPago(dato.split("###")[0].split("Primas")[1].trim().toUpperCase()));
+
 					}
 				}
 			}
@@ -167,15 +153,17 @@ public class AxaVidaModel {
 			donde = fn.recorreContenido(contenido, "Prima Anual");
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains("Anual") && dato.split("###").length == 1) {
+					if (dato.contains(ConstantsValue.ANUAL) && dato.split("###").length == 1) {
 
-						modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(dato.split("Anual")[1].trim())));
+						modelo.setPrimaTotal(
+								fn.castBigDecimal(fn.cleanString(dato.split(ConstantsValue.ANUAL)[1].trim())));
 					}
 				}
 			}
 			modelo.setPlan(contenido.split("CARATULA DE POLIZA")[1].split("\n")[2].replace("@@@", ""));
-			modelo.setPlazo(Integer.parseInt(fn.cleanString(contenido.split("Anual")[1].split("\n")[1].split("###")[3]
-					.replace("Años", "").replace("Año", "").trim())));
+			modelo.setPlazo(Integer
+					.parseInt(fn.cleanString(contenido.split(ConstantsValue.ANUAL)[1].split("\n")[1].split("###")[3]
+							.replace("Años", "").replace("Año", "").trim())));
 			modelo.setPlazoPago(
 					Integer.parseInt(fn.cleanString(contenido.split("Anual")[1].split("\n")[1].split("###")[3]
 							.replace("Años", "").replace("Año", "").trim())));
@@ -185,29 +173,28 @@ public class AxaVidaModel {
 
 			if (modelo.getFechaEmision().split("-").length == 3 && modelo.getFechaEmision().length() == 10
 					&& modelo.getVigenciaDe().length() == 10 && modelo.getVigenciaA().length() == 0) {
-				resultado = modelo.getFechaEmision().split("-")[0] + "-" + modelo.getVigenciaDe().split("-")[1] + "-"
-						+ modelo.getVigenciaDe().split("-")[2];
+				resultado = new StringBuilder();
+				resultado.append(modelo.getFechaEmision().split("-")[0]).append("-").append(modelo.getVigenciaDe().split("-")[1]).append("-").append(modelo.getVigenciaDe().split("-")[2]);
 				modelo.setVigenciaDe(modelo.getFechaEmision().split("-")[0] + "-" + modelo.getVigenciaDe().split("-")[1]
 						+ "-" + modelo.getVigenciaDe().split("-")[2]);
 				modelo.setVigenciaA(Integer.parseInt(modelo.getFechaEmision().split("-")[0]) + 1 + "-"
 						+ modelo.getVigenciaDe().split("-")[1] + "-" + modelo.getVigenciaDe().split("-")[2]);
 			}
 
-			if (contenido.split("@@@")[2].split("\r\n").length == 1) {
-				if (contenido.split("@@@")[2].split("\r\n")[0].split("###").length == 1) {
-					modelo.setPlan(contenido.split("@@@")[2].trim());
-				}
+			if (contenido.split("@@@")[2].split("\r\n").length == 1
+					&& contenido.split("@@@")[2].split("\r\n")[0].split("###").length == 1) {
+
+				modelo.setPlan(contenido.split("@@@")[2].trim());
+
 			}
 
 			if (fn.recorreContenido(contenido, "###Centro de utilidad") > 0) {
 				donde = fn.recorreContenido(contenido, "###Centro de utilidad");
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains("Agente:") && dato.split("\r\n").length == 1) {
-						if (dato.split("###").length == 3) {
-							if (dato.split("###")[0].contains("Agente:")) {
-								modelo.setAgente(dato.split("###")[0].split("Agente:")[1].trim());
-							}
-						}
+					if (dato.contains(ConstantsValue.AGENTE) && dato.split("\r\n").length == 1
+							&& dato.split("###").length == 3 && dato.split("###")[0].contains(ConstantsValue.AGENTE)) {
+						modelo.setAgente(dato.split("###")[0].split(ConstantsValue.AGENTE)[1].trim());
+
 					}
 				}
 			}
@@ -215,47 +202,43 @@ public class AxaVidaModel {
 			donde = 0;
 			if (30 < contenido.split("@@@").length) {
 				newcontenido = fn.filtroPorRango(contenido, 30);
-				donde = fn.recorreContenido(contenido, "Agente:");
-				if (donde > 0) {
-					if (newcontenido.split("@@@")[donde].split("\r\n").length == 1) {
-						if (newcontenido.split("@@@")[donde].split("\r\n")[0].split("###").length == 3) {
-							if (newcontenido.split("@@@")[donde].split("\r\n")[0].split("###")[0].contains("Agente:")) {
-								modelo.setCveAgente(newcontenido.split("@@@")[donde].split("\r\n")[0].split("###")[0]
-										.split("Agente:")[1].trim());
-							}
-						}
-					}
+				donde = fn.recorreContenido(contenido, ConstantsValue.AGENTE);
+				if (donde > 0 && newcontenido.split("@@@")[donde].split("\r\n").length == 1
+						&& newcontenido.split("@@@")[donde].split("\r\n")[0].split("###").length == 3
+						&& newcontenido.split("@@@")[donde].split("\r\n")[0].split("###")[0].contains("Agente:")) {
+
+					modelo.setCveAgente(
+							newcontenido.split("@@@")[donde].split("\r\n")[0].split("###")[0].split("Agente:")[1]
+									.trim());
+
 				}
 			}
 
 			if (fn.recorreContenido(contenido, "VIDA###") > 0) {
 				donde = fn.recorreContenido(contenido, "VIDA###");
-				if (contenido.split("@@@")[donde].split("\r\n").length == 1) {
-					if (contenido.split("@@@")[donde].split("###").length == 3) {
-						modelo.setSa(contenido.split("@@@")[donde].split("###")[1].trim());
-					}
+				if (contenido.split("@@@")[donde].split("\r\n").length == 1
+						&& contenido.split("@@@")[donde].split("###").length == 3) {
+
+					modelo.setSa(contenido.split("@@@")[donde].split("###")[1].trim());
+
 				}
 			}
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 
-
 			donde = 0;
 			newcontenido = fn.filtroPorRango(contenido, 8);
 			donde = fn.recorreContenido(newcontenido, "Datos del Asegurado");
 
-			if (donde > 0) {
-				if (newcontenido.split("@@@")[donde].contains("Nombre")
-						&& newcontenido.split("@@@")[donde].split("\r\n").length == 2) {
-					if (newcontenido.split("@@@")[donde].split("\r\n")[1].contains("Nombre")
-							&& newcontenido.split("@@@")[donde].split("\r\n")[1].split("###").length == 2) {
-						if (newcontenido.split("@@@")[donde].split("\r\n")[1].split("###")[0].contains("Nombre")) {
-							asegurado.setNombre(
-									newcontenido.split("@@@")[donde].split("\r\n")[1].split("###")[0].split("Nombre")[1]
-											.trim());
-						}
-					}
-				}
+			if (donde > 0 && newcontenido.split("@@@")[donde].contains(ConstantsValue.NOMBRE)
+					&& newcontenido.split("@@@")[donde].split("\r\n").length == 2
+					&& newcontenido.split("@@@")[donde].split("\r\n")[1].contains(ConstantsValue.NOMBRE)
+					&& newcontenido.split("@@@")[donde].split("\r\n")[1].split("###").length == 2
+					&& newcontenido.split("@@@")[donde].split("\r\n")[1].split("###")[0].contains(ConstantsValue.NOMBRE)) {
+
+				asegurado.setNombre(
+						newcontenido.split("@@@")[donde].split("\r\n")[1].split("###")[0].split(ConstantsValue.NOMBRE)[1].trim());
+
 			}
 
 			inicio = contenido.indexOf("Fecha de Nacimiento");
@@ -322,26 +305,23 @@ public class AxaVidaModel {
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			inicio = inicontenido.indexOf("Beneficiarios");
 			fin = inicontenido.indexOf("ADVERTENCIA");
-	
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = inicontenido.split("Beneficiarios")[1].split("ADVERTENCIA")[0].replace("@@@", "")
 						.replace(")", "###").replace("(", "###").trim();
-				
 
 				for (String bene : newcontenido.split("\n")) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int n = bene.split("###").length;
-					if (bene.contains("Nombres")) {
-						if (n == 3) {
+					if (bene.contains("Nombres") && n == 3) {
 
-							beneficiario.setNombre(bene.split("###")[0].replace("Nombres:", "").trim());
-							beneficiario.setParentesco(fn.parentesco(bene.split("###")[1]));
-							beneficiario.setTipo(11);
-							beneficiario.setPorcentaje(
-									fn.castDouble(bene.split("###")[2].trim().replace("%", "")).intValue());
-							beneficiarios.add(beneficiario);
-						}
+						beneficiario.setNombre(bene.split("###")[0].replace("Nombres:", "").trim());
+						beneficiario.setParentesco(fn.parentesco(bene.split("###")[1]));
+						beneficiario.setTipo(11);
+						beneficiario
+								.setPorcentaje(fn.castDouble(bene.split("###")[2].trim().replace("%", "")).intValue());
+						beneficiarios.add(beneficiario);
+
 					}
 					if (bene.contains("FALLECIMIENTO")) {
 						String fall = newcontenido.split("FALLECIMIENTO")[1].split("\n")[1];
@@ -363,9 +343,7 @@ public class AxaVidaModel {
 
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-			switch (modelo.getFormaPago()) {
-			case 1:
-
+			if(modelo.getFormaPago() == 1){
 				recibo.setReciboId("");
 				recibo.setSerie("1/1");
 				recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -383,20 +361,19 @@ public class AxaVidaModel {
 				recibo.setAjusteDos(modelo.getAjusteDos());
 				recibo.setCargoExtra(modelo.getCargoExtra());
 				recibos.add(recibo);
-
-				break;
 			}
+
 			modelo.setRecibos(recibos);
 
-			if (modelo.getCoberturas().size() > 0) {
-				String tipo_vida = modelo.getCoberturas().get(0).getNombre().toLowerCase();
-				if (tipo_vida.contains("dotal")) {
+			if (modelo.getCoberturas().isEmpty()) {
+				String tipoVida = modelo.getCoberturas().get(0).getNombre().toLowerCase();
+				if (tipoVida.contains("dotal")) {
 					modelo.setTipovida(3);
-				} else if (tipo_vida.contains("temporal")) {
+				} else if (tipoVida.contains("temporal")) {
 					modelo.setTipovida(2);
 				}
 			}
-			
+
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(

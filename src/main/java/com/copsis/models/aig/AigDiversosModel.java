@@ -3,6 +3,7 @@ package com.copsis.models.aig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -14,9 +15,6 @@ public class AigDiversosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private static final String MONEDA = "MONEDA";
-	private static final String SECCIONESCOBERTURAS = "SECCIONES Y COBERTURAS";
-
 	
 
 	public AigDiversosModel(String contenido) {
@@ -45,7 +43,7 @@ public class AigDiversosModel {
 			modelo.setCia(3);
 			// Datos del Contractante
 			inicio = contenido.indexOf("PAQUETE");
-			fin = contenido.indexOf(MONEDA);
+			fin = contenido.indexOf(ConstantsValue.MONEDA_MAYUS);
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("  ",
 						"###");
@@ -79,13 +77,13 @@ public class AigDiversosModel {
 				}
 			}
 
-			inicio = contenido.indexOf(MONEDA);
+			inicio = contenido.indexOf(ConstantsValue.MONEDA_MAYUS);
 			fin = contenido.indexOf("FECHA DE EXPEDICIÓN:");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(" ",
 						"###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains(MONEDA)
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.MONEDA_MAYUS)
 							&& newcontenido.split("\n")[i].contains("PRIMA")) {
 						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i + 1].split("###")[0].trim()));
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1]
@@ -112,11 +110,11 @@ public class AigDiversosModel {
 				}
 			}
 			boolean cbo = false;
-			for (int i = 0; i < contenido.split(SECCIONESCOBERTURAS).length; i++) {
-				if (contenido.split(SECCIONESCOBERTURAS)[i].contains(MONEDA)) {
-					newcoberturas.append(contenido.split(SECCIONESCOBERTURAS)[i].split(MONEDA)[0]);
-				} else if (contenido.split(SECCIONESCOBERTURAS)[i].contains("En cumplimiento") && !cbo) {
-					newcoberturas.append(contenido.split(SECCIONESCOBERTURAS)[i].split("En cumplimiento")[0]);
+			for (int i = 0; i < contenido.split(ConstantsValue.SECCIONES_COBERTURAS).length; i++) {
+				if (contenido.split(ConstantsValue.SECCIONES_COBERTURAS)[i].contains(ConstantsValue.MONEDA_MAYUS)) {
+					newcoberturas.append(contenido.split(ConstantsValue.SECCIONES_COBERTURAS)[i].split(ConstantsValue.MONEDA_MAYUS)[0]);
+				} else if (contenido.split(ConstantsValue.SECCIONES_COBERTURAS)[i].contains("En cumplimiento") && !cbo) {
+					newcoberturas.append(contenido.split(ConstantsValue.SECCIONES_COBERTURAS)[i].split("En cumplimiento")[0]);
 					cbo = true;
 				}
 			}

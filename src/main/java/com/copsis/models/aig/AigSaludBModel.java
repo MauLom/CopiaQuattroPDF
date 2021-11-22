@@ -3,6 +3,7 @@ package com.copsis.models.aig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -15,8 +16,7 @@ public class AigSaludBModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private static final String TIME= "12:15";
-	private static final String BENEFICIOSCUBIERTOS = "BENEFICIOS CUBIERTOS";
+	
 	public AigSaludBModel(String contenido) {
 		this.contenido = contenido;
 	}
@@ -43,7 +43,7 @@ public class AigSaludBModel {
 			fin = contenido.indexOf("BENEFICIOS CUBIERTOS ");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(TIME,"");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(ConstantsValue.TIME,"");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				modelo.setMoneda(1);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -107,13 +107,13 @@ public class AigSaludBModel {
 
 			StringBuilder coberturastxt = new StringBuilder();
 
-			for (int j = 0; j < contenido.split(BENEFICIOSCUBIERTOS).length; j++) {
-				if (contenido.split(BENEFICIOSCUBIERTOS)[j].contains("FECHA DE EXPEDICIÓN")) {
-					coberturastxt.append(contenido.split(BENEFICIOSCUBIERTOS)[j].split("FECHA DE EXPEDICIÓN")[0]);
+			for (int j = 0; j < contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS).length; j++) {
+				if (contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].contains("FECHA DE EXPEDICIÓN")) {
+					coberturastxt.append(contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].split("FECHA DE EXPEDICIÓN")[0]);
 				} else {
-					if (contenido.split(BENEFICIOSCUBIERTOS)[j].contains("Los datos personales serán")) {
+					if (contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].contains("Los datos personales serán")) {
 						coberturastxt.append(
-								contenido.split(BENEFICIOSCUBIERTOS)[j].split("Los datos personales serán")[0]);
+								contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].split("Los datos personales serán")[0]);
 					}
 				}
 			}
@@ -121,7 +121,7 @@ public class AigSaludBModel {
 			if (coberturastxt.length() > 0) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
-				newcontenido = coberturastxt.toString().replace("@@@", "").replace(TIME, "");
+				newcontenido = coberturastxt.toString().replace("@@@", "").replace(ConstantsValue.TIME, "");
 				for (String x : newcontenido.split("\r\n")) {
 					int sp = x.split("###").length;
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -147,11 +147,11 @@ public class AigSaludBModel {
 			}
 
 			inicio = contenido.indexOf("Nombre del Asegurado:");
-			fin = contenido.indexOf(BENEFICIOSCUBIERTOS);
+			fin = contenido.indexOf(ConstantsValue.BENEFICIOS_CUBIERTOS);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(TIME,"");				
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(ConstantsValue.TIME,"");				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if (newcontenido.split("\n")[i].contains("Asegurado:")) {

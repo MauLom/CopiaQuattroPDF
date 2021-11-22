@@ -3,6 +3,7 @@ package com.copsis.models.aig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -13,7 +14,7 @@ public class AigSaludModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private static final String PLAN = "Plan:";
+	
 	public AigSaludModel(String contenido) {
 		this.contenido = contenido;
 	}
@@ -39,9 +40,9 @@ public class AigSaludModel {
 					if( newcontenido.split("\n")[i].contains("Póliza:") &&  newcontenido.split("\n")[i].contains("Producto")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].split("Producto")[0].replace("###", "").trim());						
 					}
-					if( newcontenido.split("\n")[i].contains("Emisión:") && newcontenido.split("\n")[i].contains(PLAN)){
-						modelo.setPlan(newcontenido.split("\n")[i].split(PLAN)[1].replace("###", ""));
-						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split(PLAN)[0].replace("###", "").trim() ));
+					if( newcontenido.split("\n")[i].contains("Emisión:") && newcontenido.split("\n")[i].contains(ConstantsValue.PLAN)){
+						modelo.setPlan(newcontenido.split("\n")[i].split(ConstantsValue.PLAN)[1].replace("###", ""));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión:")[1].split(ConstantsValue.PLAN)[0].replace("###", "").trim() ));
 					}
 					if( newcontenido.split("\n")[i].contains("Inicio de Viaje:") ) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Viaje:")[1].replace("###", "")));

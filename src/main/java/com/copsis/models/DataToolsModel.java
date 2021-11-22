@@ -42,9 +42,8 @@ public class DataToolsModel {
 	}
 
 	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
-		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
+		return texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
 				.replace("MXN", "").trim();
-		return texto;
 	}
 
 	public String preparaPrimas(String texto) {// limpiar de signos los datos antes de convertir a numeros
@@ -192,7 +191,7 @@ public class DataToolsModel {
 		}
 	}
 
-	public String elimina_spacios(String texto) {
+	public String eliminaSpacios(String texto) {
 		 StringBuilder result = new  StringBuilder();
 		int counterSpace = 0;
 		for (int i = 0; i < texto.length(); i++) {
