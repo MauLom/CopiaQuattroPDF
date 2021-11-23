@@ -241,8 +241,14 @@ public class ImpresionConsetimientoPdf {
 
 					communsPdf.setCell(baseRow, 10, "Contratante", azul, false, "L", 10, lineBoders, "", padding,
 							bgColor);
-					communsPdf.setCell(baseRow, 50, impresionForm.getContrannte(), azul, false, "L", 9, lineBoders, "",
-							padding, bgColor);
+					if(impresionForm.getContrannte().length() > 48) {
+						communsPdf.setCell(baseRow, 50, impresionForm.getContrannte(), azul, false, "L", 9, lineBoders, "",
+								padding, bgColor).setTopPadding(-2f);
+					}else {
+						communsPdf.setCell(baseRow, 50, impresionForm.getContrannte(), azul, false, "L", 9, lineBoders, "",
+								padding, bgColor);
+					}
+				
 					communsPdf.setCell(baseRow, 10, "Categoría", azul, false, "L", 10, lineBoders, "", padding, bgColor)
 							.setLeftPadding(6f);
 					communsPdf.setCell(baseRow, 30, impresionForm.getCategoria(), azul, false, "L", 10, lineBoders, "",
@@ -255,12 +261,12 @@ public class ImpresionConsetimientoPdf {
 
 					baseRow = communsPdf.setRow(table, 10);
 					baseRow = communsPdf.setRow(table, 15);
-					baseRow2 = communsPdf.setRow(table2, 7);
+					baseRow2 = communsPdf.setRow(table2, 11);
 					baseRow2 = communsPdf.setRow(table2, 15);
 					communsPdf.setCell(baseRow, 10, "No. Póliza", azul, false, "L", 10, lineBoders, "", padding,
 							bgColor);
 					communsPdf.setCell(baseRow, 40, impresionForm.getNopoliza(), azul, false, "L", 10, lineBoders, "",
-							padding, bgColor).setTopPadding(-0.5f);
+							padding, bgColor);
 
 					communsPdf.setCell(baseRow2, 10, "", azul, false, "L", 13, lineBoders6, "", padding, bgColor);
 					communsPdf.setCell(baseRow2, 40, "", azul, false, "L", 13, lineBoders61, "", padding, bgColor);
@@ -969,6 +975,7 @@ public class ImpresionConsetimientoPdf {
 					output = new ByteArrayOutputStream();
 					document.save(output);
 					conte =null;
+					
 					return output.toByteArray();
 					
 				} finally {
