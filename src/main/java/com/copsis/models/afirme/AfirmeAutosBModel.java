@@ -71,9 +71,11 @@ public class AfirmeAutosBModel {
 
                     if (newcontenido.split("\n")[i].contains("Domicilio:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
                         newcontenidosp = newcontenido.split("\n")[i].split("Domicilio:")[1].split("R.F.C:")[0]; 
+                        
+
                         if(newcontenido.split("\n")[i+1].contains("Contratante")) {                        	
                         }else {
-                        	newcontenidosp = " " + newcontenido.split("\n")[i + 1];
+                        	newcontenidosp += " " + newcontenido.split("\n")[i + 1];
                         }	                        		                       
                         modelo.setCteDireccion(newcontenidosp.replaceAll("\r", ""));
                         modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replaceAll("\r", ""));
@@ -82,8 +84,8 @@ public class AfirmeAutosBModel {
                     if (newcontenido.split("\n")[i].contains("Contratante:") && newcontenido.split("\n")[i].contains("C.P:")) {
                         if(newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().contains(",")) {
                           	modelo.setCteNombre(
-                          			newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[1] +" "
-                          			+ newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[0]
+                          		(	newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[1] +" "
+                          			+ newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[0]).trim()
                           			);
                         }else {
                           	modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim());
