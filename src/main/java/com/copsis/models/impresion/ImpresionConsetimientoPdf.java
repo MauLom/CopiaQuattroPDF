@@ -978,7 +978,6 @@ public class ImpresionConsetimientoPdf {
 			}
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 		}
