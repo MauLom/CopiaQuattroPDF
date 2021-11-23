@@ -825,7 +825,7 @@ public class ImpresionConsetimientoPdf {
 					communsPdf.setCell(baseRow, 5, "5°", azul, false, "C", 10, lineBoders, "", padding3, bgColor);
 					communsPdf.setCell(baseRow, 95, "", azul, true, "C", 10, lineBoders, "", padding3, bgColor);
 
-					newcontenido = "Otorgo mi \tconsentimiento  \tpara ser \\tasegurado en la Póliza de Seguro de Grupo que el Contratante ha solicitado a AXA\n"
+					newcontenido = "Otorgo mi \tconsentimiento  \tpara ser \tasegurado en la Póliza de Seguro de Grupo que el Contratante ha solicitado a AXA\n"
 							+ "SEGUROS S.A. de C.V. de acuerdo a las Condiciones Generales de la Póliza. Tengo conocimiento de que para ingresar al\n"
 							+ "Seguro debo estar en servicio activo, y adquirir las características de asegurabilidad para tomar parte del mismo.\n"
 							+ "\nMis datos serán tratados de \tconformidad con lo \testablecido en el Aviso de Privacidad Integral ubicado en axa.mx, y para\n"
