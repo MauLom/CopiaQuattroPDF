@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -974,7 +973,6 @@ public class ImpresionConsetimientoPdf {
 					}
 
 					output = new ByteArrayOutputStream();
-					document.save(new File("/home/desarrollo8/Documents/download.pdf"));
 					document.save(output);
 					conte =null;
 					
