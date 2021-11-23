@@ -48,6 +48,16 @@ public class ImpresionForm {
 	private String paisNacimiento;
 	private String telefono;
 	private String textoConsentimiento="";
+	private String calleExt;
+	private String numeroExt;
+	private String coloniaExt;
+	private String cpExt;
+	private String municipioExt;
+	private String ciudadExt;
+	private String estadoExt;
+	private String paisExt;
+	private String telefonoExt;
+	
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
 }
