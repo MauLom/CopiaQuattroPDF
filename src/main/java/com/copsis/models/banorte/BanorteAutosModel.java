@@ -17,7 +17,6 @@ public class BanorteAutosModel {
 	// Varaibles
 	private String contenido = "";
 	private String recibosText = "";
-	private String resultado = "";
 
 	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
 	private BigDecimal restoDerecho = BigDecimal.ZERO;
@@ -38,6 +37,7 @@ public class BanorteAutosModel {
 		int inicio = 0;
 		int fin = 0;
 		String newcontenido = "";
+		StringBuilder resultado = new StringBuilder();
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("DATOS DEL VEHYÍ CDULO", ConstantsValue.DATOS_VEHICULO)
@@ -74,14 +74,15 @@ public class BanorteAutosModel {
 						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].replace("###", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("Calle")) {
-						resultado = newcontenido.split("\n")[i].split("Calle")[1].replace("y No:", "").replace("###",
-								"");
+						resultado.append(
+								newcontenido.split("\n")[i].split("Calle")[1].replace("y No:", "").replace("###", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("Colonia")
 							&& newcontenido.split("\n")[i].contains("Municipio")) {
-						resultado += " " + (newcontenido.split("\n")[i].split("Colonia:")[1].split("Municipio:")[0]
-								.replace("Población-", "") + "  " + newcontenido.split("\n")[i].split("Municipio:")[1])
-										.replace("###", "");
+						resultado.append(" ")
+								.append((newcontenido.split("\n")[i].split("Colonia:")[1].split("Municipio:")[0]
+										.replace("Población-", "") + "  "
+										+ newcontenido.split("\n")[i].split("Municipio:")[1]).replace("###", ""));
 
 						modelo.setCteDireccion(resultado + "  "
 								+ newcontenido.split("\n")[i + 1].split("Estado:")[1].split(ConstantsValue.TELEFONO)[0]

@@ -83,8 +83,8 @@ public class AxaDiversos2Model {
                     	modelo.setAgente(newcontenido.split("\n")[i].split("Nombre del Agente")[1].replace("###", "").trim());
 
 					}
-                    if(newcontenido.split("\n")[i].contains("Número de Agente")&& newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_EXPEDICION)  ) {
-                    	modelo.setCveAgente(newcontenido.split("\n")[i].split("Número de Agente")[1].split(ConstantsValue.GASTOS_EXPEDICION)[0].replace("###", "").trim());
+                    if(newcontenido.split("\n")[i].contains("Número de Agente")&& newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_POR_EXPEDICION)  ) {
+                    	modelo.setCveAgente(newcontenido.split("\n")[i].split("Número de Agente")[1].split(ConstantsValue.GASTOS_POR_EXPEDICION)[0].replace("###", "").trim());
                        
 					}
                     if(newcontenido.split("\n")[i].contains("I.V.A.")) {
@@ -95,8 +95,8 @@ public class AxaDiversos2Model {
                     	modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Prima Neta")[1].split("###")[1].trim())));
 					
                     }
-                    if(newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_EXPEDICION)) {
-                    	modelo.setDerecho(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split(ConstantsValue.GASTOS_EXPEDICION)[1].split("###")[1].trim())));
+                    if(newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_POR_EXPEDICION)) {
+                    	modelo.setDerecho(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split(ConstantsValue.GASTOS_POR_EXPEDICION)[1].split("###")[1].trim())));
 					
 					}
                     if(newcontenido.split("\n")[i].contains("Prima Total")) {

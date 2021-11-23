@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -59,7 +60,8 @@ public class ChubbAutosModel {
 			List<String> conceptosFin;
 
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			contenido = contenido.replace("Prima neta", "Prima Neta").replace("Prima total", "Prima Total");
+			contenido = contenido.replace("Prima neta", ConstantsValue.PRIMA_NETA).replace("Prima total",
+					ConstantsValue.PRIMA_TOTAL2);
 
 			// tipo
 			modelo.setTipo(1);
@@ -71,21 +73,17 @@ public class ChubbAutosModel {
 			modelo.setRamo("Autos");
 
 			// Moneda
-			modelo.setMoneda(
-					fn.moneda(contenido.split("Moneda:")[1].split("Forma de pago:")[0].replace("###", "").trim()));
+			modelo.setMoneda(fn.moneda(
+					contenido.split("Moneda:")[1].split(ConstantsValue.FORMA_PAGO)[0].replace("###", "").trim()));
 
 			// Renovacion
 			conceptos = Arrays.asList("Póliza anterior:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Póliza anterior:###":
-						inicio = inicio + 19;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setRenovacion(newcontenido.split("Moneda")[0].replace("###", "").trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Póliza anterior:###")) {
+					inicio = inicio + 19;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					modelo.setRenovacion(newcontenido.split("Moneda")[0].replace("###", "").trim());
 				}
 			}
 
@@ -93,14 +91,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Paquete:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Paquete:###":
-						inicio = inicio + 11;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setPlan(newcontenido.split(saltolinea)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Paquete:###")) {
+					inicio = inicio + 11;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					modelo.setPlan(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
 
@@ -108,19 +102,14 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Forma de pago:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Forma de pago:":
-						inicio = inicio + 14;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0]).split(separador)[0];
-
-						modelo.setFormaPago(fn.formaPago(newcontenido));
-						
-						break;
-					}
+				if (inicio > -1 && x.equals("Forma de pago:")) {
+					inicio = inicio + 14;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0])
+							.split(separador)[0];
+					modelo.setFormaPago(fn.formaPago(newcontenido));
 				}
 			}
-			if(modelo.getFormaPago() == 0) {
+			if (modelo.getFormaPago() == 0) {
 
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 			}
@@ -129,15 +118,11 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Póliza:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Póliza:###":
-						inicio = inicio + 10;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setPoliza(newcontenido.split(separador)[0].trim() + ""
-								+ newcontenido.split(separador)[1].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Póliza:###")) {
+					inicio = inicio + 10;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					modelo.setPoliza(
+							newcontenido.split(separador)[0].trim() + "" + newcontenido.split(separador)[1].trim());
 				}
 			}
 
@@ -145,14 +130,11 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Endoso:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Endoso:###":
-						inicio = inicio + 10;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setEndoso(newcontenido.split(separador)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Endoso:###")) {
+					inicio = inicio + 10;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					modelo.setEndoso(newcontenido.split(separador)[0].trim());
+
 				}
 			}
 
@@ -160,14 +142,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Propietario-Contratante:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Propietario-Contratante:###":
-						inicio = inicio + 27;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setContratante(newcontenido.split(saltolinea)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Propietario-Contratante:###")) {
+					inicio = inicio + 27;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setContratante(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
 
@@ -175,14 +153,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Datos del asegurado y-o propietario");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Datos del asegurado y-o propietario":
-						inicio = inicio + 35;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Datos del asegurado y-o propietario")) {
+					inicio = inicio + 35;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
 				}
 			}
 
@@ -190,14 +164,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Domicilio:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Domicilio:###":
-						inicio = inicio + 13;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						modelo.setCteDireccion(newcontenido.split(separador)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Domicilio:###")) {
+					inicio = inicio + 13;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					modelo.setCteDireccion(newcontenido.split(separador)[0].trim());
 				}
 			}
 
@@ -213,6 +183,8 @@ public class ChubbAutosModel {
 						newcontenido = contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0];
 						modelo.setRfc(newcontenido.split(separador)[0].trim());
 						break;
+					default:
+						break;
 					}
 				}
 			}
@@ -221,15 +193,11 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Inciso:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Inciso:###":
-						inicio = inicio + 10;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
-							modelo.setInciso(Integer.parseInt(newcontenido.split(separador)[0].trim()));
-						}
-						break;
+				if (inicio > -1 && x.equals("Inciso:###")) {
+					inicio = inicio + 10;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
+						modelo.setInciso(Integer.parseInt(newcontenido.split(separador)[0].trim()));
 					}
 				}
 			}
@@ -238,16 +206,12 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Prima Neta###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Prima Neta###":
-						inicio = inicio + 13;
-						newcontenido = contenido.substring(inicio, (inicio + 100));
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setPrimaneta(
-									fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-						break;
+				if (inicio > -1 && x.equals("Prima Neta###")) {
+					inicio = inicio + 13;
+					newcontenido = contenido.substring(inicio, (inicio + 100));
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setPrimaneta(
+								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
@@ -256,70 +220,55 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Prima Total");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Prima Total":
-						inicio = inicio + 11;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).replace(":", ""));
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setPrimaTotal(
-									fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-						break;
+				if (inicio > -1 && x.equals("Prima Total")) {
+					inicio = inicio + 11;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).replace(":", ""));
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setPrimaTotal(
+								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
 
 			// Iva
-			conceptos = Arrays.asList("I.V.A.");
+			conceptos = Arrays.asList(ConstantsValue.IVA);
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "I.V.A.":
-						inicio = inicio + 6;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)));
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-						break;
+				if (inicio > -1 && x.equals(ConstantsValue.IVA)) {
+					inicio = inicio + 6;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)));
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
 
 			// CveAgente
-			conceptos = Arrays.asList("Clave interna del agente:");
+			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Clave interna del agente:":
-						inicio = inicio + 25;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setCveAgente(newcontenido.contains("-") ? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim() : "");
-						break;
-					}
+				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
+					inicio = inicio + 25;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setCveAgente(newcontenido.contains("-")
+							? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
+							: "");
 				}
 			}
 
 			// Agente
-			conceptos = Arrays.asList("Clave interna del agente:");
+			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-				
-					switch (x) {
-					case "Clave interna del agente:":
-						inicio = inicio + 25;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-		
-						
-						modelo.setAgente(newcontenido.split(saltolinea)[0].contains("-")
-								? newcontenido.split(saltolinea)[0].split("-")[newcontenido.split(saltolinea)[0].split("-").length -1].trim().replace("###", " ")
-								: "");
-						break;
-
-					}
+				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
+					inicio = inicio + 25;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setAgente(
+							newcontenido.split(saltolinea)[0].contains("-")
+									? newcontenido.split(saltolinea)[0]
+											.split("-")[newcontenido.split(saltolinea)[0].split("-").length - 1].trim()
+													.replace("###", " ")
+									: "");
 				}
 			}
 
@@ -327,14 +276,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Vigencia:###Del###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Vigencia:###Del###":
-						inicio = inicio + 18;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
-						break;
-					}
+				if (inicio > -1 && x.equals("Vigencia:###Del###")) {
+					inicio = inicio + 18;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
 				}
 			}
 
@@ -342,28 +287,20 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("horas al###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "horas al###":
-						inicio = inicio + 11;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
-						break;
-					}
+				if (inicio > -1 && x.equals("horas al###")) {
+					inicio = inicio + 11;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
 				}
 			}
 			// Cp
 			conceptos = Arrays.asList("C.P:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "C.P:###":
-						inicio = inicio + 7;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setCp(newcontenido.split(saltolinea)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("C.P:###")) {
+					inicio = inicio + 7;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setCp(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
 
@@ -371,35 +308,27 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("por pago fraccionado###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "por pago fraccionado###":
-						inicio = inicio + 23;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setRecargo(
-									fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-						break;
+				if (inicio > -1 && x.equals("por pago fraccionado###")) {
+					inicio = inicio + 23;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setRecargo(
+								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
 
 			// Derecho
-			conceptos = Arrays.asList("Gastos de expedición");
+			conceptos = Arrays.asList(ConstantsValue.GASTOS_DE_EXPEDICION);
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Gastos de expedición":
-						inicio = inicio + 20;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-								.split(separador)[0].split("I.V.A.")[0];
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setDerecho(
-									fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-						break;
+				if (inicio > -1 && x.equals(ConstantsValue.GASTOS_DE_EXPEDICION)) {
+					inicio = inicio + 20;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+							.split(separador)[0].split(ConstantsValue.IVA)[0];
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setDerecho(
+								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
@@ -408,14 +337,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Descripción del vehículo*:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Descripción del vehículo*:":
-						inicio = inicio + 26;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
-						break;
-					}
+				if (inicio > -1 && x.equals("Descripción del vehículo*:")) {
+					inicio = inicio + 26;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
 				}
 			}
 
@@ -423,14 +348,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Clave vehicular:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Clave vehicular:":
-						inicio = inicio + 16;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setClave(newcontenido.split(separador)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Clave vehicular:")) {
+					inicio = inicio + 16;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setClave(newcontenido.split(separador)[0].trim());
 				}
 			}
 
@@ -438,15 +359,11 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Modelo:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Modelo:":
-						inicio = inicio + 7;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
-							modelo.setModelo(Integer.parseInt(newcontenido.split(separador)[0].trim()));
-						}
-						break;
+				if (inicio > -1 && x.equals("Modelo:")) {
+					inicio = inicio + 7;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
+						modelo.setModelo(Integer.parseInt(newcontenido.split(separador)[0].trim()));
 					}
 				}
 			}
@@ -455,14 +372,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Serie:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Serie:":
-						inicio = inicio + 6;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setSerie(newcontenido.split(saltolinea)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Serie:")) {
+					inicio = inicio + 6;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setSerie(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
 
@@ -470,14 +383,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Motor:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Motor:":
-						inicio = inicio + 6;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
-						modelo.setMotor(newcontenido);
-						break;
-					}
+				if (inicio > -1 && x.equals("Motor:")) {
+					inicio = inicio + 6;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
+					modelo.setMotor(newcontenido);
 				}
 			}
 
@@ -485,14 +394,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Placas:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Placas:":
-						inicio = inicio + 7;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
-						modelo.setPlacas(newcontenido);
-						break;
-					}
+				if (inicio > -1 && x.equals("Placas:")) {
+					inicio = inicio + 7;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
+					modelo.setPlacas(newcontenido);
 				}
 			}
 
@@ -500,15 +405,11 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Fecha de emisión:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Fecha de emisión:###":
-						inicio = inicio + 20;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
-						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
-						break;
-					}
+				if (inicio > -1 && x.equals("Fecha de emisión:###")) {
+					inicio = inicio + 20;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
+					modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
 				}
 			}
 
@@ -516,14 +417,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Marca:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Marca:":
-						inicio = inicio + 6;
-						newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
-						modelo.setMarca(newcontenido.split(separador)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Marca:")) {
+					inicio = inicio + 6;
+					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					modelo.setMarca(newcontenido.split(separador)[0].trim());
 				}
 			}
 
@@ -531,14 +428,10 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Asegurado:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Asegurado:###":
-						inicio = inicio + 13;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						modelo.setIdCliente(newcontenido.split(separador)[0].trim());
-						break;
-					}
+				if (inicio > -1 && x.equals("Asegurado:###")) {
+					inicio = inicio + 13;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					modelo.setIdCliente(newcontenido.split(separador)[0].trim());
 				}
 			}
 
@@ -546,23 +439,18 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList("Otros descuentos###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
-				if (inicio > -1) {
-					switch (x) {
-					case "Otros descuentos###":
-						inicio = inicio + 19;
-						newcontenido = contenido.substring(inicio, (inicio + 150));
-						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-							modelo.setAjusteUno(
-									fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-						}
-
-						break;
+				if (inicio > -1 && x.equals("Otros descuentos###")) {
+					inicio = inicio + 19;
+					newcontenido = contenido.substring(inicio, (inicio + 150));
+					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+						modelo.setAjusteUno(
+								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
 				}
 			}
 
 			// coberturas
-			List<EstructuraCoberturasModel> coberturas = new ArrayList<EstructuraCoberturasModel>();
+			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima");
 			conceptosFin = Arrays.asList("@@@Prima Neta###");
 			inicio = contenido.indexOf(conceptos.get(0));
@@ -596,7 +484,7 @@ public class ChubbAutosModel {
 
 			switch (modelo.getFormaPago()) {
 			case 1:
-				if (recibosList.size() == 0) {
+				if (recibosList.isEmpty()) {
 					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 					recibo.setReciboId("");
 					recibo.setSerie("1/1");
@@ -639,7 +527,7 @@ public class ChubbAutosModel {
 			case 4:
 			case 5:
 			case 6: // NINGUN PDF TRAE RECIBOS SE QUEDA PENDIENTE ESTE CASO
-				if (recibosList.size() >= 1) {
+				if (!recibosList.isEmpty()) {
 					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
 					int totalRec = fn.getTotalRec(modelo.getFormaPago());
 					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
@@ -649,17 +537,19 @@ public class ChubbAutosModel {
 						recibo.setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
 						recibo.setVigenciaA("");
 						recibo.setVencimiento("");
-						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
 						recibosList.add(recibo);
 					}
 				}
+				break;
+			default:
 				break;
 
 			}
@@ -677,28 +567,25 @@ public class ChubbAutosModel {
 		List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
 		try {
 			recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
-			
+
 			int index = 0;
 			int totalRec = fn.getTotalRec(modelo.getFormaPago());
 			int recibosSerie = 1;
 
-			ArrayList<String> series = new ArrayList<String>();
+			ArrayList<String> series = new ArrayList<>();
 			for (String a : recibos.split("AVISO DE COBRO")) {
-				if (index > 0 && a.contains("recibo:")) {
+				if (index > 0 && a.contains(ConstantsValue.RECIBO)) {
 					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					
+
 					String actualSerie = "";
-					conceptos = Arrays.asList("recibo:");
+					conceptos = Arrays.asList(ConstantsValue.RECIBO);
 					for (String x : conceptos) {
 						inicio = a.indexOf(x);
-						if (inicio > -1) {
-							switch (x) {
-							case "recibo:":
-								inicio = inicio + 7;
-								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0]).split(separador)[0];
-								actualSerie = recibo.getReciboId();
-								break;
-							}
+						if (inicio > -1 && x.equals(ConstantsValue.RECIBO)) {
+							inicio = inicio + 7;
+							newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+									.split(separador)[0];
+							actualSerie = recibo.getReciboId();
 						}
 					}
 
@@ -713,107 +600,86 @@ public class ChubbAutosModel {
 							newcontenido = fn.gatos(a.substring(inicio + 14, fin)).trim();
 
 						}
-						
-						conceptos = Arrays.asList("Vigencia:");
+
+						conceptos = Arrays.asList(ConstantsValue.VIGENCIA);
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Vigencia:":
-									inicio = inicio + 9;
-									newcontenido = fn.gatos(fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-											.split("12:")[0]);
-									newcontenido =(newcontenido.split(separador).length>1)?newcontenido.split(separador)[1]:"";
-									recibo.setVigenciaDe(fn.formatDate(newcontenido,"dd-mm-yyyy"));
-									break;
-								}
+							if (inicio > -1 && x.equals(ConstantsValue.VIGENCIA)) {
+								inicio = inicio + 9;
+								newcontenido = fn
+										.gatos(fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+												.split("12:")[0]);
+								newcontenido = (newcontenido.split(separador).length > 1)
+										? newcontenido.split(separador)[1]
+										: "";
+								recibo.setVigenciaDe(fn.formatDate(newcontenido, "dd-mm-yyyy"));
 							}
 						}
 
-						//conceptos = Arrays.asList("Vigencia:");
 						for (String x : conceptos) {
 							inicio = a.lastIndexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Vigencia:":
-									inicio = inicio + 9;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0].split("al")[1].split("12:")[0]);
-									recibo.setVigenciaA(fn.formatDate(newcontenido,"dd-mm-yyyy"));
-									break;
-								}
+							if (inicio > -1 && x.equals(ConstantsValue.VIGENCIA)) {
+								inicio = inicio + 9;
+								newcontenido = fn
+										.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0].split("al")[1]
+												.split("12:")[0]);
+								recibo.setVigenciaA(fn.formatDate(newcontenido, "dd-mm-yyyy"));
 							}
 						}
-						
+
 						conceptos = Arrays.asList("Total a pagar:");
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Total a pagar:":
-									inicio = inicio + 14;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-											.split(separador)[0];
-									if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
-										recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-										restoPrimaTotal = fn.castBigDecimal(modelo.getPrimaTotal())
-												.subtract(recibo.getPrimaTotal());
-									}
+							if (inicio > -1 && x.equals("Total a pagar:")) {
+								inicio = inicio + 14;
+								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+										.split(separador)[0];
+								if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
+									recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+									restoPrimaTotal = fn.castBigDecimal(modelo.getPrimaTotal())
+											.subtract(recibo.getPrimaTotal());
+								}
+							}
+						}
 
-									break;
-								}
-							}
-						}
-						
-						conceptos = Arrays.asList("Gastos de expedición");
+						conceptos = Arrays.asList(ConstantsValue.GASTOS_DE_EXPEDICION);
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Gastos de expedición":
-									inicio = inicio + 20;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0]).split(separador)[0];
-									if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
-										recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-										restoDerecho = fn.castBigDecimal(modelo.getDerecho()).subtract(recibo.getDerecho());
-									}
-									break;
+							if (inicio > -1 && x.equals(ConstantsValue.GASTOS_DE_EXPEDICION)) {
+								inicio = inicio + 20;
+								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+										.split(separador)[0];
+								if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
+									recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+									restoDerecho = fn.castBigDecimal(modelo.getDerecho()).subtract(recibo.getDerecho());
 								}
 							}
 						}
-						
-						conceptos = Arrays.asList("I.V.A.");
+
+						conceptos = Arrays.asList(ConstantsValue.IVA);
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "I.V.A.":
-									inicio = inicio + 6;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-											.split(separador)[0].trim();
-									if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
-										recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-										restoIva = fn.castBigDecimal(modelo.getIva()).subtract(recibo.getIva());
-									}
-									break;
+							if (inicio > -1 && x.equals(ConstantsValue.IVA)) {
+								inicio = inicio + 6;
+								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+										.split(separador)[0].trim();
+								if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
+									recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+									restoIva = fn.castBigDecimal(modelo.getIva()).subtract(recibo.getIva());
 								}
 							}
 						}
-						
+
 						conceptos = Arrays.asList("Financiamiento por pago fraccionado");
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Financiamiento por pago fraccionado":
-									inicio = inicio + 35;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-											.split(separador)[0];
-									if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
-										recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-										restoRecargo = fn.castBigDecimal(modelo.getRecargo())
-												.subtract(recibo.getRecargo());
-									}
-									break;
+							if (inicio > -1 && x.equals("Financiamiento por pago fraccionado")) {
+								inicio = inicio + 35;
+								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+										.split(separador)[0];
+								if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
+									recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+									restoRecargo = fn.castBigDecimal(modelo.getRecargo()).subtract(recibo.getRecargo());
 								}
 							}
 						}
@@ -821,18 +687,14 @@ public class ChubbAutosModel {
 						conceptos = Arrays.asList("Prima Neta");
 						for (String x : conceptos) {
 							inicio = a.indexOf(x);
-							if (inicio > -1) {
-								switch (x) {
-								case "Prima Neta":
-									inicio = inicio + 10;
-									newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
-											.split(separador)[0];
-									if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
-										recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
-										restoPrimaNeta = fn.castBigDecimal(modelo.getPrimaneta())
-												.subtract(recibo.getPrimaneta());
-									}
-									break;
+							if (inicio > -1 && x.equals("Prima Neta")) {
+								inicio = inicio + 10;
+								newcontenido = fn.gatos(a.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+										.split(separador)[0];
+								if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido))) {
+									recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
+									restoPrimaNeta = fn.castBigDecimal(modelo.getPrimaneta())
+											.subtract(recibo.getPrimaneta());
 								}
 							}
 						}
