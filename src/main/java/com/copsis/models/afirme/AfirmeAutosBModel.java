@@ -72,7 +72,7 @@ public class AfirmeAutosBModel {
                     if (newcontenido.split("\n")[i].contains("Domicilio:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
                         newcontenidosp = newcontenido.split("\n")[i].split("Domicilio:")[1].split("R.F.C:")[0]; 
                         
-                        System.out.println(newcontenido.split("\n")[i+1]);
+
                         if(newcontenido.split("\n")[i+1].contains("Contratante")) {                        	
                         }else {
                         	newcontenidosp += " " + newcontenido.split("\n")[i + 1];
