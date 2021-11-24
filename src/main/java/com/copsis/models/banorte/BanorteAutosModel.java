@@ -40,7 +40,11 @@ public class BanorteAutosModel {
 					.replace("Tel:", "Teléfono:").replace("neta", "Neta")
 					.replace("Inicio de vigencia", " Inicio Vigencia").replace("Fin de vigencia", "Fin Vigencia")
 					.replace("Derecho de póliza", "Derecho de Póliza")
-					.replace("Emisión", "emisión").replace("Moneda", "Moneda:").replace("IVA", "I.V.A:");
+					.replace("Emisión", "emisión").replace("Moneda", "Moneda:").replace("IVA", "I.V.A:")
+					.replace("N o m b r e d e l C o n t r a t a n t e :", "Nombre del Contratante:")
+					.replace("12:00hrs", "")
+					.replace("habitual:", "Habitual:")
+					.replace("Prima total:", "Prima Total:");
 			this.recibosText =  fn.remplazarMultiple(this.recibosText,fn.remplazosGenerales());
 			try {
 				
@@ -57,14 +61,22 @@ public class BanorteAutosModel {
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
 	        
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	            		
 						if(newcontenido.split("\n")[i].contains("Póliza") &&  newcontenido.split("\n")[i].contains("Subramo")) {
-							modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0]);
+							int sp =newcontenido.split("\n")[i+1].split("###")[0].length();							
+							if(sp == 4) {
+								modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1]);
+							}else {
+								modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0]);	
+							}							
 							modelo.setInciso(fn.castInteger(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i].split("###").length -1]));						
 						}
+						
 						if(newcontenido.split("\n")[i].contains("Contratante:") && newcontenido.split("\n")[i].contains("R.F.C:")){							
-							modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0].replace("###", ""));
-							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", ""));
+							modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0].replace("###", "").replace("_", "").replace("  ", ""));
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
 						}
+						
 						if(newcontenido.split("\n")[i].contains("Calle")){
 							resultado = newcontenido.split("\n")[i].split("Calle")[1].replace("y No:", "").replace("###", "");
 						}
@@ -72,12 +84,12 @@ public class BanorteAutosModel {
 							resultado +=  " "+  (newcontenido.split("\n")[i].split("Colonia:")[1].split("Municipio:")[0].replace("Población-", "")
 								+"  "+	newcontenido.split("\n")[i].split("Municipio:")[1]).replace("###", "");
 							
-						modelo.setCteDireccion( resultado +"  " +newcontenido.split("\n")[i+1].split("Estado:")[1].split("Teléfono:")[0].replace("###", ""));
-						modelo.setCp(newcontenido.split("\n")[i+1].split("C.P:")[1].split("Estado")[0].replace("###", ""));
+						modelo.setCteDireccion( (resultado.replace("_", "").replace("  ", "").replace("y número:", "") +"  " +newcontenido.split("\n")[i+1].split("Estado:")[1].split("Teléfono:")[0].replace("###", "").replace("_", "").replace("  ", "")).trim());
+						modelo.setCp(newcontenido.split("\n")[i+1].split("C.P:")[1].split("Estado")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
 						
 						}						
 						if(newcontenido.split("\n")[i].contains("Conductor")){
-							modelo.setConductor( newcontenido.split("\n")[i].split("Habitual:")[1].replace("###", ""));
+							modelo.setConductor( newcontenido.split("\n")[i].split("Habitual:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
 						}
 						//
 						//primas
@@ -106,18 +118,19 @@ public class BanorteAutosModel {
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].split("###")[newcontenido.split("\n")[i].split("I.V.A:")[1].split("###").length -1].replace("###", "").trim())));						
 						}
 						 if(newcontenido.split("\n")[i].contains("Prima Total:")) {
+					
 							 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima Total:")[1].replace("###", ""))));
 						 }
 					}
 	            }
 	            
 
-	            inicio = contenido.indexOf("AVISO DE COBRO");
-	            fin = contenido.indexOf("Derecho Póliza");
+	            inicio = recibosText.indexOf("AVISO DE COBRO");
+	            fin = recibosText.indexOf("Derecho Póliza");
 
 	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
-	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
-	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	     
+	            	newcontenido = recibosText.substring(inicio, fin).replace("\r","").replace("@", "");
+	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	
 	            		if(newcontenido.split("\n")[i].contains("Contratante:") &&  newcontenido.split("\n")[i].contains("Agente:")) {
 	            			modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].replace("###", "").trim());
 	            		}
@@ -126,6 +139,22 @@ public class BanorteAutosModel {
 	            		}
 	            	}
 	            }
+	            
+	            if (modelo.getAgente().length() == 0 && modelo.getCveAgente().length() == 0) {
+	                inicio = contenido.indexOf("AVISO DE COBRO");
+		            fin = contenido.indexOf("Derecho Póliza");
+		            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+		            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
+		            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	
+		            		if(newcontenido.split("\n")[i].contains("Contratante:") &&  newcontenido.split("\n")[i].contains("Agente:")) {
+		            			modelo.setAgente(newcontenido.split("\n")[i].split("Agente:")[1].replace("###", "").trim());
+		            		}
+		            		if(newcontenido.split("\n")[i].contains("Clave del Agente:") &&  newcontenido.split("\n")[i].contains("Oficina:")) {
+		            			modelo.setCveAgente(newcontenido.split("\n")[i].split("Clave del Agente:")[1].split("Oficina")[0].replace("###", "").trim());
+		            		}
+		            	}
+		            }
+				}
 	            
 
 	            //Informacion del vehiculo
@@ -136,12 +165,12 @@ public class BanorteAutosModel {
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	
 	            		if(newcontenido.split("\n")[i].contains("Descripción:")) {
-	            			modelo.setDescripcion(newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", ""));
+	            			modelo.setDescripcion(newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
 	            		}
 	            		if(newcontenido.split("\n")[i].contains("Clave") && newcontenido.split("\n")[i].contains("Marca:")&& newcontenido.split("\n")[i].contains("Modelo:")) {
-		            		modelo.setClave(newcontenido.split("\n")[i].split("Clave")[1].split("Marca")[0].replace("SB:", "").replace("###", ""));
-		            		modelo.setMarca((newcontenido.split("\n")[i].split("Marca:")[1].split("Capacidad")[0]).replace("###", ""));
-		            		modelo.setModelo(fn.castInteger((newcontenido.split("\n")[i].split("Modelo:")[1].split("Transmisión")[0]).replace("###", "")));
+		            		modelo.setClave(newcontenido.split("\n")[i].split("Clave")[1].split("Marca")[0].replace("SB:", "").replace("###", "").replace("_", "").replace("  ", "").trim());
+		            		modelo.setMarca((newcontenido.split("\n")[i].split("Marca:")[1].split("Capacidad")[0]).replace("###", "").replace("_", "").replace("  ", "").trim());
+		            		modelo.setModelo(fn.castInteger((newcontenido.split("\n")[i].split("Modelo:")[1].split("Transmisión")[0]).replace("_","").replace("###", "").trim()));
 	            		}
 	            		if(newcontenido.split("\n")[i].contains("Cilindros") && newcontenido.split("\n")[i].contains("Marca:")&& newcontenido.split("\n")[i].contains("Modelo:")) {
 	            			modelo.setMarca((newcontenido.split("\n")[i].split("Marca:")[1].split("Capacidad")[0]).replace("###", ""));
@@ -155,11 +184,11 @@ public class BanorteAutosModel {
 	            		}
 	            			            		
 	            		if(newcontenido.split("\n")[i].contains("Placas:") && newcontenido.split("\n")[i].contains("Serie:")){
-	            			modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].split("Serie")[0].replace("###", ""));
-	            			modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", ""));
+	            			modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].split("Serie")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
+	            			modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
 	            		}	            		
 	            		if(newcontenido.split("\n")[i].contains("Motor:") && newcontenido.split("\n")[i].contains("Serie:")){	            	
-	            			modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor")[0].replace("###", ""));
+	            			modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
 	            		}
 	            		if(newcontenido.split("\n")[i].contains("Carrocería:") && newcontenido.split("\n")[i].contains("Placas:")){	            	
 	            			modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].replace("###", ""));
@@ -267,7 +296,7 @@ public class BanorteAutosModel {
 	          
 	            
 				return modelo;
-			} catch (Exception ex) {
+			} catch (Exception ex) {			
 				modelo.setError(
 						BanorteAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 				return modelo;

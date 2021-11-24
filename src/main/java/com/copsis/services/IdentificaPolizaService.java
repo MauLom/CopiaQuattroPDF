@@ -182,13 +182,22 @@ public class IdentificaPolizaService {
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))) {
+					
+					
 					if (contenido.contains("Estimado(a)")) {
 						contenido = caratula(3, 4, pdfStripper, pdDoc);
 
 						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
 						modelo = datosBanort.procesar();
 						encontro = true;
-					} else {
+					} else  if(contenido.contains("AVISO DE COBRO")) {
+						contenido = caratula(1, 6, pdfStripper, pdDoc);
+
+						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+						modelo = datosBanort.procesar();
+						encontro = true;
+					}
+					else {
 
 						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
 						modelo = datosBanort.procesar();

@@ -29,6 +29,7 @@ public class AfirmeAutosBModel {
 
 		try {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+			contenido = contenido.replace("I.V.A:", "I.V.A.:");
 
             //tipo
             modelo.setTipo(1);
@@ -156,7 +157,7 @@ public class AfirmeAutosBModel {
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin + 50).replaceAll("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
-                	
+   
                     if (newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("Prima")) {
                         modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("Prima")[0].replace("###", "").replace(":", "").trim());
                         modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replaceAll("###", ""))));
@@ -187,7 +188,7 @@ public class AfirmeAutosBModel {
             
          
             
-      
+
             
             for (int i = 0; i < recibos.split("RECIBO DE PRIMAS").length; i++) {
                 if (recibos.split("RECIBO DE PRIMAS")[i].contains("PARA USO EXCLUSIVO DEL BANCO")) {
@@ -205,10 +206,19 @@ public class AfirmeAutosBModel {
             if (modelo.getFormaPago() == 1) {
 				recibo.setSerie(1);
 				recibo.setTotalSerie(1);
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+			    recibo.setVigenciaA(modelo.getVigenciaA());
+			 	recibo.setVence(modelo.getVigenciaDe());
+			 	recibo.setDerecho(modelo.getDerecho());
+			 	recibo.setFinanciamiento(modelo.getRecargo());
+			 	recibo.setCargoExtra(modelo.getCargoExtra());
+			 	recibo.setTotal(modelo.getPrimaTotal());
+			 	recibo.setIva(modelo.getIva());
+			 	
 			}
        
             for (int i = 0; i < newcontenido.split("\n").length; i++) {
-            
+      
            	
                 if (newcontenido.split("\n")[i].contains("Cubre el Periodo:") && newcontenido.split("\n")[i].contains("Del") && newcontenido.split("\n")[i].contains("Inciso")) {                           	
                     recibo.setVigenciaDe( fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Del")[1].split("Inciso")[0].replace(":", "").replace("###", "").replace("/", "-").trim()));
