@@ -52,7 +52,7 @@ public class ImpresionConsolidadoModelPdf {
 
 	public byte[] buildPDF(ImpresionForm impresionForm) {
 		byte[] pdfArray = null;
-		PDFMergerUtility PDFmerger = new PDFMergerUtility();
+		PDFMergerUtility pdfMerger = new PDFMergerUtility();
 		try {
 			ByteArrayOutputStream output;
 			try (PDDocument document = new PDDocument()) {
@@ -68,9 +68,9 @@ public class ImpresionConsolidadoModelPdf {
 
 						final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
 
-						PDFmerger.appendDocument(document, documentToBeParsed);
+						pdfMerger.appendDocument(document, documentToBeParsed);
 					}
-					PDFmerger.mergeDocuments();
+					pdfMerger.mergeDocuments();
 
 					output = new ByteArrayOutputStream();
 

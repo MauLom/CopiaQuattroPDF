@@ -31,7 +31,7 @@ public class AxaDiversosModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("D omicilio:", ConstantsValue.DOMICILIO).replace("F RESNOS", "FRESNOS")
 				.replace("P r i m a T o t a l", ConstantsValue.PRIMA_TOTAL2).replace("Prima###neta:", "Prima Neta:").replace("Prima neta:", "Prima Neta:")
-				.replace("expedición", ConstantsValue.EXPEDICION_MAYUS).replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
+				.replace("expedición", ConstantsValue.EXPEDICION3).replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
 				.replace("@@@I.V.A:", ConstantsValue.IVA).replace("I.V.A", ConstantsValue.IVA).replace("I.V.A..", ConstantsValue.IVA).replace("Prima###Total", ConstantsValue.PRIMA_TOTAL2).replace("financiamiento", ConstantsValue.FINANCIAMIENTO);
 		try {
 			modelo.setTipo(7);
@@ -190,8 +190,8 @@ public class AxaDiversosModel {
 							modelo.setDerecho(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento")[1].split("###")[1].replace("###", "").replace("\r", ""))));
 						}						
 					}					
-					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)) {
-						modelo.setRecargo(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION_MAYUS)[1].replace(":", "").replace("###", "").replace("\r", ""))));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION3)) {
+						modelo.setRecargo(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION3)[1].replace(":", "").replace("###", "").replace("\r", ""))));
 					}					
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.IVA)) {
 						if(newcontenido.split("\n")[i].split(ConstantsValue.IVA)[1].replace(":", "").split("###")[1].contains("%")) {

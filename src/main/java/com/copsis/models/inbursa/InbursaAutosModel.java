@@ -1,13 +1,12 @@
 package com.copsis.models.inbursa;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.banorte.BanorteAutosModel;
 
 public class InbursaAutosModel {
 	// Clases
@@ -15,28 +14,23 @@ public class InbursaAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";
+
 	private String recibosText = "";
 	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int donde = 0;
-	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-	private BigDecimal restoDerecho = BigDecimal.ZERO;
-	private BigDecimal restoIva = BigDecimal.ZERO;
-	private BigDecimal restoRecargo = BigDecimal.ZERO;
-	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
+	
 	
 	public InbursaAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
 		this.recibosText = recibos;
 	}
 	public EstructuraJsonModel procesar() {
+		
+		String newcontenido = "";		
+		int inicio = 0;
+		int fin = 0;
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		    contenido = contenido.replace("IVA", "I.V.A:")
+		    contenido = contenido.replace("IVA",ConstantsValue.IVA2)
 		    		.replace("ACTUAL", "RENOVACION");
 		try {
 			 // tipo
@@ -48,7 +42,7 @@ public class InbursaAutosModel {
 
             //Datos del Contratante
             inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
-            fin = contenido.indexOf("COBERTURAS CONTRATADAS");
+            fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS);
             if(inicio > 0 &&  fin >  0 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").replace("las 12:00 horas", "");        
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -60,22 +54,22 @@ public class InbursaAutosModel {
             				modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0]);		
             			}            		
             		}
-            		if(newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("CIS")  && newcontenido.split("\n")[i].contains("ID CLIENTE")) {
+            		if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS) && newcontenido.split("\n")[i].contains("CIS")  && newcontenido.split("\n")[i].contains("ID CLIENTE")) {
             			modelo.setPoliza(newcontenido.split("\n")[i-1].split("###")[1]);
             		}
-            		else if(newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("CIS")  && newcontenido.split("\n")[i].contains("Cliente Inbursa")) {
+            		else if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS) && newcontenido.split("\n")[i].contains("CIS")  && newcontenido.split("\n")[i].contains("Cliente Inbursa")) {
             			modelo.setPoliza(newcontenido.split("\n")[i-1].split("###")[1]);
-            		}  else if(newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("FAMILIA")) {
+            		}  else if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS) && newcontenido.split("\n")[i].contains("FAMILIA")) {
             			modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0]);
             		}
             		//proceso direccion
             		if(newcontenido.split("\n")[i].contains("R.F.C.")) {
             			resultado =newcontenido.split("\n")[i].split("R.F.C.")[0];
             		}
-            		if(newcontenido.split("\n")[i].contains("PRIMA") && newcontenido.split("\n")[i].contains("NETA") && newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {
+            		if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_MAYUS) && newcontenido.split("\n")[i].contains("NETA") && newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {
             			//debe entra para no colocar nada
-            		}else if(newcontenido.split("\n")[i].contains("PRIMA") && newcontenido.split("\n")[i].contains("NETA")) {
-            			resultado += " " + newcontenido.split("\n")[i].split("PRIMA")[0] +" "+  newcontenido.split("\n")[i+1] ;
+            		}else if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_MAYUS) && newcontenido.split("\n")[i].contains("NETA")) {
+            			resultado += " " + newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_MAYUS)[0] +" "+  newcontenido.split("\n")[i+1] ;
             			modelo.setCteDireccion(resultado.replace("###", "").trim() );
             		} 
             		
@@ -86,8 +80,8 @@ public class InbursaAutosModel {
             			 }else {
             				A= newcontenido.split("\n")[i+2].trim();
             			 }
-            			 if(newcontenido.split("\n")[i+3].trim() .contains("R.F.C:")) {  
-            				B = newcontenido.split("\n")[i+3].split("R.F.C:")[0].trim();
+            			 if(newcontenido.split("\n")[i+3].trim() .contains(ConstantsValue.RFC)) {  
+            				B = newcontenido.split("\n")[i+3].split(ConstantsValue.RFC)[0].trim();
             			 }else {
             				B = newcontenido.split("\n")[i+3].trim();
             			 }
@@ -115,42 +109,42 @@ public class InbursaAutosModel {
             			}            		
             		}
             		//primas
-            		 if(newcontenido.split("\n")[i].contains("PRIMA NETA:") && newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {  
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS) && newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {  
             			 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble( newcontenido.split("\n")[i+1].split("###")[1])));
             		 }
-            		 else if(newcontenido.split("\n")[i].contains("PRIMA NETA:")) {  
-            			 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i].split("PRIMA NETA:")[1].replace("###", "").substring(0,13)))));
+            		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)) {  
+            			 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA_MAYUS)[1].replace("###", "").substring(0,13)))));
             		 }
-            		 if(newcontenido.split("\n")[i].contains("FINANCIAMIENTO:") && newcontenido.split("\n")[i].contains("R.F.C:")) {  
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS) && newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {  
             			 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[1].replace("###", ""))));
             		 }
-            		 else if(newcontenido.split("\n")[i].contains("FINANCIAMIENTO:")) {  
-            			 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("FINANCIAMIENTO:")[1].replace("###", ""))));
+            		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)) {  
+            			 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.FINANCIAMIENTO_MAYUS)[1].replace("###", ""))));
             		 }
-            		 if(newcontenido.split("\n")[i].contains("EXPEDICIÓN:") && newcontenido.split("\n")[i].contains("MONEDA:")) {  
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS) && newcontenido.split("\n")[i].contains("MONEDA:")) {  
             			 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1].replace("###", ""))));
             		 }
-            		 else if(newcontenido.split("\n")[i].contains("EXPEDICIÓN:")) {  
-            			 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("EXPEDICIÓN:")[1].replace("###", ""))));
+            		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)) {  
+            			 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION_MAYUS)[1].replace("###", ""))));
             		 }
-             		 if(newcontenido.split("\n")[i].contains("I.V.A:") && newcontenido.split("\n")[i].contains("PAGO")) {  
+             		 if(newcontenido.split("\n")[i].contains(ConstantsValue.IVA2) && newcontenido.split("\n")[i].contains("PAGO")) {  
             			 modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1].replace("###", ""))));
             				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("###")[0].trim()));
             		 }
-             		 else if(newcontenido.split("\n")[i].contains("I.V.A:")) {  
-            			 modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
+             		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.IVA2)) {  
+            			 modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.IVA2)[1].replace("###", ""))));
             		 }
-             		if(newcontenido.split("\n")[i].contains("PRIMA TOTAL:") && newcontenido.split("\n")[i].contains("DOCUMENTO")) {  
+             		if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL_MAYUS) && newcontenido.split("\n")[i].contains("DOCUMENTO")) {  
            			 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1].replace("###", ""))));
            		    }
-             		else if(newcontenido.split("\n")[i].contains("PRIMA TOTAL:")) {  
-            			 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("PRIMA TOTAL:")[1].replace("###", ""))));
+             		else if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL_MAYUS)) {  
+            			 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL_MAYUS)[1].replace("###", ""))));
             		 }
-             		 if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("-")) { 
-             			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
-             			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("RENOVACION")[0].replace("###", "").trim()));
+             		 if(newcontenido.split("\n")[i].contains(ConstantsValue.DESDE) && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA2) && newcontenido.split("\n")[i].contains("-")) { 
+             			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.DESDE)[1].split(ConstantsValue.HASTA2)[0].replace("###", "").trim()));
+             			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA2)[1].split("RENOVACION")[0].replace("###", "").trim()));
              		 }
-             		 else if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta")) {  
+             		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.DESDE) && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA2)) {  
             			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0]));
             			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));
             			modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("###")[2].trim()));
@@ -161,22 +155,22 @@ public class InbursaAutosModel {
                   			modelo.setDescripcion(newcontenido.split("\n")[i].split(modelo.getClave())[1].trim());            				 
             			 }
              		 }
-            		 if(newcontenido.split("\n")[i].contains("MODELO:") && newcontenido.split("\n")[i].contains("PLACAS:")){
-            			 modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split("MODELO:")[1].split("PLACAS")[0].replace("###", "").trim()));
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.MODELO_MAYUS) && newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS_MAYUS)){
+            			 modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split(ConstantsValue.MODELO_MAYUS)[1].split("PLACAS")[0].replace("###", "").trim()));
             		 }
-            		 else if(newcontenido.split("\n")[i].contains("MODELO:")){            			
-            			 modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split("MODELO:")[1].replace("###", "").trim()));
+            		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.MODELO_MAYUS)){            			
+            			 modelo.setModelo(fn.castInteger(newcontenido.split("\n")[i].split(ConstantsValue.MODELO_MAYUS)[1].replace("###", "").trim()));
             		 }
-            		 if(newcontenido.split("\n")[i].contains("PLACAS:")){
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS_MAYUS)){
             			 if(newcontenido.split("\n")[i].split("PLACAS")[1].length() > 2) {
             				 modelo.setPlacas(newcontenido.split("\n")[i].split("PLACAS:")[1].replace("###", "").trim());	 
             			 }            			 
             		 }
-            		 if(newcontenido.split("\n")[i].contains("SERIE:") && newcontenido.split("\n")[i].contains("NÚMERO")){            			
-            			 modelo.setSerie(newcontenido.split("\n")[i].split("SERIE:")[1].split("NÚMERO")[0].replace("###", "").trim());
+            		 if(newcontenido.split("\n")[i].contains(ConstantsValue.SERIE_MAYUS) && newcontenido.split("\n")[i].contains("NÚMERO")){            			
+            			 modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.SERIE_MAYUS)[1].split("NÚMERO")[0].replace("###", "").trim());
             		 }
-            		 else if(newcontenido.split("\n")[i].contains("SERIE:")){            			
-            			 modelo.setSerie(newcontenido.split("\n")[i].split("SERIE:")[1].replace("###", "").trim());
+            		 else if(newcontenido.split("\n")[i].contains(ConstantsValue.SERIE_MAYUS)){            			
+            			 modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.SERIE_MAYUS)[1].replace("###", "").trim());
             		 }
             		 if(newcontenido.split("\n")[i].contains("MOTOR:")){
             			 if(newcontenido.split("\n")[i].split("MOTOR")[1].length() > 2) {
@@ -224,7 +218,7 @@ public class InbursaAutosModel {
             
             
             
-            inicio = contenido.indexOf("COBERTURAS CONTRATADAS");
+            inicio = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS);
             fin = contenido.indexOf("En caso de Siniestro");
             if(fin == -1) {
             	  fin = contenido.indexOf("AVISO IMPORTANTE");
@@ -239,7 +233,7 @@ public class InbursaAutosModel {
             	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").replace("las 12:00 horas", "");
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {            		
           		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-            	  if(newcontenido.split("\n")[i].contains("COBERTURAS CONTRATADAS") || newcontenido.split("\n")[i].contains("MÍNIMO")
+            	  if(newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS_CONTRATADAS) || newcontenido.split("\n")[i].contains("MÍNIMO")
             		|| newcontenido.split("\n")[i].contains("Cobertura") || newcontenido.split("\n")[i].contains("Deducible") || newcontenido.split("\n")[i].contains("**")
             		|| newcontenido.split("\n")[i].contains("UMA") || newcontenido.split("\n")[i].contains("OPERAN")) {
             	  }else {
