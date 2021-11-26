@@ -9,8 +9,10 @@ import javax.validation.constraints.NotNull;
 import com.copsis.dto.AmortizacionDTO;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class AmortizacionPdfForm {
 	@NotBlank(message = "¡El Producto no puede ir vacio!")
 	private String producto;
