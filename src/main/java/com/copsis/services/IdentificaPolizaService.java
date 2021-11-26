@@ -53,8 +53,9 @@ public class IdentificaPolizaService {
 			pdfStripper.setParagraphStart("@@@");
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";
-			
+
 			boolean encontro = false;
+
 			// CHUBB
 			if (encontro == false) {
 				if (contenido.contains("Chubb")) {
@@ -175,6 +176,20 @@ public class IdentificaPolizaService {
 					}
 				}
 			}
+			
+			// ENTRADA PARA HDI
+			if (encontro == false) {
+		
+				if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
+						|| contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
+						|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
+						|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+					HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
+					modelo = datosHdi.procesar();
+					encontro = true;
+				}
+			}
+
 
 			// ENTRADA PARA BANORTE
 			if (encontro == false) {
@@ -206,6 +221,7 @@ public class IdentificaPolizaService {
 
 				}
 			}
+		
 			// ENTRADA PARA INBURSA
 			if (encontro == false) {
 				if (contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
@@ -214,7 +230,7 @@ public class IdentificaPolizaService {
 					encontro = true;
 				}
 			}
-
+		
 			// ENTRADA PARA METLIFE
 			if (encontro == false) {
 				if (contenido.split("@@@")[1].contains("MetLife México S.A.")
@@ -283,17 +299,6 @@ public class IdentificaPolizaService {
 				}
 			}
 
-			// ENTRADA PARA HDI
-			if (encontro == false) {
-				if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
-						|| contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
-						|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
-						|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
-					HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
-					modelo = datosHdi.procesar();
-					encontro = true;
-				}
-			}
 
 			// ENTRADA PARA SURA
 			if (encontro == false) {
@@ -346,7 +351,7 @@ public class IdentificaPolizaService {
 						+ "No se logró identificar el PDF.");
 				;
 			}
-
+		
 			pdDoc.close();
 
 			documentToBeParsed.close();

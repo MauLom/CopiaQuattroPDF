@@ -64,7 +64,10 @@ public class HdiAutosModel {
 						if(newcontenido.split("\n")[i + 1].contains("Formea de Pago")) {
 							modelo.setCteDireccion(newcontenido.split("\n")[i + 1].split("Forma de Pago")[0].replace("###", "").trim());
 							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("Forma de Pago:")[1].trim()));
-						}else {
+						}else if(newcontenido.split("\n")[i + 1].contains("CLIENTE")) {
+							modelo.setCteDireccion(newcontenido.split("\n")[i + 2]);
+						}
+						else {
 							modelo.setCteDireccion(newcontenido.split("\n")[i + 1]);
 						}
 						
@@ -238,6 +241,9 @@ public class HdiAutosModel {
 		
 			inicio = contenido.indexOf("Descripción###Límite de Responsabilidad");
 			fin = contenido.indexOf("Prima de");
+			if(fin  < inicio) {
+				fin = contenido.lastIndexOf("Recargo");
+			}
 
 			if (inicio > 0 & fin > 0 & inicio < fin) {
 				  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
