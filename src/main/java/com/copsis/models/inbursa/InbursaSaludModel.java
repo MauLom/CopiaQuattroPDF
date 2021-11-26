@@ -1,6 +1,5 @@
 package com.copsis.models.inbursa;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,26 +13,16 @@ public class InbursaSaludModel {
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
 		// Varaibles
 		private String contenido = "";
-		private String newcontenido = "";
-		private String recibosText = "";
-		private String resultado = "";
-		private int inicio = 0;
-		private int fin = 0;
-		private int donde = 0;
-		private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-		private BigDecimal restoDerecho = BigDecimal.ZERO;
-		private BigDecimal restoIva = BigDecimal.ZERO;
-		private BigDecimal restoRecargo = BigDecimal.ZERO;
-		private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-		private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-		private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-		private BigDecimal restoCargoExtra = BigDecimal.ZERO;
 	
 	public InbursaSaludModel(String contenido) {
 		this.contenido = contenido;	
 	}
 	
 	public EstructuraJsonModel procesar() {
+		String newcontenido = "";
+		String resultado = "";
+		int inicio = 0;
+		int fin = 0;
 		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
@@ -109,11 +98,11 @@ public class InbursaSaludModel {
                     	if(newcontenido.split("\n")[j].contains("CLAVE")) {                   
                     		modelo.setCveAgente(fn.extraerNumeros( newcontenido.split("\n")[j-2]));
                     		if(modelo.getCveAgente().length() > 0) {
-                    			String A = newcontenido.split("\n")[j-1].replace(" ", "###").split("###")[0].trim();
-                    			 if(A.contains("@")) {
-                    				 A ="";
+                    			String a = newcontenido.split("\n")[j-1].replace(" ", "###").split("###")[0].trim();
+                    			 if(a.contains("@")) {
+                    				 a ="";
                     			 }
-                    		  modelo.setAgente((newcontenido.split("\n")[j-2].split( modelo.getCveAgente() )[1] +""+ A).trim());	
+                    		  modelo.setAgente((newcontenido.split("\n")[j-2].split( modelo.getCveAgente() )[1] +""+ a).trim());	
                     		}                                        			
                     	}
 					} 
@@ -135,7 +124,7 @@ public class InbursaSaludModel {
             			asegurado.setNacimiento(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("nacimiento:")[1].split("###")[1]));            			
             		}
             		if(newcontenido.split("\n")[i].contains("Género:") && newcontenido.split("\n")[i].contains("Fecha:")) {
-            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("Género:")[1].split("###")[1]) ? 1 : 0);
+            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("Género:")[1].split("###")[1]).booleanValue() ? 1 : 0);
             		}
             		
             		if(newcontenido.split("\n")[i].contains("Parentesco:") && newcontenido.split("\n")[i].contains("Tope")) {
