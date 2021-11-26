@@ -32,9 +32,6 @@ public class HdiAutosModel {
 		try {
 
 
-			 int inicio = 0;
-			 int fin = 0;
-			 String newcontenido = "";
 			// tipo
 			modelo.setTipo(1);
 			// cia

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -16,8 +15,11 @@ public class BanorteAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
+	private String newcontenido = "";
 	private String recibosText = "";
-
+	private String resultado = "";
+	private int inicio = 0;
+	private int fin = 0;
 	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
 	private BigDecimal restoDerecho = BigDecimal.ZERO;
 	private BigDecimal restoIva = BigDecimal.ZERO;
@@ -26,7 +28,7 @@ public class BanorteAutosModel {
 	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
 	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
 	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
-
+	
 	public BanorteAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
 		this.recibosText = recibos;
@@ -93,15 +95,15 @@ public class BanorteAutosModel {
 						//primas
 						if(newcontenido.split("\n")[i].contains("emisión:") && newcontenido.split("\n")[i].contains("Neta:")){
 					
-							modelo.setFechaEmision(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("emisión:")[1].split("Prima")[0]).replace("###", "").trim()));
+							modelo.setFechaEmision(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("emisión:")[1].split("Prima")[0]).replace("###", "").trim()));
 						    modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replace("###", ""))));
 						}
 					    if(newcontenido.split("\n")[i].contains("Inicio Vigencia:") && newcontenido.split("\n")[i].contains("Reducción:")){
-					    	modelo.setVigenciaDe(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Reducción")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
+					    	modelo.setVigenciaDe(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Reducción")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
 						    				
 						}
                         if(newcontenido.split("\n")[i].contains("Fin Vigencia:") && newcontenido.split("\n")[i].contains("Recargo:")){
-                        	modelo.setVigenciaA(fn.formatDate_MonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Recargo")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
+                        	modelo.setVigenciaA(fn.formatDateMonthCadena((newcontenido.split("\n")[i].split("Vigencia:")[1].split("Recargo")[0]).replace("###", "").replace("12:00 hrs", "").trim()));
                         	modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Recargo:")[1].split("###")[newcontenido.split("\n")[i].split("Recargo:")[1].split("###").length -1].replace("###", ""))));	
 						}
                    
@@ -237,104 +239,54 @@ public class BanorteAutosModel {
 					recibosList = recibosExtract();
 					
 				}
-			}
-//	            //COBERTURAS
-			inicio = contenido.indexOf("DETALLES DE COBERTURAS");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("DETALLE COBERTURAS");
-			}
-
-			fin = contenido.indexOf("La Unidad de Medida ");
-			if (fin == -1) {
-				fin = contenido.indexOf("La Compañía podrá en cualquier");
-			}
-
-			if (inicio > 0 && fin > 0 && inicio < fin) {
-				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "").trim();
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if (!newcontenido.split("\n")[i].contains("DETALLES")
-							&& !newcontenido.split("\n")[i].contains("PAQUETE")
-							&& !newcontenido.split("\n")[i].contains("Coberturas")
-							&& !newcontenido.split("\n")[i].contains("Primas")
-							&& !newcontenido.split("\n")[i].contains("COBERTURAS")
-							&& newcontenido.split("\n")[i].split("###").length > 1) {
-
-						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-						if (newcontenido.split("\n")[i].split("###").length == 4) {
-							cobertura.setDeducible(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 2]);
-							cobertura.setSa(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 3]);
-						} else {
-							cobertura.setDeducible(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 1]);
-							cobertura.setSa(newcontenido.split("\n")[i]
-									.split("###")[newcontenido.split("\n")[i].split("###").length - 2]);
+	        	switch (modelo.getFormaPago()) {
+				case 1:
+					if(recibosList.size() ==  0) {
+						recibo.setReciboId("");
+						recibo.setSerie("1/1");
+						recibo.setVigenciaDe(modelo.getVigenciaDe());
+						recibo.setVigenciaA(modelo.getVigenciaA());
+						if (recibo.getVigenciaDe().length() > 0) {
+							recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
 						}
-						coberturas.add(cobertura);
+						recibo.setPrimaneta(modelo.getPrimaneta());
+						recibo.setDerecho(modelo.getDerecho());
+						recibo.setRecargo(modelo.getRecargo());
+						recibo.setIva(modelo.getIva());
+						recibo.setPrimaTotal(modelo.getPrimaTotal());
+						recibo.setAjusteUno(modelo.getAjusteUno());
+						recibo.setAjusteDos(modelo.getAjusteDos());
+						recibo.setCargoExtra(modelo.getCargoExtra());
+						recibosList.add(recibo);					
+					}
+				
+					break;
+				case 2:
+					if (recibosList.size() == 1) {
+						recibo.setSerie("2/2");
+						recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
+						recibo.setVigenciaA(modelo.getVigenciaA());
+						recibo.setVencimiento("");
+						recibo.setPrimaneta(restoPrimaNeta);
+						recibo.setPrimaTotal(restoPrimaTotal);
+						recibo.setRecargo(restoRecargo);
+						recibo.setDerecho(restoDerecho);
+						recibo.setIva(restoIva);
+						recibo.setAjusteUno(restoAjusteUno);
+						recibo.setAjusteDos(restoAjusteDos);
+						recibo.setCargoExtra(restoCargoExtra);
+						recibosList.add(recibo);
 
 					}
-				}
-				modelo.setCoberturas(coberturas);
-			}
-
-			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
-
-			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-
-			if (recibosText.length() > 0) {
-				recibosList = recibosExtract();
-
-			}
-			switch (modelo.getFormaPago()) {
-			case 1:
-				if (recibosList.isEmpty()) {
-					recibo.setReciboId("");
-					recibo.setSerie("1/1");
-					recibo.setVigenciaDe(modelo.getVigenciaDe());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					if (recibo.getVigenciaDe().length() > 0) {
-						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-					}
-					recibo.setPrimaneta(modelo.getPrimaneta());
-					recibo.setDerecho(modelo.getDerecho());
-					recibo.setRecargo(modelo.getRecargo());
-					recibo.setIva(modelo.getIva());
-					recibo.setPrimaTotal(modelo.getPrimaTotal());
-					recibo.setAjusteUno(modelo.getAjusteUno());
-					recibo.setAjusteDos(modelo.getAjusteDos());
-					recibo.setCargoExtra(modelo.getCargoExtra());
-					recibosList.add(recibo);
-				}
-
-				break;
-			case 2:
-				if (recibosList.size() == 1) {
-					recibo.setSerie("2/2");
-					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					recibo.setVencimiento("");
-					recibo.setPrimaneta(restoPrimaNeta);
-					recibo.setPrimaTotal(restoPrimaTotal);
-					recibo.setRecargo(restoRecargo);
-					recibo.setDerecho(restoDerecho);
-					recibo.setIva(restoIva);
-					recibo.setAjusteUno(restoAjusteUno);
-					recibo.setAjusteDos(restoAjusteDos);
-					recibo.setCargoExtra(restoCargoExtra);
-					recibosList.add(recibo);
-
-				}
-				break;
-			case 3:
-			case 4:
-				int totaRecibos = fn.getTotalRec(modelo.getFormaPago());
-				if (recibosList.size() > totaRecibos) {
-					for (int i = 0; i < recibosList.size(); i++) {
-						if (i >= totaRecibos) {
-							recibosList.remove(i--);
+					break;
+				case 3:
+				case 4:									
+					int tota_recibos =fn.getTotalRec(modelo.getFormaPago());
+					if(recibosList.size() > tota_recibos) {
+						for (int i = 0; i < recibosList.size(); i++) {					      
+							if(i >= tota_recibos) {							
+								recibosList.remove(i--);							
+							}				
 						}
 					}				
 					break;
@@ -349,62 +301,50 @@ public class BanorteAutosModel {
 						BanorteAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 				return modelo;
 			}
-
-			modelo.setRecibos(recibosList);
-
-			return modelo;
-		} catch (Exception ex) {
-			modelo.setError(BanorteAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
-					+ ex.getCause());
-			return modelo;
+			
 		}
+		
+		private ArrayList<EstructuraRecibosModel> recibosExtract() {
+			recibosText = fn.fixContenido(recibosText);
+			List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
 
-	}
+			try {
+				for (int i = 0; i < recibosText.split("AVISO DE COBRO").length; i++) {
+			
+					if(recibosText.split("AVISO DE COBRO")[i].contains("Serie:")) {
 
-	private ArrayList<EstructuraRecibosModel> recibosExtract() {
-		recibosText = fn.fixContenido(recibosText);
-		List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
-
-		try {
-			for (int i = 0; i < recibosText.split(ConstantsValue.AVISO_COBRO).length; i++) {
-
-				if (recibosText.split(ConstantsValue.AVISO_COBRO)[i].contains(ConstantsValue.SERIE)) {
-
-					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					String x = recibosText.split(ConstantsValue.AVISO_COBRO)[i].split("Importe con Letra")[0];
-					if (x.contains("Prima Neta") && x.contains(ConstantsValue.RECARGOS)) {
-						recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(
-								x.split("Prima Neta")[1].split(ConstantsValue.RECARGOS)[0].split("###")[1])));
-
-						recibo.setRecargo(fn.castBigDecimal(fn
-								.preparaPrimas(x.split(ConstantsValue.RECARGOS)[1].split("\n")[0].replace("###", ""))));
-
-						recibosLis.add(recibo);
-					}
-					if (x.contains(ConstantsValue.SERIE)) {
-						recibo.setSerie(x.split(ConstantsValue.SERIE)[1].split("Folio")[0].replace("###", ""));
-					}
-
-					if (x.contains("IVA")) {
-						recibo.setIva(fn.castBigDecimal(
-								fn.preparaPrimas(x.split("IVA")[1].split(":")[1].split("\n")[0].replace("###", ""))));
-					}
-					if (x.contains("Prima Total")) {
-						recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(
-								x.split("Derecho Póliza")[1].split("Prima")[0].split("\n")[0].replace("###", ""))));
-						recibo.setPrimaTotal(fn.castBigDecimal(
-								fn.preparaPrimas(x.split("Prima Total")[1].split("\n")[0].replace("###", ""))));
-					}
-
+						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+					String x = recibosText.split("AVISO DE COBRO")[i].split("Importe con Letra")[0];
+					    if(x.contains("Prima Neta") && x.contains("Recargos")) {
+					    	recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(x.split("Prima Neta")[1].split("Recargos")[0].split("###")[1])));
+					    
+					    	recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(x.split("Recargos")[1].split("\n")[0].replace("###", ""))));
+					    	
+					    	 recibosLis.add(recibo);
+					    }
+					    if(x.contains("Serie:")){
+					    	recibo.setSerie(x.split("Serie:")[1].split("Folio")[0].replace("###", ""));
+					    }
+					    
+					    if(x.contains("IVA")){					 
+					    	recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(x.split("IVA")[1].split(":")[1].split("\n")[0].replace("###", ""))));
+					    } 
+					    if(x.contains("Prima Total")){
+					    	recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(x.split("Derecho Póliza")[1].split("Prima")[0].split("\n")[0].replace("###", ""))));
+					    	recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(x.split("Prima Total")[1].split("\n")[0].replace("###", ""))));
+					    } 
+					   
+					}			
 				}
-			}
-			return (ArrayList<EstructuraRecibosModel>) recibosLis;
-		} catch (Exception ex) {
-			modelo.setError(
-					BanorteAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+				return (ArrayList<EstructuraRecibosModel>) recibosLis;
+			} catch (Exception ex) {
+				modelo.setError(BanorteAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
+						+ ex.getCause());
 
-			return (ArrayList<EstructuraRecibosModel>) recibosLis;
+				return (ArrayList<EstructuraRecibosModel>) recibosLis;
+			}
 		}
-	}
+		
+		
 
 }
