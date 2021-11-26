@@ -30,6 +30,11 @@ public class HdiAutosModel {
 				.replace("SEMESTRAL EFECTIVO", "SEMESTRAL").replace("Individual", "")
 				.replace("C l a v e : ", ConstantsValue.CLAVE);
 		try {
+
+
+			 int inicio = 0;
+			 int fin = 0;
+			 String newcontenido = "";
 			// tipo
 			modelo.setTipo(1);
 			// cia
@@ -53,12 +58,13 @@ public class HdiAutosModel {
 
 					if (newcontenido.split("\n")[i].contains("RFC:")) {
 						modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].trim());
-						if (newcontenido.split("\n")[i + 1].contains("Formea de Pago")) {
-							modelo.setCteDireccion(newcontenido.split("\n")[i + 1].split("Forma de Pago")[0]
-									.replace("###", "").trim());
-							modelo.setFormaPago(
-									fn.formaPago(newcontenido.split("\n")[i + 1].split("Forma de Pago:")[1].trim()));
-						} else {
+						if(newcontenido.split("\n")[i + 1].contains("Formea de Pago")) {
+							modelo.setCteDireccion(newcontenido.split("\n")[i + 1].split("Forma de Pago")[0].replace("###", "").trim());
+							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("Forma de Pago:")[1].trim()));
+						}else if(newcontenido.split("\n")[i + 1].contains("CLIENTE")) {
+							modelo.setCteDireccion(newcontenido.split("\n")[i + 2]);
+						}
+						else {
 							modelo.setCteDireccion(newcontenido.split("\n")[i + 1]);
 						}
 
@@ -155,11 +161,11 @@ public class HdiAutosModel {
 						modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.SERIE)[1].split("Cilindros")[0]
 								.replace("###", "").trim());
 					}
-					if (modelo.getSerie().length() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.SERIE)) {
-
-						modelo.setSerie(
-								newcontenido.split("\n")[i].split(ConstantsValue.SERIE)[1].split("###")[0].trim());
-
+					if(modelo.getSerie().length() == 0) {
+						if (newcontenido.split("\n")[i].contains("Serie:")) {
+							modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].	split("###")[0].trim());
+						}
+						
 					}
 
 					if (newcontenido.split("\n")[i].contains("Paquete:")) {
@@ -191,49 +197,40 @@ public class HdiAutosModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains("Fraccionado")
-							&& newcontenido.split("\n")[i].contains("Total a Pagar")
-							&& newcontenido.split("\n")[i].split("###").length == 5) {
-
-						primas = false;
-						modelo.setPrimaneta(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[0])));
-						modelo.setDerecho(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[3])));
-						modelo.setRecargo(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[5])));
-						modelo.setIva(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[6])));
-						modelo.setPrimaTotal(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[7])));
-
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
+					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("Total a Pagar")) {
+						
+						if(newcontenido.split("\n")[i].split("###").length ==  5) {
+				
+							primas = false;
+							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
+							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
+							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
+							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));							
+						}
 					}
-					if (newcontenido.split("\n")[i].contains("Fraccionado")
-							&& newcontenido.split("\n")[i].contains("de Póliza")
-							&& newcontenido.split("\n")[i + 1].split("###").length == 8) {
-
-						primas = false;
-						modelo.setPrimaneta(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[0])));
-						modelo.setDerecho(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[3])));
-						modelo.setRecargo(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[5])));
-						modelo.setIva(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[6])));
-						modelo.setPrimaTotal(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[7])));
-
+					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("de Póliza") && newcontenido.split("\n")[i+1].split("###").length ==  8) {
+							primas = false;
+							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
+							modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1])) );
+							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
+							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
+							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));
 					}
 				}
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (primas) {
-						if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
-							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(
-									newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].split("###")[1])));
+					if (Boolean.TRUE.equals(primas)) {
+					
+						if (newcontenido.split("\n")[i].contains("Prima Neta")) {
+							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima Neta")[1].split("###")[1])));
 						}
+						if (newcontenido.split("\n")[i].contains("Descuento")) {
+							modelo.setAjusteUno( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Descuento")[1].split("###")[1])));
+						}
+						
 						if (newcontenido.split("\n")[i].contains("fraccionado")) {
 
 							modelo.setRecargo(fn.castBigDecimal(
@@ -259,6 +256,9 @@ public class HdiAutosModel {
 
 			inicio = contenido.indexOf("Descripción###Límite de Responsabilidad");
 			fin = contenido.indexOf("Prima de");
+			if(fin  < inicio) {
+				fin = contenido.lastIndexOf("Recargo");
+			}
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

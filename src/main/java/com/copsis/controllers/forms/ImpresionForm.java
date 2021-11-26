@@ -1,9 +1,10 @@
 package com.copsis.controllers.forms;
-
 import java.util.List;
 
 import com.copsis.clients.projections.BeneficiarioProjection;
 import com.copsis.clients.projections.PaqueteCoberturaProjection;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class ImpresionForm {
 	private String colonia;
 	private String municipo;
 	private String estado;
-	private String cp;	
+	private String cp;
 	private String nacimiento;
 	private String vigenciaDe;
 	private String vigenciaA;
@@ -47,6 +48,17 @@ public class ImpresionForm {
 	private String ocupacion;
 	private String paisNacimiento;
 	private String telefono;
-	private List<BeneficiarioProjection> beneficiarios;
-	private List<PaqueteCoberturaProjection> coberturas;
+	private String textoConsentimiento="";
+	private String calleExt;
+	private String numeroExt;
+	private String coloniaExt;
+	private String cpExt;
+	private String municipioExt;
+	private String ciudadExt;
+	private String estadoExt;
+	private String paisExt;
+	private String telefonoExt;
+	
+	private List<BeneficiarioProjection> Beneficiarios;
+	private List<PaqueteCoberturaProjection> Coberturas;
 }

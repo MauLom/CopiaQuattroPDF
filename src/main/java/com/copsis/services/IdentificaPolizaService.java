@@ -58,6 +58,7 @@ public class IdentificaPolizaService {
 			String contenidoAux = "";
 
 			boolean encontro = false;
+
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
 				ChubbModel datosChubb = new ChubbModel();
@@ -161,25 +162,51 @@ public class IdentificaPolizaService {
 					}
 				}
 			}
-
-			// ENTRADA PARA BANORTE
-			if (!encontro && contenido.contains("Banorte") || (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
-							&& contenido.contains("Datos del asegurado titular (Solicitante)")
-							&& contenido.contains("ASEGURADOS"))) {
-				if (contenido.contains("Estimado(a)")) {
-					contenido = caratula(3, 4, pdfStripper, pdDoc);
-
-					BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
-					modelo = datosBanort.procesar();
-					encontro = true;
-				} else {
-
-					BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
-					modelo = datosBanort.procesar();
+			
+			// ENTRADA PARA HDI
+			if (encontro == false) {
+		
+				if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
+						|| contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
+						|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
+						|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+					HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
+					modelo = datosHdi.procesar();
 					encontro = true;
 				}
-
 			}
+
+
+			// ENTRADA PARA BANORTE
+			if (!encontro && contenido.contains("Banorte")
+						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
+								&& contenido.contains("Datos del asegurado titular (Solicitante)")
+								&& contenido.contains("ASEGURADOS"))) {
+			
+					
+					if (contenido.contains("Estimado(a)")) {
+						contenido = caratula(3, 4, pdfStripper, pdDoc);
+
+						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+						modelo = datosBanort.procesar();
+						encontro = true;
+					} else  if(contenido.contains("AVISO DE COBRO")) {
+						contenido = caratula(1, 6, pdfStripper, pdDoc);
+
+						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+						modelo = datosBanort.procesar();
+						encontro = true;
+					}
+					else {
+
+						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+						modelo = datosBanort.procesar();
+						encontro = true;
+					}
+
+				
+			}
+		
 			// ENTRADA PARA INBURSA
 			if (!encontro && contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
 				InbursaModel datosInbursa = new InbursaModel(pdfStripper, pdDoc, contenido);
@@ -187,7 +214,7 @@ public class IdentificaPolizaService {
 				encontro = true;
 
 			}
-
+		
 			// ENTRADA PARA METLIFE
 			if (!encontro && contenido.split("@@@")[1].contains("MetLife México S.A.")
 					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México")) {
@@ -294,7 +321,7 @@ public class IdentificaPolizaService {
 				modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " | "
 						+ "No se logró identificar el PDF.");
 			}
-
+		
 			pdDoc.close();
 
 			documentToBeParsed.close();

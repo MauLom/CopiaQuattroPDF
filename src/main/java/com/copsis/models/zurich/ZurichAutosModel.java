@@ -14,11 +14,7 @@ public class ZurichAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";	
-	private String  newcontenidoDire=""; 
-	
-	private int inicio = 0;
-	private int fin = 0;
+
 	
 	public ZurichAutosModel(String contenido) {
 		this.contenido = contenido;
@@ -27,8 +23,14 @@ public class ZurichAutosModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
+			
+			 String newcontenido = "";	
+			 String  newcontenidoDire=""; 
+			
+			 int inicio = 0;
+			 int fin = 0;
 			  modelo.setTipo(1);
-	            modelo.setCia(44);
+			    modelo.setCia(44);
 	            
 	            inicio = contenido.indexOf("PÓLIZA No.");
 	            fin = contenido.indexOf("Datos del Asegurado");
@@ -151,8 +153,7 @@ public class ZurichAutosModel {
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Prima Neta")) {	                    
 	                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1].trim())));
-	                        modelo.setAjusteDos(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
-	                        modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
+	                        modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));	 	          
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Financiamiento")) {
 	                    		modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[1])));
@@ -188,7 +189,7 @@ public class ZurichAutosModel {
 	                	cobertura.setNombre(dato.split("###")[0].replace("@@@", ""));
 	                	cobertura.setSa(dato.split("###")[1].trim().replace("    ", "").replace("   ", ""));
 	                	cobertura.setDeducible(dato.split("###")[2].trim());
-	               	   coberturas.add(cobertura);	;
+	               	   coberturas.add(cobertura);	
 	                }
 	            }
 	        	modelo.setCoberturas(coberturas);
