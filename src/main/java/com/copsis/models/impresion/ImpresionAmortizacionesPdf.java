@@ -164,7 +164,6 @@ public class ImpresionAmortizacionesPdf {
 								}
 								// PINTA LA DATA DE LA TABLA
 								table.draw();
-								document.save(new File("/home/development/Documents/prueba"));
 								yStart -= table.getHeaderAndDataHeight();
 								heightBorder = height -yStart;
 							}
