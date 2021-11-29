@@ -41,8 +41,8 @@ public class AtlasSaludModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza")) {
-						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
-						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "")
+						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].replace("###", ""));
+						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].replace("###", "")
 								.replace("-", "").replace(" ", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("desde:")
@@ -54,7 +54,7 @@ public class AtlasSaludModel {
 								.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta:")[1].split("Fecha")[0]
 										.replace("###", "").trim()));
 						modelo.setFechaEmision(fn.formatDateMonthCadena(
-								newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
+								newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1].replace("###", "").replace(":", "").trim()));
 					}
 					if (newcontenido.split("\n")[i].contains("Contratante")
 							&& newcontenido.split("\n")[i].contains("Domicilio")
@@ -87,7 +87,7 @@ public class AtlasSaludModel {
 					if (newcontenido.split("\n")[i].contains("Recibo:")
 							&& newcontenido.split("\n")[i].contains("Expedición:")) {
 						modelo.setDerecho(fn.castBigDecimal(
-								fn.castDouble(newcontenido.split("\n")[i].split("Expedición:")[1].replace("###", ""))));
+								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION2)[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("IVA:")) {
 						modelo.setIva(fn.castBigDecimal(
