@@ -59,7 +59,7 @@ public class PrimeroAutosBModel {
 						case 7:
 							modelo.setPlan(newcontenido.split("\n")[i + 1].split("###")[0]);
 							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i + 1].split("###")[2]));
-							modelo.setFechaEmision(fn.formatDate_MonthCadena(
+							modelo.setFechaEmision(fn.formatDateMonthCadena(
 									fn.elimgatos(newcontenido.split("\n")[i + 1].split("EXPEDICIÓN")[1]).replace("###",
 											"-")));
 							break;
@@ -71,9 +71,9 @@ public class PrimeroAutosBModel {
 							|| newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {
 						if (newcontenido.split("\n")[i + 1].split("-").length > 0) {
 							modelo.setVigenciaDe(
-									fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[1]));
+									fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1]));
 							modelo.setVigenciaA(
-									fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[3]));
+									fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3]));
 							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[4]));
 						}
 					}

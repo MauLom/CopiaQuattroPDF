@@ -79,16 +79,16 @@ public class SegurosMtySalud {
 							);
 				}
 				if(newcontenido.split("\n")[i].contains("LAS 12 HRS DEL DÍA") && newcontenido.split("\n")[i].contains("INICIA")) {
-					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("LAS 12 HRS DEL DÍA")[1].split("###")[1].trim()));
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("LAS 12 HRS DEL DÍA")[1].split("###")[1].trim()));
 				 modelo.setFechaEmision(modelo.getVigenciaDe());
 				}
 				if(newcontenido.split("\n")[i].contains("LAS 12 HRS DEL DÍA") && newcontenido.split("\n")[i].contains("TERMINA")) {
-					modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("LAS 12 HRS DEL DÍA")[1].split("###")[1].trim()));
+					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("LAS 12 HRS DEL DÍA")[1].split("###")[1].trim()));
 				}
 				if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].contains("C.P.") ) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
-					modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
-					modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[2].trim()));	
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].trim()));	
 					 modelo.setFechaEmision(modelo.getVigenciaDe());
 				}
 				if( newcontenido.split("\n")[i].contains("C.P.")) {
@@ -193,11 +193,11 @@ public class SegurosMtySalud {
 					asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));					
 					asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
 					if(newcontenido.split("\n")[i].split("###")[4].trim().contains("-")) {
-						asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[4].trim()));
-	            		asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[5].trim()));
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].trim()));
+	            		asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5].trim()));
 					}else {
-						asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[5].trim()));
-	            		asegurado.setNacimiento(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[6].trim()));
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5].trim()));
+	            		asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[6].trim()));
 					}
 					
             		asegurados.add(asegurado);

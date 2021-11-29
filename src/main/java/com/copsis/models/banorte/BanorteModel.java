@@ -3,6 +3,7 @@ package com.copsis.models.banorte;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -14,7 +15,6 @@ public class BanorteModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private Integer pagIni =0;
 	private Integer pagFin =0;
 
 
@@ -30,7 +30,8 @@ public class BanorteModel {
 	public EstructuraJsonModel procesar() {
 	
 		try {
-
+			Integer pagIni =0;
+			
 			switch (fn.tipoPoliza(contenido)) {
 			case 1://Autos
 
@@ -39,7 +40,7 @@ public class BanorteModel {
 				pagFin = fn.pagFinRango(stripper, doc, "DETALLES DE COBERTURAS");
 				  if(pagFin == 0)   pagFin = fn.pagFinRango(stripper, doc, "DETALLE COBERTURAS");
 					if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
-						modelo  = new BanorteAutosModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+						modelo  = new BanorteAutosModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
 					}					   
 				break;
 			case 2://Salud 
@@ -53,18 +54,18 @@ public class BanorteModel {
 
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 				
-					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
+					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
 				}
 				break;
 			case 5://Vida
-				modelo  = new BanorteVidaModel(fn.caratula(2, 3, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+				modelo  = new BanorteVidaModel(fn.caratula(2, 3, stripper, doc),fn.textoBusqueda(stripper, doc,ConstantsValue.AVISO_COBRO, false)).procesar();
 
 				break;
 			case 4://Diversos/Empresarial
 				pagIni = fn.pagFinRango(stripper, doc, "DATOS DEL CONTRATANTE");
 				pagFin = fn.pagFinRango(stripper, doc, "nombre del Agente:");
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
-					modelo  = new BanorteDiversos(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, "AVISO DE COBRO", false)).procesar();
+					modelo  = new BanorteDiversos(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
 				}				
 				break;
 

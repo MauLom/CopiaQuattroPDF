@@ -21,7 +21,15 @@ import org.apache.pdfbox.text.PDFTextStripper;
 public class DataToolsModel {
 	DateTimeFormatter formatter;
 	SimpleDateFormat simpleDateFormat;
-	private static final  String rpl ="\r\r\n";
+	private static final  String RPL ="\r\r\n";
+	private static final String FORMATDATE="yyyy-MM-dd";
+	
+	private static final String CONTADO="CONTADO";
+	private static final String SEMESTRAL="SEMESTRAL";
+	private static final String TRIMESTRAL="TRIMESTRAL";
+	private static final String MENSUAL="MENSUAL";
+	private static final String SEMANAL="SEMANAL";
+	private static final String QUINCENAL="QUINCENAL";
 	
 
 	public boolean isNumeric(String value) {// validacion de si es numero
@@ -34,9 +42,8 @@ public class DataToolsModel {
 	}
 
 	public String cleanString(String texto) {// limpiar de signos los datos antes de convertir a numeros
-		texto = texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
+		return texto.replace("(", "").replace(")", "").replace(",", "").replace("$", "").replace("MXP", "")
 				.replace("MXN", "").trim();
-		return texto;
 	}
 
 	public String preparaPrimas(String texto) {// limpiar de signos los datos antes de convertir a numeros
@@ -46,7 +53,7 @@ public class DataToolsModel {
 	public List<ReplaceModel> remplazosGenerales() {
 		List<ReplaceModel> remplazoDeA = new ArrayList<>();
 		try {
-			remplazoDeA.add(new ReplaceModel(rpl, "\r\n"));
+			remplazoDeA.add(new ReplaceModel(RPL, "\r\n"));
 			remplazoDeA.add(new ReplaceModel("\n", "\r\n"));
 			remplazoDeA.add(new ReplaceModel(" :", ":"));
 			remplazoDeA.add(new ReplaceModel("$", ""));
@@ -184,35 +191,35 @@ public class DataToolsModel {
 		}
 	}
 
-	public String elimina_spacios(String texto) {
-		String result = "";
-		int counter_space = 0;
+	public String eliminaSpacios(String texto) {
+		 StringBuilder result = new  StringBuilder();
+		int counterSpace = 0;
 		for (int i = 0; i < texto.length(); i++) {
 			if (texto.charAt(i) == ' ') {
-				if (counter_space < 1) {
-					counter_space = 1;
+				if (counterSpace < 1) {
+					counterSpace = 1;
 					if (result.length() > 0 || result.length() > 0 && i < texto.length()) {
-						result += Character.toString(texto.charAt(i));
+						result.append(Character.toString(texto.charAt(i)));
 					}
 				}
 			} else {
-				counter_space = 0;
-				result += Character.toString(texto.charAt(i));
+				counterSpace = 0;
+				result.append(Character.toString(texto.charAt(i)));
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
-	public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
-		boolean encontro_grupo = false;
+	public String remplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
+		boolean encontroGrupo = false;
 		int par = 0;
 		StringBuilder newdato = new StringBuilder();
 		for (int i = 0; i < dato.length(); i++) {
 			if (dato.charAt(i) == ' ') {
-				if (encontro_grupo == false) {
+				if (!encontroGrupo) {
 					par = par + 1;
 					if (par == 2) {
-						encontro_grupo = true;
+						encontroGrupo = true;
 						newdato.append(newdato.toString().trim());
 						newdato.append("###");
 					} else {
@@ -221,25 +228,25 @@ public class DataToolsModel {
 				}
 			} else {
 				par = 0;
-				encontro_grupo = false;
+				encontroGrupo = false;
 				newdato.append(Character.toString(dato.charAt(i)));
 			}
 		}
 		return newdato.toString();
 	}
 
-	public String eliminaSpacios(String texto, char delimiter, String valor) {
-		boolean encontro_grupo = false;
+	public String eliminaSpacios(String texto,char delimiter ,String valor) {
+		boolean encontroGrupo = false;
 		int counterspace = 0;
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < texto.length(); i++) {
 			if (texto.charAt(i) == ' ') {
 
 				if (valor.length() > 0) {
-					if (encontro_grupo == false) {
+					if (!encontroGrupo) {
 						counterspace = counterspace + 1;
 						if (counterspace == 2) {
-							encontro_grupo = true;
+							encontroGrupo = true;
 							result.append(result.toString().trim());
 							result.append("###");
 						} else {
@@ -258,7 +265,7 @@ public class DataToolsModel {
 				}
 
 			} else {
-				encontro_grupo = false;
+				encontroGrupo = false;
 				counterspace = 0;
 				result.append(Character.toString(texto.charAt(i)));
 			}
@@ -279,10 +286,8 @@ public class DataToolsModel {
 				newtexto = texto;
 			}
 			longText = newtexto.length();
-			if (newtexto.length() >= 3) {
-				if (newtexto.substring(0, 3).equals("###")) {
-					newtexto = newtexto.substring(3, longText);
-				}
+			if (newtexto.length() >= 3 && newtexto.substring(0, 3).equals("###")) {
+				newtexto = newtexto.substring(3, longText);
 			}
 		} else {
 			newtexto = texto;
@@ -292,24 +297,28 @@ public class DataToolsModel {
 
 	public int searchTwoTexts(String texto, String textOne, String textTwo) {
 		int result = 0;
+		boolean toBreak = false;
 		for (int i = 1; i < texto.trim().split("@@@").length; i++) {
 			if (texto.length() > 0) {
 				if (texto.trim().split("@@@")[i].contains(textOne) && texto.trim().split("@@@")[i].contains(textTwo)) {
 					result = i;
-					break;
+					toBreak = true;
 				}
 			} else {
 				if (texto.trim().split("@@@")[i].contains(textOne)) {
 					result = i;
-					break;
+					toBreak = true;
 				}
+			}
+			if(toBreak) {
+				break;
 			}
 
 		}
 		return result;
 	}
 
-	public String formatDate_MonthCadena(String formatear) { // RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018  // RETORNA 2018-02-02;
+	public String formatDateMonthCadena(String formatear) { /** RECIBE 02/FEBRERO/2018 || 02/FEB/2018 || 02/Feb/2018  // RETORNA 2018-02-02; **/
 		String result = "";
 		String day = "";
 		if (formatear.split("-")[0].length() == 1) {
@@ -336,11 +345,11 @@ public class DataToolsModel {
 			if (fecha.split("-")[1].length() > 2) {
 				fecha = fecha.split("-")[0] + "-" + mes(fecha.split("-")[1]) + "/" + fecha.split("-")[2];
 			}
-			DateFormat formatter;
+			DateFormat formater;
 			Date date;
-			formatter = new SimpleDateFormat(format);
-			date = (Date) formatter.parse(fecha.replaceAll("/", "-"));
-			simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			formater = new SimpleDateFormat(format);
+			date = formater.parse(fecha.replace("/", "-"));
+			simpleDateFormat = new SimpleDateFormat(FORMATDATE);
 			return simpleDateFormat.format(date);
 		} catch (Exception ex) {
 			resul = ex.getMessage();
@@ -350,7 +359,7 @@ public class DataToolsModel {
 
 	}
 
-	public String mes(String mes) { // RECIBE Ene || ENE || ENERO 02
+	public String mes(String mes) { /** RECIBE Ene || ENE || ENERO 02 */
 		mes = mes.toUpperCase();
 		List<String> meses = Arrays.asList("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO",
 				"SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
@@ -405,7 +414,7 @@ public class DataToolsModel {
 		int dato = 0;
 		switch (x.toUpperCase()) {
 		case "CONT":
-		case "CONTADO":
+		case CONTADO:
 		case "PRIMA UNICA":
 		case "PAGO ÚNICO":
 		case "PAGO UNICO":
@@ -418,7 +427,7 @@ public class DataToolsModel {
 			break;
 		case "SEME":
 		case "SEM.":
-		case "SEMESTRAL":
+		case SEMESTRAL:
 		case "SEMESTR":
 		case "SEMESTRAL S/R":
 		case "SEMESTRAL S-R":
@@ -426,7 +435,7 @@ public class DataToolsModel {
 			break;
 		case "TRIM":
 		case "TRIMESTR":
-		case "TRIMESTRAL":
+		case TRIMESTRAL:
 		case "Trimestral":
 		case "TRIMESTRAL S/R":
 		case "TRIMESTRAL S-R":
@@ -437,7 +446,7 @@ public class DataToolsModel {
 			break;
 		case "MENS":
 		case "MEN.":
-		case "MENSUAL":
+		case MENSUAL:
 		case "MENSUAL SIN RPF":
 		case "MENSUAL SR DERP":
 		case "MENSUAL SR":
@@ -456,7 +465,7 @@ public class DataToolsModel {
 			dato = 5;
 			break;
 		case "SEMA":
-		case "SEMANAL":
+		case SEMANAL:
 		case "SEMANAL VITRO":
 			dato = 6;
 			break;
@@ -487,6 +496,8 @@ public class DataToolsModel {
 			break;
 		case 6:
 			result = 52; // REVISAR ESTE CASO
+			break;
+		default:
 			break;
 		}
 		return result;
@@ -634,7 +645,7 @@ public class DataToolsModel {
 
 	public String recibo2(String fecha, int cuantos, int caso) {
 
-		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		formatter = DateTimeFormatter.ofPattern(FORMATDATE);
 		LocalDate date = LocalDate.parse(fecha);
 		switch (caso) {
 		case 1:// DIAS
@@ -675,12 +686,8 @@ public class DataToolsModel {
 		return meses;
 	}
 
-	public int ramoPoliza(String Contenido) {
-		int ramo = 0;
-		return ramo;
-	}
 
-	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, Boolean tipo)
+	public String textoBusqueda(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar, boolean tipo)
 			throws IOException { // BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO
 		StringBuilder x = new StringBuilder();
 		int listado = 0;
@@ -712,7 +719,7 @@ public class DataToolsModel {
 	}
 
 	public String dateAdd(String fecha, int cuantos, int caso) {
-		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		formatter = DateTimeFormatter.ofPattern(FORMATDATE);
 		LocalDate date = LocalDate.parse(fecha);
 		if(caso ==1) {
 			LocalDate dateNew = date.plusDays(cuantos);
@@ -740,10 +747,10 @@ public class DataToolsModel {
 	}
 
 	public String fixContenido(String contenido) {
-		String cont_Fix = contenido.replace("\n", "\r\n");
+		String contFix = contenido.replace("\n", "\r\n");
 		String texto = "";
-		if (cont_Fix.contains(rpl)) {
-			texto = cont_Fix.replace(rpl, "\r\n");
+		if (contFix.contains(RPL)) {
+			texto = contFix.replace(RPL, "\r\n");
 		} else {
 			texto = contenido.replace("\n", "\r\n");
 		}
@@ -763,7 +770,7 @@ public class DataToolsModel {
 		
 
 		stripper.setParagraphStart("@@@");
-	stripper.setWordSeparator("###");
+		stripper.setWordSeparator("###");
 		
 		stripper.setSortByPosition(true);
 		
@@ -771,7 +778,8 @@ public class DataToolsModel {
 	}
 	
 	 public String coberturas(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
-	        String x = "";
+	        
+	        StringBuilder x = new StringBuilder(); 
 		      
      
 	        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
@@ -782,20 +790,18 @@ public class DataToolsModel {
 
 	            if (pdfStripper.getText(pdDoc).contains(buscar)) {
 	                PDFTextStripper s = new PDFTextStripper();
-//	                s.setParagraphStart("@@@");
-//                    s.setWordSeparator("###");
 	                s.setSortByPosition(true);
 	                s = pdfStripper;
-	                x += s.getText(pdDoc);
+	                x.append(s.getText(pdDoc));
 	            }
 	        }
 
-	        return x;
+	        return x.toString();
 	    }
 	
 	
 	  public String recibos(PDFTextStripper pdfStripper, PDDocument pdDoc, String buscar) throws IOException { //BUSCA UNA PAGINA QUE CONTENGA LO BUSCADO 
-	        String x = "";
+	        StringBuilder x = new StringBuilder();
 	        for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
 
 	            pdfStripper.setStartPage(i);
@@ -806,11 +812,11 @@ public class DataToolsModel {
 	                s.setParagraphStart("###");
 	                s.setSortByPosition(true);
 	                s = pdfStripper;
-	                x += s.getText(pdDoc);
+	                x.append(s.getText(pdDoc));
 	            }
 	        }
 
-	        return x;
+	        return x.toString();
 	    }
 	
 	
@@ -818,7 +824,7 @@ public class DataToolsModel {
 		int dato = 0;
 		// Autos 1 Salud 2 Vida 3 Empresarial 4
 
-		String tipos[] = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL","PLACAS",
+		String[] tipos = { "SEGURO DE AUTOMÓVILES", "AUTOMÓVILES", "DATOS DEL VEH", "PAQUETE DE SEGURO EMPRESARIAL","PLACAS",
 				"AUTOS",
 				"AUTO INDIVIDUAL",
 				"SEGURO DE AUTOS",
@@ -835,7 +841,7 @@ public class DataToolsModel {
 
 		 boolean encontro = false;
 		for (String tipo : tipos) {	
-			if (contenido.toUpperCase().contains(tipo) && encontro == false) {
+			if (contenido.toUpperCase().contains(tipo) && !encontro) {
 				switch (tipo) {
 				case "DATOS DEL VEH":
 				case "AUTOMÓVILES":
@@ -886,7 +892,7 @@ public class DataToolsModel {
 		while (m.find()) {
 			resultado = m.group();
 		}
-		return resultado.toString();
+		return resultado;
 	}	
 	
 	public String numTx (String cadena) {
@@ -896,10 +902,10 @@ public class DataToolsModel {
 	        while (m.find()) {  
 	        	resultado = m.group();
 	        }
-	        return resultado.toString();
+	        return resultado;
 	}
 	
-    public String elimgatos(String texto) {// QUITA ### AL INICIO Y FINAL
+	public String elimgatos(String texto) {// QUITA ### AL INICIO Y FINAL
         String newtexto = "";
         int longText = 0;
         texto = texto.trim();
@@ -922,6 +928,7 @@ public class DataToolsModel {
         }
         return newtexto;
     }
+	
 	
 	public String seccion(String res ) {
 		String number;
@@ -976,33 +983,34 @@ public class DataToolsModel {
         	 number ="";
          break;
 		}
-		
 		return number;
 	}
 	
-	public int formaPagoSring(String x) { // FORMA DE PAGO
+	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
-		String tiposP[] = {"CONTADO","ANUAL","SEMESTRAL","TRIMESTRAL","MENSUAL","QUINCENAL","SEMANAL"};
+		String[] tiposP = {CONTADO,"ANUAL",SEMESTRAL,TRIMESTRAL,MENSUAL,QUINCENAL,SEMANAL};
 		for (String tipo : tiposP) {	
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
-				case "CONTADO":
+				case CONTADO:
 					dato=1;
 					break;
-				case "SEMESTRAL":
+				case SEMESTRAL:
 					dato=2;
 					break;
-				case "TRIMESTRAL":
+				case TRIMESTRAL:
 					dato=3;
 					break;
-				case "MENSUAL":
+				case MENSUAL:
 					dato=4;
 					break;
-				case "QUINCENAL":
+				case QUINCENAL:
 					dato=5;
 					break;
-				case "SEMANAL":
+				case SEMANAL:
 					dato=6;
+					break;
+				default:
 					break;
 				}			
 			}				

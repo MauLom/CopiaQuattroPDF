@@ -3,6 +3,7 @@ package com.copsis.models.gnp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -15,17 +16,13 @@ public class GnpDiversosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
 	private String contenido = "";
-	private String newcontenido = "";
-	private String resultado = "";
-	private String contenidolower = "";
-	private String nombre = "";
+
 	private String seccion = "";
 	private String ubicacionesT = "";
 	private int inicio = 0;
 	private int fin = 0;
-	private int index = 0;
 	private int tipo;
-	private Boolean esverdad;
+	private boolean esverdad;
 
 	// constructor
 	public GnpDiversosModel(String contenido, String ubicaciones, int tipo) {
@@ -35,6 +32,11 @@ public class GnpDiversosModel {
 	}
 
 	public EstructuraJsonModel procesar() {
+		int index = 0;
+		StringBuilder nombre = new StringBuilder();
+		StringBuilder resultado = new StringBuilder();
+		StringBuilder newcontenido = new StringBuilder();
+		String contenidolower = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenidolower = contenido.toLowerCase();
 		try {
@@ -45,150 +47,149 @@ public class GnpDiversosModel {
 			// poliza
 			inicio = contenido.indexOf("liza No.");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 8, inicio + 150).split("\r\n")[0].trim()).trim();
-				modelo.setPoliza(resultado);
+				modelo.setPoliza(
+						fn.gatos(contenido.substring(inicio + 8, inicio + 150).split("\r\n")[0].trim()).trim());
 			}
 
 			// renovacion
 			inicio = contenido.indexOf("Renovación");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 10, inicio + 150).split("\r\n")[0].trim()).trim();
-				modelo.setRenovacion(resultado);
+				modelo.setRenovacion(
+						fn.gatos(contenido.substring(inicio + 10, inicio + 150).split("\r\n")[0].trim()).trim());
 			}
 
 			// rfc
 			inicio = contenido.indexOf("R.F.C:");
 			if (inicio > -1) {
-				resultado = contenido.substring(inicio + 8, inicio + 150).trim().split("\r\n")[0].trim();
-				if (resultado.contains("Desde las")) {
-					resultado = fn.gatos(resultado.split("Desde las")[0].trim());
-					modelo.setRfc(resultado);
-				} else if (resultado.contains("Hasta las")) {
-					resultado = fn.gatos(resultado.split("Hasta las")[0].trim());
-					modelo.setRfc(resultado);
-				} else if (resultado.contains("Vigencia")) {
-					resultado = fn.gatos(resultado.split("Vigencia")[0].trim());
-					modelo.setRfc(resultado);
+				resultado.append(contenido.substring(inicio + 8, inicio + 150).trim().split("\r\n")[0].trim());
+				if (resultado.toString().contains(ConstantsValue.DESDE_LAS)) {
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()));
+				} else if (resultado.toString().contains("Hasta las")) {
+					modelo.setRfc(fn.gatos(resultado.toString().split("Hasta las")[0].trim()));
+				} else if (resultado.toString().contains(ConstantsValue.VIGENCIA2)) {
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()));
 				}
 			}
 
-			List<String> search = new ArrayList<String>();
+			List<String> search = new ArrayList<>();
 			search.add("Clave");
 			search.add("En caso");
 			search.add("Para mayor");
-			search.add("Grupo Nacional");
+			search.add(ConstantsValue.GRUPO_NACIONAL);
 
 			// cve_agente
 			inicio = contenido.indexOf("Clave");
 			if (inicio > -1) {
-				newcontenido = "";
-				newcontenido = fn.gatos(contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].trim());
-				resultado = "";
-				for (String x : newcontenido.split("\r\n")) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(fn.gatos(contenido.substring(inicio + 5, inicio + 150).split("\r\n")[0].trim()));
+				resultado = new StringBuilder();
+				for (String x : newcontenido.toString().split("\r\n")) {
 					esverdad = false;
 					for (String a : search) {
 						fin = x.indexOf(a);
 						if (fin > -1) {
-							resultado += x.substring(0, fin).trim();
+							resultado.append(x.substring(0, fin).trim());
 							esverdad = true;
 							break;
 						}
 					}
-					if (esverdad == false)
-						resultado += x.trim() + " ";
+					if (!esverdad)
+						resultado.append(x.trim()).append(" ");
 				}
-				modelo.setCveAgente(resultado.replace("###", " ").trim());
+				modelo.setCveAgente(resultado.toString().replace("###", " ").trim());
 			}
 
 			// agente
-			inicio = contenido.indexOf("Agente");
+			inicio = contenido.indexOf(ConstantsValue.AGENTE2);
 			if (inicio > -1) {
-				newcontenido = "";
-				newcontenido = fn.gatos(contenido.substring(inicio + 6, inicio + 180)).replace("@@@", "").trim();
-				resultado = "";
-				for (String x : newcontenido.split("\r\n")) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(fn.gatos(contenido.substring(inicio + 6, inicio + 180)).replace("@@@", "").trim());
+				resultado = new StringBuilder();
+				for (String x : newcontenido.toString().split("\r\n")) {
 					if (x.trim().length() > 0) {
 						esverdad = false;
 						for (String a : search) {
 							fin = x.indexOf(a);
 							if (fin > -1) {
-								resultado += x.substring(0, fin).trim();
+								resultado.append(x.substring(0, fin).trim());
 								esverdad = true;
 								break;
 							}
 						}
-						if (esverdad == false)
-							resultado += x.trim() + " ";
+						if (!esverdad)
+							resultado.append(x.trim()).append(" ");
 					}
 				}
-				modelo.setAgente(resultado.replace("###", " ").trim());
+				modelo.setAgente(resultado.toString().replace("###", " ").trim());
 			}
 
 			// id_cliente
 			inicio = contenido.indexOf("Código Cliente");
 			if (inicio > -1) {
-				resultado = contenido.substring(inicio + 14, inicio + 150).trim().split("\r\n")[0];
-				if (resultado.contains("Duraci")) {
-					resultado = fn.gatos(resultado.split("Duraci")[0]).trim();
-					modelo.setIdCliente(resultado);
+				resultado = new StringBuilder();
+				resultado.append(contenido.substring(inicio + 14, inicio + 150).trim().split("\r\n")[0]);
+				if (resultado.toString().contains("Duraci")) {
+					modelo.setIdCliente(fn.gatos(resultado.toString().split("Duraci")[0]).trim());
 				}
 			}
 
 			// plan
 			fin = contenido.indexOf("Póliza No.");
 			if (fin > -1) {
-				resultado = fn.gatos(contenido.substring(0, fin).trim());
-				inicio = resultado.indexOf("Daños");
+				resultado = new StringBuilder();
+				resultado.append(fn.gatos(contenido.substring(0, fin).trim()));
+				inicio = resultado.indexOf(ConstantsValue.DANIOS);
 				if (inicio > -1) {
-					resultado = fn.gatos(resultado.substring(inicio + 5, resultado.length()));
-					modelo.setPlan(resultado);
+					modelo.setPlan(fn.gatos(resultado.substring(inicio + 5, resultado.length())));
 				}
 			}
 
 			// cte_nombre
 			inicio = contenido.indexOf("Contratante");
 			if (inicio > -1) {
-				newcontenido = "";
-				resultado = contenido.substring(inicio + 11, inicio + 200).trim();
-				int index = 0;
-				for (String x : resultado.split("\n")) {
-					if (index == 1) {
-						if (x.contains("Número")) {
-							x = fn.gatos(x.split("Número")[0].trim());
+				newcontenido = new StringBuilder();
+				resultado = new StringBuilder();
+				resultado.append(contenido.substring(inicio + 11, inicio + 200).trim());
+				int idx = 0;
+				for (String x : resultado.toString().split("\n")) {
+					if (idx == 1) {
+						if (x.contains(ConstantsValue.NUMERO)) {
+							x = fn.gatos(x.split(ConstantsValue.NUMERO)[0].trim());
 						}
-						newcontenido += fn.gatos(x.trim());
-					} else if (index == 2) {
-						if ((x.contains("CALLE") || x.contains("Vigencia") || x.contains("AVENIDA")
-								|| x.contains("BOULEVARD") || x.contains("CARRETERA")
-								|| x.contains("Número")) == false) {
-							newcontenido += " " + fn.gatos(x.trim());
-						}
+						newcontenido.append(fn.gatos(x.trim()));
+					} else if (idx == 2
+							&& (x.contains("CALLE") || x.contains(ConstantsValue.VIGENCIA2) || x.contains("AVENIDA")
+									|| x.contains("BOULEVARD") || x.contains("CARRETERA") || !x.contains("Número"))) {
+
+						newcontenido.append(" ").append(fn.gatos(x.trim()));
+
 					}
-					index++;
+					idx++;
 				}
-				modelo.setCteNombre(newcontenido);
+				modelo.setCteNombre(newcontenido.toString());
 			}
 
 			// cte_direccion
-			newcontenido = "";
+			newcontenido = new StringBuilder();
 			inicio = contenido.indexOf(modelo.getCteNombre());
 			if (inicio > -1) {
 				int longtxt = modelo.getCteNombre().length();
 				if (longtxt > 0) {
-					resultado = fn.gatos(contenido.substring(inicio + longtxt, inicio + 350).trim()).trim();
-					for (String x : resultado.split("\r\n")) {
-						if (x.contains("Número") == false) {
-							fin = x.indexOf("Vigencia");
+					resultado = new StringBuilder();
+					resultado.append(fn.gatos(contenido.substring(inicio + longtxt, inicio + 350).trim()).trim());
+					for (String x : resultado.toString().split("\r\n")) {
+						if (!x.contains("Número")) {
+							fin = x.indexOf(ConstantsValue.VIGENCIA2);
 							if (fin > -1) {
-								newcontenido += fn.gatos(x.substring(0, fin).trim()) + " ";
+								newcontenido.append(fn.gatos(x.substring(0, fin).trim())).append(" ");
 							} else {
-								newcontenido += x.trim() + "\r\n";
+								newcontenido.append(x.trim()).append("\r\n");
 							}
 						}
 					}
-					if (newcontenido.contains("C.P")) {
-						newcontenido = newcontenido.split("C.P")[0].trim();
-						modelo.setCteDireccion(newcontenido.replace("###", " ").replace("\r\n", ""));
+					if (newcontenido.toString().contains("C.P")) {
+						modelo.setCteDireccion(
+								newcontenido.toString().split("C.P")[0].trim().replace("###", " ").replace("\r\n", ""));
 					}
 				}
 			}
@@ -196,156 +197,176 @@ public class GnpDiversosModel {
 			// cp
 			inicio = contenido.indexOf(", C.P");
 			if (inicio > -1) {
-				resultado = fn
-						.gatos(contenido.substring(inicio + 5, inicio + 250).replace(".", "").split("\r\n")[0].trim());
-				if (resultado.contains("Vigencia")) {
-					modelo.setCp(fn.gatos(resultado.split("Vigencia")[0].trim()));
-				} else if (resultado.contains("Desde las")) {
-					modelo.setCp(fn.gatos(resultado.split("Desde las")[0].trim()));
-				} else if (fn.isNumeric(resultado)) {
-					modelo.setCp(resultado);
+				resultado = new StringBuilder();
+				resultado.append(fn
+						.gatos(contenido.substring(inicio + 5, inicio + 250).replace(".", "").split("\r\n")[0].trim()));
+				if (resultado.toString().contains(ConstantsValue.VIGENCIA2)) {
+					modelo.setCp(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()));
+				} else if (resultado.toString().contains(ConstantsValue.DESDE_LAS)) {
+					modelo.setCp(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()));
+				} else if (fn.isNumeric(resultado.toString())) {
+					modelo.setCp(resultado.toString());
 				}
 			}
 
 			// moneda
 			inicio = contenido.indexOf("Moneda");
 			if (inicio > -1) {
-				resultado = (contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim());
-				if (resultado.contains("Derecho de P")) {
-					resultado = fn.gatos(resultado.split("Derecho de P")[0].trim());
-					modelo.setMoneda(fn.moneda(resultado));
+				resultado = new StringBuilder();
+				resultado.append((contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim()));
+				if (resultado.toString().contains("Derecho de P")) {
+					modelo.setMoneda(fn.moneda(fn.gatos(resultado.toString().split("Derecho de P")[0].trim())));
 				}
 			}
 
 			// forma_pago
 			inicio = contenido.indexOf("Forma de pago");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 13, inicio + 150).trim().split("\r\n")[0].trim());
-				if (resultado.contains("Recargo Pago")) {
-					resultado = fn.gatos(resultado.split("Recargo Pago")[0].trim());
-					modelo.setFormaPago(fn.formaPago(resultado));
+				resultado = new StringBuilder();
+				resultado.append(
+						fn.gatos(contenido.substring(inicio + 13, inicio + 150).trim().split("\r\n")[0].trim()));
+				if (resultado.toString().contains("Recargo Pago")) {
+					modelo.setFormaPago(fn.formaPago(fn.gatos(resultado.toString().split("Recargo Pago")[0].trim())));
 				}
 			}
 
 			// vigencia_de
 			inicio = contenido.indexOf("Desde las 12 hrs");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim());
-				resultado = resultado.replace("###", "-");
-				if (resultado.split("-").length == 3) {
-					modelo.setVigenciaDe(fn.formatDate(resultado, "dd-MM-yy"));
+				resultado = new StringBuilder();
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim())
+						.replace("###", "-"));
+				if (resultado.toString().split("-").length == 3) {
+					modelo.setVigenciaDe(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
 				}
 			}
 
 			// vigencia_a
 			inicio = contenido.indexOf("Hasta las 12 hrs");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim());
-				resultado = resultado.replace("###", "-");
-				if (resultado.split("-").length == 3) {
-					modelo.setVigenciaA(fn.formatDate(resultado, "dd-MM-yy"));
+				resultado = new StringBuilder();
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim())
+						.replace("###", "-"));
+				if (resultado.toString().split("-").length == 3) {
+					modelo.setVigenciaA(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
 				}
 			}
 
 			// fecha_emision
 			inicio = contenido.indexOf("Fecha de expedición");
 			if (inicio > -1) {
-				resultado = contenido.substring(inicio + 19, inicio + 150).split("\r\n")[0];
-				if (resultado.contains("Tipo de")) {
-					resultado = fn.gatos(resultado.split("Tipo de")[0].trim()).replace("###", "-");
-				} else if (resultado.contains("I.V.A.")) {
-					resultado = fn.gatos(resultado.split("I.V.A.")[0].trim()).replace("###", "-");
+				String auxStr = "";
+				resultado = new StringBuilder();
+				resultado.append(contenido.substring(inicio + 19, inicio + 150).split("\r\n")[0]);
+				auxStr = resultado.toString();
+				if (resultado.toString().contains("Tipo de")) {
+					resultado = new StringBuilder();
+					resultado.append(fn.gatos(auxStr.split("Tipo de")[0].trim()).replace("###", "-"));
+				} else if (resultado.toString().contains(ConstantsValue.IVA)) {
+					resultado = new StringBuilder();
+					resultado.append(fn.gatos(auxStr.split(ConstantsValue.IVA)[0].trim()).replace("###", "-"));
 				}
-				if (resultado.split("-").length == 3 && resultado.length() == 10) {
-					modelo.setFechaEmision(fn.formatDate(resultado, "dd-MM-yy"));
+
+				if (resultado.toString().split("-").length == 3 && resultado.length() == 10) {
+					modelo.setFechaEmision(fn.formatDate(resultado.toString(), "dd-MM-yy"));
 				}
 			}
 
 			if (modelo.getFechaEmision().length() == 0) {
 				inicio = contenido.lastIndexOf("Derecho de Póliza");
-				fin = contenido.indexOf("I.V.A.");
+				fin = contenido.indexOf(ConstantsValue.IVA);
 				if (inicio > -1 && fin > inicio) {
-					newcontenido = contenido.substring(inicio + 17, fin).trim();
-					if (newcontenido.split("\r\n").length == 2) {
-						newcontenido = fn.gatos(newcontenido.split("\r\n")[1].trim()).replace("###", "-");
-						if (newcontenido.split("-").length == 3 && newcontenido.length() == 10) {
-							modelo.setFechaEmision(fn.formatDate(newcontenido, "dd-MM-yy"));
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio + 17, fin).trim());
+					if (newcontenido.toString().split("\r\n").length == 2) {
+						String auxStr = newcontenido.toString();
+						newcontenido = new StringBuilder();
+						newcontenido.append(fn.gatos(auxStr.split("\r\n")[1].trim()).replace("###", "-"));
+						if (newcontenido.toString().split("-").length == 3 && newcontenido.length() == 10) {
+							modelo.setFechaEmision(fn.formatDate(newcontenido.toString(), "dd-MM-yy"));
 						}
 					}
 				}
 			}
-			
-			if(modelo.getFechaEmision().length() == 0 ) {
+
+			if (modelo.getFechaEmision().length() == 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
 
 			// prima_neta
 			inicio = contenido.indexOf("Prima Neta");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 10, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(resultado)));
+				modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(
+						fn.gatos(contenido.substring(inicio + 10, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
 
 			// recargo
 			inicio = contenido.indexOf("Pago Fraccionado");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(resultado)));
+				modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(
+						fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
 
 			// derecho
 			inicio = contenido.indexOf("Derecho de Póliza");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 17, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(resultado)));
+				modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(
+						fn.gatos(contenido.substring(inicio + 17, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
 
 			// iva
 			inicio = contenido.indexOf("I.V.A.");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim());
+				resultado = new StringBuilder();
+				resultado
+						.append(fn.gatos(contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim()));
 				inicio = resultado.indexOf("%");
 				if (inicio > -1) {
-					resultado = fn.gatos(resultado.substring(inicio + 1, resultado.length()));
+					resultado = new StringBuilder();
+					String auxStr = resultado.toString();
+					resultado.append(fn.gatos(auxStr.substring(inicio + 1, resultado.length())));
 				}
-				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(resultado)));
+				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(resultado.toString())));
 			}
 
 			// prima_total
 			inicio = contenidolower.indexOf("importe a pagar");
 			if (inicio > -1) {
-				resultado = fn.gatos(contenido.substring(inicio + 15, inicio + 150).trim().split("\r\n")[0].trim());
-				modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(resultado)));
+				modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(
+						fn.gatos(contenido.substring(inicio + 15, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
 
 			// LAS COBERTURAS(TITULOS O TUTULOS Y DESGLOCE)
 			// TUTULOS 1
-			newcontenido = "";
+			newcontenido = new StringBuilder();
 			inicio = contenido.indexOf("Riesgos###Prima Neta###");
-			fin = contenido.indexOf("Agente");
+			fin = contenido.indexOf(ConstantsValue.AGENTE2);
 			if (inicio > -1 && fin > inicio) {
-				newcontenido = contenido.substring(inicio + 23, fin).trim();
-				List<String> buscar = new ArrayList<String>();
-				buscar.add("Agente");
+				newcontenido.append(contenido.substring(inicio + 23, fin).trim());
+				List<String> buscar = new ArrayList<>();
+				buscar.add(ConstantsValue.AGENTE2);
 				buscar.add("Grupo Nacional");
 				for (String x : buscar) {
 					fin = newcontenido.indexOf(x);
 					if (fin > -1) {
-						resultado = newcontenido.substring(0, fin).replace("@@@", "").trim();
+						resultado = new StringBuilder();
+						resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
 					}
 				}
-				newcontenido = clearCoberturas(resultado);
+				newcontenido.append(clearCoberturas(resultado.toString()));
 			}
 
 			// ***************************************************************************
 			// TITULO 2
 			inicio = contenido.indexOf("Renovación póliza");
 			if (inicio > -1) {
-				newcontenido = contenido.substring(inicio + 17, contenido.length()).trim();
+				newcontenido = new StringBuilder();
+				newcontenido.append(contenido.substring(inicio + 17, contenido.length()).trim());
 				fin = newcontenido.indexOf("Grupo Nacional");
 				if (fin > -1) {
-					resultado = newcontenido.substring(0, fin).replace("@@@", "").trim();
-					newcontenido = clearCoberturas(resultado);
+					resultado = new StringBuilder();
+					resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
+					newcontenido.append(clearCoberturas(resultado.toString()));
 				}
 			}
 
@@ -354,51 +375,57 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("secciones contratadas");
 			fin = contenido.indexOf("Grupo###Nacional###Provincial");
 			if (inicio > -1 && fin > inicio) {
-				newcontenido = "";
-				newcontenido = fn.gatos(contenido.substring(inicio + 21, fin).replace("@@@", "")).trim()
-						.replace(" Amparado", "###Amparado");
-				resultado = "";
-				for (String x : newcontenido.split("\r\n")) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(fn.gatos(contenido.substring(inicio + 21, fin).replace("@@@", "")).trim()
+						.replace(" Amparado", "###Amparado"));
+				resultado = new StringBuilder();
+				for (String x : newcontenido.toString().split("\r\n")) {
 					if (x.trim().length() > 0) {
-						resultado += fn.gatos(x.trim()) + "\r\n";
+						resultado.append(fn.gatos(x.trim()) + "\r\n");
 					}
 				}
-				newcontenido = resultado;
+				newcontenido.append(resultado.toString());
 			}
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// SE RECORRE LOS DOS CASOS ANTERIORES CON ESTE FOR (TITULO 1 O TUTULO 2)
-			newcontenido = newcontenido.replace(" Amparado", "###Amparado").replace("######", "###");
-			if (newcontenido.contains("Grupo###Nacional")) {
-				newcontenido = newcontenido.split("Grupo###Nacional")[0].toString();
+			String auxStr = newcontenido.toString();
+			newcontenido = new StringBuilder();
+			newcontenido.append(auxStr.replace(" Amparado", "###Amparado").replace("######", "###"));
+			if (newcontenido.toString().contains("Grupo###Nacional")) {
+				auxStr = newcontenido.toString();
+				newcontenido = new StringBuilder();
+				newcontenido.append(auxStr.split("Grupo###Nacional")[0]);
 			}
 			if (newcontenido.length() > 0) {
-				for (int i = 0; i < newcontenido.split("\r\n").length; i++) {
+				for (int i = 0; i < newcontenido.toString().split("\r\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
-					String x = "", y = "";
-					x = newcontenido.split("\r\n")[i];
-					if (x.contains("Especificación de Bienes") == false) {
-						if (i + 1 < newcontenido.split("\r\n").length) {
-							if (newcontenido.split("\r\n")[i + 1].split("###").length == 1) {
-								y = newcontenido.split("\r\n")[i + 1];
-							}
+					String x = "";
+					String y = "";
+					x = newcontenido.toString().split("\r\n")[i];
+					if (!x.contains("Especificación de Bienes")) {
+						if (i + 1 < newcontenido.toString().split("\r\n").length
+								&& newcontenido.toString().split("\r\n")[i + 1].split("###").length == 1) {
+							y = newcontenido.toString().split("\r\n")[i + 1];
+
 						}
-						switch (x.split("###").length) {
-						case 3:
-							nombre = x.split("###")[1].trim();
+
+						if (x.split("###").length == 3) {
+							nombre.append(x.split("###")[1].trim());
 							if (y.length() > 0) {
-								nombre += " " + y.trim();
+								nombre.append(" ").append(y.trim());
 							}
 
 							cobertura.setSeccion(x.split("###")[0].trim());
-							cobertura.setNombre(nombre);
+							cobertura.setNombre(nombre.toString());
 							if (x.split("###")[2].trim().equals("Amparado")) {
 								cobertura.setSa(x.split("###")[2].trim());
 							}
 							coberturas.add(cobertura);
-							break;
+
 						}
+
 					}
 				}
 			}
@@ -410,21 +437,22 @@ public class GnpDiversosModel {
 
 			// UBICACIONES
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
-			inicio = contenido.indexOf("Descripción del Movimiento");
+			inicio = contenido.indexOf(ConstantsValue.DESCRIPCION_MOVIMIENTO);
 			fin = contenido.indexOf("Ubicado a Más");
 			if (inicio > -1 && fin > inicio) {
 
-				resultado = "";
-				newcontenido = contenido.substring(inicio + 26, fin).trim();
+				resultado = new StringBuilder();
+				newcontenido = new StringBuilder();
+				newcontenido.append(contenido.substring(inicio + 26, fin).trim());
 
 				index = 0;
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
-				for (String x : newcontenido.split("\r\n")) {
+				for (String x : newcontenido.toString().split("\r\n")) {
 
 					if (x.split("###").length == 2)
-						resultado += x.split("###")[0].trim() + "\r\n";
+						resultado.append(x.split("###")[0].trim()).append("\r\n");
 					else
-						resultado += x.trim() + "\r\n";
+						resultado.append(x.trim()).append("\r\n");
 					if (index == 0) {
 						int len = x.split(",").length;
 						if (len > 1) {
@@ -433,7 +461,7 @@ public class GnpDiversosModel {
 							for (int i = 0; i < x.split(",")[0].trim().split(" ").length; i++) {
 								String a = x.split(",")[0].trim().split(" ")[i];
 								if (i == x.split(",")[0].trim().split(" ").length - 1) {
-									if (fn.isNumeric(a) && encontro == false) {
+									if (fn.isNumeric(a) && !encontro) {
 										ubicacion.setNoExterno(a);
 										ubicacion.setCalle(
 												x.split(",")[0].trim().split(ubicacion.getNoExterno())[0].trim());
@@ -448,8 +476,8 @@ public class GnpDiversosModel {
 						}
 					}
 					if (x.contains("C.P") && x.split("###").length == 2) {
-						
-							ubicacion.setCp(x.split("###")[0].split("C.P.")[1].trim());
+
+						ubicacion.setCp(x.split("###")[0].split("C.P.")[1].trim());
 					}
 					index++;
 				}
@@ -460,16 +488,17 @@ public class GnpDiversosModel {
 				inicio = contenido.indexOf("Descripción del Movimiento");
 				fin = contenido.lastIndexOf("Asegurado###");
 
-				resultado = "";
+				resultado = new StringBuilder();
+				newcontenido = new StringBuilder();
 				if (inicio > -1 && fin > inicio) {
 
 					EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
-					newcontenido = contenido.substring(inicio + 26, fin).replace("@@@", "").trim();
-					for (String x : newcontenido.split("\r\n")) {
-						if (x.contains("###CARTERA"))
-							resultado += x.split("###CARTERA")[0].trim() + "\r\n";
+					newcontenido.append(contenido.substring(inicio + 26, fin).replace("@@@", "").trim());
+					for (String x : newcontenido.toString().split("\r\n")) {
+						if (x.contains(ConstantsValue.CARTERA_HASH))
+							resultado.append(x.split(ConstantsValue.CARTERA_HASH)[0].trim()).append("\r\n");
 						else
-							resultado += x + "\r\n";
+							resultado.append(x).append("\r\n");
 					}
 
 					// giro
@@ -483,43 +512,50 @@ public class GnpDiversosModel {
 					}
 
 					// techos
-					inicio = resultado.indexOf("Techos");
-					fin = resultado.indexOf("Muros");
+					inicio = resultado.indexOf(ConstantsValue.TECHOS);
+					fin = resultado.indexOf(ConstantsValue.MUROS);
 
 					if (inicio > -1 && fin > inicio) {
-						newcontenido = resultado.substring(inicio + 6, fin).replace("###", "").replace("\r\n", " ")
-								.trim();
+						newcontenido = new StringBuilder();
+						newcontenido.append(
+								resultado.substring(inicio + 6, fin).replace("###", "").replace("\r\n", " ").trim());
 
-						if (newcontenido.contains("MATERIALES INCOMBUSTIBLES")) {
-							newcontenido = newcontenido.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
-									.replace("(", "").replace(")", "").trim();
+						if (newcontenido.toString().contains("MATERIALES INCOMBUSTIBLES")) {
+							auxStr = newcontenido.toString();
+							newcontenido = new StringBuilder();
+							newcontenido.append(auxStr.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
+									.replace("(", "").replace(")", "").trim());
 
 						}
-						ubicacion.setTechos(fn.material(newcontenido));
+						ubicacion.setTechos(fn.material(newcontenido.toString()));
 					}
 
 					// muros
-					inicio = resultado.indexOf("Muros");
+					inicio = resultado.indexOf(ConstantsValue.MUROS);
 					fin = resultado.indexOf("Ubicado");
 					if (inicio > -1 && fin > inicio) {
-						newcontenido = resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "")
-								.trim();
-						ubicacion.setMuros(fn.material(newcontenido));
+						newcontenido = new StringBuilder();
+						newcontenido.append(
+								resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "").trim());
+						ubicacion.setMuros(fn.material(newcontenido.toString()));
 					}
 
 					// niveles
 					inicio = resultado.indexOf("No. de Pisos del edificio");
 					if (inicio > -1) {
-						newcontenido = resultado.substring(inicio + 25, resultado.length()).replace("###", "")
-								.replace("\r\n", "").trim();
-						if (newcontenido.contains("(")) {
-							newcontenido = newcontenido.replace("(", "&&&&");
-							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("&&&&")[0].trim()));
+						newcontenido = new StringBuilder();
+						newcontenido.append(resultado.substring(inicio + 25, resultado.length()).replace("###", "")
+								.replace("\r\n", "").trim());
+						if (newcontenido.toString().contains("(")) {
+							auxStr = newcontenido.toString();
+							newcontenido = new StringBuilder();
+							newcontenido.append(auxStr.replace("(", "&&&&"));
+							ubicacion.setNiveles(Integer.parseInt(newcontenido.toString().split("&&&&")[0].trim()));
 						}
 					}
 					if (ubicacion.getNombre().length() > 0)
 						ubicaciones.add(ubicacion);
-					if (ubicaciones.size() > 0) {
+					if (!ubicaciones.isEmpty()) {
 						modelo.setUbicaciones(ubicaciones);
 					}
 
@@ -528,16 +564,17 @@ public class GnpDiversosModel {
 					inicio = ubicacionesT.indexOf("Descripción del Movimiento");
 					fin = ubicacionesT.lastIndexOf("Resumen de secciones contratada");
 
-					resultado = "";
+					resultado = new StringBuilder();
+					newcontenido = new StringBuilder();
 					if (inicio > -1 && fin > inicio) {
 
 						EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
-						newcontenido = ubicacionesT.substring(inicio + 26, fin).replace("@@@", "").trim();
-						for (String x : newcontenido.split("\r\n")) {
+						newcontenido.append(ubicacionesT.substring(inicio + 26, fin).replace("@@@", "").trim());
+						for (String x : newcontenido.toString().split("\r\n")) {
 							if (x.contains("###CARTERA"))
-								resultado += x.split("###CARTERA")[0].trim() + "\r\n";
+								resultado.append(x.split("###CARTERA")[0].trim()).append("\r\n");
 							else
-								resultado += x + "\r\n";
+								resultado.append(x).append("\r\n");
 						}
 
 						// giro
@@ -555,45 +592,45 @@ public class GnpDiversosModel {
 						fin = resultado.indexOf("Muros");
 
 						if (inicio > -1 && fin > inicio) {
-							newcontenido = resultado.substring(inicio + 6, fin).replace("###", "").replace("\r\n", " ")
-									.trim();
+							newcontenido = new StringBuilder();
+							newcontenido.append(resultado.substring(inicio + 6, fin).replace("###", "")
+									.replace("\r\n", " ").trim());
 
-							if (newcontenido.contains("MATERIALES INCOMBUSTIBLES")) {
-								newcontenido = newcontenido.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
-										.replace("(", "").replace(")", "").trim();
-
+							if (newcontenido.toString().contains("MATERIALES INCOMBUSTIBLES")) {
+								auxStr = newcontenido.toString();
+								newcontenido = new StringBuilder();
+								newcontenido.append(auxStr.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
+										.replace("(", "").replace(")", "").trim());
 							}
 
-							ubicacion.setTechos(fn.material(newcontenido));
+							ubicacion.setTechos(fn.material(newcontenido.toString()));
 						}
 
 						// muros
 						inicio = resultado.indexOf("Muros");
 						fin = resultado.indexOf("Año de Construcción");
 						if (inicio > -1 && fin > inicio) {
-							newcontenido = resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "")
-									.trim();
-							;
-							ubicacion.setMuros(fn.material(newcontenido));
+							newcontenido = new StringBuilder();
+							newcontenido.append(
+									resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "").trim());
+							ubicacion.setMuros(fn.material(newcontenido.toString()));
 						}
 
 						// niveles
 						inicio = resultado.indexOf("Número de pisos");
 						fin = resultado.indexOf("Techos");
 						if (inicio > -1) {
-							newcontenido = resultado.substring(inicio + 15, fin).replace("###", "").replace("\r\n", "")
-									.trim();
+							newcontenido = new StringBuilder();
+							newcontenido.append(resultado.substring(inicio + 15, fin).replace("###", "")
+									.replace("\r\n", "").trim());
 
-							if (fn.isNumeric(newcontenido)) {
+							if (fn.isNumeric(newcontenido.toString())) {
 
-								ubicacion.setNiveles(Integer.parseInt(newcontenido));
+								ubicacion.setNiveles(Integer.parseInt(newcontenido.toString()));
 							}
 						}
-						if (ubicacion.getNombre().length() > 0)
-							if (ubicaciones.size() > 0) {
-								modelo.setUbicaciones(ubicaciones);
-							}
-
+						if (ubicacion.getNombre().length() > 0 && !ubicaciones.isEmpty())
+							modelo.setUbicaciones(ubicaciones);
 					}
 
 				}
@@ -602,8 +639,8 @@ public class GnpDiversosModel {
 			// **************************************RECIBOS
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-			switch (modelo.getFormaPago()) {
-			case 1:
+
+			if (modelo.getFormaPago() == 1) {
 				recibo.setReciboId("");
 				recibo.setSerie("1/1");
 				recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -621,8 +658,8 @@ public class GnpDiversosModel {
 				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
 				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
 				recibos.add(recibo);
-				break;
 			}
+
 			modelo.setRecibos(recibos);
 
 			return modelo;
@@ -635,37 +672,45 @@ public class GnpDiversosModel {
 	}
 
 	public void extctCoberturas(List<EstructuraCoberturasModel> coberturas, Integer tipo) {
+		StringBuilder newcontenido = new StringBuilder();
+		StringBuilder resultado = new StringBuilder();
 		if (tipo == 1) {// esto es para estraer coberutas de 1* version
-			newcontenido = "";
+
 			inicio = contenido.indexOf("###Coaseguro###Primas");
 			fin = contenido.indexOf("Total Coberturas");
+			StringBuilder nombre = new StringBuilder();
 			if (inicio > -1 && fin > inicio) {
-				resultado = contenido.substring(inicio + 21, fin).replace("@@@", "").trim();
-				resultado = resultado.replace("C ris tales", "Cristales").replace("A rt ículos", "Artículos")
+				resultado.append(contenido.substring(inicio + 21, fin).replace("@@@", "").trim());
+				String auxStr = resultado.toString();
+				resultado = new StringBuilder();
+				resultado.append(auxStr.replace("C ris tales", "Cristales").replace("A rt ículos", "Artículos")
 						.replace("Res ponsabilidad", "Responsabilidad").replace("p ro pietario", "propietario")
-						.replace("G as tos", "Gastos").replace("Rem oción", "Remoción").replace("Rie sgos", "Riesgos")
-						.replace("E qu ipo", "Equipo").replace("Dañ os", "Daños").replace("Rie sgos", "Riesgos")
-						.replace("V  ", "V###").replace("Me naje", "Menaje").replace("No Aplica  ", "No Aplica###")
+						.replace("G as tos", "Gastos").replace("Rem oción", "Remoción")
+						.replace("Rie sgos", ConstantsValue.RIESGOS).replace("E qu ipo", "Equipo")
+						.replace("Dañ os", "Daños").replace("Rie sgos", ConstantsValue.RIESGOS).replace("V  ", "V###")
+						.replace("Me naje", "Menaje").replace("No Aplica  ", "No Aplica###")
 						.replace("T er remoto", "Terremoto").replace("v olc ánica", "volcánica")
 						.replace("M e naje", "Menaje").replace("D añ os", "Daños").replace("Cris tales", "Cristales")
-						.replace("Gas tos", "Gastos").replace("Equ ipo", "Equipo").replace("R ie sgos", "Riesgos")
-						.replace("R em oción", "Remoción").replace("volc ánica", "volcánica").replace("I Rie", "Rie")
-						.replace("No Aplica ", "No Aplica###").replace("V l###", "Vl###").replace("l ll###", "lll###");
-				newcontenido = clearCoberturas(resultado);
-				for (int i = 0; i < newcontenido.split("\r\n").length; i++) {
+						.replace("Gas tos", "Gastos").replace("Equ ipo", "Equipo")
+						.replace("R ie sgos", ConstantsValue.RIESGOS).replace("R em oción", "Remoción")
+						.replace("volc ánica", "volcánica").replace("I Rie", "Rie")
+						.replace("No Aplica ", "No Aplica###").replace("V l###", "Vl###").replace("l ll###", "lll###"));
+				newcontenido.append(clearCoberturas(resultado.toString()));
+				for (int i = 0; i < newcontenido.toString().split("\r\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					esverdad = false;
-					String x = "", y = "", z = "";
-					x = newcontenido.split("\r\n")[i];
-					if (i + 1 < newcontenido.split("\r\n").length) {
-						if (newcontenido.split("\r\n")[i + 1].split(
-								"###").length == 1 /* && (x.split("###").length == 4 ) || x.split("###").length == 5 */) {
-							y = fn.cleanString(newcontenido.split("\r\n")[i + 1]);
+					String x = "";
+					String y = "";
+					String z = "";
+					x = newcontenido.toString().split("\r\n")[i];
+					if (i + 1 < newcontenido.toString().split("\r\n").length) {
+						if (newcontenido.toString().split("\r\n")[i + 1].split("###").length == 1) {
+							y = fn.cleanString(newcontenido.toString().split("\r\n")[i + 1]);
 							if (fn.isNumeric(y)) {
 								esverdad = true;
 								y = "";
-							} else if (newcontenido.split("\r\n")[i + 1].contains("Daños a") == false) {
-								y = newcontenido.split("\r\n")[i + 1].trim();
+							} else if (!newcontenido.toString().split("\r\n")[i + 1].contains("Daños a")) {
+								y = newcontenido.toString().split("\r\n")[i + 1].trim();
 								esverdad = true;
 							} else {
 								y = "";
@@ -676,13 +721,13 @@ public class GnpDiversosModel {
 					} else {
 						y = "";
 					}
-					if (i + 2 < newcontenido.split("\r\n").length) {
-						if (newcontenido.split("\r\n")[i + 2].split("###").length == 1 && esverdad) {
-							z = fn.cleanString(newcontenido.split("\r\n")[i + 2].trim());
+					if (i + 2 < newcontenido.toString().split("\r\n").length) {
+						if (newcontenido.toString().split("\r\n")[i + 2].split("###").length == 1 && esverdad) {
+							z = fn.cleanString(newcontenido.toString().split("\r\n")[i + 2].trim());
 							if (fn.isNumeric(z)) {
 								z = "";
-							} else if (newcontenido.split("\r\n")[i + 2].contains("Daños a") == false) {
-								z = newcontenido.split("\r\n")[i + 2].trim();
+							} else if (!newcontenido.toString().split("\r\n")[i + 2].contains("Daños a")) {
+								z = newcontenido.toString().split("\r\n")[i + 2].trim();
 							} else {
 								z = "";
 							}
@@ -706,20 +751,22 @@ public class GnpDiversosModel {
 						switch (x.split("###").length) {
 						case 5:
 						case 4:
-							nombre = "";
-							nombre = x.split("###")[0].trim();
+							nombre = new StringBuilder();
+							nombre.append(x.split("###")[0].trim());
 							if (y.length() > 0) {
-								nombre += " " + y;
+								nombre.append(" ").append(y);
 							}
 							if (z.length() > 0) {
-								nombre += " " + z;
+								nombre.append(" ").append(z);
 							}
-							cobertura.setNombre(nombre);
+							cobertura.setNombre(nombre.toString());
 							cobertura.setSa(x.split("###")[1].trim());
 							cobertura.setDeducible(x.split("###")[2].trim());
 							cobertura.setCoaseguro(x.split("###")[3].trim());
 							cobertura.setSeccion(seccion);
 							coberturas.add(cobertura);
+							break;
+						default:
 							break;
 						}
 					}
@@ -728,37 +775,35 @@ public class GnpDiversosModel {
 		}
 
 		if (tipo == 2) {
-			for (int i = 0; i < contenido.split("Suma Asegurada").length; i++) {
-				if (contenido.split("Suma Asegurada")[i].contains("Cuando###se###refieran")) {
-					newcontenido = contenido.split("Suma Asegurada")[i].split("Cuando###se###refieran")[0];
-				} else if (contenido.split("Suma Asegurada")[i].contains("Agente")) {
-					if (contenido.split("Suma Asegurada")[i].contains("Coaseguro")) {
-						newcontenido += contenido.split("Suma Asegurada")[i].split("Agente")[0]
-								.split("SERVICIOS DE ASISTENCIAS AMPARADAS")[0];
-					}
+			for (int i = 0; i < contenido.split(ConstantsValue.SUMA_ASEGURADA).length; i++) {
+				if (contenido.split(ConstantsValue.SUMA_ASEGURADA)[i].contains("Cuando###se###refieran")) {
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.split(ConstantsValue.SUMA_ASEGURADA)[i].split("Cuando###se###refieran")[0]);
+				} else if (contenido.split(ConstantsValue.SUMA_ASEGURADA)[i].contains("Agente")
+						&& contenido.split(ConstantsValue.SUMA_ASEGURADA)[i].contains("Coaseguro")) {
+					newcontenido.append(contenido.split(ConstantsValue.SUMA_ASEGURADA)[i].split("Agente")[0]
+							.split("SERVICIOS DE ASISTENCIAS AMPARADAS")[0]);
 				}
 			}
 
-			for (String co : newcontenido.split("\n")) {
+			for (String co : newcontenido.toString().split("\n")) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				int x = co.split("###").length;
-				if (x > 1) {
-					if (co.contains("Deducible")) {
-					} else {
-						if (x == 3) {
-							cobertura.setNombre(co.split("###")[0]);
-							cobertura.setSa(co.split("###")[1]);
-							cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
-							cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
-							coberturas.add(cobertura);
-						}
-						if (x == 4) {
-							cobertura.setNombre(co.split("###")[0]);
-							cobertura.setSa(co.split("###")[1]);
-							cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
-							cobertura.setCoaseguro(co.split("###")[3].replace("\r", ""));
-							coberturas.add(cobertura);
-						}
+				if (x > 1 && !co.contains("Deducible")) {
+
+					if (x == 3) {
+						cobertura.setNombre(co.split("###")[0]);
+						cobertura.setSa(co.split("###")[1]);
+						cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
+						cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
+						coberturas.add(cobertura);
+					}
+					if (x == 4) {
+						cobertura.setNombre(co.split("###")[0]);
+						cobertura.setSa(co.split("###")[1]);
+						cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
+						cobertura.setCoaseguro(co.split("###")[3].replace("\r", ""));
+						coberturas.add(cobertura);
 					}
 
 				}
@@ -768,62 +813,62 @@ public class GnpDiversosModel {
 	}
 
 	private String clearCoberturas(String resultado) {
-		String a = "";
+		StringBuilder a = new StringBuilder();
 		try {
 			for (String x : resultado.split("\r\n")) {
 				x = x.trim();
-				if (x.length() > 0
-						&& (x.contains("las 12") || x.contains("Agosto") || x.contains("Mes###Año")) == false) {
+				if (x.length() > 0 && (x.contains("las 12") || x.contains("Agosto") || !x.contains("Mes###Año"))) {
 					boolean cobertura = false;
 					fin = x.indexOf("Duración");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
+					
 					fin = x.indexOf("Importe");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					} else {
 						fin = x.indexOf("mporte Total");
 						if (fin > -1) {
-							a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+							a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 							cobertura = true;
 						}
 					}
 					fin = x.indexOf("Movimiento");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
 					fin = x.indexOf("Descuentos");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
 					fin = x.indexOf("Aplican Condiciones");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
 					fin = x.indexOf("Póliza paquetes");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
 					fin = x.indexOf("Vigencia");
 					if (fin > -1) {
-						a += fn.gatos(x.substring(0, fin).trim()).trim() + "\r\n";
+						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
-					if (cobertura == false) {
-						a += fn.gatos(x.trim()) + "\r\n";
+					if (!cobertura) {
+						a.append(fn.gatos(x.trim())).append("\r\n");
 					}
 				}
 			}
-			return a;
-		} catch (Exception ex) {			
-			return a;
+			return a.toString();
+		} catch (Exception ex) {
+			return a.toString();
 		}
 	}
 

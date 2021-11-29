@@ -3,6 +3,7 @@ package com.copsis.models.axa;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -16,22 +17,22 @@ public class AxaDiversosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private static String contenido = "";
 	
-	private static  String textbusq = "";
-	private int inicio = 0;
-	private int fin = 0;
-
 	
 	public AxaDiversosModel(String contenido) {
 		AxaDiversosModel.contenido = contenido;
 	}
 
 	public EstructuraJsonModel procesar() {
+		String textbusq = "";
+		int inicio = 0;
+		int fin = 0;
+		
 		String newcontenido = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		contenido = contenido.replace("D omicilio:", "Domicilio:").replace("F RESNOS", "FRESNOS")
-				.replace("P r i m a T o t a l", "Prima Total").replace("Prima###neta:", "Prima Neta:").replace("Prima neta:", "Prima Neta:")
-				.replace("expedición", "Expedición").replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
-				.replace("@@@I.V.A:", "I.V.A.").replace("I.V.A", "I.V.A.").replace("I.V.A..", "I.V.A.").replace("Prima###Total", "Prima Total").replace("financiamiento", "Financiamiento");
+		contenido = contenido.replace("D omicilio:", ConstantsValue.DOMICILIO).replace("F RESNOS", "FRESNOS")
+				.replace("P r i m a T o t a l", ConstantsValue.PRIMA_TOTAL2).replace("Prima###neta:", "Prima Neta:").replace("Prima neta:", "Prima Neta:")
+				.replace("expedición", ConstantsValue.EXPEDICION3).replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
+				.replace("@@@I.V.A:", ConstantsValue.IVA).replace("I.V.A", ConstantsValue.IVA).replace("I.V.A..", ConstantsValue.IVA).replace("Prima###Total", ConstantsValue.PRIMA_TOTAL2).replace("financiamiento", ConstantsValue.FINANCIAMIENTO);
 		try {
 			modelo.setTipo(7);
 			modelo.setCia(20);
@@ -78,8 +79,8 @@ public class AxaDiversosModel {
 							
 							x = (newcontenido.split("\n")[i + 1].split("C.P:")[0]).replace("\r", "");
 						}
-						if (newcontenido.split("\n")[i + 1].contains("Vigencia")) {
-							x = (newcontenido.split("\n")[i + 1].split("Vigencia")[0]).replace("\r", "");
+						if (newcontenido.split("\n")[i + 1].contains(ConstantsValue.VIGENCIA2)) {
+							x = (newcontenido.split("\n")[i + 1].split(ConstantsValue.VIGENCIA2)[0]).replace("\r", "");
 						}
 						if (newcontenido.split("\n")[i + 1].contains("Vigencia a las")) {
 							x = (newcontenido.split("\n")[i + 1].split("Vigencia a las")[1]).replace("\r", "").replace("1 2 hrs", "");
@@ -89,29 +90,29 @@ public class AxaDiversosModel {
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + x).replace("\r", "").replace("###", "").replace("@@@", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
-						if(newcontenido.split("\n")[i].split("C.P:")[1].contains("Vigencia")) {
-							if(newcontenido.split("\n")[i].split("C.P:")[1].split("Vigencia")[0].length() > 7) {
+						if(newcontenido.split("\n")[i].split("C.P:")[1].contains(ConstantsValue.VIGENCIA2)) {
+							if(newcontenido.split("\n")[i].split("C.P:")[1].split(ConstantsValue.VIGENCIA2)[0].length() > 7) {
             					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].substring(0,5));
             				}else {
             					modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Vigencia")[0].trim());
             				}
 							
 						}
-						if(newcontenido.split("\n")[i].split("C.P:")[1].contains("Desde")) {
-							if(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").length() > 7) {
+						if(newcontenido.split("\n")[i].split("C.P:")[1].contains(ConstantsValue.DESDE)) {
+							if(newcontenido.split("\n")[i].split("C.P:")[1].split(ConstantsValue.DESDE)[0].replace("###", "").length() > 7) {
 								modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].substring(0,5));
 							}else {
-								modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").trim());
+								modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split(ConstantsValue.DESDE)[0].replace("###", "").trim());
 							}
 						
 						}						
 					}
-					if(newcontenido.split("\n")[i].contains("R.F.C:")) {
-						if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Desde") && modelo.getRfc().length() == 0) {
-							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Desde")[0].replace("###", "").trim());
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
+						if(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].contains(ConstantsValue.DESDE) && modelo.getRfc().length() == 0) {
+							modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].split(ConstantsValue.DESDE)[0].replace("###", "").trim());
 						}
-						if(newcontenido.split("\n")[i].split("R.F.C:")[1].contains("Hasta")&& modelo.getRfc().length() == 0) {
-							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Hasta")[0].replace("###", "").trim());
+						if(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].contains(ConstantsValue.HASTA2)&& modelo.getRfc().length() == 0) {
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split(ConstantsValue.HASTA2)[0].replace("###", "").trim());
 						}
 						else {
 							if( modelo.getRfc().length() == 0) {
@@ -122,26 +123,26 @@ public class AxaDiversosModel {
 						
 					}
 					if(newcontenido.split("\n")[i].contains("Desde")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("Hasta")) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("Emisión")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Moneda")) {
 					modelo.setMoneda(1);
 					}
 					
-					if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Agente:")) {
+					if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)) {
 						
-						modelo.setAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("###")[newcontenido.split("\n")[i].split("Agente:")[1].split("###").length -2]).trim().replace("###", "").replace("  ", ""));
+						modelo.setAgente((newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###").length -2]).trim().replace("###", "").replace("  ", ""));
 					}
 				
-					if(newcontenido.split("\n")[i].contains("Número") && newcontenido.split("\n")[i].contains("Agente:")) {
-						modelo.setCveAgente((newcontenido.split("\n")[i].split("Agente:")[1].split("No.")[0]).trim().replace("###", "").replace("  ", ""));
+					if(newcontenido.split("\n")[i].contains("Número") && newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)) {
+						modelo.setCveAgente((newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("No.")[0]).trim().replace("###", "").replace("  ", ""));
 					}
 					if(newcontenido.split("\n")[i].contains("Subramo") && newcontenido.split("\n")[i].contains("pago")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("Folio:")[1].replace("###", "").replace("\r", "").trim()));
@@ -155,7 +156,7 @@ public class AxaDiversosModel {
 			
 			
 			//Primas de la poliza
-			inicio = contenido.indexOf("Prima Neta");
+			inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
 			fin = contenido.indexOf("Relación de bienes opcionales");
 
 			if( fin == -1) {
@@ -168,8 +169,8 @@ public class AxaDiversosModel {
 			}
 
 			if(inicio > fin) {
-				inicio = contenido.indexOf("Prima Neta");
-				fin = contenido.indexOf("Prima Total");
+				inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
+				fin = contenido.indexOf(ConstantsValue.PRIMA_TOTAL2);
 				if(fin > -1) {
 					fin =fin+100;
 				}
@@ -179,8 +180,8 @@ public class AxaDiversosModel {
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {		
-					if(newcontenido.split("\n")[i].contains("Prima Neta")) {
-						modelo.setPrimaneta(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Prima Neta")[1].replace(":", "").replace("###", "").replace("\r", ""))));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
+						modelo.setPrimaneta(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].replace(":", "").replace("###", "").replace("\r", ""))));
 					}
 					if(newcontenido.split("\n")[i].contains("Financiamiento")) {
 						if(newcontenido.split("\n")[i].contains("Financiamiento 0.0%")) {
@@ -189,18 +190,18 @@ public class AxaDiversosModel {
 							modelo.setDerecho(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento")[1].split("###")[1].replace("###", "").replace("\r", ""))));
 						}						
 					}					
-					if(newcontenido.split("\n")[i].contains("Expedición")) {
-						modelo.setRecargo(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Expedición")[1].replace(":", "").replace("###", "").replace("\r", ""))));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION3)) {
+						modelo.setRecargo(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION3)[1].replace(":", "").replace("###", "").replace("\r", ""))));
 					}					
-					if(newcontenido.split("\n")[i].contains("I.V.A.")) {
-						if(newcontenido.split("\n")[i].split("I.V.A.")[1].replace(":", "").split("###")[1].contains("%")) {
-							modelo.setIva(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.")[1].replace(":", "").split("###")[0].replace("###", "").replace("\r", ""))));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.IVA)) {
+						if(newcontenido.split("\n")[i].split(ConstantsValue.IVA)[1].replace(":", "").split("###")[1].contains("%")) {
+							modelo.setIva(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.IVA)[1].replace(":", "").split("###")[0].replace("###", "").replace("\r", ""))));
 						}else {
-							modelo.setIva(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.")[1].replace(":", "").split("###")[1].replace("###", "").replace("\r", ""))));
+							modelo.setIva(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.IVA)[1].replace(":", "").split("###")[1].replace("###", "").replace("\r", ""))));
 						}													
 					}					
-					if(newcontenido.split("\n")[i].contains("Prima Total")) {
-						modelo.setPrimaTotal(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Prima Total")[1].replace(":", "").replace("###", "").replace("\r", ""))));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL2)) {
+						modelo.setPrimaTotal(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL2)[1].replace(":", "").replace("###", "").replace("\r", ""))));
 					}
 				}				
 			}
@@ -267,33 +268,6 @@ public class AxaDiversosModel {
 				}
 				modelo.setCoberturas(coberturas);
 			}
-//		
-//			List<EstructuraRecibosModel> recibos = new ArrayList<>();
-//			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-//			switch (modelo.getFormaPago()) {
-//			case 1:
-//
-//				recibo.setReciboId("");
-//				recibo.setSerie("1/1");
-//				recibo.setVigenciaDe(modelo.getVigenciaDe());
-//				recibo.setVigenciaA(modelo.getVigenciaA());
-//				if (recibo.getVigenciaDe().length() > 0) {
-//					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-//				}
-//				recibo.setPrimaneta(modelo.getPrimaneta());
-//				recibo.setDerecho(modelo.getDerecho());
-//				recibo.setRecargo(modelo.getRecargo());
-//				recibo.setIva(modelo.getDerecho());
-//				recibo.setPrimaTotal(modelo.getPrimaTotal());
-//				recibo.setAjusteUno(modelo.getAjusteUno());
-//				recibo.setAjusteDos(modelo.getAjusteDos());
-//				recibo.setCargoExtra(modelo.getCargoExtra());
-//				recibos.add(recibo);
-//				break;
-//			}
-//			modelo.setRecibos(recibos);
-//			
-			
 			
 			return modelo;
 		} catch (Exception ex) {

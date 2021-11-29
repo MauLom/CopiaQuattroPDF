@@ -6,15 +6,16 @@ import com.copsis.clients.projections.PaqueteCoberturaProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@JsonInclude(value = Include.NON_NULL)
+@Getter
+@Setter
 public class ImpresionForm {
-	private Integer tiporespuesta;//tipo de respuesta
-	private Integer tipoImpresion;//tipo de impresion
-	private Integer siniestroDocumentoID;// sinietro Id
-    private List<UrlForm> urls;//Lista de urls de Pdf
+	private Integer tiporespuesta;
+	private Integer tipoImpresion;
+	private Integer siniestroDocumentoID;
+    private List<UrlForm> urls;
     private String d;
     private String nombreOriginal;
     private String bucket;

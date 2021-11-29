@@ -1,8 +1,10 @@
 package com.copsis.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class EstructuraBeneficiariosModel {
 	private String nombre = "";
 	private int parentesco = 0;

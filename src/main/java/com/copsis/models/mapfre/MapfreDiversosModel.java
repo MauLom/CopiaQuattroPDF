@@ -89,7 +89,7 @@ public class MapfreDiversosModel {
 
 			// cte_nombre
 			inicio = contenido.indexOf("Contratante:");
-		;
+			;
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0];
 				if (newcontenido.contains("R.F.C")) {
@@ -125,7 +125,6 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 5, inicio + 30).split("\r\n")[0].replace(" ", "").trim();
 				modelo.setCp(newcontenido);
-				;
 			}
 
 			// cte_direccion
@@ -144,10 +143,12 @@ public class MapfreDiversosModel {
 				switch (newcontenido.split("###").length) {
 				case 2:
 				case 3:
-					if (newcontenido.split("###")[0].contains("de:")) {					
+					if (newcontenido.split("###")[0].contains("de:")) {
 						modelo.setVigenciaDe(
 								fn.formatDate(newcontenido.split("###")[0].split("de:")[1].trim(), "dd-MM-YY"));
 					}
+					break;
+				default:
 					break;
 				}
 			}
@@ -163,13 +164,11 @@ public class MapfreDiversosModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + 15, fin).replace("@@@", "");
 				if (newcontenido.contains("de:")) {
-					newcontenido = fn.RemplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
-					switch (newcontenido.split("###").length) {
-					case 3:
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("###")[0].trim()));
+					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
+					if (newcontenido.split("###").length == 3) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("###")[0].trim()));
 						modelo.setCveAgente(newcontenido.split("###")[1].trim());
 						modelo.setAgente(newcontenido.split("###")[2].trim());
-						break;
 					}
 				}
 			}
@@ -183,15 +182,14 @@ public class MapfreDiversosModel {
 			fin = contenido.indexOf("Prima neta:");
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = fn
-						.RemplazaGrupoSpace(
+						.remplazaGrupoSpace(
 								contenido.substring(inicio + 6, fin).replace("@@@", "").trim().split("\r\n")[0])
 						.replace("######", "###");
-				switch (newcontenido.split("###").length) {
-				case 5:
+				if (newcontenido.split("###").length == 5) {
 					modelo.setFormaPago(fn.formaPago(newcontenido.split("###")[1].trim()));
 					modelo.setMoneda(fn.moneda(newcontenido.split("###")[2].replace("$", "").trim()));
-					break;
 				}
+
 			}
 
 			// fecha_emision
@@ -224,17 +222,17 @@ public class MapfreDiversosModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
 				if (newcontenido.contains("otal:")) {
-					newcontenido = fn.RemplazaGrupoSpace(newcontenido.split("otal:")[1].replace("@@@", "").trim())
+					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("otal:")[1].replace("@@@", "").trim())
 							.replace("######", "###");
-					switch (newcontenido.split("###").length) {
-					case 7:
+
+					if (newcontenido.split("###").length == 7) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[0].trim())));
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2].trim())));
-						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[3].trim())));;
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[3].trim())));
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[5].trim())));
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[6].trim())));
-						break;
 					}
+
 				}
 			}
 
@@ -245,10 +243,8 @@ public class MapfreDiversosModel {
 				newcontenido = contenido.substring(inicio + 14, fin);
 				if (newcontenido.split("\r\n").length == 2) {
 					newcontenido = newcontenido.split("\r\n")[1];
-					switch (newcontenido.split("###").length) {
-					case 2:
+					if (newcontenido.split("###").length == 2) {
 						modelo.setPlan(newcontenido.split("###")[1].replace("\"", "").trim());
-						break;
 					}
 				}
 			} else {
@@ -256,12 +252,11 @@ public class MapfreDiversosModel {
 				fin = contenido.indexOf("óliza número:");
 				if (inicio > -1 && fin > -1 && inicio < fin) {
 					newcontenido = contenido.substring(inicio + 9, fin);
-					if (newcontenido.split("\r\n").length == 2) {
-						switch (newcontenido.split("\r\n")[1].split("###").length) {
-						case 2:
-							modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "").trim());
-							break;
-						}
+					if (newcontenido.split("\r\n").length == 2
+							&& newcontenido.split("\r\n")[1].split("###").length == 2) {
+
+						modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "").trim());
+
 					}
 				}
 			}
@@ -275,10 +270,9 @@ public class MapfreDiversosModel {
 				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
 				resultado = "";
 				for (String x : newcontenido.split("\r\n")) {
-					if (x.contains("BIENES Y RIESGOS CUBIERTOS") == false && x.contains("---") == false
-							&& x.contains("DEDUCIBLE") == false) {
+					if (!x.contains("BIENES Y RIESGOS CUBIERTOS") && !x.contains("---") && !x.contains("DEDUCIBLE")) {
 						resultado = x.trim();
-						resultado = fn.RemplazaGrupoSpace(resultado.trim());
+						resultado = fn.remplazaGrupoSpace(resultado.trim());
 						resultado = resultado.replace("A.###MIN", "A. MIN").replace("###DSMG", " DSMG")
 								.replace(".###MIN", ". MIN").replace(".###MAX", ". MAX");
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -305,6 +299,8 @@ public class MapfreDiversosModel {
 							cobertura.setCoaseguro(resultado.split("###")[3].trim());
 							coberturas.add(cobertura);
 							break;
+						default:
+							break;
 						}
 					}
 				}
@@ -325,11 +321,10 @@ public class MapfreDiversosModel {
 					resultado = "";
 					for (String x : newcontenido.split("\r\n")) {
 
-						if (x.contains("SUMA ASEGURADA") == false && x.contains("---") == false) {
+						if (!x.contains("SUMA ASEGURADA") && !x.contains("---")) {
 
-							
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-							x = fn.gatos( x.replaceAll("  +", "###").trim());
+							x = fn.gatos(x.replaceAll("  +", "###").trim());
 							x = x.replace("###$###", "###$ ");
 							switch (x.split("###").length) {
 							case 2:
@@ -352,7 +347,7 @@ public class MapfreDiversosModel {
 									seccion = x.split("###")[0].trim();
 									break;
 								default:
-									
+
 									cobertura.setNombre(x.split("###")[0].trim());
 									cobertura.setSeccion(seccion);
 									cobertura.setSa(x.split("###")[1].trim());
@@ -377,7 +372,7 @@ public class MapfreDiversosModel {
 								case "XIII":
 								case "XIV":
 								case "XV":
-								
+
 									seccion = x.split("###")[0].trim();
 									cobertura.setSeccion(seccion);
 									cobertura.setNombre(x.split("###")[1].trim());
@@ -392,6 +387,8 @@ public class MapfreDiversosModel {
 									break;
 								}
 								break;
+								default:
+									break;
 							}
 						}
 					}
@@ -503,7 +500,7 @@ public class MapfreDiversosModel {
 			// CALCULO RESTO DE RECIBOS
 			switch (modelo.getFormaPago()) {
 			case 1:
-				if(recibosList.size() ==  0) {
+				if (recibosList.size() == 0) {
 					recibo.setReciboId("");
 					recibo.setSerie("1/1");
 					recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -519,9 +516,9 @@ public class MapfreDiversosModel {
 					recibo.setAjusteUno(modelo.getAjusteUno());
 					recibo.setAjusteDos(modelo.getAjusteDos());
 					recibo.setCargoExtra(modelo.getCargoExtra());
-					recibosList.add(recibo);					
+					recibosList.add(recibo);
 				}
-			
+
 				break;
 			case 2:
 				if (recibosList.size() == 1) {
@@ -556,14 +553,14 @@ public class MapfreDiversosModel {
 							recibo.setVigenciaA(fn.dateAdd(recibosList.get(i - 1).getVigenciaA(), meses, i));
 						}
 						recibo.setVencimiento("");
-						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2,RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_DOWN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_DOWN));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
 						recibosList.add(recibo);
 					}
 				}
@@ -577,14 +574,15 @@ public class MapfreDiversosModel {
 					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
 
 						recibo.setSerie(i + 1 + "/" + totalRec);
-						recibo.setPrimaneta(restoPrimaNeta.divide(fn.castBigDecimal(restoRec), 2,RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec, 2,RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec,2,RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec,2,RoundingMode.HALF_DOWN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec,2,RoundingMode.HALF_EVEN));
+						recibo.setPrimaneta(
+								restoPrimaNeta.divide(fn.castBigDecimal(restoRec), 2, RoundingMode.HALF_EVEN));
+						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
+						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_DOWN));
+						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
 						recibosList.add(recibo);
 					}
 				}
@@ -642,7 +640,7 @@ public class MapfreDiversosModel {
 			if (inicio > -1) {
 				newcontenido = recibosText.substring(inicio, recibosText.indexOf("\r\n", inicio));
 				if (newcontenido.split("###").length == 3) {
-				
+
 					recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("###")[2])));
 					restoIva = modelo.getIva().subtract(recibo.getIva());
 				}
@@ -670,7 +668,7 @@ public class MapfreDiversosModel {
 					recibo.setVigenciaDe(resultado);
 					String resultado2 = fn.gatos(newcontenido.split("Hasta: 12:00 horas del")[1]).trim();
 					recibo.setVigenciaA(resultado2);
-	
+
 				}
 			}
 
@@ -690,7 +688,7 @@ public class MapfreDiversosModel {
 
 			// recibo_id
 			inicio = recibosText.indexOf("serie P No.");
-	
+
 			if (inicio > -1) {
 				newcontenido = fn.gatos(recibosText.substring(inicio + 11, recibosText.indexOf("\r\n", inicio + 11)));
 

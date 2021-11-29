@@ -49,15 +49,15 @@ public class MapfreSaludBModel {
 						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].split("Tel:")[0].replace("###", "").strip());
 					}
 					if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Clave de Agente:")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0].replace("###", "").strip()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0].replace("###", "").strip()));
 						modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").strip());
 						modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").strip());
 					}
 					if(newcontenido.split("\n")[i].contains("Hasta") ) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").strip()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").strip()));
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i].contains("Forma de Pago:") && newcontenido.split("\n")[i].contains("Moneda") ) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").replace(" ", "")).strip() );					
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").replace(" ", "")).strip() );					
 						modelo.setFormaPago(fn.formaPago( newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").strip()));
 						modelo.setMoneda(1);
 						
@@ -138,7 +138,7 @@ public class MapfreSaludBModel {
 								asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[1]) ? 1 : 0);
 								asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].strip()));
 								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3].strip()));
-								asegurado.setAntiguedad(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[4].strip().split(" ")[1]));
+								asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].strip().split(" ")[1]));
 								asegurados.add(asegurado);
 								break;
 							}

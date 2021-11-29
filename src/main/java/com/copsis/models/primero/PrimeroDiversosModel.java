@@ -43,7 +43,7 @@ public class PrimeroDiversosModel {
 	                		}	                		
 	                	} 
 	                	if(newcontenido.split("\n")[i].contains("Fecha de Emisión")) {
-	                		modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split(" ")[0]));
+	                		modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split(" ")[0]));
 	                	}
 	                	if(newcontenido.split("\n")[i].contains("Asegurado:")) {
 	                		modelo.setCteNombre(newcontenido.split("\n")[i].split("Asegurado:")[1].replace(":", "").replace("###", ""));
@@ -60,8 +60,8 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {
 	                		
 	                			modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0]);
-	                			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[2].strip()));
-	                			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i+1].split("###")[4].strip()));
+	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].strip()));
+	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].strip()));
 	                		
 	                	}
 	                }

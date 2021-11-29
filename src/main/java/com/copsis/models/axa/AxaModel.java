@@ -29,16 +29,15 @@ public class AxaModel {
 
 
 			
-			if ((contenido.contains("Datos del vehículo")) && contenido.contains(" Vehicle description") == false) { // AUTOS
+			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description")) { // AUTOS
 				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 1, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false));
 				modelo = datosAxaAutos.procesar();
-			}else if( contenido.contains("Datos del Vehículo") && contenido.contains("AUTOMÓVILES/AUTO  COLECTIVA")  && contenido.contains(" Vehicle description") == false) {
-				
+			}else if( contenido.contains("Datos del Vehículo") && contenido.contains("AUTOMÓVILES/AUTO  COLECTIVA")  && !contenido.contains(" Vehicle description")) {
 				AxaAutos3Model datosAxaAutos = new AxaAutos3Model(fn.caratula(1, 4, stripper, doc));
 				modelo = datosAxaAutos.procesar();
 			}
-			else if (contenido.indexOf("Recibo provisional para pago de primas") > 0) {
+			else if (contenido.indexOf("Recibo provisional para pago de primas") > -1) {
 				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
 				modelo = datosAxaSalud.procesar();
 		
@@ -46,7 +45,7 @@ public class AxaModel {
 
 			else {
 		
-				String tipos[] = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
+				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO"};
@@ -84,6 +83,8 @@ public class AxaModel {
 						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR							
 							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxaDive.procesar();								
+								break;
+							default: 
 								break;
 						}
 					

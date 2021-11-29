@@ -1,13 +1,12 @@
 package com.copsis.models.aba;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.chubb.ChubbDiversosModel;
 
 public class AbaAutosModel {
 	
@@ -17,12 +16,6 @@ public class AbaAutosModel {
 
 	// Variables
 	private String contenido;
-	private int inicio = 0;
-	private int fin = 0;
-	private String newcontenido = "";
-
-	
-
 	// constructor
 	public AbaAutosModel(String contenido ) {
 		this.contenido = contenido;
@@ -30,6 +23,11 @@ public class AbaAutosModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
+		
+		int inicio = 0;
+		int fin = 0;
+		String newcontenido = "";
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("vehículo*:", "vehículo###:");
 		try {
@@ -46,10 +44,10 @@ public class AbaAutosModel {
 			if(inicio > 0 && fin > 0 && inicio < fin ) {
 				newcontenido = contenido.substring(inicio,fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
-					if(newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Vigencia")) {
-						modelo.setPoliza( newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0].replace("###", "").trim());
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("horas")[1].split("horas")[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA) && newcontenido.split("\n")[i].contains("Vigencia")) {
+						modelo.setPoliza( newcontenido.split("\n")[i].split(ConstantsValue.POLIZA)[1].split("Vigencia")[0].replace("###", "").trim());
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Vigencia:")[1].split(ConstantsValue.HORAS)[0].replace("###", "").replace("12:00", "").replace("Del", "").trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HORAS)[1].split(ConstantsValue.HORAS)[0].replace("###", "").replace("12:00", "").replace("al", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Asegurado") && newcontenido.split("\n")[i].contains("Endoso:")) {
 						modelo.setEndoso( newcontenido.split("\n")[i].split("Endoso:")[1].replace(":", "").replace("\r","").replace("###", "").replace("", "".trim()));						
@@ -66,11 +64,11 @@ public class AbaAutosModel {
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").replace("\r", "").trim());
 					}
-					if(newcontenido.split("\n")[i].contains("R.F.C:")) {
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
 						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("\r", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Domicilio:")) {
-						modelo.setCteNombre((newcontenido.split("\n")[i].split("Domicilio:")[1].split("C.P:")[0] +" " + newcontenido.split("\n")[i+1].split("Teléfono:")[0] +" " + newcontenido.split("\n")[i+2].split("R.F.C:")[0] ).replace("@@@", "").replace("###", "").replace("\r", "").trim());
+						modelo.setCteNombre((newcontenido.split("\n")[i].split("Domicilio:")[1].split("C.P:")[0] +" " + newcontenido.split("\n")[i+1].split(ConstantsValue.TELEFONO)[0] +" " + newcontenido.split("\n")[i+2].split("R.F.C:")[0] ).replace("@@@", "").replace("###", "").replace("\r", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Moneda:")  && newcontenido.split("\n")[i].contains("pago")) {
             			modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Forma")[0].replace("###", "").trim()));
@@ -81,7 +79,7 @@ public class AbaAutosModel {
             		    modelo.setAgente(newcontenido.split("\n")[i].split("- 0 - ")[1].replace("\r", "").replace("###", "").trim());
 					}								
 					if(newcontenido.split("\n")[i].contains("vehículo###:")) {
-						modelo.setDescripcion(newcontenido.split("\n")[i].split("vehículo###:")[1].replace("###", "").replace("\r", "").trim());
+						modelo.setDescripcion(newcontenido.split("\n")[i].split(ConstantsValue.VEHICULO_HASH)[1].replace("###", "").replace("\r", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Modelo:") && newcontenido.split("\n")[i].contains("Serie:")) {
 						modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo:")[1].split("Serie")[0].replace("###", "").replace("\r", "").trim()));
@@ -100,21 +98,21 @@ public class AbaAutosModel {
 			
 			
 			//PRIMAS
-			inicio = contenido.indexOf("Prima neta");
+			inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
 			fin = contenido.indexOf("Página 1");
 			
 			if(inicio > 0 && fin > 0 && inicio < fin ) {
 				newcontenido = contenido.substring(inicio,fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
-					if(newcontenido.split("\n")[i].contains("Prima neta")) {
-						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima neta")[1].replace("###", "").replace("\r", "").trim())));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
+						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].replace("###", "").replace("\r", "").trim())));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("fraccionado")) {
 						 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("fraccionado")[1].replace("###", "").replace("\r", "").trim())));
 					}
 					if(newcontenido.split("\n")[i].contains("expedición")) {
-						 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1].replace("###", "").replace("\r", "").trim())));
+						 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1].replace("###", "").replace("\r", "").trim())));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("I.V.A.")) {

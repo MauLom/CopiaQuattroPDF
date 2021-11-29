@@ -53,7 +53,7 @@ public class MapfreSaludRojoModel {
 						}				
 					}
 					if(newcontenido.split("\n")[i].contains("FECHA DE EMISIÓN")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("FECHA DE EMISIÓN")[1].replace("###", "").trim()));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("FECHA DE EMISIÓN")[1].replace("###", "").trim()));
 						if(newcontenido.split("\n")[i+1].contains("AGENTE:")) {
 							modelo.setAgente(newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim());
 						}
@@ -62,10 +62,10 @@ public class MapfreSaludRojoModel {
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("DESDE") && newcontenido.split("\n")[i].contains("TIPO")) {
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("DESDE")[1].split("TIPO")[0].replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("DESDE")[1].split("TIPO")[0].replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("HASTA") && newcontenido.split("\n")[i].contains("CLIENTE")) {
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("HASTA:")[1].split("CLIENTE")[0].replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("HASTA:")[1].split("CLIENTE")[0].replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("PLAN CONTRATADO:")){
 						modelo.setPlan((newcontenido.split("\n")[i].split("PLAN CONTRATADO:")[1] +" "+ newcontenido.split("\n")[i+1]).replace("###", "").trim());

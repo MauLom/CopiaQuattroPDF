@@ -14,34 +14,27 @@ public class InbursaModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private Integer pagIni =0;
-	private Integer pagFin =0;
 
-
-	
-	
 	public InbursaModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
 		this.contenido = contenido;
 	}
+
 	public EstructuraJsonModel procesar() {
 		try {
-
-			
 			switch (fn.tipoPoliza(contenido)) {
-
 			case 1:// Autos
-				modelo  = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
-				
+				modelo = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),
+						fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
 				break;
 			case 2:// Salud
-				modelo  = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
+				modelo = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				break;
 			case 4:// Vida
-				modelo  = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				
+				modelo = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;
+			default:
 				break;
 			}
 
@@ -51,7 +44,7 @@ public class InbursaModel {
 					InbursaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
-		
+
 	}
 
 }

@@ -3,6 +3,7 @@ package com.copsis.models.aig;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -15,7 +16,7 @@ public class AigSaludBModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-
+	
 	public AigSaludBModel(String contenido) {
 		this.contenido = contenido;
 	}
@@ -42,8 +43,7 @@ public class AigSaludBModel {
 			fin = contenido.indexOf("BENEFICIOS CUBIERTOS ");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:15",
-						"");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(ConstantsValue.TIME,"");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				modelo.setMoneda(1);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -55,14 +55,12 @@ public class AigSaludBModel {
 						}
 					}
 
-					if (newcontenido.split("\n")[i].contains("NOMBRE")
-							&& newcontenido.split("\n")[i].contains("CONTRATANTE")) {
-						if (newcontenido.split("\n")[i + 1].contains("NOMBRE:")
-								&& newcontenido.split("\n")[i + 1].contains("R.F.C:")) {
-							modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("NOMBRE:")[1].split("R.F.C:")[0]
-									.replace("###", "").trim());
-						}
-
+					if (newcontenido.split("\n")[i].contains("NOMBRE") && 
+						newcontenido.split("\n")[i].contains("CONTRATANTE") && 
+						newcontenido.split("\n")[i + 1].contains("NOMBRE:") && 
+						newcontenido.split("\n")[i + 1].contains("R.F.C:")) {
+						
+						modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("NOMBRE:")[1].split("R.F.C:")[0].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("CALLE:")) {
 						newdireccion.append(newcontenido.split("\n")[i].split("CALLE:")[1]);
@@ -80,9 +78,9 @@ public class AigSaludBModel {
 					}
 					if (newcontenido.split("\n")[i].split("-").length > 3) {
 						modelo.setVigenciaDe(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[0].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[0].trim()));
 						modelo.setVigenciaA(
-								fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 
 					}
@@ -109,42 +107,32 @@ public class AigSaludBModel {
 
 			StringBuilder coberturastxt = new StringBuilder();
 
-			for (int j = 0; j < contenido.split("BENEFICIOS CUBIERTOS").length; j++) {
-				if (contenido.split("BENEFICIOS CUBIERTOS")[j].contains("FECHA DE EXPEDICIÓN")) {
-					coberturastxt.append(contenido.split("BENEFICIOS CUBIERTOS")[j].split("FECHA DE EXPEDICIÓN")[0]);
+			for (int j = 0; j < contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS).length; j++) {
+				if (contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].contains("FECHA DE EXPEDICIÓN")) {
+					coberturastxt.append(contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].split("FECHA DE EXPEDICIÓN")[0]);
 				} else {
-					if (contenido.split("BENEFICIOS CUBIERTOS")[j].contains("Los datos personales serán")) {
+					if (contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].contains("Los datos personales serán")) {
 						coberturastxt.append(
-								contenido.split("BENEFICIOS CUBIERTOS")[j].split("Los datos personales serán")[0]);
+								contenido.split(ConstantsValue.BENEFICIOS_CUBIERTOS)[j].split("Los datos personales serán")[0]);
 					}
 				}
 			}
-	
-
-
-
 
 			if (coberturastxt.length() > 0) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
-				newcontenido = coberturastxt.toString().replace("@@@", "").replace("12:15", "");
+				newcontenido = coberturastxt.toString().replace("@@@", "").replace(ConstantsValue.TIME, "");
 				for (String x : newcontenido.split("\r\n")) {
 					int sp = x.split("###").length;
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-				    if(sp == 2) {
-				    	if(x.contains("COBERTURAS") && x.contains("SUMAS ASEGURADAS")) {
-				    	
-				    	}else {
-				    		cobertura.setNombre(x.split("###")[0].trim());
-							cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(), ' ', ""));
-							coberturas.add(cobertura);	
-				    	}			    
+				    if(sp == 2 && !x.contains("COBERTURAS") && !x.contains("SUMAS ASEGURADAS")) {
+				    	cobertura.setNombre(x.split("###")[0].trim());
+				    	cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(), ' ', ""));
+				    	coberturas.add(cobertura);	
 				    }				    			
 				}
 				modelo.setCoberturas(coberturas);
 			}
-			
-			
 
 			inicio = contenido.indexOf("Agente de Seguro:");
 			fin = contenido.indexOf("Reducción en prima ");
@@ -159,11 +147,11 @@ public class AigSaludBModel {
 			}
 
 			inicio = contenido.indexOf("Nombre del Asegurado:");
-			fin = contenido.indexOf("BENEFICIOS CUBIERTOS");
+			fin = contenido.indexOf(ConstantsValue.BENEFICIOS_CUBIERTOS);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:15","");				
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(ConstantsValue.TIME,"");				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if (newcontenido.split("\n")[i].contains("Asegurado:")) {

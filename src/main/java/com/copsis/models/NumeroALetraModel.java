@@ -2,19 +2,19 @@ package com.copsis.models;
 import java.util.regex.Pattern;
 
 public class NumeroALetraModel {
-    private final String[] UNIDADES = {"", "un ", "dos ", "tres ", "cuatro ", "cinco ", "seis ", "siete ", "ocho ", "nueve "};
-    private final String[] DECENAS = {"diez ", "once ", "doce ", "trece ", "catorce ", "quince ", "dieciseis ",
+    private static final String[] UNIDADES = {"", "un ", "dos ", "tres ", "cuatro ", "cinco ", "seis ", "siete ", "ocho ", "nueve "};
+    private static final String[] DECENAS = {"diez ", "once ", "doce ", "trece ", "catorce ", "quince ", "dieciseis ",
         "diecisiete ", "dieciocho ", "diecinueve", "veinte ", "treinta ", "cuarenta ",
         "cincuenta ", "sesenta ", "setenta ", "ochenta ", "noventa "};
-    private final String[] CENTENAS = {"", "ciento ", "doscientos ", "trecientos ", "cuatrocientos ", "quinientos ", "seiscientos ",
+    private static final String[] CENTENAS = {"", "ciento ", "doscientos ", "trecientos ", "cuatrocientos ", "quinientos ", "seiscientos ",
         "setecientos ", "ochocientos ", "novecientos "};
 
    public NumeroALetraModel() {
    }
 
-    public String Convertir(String numero, boolean mayusculas) {
+    public String convertir(String numero, boolean mayusculas) {
         String literal = "";
-        String parte_decimal;    
+        String parteDecimal;    
         //si el numero utiliza (.) en lugar de (,) -> se reemplaza
         numero = numero.replace(".", ",");
         //si el numero no tiene parte decimal, se le agrega ,00
@@ -24,28 +24,28 @@ public class NumeroALetraModel {
         //se valida formato de entrada -> 0,00 y 999 999 999,00
         if (Pattern.matches("\\d{1,9},\\d{1,2}", numero)) {
             //se divide el numero 0000000,00 -> entero y decimal
-            String Num[] = numero.split(",");            
+            String[] num = numero.split(",");            
             //de da formato al numero decimal
-            parte_decimal = " "+"pesos " +Num[1] + "/100 m.n.";
+            parteDecimal = " "+"pesos " +num[1] + "/100 m.n.";
             //se convierte el numero a literal
-            if (Integer.parseInt(Num[0]) == 0) {//si el valor es cero
+            if (Integer.parseInt(num[0]) == 0) {//si el valor es cero
                 literal = "cero ";
-            } else if (Integer.parseInt(Num[0]) > 999999) {//si es millon
-                literal = getMillones(Num[0]);
-            } else if (Integer.parseInt(Num[0]) > 999) {//si es miles
-                literal = getMiles(Num[0]);
-            } else if (Integer.parseInt(Num[0]) > 99) {//si es centena
-                literal = getCentenas(Num[0]);
-            } else if (Integer.parseInt(Num[0]) > 9) {//si es decena
-                literal = getDecenas(Num[0]);
+            } else if (Integer.parseInt(num[0]) > 999999) {//si es millon
+                literal = getMillones(num[0]);
+            } else if (Integer.parseInt(num[0]) > 999) {//si es miles
+                literal = getMiles(num[0]);
+            } else if (Integer.parseInt(num[0]) > 99) {//si es centena
+                literal = getCentenas(num[0]);
+            } else if (Integer.parseInt(num[0]) > 9) {//si es decena
+                literal = getDecenas(num[0]);
             } else {//sino unidades -> 9
-                literal = getUnidades(Num[0]);
+                literal = getUnidades(num[0]);
             }
             //devuelve el resultado en mayusculas o minusculas
             if (mayusculas) {
-                return (literal + parte_decimal).toUpperCase();
+                return (literal + parteDecimal).toUpperCase();
             } else {
-                return (literal + parte_decimal);
+                return (literal + parteDecimal);
             }
         } else {//error, no se puede convertir
             return literal = null;

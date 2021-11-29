@@ -172,8 +172,8 @@ public class MetlifeSaludModel {
             			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
             			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1:0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");
-            			asegurado.setNacimiento( fn.formatDate_MonthCadena(x.split("###")[0]));
-            			asegurado.setAntiguedad( fn.formatDate_MonthCadena(x.split("###")[1]));
+            			asegurado.setNacimiento( fn.formatDateMonthCadena(x.split("###")[0]));
+            			asegurado.setAntiguedad( fn.formatDateMonthCadena(x.split("###")[1]));
             			asegurados.add(asegurado);
             		}
             	}

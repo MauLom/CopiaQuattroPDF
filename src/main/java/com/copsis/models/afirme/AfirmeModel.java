@@ -14,31 +14,22 @@ public class AfirmeModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private Integer pagIni =0;
 
-	
 	public AfirmeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
 		this.contenido = contenido;
 	}
-	public EstructuraJsonModel procesar() {
-	
+	public EstructuraJsonModel procesar() {	
 		try {
-	
-			switch (fn.tipoPoliza(contenido)) {
-			case 1://Autos
+			
+			if(fn.tipoPoliza(contenido) == 1) { // autos
 				if(contenido.contains("AUTOMÓVILES RESIDENTES")) {
-						
 					modelo  = new AfirmeAutosBModel(fn.caratula(1, 2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();	
 				}else {
-					pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+					Integer pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
 					modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
 				}
-										  
-				break;		
-			default:
-				break;
 			}
 			
 			return modelo;

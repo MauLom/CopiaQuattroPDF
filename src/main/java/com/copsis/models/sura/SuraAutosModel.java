@@ -57,18 +57,18 @@ public class SuraAutosModel {
 						if (sp == 7) {
 							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[6]));
 							modelo.setFechaEmision(
-									fn.formatDate_MonthCadena(newcontenido.split("\n")[i + 1].split("###")[5]));
+									fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[5]));
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("Vigencia desde")) {
 						modelo.setVigenciaDe(
-								fn.formatDate_MonthCadena(newcontenido.split("Vigencia desde")[1].split("###")[1]));
+								fn.formatDateMonthCadena(newcontenido.split("Vigencia desde")[1].split("###")[1]));
 					}
 					if (newcontenido.split("\n")[i].contains("Hasta las")
 							&& newcontenido.split("\n")[i].contains("C.P.")) {
 				
 						modelo.setVigenciaA(
-								fn.formatDate_MonthCadena(newcontenido.split("Hasta las")[1].split("###")[1]));
+								fn.formatDateMonthCadena(newcontenido.split("Hasta las")[1].split("###")[1]));
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim());
 					}
 					

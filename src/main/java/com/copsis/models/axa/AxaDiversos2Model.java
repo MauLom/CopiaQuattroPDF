@@ -3,6 +3,7 @@ package com.copsis.models.axa;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -11,13 +12,8 @@ public class AxaDiversos2Model {
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	private static String contenido = "";
-	private static String newcontenido = "";
+	private String contenido = "";
 	
-	private static  String textbusq = "";
-	private int inicio = 0;
-	private int fin = 0;
-
 	
 	public AxaDiversos2Model(String contenidox) {
 	 this.contenido = fn.remplazarMultiple(contenidox, fn.remplazosGenerales());
@@ -25,7 +21,9 @@ public class AxaDiversos2Model {
 	}
 
 	public EstructuraJsonModel procesar() {
-
+		String newcontenido = "";
+		int inicio = 0;
+		int fin = 0;
 		//Responsabilidad Civil, Comercio
 	
 		try {
@@ -44,12 +42,12 @@ public class AxaDiversos2Model {
 						
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i].contains("Expediente")) {
-						modelo.setFechaEmision(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("Emisión")[1].split("Expediente")[0].replace("###", "").trim()));
+						modelo.setFechaEmision(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Emisión")[1].split("Expediente")[0].replace("###", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Vigencia") ) {
 						String x = newcontenido.split("\n")[i+1].replace("a las 12 Hrs.", "");
-						modelo.setVigenciaDe(fn.formatDate_MonthCadena(x.split("###")[1].trim()));
-						modelo.setVigenciaA(fn.formatDate_MonthCadena(x.split("###")[3].trim()));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[1].trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[3].trim()));
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Datos Generales del Asegurado") && newcontenido.split("\n")[i+1].contains("RFC:") ) {
@@ -71,22 +69,22 @@ public class AxaDiversos2Model {
 			fin = contenido.indexOf("Suma Asegurada Prima Neta");
 			if(inicio > -1 && fin > -1 && inicio < fin) {
 
-				newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replaceAll("\u00a0", "");				
+				newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("\u00a0", "");				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					
 					if(newcontenido.split("\n")[i].contains("Moneda") && newcontenido.split("\n")[i].contains("Suma Asegurada")) {
 						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda")[1].split("Suma Asegurada")[0].replace("###", "").trim()));	
 					}
-					if(newcontenido.split("\n")[i].contains("Forma de Pago") && newcontenido.split("\n")[i].contains("Prima Neta")) {
-						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Forma de Pago")[1].split("Prima Neta")[0].replace("###", "").trim()));
+					if(newcontenido.split("\n")[i].contains("Forma de Pago") && newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
+						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Forma de Pago")[1].split(ConstantsValue.PRIMA_NETA)[0].replace("###", "").trim()));
 						
 					}
                     if(newcontenido.split("\n")[i].contains("Nombre del Agente")) {
                     	modelo.setAgente(newcontenido.split("\n")[i].split("Nombre del Agente")[1].replace("###", "").trim());
-//             
+
 					}
-                    if(newcontenido.split("\n")[i].contains("Número de Agente")&& newcontenido.split("\n")[i].contains("Gastos por Expedición")  ) {
-                    	modelo.setCveAgente(newcontenido.split("\n")[i].split("Número de Agente")[1].split("Gastos por Expedición")[0].replace("###", "").trim());
+                    if(newcontenido.split("\n")[i].contains("Número de Agente")&& newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_POR_EXPEDICION)  ) {
+                    	modelo.setCveAgente(newcontenido.split("\n")[i].split("Número de Agente")[1].split(ConstantsValue.GASTOS_POR_EXPEDICION)[0].replace("###", "").trim());
                        
 					}
                     if(newcontenido.split("\n")[i].contains("I.V.A.")) {
@@ -97,8 +95,8 @@ public class AxaDiversos2Model {
                     	modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Prima Neta")[1].split("###")[1].trim())));
 					
                     }
-                    if(newcontenido.split("\n")[i].contains("Gastos por Expedición")) {
-                    	modelo.setDerecho(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split("Gastos por Expedición")[1].split("###")[1].trim())));
+                    if(newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_POR_EXPEDICION)) {
+                    	modelo.setDerecho(fn.castBigDecimal(fn.cleanString(newcontenido.split("\n")[i].split(ConstantsValue.GASTOS_POR_EXPEDICION)[1].split("###")[1].trim())));
 					
 					}
                     if(newcontenido.split("\n")[i].contains("Prima Total")) {

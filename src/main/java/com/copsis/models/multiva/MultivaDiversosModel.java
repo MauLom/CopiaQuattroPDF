@@ -61,8 +61,8 @@ public class MultivaDiversosModel {
 						modelo.setCteDireccion(newcontenido.split("\n")[i].split("###")[0] +" "+ newcontenido.split("\n")[i+2].split("###")[0]);
 					}
             		if(newcontenido.split("\n")[i].split("-").length  > 4) {
-            			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2].trim()));
-            			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -1].trim()));            		
+            			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2].trim()));
+            			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -1].trim()));            		
             		}
             		if(newcontenido.split("\n")[i].contains("C.P:")) {
             			modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("###")[1]);
@@ -74,7 +74,7 @@ public class MultivaDiversosModel {
             			modelo.setIdCliente(newcontenido.split("\n")[i].split("Asegurado:")[1].split("###")[1]);
             		}
             		if(newcontenido.split("\n")[i].contains("Emisión")) {
-            			modelo.setFechaEmision(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].split("###")[1]));
+            			modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].split("###")[1]));
             		}
             	}            	
             }

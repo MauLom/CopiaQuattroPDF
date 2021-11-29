@@ -768,7 +768,7 @@ public class MapfreVidaModel {
 
 				for (String dato : inicontenido.split("@@@")[donde + 1].split("\r\n")) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					newcontenido = RemplazaGrupoSpace(dato.trim());
+					newcontenido = remplazaGrupoSpace(dato.trim());
 					if (newcontenido.split("###").length == 5) {
 						cobertura.setNombre(newcontenido.split("###")[0].replace("*", "").trim());
 						cobertura.setSa(newcontenido.split("###")[1].trim());
@@ -817,7 +817,7 @@ public class MapfreVidaModel {
 			;
 
 			if (contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS") > 0) {
-				String beneFi = RemplazaGrupoSpace(
+				String beneFi = remplazaGrupoSpace(
 						inicontenido.split("DESIGNACION DE LOS BENEFICIARIOS")[1].split("PARTICIPACIÓN")[1]
 								.split("En testimonio ")[0].replace("@@@", ""));
 				for (String ben : beneFi.split("\r\n")) {
@@ -838,7 +838,7 @@ public class MapfreVidaModel {
 				if (modelo.getBeneficiarios().size() == 0) {
 					if (inicontenido.contains("BENEFICIARIOS")
 							&& inicontenido.contains("LA DOCUMENTACION CONTRACTUAL")) {
-						String beng = RemplazaGrupoSpace(inicontenido.split("BENEFICIARIOS")[1].split("PORCENTAJE")[1]
+						String beng = remplazaGrupoSpace(inicontenido.split("BENEFICIARIOS")[1].split("PORCENTAJE")[1]
 								.split("LA DOCUMENTACION CONTRACTUAL")[0]);
 						for (String ben : beng.split("\r\n")) {
 							EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
@@ -894,7 +894,7 @@ public class MapfreVidaModel {
 		}
 	}
 
-	public String RemplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
+	public String remplazaGrupoSpace(String dato) { // RETORNA UNA CADENA, EN DONDE TENGA MAS DE 2 ESPACIOS PONE ###
 		boolean encontro_grupo = false;
 		int par = 0;
 		String newdato = "";

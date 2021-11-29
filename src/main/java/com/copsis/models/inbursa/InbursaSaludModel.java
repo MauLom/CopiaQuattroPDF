@@ -1,6 +1,5 @@
 package com.copsis.models.inbursa;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,26 +13,16 @@ public class InbursaSaludModel {
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
 		// Varaibles
 		private String contenido = "";
-		private String newcontenido = "";
-		private String recibosText = "";
-		private String resultado = "";
-		private int inicio = 0;
-		private int fin = 0;
-		private int donde = 0;
-		private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-		private BigDecimal restoDerecho = BigDecimal.ZERO;
-		private BigDecimal restoIva = BigDecimal.ZERO;
-		private BigDecimal restoRecargo = BigDecimal.ZERO;
-		private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-		private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-		private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-		private BigDecimal restoCargoExtra = BigDecimal.ZERO;
 	
 	public InbursaSaludModel(String contenido) {
 		this.contenido = contenido;	
 	}
 	
 	public EstructuraJsonModel procesar() {
+		String newcontenido = "";
+		String resultado = "";
+		int inicio = 0;
+		int fin = 0;
 		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
@@ -88,8 +77,8 @@ public class InbursaSaludModel {
             			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1])));
             		}
 	        		 if(newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("-")) { 
-	          			modelo.setVigenciaDe(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
-	          			modelo.setVigenciaA(fn.formatDate_MonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
+	          			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("Hasta")[0].replace("###", "").trim()));
+	          			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
 	          		 }
 	        		 if(newcontenido.split("\n")[i].contains("PRODUCTO")){            			
 	        			 modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").trim());
@@ -109,11 +98,11 @@ public class InbursaSaludModel {
                     	if(newcontenido.split("\n")[j].contains("CLAVE")) {                   
                     		modelo.setCveAgente(fn.extraerNumeros( newcontenido.split("\n")[j-2]));
                     		if(modelo.getCveAgente().length() > 0) {
-                    			String A = newcontenido.split("\n")[j-1].replace(" ", "###").split("###")[0].trim();
-                    			 if(A.contains("@")) {
-                    				 A ="";
+                    			String a = newcontenido.split("\n")[j-1].replace(" ", "###").split("###")[0].trim();
+                    			 if(a.contains("@")) {
+                    				 a ="";
                     			 }
-                    		  modelo.setAgente((newcontenido.split("\n")[j-2].split( modelo.getCveAgente() )[1] +""+ A).trim());	
+                    		  modelo.setAgente((newcontenido.split("\n")[j-2].split( modelo.getCveAgente() )[1] +""+ a).trim());	
                     		}                                        			
                     	}
 					} 
@@ -132,10 +121,10 @@ public class InbursaSaludModel {
             			asegurado.setNombre(newcontenido.split("\n")[i].split("Nombre:")[1].split("###")[1]);            		
             		}
             		if(newcontenido.split("\n")[i].contains("nacimiento:")) {
-            			asegurado.setNacimiento(fn.formatDate_MonthCadena( newcontenido.split("\n")[i].split("nacimiento:")[1].split("###")[1]));            			
+            			asegurado.setNacimiento(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("nacimiento:")[1].split("###")[1]));            			
             		}
             		if(newcontenido.split("\n")[i].contains("Género:") && newcontenido.split("\n")[i].contains("Fecha:")) {
-            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("Género:")[1].split("###")[1]) ? 1 : 0);
+            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("Género:")[1].split("###")[1]).booleanValue() ? 1 : 0);
             		}
             		
             		if(newcontenido.split("\n")[i].contains("Parentesco:") && newcontenido.split("\n")[i].contains("Tope")) {

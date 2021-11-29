@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import com.copsis.clients.projections.QuattroUploadAdjuntoProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.exceptions.GeneralServiceException;
+import com.copsis.utils.ErrorCode;
 
 @Service
 public class QuattroUploadClient {
@@ -114,7 +115,7 @@ public class QuattroUploadClient {
 				body.add("webpath", adjuntoForm.getWebpath());
 			}
 			if(adjuntoForm.getNombreOriginal() != null && !adjuntoForm.getNombreOriginal().equals("")) {
-				body.add("nombreOriginal", adjuntoForm.getNombreOriginal());;
+				body.add("nombreOriginal", adjuntoForm.getNombreOriginal());
 			}
 			if(adjuntoForm.getD() != null && !adjuntoForm.getD().equals("")) {
 				body.add("d", adjuntoForm.getD());	
@@ -126,7 +127,7 @@ public class QuattroUploadClient {
 					.postForEntity(QUATTRO_UPLOAD_PROXY + "/upload/adjunto", requestEntity, QuattroUploadAdjuntoProjection.class);
 			return response.getBody();
 		} catch (Exception e) {
-			throw new GeneralServiceException("00009", "Hubo un error en el proceso: " + e.getMessage());
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000 , e.getMessage());
 		}
 	}
 }
