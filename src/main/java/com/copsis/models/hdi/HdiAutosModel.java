@@ -55,7 +55,7 @@ public class HdiAutosModel {
 
 					if (newcontenido.split("\n")[i].contains("RFC:")) {
 						modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].trim());
-						if(newcontenido.split("\n")[i + 1].contains("Formea de Pago")) {
+						if(newcontenido.split("\n")[i + 1].contains("Forma de Pago")) {
 							modelo.setCteDireccion(newcontenido.split("\n")[i + 1].split("Forma de Pago")[0].replace("###", "").trim());
 							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("Forma de Pago:")[1].trim()));
 						}else if(newcontenido.split("\n")[i + 1].contains("CLIENTE")) {
@@ -169,7 +169,8 @@ public class HdiAutosModel {
 						modelo.setPlan(newcontenido.split("\n")[i].split("Paquete:")[1].split("###")[0].trim());
 
 					}
-					if (newcontenido.split("\n")[i].contains("ANUAL")) {
+					System.out.println(newcontenido);
+					if (newcontenido.split("\n")[i].contains("ANUAL") || newcontenido.split("\n")[i].contains("12 MESES SIN INTERESES")) {
 						modelo.setFormaPago(1);
 					}
 					if (newcontenido.split("\n")[i].contains("MENSUAL")) {
