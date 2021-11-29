@@ -315,23 +315,15 @@ public class GnpAutosModel {
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "Clave###Agente");
 
-			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length == 2
-					&& contenido.split("@@@")[donde].split("\r\n")[1].contains("Clave###Agente")) {
-
-				int split = contenido.split("@@@")[donde + 1].split("\r\n").length;
-
-				switch (split) {
-				case 1:
-				case 2:
-					if (contenido.split("@@@")[donde + 1].split("\r\n")[0].split("###").length == 3) {
-						modelo.setCveAgente(contenido.split("@@@")[donde + 1].split("\r\n")[0].split("###")[0].trim());
-						modelo.setAgente(contenido.split("@@@")[donde + 1].split("\r\n")[0].split("###")[1].trim());
+			if (donde > 0 ) {
+				for (int i = 0; i < contenido.split("@@@")[donde].split("\n").length; i++) {
+					if (contenido.split("@@@")[donde].split("\n")[i].contains("Clave")
+							&& contenido.split("@@@")[donde].split("\n")[i].contains("Agente")) {
+						modelo.setCveAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[0].trim());
+						modelo.setAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[1].trim());
 					}
-					break;
-				default:
-					break;
-
 				}
+
 			}
 
 			// plan

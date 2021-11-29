@@ -31,7 +31,8 @@ public class qualitasAutosModel {
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
-				.replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición");
+				.replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición")
+				.replace("Servic i o :", "Servicio:");
 		try {
 			// cia
 			modelo.setCia(29);
@@ -568,7 +569,6 @@ public class qualitasAutosModel {
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
 						.replace("del:", "del").replace("Servic  i o  :", "Servicio:");
-
 				if (newcontenido.contains("Servicio")) {
 					newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
 					if (newcontenido.split("###").length == 2) {
