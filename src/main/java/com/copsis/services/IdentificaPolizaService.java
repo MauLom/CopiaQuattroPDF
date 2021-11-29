@@ -78,7 +78,7 @@ public class IdentificaPolizaService {
 
 			if (!encontro && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
-					|| contenido.contains("Grupo Nacional Provincial"))) {
+					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP"))) {
 
 				GnpModel datosGnp = new GnpModel(pdfStripper, pdDoc, contenido);
 				modelo = datosGnp.procesa();
@@ -182,15 +182,12 @@ public class IdentificaPolizaService {
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))) {
-			
-					
-					if (contenido.contains("Estimado(a)")) {
+					if (contenido.contains("Estimado(a)") ) {
 						contenido = caratula(3, 4, pdfStripper, pdDoc);
-
 						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
 						modelo = datosBanort.procesar();
 						encontro = true;
-					} else  if(contenido.contains("AVISO DE COBRO")) {
+					} else  if(contenido.contains("AVISO DE COBRO") || contenido.contains("CARGOS AUTOMÁTICOS")) {
 						contenido = caratula(1, 6, pdfStripper, pdDoc);
 
 						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
@@ -203,8 +200,6 @@ public class IdentificaPolizaService {
 						modelo = datosBanort.procesar();
 						encontro = true;
 					}
-
-				
 			}
 		
 			// ENTRADA PARA INBURSA
