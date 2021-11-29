@@ -103,6 +103,9 @@ public class ChubbDiversosModel {
 
 			// PRIMAS
 			inicio = contenido.indexOf("o especificación");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Prima Neta");
+			}
 			fin = contenido.indexOf("Notas del riesgo");
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
@@ -150,18 +153,22 @@ public class ChubbDiversosModel {
 								.replace("\r", ""));
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHO)) {
-						ubicacion.setTechos(
-								fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0]
-										.replace("###", "")));
-						ubicacion.setMuros(
-								fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0]
-										.replace("###", "")));
+						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "")));
+						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "")));
 					}
-
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHOS)) {				
+						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHOS)[1].split("Incendio:")[1].toUpperCase().replace("###", "")));						
+						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.MUROS)[1].split(ConstantsValue.TECHOS)[0].toUpperCase().replace("###", "").trim()));
+					}
+					
 					if (newcontenido.split("\n")[i].contains("Niveles:")) {
-						ubicacion.setNiveles(Integer
-								.parseInt(newcontenido.split("\n")[i].split("Niveles:")[1].split("En qué piso")[0]
-										.replace("###", "").replace("\r", "")));
+						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Niveles:")[1].split("En qué piso")[0].replace("###", "").replace("\r", "")));
+					}
+					if (newcontenido.split("\n")[i].contains("Núm. pisos incendio:")) {
+						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "")));
+					}
+					if (newcontenido.split("\n")[i].contains("Giro:")) {
+						ubicacion.setGiro(newcontenido.split("\n")[i].split("Giro:")[1].replace("###", "").trim());
 					}
 
 				}
@@ -174,7 +181,11 @@ public class ChubbDiversosModel {
 			// Cobertutas
 
 			inicio = contenido.indexOf("Tipo Vivienda");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Muro de Contención:");
+			}
 			fin = contenido.indexOf("Prima Neta");
+			
 
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
@@ -213,16 +224,19 @@ public class ChubbDiversosModel {
 
 									if (b.split("###").length == 1 && !b.contains(ConstantsValue.SECCION)) {
 										deducible.append(" ").append(b);
+										deducible = new StringBuilder();
 
 									}
 
 									if (c.split("###").length == 1 && b.split("###").length == 1
 											&& !c.contains(ConstantsValue.SECCION)) {
 										deducible.append(" ").append(c);
+										deducible = new StringBuilder();
 									}
 
 								} else {
 									cobertura.setDeducible(deducible.toString());
+									deducible = new StringBuilder();
 								}
 								cobertura.setSeccion(seccion.replace("SECCION", "").trim());
 								cobertura.setNombre(nombre);
@@ -267,6 +281,7 @@ public class ChubbDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
