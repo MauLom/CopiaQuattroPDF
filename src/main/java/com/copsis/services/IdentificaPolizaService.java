@@ -128,12 +128,12 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA ABA
-			if (!encontro && contenido.contains("ABA Seguros S.A.")
+			if (!encontro && (contenido.contains("ABA Seguros S.A.")
 					|| contenido.contains("Datos del asegurado y/o propietario")
 							&& contenido.contains("Domicilio del bien asegurado")
 							&& contenido.contains("Descripcion del Riesgo")
 					|| contenido.contains("Datos del asegurado y/o propietario")
-							&& contenido.contains("Características del riesgo")) {
+							&& contenido.contains("Características del riesgo"))) {
 				AbaModel datosAba = new AbaModel();
 				datosAba.setPdfStripper(pdfStripper);
 				datosAba.setPdDoc(pdDoc);
