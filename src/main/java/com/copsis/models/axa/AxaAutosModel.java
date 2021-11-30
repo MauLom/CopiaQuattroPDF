@@ -301,11 +301,7 @@ public class AxaAutosModel {
 				modelo.setMarca(newcontenido.toString());
 			}
 
-			// fecha_emision//tipo
-			modelo.setTipo(1);
-			// cia
-			modelo.setCia(20);
-
+	
 			// poliza
 			// cte_nombre
 			donde = 0;
@@ -492,7 +488,6 @@ public class AxaAutosModel {
 					}
 				}
 			}
-
 			// derecho
 			// recargo
 			// prima_neta
@@ -532,6 +527,9 @@ public class AxaAutosModel {
 			donde = fn.recorreContenido(contenido, ConstantsValue.IVA);
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+					if (dato.split("###").length == 2 && dato.contains("comisión")) {
+						modelo.setCargoExtra(fn.castBigDecimal(fn.cleanString(dato.split("###")[1].trim())));
+					}
 					if (dato.split("###").length == 2 && dato.contains("I.V.A.")) {
 						modelo.setIva(fn.castBigDecimal(fn.cleanString(dato.split("###")[1].trim())));
 					}
@@ -588,6 +586,8 @@ public class AxaAutosModel {
 			fin = 0;
 			inicio = contenido.indexOf("Coberturas amparadas###Suma asegurada###Deducible###Prima");
 			fin = contenido.indexOf("Prima neta###");
+			if(fin == -1)fin = contenido.indexOf("Félix Cuevas 366");
+	
 			if (inicio > 0 && fin > 0) {
 				for (String dato : contenido.substring(inicio + 57, fin).replace(".....", "").trim().split("\n")) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -607,116 +607,7 @@ public class AxaAutosModel {
 			}
 			modelo.setCoberturas(coberturas);
 
-			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
-
-			if (recibosText.length() > 0) {
-				recibosList = recibosExtract();
-
-			}
-
-			// **************************************RECIBOS
-			switch (modelo.getFormaPago()) {
-			case 1:
-				if (recibosList.isEmpty()) {
-					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					recibo.setReciboId("");
-					recibo.setSerie("1/1");
-					recibo.setVigenciaDe(modelo.getVigenciaDe());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					if (recibo.getVigenciaDe().length() > 0) {
-						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-					}
-					recibo.setPrimaneta(modelo.getPrimaneta());
-					recibo.setDerecho(modelo.getDerecho());
-					recibo.setRecargo(modelo.getRecargo());
-					recibo.setIva(modelo.getIva());
-					recibo.setPrimaTotal(modelo.getPrimaTotal());
-					recibo.setAjusteUno(modelo.getAjusteUno());
-					recibo.setAjusteDos(modelo.getAjusteDos());
-					recibo.setCargoExtra(modelo.getCargoExtra());
-					recibosList.add(recibo);
-				}
-				break;
-			case 2:
-				if (recibosList.size() == 1) {
-					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					recibo.setSerie("2/2");
-					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					recibo.setVencimiento("");
-					recibo.setPrimaneta(restoPrimaNeta);
-					recibo.setPrimaTotal(restoPrimaTotal);
-					recibo.setRecargo(restoRecargo);
-					recibo.setDerecho(restoDerecho);
-					recibo.setIva(restoIva);
-					recibo.setAjusteUno(restoAjusteUno);
-					recibo.setAjusteDos(restoAjusteDos);
-					recibo.setCargoExtra(restoCargoExtra);
-					recibosList.add(recibo);
-				}
-				break;
-			case 3:
-			case 4:
-				if (!recibosList.isEmpty()) {
-					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
-					int totalRec = fn.getTotalRec(modelo.getFormaPago());
-					int meses = fn.monthAdd(modelo.getFormaPago());// MESES A AGREGAR POR RECIBOs
-					int ct = recibosList.size();
-					int x = 0;
-					for (int i = 0; i < restoRec.intValue(); i++) {
-						x++;
-						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-						recibo.setSerie((x + ct) + "/" + totalRec);
-						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_DOWN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibosList.add(recibo);
-					}
-
-					for (int i = 0; i < recibosList.size(); i++) {
-
-						if (i >= ct) {
-							recibosList.get(i).setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
-							if (recibosList.get(i - 1).getVigenciaA().length() == 10) {
-								recibosList.get(i)
-										.setVigenciaA(fn.dateAdd(recibosList.get(i - 1).getVigenciaA(), meses, 2));
-							}
-						}
-					}
-
-				}
-
-				break;
-			case 5:
-			case 6:// QUINCENAL, SEMANAL NINGUN PDF DE FORMA DE PAGO SE QUEDA PENDIENTE ESTE CASO
-				if (!recibosList.isEmpty()) {
-					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
-					int totalRec = fn.getTotalRec(modelo.getFormaPago());
-					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
-						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-						recibo.setSerie(i + 1 + "/" + totalRec);
-						recibo.setPrimaneta(
-								restoPrimaNeta.divide(fn.castBigDecimal(restoRec), 2, RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_DOWN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibosList.add(recibo);
-					}
-				}
-				break;
-			default:
-				break;
-			}
-			modelo.setRecibos(recibosList);
+		
 
 			return modelo;
 		} catch (

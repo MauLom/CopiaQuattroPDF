@@ -30,7 +30,7 @@ public class AxaModel {
 
 			
 			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description")) { // AUTOS
-				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 1, stripper, doc),
+				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false));
 				modelo = datosAxaAutos.procesar();
 			}else if( contenido.contains("Datos del Vehículo") && contenido.contains("AUTOMÓVILES/AUTO  COLECTIVA")  && !contenido.contains(" Vehicle description")) {
