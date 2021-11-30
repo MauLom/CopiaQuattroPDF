@@ -190,14 +190,13 @@ public class AtlasSaludModel {
 								coberturas.add(cobertura);
 														
 						}
-						if(!newcontenido.split("\n")[i].contains("Límites") && !newcontenido.split("\n")[i].contains("Gastos médicos")) {
-                              if(newcontenido.split("\n")[i].contains("Suma asegurada")) {
+						if(!newcontenido.split("\n")[i].contains("Límites") && !newcontenido.split("\n")[i].contains("Gastos médicos") && newcontenido.split("\n")[i].contains("Suma asegurada")) {                       
                             		cobertura.setNombre("Basica");
                             		cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
                             		cobertura.setDeducible(newcontenido.split("\n")[i+1].split("###")[1]);
                             		cobertura.setCoaseguro(newcontenido.split("\n")[i+3].split("###")[1]);
                             		coberturas.add(cobertura);
-                              }
+                              
 						}
 					}	
 				 modelo.setCoberturas(coberturas);
