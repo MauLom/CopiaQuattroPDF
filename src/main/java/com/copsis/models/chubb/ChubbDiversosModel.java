@@ -28,6 +28,7 @@ public class ChubbDiversosModel {
 
 	public EstructuraJsonModel procesar() {
 
+
 		StringBuilder resultado = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;
@@ -50,7 +51,7 @@ public class ChubbDiversosModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza:")
 							&& newcontenido.split("\n")[i].contains("Vigencia")) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].split("Vigencia:")[0]
+						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Vigencia:")[0]
 								.replace("###", ""));
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("Vigencia:")[1].split(ConstantsValue.HORAS)[0]
@@ -161,8 +162,13 @@ public class ChubbDiversosModel {
 						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.MUROS)[1].split(ConstantsValue.TECHOS)[0].toUpperCase().replace("###", "").trim()));
 					}
 					
-					if (newcontenido.split("\n")[i].contains("Niveles:")) {
-						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Niveles:")[1].split("En qué piso")[0].replace("###", "").replace("\r", "")));
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.NIVELES)) {						
+						if(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].contains("No. Sótanos:")) {
+							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("No. Sótanos:")[0].replace("###", "").replace("\r", "")));
+						}else {
+							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("En qué piso")[0].replace("###", "").replace("\r", "")));	
+						}
+						
 					}
 					if (newcontenido.split("\n")[i].contains("Núm. pisos incendio:")) {
 						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "")));
@@ -184,8 +190,11 @@ public class ChubbDiversosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Muro de Contención:");
 			}
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Tipo Techo");
+			}
 			fin = contenido.indexOf("Prima Neta");
-			
+	
 
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
@@ -281,6 +290,7 @@ public class ChubbDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

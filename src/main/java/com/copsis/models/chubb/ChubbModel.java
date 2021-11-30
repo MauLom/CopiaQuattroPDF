@@ -24,7 +24,7 @@ public class ChubbModel {
 			int pagFin = 0;
 			int pagIni = 0;
 			String[] tipos = { "HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA" };
+					"SEGURO CONCRETA","TECHO" };
 
 			for (String tipo : tipos) {
 				if (contenido.contains(tipo)) {
@@ -32,6 +32,7 @@ public class ChubbModel {
 					case "EMPRESARIAL":
 					case "HOGAR":
 					case "SEGURO CONCRETA":
+					case "PYME SEGURA":
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
 
 						if (pagFin == 0) {
