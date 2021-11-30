@@ -1,7 +1,11 @@
 package com.copsis.models.atlas;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class AtlasSaludModel {
@@ -170,7 +174,34 @@ public class AtlasSaludModel {
 					}
 				}
 			}
-
+			
+		
+				inicio = contenido.indexOf("Límites de cobertura");
+				fin = contenido.indexOf("Base de catálogo");
+				
+				if(inicio > -1 && fin >  -1 && inicio < fin ) {	
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					 newcontenido =contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+					 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+						 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(newcontenido.split("\n")[i].contains("Gastos médico")) {
+								cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("según anexo", "").trim());
+								coberturas.add(cobertura);
+														
+						}
+						if(!newcontenido.split("\n")[i].contains("Límites") && !newcontenido.split("\n")[i].contains("Gastos médicos")) {
+                              if(newcontenido.split("\n")[i].contains("Suma asegurada")) {
+                            		cobertura.setNombre("Basica");
+                            		cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+                            		cobertura.setDeducible(newcontenido.split("\n")[i+1].split("###")[1]);
+                            		cobertura.setCoaseguro(newcontenido.split("\n")[i+3].split("###")[1]);
+                            		coberturas.add(cobertura);
+                              }
+						}
+					}	
+				 modelo.setCoberturas(coberturas);
+			}			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(AtlasSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
