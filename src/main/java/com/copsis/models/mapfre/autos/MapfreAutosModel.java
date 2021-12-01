@@ -41,7 +41,7 @@ public class MapfreAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		inicontenido = fn.fixContenido(contenido);
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C.:", "R.F.C:").replace("R.F.C:###", "R.F.C:");
 		this.recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
 		try {
 			// tipo
@@ -160,6 +160,7 @@ public class MapfreAutosModel {
 					modelo.setRfc(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].trim());
 				}
 
+
 				if (modelo.getCteNombre().length() == 0 && modelo.getRfc().length() == 0) {
 					inicio = contenido.indexOf("Contratante");
 					fin = contenido.indexOf("Sexo");
@@ -167,6 +168,7 @@ public class MapfreAutosModel {
 					if (inicio > 0 && fin > 0 && inicio < fin) {
 						newcontenido = contenido.substring(inicio, fin);
 						for (int i = 0; i < newcontenido.split("\n").length; i++) {
+
 							if (newcontenido.split("\n")[i].contains("Contratante")
 									&& newcontenido.split("\n")[i].contains("R.F.C:")) {
 								if (newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0]
@@ -205,18 +207,14 @@ public class MapfreAutosModel {
 					}
 				}
 
-			} else {
-
+			} else {				
 				// rfc
-				int iniciorfcveri = contenido.indexOf("R.F.C:");
-
-				if (iniciorfcveri > 0) {
-					inicio = contenido.indexOf("R.F.C:###") + 9;
-				} else {
-					inicio = contenido.indexOf("R.F.C:") + 8;
-				}
-
-				modelo.setRfc(contenido.substring(inicio, inicio + 13).trim().replace("-", "").replace("###", ""));
+				if (contenido.indexOf("R.F.C:") > -1) {
+					inicio = contenido.indexOf("R.F.C:") + 6;
+					modelo.setRfc(contenido.substring(inicio, inicio + 14).trim().replace("-", "").replace("###", ""));
+				} 
+     
+				
 
 				// prima neta
 				inicio = contenido.indexOf("###PRIMA###NETA:###") + 19;
