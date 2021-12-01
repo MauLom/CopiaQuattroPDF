@@ -183,13 +183,16 @@ public class IdentificaPolizaService {
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))) {
 					if (contenido.contains("Estimado(a)") ) {
-						contenido = caratula(3, 4, pdfStripper, pdDoc);
-						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
+							BanorteModel datosBanort;						
+							if(caratula(3, 4, pdfStripper, pdDoc).contains("AVISO DE COBRO")){						
+								 datosBanort = new BanorteModel(pdfStripper, pdDoc, caratula(5, 7, pdfStripper, pdDoc));
+							}else {
+								 datosBanort = new BanorteModel(pdfStripper, pdDoc, caratula(3, 4, pdfStripper, pdDoc));
+							}					
 						modelo = datosBanort.procesar();
 						encontro = true;
 					} else  if(contenido.contains("AVISO DE COBRO") || contenido.contains("CARGOS AUTOMÁTICOS")) {
 						contenido = caratula(1, 6, pdfStripper, pdDoc);
-
 						BanorteModel datosBanort = new BanorteModel(pdfStripper, pdDoc, contenido);
 						modelo = datosBanort.procesar();
 						encontro = true;
