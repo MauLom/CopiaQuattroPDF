@@ -265,8 +265,9 @@ public class HdiAutosModel {
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+
 					int sp = newcontenido.split("\n")[i].split("###").length;
-					if (newcontenido.split("\n")[i].contains("Deducible")) {
+					if (!newcontenido.split("\n")[i].contains("Deducible")) {
 						if (sp > 1) {
 
 							switch (sp) {
