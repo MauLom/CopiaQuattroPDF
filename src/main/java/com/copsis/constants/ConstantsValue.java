@@ -166,6 +166,7 @@ public final class ConstantsValue {
 	public static final String VIGENCIA3 = "vigencia";
 
 	public static final String NOMBRE_EDAD_SEXO_HASH = "Nombre:###Edad:###Sexo:";
+	public static final String NIVELES = "Niveles:";
 	public static final String EN_CUMPLUMIENTO = "En###cumplimiento#";
 	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";
 	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
