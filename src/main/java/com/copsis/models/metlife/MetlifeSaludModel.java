@@ -1,14 +1,13 @@
 package com.copsis.models.metlife;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.inbursa.InbursaSaludModel;
 
 public class MetlifeSaludModel {
 
@@ -17,28 +16,20 @@ public class MetlifeSaludModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";
-	private String recibosText = "";
-	private String resultado = "";
-	private int inicio = 0;
-	private int fin = 0;
-	private int donde = 0;
-	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
-	private BigDecimal restoDerecho = BigDecimal.ZERO;
-	private BigDecimal restoIva = BigDecimal.ZERO;
-	private BigDecimal restoRecargo = BigDecimal.ZERO;
-	private BigDecimal restoPrimaNeta = BigDecimal.ZERO;
-	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
-	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
-	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
-	
-	
+
+
 	public MetlifeSaludModel(String contenido) {
 		this.contenido = contenido;	
 	}
 
 	
 	public EstructuraJsonModel procesar() {
+		 String newcontenido = "";
+		 String resultado = "";
+		 int inicio = 0;
+		 int fin = 0;
+
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("FEM.", "###FEM.###").replace("TIT.", "###TIT###")
 				.replace("CONY.", "###CONY.###").replace("MASC.", "###MASC.###")
@@ -66,7 +57,7 @@ public class MetlifeSaludModel {
             inicio = contenido.indexOf("Nombre y Domicilio");
             fin = contenido.indexOf("ASEGURADOS DE LA POLIZA");
             
-            if(inicio > 0 && fin > 0 && inicio < fin) {
+            if(inicio > -1 && fin > -1 && inicio < fin) {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
             			if( newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {
@@ -94,24 +85,20 @@ public class MetlifeSaludModel {
             			
             			}
             			
-            			if( newcontenido.split("\n")[i].contains("Día") &&  newcontenido.split("\n")[i].contains("Mes")){            				
-            				if(newcontenido.split("\n")[i+1].split("###").length ==  6) {
-            					String A = newcontenido.split("\n")[i+1].split("###")[2] +"-"+newcontenido.split("\n")[i+1].split("###")[1] +"-"+newcontenido.split("\n")[i+1].split("###")[0];
-            					String B = newcontenido.split("\n")[i+1].split("###")[5] +"-"+newcontenido.split("\n")[i+1].split("###")[4] +"-"+newcontenido.split("\n")[i+1].split("###")[3];
-            					modelo.setVigenciaDe(A);
-            					modelo.setVigenciaA(B);            					
-							}
+            			if( newcontenido.split("\n")[i].contains("Día") &&  newcontenido.split("\n")[i].contains("Mes") && newcontenido.split("\n")[i+1].split("###").length ==  6){            				            				
+            					modelo.setVigenciaDe(newcontenido.split("\n")[i+1].split("###")[2] +"-"+newcontenido.split("\n")[i+1].split("###")[1] +"-"+newcontenido.split("\n")[i+1].split("###")[0]);
+            					modelo.setVigenciaA(newcontenido.split("\n")[i+1].split("###")[5] +"-"+newcontenido.split("\n")[i+1].split("###")[4] +"-"+newcontenido.split("\n")[i+1].split("###")[3]);            												
 						}
 					}
 				}
             
-            /*primas*/
+
             inicio = contenido.indexOf("Forma de Pago");
             fin = contenido.indexOf("MetLife México, S.A. pagará los beneficios convenidos");
            
 
-            if (inicio > 0 & fin > 0 & inicio < fin) {
-            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual");
+            if (inicio > -1  && fin > -1 && inicio < fin) {            	
+            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral");
             	modelo.setFormaPago(fn.formaPagoSring(newcontenido));
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("Agente")) { 
@@ -146,23 +133,23 @@ public class MetlifeSaludModel {
                     }
                 }
             }
+
             
             /*plan**/
             inicio = contenido.indexOf("PLAN");
             fin = contenido.indexOf("TIPO CONDUCTO");
-            if (inicio > 0 & fin > 0 & inicio < fin) {
+            if (inicio > -1 && fin > -1 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace(":", "").trim();
                 modelo.setPlan(newcontenido.split("PLAN")[1].trim());
 
             }
             if(modelo.getVigenciaDe().length() >0) {
             	modelo.setFechaEmision(modelo.getVigenciaDe());
-            }
-            
+            }            
             inicio = contenido.indexOf("ASEGURADOS DE LA POLIZA");
-            fin = contenido.indexOf("COBERTURAS");
+            fin = contenido.indexOf(ConstantsValue.COBERTURAS.toUpperCase());
 
-            if(inicio > 0 && fin > 0 && inicio < fin) {
+            if(inicio > -1 && fin > -1 && inicio < fin) {
             	List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {          
@@ -170,7 +157,7 @@ public class MetlifeSaludModel {
             		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {
             			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").replace("01", "").trim());
             			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
-            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1:0);
+            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1 : 0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");
             			asegurado.setNacimiento( fn.formatDateMonthCadena(x.split("###")[0]));
             			asegurado.setAntiguedad( fn.formatDateMonthCadena(x.split("###")[1]));
@@ -180,15 +167,15 @@ public class MetlifeSaludModel {
             	modelo.setAsegurados(asegurados);
             }
 
-            inicio = contenido.indexOf("COBERTURAS");
+            inicio = contenido.indexOf(ConstantsValue.COBERTURAS.toUpperCase());
             fin = contenido.indexOf("PLAN");
         
-            if(inicio > 0 && fin > 0 && inicio < fin) {
+            if(inicio > -1 && fin > -1 && inicio < fin) {
             	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-            	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").replaceAll("-", "").replace("M.N.", "M.N.###").trim();
+            	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").replace("-", "").replace("M.N.", "M.N.###").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
             		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-            		if(newcontenido.split("\n")[i].contains("COBERTURAS") || newcontenido.split("\n")[i].contains("Nombre")) {            			
+            		if(newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS.toUpperCase()) || newcontenido.split("\n")[i].contains("Nombre")) {            			
             		}else {
             			if(newcontenido.split("\n")[i].length() > 4) {
             				cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
