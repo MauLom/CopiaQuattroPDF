@@ -31,8 +31,9 @@ public class MapfreModel {
 
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
-				if (contenido.contains("CONTRATANTE Y CONDUCTOR")) {
+				if (contenido.contains("CONTRATANTE Y CONDUCTOR" ) || contenido.contains("INFORMACIÓN GENERAL")) {
 					pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");
+		
 					if (pagFin == 0) {
 						pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN ADICIONAL");
 					}
