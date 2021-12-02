@@ -202,8 +202,8 @@ public class HdiAutosModel {
 				
 							primas = false;
 							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
-							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
-							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
 							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
 							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));							
 						}
@@ -212,8 +212,8 @@ public class HdiAutosModel {
 							primas = false;
 							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
 							modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1])) );
-							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
-							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
+							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
 							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
 							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));
 					}
