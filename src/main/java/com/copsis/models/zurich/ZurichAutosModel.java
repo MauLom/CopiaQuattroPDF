@@ -192,7 +192,6 @@ public class ZurichAutosModel {
 	        	modelo.setCoberturas(coberturas);
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					ZurichAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
