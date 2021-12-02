@@ -297,7 +297,6 @@ public class SegurosMtySalud {
          }
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					SegurosMtySalud.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
