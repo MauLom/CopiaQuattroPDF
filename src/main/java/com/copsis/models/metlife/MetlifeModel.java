@@ -21,24 +21,19 @@ public class MetlifeModel {
 	public MetlifeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
-		this.contenido = contenido;
+		this.contenido = contenido.replace("GMM", "GASTOS M");
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-			switch (fn.tipoPoliza(contenido)) {
 
-//			case 1:// Autos
-//				modelo  = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
-//				
-//				break;
+			switch (fn.tipoPoliza(contenido)) {
 			case 2:// Salud
 				modelo  = new MetlifeSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				
 				break;
 			case 5:// Vida
 				modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();
-//				
-//				break;
+
 			}
 
 			
