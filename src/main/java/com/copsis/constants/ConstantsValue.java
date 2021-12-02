@@ -76,6 +76,8 @@ public final class ConstantsValue {
 	public static final String IVA3 = "I.V.A";
 	public static final String INCENDIO = "INCENDIO";
 	public static final String IMPORTE = "Importe";
+	public static final String LAS_HORAS = "LAS 12 HRS DEL DÍA";
+	
 
 	public static final String MONEDA_MAYUS = "MONEDA";
 	public static final String MONEDA = "Moneda";
