@@ -528,7 +528,7 @@ public class qualitasAutosModel {
 					newcontenido = newcontenido.split("Tasa Financiamiento")[0].trim();
 				}
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setPrimerPrimatotal(Float.parseFloat(newcontenido));
+					modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 				}
 			}
 
@@ -546,7 +546,7 @@ public class qualitasAutosModel {
 					newcontenido = newcontenido.split("Gastos por")[0].trim();
 				}
 				if (fn.isNumeric(newcontenido)) {
-					modelo.setSubPrimatotal(fn.castFloat(newcontenido));
+					modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 				}
 			}
 			/**

@@ -162,8 +162,10 @@ public class ZurichAutosModel {
 		                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[3])));
 		                        modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));	                    		                     
 	                    }
-	                    if (newcontenido.split("\n")[i].contains("Prima Total")) {	                        
+	                    if (newcontenido.split("\n")[i].contains("Prima Total")) {	      
 	                        modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(newcontenido.split("\n")[i].split("###")[1])));
+	                        modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castFloat(newcontenido.split("\n")[i].split("###")[3])));
+	                        modelo.setSubPrimatotal(fn.castBigDecimal(fn.castFloat(newcontenido.split("\n")[i].split("###")[5])));
 	                    }
 	                    
 	                }
