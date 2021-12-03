@@ -372,26 +372,23 @@ public class AxaAutosModel {
 
 			}
 
-			// vigencia_a
-			// vigencia_de
-			donde = 0;
-			donde = fn.recorreContenido(contenido, "Desde:");
-			if (donde > 0) {
-				if (contenido.split("@@@")[donde].split("\r\n").length == 2
-						&& contenido.split("@@@")[donde].split("\r\n")[1].split(ConstantsValue.DESDE)[1].trim()
-								.split("-").length == 3
-						&& contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1].split("###").length == 2) {
+			if(modelo.getVigenciaDe().length() == 0  || modelo.getVigenciaA().length() == 0) {
 
-					modelo.setVigenciaDe(fn.formatDateMonthCadena(
-							contenido.split("@@@")[donde].split("\r\n")[1].split("Desde")[1].split("###")[1].trim()));
+				   inicio = contenido.indexOf("Domicilio");
+				   fin = contenido.indexOf("Datos del vehículo");
+				   if(inicio > -1 &&  fin > -1 && inicio < fin) {
+					 String x = contenido.substring(inicio ,fin).replace("@@@", "").replace("\r", "");
+					 	for (int i = 0; i < x.split("\n").length; i++) {
+					        if(x.split("\n")[i].contains("Desde:")) {
+					        	modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("\n")[i].split("Desde:")[1].replace("###", "")));
+					        }
+					if(x.split("\n")[i].contains("Hasta:")) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("\n")[i].split("Hasta:")[1].replace("###", "")));				        
+						       }
+						  }
+					}
+				}
 
-				}
-				if (contenido.split("@@@")[donde + 1].split("\r\n").length == 1
-						&& contenido.split("@@@")[donde + 1].contains("Hasta:###")) {
-					modelo.setVigenciaA(
-							fn.formatDateMonthCadena(contenido.split("@@@")[donde + 1].split("###")[1].trim()));
-				}
-			}
 
 			// descripcion
 			donde = 0;
@@ -581,6 +578,9 @@ public class AxaAutosModel {
 				}
 			}
 
+			if(modelo.getMoneda() == 0) {
+				modelo.setMoneda(1);
+			}
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			inicio = 0;
 			fin = 0;
