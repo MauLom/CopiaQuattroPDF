@@ -158,7 +158,7 @@ public class AtlasSaludModel {
 				if (newcontenido.contains("Gastos")) {
 					newcontenido = fn.cleanString(fn.gatos(newcontenido.split("Gastos")[0].trim()));
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setPrimerPrimatotal(Float.parseFloat(newcontenido));
+						modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 					}
 				}
 			}
@@ -170,7 +170,7 @@ public class AtlasSaludModel {
 				if (newcontenido.split("###").length == 1) {
 					newcontenido = fn.cleanString(newcontenido);
 					if (fn.isNumeric(newcontenido)) {
-						modelo.setSubPrimatotal(Float.parseFloat(newcontenido));
+						modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 					}
 				}
 			}

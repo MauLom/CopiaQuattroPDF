@@ -50,8 +50,8 @@ public class EstructuraJsonModel {
     private String motor = "";
     private String conductor = "";
     private String placas = "";
-    private float primerPrimatotal = 0;
-    private float subPrimatotal = 0;
+    private BigDecimal primerPrimatotal = BigDecimal.ZERO;
+    private BigDecimal subPrimatotal = BigDecimal.ZERO;
     private String plan = "";
     private String sa = "";
     private String deducible = "";
