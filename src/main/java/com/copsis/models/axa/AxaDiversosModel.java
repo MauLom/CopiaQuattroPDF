@@ -87,7 +87,7 @@ public class AxaDiversosModel {
 						}
 
 
-						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + x).replace("\r", "").replace("###", "").replace("@@@", "").trim());
+						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + x).replace("\r", "").replace("###", "").replace("@@@", "").replace("  ", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
 						if(newcontenido.split("\n")[i].split("C.P:")[1].contains(ConstantsValue.VIGENCIA2)) {
@@ -216,7 +216,12 @@ public class AxaDiversosModel {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				newcontenido = contenido.substring(inicio,fin);				
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {	
+				if(contenido.contains("Hogar Integral") && newcontenido.split("\n")[i].contains("Uso:") && newcontenido.split("\n")[i].contains("Forma")) {										
+						 ubicacion.setGiro(newcontenido.split("\n")[i].split("Uso:")[1].split("Forma")[0].replace("###", "").trim());
+						
+				   }
+					
 					if(newcontenido.split("\n")[i].contains("Muros:")) {
 						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i]));
 					}
@@ -224,9 +229,15 @@ public class AxaDiversosModel {
 						ubicacion.setNiveles(fn.castInteger(newcontenido.split("\n")[i].split("Niveles:")[1].replace("\r", "").replace("###","").trim()).intValue());
 					}					
 				}
+				if(contenido.contains("Hogar Integral")) {
+					ubicacion.setCalle(modelo.getCteDireccion());
+					ubicacion.setCp(modelo.getCp());
+				}
+							
 				ubicaciones.add(ubicacion);
 				modelo.setUbicaciones(ubicaciones);
 			}
+
 			
 //			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Paquete contratado");
