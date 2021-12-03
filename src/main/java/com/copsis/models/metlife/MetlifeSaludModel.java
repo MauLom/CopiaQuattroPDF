@@ -43,8 +43,7 @@ public class MetlifeSaludModel {
 				.replace("ENFERMEDADES CATASTROFICAS EX", "ENFERMEDADES CATASTROFICAS EX###")
 				.replace("REDUCCION POR ACCIDENTE ", "REDUCCION POR ACCIDENTE###")
 				.replace("SEM.C-REC.", "SEM.")
-				.replace("HIJO", "###HIJO###")
-				;
+				.replace("HIJO", "###HIJO###");
 		         
 		try {
 			  // tipo
@@ -134,14 +133,17 @@ public class MetlifeSaludModel {
                 }
             }
 
-            
             /*plan**/
             inicio = contenido.indexOf("PLAN");
             fin = contenido.indexOf("TIPO CONDUCTO");
+            if(fin == -1) {
+            	fin = contenido.lastIndexOf("MetLife México");
+            }
+            
             if (inicio > -1 && fin > -1 && inicio < fin) {
-            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace(":", "").trim();
-                modelo.setPlan(newcontenido.split("PLAN")[1].trim());
-
+            	newcontenido = contenido.substring(inicio, fin).split("\n")[0].replace("@@@", "").replace(":", "").trim();  
+   
+                modelo.setPlan(newcontenido.trim());
             }
             if(modelo.getVigenciaDe().length() >0) {
             	modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -175,27 +177,20 @@ public class MetlifeSaludModel {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").replace("-", "").replace("M.N.", "M.N.###").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
             		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-            		if(newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS.toUpperCase()) || newcontenido.split("\n")[i].contains("Nombre")) {            			
-            		}else {
-            			if(newcontenido.split("\n")[i].length() > 4) {
+            		if((!newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS.toUpperCase()) || !newcontenido.split("\n")[i].contains("Nombre")) && ( newcontenido.split("\n")[i].length() > 4 && newcontenido.split("\n")[i].split("###").length > 1)) {            			            		
             				cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
             				cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
             				if(newcontenido.split("\n")[i].split("###").length ==  4) {
             					cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2]);
             					cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[3]);
             				}
-            				coberturas.add(cobertura);
-            			
-            			}
-            		}
-            		
+            				coberturas.add(cobertura);            			            			
+                	}            		
             	}
             	modelo.setCoberturas(coberturas);
             }
-			
-			
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {		
 			modelo.setError(
 					MetlifeSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
