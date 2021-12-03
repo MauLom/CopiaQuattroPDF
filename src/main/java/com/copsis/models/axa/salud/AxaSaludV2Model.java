@@ -132,7 +132,6 @@ public class AxaSaludV2Model {
 										.replace("###", "").trim().replace("\r", "")));
 						
 					}
-//					System.out.println("============> " + newcontenido.split("\n")[i]);
 
 					if (newcontenido.split("\n")[i].contains("R.F.C.") && newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA3) && newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1].length() > 7 ) {
 	   
@@ -361,7 +360,6 @@ public class AxaSaludV2Model {
 
 			inicio = contenido.indexOf("Coberturas-Servicios");
 			fin = contenido.indexOf("Costo por Servicio");
-			System.out.println(contenido);
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r","").replace("###D ###e acuerdo",
@@ -509,7 +507,6 @@ public class AxaSaludV2Model {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
