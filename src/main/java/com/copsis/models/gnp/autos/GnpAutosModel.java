@@ -318,13 +318,23 @@ public class GnpAutosModel {
 			if (donde > 0 ) {
 				for (int i = 0; i < contenido.split("@@@")[donde].split("\n").length; i++) {
 					if (contenido.split("@@@")[donde].split("\n")[i].contains("Clave")
-							&& contenido.split("@@@")[donde].split("\n")[i].contains("Agente")) {
-						modelo.setCveAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[0].trim());
-						modelo.setAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[1].trim());
+							&& contenido.split("@@@")[donde].split("\n")[i].contains("Agente") && contenido.split("@@@")[donde].split("\n").length > 3) {						
+							modelo.setCveAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[0].trim());
+							modelo.setAgente(contenido.split("@@@")[donde].split("\n")[i+1].split("###")[1].trim());								
 					}
+				}
+				if(modelo.getAgente().length() == 0 && modelo.getCveAgente().length() == 0 && contenido.split("Clave###Agente")[1].split("\n").length > 2 && contenido.split("Clave###Agente")[1].split("\n")[1].contains("-")) {					
+					modelo.setCveAgente(contenido.split("Clave###Agente")[1].split("\n")[1].split("###")[0].replace("@@@", "").trim());
+			        newcontenido = new StringBuilder();
+					newcontenido.append(contenido.split("Clave###Agente")[1].split("\n")[1].split("###")[contenido.split("Clave###Agente")[1].split("\n")[1].split("###").length - 1]);
+					modelo.setAgente(contenido.split("Clave###Agente")[1].split("\n")[1].split(modelo.getCveAgente())[1].split(newcontenido.toString())[0].replace("###", " ").trim());
+					
 				}
 
 			}
+			
+			
+			
 
 			// plan
 
@@ -334,10 +344,14 @@ public class GnpAutosModel {
 					inicio = contenido.split("@@@")[j].trim().indexOf("Regular Autos");
 					fin = contenido.split("@@@")[j].trim().indexOf(ConstantsValue.NO_POLIZA);
 
-					if (inicio > -1 && fin > inicio) {
+					if (inicio > -1 && fin > inicio) {				
 						modelo.setPlan(contenido.split("@@@")[j].trim().substring((inicio + 13), fin).trim());
 					}
 				}
+			}
+			
+			if(modelo.getPlan().length() == 0 && newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("Amplia")) {				
+					modelo.setPlan("Amplia");				
 			}
 
 			// conductor
@@ -398,7 +412,8 @@ public class GnpAutosModel {
 			}
 
 			modelo.setRecibos(recibos);
-
+		
+			newcontenido = new StringBuilder();
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
