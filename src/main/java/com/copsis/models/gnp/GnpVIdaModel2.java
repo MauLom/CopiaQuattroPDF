@@ -197,12 +197,22 @@ public class GnpVIdaModel2 {
 
 			}
 
-			if (contenido.contains("Plazo edad alcanzada")) {
 
-				String plazapago = contenido.split("Plazo: Edad Alcanzada")[1].split("Cobertura:s")[0]
-						.replace("años", "").replace("\r\n", "").replace(".", "").substring(0, 7);
-				modelo.setPlazoPago(fn.castInteger(plazapago.trim()));
-				modelo.setRetiro(fn.castInteger(plazapago.trim()));
+			if (contenido.contains("Plazo edad alcanzada")) {
+			
+				newcontenido = new StringBuilder();
+
+				if(contenido.split("Plazo edad")[1].split("\n")[0].contains("Cobertura:s")) {
+					newcontenido.append(contenido.split("Plazo edad")[1].split("Cobertura:s")[0]
+							.replace("años", "").replace("\r\n", "").replace(".", "").replace("alcanzada", "").substring(0, 7));
+				}else {
+					if(contenido.split("Plazo edad")[1].contains("años")) {
+						newcontenido.append(contenido.split("Plazo edad")[1].split("años")[0].replace("alcanzada", "").trim());
+					}
+				}
+
+				modelo.setPlazoPago(fn.castInteger(newcontenido.toString()));
+				modelo.setRetiro(fn.castInteger(newcontenido.toString()));
 			}
 
 			if (modelo.getRetiro() > 0) {
@@ -298,7 +308,9 @@ public class GnpVIdaModel2 {
 						if (dato.split("###")[1].trim().equals("Amparada")) {
 							newcontenido.append("\r\n").append(dato.trim());
 						} else {
-							if (Double.parseDouble(dato.split("###")[1].replace(".", "").replace(",", "").trim()) >= 0
+		
+
+							if (fn.isNumeric(dato.split("###")[1].replace(".", "").replace(",", "").trim()) && Double.parseDouble(dato.split("###")[1].replace(".", "").replace(",", "").trim()) >= 0
 									&& !dato.split("###")[0].contains("Hasta")
 									&& !dato.split("###")[0].trim().equals("Movimiento")
 									&& !dato.split("###")[0].trim().equals("Actual")
@@ -325,6 +337,20 @@ public class GnpVIdaModel2 {
 				}
 			}
 			modelo.setCoberturas(coberturas);
+			
+			inicio = contenido.indexOf("Póliza de Seguro de Vida");
+			fin = contenido.indexOf("Póliza No.");
+			newcontenido = new StringBuilder();
+			if(inicio > -1 && fin > -1 && inicio < fin) {
+				newcontenido.append(contenido.substring(inicio,fin));
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					if(newcontenido.toString().split("\n")[i].contains("Seguro de Vida")) {
+						modelo.setPlan(newcontenido.toString().split("\n")[i].split("Seguro de Vida")[1].replace("###", "").trim());
+					}
+				}
+				
+			}
+
 
 			return modelo;
 		} catch (Exception ex) {
