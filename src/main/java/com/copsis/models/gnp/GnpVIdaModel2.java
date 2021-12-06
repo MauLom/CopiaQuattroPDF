@@ -354,7 +354,6 @@ public class GnpVIdaModel2 {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					GnpVIdaModel2.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
