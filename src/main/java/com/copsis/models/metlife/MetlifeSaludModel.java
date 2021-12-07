@@ -103,7 +103,8 @@ public class MetlifeSaludModel {
            
 
             if (inicio > -1  && fin > -1 && inicio < fin) {            	
-            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral");
+            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral").replace("TRIM.S-REC", "Trimestral");
+            	System.out.println(newcontenido);
             	modelo.setFormaPago(fn.formaPagoSring(newcontenido));
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("Agente")) { 
