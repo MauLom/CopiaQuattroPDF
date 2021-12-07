@@ -60,8 +60,14 @@ public class MetlifeSaludModel {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
             			if( newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {
-                			modelo.setPoliza(newcontenido.split("\n")[i+2]);
-                			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
+            				if(newcontenido.split("\n")[i+2].length() > 20) {
+            					modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].trim());
+                    			modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0].replace("SR.", "").trim());
+            				}else {
+            					modelo.setPoliza(newcontenido.split("\n")[i+2]);
+                    			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
+            				}
+                			
                 		}
             			if(modelo.getPoliza().contains("Sucursal")) {
             				modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].trim());
@@ -71,7 +77,7 @@ public class MetlifeSaludModel {
             				resultado =newcontenido.split("\n")[i+1].split("###")[0] 
             						+" "+ newcontenido.split("\n")[i+2].split("###")[0] 
             					    +" " + newcontenido.split("\n")[i+3].split("C.P.")[0];
-            				modelo.setCteDireccion(resultado.trim());
+            				modelo.setCteDireccion(resultado.replace("Desde###Hasta", "").trim());
             			}
             			
             			if( newcontenido.split("\n")[i].contains("C.P.")){
