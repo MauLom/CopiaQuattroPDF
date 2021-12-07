@@ -77,7 +77,7 @@ public class MetlifeSaludModel {
             				resultado =newcontenido.split("\n")[i+1].split("###")[0] 
             						+" "+ newcontenido.split("\n")[i+2].split("###")[0] 
             					    +" " + newcontenido.split("\n")[i+3].split("C.P.")[0];
-            				modelo.setCteDireccion(resultado.replace("Desde###Hasta", "").trim());
+            				modelo.setCteDireccion(resultado.replace("###Vigencia de la Póliza", "").replace("Desde###Hasta", "").trim());
             			}
             			
             			if( newcontenido.split("\n")[i].contains("C.P.")){
