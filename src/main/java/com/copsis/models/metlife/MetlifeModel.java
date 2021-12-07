@@ -21,7 +21,7 @@ public class MetlifeModel {
 	public MetlifeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
-		this.contenido = contenido.replace("GMM", "GASTOS M");
+		this.contenido = contenido.replace("GMM", "GASTOS M").replace("MEDICALIFE GOBIERNO  ", "GASTOS M");
 	}
 	public EstructuraJsonModel procesar() {
 		try {
