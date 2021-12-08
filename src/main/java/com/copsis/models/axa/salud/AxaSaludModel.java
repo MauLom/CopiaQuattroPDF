@@ -38,6 +38,7 @@ public class AxaSaludModel {
 				.replace("T I T ULAR F", ConstantsValue.TITULAR_HASH)
 				.replace("T ITULAR F",ConstantsValue.TITULAR_HASH)
 				.replace("T I TULAR F",ConstantsValue.TITULAR_HASH)
+				.replace("TITULAR F", ConstantsValue.TITULAR_HASH)
 				.replace("E ###SPOSA F ","###ESPOSA###F###" )
 				.replace("###HIJA F", "###HIJA###F###")
 				.replace("###HIJO M", "###HIJO###M###")
@@ -318,7 +319,7 @@ public class AxaSaludModel {
 		
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-					
+						System.out.println( newcontenido.split("\n")[i]);
 						if (newcontenido.split("\n")[i].split("-").length > 2) {
 							
 					                                                       								
@@ -449,6 +450,7 @@ public class AxaSaludModel {
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin);
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
+			
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 	
 						if (newcontenido.split("\n")[i].split("-").length > 2) {

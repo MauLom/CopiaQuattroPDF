@@ -69,8 +69,9 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
+			System.out.println(contenido.contains("qualitas"));
 			// ENTRADA PARA QUALITAS
-			if (!encontro && contenido.contains("qualitas")) {
+			if (!encontro && contenido.contains("qualitas")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("qualitas")) {
 				QualitasModel datosQualitas = new QualitasModel(pdfStripper, pdDoc, contenido);
 				modelo = datosQualitas.procesa();
 				encontro = true;
