@@ -122,9 +122,7 @@ public class PrimeroDiversosModel {
 		                	}
 		                   	if(newcontenido.split("\n")[i].contains("Ubicación del Riesgo.")) {
 		                   	  ubicacion.setCalle( newcontenido.split("\n")[i+1]);
-		                   	}
-		     
-		              
+		                   	}		     		             
 		                }
 		                ubicaciones.add(ubicacion);
 		                modelo.setUbicaciones(ubicaciones);
