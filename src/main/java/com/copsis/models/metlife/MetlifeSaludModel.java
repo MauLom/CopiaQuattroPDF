@@ -60,8 +60,14 @@ public class MetlifeSaludModel {
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) { 
             			if( newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {
-                			modelo.setPoliza(newcontenido.split("\n")[i+2]);
-                			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
+            				if(newcontenido.split("\n")[i+2].length() > 20) {
+            					modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].trim());
+                    			modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0].replace("SR.", "").trim());
+            				}else {
+            					modelo.setPoliza(newcontenido.split("\n")[i+2]);
+                    			modelo.setCteNombre(newcontenido.split("\n")[i+3].replace("SR.", "").trim());
+            				}
+                			
                 		}
             			if(modelo.getPoliza().contains("Sucursal")) {
             				modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].trim());
@@ -71,7 +77,7 @@ public class MetlifeSaludModel {
             				resultado =newcontenido.split("\n")[i+1].split("###")[0] 
             						+" "+ newcontenido.split("\n")[i+2].split("###")[0] 
             					    +" " + newcontenido.split("\n")[i+3].split("C.P.")[0];
-            				modelo.setCteDireccion(resultado.trim());
+            				modelo.setCteDireccion(resultado.replace("###Vigencia de la Póliza", "").replace("Desde###Hasta", "").trim());
             			}
             			
             			if( newcontenido.split("\n")[i].contains("C.P.")){
@@ -97,7 +103,7 @@ public class MetlifeSaludModel {
            
 
             if (inicio > -1  && fin > -1 && inicio < fin) {            	
-            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral");
+            	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral").replace("TRIM.S-REC", "Trimestral");
             	modelo.setFormaPago(fn.formaPagoSring(newcontenido));
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("Agente")) { 
@@ -153,13 +159,13 @@ public class MetlifeSaludModel {
 
             if(inicio > -1 && fin > -1 && inicio < fin) {
             	List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-            	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
+            	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").replace("ASC.", "###PADRE###").trim();
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {          
             		EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-            		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {
+            		if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].split("-").length < 6) {            		
             			asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].replace("00", "").replace("01", "").trim());
-            			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
-            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3]) ? 1 : 0);
+            			asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));            			
+            			asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[3].trim()) ? 1 : 0);
             			String x = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].trim().replace(" ", "###");
             			asegurado.setNacimiento( fn.formatDateMonthCadena(x.split("###")[0]));
             			asegurado.setAntiguedad( fn.formatDateMonthCadena(x.split("###")[1]));
@@ -190,7 +196,7 @@ public class MetlifeSaludModel {
             	modelo.setCoberturas(coberturas);
             }
 			return modelo;
-		} catch (Exception ex) {		
+		} catch (Exception ex) {	
 			modelo.setError(
 					MetlifeSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
