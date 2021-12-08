@@ -3,11 +3,11 @@ package com.copsis.models.sisnova;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.atlas.AtlasSaludModel;
 
 public class SisnovaSaludModel {
 	
@@ -16,12 +16,9 @@ public class SisnovaSaludModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Variables
 	private String contenido = "";
-	private String newcontenido = "";
+	
 	private String resultado = "";
-	private boolean direccion = false;
-	private int donde = 0;
-	private int inicio = 0;
-	private int fin = 0;
+
 
 	
 	public SisnovaSaludModel(String contenido) {
@@ -30,6 +27,11 @@ public class SisnovaSaludModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
+		 String newcontenido = "";
+		 boolean direccion = false;
+		 int inicio;
+		 int fin ;
+		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("DATOS DE LOS ASEGURADOS", "Datos de los asegurados")
 				.replace("PÓLIZA NO.", "PÓLIZA NO.").replace("FECHA DE EMISIÓN", "Fecha de emisión")
@@ -41,23 +43,25 @@ public class SisnovaSaludModel {
 		
 
 		try {
-		    //mocia
-            modelo.setCia(11);
-            //cia
-            modelo.setTipo(3);
-            //
 
-            
-            //Datos Generales
-            inicio = contenido.indexOf("PÓLIZA NO.");
+            modelo.setCia(11);
+            modelo.setTipo(3);
+
+               							   
+            inicio = contenido.indexOf(ConstantsValue.POLIZA_NOM);
             fin = contenido.indexOf("Datos de los asegurados");
-            if (inicio > 0 && fin > 0 && inicio < fin) {
+            if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.trim().replaceAll(" +", " ").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("   ", " ");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-					if(newcontenido.split("\n")[i].contains("PÓLIZA NO.")) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NO.")[1].trim().replace(" ", ""));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_NOM)) {
+						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
+						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
+					}
+
+					if(newcontenido.split("\n")[i].contains("CP:")) {
+						modelo.setCp(newcontenido.split("CP:")[1].substring(0,6).trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de emisión")) {
 						modelo.setFechaEmision(newcontenido.split("\n")[i].split("Fecha de emisión")[1].replace("###", "").trim().replace(" ", ""));
@@ -67,7 +71,8 @@ public class SisnovaSaludModel {
 						modelo.setCteNombre(newcontenido.split("\n")[i+1].replace("###", ""));
 						if(newcontenido.split("\n")[i+2].split("###").length == 2) {
 							modelo.setRfc(newcontenido.split("\n")[i+2].split("###")[1].replace("###", "").trim().replace(" ", ""));	
-						} if(newcontenido.split("\n")[i+4].split("###").length == 2) {
+						} 
+						else if(newcontenido.split("\n")[i+4].split("###").length == 2) {
 							modelo.setRfc(newcontenido.split("\n")[i+4].split("###")[1].replace("###", "").trim().replace(" ", ""));	
 						}						
 					}
@@ -80,7 +85,7 @@ public class SisnovaSaludModel {
 	                	direccion = true;
 					}else if(newcontenido.split("\n")[i].contains("domicilio") && direccion == false) {
 	                		resultado =  newcontenido.split("\n")[i+2] +" " + newcontenido.split("\n")[i+3];
-	                		modelo.setCteDireccion(resultado);
+	                		modelo.setCteDireccion(resultado.replace("LLEEOGNH8109053V9 NOMBRE Y DOMICILIO DEL TITULAR###RAMO", "").trim());
 	               }	                  		               
 				}
             }
@@ -116,12 +121,14 @@ public class SisnovaSaludModel {
             inicio = contenido.indexOf("Descripción de la póliza");
             fin = contenido.indexOf("Servicios Integrales de Salud");
 	
-          
-            if (inicio > 0 && fin > 0 && inicio < fin) {
+       
+            if (inicio > -1 && fin > -1 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("\r", "").replaceAll("@@@", "").replaceAll("### ###", "###")
             		    .trim().replaceAll("\u00A0", " ")	.replaceAll(" +", "###").replaceAll("######", "###").replace("######", "###")
-            			.replace("00:00", "").replace("hrs.", "").replace("#########", "###");
+            			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "").replace("Hasta", "Hasta:")
+            			.replace("las###12###Hrs.###del###día###", "");
             	        //El caracter unicode
+            	  
             	
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
@@ -131,10 +138,11 @@ public class SisnovaSaludModel {
             		if(newcontenido.split("\n")[i].contains("Plan:") && newcontenido.split("\n")[i].contains("Asegurada:") ) {
             			modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].split("###")[1]);
             		} else if(newcontenido.split("\n")[i].contains("Plan:") ) {
-            			modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", " "));
+            			modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", " ").trim());
             		} 
             		if(newcontenido.split("\n")[i].contains("Prima") && newcontenido.split("\n")[i].contains("Neta") ) {
             			if(newcontenido.split("\n")[i+2].split("###").length == 4) {
+            	
             				modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[3])));
                 			modelo.setRecargo(fn.castBigDecimal(0.00));
                 			modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+4].split("###")[2])));
@@ -142,7 +150,7 @@ public class SisnovaSaludModel {
             			}
             			if(newcontenido.split("\n")[i+2].split("###").length == 9) {
             				modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[4])));
-            				modelo.setRecargo(fn.castBigDecimal(0.00));
+            				modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[5])));
             				modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[6])));
             				modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+2].split("###")[7])));
             			}
@@ -158,35 +166,35 @@ public class SisnovaSaludModel {
             				modelo.setMoneda( fn.moneda( newcontenido.split("\n")[i+1].split("###")[0]));
                 			modelo.setFormaPago( fn.formaPago( newcontenido.split("\n")[i+1].split("###")[1]));
                 			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[2])));
+                			modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
+                			modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[4])));
             			}
             			
             		}
             	}            	
             }
             
-    		List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+    		
             inicio = contenido.indexOf("coberturas amparadas");
             fin = contenido.indexOf("PROMOCIONES");
             if(fin == -1) {
             	   fin = contenido.lastIndexOf("Servicios Integrales");
             }
 
-            if (inicio > 0 & fin > 0 & inicio < fin) {
+            if (inicio > -1 && fin > -1 && inicio < fin) {
+            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
                 newcontenido = "";
                 newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("     ", "").replace("   ", "").replace("@@@", "")).replace("\r", "");
 
                 for (String x : newcontenido.split("\n")) {
                     int sp = x.split("###").length;
-                    if (x.contains("Plan")) {
-                    } else {
-                        if (sp == 2) {
+                    if (!x.contains("Plan") && sp == 2) {                                            
                         	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                             cobertura.setNombre(x.split("###")[0]);
                             cobertura.setDeducible(x.split("###")[1]);
-                            coberturas.add(cobertura);
-                        }
+                            coberturas.add(cobertura);                                          
+                    	}
                     }
-                }
             	modelo.setCoberturas(coberturas);
             }
 			
