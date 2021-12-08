@@ -178,7 +178,6 @@ public class PrimeroDiversosModel {
 			
 			return modelo;
 		} catch (Exception e) {
-			e.printStackTrace();
 		  return modelo;
 		}
 	}
