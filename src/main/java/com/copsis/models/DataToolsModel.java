@@ -767,11 +767,9 @@ public class DataToolsModel {
 	public String caratula(int inicio, int fin, PDFTextStripper stripper, PDDocument doc) throws IOException {
 		stripper.setStartPage(inicio);
 		stripper.setEndPage(fin);
-		
-
+	
 		stripper.setParagraphStart("@@@");
 		stripper.setWordSeparator("###");
-		
 		stripper.setSortByPosition(true);
 		
 		return stripper.getText(doc);
