@@ -279,11 +279,14 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
+
+		            
 			// ENTRADA PARA SURA
 			if (!encontro && contenido.split("@@@")[3].contains("Seguros SURA S.A.")
 					|| contenido.contains("Royal & SunAlliance Seguros")
 					|| contenido.contains("Seguros SURA S.A. de C.V.")
-					|| contenido.contains("@@@Seguros SURA S.A. de C.V.")) {
+					|| contenido.contains("Seguros SURA")
+					|| contenido.contains("@@@Seguros SURA S.A. de C.V.") || contenido.contains("SURA S.A.")) {
 				SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
 				modelo = datosSura.procesar();
 				encontro = true;
