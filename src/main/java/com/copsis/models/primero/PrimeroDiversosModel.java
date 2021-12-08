@@ -21,8 +21,8 @@ public class PrimeroDiversosModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		 String newcontenido = "";
-		 int inicio = 0;
-		 int fin = 0;
+		 int inicio;
+		 int fin;
 		
 		try {
 			modelo.setCia(49);
@@ -30,6 +30,7 @@ public class PrimeroDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
 			fin = contenido.indexOf("Coberturas");
+	
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -41,7 +42,12 @@ public class PrimeroDiversosModel {
 	                			modelo.setPoliza(newcontenido.split("\n")[i+1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                			
 	                		}	                		
-	                	} 
+	                	}
+	                	if(modelo.getPoliza().length() == 0 && newcontenido.split("\n")[i].contains("SEGURO PARA DAÑOS")) {	                			   
+	                			modelo.setPoliza(newcontenido.split("\n")[i+1].replace("-", "").trim());
+		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                		
+	                	}
+	                	
 	                	if(newcontenido.split("\n")[i].contains("Fecha de Emisión")) {
 	                		modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split(" ")[0]));
 	                	}
@@ -51,17 +57,18 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("Domicilio:")) {
 	                		modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].replace(":", "").replace("###", ""));
 	                	}
-	                	if (newcontenido.split("\n")[i].contains("Cp.")) {
-							modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].strip());
+	                	if (newcontenido.split("\n")[i].contains("Cp.") && newcontenido.split("\n")[i].contains("Domicilio:")) {
+	                		
+							modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
 						}
 	                	if(newcontenido.split("\n")[i].contains("RFC:") || newcontenido.split("\n")[i].contains("Teléfono:")) {
 	                		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].split("Teléfono:")[0].replace("###", ""));
 	                	}
 	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {
-	                		
+	                	
 	                			modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0]);
-	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].strip()));
-	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].strip()));
+	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].trim()));
+	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].trim()));
 	                		
 	                	}
 	                }
@@ -93,7 +100,7 @@ public class PrimeroDiversosModel {
 	            inicio = contenido.indexOf("Datos del Riesgo");
 				fin = contenido.indexOf("Coberturas");
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
-				  if (inicio > 0 && fin > 0 && inicio < fin) {					 
+				  if (inicio > -1 && fin > -1 && inicio < fin) {					 
 		                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 		                EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 		                for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -107,17 +114,15 @@ public class PrimeroDiversosModel {
 		                	if(newcontenido.split("\n")[i].contains("Techo:")) {
 		                		ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split("Techo:")[1].replace(".", "###").split("###")[0].toLowerCase()));
 		                	}
-		                	if(newcontenido.split("\n")[i].contains("Cp.")) {
-		                		ubicacion.setCp(newcontenido.split("\n")[i].split("Cp.")[1].replace(",", "###").split("###")[0].strip());
+		                	if(newcontenido.split("\n")[i].contains("Cp.") && newcontenido.split("\n")[i].split("Cp")[1].length() >1) {
+		                		ubicacion.setCp(newcontenido.split("\n")[i].split("Cp.")[1].replace(",", "###").split("###")[0].trim());
 		                	}
 		                   	if(newcontenido.split("\n")[i].contains("Niveles:")) {
 		                		ubicacion.setNiveles(Integer.parseInt( newcontenido.split("\n")[i].split("Niveles:")[1].replace(".", "###").split("###")[0].strip()));
 		                	}
 		                   	if(newcontenido.split("\n")[i].contains("Ubicación del Riesgo.")) {
 		                   	  ubicacion.setCalle( newcontenido.split("\n")[i+1]);
-		                   	}
-		     
-		              
+		                   	}		     		             
 		                }
 		                ubicaciones.add(ubicacion);
 		                modelo.setUbicaciones(ubicaciones);
@@ -127,25 +132,22 @@ public class PrimeroDiversosModel {
 				  inicio = contenido.indexOf("Coberturas");
 				  fin = contenido.indexOf("Prima Neta");
 
-				  if (inicio > 0 && fin > 0 && inicio < fin) {	
+				  if (inicio > -1 && fin > -1 && inicio < fin) {	
 					  String secciont="";
 					  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 					   newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 		                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
 		                	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 		                	
-		                	if(newcontenido.split("\n")[i].contains("Coberturas Amparadas") || newcontenido.split("\n")[i].contains("Deducible")
-		                			|| newcontenido.split("\n")[i].contains("Sección") || newcontenido.split("\n")[i].contains("Coberturas")) {
-		                		
-		                	}else {
+		                	if(!newcontenido.split("\n")[i].contains("Coberturas Amparadas") || !newcontenido.split("\n")[i].contains("Deducible")
+		                			|| !newcontenido.split("\n")[i].contains("Sección") || !newcontenido.split("\n")[i].contains("Coberturas")) {
+		             
 		                		
 		                		int sp = newcontenido.split("\n")[i].split("###").length;
 		                		if(sp == 4) {
 		                			secciont =newcontenido.split("\n")[i].split("###")[0];	
 		                		}
-		                	
-		                		
-		                		System.out.println(secciont);
+		                			                				        
 		                		switch (sp) {
 								case  4:
 									cobertura.setSeccion(secciont);
@@ -153,7 +155,6 @@ public class PrimeroDiversosModel {
 									cobertura.setSa( newcontenido.split("\n")[i].split("###")[2]);
 									cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[3]);
 									coberturas.add(cobertura);
-//								
 									break;
 
 								case 3:
@@ -163,6 +164,8 @@ public class PrimeroDiversosModel {
 									cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2]);
 									coberturas.add(cobertura);
 									break;
+									default:
+										break;
 								}
 //		                		
 		                	}
