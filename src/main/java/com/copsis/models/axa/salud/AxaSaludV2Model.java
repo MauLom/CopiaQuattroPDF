@@ -316,9 +316,10 @@ public class AxaSaludV2Model {
 								asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[3]));
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
-					
-					           asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[1])[1].split(newcontenido.split("\n")[i].split("###")[3])[0].replace("###", "").trim()));
+
+					           asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[2]));
 					     	  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[10]));
+							 	asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[12])));
 					    
 								asegurados.add(asegurado);
 							}
