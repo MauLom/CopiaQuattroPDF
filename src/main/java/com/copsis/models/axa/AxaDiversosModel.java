@@ -87,7 +87,7 @@ public class AxaDiversosModel {
 						}
 
 
-						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + x).replace("\r", "").replace("###", "").replace("@@@", "").replace("  ", "").trim());
+						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1] + x).replace("\r", "").replace("###", "").replace("@@@", "").replace("  ", "").replace("C ALLE", "CALLE").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
 						if(newcontenido.split("\n")[i].split("C.P:")[1].contains(ConstantsValue.VIGENCIA2)) {
