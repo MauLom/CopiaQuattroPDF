@@ -102,12 +102,17 @@ public class ChubbDiversosModel {
 				}
 			}
 
+
 			// PRIMAS
 			inicio = contenido.indexOf("o especificación");
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Prima Neta");
 			}
 			fin = contenido.indexOf("Notas del riesgo");
+			if(fin == -1) {
+				fin = contenido.indexOf("Artículo");
+			}
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -124,6 +129,12 @@ public class ChubbDiversosModel {
 								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
 										.replace("###", "").replace("\r", "").trim())));
 					}
+					if(modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains("expedición") ) {
+						modelo.setDerecho(
+								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
+										.replace("###", "").replace("\r", "").trim())));
+					}
+					
 					if (newcontenido.split("\n")[i].contains("I.V.A.")) {
 						modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.")[1]
 								.replace("###", "").replace("\r", "").trim())));
@@ -190,12 +201,16 @@ public class ChubbDiversosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Muro de Contención:");
 			}
+			
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Tipo Techo");
 			}
-			fin = contenido.indexOf("Prima Neta");
+			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Uso Camión:");
+			}
+		    fin = contenido.indexOf("Prima Neta");
 	
-
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
 
