@@ -21,12 +21,15 @@ public class GnpVIdaModel2 {
 
 	public EstructuraJsonModel procesar() {
 		StringBuilder newcontenido = new StringBuilder();
+		StringBuilder newcontenidodire = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("### ### ###", "###").replace("### ### ", "###").replace("######", "###")
-				.replace("E ###specificaciones del Plan", ConstantsValue.ESPECIFICACIONES_PLAN);
+				.replace("E ###specificaciones del Plan", ConstantsValue.ESPECIFICACIONES_PLAN)
+				.replace("Periodicidad de Pago", "Forma de pago")
+				.replace("Importe a Pagar", "Importe a pagar");
 
 		try {
 			modelo.setTipo(5);
@@ -45,18 +48,32 @@ public class GnpVIdaModel2 {
 					if (newcontenido.toString().split("\n")[i].contains("Contratante")
 							&& newcontenido.toString().split("\n")[i + 1].length() < 20) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i + 2].replace("###", ""));
+					
 					}
-					if (newcontenido.toString().split("\n")[i].contains("R.F.C:")
-							&& newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE)) {
-						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Desde")[0]
-								.replace("###", "").trim());
+					if (newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Vigencia")) {
+						modelo.setCteNombre(newcontenido.toString().split("\n")[i + 1].split("Vigencia")[0].replace("###", ""));
+						newcontenidodire.append(newcontenido.toString().split("\n")[i + 2].split("Día")[0].replace("###", ""));						
 					}
+					
+					if (newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE)) {
+						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Desde")[0].replace("###", "").trim());
+					}
+					
+				    if (newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Hasta") ) {
+				    	modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Hasta")[0].replace("###", "").trim());
+				    }
+					
+					
 					if (newcontenido.toString().split("\n")[i].contains("C.P")) {
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].split("###")[0].trim());
-						modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "
-								+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", ""));
+					
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].split("###")[0].replace(".", "").trim());
+						 if((newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", "").contains("R.F.C:")) {
+							 modelo.setCteDireccion(newcontenidodire +" "+newcontenido.toString().split("\n")[i].split("C.P")[0]);
+						 }else {
+							 modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", ""));	 
+						 }
+						
 					}
-
 					if (newcontenido.toString().split("\n")[i].contains("Desde el")) {
 
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
@@ -73,6 +90,9 @@ public class GnpVIdaModel2 {
 										.elimgatos(newcontenido.toString().split("\n")[i].split("Fecha de expedición")[1]
 												.split("Forma de pago")[0].replace("### ###", "###"))
 										.replace("###", "-")));
+					}
+					if(modelo.getFechaEmision().isEmpty()) {
+						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Forma de pago")) {
 						if (newcontenido.toString().split("\n")[i].contains("Anual")) {
@@ -109,6 +129,7 @@ public class GnpVIdaModel2 {
 
 			inicio = contenido.lastIndexOf(ConstantsValue.AGENTE2);
 			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
+		
 			if (inicio > -1 || fin > -1 || inicio < fin) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
@@ -116,7 +137,6 @@ public class GnpVIdaModel2 {
 					newcontenido = new StringBuilder();
 					inicio = contenido.indexOf("Especificaciones del Plan");
 					fin = contenido.indexOf("visite gnp.com.mx");
-
 					if (inicio > -1 || fin > -1 || inicio < fin) {
 						inicio = contenido.indexOf("Especificaciones del Plan");
 						fin = contenido.indexOf("visite gnp.com.mx");
@@ -124,6 +144,7 @@ public class GnpVIdaModel2 {
 
 				}
 			}
+			
 
 			if (inicio > -1 || fin > -1 || inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### ###",
@@ -136,6 +157,25 @@ public class GnpVIdaModel2 {
 						modelo.setCveAgente(
 								newcontenido.toString().split("\n")[i].split(ConstantsValue.CLAVE2)[1].split("###")[1]);
 					}
+				}
+			}
+			
+			if(modelo.getAgente().isEmpty() && modelo.getCveAgente().isEmpty()) {
+				inicio = contenido.indexOf(ConstantsValue.AGENTE2);
+				fin = contenido.indexOf("Para mayor información contáctenos:");
+			
+				if (inicio > -1 || fin > -1 || inicio < fin) {
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {						
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.AGENTE2)){
+							modelo.setAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1].replace("###", ""));
+						}
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2)){
+							modelo.setCveAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.CLAVE2)[1].split("###")[1].replace(" ", "").trim());
+						}
+					}
+					
 				}
 			}
 
@@ -192,8 +232,7 @@ public class GnpVIdaModel2 {
 			if (fn.isNumeric(plazo.replace("Plazo", "").replace("años", "").trim())
 					&& !plazo.contains(ConstantsValue.PLAZO_EDAD_ALCANZADA)
 					&& !contenido.contains("Plazo edad alcanzada")) {
-
-				modelo.setPlazo(fn.castInteger((plazo.replace("Plazo", "").replace("años", "").trim())));
+                     modelo.setPlazo(fn.castInteger((plazo.replace("Plazo", "").replace("años", "").trim())));
 
 			}
 
@@ -225,7 +264,12 @@ public class GnpVIdaModel2 {
 			if (contenido.contains("Supervivencia")) {
 				modelo.setAportacion(1);
 			}
-			modelo.setIdCliente(contenido.split("Código Cliente")[1].split("Hasta el")[0].replace("###", "").trim());
+			if(contenido.split("Código Cliente")[1].split("Hasta el")[0].length() > 100) {
+				modelo.setIdCliente(contenido.split("Código Cliente")[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+			}else {
+				modelo.setIdCliente(contenido.split("Código Cliente")[1].split("Hasta el")[0].replace("###", "").trim());	
+			}
+			
 			String beneficiarios1 = "";
 			inicio = contenido.indexOf("Beneficiarios de Ahorro Garantizado:");
 			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
