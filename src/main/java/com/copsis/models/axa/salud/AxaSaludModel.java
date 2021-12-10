@@ -42,7 +42,7 @@ public class AxaSaludModel {
 				.replace("T ###ITULAR M", "###TITULAR###M###")
 				.replace("E ###SPOSA F ","###ESPOSA###F###" )
 				.replace("ESPOSA F", "ESPOSA###F###")
-				.replace("E SPOSA F", "###ESPOSA###F###")
+				.replace("E SPOSA F", "###ESPOSA###F###s")
 				.replace("###HIJA F", "###HIJA###F###")
 				.replace("###HIJO M", "###HIJO###M###")
 				.replace(" ######TITULAR", " ###TITULAR")
@@ -287,17 +287,9 @@ public class AxaSaludModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-				  if(newcontenido.split("\n")[i].contains("-")) {
-					  System.out.println(newcontenido.split("\n")[i].split("###").length);
-					  
-					  System.out.println(newcontenido.split("\n")[i]);
-			  switch (newcontenido.split("\n")[i].split("###").length) {
-			
-			 
-				
-		
-			  case 7: case 8:	
-
+				  if(newcontenido.split("\n")[i].contains("-")) {	
+			  switch (newcontenido.split("\n")[i].split("###").length) {						 		
+			        case 7: case 8:	
 						asegurado.setNombre((newcontenido.split("\n")[i].split("###")[0].split(",")[1] +" " + newcontenido.split("\n")[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[1]));
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
