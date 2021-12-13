@@ -81,7 +81,7 @@ public class AfirmeAutosBModel {
                         	newcontenidosp += " " + newcontenido.split("\n")[i + 1];
                         }	                        		                       
                         modelo.setCteDireccion(newcontenidosp.replaceAll("\r", ""));
-                        modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replaceAll("\r", ""));
+                        modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replaceAll("\r", "").trim());
                     }
 
                     if (newcontenido.split("\n")[i].contains(ConstantsValue.CONTRATANTE) && newcontenido.split("\n")[i].contains("C.P:")) {
@@ -93,8 +93,13 @@ public class AfirmeAutosBModel {
                         }else {
                           	modelo.setCteNombre(newcontenido.split("\n")[i].split(ConstantsValue.CONTRATANTE)[1].split("C.P:")[0].trim());
                         }
-                  
-                        modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("\r", ""));
+                 
+                        modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("\r", "").trim());
+                        
+                        if(modelo.getCp().length() == 4) {
+                            modelo.setCp("0" + modelo.getCp());
+                        }
+                   
                     }
                 }
             }
@@ -131,7 +136,7 @@ public class AfirmeAutosBModel {
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                     int sp = split.split("###").length;
                     if (!split.contains("COBERTURAS") && !split.contains("Clave de Agente:") && !split.contains("Pagina") && !split.contains("CARATULA DE AUTOMÓVILES RESIDENTES")
-                            && !split.contains("Vigencia") && !split.contains("Hasta") && !split.contains("Fecha")) {
+                            && !split.contains("Vigencia") && !split.contains("Hasta") && !split.contains("Fecha") && !split.contains("###RESPONSABILIDAD")) {
                     	                    	
                     	if (sp == 5) {
                     		cobertura.setNombre(split.split("###")[0]);
