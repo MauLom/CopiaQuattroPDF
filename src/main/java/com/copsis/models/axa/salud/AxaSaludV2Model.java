@@ -267,7 +267,7 @@ public class AxaSaludV2Model {
 					newcontenido = inicontenido.substring(inicio, fin).replace("T   it u  l ar", "Titular")
 							.replace("C   ó  n  y  uge", "Conyuge").replace("H   i j o", "Hijo")
 							.replaceAll("  +", "###").replace("/", "-").replace("######", "###").replace("H###i j a", "Hija");
-				
+
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						int x = newcontenido.split("\n")[i].split("###").length;
@@ -287,7 +287,6 @@ public class AxaSaludV2Model {
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
 								asegurados.add(asegurado);
-								
 							}
 							if (x == 12) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
@@ -316,11 +315,8 @@ public class AxaSaludV2Model {
 								asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[3]));
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
-
-					           asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[2]));
+					           asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[1])[1].split(newcontenido.split("\n")[i].split("###")[3])[0].replace("###", "").trim()));
 					     	  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[10]));
-							 	asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[12])));
-					    
 								asegurados.add(asegurado);
 							}
 
@@ -346,10 +342,8 @@ public class AxaSaludV2Model {
 								}
 								
 					
-								  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[12]));
-							 	asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[13])));
-							 	
-							
+								  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[11]));
+								
 							  asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[1])[1].split(newcontenido.split("\n")[i].split("###")[4])[0].replace("###", "").trim()));
 								
 								asegurados.add(asegurado);
