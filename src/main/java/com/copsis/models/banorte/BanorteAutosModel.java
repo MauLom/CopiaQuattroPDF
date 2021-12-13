@@ -209,6 +209,7 @@ public class BanorteAutosModel {
 	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").trim();
+	            	modelo.setPlan(newcontenido.split("PAQUETE:")[1].split("\n")[0].replace("###", "").trim());
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	 
 	            		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	            		if(newcontenido.split("\n")[i].contains("DETALLES")  || newcontenido.split("\n")[i].contains("PAQUETE")  || newcontenido.split("\n")[i].contains("Coberturas") 
