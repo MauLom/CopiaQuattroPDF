@@ -23,21 +23,27 @@ public class ChubbModel {
 		try {
 			int pagFin = 0;
 			int pagIni = 0;
-			String[] tipos = { "HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
+			String[] tipos = { "TRANSPORTE DE CARGA","HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO" };
-
+			 boolean encontro = false;
 			for (String tipo : tipos) {
-				if (contenido.contains(tipo)) {
+				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
+					case "TRANSPORTE DE CARGA":
 					case "EMPRESARIAL":
 					case "HOGAR":
 					case "SEGURO CONCRETA":
 					case "PYME SEGURA":
+
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
 
 						if (pagFin == 0) {
 							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "FACTURA");
 						}
+						if (pagFin == 0) {
+							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo 25");
+						}
+
 						if (pagFin > 0) {
 							contenido = "";
 
@@ -45,6 +51,7 @@ public class ChubbModel {
 									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
 
 						}
+						encontro = true;
 						break;
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":
@@ -62,6 +69,7 @@ public class ChubbModel {
 							chubbAutos.setContenido(fn.caratula(0, 3, pdfStripper, pdDoc));
 							modelo = chubbAutos.procesar();
 						}
+						encontro = true;
 						break;
 					default:
 						break;

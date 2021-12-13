@@ -3,6 +3,7 @@ package com.copsis.models.primero;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -29,15 +30,15 @@ public class PrimeroDiversosModel {
 			modelo.setTipo(7);
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
-			fin = contenido.indexOf("Coberturas");
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
 	
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	                	if(newcontenido.split("\n")[i].contains("SEGURO PARA DAÃ‘OS")) {	      
-	                		if(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘")[1].split("###").length > 1) {
-	                			modelo.setPoliza(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘OS")[1].split("###")[1].replace("-", "").trim());
-		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split("SEGURO PARA DAÃ‘OS")[1].split("###")[1]);
+	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
+	                		if(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###").length > 1) {
+	                			modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].replace("-", "").trim());
+		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1]);
 	                		}else {
 	                			modelo.setPoliza(newcontenido.split("\n")[i+1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                			
@@ -64,12 +65,10 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("RFC:") || newcontenido.split("\n")[i].contains("Teléfono:")) {
 	                		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].split("Teléfono:")[0].replace("###", ""));
 	                	}
-	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {
-	                	
+	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {	                	
 	                			modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0]);
 	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].trim()));
-	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].trim()));
-	                		
+	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].trim()));	                		
 	                	}
 	                }
 			   }
