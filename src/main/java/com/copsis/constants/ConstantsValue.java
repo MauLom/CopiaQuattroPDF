@@ -161,6 +161,7 @@ public final class ConstantsValue {
 	public static final String SOCIAL = "Social:";
 	public static final String SUMA_ASEGURADA = "Suma Asegurada";
 	public static final String SIN_LIMITE = "Sin Límite";
+	public static final String SEGURO_PARA_DANOS = "SEGURO PARA DAÑOS"; 
 
 	public static final String VEHICULO_HASH = "vehículo###:";
 	public static final String VEHICLE_ID_NUMBER = "Vehicle ID Number:";
