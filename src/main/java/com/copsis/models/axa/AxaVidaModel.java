@@ -1,10 +1,14 @@
 package com.copsis.models.axa;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraBeneficiariosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class AxaVidaModel {
@@ -33,11 +37,11 @@ public class AxaVidaModel {
 
 			modelo.setTipo(5);
 			modelo.setCia(20);
-//		System.out.println(contenido);
+
 		 inicio = contenido.indexOf("CARATULA DE POLIZA");
 		 fin = contenido.indexOf("Coberturas Amparadas");
 
-			if (inicio > 0 && fin > 0 && inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 			 newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 			 
 			 for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -74,21 +78,83 @@ public class AxaVidaModel {
 			}
 		 }
 			modelo.setMoneda(1);
+
+			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
+			inicio = inicontenido.indexOf("Beneficiarios");
+			fin = inicontenido.indexOf("ADVERTENCIA");
+			
+			if (inicio > 0 && fin > 0 && inicio < fin) {
+				newcontenido = inicontenido.split("Beneficiarios")[1].split("ADVERTENCIA")[0].replace("@@@", "")
+						.replace(")", "###").replace("(", "###").trim();
+
+				for (String bene : newcontenido.split("\n")) {
+					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
+					int n = bene.split("###").length;
+					
+					System.out.println(bene +"--->" + n);
+					
+                    if (bene.contains("Nombres") && n == 4) {
+				    	
+						beneficiario.setNombre(bene);
+//						beneficiario.setParentesco(fn.parentesco(bene.split("###")[1]));
+//						beneficiario.setTipo(11);
+//						beneficiario
+//								.setPorcentaje(fn.castDouble(bene.split("###")[2].trim().replace("%", "")).intValue());
+						beneficiarios.add(beneficiario);
+
+					}
+					
+					if (bene.contains("Nombres") && n == 3) {
+				    	
+						beneficiario.setNombre(bene.split("###")[0].replace("Nombres:", "").trim());
+						beneficiario.setParentesco(fn.parentesco(bene.split("###")[1]));
+						beneficiario.setTipo(11);
+						beneficiario
+								.setPorcentaje(fn.castDouble(bene.split("###")[2].trim().replace("%", "")).intValue());
+						beneficiarios.add(beneficiario);
+
+					}
+					if (bene.contains("FALLECIMIENTO")) {
+						String fall = newcontenido.split("FALLECIMIENTO")[1].split("\n")[1];
+						if (fall.split("###").length == 3) {
+							beneficiario.setNombre(fall.split("###")[0].trim());
+							beneficiario.setPorcentaje(
+									fn.castDouble(fall.split("###")[2].trim().replace("%", "")).intValue());
+							beneficiario.setParentesco(fn.parentesco(fall.split("###")[1].trim()));
+							beneficiario.setTipo(12);
+							beneficiarios.add(beneficiario);
+						}
+					}
+
+				}
+
+				modelo.setBeneficiarios(beneficiarios);
+
+			}
+			
 			
 			 inicio = contenido.indexOf("Coberturas Amparadas");
 			 fin = contenido.indexOf("AXA Seguros, S.A. de C.V.");
 
-			 System.out.println(inicio +"-->"+ fin);
-				if (inicio > 0 && fin > 0 && inicio < fin) {
+		
+				if (inicio > -1 && fin > -1 && inicio < fin) {
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				     newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 				     for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				    	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				    	 if(!newcontenido.split("\n")[i].contains("Coberturas Amparadas") && !newcontenido.split("\n")[i].contains("Asegurada")
 				    			 && !newcontenido.split("\n")[i].contains("Prima") && !newcontenido.split("\n")[i].contains("R E S U M E N")
-				    			 && !newcontenido.split("\n")[i].contains("VIDA") ) {
-				    		 System.out.println(newcontenido.split("\n")[i]);
+				    			 && !newcontenido.split("\n")[i].contains("VIDA")  &&  newcontenido.split("\n")[i].split("###").length == 6) {			
+				    		 
+				    			 cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+				    			 cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+				    				coberturas.add(cobertura);
+				    		
+				    		
 				    	 }
 				    	
 				     }
+				     modelo.setCoberturas(coberturas);
 				}
 
 			return modelo;
