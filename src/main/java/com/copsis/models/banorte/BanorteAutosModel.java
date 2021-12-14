@@ -43,6 +43,7 @@ public class BanorteAutosModel {
 					.replace("Emisión", "emisión").replace("Moneda", "Moneda:").replace("IVA", "I.V.A:")
 					.replace("N o m b r e d e l C o n t r a t a n t e :", "Nombre del Contratante:")
 					.replace("12:00hrs", "")
+					.replace("13:13hrs", "")
 					.replace("habitual:", "Habitual:")
 					.replace("Prima total:", "Prima Total:");
 			this.recibosText =  fn.remplazarMultiple(this.recibosText,fn.remplazosGenerales());
