@@ -46,10 +46,14 @@ public class SisnovaSaludModel {
 
             modelo.setCia(11);
             modelo.setTipo(3);
-
+System.out.println(contenido);
                							   
             inicio = contenido.indexOf(ConstantsValue.POLIZA_NOM);
             fin = contenido.indexOf("Datos de los asegurados");
+            if(inicio > fin) {
+            	   inicio = contenido.indexOf("PÓLIZA NO:");
+            }
+            System.out.println(inicio +"----> " + fin);
             if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.trim().replaceAll(" +", " ").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("   ", " ");
