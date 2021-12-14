@@ -55,8 +55,13 @@ public class AxaModel {
 					if (contenido.contains(tipo)) {
 						switch (tipo) {
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
-							AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
-							modelo = datosAxaVida.procesar();
+							if(tipo.equals("VIDA PROTGT") ) {
+								AxaVida2Model datosAxaVida = new AxaVida2Model(fn.caratula(1, 4, stripper, doc));
+								modelo = datosAxaVida.procesar();
+							}else {
+								AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
+								modelo = datosAxaVida.procesar();	
+							}											
 							break;
 						case "VEHICLE DESCRIPTION":
 							

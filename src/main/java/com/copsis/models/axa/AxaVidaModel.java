@@ -11,6 +11,7 @@ import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+
 public class AxaVidaModel {
 
 	// Clases
@@ -32,7 +33,8 @@ public class AxaVidaModel {
 
 
 		String inicontenido = fn.fixContenido(contenido);
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("Carátula de Póliza ", "CARATULA DE POLIZA")
+				.replace("Coberturas amparadas", "Coberturas Amparadas");
 		try {
 
 			modelo.setTipo(5);
@@ -40,17 +42,22 @@ public class AxaVidaModel {
 
 		 inicio = contenido.indexOf("CARATULA DE POLIZA");
 		 fin = contenido.indexOf("Coberturas Amparadas");
-
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 			 newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 			 
 			 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				
 				 if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {					
-					 modelo.setPoliza( newcontenido.split("\n")[i].split("Póliza")[1].split("###")[1]);					 
+					 modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza")[1].split("###")[1]);
+					
 				 }
+	
+				 
+				 				        
 				 if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("RFC:")) {
 					 modelo.setCteNombre(newcontenido.split("\n")[i].split("Nombre")[1].split("RFC:")[0].replace("###", "").trim());
-					 //modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].replace("###", "").trim());
+		
+					 modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].replace("###", "").trim());
 				 }
 				 if(newcontenido.split("\n")[i].contains("Domicilio")) {
 					 modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio")[1].replace("###", " ").trim() +" "+ newcontenido.split("\n")[i+1].replace("###", " ").trim());
@@ -91,15 +98,13 @@ public class AxaVidaModel {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int n = bene.split("###").length;
 					
-					System.out.println(bene +"--->" + n);
+			
 					
-                    if (bene.contains("Nombres") && n == 4) {
-				    	
-						beneficiario.setNombre(bene);
-//						beneficiario.setParentesco(fn.parentesco(bene.split("###")[1]));
-//						beneficiario.setTipo(11);
-//						beneficiario
-//								.setPorcentaje(fn.castDouble(bene.split("###")[2].trim().replace("%", "")).intValue());
+                    if (bene.contains("Nombres") && n == 4) {				    	
+						beneficiario.setNombre(bene.split("###")[1].trim());
+						beneficiario.setParentesco(fn.parentesco(bene.split("###")[2]));
+						beneficiario.setTipo(11);
+						beneficiario.setPorcentaje(fn.castDouble(bene.split("###")[3].trim().replace("%", "")).intValue());
 						beneficiarios.add(beneficiario);
 
 					}

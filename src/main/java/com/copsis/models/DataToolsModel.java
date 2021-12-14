@@ -387,6 +387,7 @@ public class DataToolsModel {
 			moneda = 1;
 			break;
 		case "DÓLARES":
+		case "DOLARES":
 		case "DÓLAR AMERICANO":
 		case "DOLARES US":
 		case "USD":
