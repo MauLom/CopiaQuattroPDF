@@ -97,8 +97,7 @@ public class AxaVida2Model {
 			if(resultado.length() >  0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
-					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-							
+					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();							
 					if(resultado.toString().split("\n")[i].contains("%")) {
 						beneficiario.setNombre(resultado.toString().split("\n")[i].split("###")[0]);
 						beneficiario.setParentesco(fn.parentesco( resultado.toString().split("\n")[i].split("###")[1]));
