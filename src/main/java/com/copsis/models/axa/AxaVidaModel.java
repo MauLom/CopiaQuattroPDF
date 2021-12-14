@@ -164,7 +164,6 @@ public class AxaVidaModel {
 
 			return modelo;
 		} catch (Exception ex) {
-		ex.printStackTrace();
 			modelo.setError(
 					AxaVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
