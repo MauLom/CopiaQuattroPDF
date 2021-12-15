@@ -60,7 +60,6 @@ public class SisnovaSaludModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.trim().replaceAll(" +", " ").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("   ", " ");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_NOM)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
 						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
