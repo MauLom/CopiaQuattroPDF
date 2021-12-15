@@ -47,11 +47,11 @@ public class GnpVIdaModel2 {
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Contratante")
 							&& newcontenido.toString().split("\n")[i + 1].length() < 20) {
-						modelo.setCteNombre(newcontenido.toString().split("\n")[i + 2].replace("###", ""));
+						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 2].replace("###", "")).trim());
 					
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Vigencia")) {
-						modelo.setCteNombre(newcontenido.toString().split("\n")[i + 1].split("Vigencia")[0].replace("###", ""));
+						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 1].split("Vigencia")[0].replace("###", "")).trim());
 						newcontenidodire.append(newcontenido.toString().split("\n")[i + 2].split("Día")[0].replace("###", ""));						
 					}
 					
@@ -64,11 +64,10 @@ public class GnpVIdaModel2 {
 				    }
 					
 					
-					if (newcontenido.toString().split("\n")[i].contains("C.P")) {
-					
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].split("###")[0].replace(".", "").trim());
+					if (newcontenido.toString().split("\n")[i].contains("C.P")) {									
+						modelo.setCp(newcontenido.toString().split("\n")[i].replace("C.P", "C/P").split("C/P")[1].split("###")[0].replace(".", "").trim());
 						 if((newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", "").contains("R.F.C:")) {
-							 modelo.setCteDireccion(newcontenidodire +" "+newcontenido.toString().split("\n")[i].split("C.P")[0]);
+							 modelo.setCteDireccion(newcontenidodire +" "+newcontenido.toString().split("\n")[i].replace("C.P", "C/P").split("C/P")[0]);
 						 }else {
 							 modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", ""));	 
 						 }
@@ -160,6 +159,7 @@ public class GnpVIdaModel2 {
 				}
 			}
 			
+
 			if(modelo.getAgente().isEmpty() && modelo.getCveAgente().isEmpty()) {
 				inicio = contenido.indexOf(ConstantsValue.AGENTE2);
 				fin = contenido.indexOf("Para mayor información contáctenos:");
@@ -167,13 +167,22 @@ public class GnpVIdaModel2 {
 				if (inicio > -1 || fin > -1 || inicio < fin) {
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
-					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {						
-						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.AGENTE2)){
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
+						
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.AGENTE2)){ 
 							modelo.setAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1].replace("###", ""));
 						}
-						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2)){
-							modelo.setCveAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.CLAVE2)[1].split("###")[1].replace(" ", "").trim());
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.AGENTE2) && newcontenido.toString().split("\n")[i].contains("Clave")){ 
+							modelo.setAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1].split("Clave")[0].replace("###", ""));
 						}
+					
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2)){
+							
+							modelo.setCveAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.CLAVE2)[1].split("###")[1].replace(" ", "").trim());
+							
+						}
+						
+						
 					}
 					
 				}
