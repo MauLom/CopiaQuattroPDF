@@ -123,6 +123,7 @@ public final class ConstantsValue {
 	public static final String PESOS_MAYUS = "PESOS";
 	public static final String POLIZA_NO = "Póliza No.";
 	public static final String POLIZA_NOM = "PÓLIZA NO.";
+	public static final String POLIZA_NOPUNTOS = "PÓLIZA NO:";
 	public static final String PAGAR = "Pagar";
 	public static final String PLAZO_EDAD_ALCANZADA = "Plazo: Edad Alcanzada";
 	public static final String PLAZO = "Plazo";
