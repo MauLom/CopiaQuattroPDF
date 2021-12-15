@@ -132,6 +132,10 @@ public class AxaSaludV2Model {
 										.replace("###", "").trim().replace("\r", "")));
 						
 					}
+					  if (newcontenido.split("\n")[i].contains("R.F.C:")  && newcontenido.split("\n")[i].contains("Teléfono") ) {
+						   modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "").replace("\u00A0","").trim() );
+					   }
+					   
 
 					if (newcontenido.split("\n")[i].contains("R.F.C.") && newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA3) && newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1].length() > 7 ) {
 	   
@@ -158,10 +162,10 @@ public class AxaSaludV2Model {
 									(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].replace("###", " ")
 											+ " "
 											+ newcontenido.split("\n")[i + 1].split(ConstantsValue.PERIODO)[0].trim())
-													.trim().replace("@@@", "").replace("\r", "").replace("###", ""));
+													.trim().replace("@@@", "").replace("\r", "").replace("###", "").trim());
 						} else {
 							modelo.setAgente((newcontenido.split("\n")[i].split(modelo.getCveAgente())[1]
-									.split(ConstantsValue.PERIODO)[0].replace("###", " ")).replace("\r", ""));
+									.split(ConstantsValue.PERIODO)[0].replace("###", " ")).replace("\r", "").trim());
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("pago")
@@ -245,7 +249,7 @@ public class AxaSaludV2Model {
 					if (newcontenido.split("\n")[i].split("-").length > 5) {
 						String x = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 						asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
-						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4]));
+						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4]).trim());
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5]));
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3]));
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[3]).booleanValue() ? 1 : 0);
@@ -280,7 +284,7 @@ public class AxaSaludV2Model {
 										+ newcontenido.split("\n")[i + 1].split("###")[0] + " " + nombre.split(",")[0]);
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
-								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN));
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								fechaA = newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
 								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[4]));
@@ -294,7 +298,7 @@ public class AxaSaludV2Model {
 
 								fechaN = newcontenido.split("\n")[i].split("###")[4] + ""
 										+ newcontenido.split("\n")[i].split("###")[5].replace(" ", "");
-								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN));
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								fechaA = newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
 								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3]));
@@ -308,7 +312,7 @@ public class AxaSaludV2Model {
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6] + ""
 										+ newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
-								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN));
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "").contains("-") ? newcontenido.split("\n")[i].split("###")[8].replace(" ", "") :newcontenido.split("\n")[i].split("###")[9];						
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
 								 
@@ -327,7 +331,7 @@ public class AxaSaludV2Model {
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6] + ""
 										+ newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
-								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN));
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
 								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[4]));
