@@ -22,6 +22,7 @@ public class AxaModel {
 		this.stripper = pdfStripper;
 		this.doc = pdDoc;
 		this.contenido = contenido;
+
 	}
 
 	public EstructuraJsonModel procesa() {
@@ -45,7 +46,7 @@ public class AxaModel {
 
 			else {
 		
-				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
+				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA","VIDA PROTGT",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO"};
@@ -53,9 +54,14 @@ public class AxaModel {
 				for (String tipo : tipos) {
 					if (contenido.contains(tipo)) {
 						switch (tipo) {
-						case "TRADICIONALES DE VIDA": // VIDA
-							AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
-							modelo = datosAxaVida.procesar();
+						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
+							if(tipo.equals("VIDA PROTGT") ) {
+								AxaVida2Model datosAxaVida = new AxaVida2Model(fn.caratula(1, 4, stripper, doc));
+								modelo = datosAxaVida.procesar();
+							}else {
+								AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
+								modelo = datosAxaVida.procesar();	
+							}											
 							break;
 						case "VEHICLE DESCRIPTION":
 							
