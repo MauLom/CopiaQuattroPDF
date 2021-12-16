@@ -197,6 +197,7 @@ public class ChubbDiversosModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// Cobertutas
 
+
 			inicio = contenido.indexOf("Tipo Vivienda");
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Muro de Contención:");
@@ -209,7 +210,13 @@ public class ChubbDiversosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Uso Camión:");
 			}
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Secciones amparadas");
+			}
+			
 		    fin = contenido.indexOf("Prima Neta");
+		    
+
 	
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
@@ -244,7 +251,7 @@ public class ChubbDiversosModel {
 								nombre = a.split("###")[0].trim();
 								deducible.append(a.split("###")[2].trim());
 								if (deducible.toString().contains("de la pérdida")
-										|| deducible.toString().contains("del eq. dañado")) {
+										|| deducible.toString().contains("del eq. dañado")|| deducible.toString().contains("sobre el monto")) {
 
 									if (b.split("###").length == 1 && !b.contains(ConstantsValue.SECCION)) {
 										deducible.append(" ").append(b);
