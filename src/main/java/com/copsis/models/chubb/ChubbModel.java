@@ -23,12 +23,13 @@ public class ChubbModel {
 		try {
 			int pagFin = 0;
 			int pagIni = 0;
-			String[] tipos = { "TRANSPORTE DE CARGA","HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
+			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA","HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO" };
 			 boolean encontro = false;
 			for (String tipo : tipos) {
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
+					case "RESPONSABILIDAD CIVIL VIAJERO":
 					case "TRANSPORTE DE CARGA":
 					case "EMPRESARIAL":
 					case "HOGAR":
