@@ -1,6 +1,7 @@
 package com.copsis.models.gnp;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
@@ -73,6 +74,7 @@ public class GnpDiversosModel {
 
 			List<String> search = new ArrayList<>();
 			search.add("Clave");
+			search.add("C lave");
 			search.add("En caso");
 			search.add("Para mayor");
 			search.add(ConstantsValue.GRUPO_NACIONAL);
@@ -105,9 +107,10 @@ public class GnpDiversosModel {
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.gatos(contenido.substring(inicio + 6, inicio + 180)).replace("@@@", "").trim());
 				resultado = new StringBuilder();
+				esverdad = false;
 				for (String x : newcontenido.toString().split("\r\n")) {
 					if (x.trim().length() > 0) {
-						esverdad = false;
+						
 						for (String a : search) {
 							fin = x.indexOf(a);
 							if (fin > -1) {
@@ -157,12 +160,8 @@ public class GnpDiversosModel {
 							x = fn.gatos(x.split(ConstantsValue.NUMERO)[0].trim());
 						}
 						newcontenido.append(fn.gatos(x.trim()));
-					} else if (idx == 2
-							&& (x.contains("CALLE") || x.contains(ConstantsValue.VIGENCIA2) || x.contains("AVENIDA")
-									|| x.contains("BOULEVARD") || x.contains("CARRETERA") || !x.contains("Número"))) {
-
-						newcontenido.append(" ").append(fn.gatos(x.trim()));
-
+					} else if (idx == 2  && !(x.contains("CALLE") || x.contains("Vigencia") || x.contains("AVENIDA") || x.contains("BOULEVARD")|| x.contains("CARRETERA") || x.contains("Número"))) {					
+							newcontenido.append(fn.gatos(x.trim()));
 					}
 					idx++;
 				}
@@ -234,7 +233,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Desde las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaDe(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -245,7 +244,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Hasta las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaA(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -296,6 +295,7 @@ public class GnpDiversosModel {
 			// prima_neta
 			inicio = contenido.indexOf("Prima Neta");
 			if (inicio > -1) {
+			//
 				modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(
 						fn.gatos(contenido.substring(inicio + 10, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
@@ -309,7 +309,7 @@ public class GnpDiversosModel {
 
 			// derecho
 			inicio = contenido.indexOf("Derecho de Póliza");
-			if (inicio > -1) {
+			if (inicio > -1) {			
 				modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(
 						fn.gatos(contenido.substring(inicio + 17, inicio + 150).trim().split("\r\n")[0].trim()))));
 			}
@@ -317,15 +317,14 @@ public class GnpDiversosModel {
 			// iva
 			inicio = contenido.indexOf("I.V.A.");
 			if (inicio > -1) {
-				resultado = new StringBuilder();
-				resultado
-						.append(fn.gatos(contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim()));
+				resultado = new StringBuilder();			
+				resultado.append(fn.gatos(contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim()));
 				inicio = resultado.indexOf("%");
-				if (inicio > -1) {
-					resultado = new StringBuilder();
+				if (inicio > -1) {					
 					String auxStr = resultado.toString();
-					resultado.append(fn.gatos(auxStr.substring(inicio + 1, resultado.length())));
-				}
+					resultado = new StringBuilder();
+					resultado.append(fn.gatos(auxStr.substring(inicio + 1, auxStr.length())));
+				}	
 				modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(resultado.toString())));
 			}
 
@@ -431,9 +430,27 @@ public class GnpDiversosModel {
 			}
 
 			// ***************************************************************************
-			// COBERTURAS TUTULOS Y DESGLOCE
+			// COBERTURAS 
 			extctCoberturas(coberturas, tipo);
 			modelo.setCoberturas(coberturas);
+			if(modelo.getCoberturas().isEmpty()) {
+				inicio = contenido.indexOf("Coberturas Contratadas");
+				fin = contenido.indexOf("Vigencia Póliza");
+				if (inicio > -1 && fin > inicio) {					
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio + 21, fin).replace("@@@", "").replace("\r", ""));
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") && newcontenido.toString().split("\n")[i].split("###").length == 3) {
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);						
+							coberturas.add(cobertura);
+						}
+					}
+					modelo.setCoberturas(coberturas);
+				}				
+			}
+			
 
 			// UBICACIONES
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
