@@ -55,13 +55,19 @@ public class AxaVidaModel {
 				 
 				 				        
 				 if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("RFC:")) {
-					 modelo.setCteNombre(newcontenido.split("\n")[i].split("Nombre")[1].split("RFC:")[0].replace("###", "").trim());
-		
-					 modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].replace("###", "").trim());
+					modelo.setCteNombre(newcontenido.split("\n")[i].split("Nombre")[1].split("RFC:")[0].replace("###", "").trim());
+		             if(newcontenido.split("\n")[i].split("RFC")[1].length() > 10) {
+		                 modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].replace("###", "").trim());
+		             }					 
 				 }
 				 if(newcontenido.split("\n")[i].contains("Domicilio")) {
 					 modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio")[1].replace("###", " ").trim() +" "+ newcontenido.split("\n")[i+1].replace("###", " ").trim());
 				 }
+				
+				 if(newcontenido.split("\n")[i].contains("Moneda")) {
+					modelo.setFormaPago(fn.moneda(newcontenido.split("\n")[i].split("Moneda")[1].replace("###", "").trim()));
+				 }
+				 
 				 if(newcontenido.split("\n")[i].contains("C.P.")) {
 					 modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].replace("###", "").substring(0,6).trim());
 				 }
@@ -84,7 +90,10 @@ public class AxaVidaModel {
 				 
 			}
 		 }
-			modelo.setMoneda(1);
+			if(modelo.getMoneda() == 0) {
+				modelo.setMoneda(1);
+			}
+	
 
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			inicio = inicontenido.indexOf("Beneficiarios");

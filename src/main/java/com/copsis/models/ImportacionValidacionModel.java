@@ -7,13 +7,13 @@ public class ImportacionValidacionModel {
 		try {
 
 			if(poliza.getPoliza().length() == 0) {
-				respuesta ="La poliza no puede estar vacia\n";
+				respuesta ="La poliza esta vacia\n";
 			}
 			if(poliza.getCp().length() == 0) {
-				respuesta +="El cp no puede estar vacia\n";
+				respuesta +="El cp esta vacio\n";
 			}
 			if(poliza.getPlan().length() == 0) {
-				respuesta +="El plan no puede estar vacion\n";
+				respuesta +="El plan  esta vacio\n";
 			}
 			if(poliza.getCoberturas().isEmpty()) {
 				respuesta +="La poliza debe contener coberturas\n";
@@ -23,11 +23,12 @@ public class ImportacionValidacionModel {
 				respuesta +="El campo fecha no puede estar vacio\n";
 			}
 			if(poliza.getFormaPago() == 0){
-				respuesta +="La forma de pago no puede estar vacia \n";
+				respuesta +="La forma de pago esta vacio \n";
 			}
 			if(poliza.getMoneda() == 0){
 				respuesta +="La moneda no esta definida\n";
 			}
+			
 
 			return respuesta;
 		} catch (Exception e) {
