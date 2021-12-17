@@ -42,15 +42,22 @@ public class MapfreSaludRojoModel {
 
 			inicio = contenido.indexOf("PROTECCION MEDICA");
 			fin = contenido.indexOf("COBERTURAS Y SERVICIOS");
+			if(inicio == -1 && fin == -1) {
+				inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
+				fin = contenido.indexOf("ASEGURADO###TITULAR");
+			}
 			
 
-			if (inicio > -1 & fin > -1 & inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+			
+
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("######","###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if(newcontenido.split("\n")[i].contains("PÓLIZA-ENDOSO")) {
-						if(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().contains("-")) {
+					
+					if(newcontenido.split("\n")[i].contains("PÓLIZA-ENDOSO")  && newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().contains("-")) {
+						
 							 modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().replace("-", "/"));							 
-						}				
+										
 					}
 					if(newcontenido.split("\n")[i].contains("FECHA DE EMISIÓN")) {
 						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("FECHA DE EMISIÓN")[1].replace("###", "").trim()));
@@ -65,7 +72,7 @@ public class MapfreSaludRojoModel {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("DESDE")[1].split("TIPO")[0].replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("HASTA") && newcontenido.split("\n")[i].contains("CLIENTE")) {
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("HASTA:")[1].split("CLIENTE")[0].replace("###", "")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].replace("HASTA","HASTA:").replace("::", ":").split("HASTA:")[1].split("CLIENTE")[0].replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("PLAN CONTRATADO:")){
 						modelo.setPlan((newcontenido.split("\n")[i].split("PLAN CONTRATADO:")[1] +" "+ newcontenido.split("\n")[i+1]).replace("###", "").trim());
@@ -73,6 +80,10 @@ public class MapfreSaludRojoModel {
 					if(newcontenido.split("\n")[i].contains("CONTRATANTE:") &&  newcontenido.split("\n")[i].contains("ZONA DE CONTRATACIÓN:")){
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("CONTRATANTE:")[1].split("ZONA")[0].replace("###", "").trim());
 					}
+					if(modelo.getCteNombre().isEmpty() && newcontenido.split("\n")[i].contains("CONTRATANTE:") &&  newcontenido.split("\n")[i+1].contains("DOMICILIO:")) {
+						modelo.setCteNombre(newcontenido.split("\n")[i].split("CONTRATANTE:")[1].replace("###", "").trim());
+					}
+					
 					if(newcontenido.split("\n")[i].contains("DOMICILIO:")){
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split("DOMICILIO:")[1] +" "+newcontenido.split("\n")[i+1]).replace("###", "").trim());
 					}
@@ -88,14 +99,14 @@ public class MapfreSaludRojoModel {
 			}
 			
 			modelo.setMoneda(1);
-
+			System.out.println("==> "+ contenido);
 			inicio = contenido.indexOf("FORMA DE PAGO:");
 			fin = contenido.indexOf("PRÁCTICA DE DEPORTE");
 			if(fin == -1) {
 				fin = contenido.indexOf("ENDOSO DEL FACTOR");
 			}
 
-
+System.out.println(inicio +"---> "+ fin);
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
@@ -201,6 +212,7 @@ public class MapfreSaludRojoModel {
 			
 			return modelo;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return modelo;
 		}
 	}
