@@ -59,6 +59,7 @@ public class IdentificaPolizaService {
 
 			boolean encontro = false;
 
+
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
 				ChubbModel datosChubb = new ChubbModel();
@@ -150,7 +151,7 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA AFIRME
 			if (!encontro) {
 
-				contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
+				contenidoAux = rangoSimple(1, 3, pdfStripper, pdDoc);
 
 				if (contenido.contains("AFIRME GRUPO FINANCIERO") || contenido.contains("Afirme Grupo Financiero")
 						|| contenido.contains("www.afirme.com")) {
@@ -159,8 +160,8 @@ public class IdentificaPolizaService {
 					encontro = true;
 				} else {
 					if (contenidoAux.contains("AFIRME GRUPO FINANCIERO")
-							|| contenidoAux.contains("Afirme Grupo Financiero")) {
-						AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenido);
+							|| contenidoAux.contains("Afirme Grupo Financiero") || contenidoAux.contains("www.afirme.com")) {					
+						AfirmeModel datosAfirme = new AfirmeModel(pdfStripper, pdDoc, contenidoAux);
 						modelo = datosAfirme.procesar();
 						encontro = true;
 					}
