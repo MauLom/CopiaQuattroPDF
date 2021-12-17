@@ -99,14 +99,17 @@ public class MapfreSaludRojoModel {
 			}
 			
 			modelo.setMoneda(1);
-			System.out.println("==> "+ contenido);
+	
 			inicio = contenido.indexOf("FORMA DE PAGO:");
 			fin = contenido.indexOf("PRÁCTICA DE DEPORTE");
 			if(fin == -1) {
 				fin = contenido.indexOf("ENDOSO DEL FACTOR");
 			}
+			if(fin == -1) {
+				fin = contenido.indexOf("Av.###Revolución");
+			}
 
-System.out.println(inicio +"---> "+ fin);
+
 			if (inicio > -1 & fin > -1 & inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
