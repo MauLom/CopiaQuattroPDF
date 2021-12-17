@@ -260,8 +260,8 @@ public class SisnovaSaludModel {
                 			 modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", ""));
                 		 }
                 		 if(newcontenido.split("\n")[i].contains("Póliza:")) {
-                			 cobertura.setNombre(newcontenido.split("\n")[i+1].split("###")[1].trim());
-                			 cobertura.setSa(newcontenido.split("\n")[i+2].split("###")[1].trim());
+                			 cobertura.setSa(newcontenido.split("\n")[i+1].split("###")[1].trim());
+                			 cobertura.setDeducible(newcontenido.split("\n")[i+2].split("###")[1].trim());
                 			 cobertura.setCoaseguro(newcontenido.split("\n")[i+3].split("###")[1].trim());
                 			 cobertura.setCoaseguroTope(newcontenido.split("\n")[i+4].split("###")[1].trim());
                 			 coberturas.add(cobertura);
