@@ -141,7 +141,7 @@ public class AfirmeAutosBModel {
                     	if (sp == 5) {
                     		cobertura.setNombre(split.split("###")[0]);
                     		cobertura.setSa(split.split("###")[1]);
-                    		cobertura.setDeducible(split.split("###")[2]);
+                    		cobertura.setDeducible(split.split("###")[2].trim());
                     		coberturas.add(cobertura);
                     	}
                     	if (sp == 3) {
@@ -161,7 +161,7 @@ public class AfirmeAutosBModel {
             
             inicio = contenido.indexOf("Agente:");
             fin = contenido.indexOf("Prima Total:");
-
+            
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin + 50).replace("@@@", "").replace("###", " ");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
