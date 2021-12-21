@@ -8,26 +8,32 @@ import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
 
+
 public class qualitasAutosModel {
 
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
+	private String cbo = "";
 
-	public qualitasAutosModel(String contenido) {
+	public qualitasAutosModel(String contenido,String coberturas) {
 		this.contenido = contenido;
+		this.cbo = coberturas;
 	}
 
-	private int donde = 0;
-	private int index = 0;
-	private int inicio = 0;
-	private int inicioaux = 0;
-	private int fin = 0;
-	private String texto = "";
-	private String subtxt = "";
+
 
 	public EstructuraJsonModel procesar() {
-		String newcontenido = "";
+		
+		 int donde = 0;
+		 int index = 0;
+		 int inicio = 0;
+		 int inicioaux = 0;
+		 int fin = 0;
+		 String texto = "";
+		 String subtxt = "";
+		 String newcontenido = "";
+	
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
@@ -566,12 +572,15 @@ public class qualitasAutosModel {
 			}
 			// vigencia_de
 			inicio = contenido.lastIndexOf("Desde las");
+			
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
-						.replace("del:", "del").replace("Servic  i o  :", "Servicio:");
+						.replace("del:", "del").replace("Servic  i o  :", "Servicio:").replace("Servic ###io:", "Servicio:");
+	
 				if (newcontenido.contains("Servicio")) {
 					newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
-					if (newcontenido.split("###").length == 2) {
+	
+					if (newcontenido.split("###").length == 2 ||( newcontenido.split("###").length == 1 && newcontenido.contains("-") )) {
 						newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), "dd-MM-yy");
 						if (newcontenido.length() == 10) {
 							modelo.setVigenciaDe(newcontenido);
@@ -690,13 +699,10 @@ public class qualitasAutosModel {
 
 			// coberturas
 			inicio = contenido.indexOf("PRIMAS");
-			if (inicio > 0) {
-
-			} else {
+			if (inicio  == -1) {
 				inicio = contenido.indexOf("PRIMA");
 			}
 			fin = contenido.indexOf("MONEDA");
-
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").trim();
 				if (newcontenido.contains("La Unidad de Medida")) {
@@ -731,6 +737,48 @@ public class qualitasAutosModel {
 				modelo.setCoberturas(coberturas);
 			}
 
+			if(modelo.getCoberturas().isEmpty()) {
+		
+				inicio = cbo.indexOf("PRIMAS");
+				if (inicio  == -1) {
+					inicio = cbo.indexOf("PRIMA");
+				}
+				fin = cbo.indexOf("MONEDA");
+				if (inicio > -1 && fin > inicio) {
+					newcontenido = cbo.substring(inicio, fin).replace("\u00A0","").replace("@@@", "").trim();
+					
+					if (newcontenido.contains("Asistencia Vial Quálitas")) {
+						newcontenido = newcontenido.split("Asistencia Vial Quálitas")[0].trim();
+					}
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+
+					for (String x : newcontenido.split("\n")) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+	
+						switch (x.split("###").length) {
+						case 4:
+							cobertura.setNombre(x.split("###")[0].trim());
+							cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(), ' ', ""));
+							cobertura.setDeducible(x.split("###")[2].trim());
+							coberturas.add(cobertura);
+							break;
+						case 3:
+							cobertura.setNombre(x.split("###")[0].trim());
+							cobertura.setSa(fn.eliminaSpacios(x.split("###")[1].trim(), ' ', ""));
+							coberturas.add(cobertura);
+							break;
+						default:
+							break;
+						}
+
+					}
+
+					modelo.setCoberturas(coberturas);
+				}
+				
+			}
+			
+			
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
