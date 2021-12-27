@@ -373,6 +373,7 @@ public class GnpDiversosModel {
 			// TITULO 3
 			inicio = contenido.indexOf("secciones contratadas");
 			fin = contenido.indexOf("Grupo###Nacional###Provincial");
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.gatos(contenido.substring(inicio + 21, fin).replace("@@@", "")).trim()
@@ -449,6 +450,26 @@ public class GnpDiversosModel {
 					}
 					modelo.setCoberturas(coberturas);
 				}				
+			}
+			
+			if(modelo.getCoberturas().isEmpty()) {
+				inicio = contenido.indexOf("secciones contratadas");
+				fin = contenido.lastIndexOf("Para mayor información contáctenos:");
+				if (inicio > -1 && fin > inicio) {	
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio + 21, fin).replace("@@@", "").replace("\r", ""));
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(!newcontenido.toString().split("\n")[i].contains("Vigencia") &&
+							!newcontenido.toString().split("\n")[i].contains("Importe Total") &&
+							!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") && newcontenido.toString().split("\n")[i].split("###").length == 3) {
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);			
+							coberturas.add(cobertura);
+						}
+					}
+					modelo.setCoberturas(coberturas);
+					
+				}
 			}
 			
 
