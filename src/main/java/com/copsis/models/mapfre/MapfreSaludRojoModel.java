@@ -141,9 +141,6 @@ public class MapfreSaludRojoModel {
 				}
 			}
 
-
-			
-			
 			
 			 if (contenido.contains("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD") || contenido.contains("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD") && contenido.contains("Av.###Revolución")) {
 	                newcontenido = contenido.split("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD")[1].split("Av.###Revolución#")[0];
@@ -180,6 +177,29 @@ public class MapfreSaludRojoModel {
 	                modelo.setAsegurados(asegurados);
 	            }
 			
+			 if(modelo.getAsegurados().isEmpty()) {
+				 newcontenido = contenido.split("RIESGO###NOMBRES###SEXO###EDAD###PARENTESCO###FECHA DE###ANTIGÜEDAD")[1].split("FECHAS###DE###ANTIGÜEDAD")[0];
+				 
+				 List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+				 for (String a : newcontenido.split("\r\n")) {
+	                    EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+	                    if(a.split("-").length > 3) {
+	                    	 int sp = a.split("###").length;
+	                         if (sp == 7) {	         	                
+	 	                    	asegurado.setNombre(a.split("###")[1].replace("@@@", "").trim());
+	 	                    	asegurado.setSexo(fn.sexo(a.split("###")[2]) ? 1:0);
+	 	                    	asegurado.setParentesco(fn.parentesco(a.split("###")[4]));
+	 	                    	asegurado.setNacimiento(fn.formatDateMonthCadena(a.split("###")[5]));
+	 	                    	asegurado.setFechaAlta(fn.formatDateMonthCadena(a.split("###")[6]));
+	 	                    	asegurados.add(asegurado);
+	 	                       
+	 	                    }
+
+	                    }
+	                    
+				 }
+				 modelo.setAsegurados(asegurados);
+			 }
 			
 			
 			
@@ -239,7 +259,6 @@ public class MapfreSaludRojoModel {
 			
 			return modelo;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return modelo;
 		}
 	}
