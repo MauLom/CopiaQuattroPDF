@@ -108,9 +108,13 @@ public class MapfreSaludRojoModel {
 			if(fin == -1) {
 				fin = contenido.indexOf("Av.###Revolución");
 			}
+			
+			if(fin < inicio) {
+				fin = contenido.lastIndexOf("Av.###Revolución");
+			}
 
 
-			if (inicio > -1 & fin > -1 & inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -123,8 +127,15 @@ public class MapfreSaludRojoModel {
 					if(newcontenido.split("\n")[i].contains("FRACCIONADO") && newcontenido.split("\n")[i].contains("I.V.A.")) {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A.")[1].replace("###", "").trim())));
 					}
-					if(newcontenido.split("\n")[i].contains("FRACCIONADO:") && newcontenido.split("\n")[i].contains("PRIMA TOTAL:")) {				
-						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("FRACCIONADO:")[1].split("PRIMA")[0].replace("###", "").trim())));
+					if(newcontenido.split("\n")[i].contains("RENOVACIÓN") && newcontenido.split("\n")[i].contains("MONTO") && newcontenido.split("\n")[i].contains("I.V.A.")) {
+						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A.")[1].replace("###", "").trim())));
+					}
+					if(newcontenido.split("\n")[i].contains("FRACCIONADO:") && newcontenido.split("\n")[i].contains("PRIMA TOTAL:")) {		
+						if(newcontenido.split("\n")[i].split("FRACCIONADO:")[1].split("PRIMA")[0].replace("###", "").trim().contains("|")) {						
+							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("FRACCIONADO:")[1].split("PRIMA")[0].replace("|", "###").split("###")[2].trim())));	
+						}else {
+							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("FRACCIONADO:")[1].split("PRIMA")[0].replace("###", "").trim())));
+						}											
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("TOTAL:")[1].replace("###", "").trim())));
 					}						
 				}
@@ -184,17 +195,30 @@ public class MapfreSaludRojoModel {
 	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", aed).replace("EndosoElemental", "Elemental")
 	            		.replace("EndosoAsistencia", "Asistencia")
 	            		.replace("ReducciÃ³n de deducible por", "ReducciÃ³n de deducible por accidente");
-	          
+	          	            
+	            if(newcontenido.contains("R.F.C:") && newcontenido.contains("SEXO") &&  newcontenido.contains("EDAD")) {
+	            	newcontenido ="";
+	            	inicio = contenido.indexOf("COBERTURAS###SUMA###DEDUCIBLE###COAS");
+	            	fin = contenido.indexOf("LAS###ANTERIORES");
+	            	if(inicio  > -1 && fin > -1 && inicio < fin ) {
+	            		newcontenido = contenido.substring(inicio,fin).replace("@@@COBERTURA", "COBERTURA")
+		            			.replace("INCREMENTO DE", "INCREMENTO DE HON-QUIRÚRGICOS")
+		            			.replace("ELIM.DE DED.", "ELIM.DE DED. ACCIDENTE Cob. Nal.");		
+	            	}	                        	
+	            }
+	            
 
 	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	            for (String x : newcontenido.split("\r\n")) {
 	               
 	                int sp = x.split("###").length;
 
-	                if (x.contains("COBERTURAS") || x.contains("COASEGURO") || x.contains("a###a") || x.contains("ContinuaciÃ³n")) {
-	                } else {
+	                if (!x.contains("ASEGURADA") && !x.contains("COBERTURAS") && !x.contains("COASEGURO") && !x.contains("a###a") && !x.contains("ContinuaciÃ³n")
+	                		&& !x.contains("EXTRANJERO###URO")
+	                		) {	                
 	                	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-	                    if (sp == 6 || sp ==5) {
+	              
+	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                        cobertura.setNombre(x.split("###")[0]);
 	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 	                        cobertura.setDeducible(x.split("###")[2]);
