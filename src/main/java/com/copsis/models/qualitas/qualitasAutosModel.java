@@ -748,18 +748,14 @@ public class qualitasAutosModel {
 				}
 				fin = cbo.indexOf("MONEDA");
 		
-			if(cbo.indexOf("COBERTURAS CONTRATADAS") > -1 && cbo.indexOf("SUMA ASEGURADA") > -1 && cbo.indexOf("DEDUCIBLE") > -1) {
-
-				inicio = cbo.lastIndexOf("COBERTURAS CONTRATADAS");
-				fin = cbo.indexOf("Para RC en el extranjero");
-				
-			}
+			  if(cbo.indexOf("COBERTURAS CONTRATADAS") > -1 && cbo.indexOf("SUMA ASEGURADA") > -1 && cbo.indexOf("DEDUCIBLE") > -1) {
+				 inicio = cbo.lastIndexOf("COBERTURAS CONTRATADAS");
+				 fin = cbo.indexOf("Para RC en el extranjero");				
+			  }
 				
 				if (inicio > -1 && fin > inicio) {
-				System.out.println(cbo.substring(inicio, fin).replace("\u00A0","").replace("@@@", "").trim());
-					newcontenido = cbo.substring(inicio, fin).replace("\u00A0","").replace("@@@", "").trim();
-					
-
+		
+					newcontenido = cbo.substring(inicio, fin).replace("\u00A0","").replace("@@@", "").trim();				
 					
 					if (newcontenido.contains("Asistencia Vial Quálitas")) {
 						newcontenido = newcontenido.split("Asistencia Vial Quálitas")[0].trim();
