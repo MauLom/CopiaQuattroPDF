@@ -176,20 +176,7 @@ public class AxaAutosModel {
 			}
 
 			// forma_pago
-			donde = 0;
-			donde = fn.recorreContenido(contenido, ConstantsValue.DATOS_ADICIONALES);
-			if (donde > 0) {
-				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
-					if (dato.contains(ConstantsValue.DATOS_ADICIONALES) && dato.split("###").length == 3) {
-						if (dato.split("###")[1].split(" ").length == 2) {
-							modelo.setFormaPago(fn.formaPago(dato.split("###")[1].split(" ")[0].trim()));
-						} else {
-							modelo.setFormaPago(fn.formaPago(dato.split("###")[1].replace("", "").trim()));
-						}
-					}
-				}
-			}
-
+			modelo.setFormaPago(fn.formaPagoSring(recibosText));
 			// agente
 			// cve_agente
 
