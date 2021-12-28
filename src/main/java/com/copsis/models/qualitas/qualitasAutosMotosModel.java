@@ -51,7 +51,7 @@ public class qualitasAutosMotosModel {
 			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin  = contenido.indexOf("COBERTURAS CONTRATADAS");
 			
-			if(inicio >  0 && fin > 0 && inicio < fin) {
+			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(newcontenido.split("\n")[i].contains("SEGURO DE AUTOMÓVILES")) {
@@ -67,12 +67,13 @@ public class qualitasAutosMotosModel {
 						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("-", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Domicilio")) {
-						newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ");
+						newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ").replace("### ", "")
+								.replace(modelo.getRfc(), "");
 					}
 					
 					if(newcontenido.split("\n")[i].contains("C.P.")) {
 						newDireccion  += newcontenido.split("\n")[i].split("C.P.")[1].replace(":", " ").replace("###", " ").trim();
-						modelo.setCteDireccion(newDireccion.trim());
+						modelo.setCteDireccion(newDireccion.replace("###", "").trim());
 					
 					}
 				
@@ -98,11 +99,11 @@ public class qualitasAutosMotosModel {
 						}
 					
 					}
-					if(newcontenido.split("\n")[i].contains("Placas")) {
+					if(newcontenido.split("\n")[i].contains("Placas") && newcontenido.split("\n")[i].split("Placas")[1].length()  > 3) {
 						
-						if(newcontenido.split("\n")[i].split("Placas")[1].length() > 3) {
-							modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].trim());
-						}					
+					
+							modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].replace("###", "").trim());
+										
 					}
 					if(newcontenido.split("\n")[i].contains("Serie:") && newcontenido.split("\n")[i].contains("Motor:")) {
 						modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor:")[0].replace("###", "").trim());
@@ -131,7 +132,7 @@ public class qualitasAutosMotosModel {
 			
 			inicio = agente.indexOf("Agente");
 			fin  = agente.indexOf("En###cumplimiento");
-			if(inicio >  0 && fin > 0 && inicio < fin) {
+			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = agente.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
@@ -151,7 +152,7 @@ public class qualitasAutosMotosModel {
 			
 			inicio = agente.indexOf("PLAN");
 			fin  = agente.indexOf("R.F.C:");
-			if(inicio >  0 && fin > 0 && inicio < fin) {
+			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = agente.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {				
 					if(newcontenido.split("\n")[i].contains("PLAN:")) {
@@ -166,13 +167,15 @@ public class qualitasAutosMotosModel {
 			inicio = contenido.indexOf("MONEDA");
 			fin  = contenido.indexOf("Tarifa Aplicada");
 	
-			if(inicio >  0 && fin > 0 && inicio < fin) {
+			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-				
+	
 					if(newcontenido.split("\n")[i].contains("Anual")  || newcontenido.split("\n")[i].contains("CONTADO")) {
 						modelo.setFormaPago(1);
 					}
+				
 					if(newcontenido.split("\n")[i].contains("Prima Neta")) {		
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta")[1].replace("###", ""))));						
 					}
@@ -198,7 +201,7 @@ public class qualitasAutosMotosModel {
 
 			// coberturas
 			inicio = contenido.indexOf("PRIMAS");
-			if (inicio > 0) {
+			if (inicio > -1) {
 
 			} else {
 				inicio = contenido.indexOf("PRIMA");
