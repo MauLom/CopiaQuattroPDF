@@ -80,11 +80,11 @@ public class AtlasAutosModel {
 								fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("Forma Pago:")
-							&& newcontenido.split("\n")[i].contains("Fraccionado:")) {
+							&& newcontenido.split("\n")[i].contains("Fraccionado")) {
 						modelo.setFormaPago(fn.formaPago(
 								newcontenido.split("\n")[i].split("Pago:")[1].split("Recargo")[0].replace("###", "")));
 						modelo.setRecargo(fn.castBigDecimal(fn
-								.castDouble(newcontenido.split("\n")[i].split("Fraccionado:")[1].replace("###", ""))));
+								.castDouble(newcontenido.split("\n")[i].split("Fraccionado")[1].replace("###", "").replace(":", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("Recibo:")
 							&& newcontenido.split("\n")[i].contains("Expedición:")) {
@@ -156,7 +156,7 @@ public class AtlasAutosModel {
 
 			inicio = recibosText.indexOf("Agente");
 			fin = recibosText.indexOf("Forma de pago");
-			if (inicio > 0 && fin > 0 && inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = recibosText.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
@@ -168,7 +168,7 @@ public class AtlasAutosModel {
 			if (modelo.getAgente().length() >= 0) {
 				inicio = contenido.indexOf("Agente");
 				fin = contenido.indexOf("En cumplimiento");
-				if (inicio > 0 && fin > 0 && inicio < fin) {
+				if (inicio > -1 && fin > -1 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						if (newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)
