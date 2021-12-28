@@ -28,8 +28,9 @@ public class GnpVIdaModel2 {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("### ### ###", "###").replace("### ### ", "###").replace("######", "###")
 				.replace("E ###specificaciones del Plan", ConstantsValue.ESPECIFICACIONES_PLAN)
-				.replace("Periodicidad de Pago", "Forma de pago")
+				.replace("Periodicidad de Pago", ConstantsValue.FORMA_PAGO2)
 				.replace("Importe a Pagar", "Importe a pagar");
+		        
 
 		try {
 			modelo.setTipo(5);
@@ -93,13 +94,15 @@ public class GnpVIdaModel2 {
 					if(modelo.getFechaEmision().isEmpty()) {
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
+					
 					if (newcontenido.toString().split("\n")[i].contains("Forma de pago")) {
 						if (newcontenido.toString().split("\n")[i].contains("Anual")) {
 							modelo.setFormaPago(1);
 						}
 						if (modelo.getFormaPago() == 0) {
-							modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+							modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().replace("Única", "Contado").split("\n")[i]));
 						}
+						
 
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
@@ -273,10 +276,11 @@ public class GnpVIdaModel2 {
 			if (contenido.contains("Supervivencia")) {
 				modelo.setAportacion(1);
 			}
-			if(contenido.split("Código Cliente")[1].split("Hasta el")[0].length() > 100) {
-				modelo.setIdCliente(contenido.split("Código Cliente")[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+			
+			if(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].length() > 100) {
+				modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
 			}else {
-				modelo.setIdCliente(contenido.split("Código Cliente")[1].split("Hasta el")[0].replace("###", "").trim());	
+				modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].replace("###", "").trim());	
 			}
 			
 			String beneficiarios1 = "";
