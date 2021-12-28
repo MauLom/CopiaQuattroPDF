@@ -58,7 +58,7 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO = "Forma de pago:";
 	public static final String FORMA_PAGO2 = "Forma de pago";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
-
+	
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
 	public static final String GASTOS = "Gastos";
@@ -142,7 +142,15 @@ public final class ConstantsValue {
 	public static final String RENOVACION = "Renovación";
 	public static final String REFERENCIA = "Referencia";
 	public static final String RECARGO_PAGO = "Recargo por Pago";
-
+	public static final String REGEX_FECHA = "(29(-|\\/)02(-|\\/)(2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26]))))" 
+	  	      + "|((0[1-9]|1[0-9]|2[0-8])(-|\\/)02(-|\\/)((19|2[0-9])[0-9]{2}))"
+	  	      +"|((0[1-9]|[12][0-9]|3[01])(-|\\/)(0[13578]|10|12)(-|\\/)((19|2[0-9])[0-9]{2}))"
+	  	      +"|((0[1-9]|[12][0-9]|30)(-|\\/)(0[469]|11)(-|\\/)((19|2[0-9])[0-9]{2}))";
+	public static final String REGEX_IDCLIENTE_MAPFRE = "(Cliente (Mapfre|MAPFRE)\\s*:\\s*(\\S*\\w+))";
+	public static final String REGEX_POLIZA = "((Póliza Número|POLIZA NUMERO|PÓLIZA NÚMERO|Póliza número|Número de Póliza|NUMERO DE POLIZA|NÚMERO DE PÓLIZA|Número de póliza)\\s*\\S*:(\\s*\\d+)\\w*)";
+	public static final String REGEX_CP = "((C.P.)\\s*\\S*:\\s*(\\S*\\w+))";
+	public static final String RENOVACION_AUTOM = "RENOVACIÓN AUTOMÁTICA";
+	
 	public static final String TELEFONO = "Teléfono:";
 	public static final String TOTAL = "Total:";
 	public static final String TOTAL2 = "Total";
