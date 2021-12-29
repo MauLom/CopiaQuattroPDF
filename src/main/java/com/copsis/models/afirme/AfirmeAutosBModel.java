@@ -17,8 +17,8 @@ public class AfirmeAutosBModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
     private String recibos = "";
-    private final String CLAVE_REGEX = "(Clave\\s*:\\s*'+(\\w+)'+)"; 
-    private final String PLACAS_REGEX = "(Placas\\s*:\\s*'+(\\w+)'+)"; 
+    private static final String CLAVE_REGEX = "(Clave\\s*:\\s*'+(\\w+)'+)"; 
+    private static final String PLACAS_REGEX = "(Placas\\s*:\\s*'+(\\w+)'+)"; 
 
     
 	public AfirmeAutosBModel(String contenido,String recibos) {
@@ -112,7 +112,6 @@ public class AfirmeAutosBModel {
             /*poliza*/
             inicio = contenido.indexOf("DATOS DEL VEHÍCULO");
             fin = contenido.indexOf("COBERTURAS ");
-            System.err.println("contenido "+contenido);
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {

@@ -24,11 +24,9 @@ public class AfirmeModel {
 		try {
 			if(fn.tipoPoliza(contenido) == 1) { // autos
 				if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO")) {
-					System.err.println("L 28");
 					modelo  = new AfirmeAutosBModel(fn.caratula(1, 3, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();	
 				}else {
 					Integer pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
-					System.err.println("L 31");
 					modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
 				}
 			}
