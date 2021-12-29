@@ -22,9 +22,8 @@ public class AfirmeModel {
 	}
 	public EstructuraJsonModel procesar() {	
 		try {
-			
 			if(fn.tipoPoliza(contenido) == 1) { // autos
-				if(contenido.contains("AUTOMÓVILES RESIDENTES")) {
+				if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO")) {
 					modelo  = new AfirmeAutosBModel(fn.caratula(1, 3, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();	
 				}else {
 					Integer pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
