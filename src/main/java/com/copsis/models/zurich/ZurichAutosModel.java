@@ -15,6 +15,7 @@ public class ZurichAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
+	private static final String CLAVE2 = "laDvEe";
 
 	
 	public ZurichAutosModel(String contenido) {
@@ -109,21 +110,7 @@ public class ZurichAutosModel {
 	            }
 
 	            /*AGENTE*/
-	            inicio = contenido.indexOf("Nombre del Agente");
-	            fin = contenido.indexOf("Folio");
-	            if (inicio > -1 && fin > -1 && inicio < fin) {
-	                newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", "")).replace("\r\n", "").replace("FIA SCAl aDve", "FISCAL Clave");
-	                modelo.setAgente(newcontenido.split("Nombre del Agente")[1].split("###")[1].replace("Clave:", ""));
-	                int sp = newcontenido.split(ConstantsValue.CLAVE)[1].split("###").length;
-	                if(sp == 3) {
-	                	  modelo.setCveAgente(newcontenido.split(ConstantsValue.CLAVE)[1].split("###")[2]);
-	                }
-	                if(sp == 2) {
-	                	  modelo.setCveAgente(newcontenido.split(ConstantsValue.CLAVE)[1].split("###")[1]);
-	                }
-	                               	               
-	            }
-
+	            obtenerCveAgente();
 
 	            /*DESCRIPCION DEL VEHICULO*/
 	            inicio = contenido.indexOf("Descripción del Vehículo");
@@ -143,6 +130,9 @@ public class ZurichAutosModel {
 	                    }
 	                    if (x.contains("Descripción:")) {
 	                        modelo.setDescripcion(x.split("###")[1].replace("\r", ""));
+	                    }
+	                    if(x.contains("Clave:")) {
+	                        modelo.setClave(x.split("###")[5].replace("\r", ""));
 	                    }
 	                }
 	            }
@@ -196,6 +186,34 @@ public class ZurichAutosModel {
 					ZurichAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
+	}
+	
+	private void obtenerCveAgente() {
+		int inicio = contenido.indexOf("Nombre del Agente");
+        int fin = contenido.indexOf("Folio");
+        if (inicio > -1 && fin > -1 && inicio < fin) {
+            String newcontenido = fn.eliminaSpacios(contenido.substring(inicio, fin).replace("@@@", "")).replace("\r\n", "").replace("FIA SCAl aDve", "FISCAL Clave");
+            modelo.setAgente(newcontenido.split("Nombre del Agente")[1].split("###")[1].replace("Clave:", ""));
+
+            if(newcontenido.contains(ConstantsValue.CLAVE)) {
+                int sp = newcontenido.split(ConstantsValue.CLAVE)[1].split("###").length;
+                if(sp == 3) {
+                	  modelo.setCveAgente(newcontenido.split(ConstantsValue.CLAVE)[1].split("###")[2]);
+                }
+                if(sp == 2) {
+                	  modelo.setCveAgente(newcontenido.split(ConstantsValue.CLAVE)[1].split("###")[1]);
+                }
+            }
+            
+            if(newcontenido.contains(CLAVE2)){
+            	String[] arrContenido = newcontenido.split(CLAVE2)[1].split("###");
+            	newcontenido = arrContenido.length>0? arrContenido[arrContenido.length-1]:"";
+            	newcontenido = newcontenido.replace("\r","");
+            	modelo.setCveAgente(newcontenido );
+            	modelo.setAgente(modelo.getAgente().split(CLAVE2)[0].trim());
+            
+            }                           	               
+        }
 	}
 
 }
