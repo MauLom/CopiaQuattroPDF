@@ -2,6 +2,7 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ public class ImpresionConsetimientoPdf {
 	private final Color bgColor = new Color(255, 255, 255, 0);
 	private final Color bgColorA = new Color(0, 0, 143);
 	private final Color bgColorAb = new Color(203, 203, 228, 0);
+	private final Color bgColorCl = new Color(135, 129, 189, 0);
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 	private float yStartStar = 0;
@@ -425,15 +427,9 @@ public class ImpresionConsetimientoPdf {
 					yStartStar = yStart;
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,
 							true);
-					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 40, "Fecha de nacimiento:", azul, false, "L", 10, lineBoders3101, "",
-							padding3, bgColor);
-					communsPdf.setCell(baseRow, 20, "Día     ", azul, false, "l", 10, lineBoders31, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 20, "Mes     ", azul, false, "l", 10, lineBoders31, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 20, "Año     ", azul, false, "l", 10, lineBoders32, "", padding3,
-							bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 100, "Vigencia", bgColor, true, "L",
+							10, lineBoders1, "", padding2, bgColorA);
 
 
 					baseRow = communsPdf.setRow(table, 20);
@@ -463,8 +459,11 @@ public class ImpresionConsetimientoPdf {
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,
 							true);
 					baseRow = communsPdf.setRow(table, 25);
-					communsPdf.setCell(baseRow, 100, "Tipo de afiliación:", azul, true, "L", 10, lineBoders, "",
+					communsPdf.setCell(baseRow, 16, "Tipo de afiliación:", azul, true, "L", 10, lineBoders3101, "",
 							padding3, bgColor);
+					communsPdf.setCell(baseRow, 84, "prestación laboral", azul, false, "L", 10, lineBoders32, "",
+							padding3, bgColor);
+
 
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, "Coberturas amparadas", bgColor, true, "L", 10, lineBoders1, "",
@@ -625,8 +624,8 @@ public class ImpresionConsetimientoPdf {
 					table3 = new BaseTable(yStartStar, yStartNewPage, bottomMargin, fullWidth, 30, document, page,
 							false, true);
 					table3.setTableContentStream(content0);
-					baseRow3 = communsPdf.setRow(table3, 15);
-					communsPdf.setCell(baseRow3, 43, ":", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
+					baseRow3 = communsPdf.setRow(table3, 8);
+					communsPdf.setCell(baseRow3, 43, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 					communsPdf.setCell(baseRow3, 21, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
 							bgColor);
 					communsPdf.setCell(baseRow3, 20, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
@@ -636,7 +635,7 @@ public class ImpresionConsetimientoPdf {
 					baseRow3 = communsPdf.setRow(table3, 5);
 
 					baseRow3 = communsPdf.setRow(table3, 15);
-					communsPdf.setCell(baseRow3, 43, ":", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
+					communsPdf.setCell(baseRow3, 43, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 					communsPdf.setCell(baseRow3, 21, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
 							bgColor);
 					communsPdf.setCell(baseRow3, 20, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
@@ -647,7 +646,7 @@ public class ImpresionConsetimientoPdf {
 					baseRow3 = communsPdf.setRow(table3, 5);
 
 					baseRow3 = communsPdf.setRow(table3, 15);
-					communsPdf.setCell(baseRow3, 43, ":", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
+					communsPdf.setCell(baseRow3, 43, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 					communsPdf.setCell(baseRow3, 21, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
 							bgColor);
 					communsPdf.setCell(baseRow3, 20, "_______________", azul, false, "l", 10, lineBoders, "", padding3,
@@ -967,15 +966,15 @@ public class ImpresionConsetimientoPdf {
 						PDPage page3 = document.getPage(v);
 						try (PDPageContentStream content = new PDPageContentStream(document, page3,
 								PDPageContentStream.AppendMode.PREPEND, true, true)) {
-							
+								
 							communsPdf.drawText(content, false, 500, 754, "VI-557• ENER0 2019", azul, true);
 						}
 					}
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					conte =null;
-					
+					document.save(new File("/home/desarrollo8/Pictures/res.pdf"));	
+					conte =null;								
 					return output.toByteArray();
 					
 				} finally {
@@ -1006,12 +1005,10 @@ public class ImpresionConsetimientoPdf {
 
 			table = new BaseTable((yStart - 20), yStartNewPage, bottomMargin, 300, 290, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 15);
-			communsPdf.setCell(baseRow, 100, "Consentimiento Individual / Seguro de grupo", azul, true, "r", 11,
-					lineBoders, "", padding);
+			communsPdf.setCell(baseRow, 100, "Vida", bgColorCl, true, "r", 11, lineBoders, "", padding);
 			baseRow = communsPdf.setRow(table, 15);
-			communsPdf.setCell(baseRow, 100, "Respaldo Empresarial ", azul, true, "r", 11, lineBoders, "", padding);
+			communsPdf.setCell(baseRow, 100, "Consentimiento Individual / Seguro de grupo", azul, true, "r", 11,lineBoders, "", padding);
 			table.draw();
-
 			yStart -= table.getHeaderAndDataHeight() + 40;
 
 			table = new BaseTable(30, yStartNewPage, 0, fullWidth + 30, 10, document, page, false, true);

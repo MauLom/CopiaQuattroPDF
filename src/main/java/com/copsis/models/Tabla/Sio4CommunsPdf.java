@@ -3,6 +3,7 @@ package com.copsis.models.Tabla;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -441,6 +442,27 @@ public class Sio4CommunsPdf {
 			return false;
 		}
 	}
+    
+    public List<LineStyle> setLineStyle(Color ColorLRTB){
+    	List<LineStyle> lineBoders = new ArrayList<>();
+        //Solo son 4 L,R,T,B
+    	lineBoders.add(new LineStyle(ColorLRTB, 0));
+		lineBoders.add(new LineStyle(ColorLRTB, 0));
+		lineBoders.add(new LineStyle(ColorLRTB, 0));
+		lineBoders.add(new LineStyle(ColorLRTB, 0));
+		return lineBoders;    	
+    }
+    
+    public List<LineStyle> setLineStyle(Color ColorL,Color ColorR,Color ColorT ,Color ColorB){
+    	List<LineStyle> lineBoders = new ArrayList<>();
+        //Solo son 4 L,R,T,B
+    	lineBoders.add(new LineStyle(ColorL, 0));
+		lineBoders.add(new LineStyle(ColorR, 0));
+		lineBoders.add(new LineStyle(ColorT, 0));
+		lineBoders.add(new LineStyle(ColorB, 0));
+		return lineBoders;
+    	
+    }
 
 	
 }
