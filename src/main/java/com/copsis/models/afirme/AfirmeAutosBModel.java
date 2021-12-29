@@ -3,6 +3,8 @@ package com.copsis.models.afirme;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -15,7 +17,9 @@ public class AfirmeAutosBModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
     private String recibos = "";
-   
+    private final String CLAVE_REGEX = "(Clave\\s*:\\s*'+(\\w+)'+)"; 
+    private final String PLACAS_REGEX = "(Placas\\s*:\\s*'+(\\w+)'+)"; 
+
     
 	public AfirmeAutosBModel(String contenido,String recibos) {
 		this.contenido = contenido;
@@ -102,11 +106,13 @@ public class AfirmeAutosBModel {
                    
                     }
                 }
+
             }
             
             /*poliza*/
             inicio = contenido.indexOf("DATOS DEL VEHÍCULO");
             fin = contenido.indexOf("COBERTURAS ");
+            System.err.println("contenido "+contenido);
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -123,8 +129,15 @@ public class AfirmeAutosBModel {
 
                 }
             }
-            
-            
+            //clave
+            inicio = contenido.indexOf("Uso:");                
+            if(inicio>-1) {
+            	newcontenido = contenido.substring(inicio,inicio+100);
+            	modelo.setClave(obtenerValoresPorRegex(CLAVE_REGEX,newcontenido));
+            }
+            //placas
+            modelo.setPlacas(obtenerValoresPorRegex(PLACAS_REGEX ,contenido));
+            //
             inicio = contenido.indexOf("COBERTURAS");
             fin = contenido.indexOf("Prima Neta");
 
@@ -306,6 +319,12 @@ public class AfirmeAutosBModel {
 					+ ex.getCause());
 			return modelo;
 		}
+	}
+	
+	private String obtenerValoresPorRegex(String regex,String texto) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(texto.replace("#","'"));
+		return matcher.find() ? matcher.group(2) : "";
 	}
 
 }
