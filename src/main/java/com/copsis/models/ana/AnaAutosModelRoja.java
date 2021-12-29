@@ -25,6 +25,7 @@ public class AnaAutosModelRoja {
 		String vigencias = "";
 		int inicio = 0;
 		int fin = 0;
+		boolean cp = true;
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Fecha de Exp.", "Fecha de Expedición")
@@ -97,9 +98,16 @@ public class AnaAutosModelRoja {
 						}
 
 					}
-					if (newcontenido.split("\n")[i].contains("C.P.")) {
-						modelo.setCp(newcontenido.split("C.P.")[1].substring(0, 5).trim());
+					if (newcontenido.split("\n")[i].contains("C.P.") && cp ){
+					
+						System.out.println(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5));
 					}
+				
+					if (newcontenido.split("\n")[i].contains("C.P.") && fn.isNumeric(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5).trim()) && cp) {												
+							modelo.setCp(newcontenido.split("C.P.")[1].substring(0, 5).trim());		
+							cp =false;
+					}
+					
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
