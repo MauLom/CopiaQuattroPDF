@@ -54,12 +54,9 @@ public class qualitasAutosMotosModel {
 			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if(newcontenido.split("\n")[i].contains("SEGURO DE AUTOMÓVILES")) {
-						
-						modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0].trim());
-						modelo.setEndoso(newcontenido.split("\n")[i+1].split("###")[1].trim());
-						modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i+1].split("###")[2].trim()));
-					}
+
+					obtenerPolizaEndosoInciso(newcontenido.split("\n"), i);
+					
 					if(newcontenido.split("\n")[i].contains("INFORMACIÓN DEL ASEGURADO")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i+1].split("###")[0]);
 					}
@@ -109,8 +106,8 @@ public class qualitasAutosMotosModel {
 						modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor:")[0].replace("###", "").trim());
 						if(newcontenido.split("\n")[i].split("Motor:")[1].contains("REPUVE")) {
 							modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].split("REPUVE")[0].replace("###", "").trim());
-						}else {
-							modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].replace("###", "").trim());
+						}else if(newcontenido.split("\n")[i].split("Motor:")[1].contains("Placas:")){
+							modelo.setMotor(newcontenido.split("\n")[i].split("Motor:")[1].split("Placas:")[0].replace("###", "").trim());
 						}
 						
 					}
@@ -282,6 +279,20 @@ public class qualitasAutosMotosModel {
 			modelo.setError(
 					qualitasAutosMotosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
+		}
+	}
+	
+
+	private void obtenerPolizaEndosoInciso(String[] arrContenido, int i) {
+		if(arrContenido[i].contains("SEGURO DE AUTOMÓVILES") && arrContenido[i].contains("INCISO") && arrContenido[i].contains("PÓLIZA")) {
+			modelo.setPoliza(arrContenido[i+1].split("###")[0].trim());
+			modelo.setEndoso(arrContenido[i+1].split("###")[1].trim());
+			modelo.setInciso(Integer.parseInt(arrContenido[i+1].split("###")[2].trim()));
+		} else if (arrContenido[i].contains("SEGURO DE AUTOMÓVILES") && !arrContenido[i].contains("PÓLIZA")
+				&& arrContenido[i].split("###").length == 4) {
+			modelo.setPoliza(arrContenido[i].split("###")[1].trim());
+			modelo.setEndoso(arrContenido[i].split("###")[2].trim());
+			modelo.setInciso(Integer.parseInt(arrContenido[i].split("###")[3].trim()));
 		}
 	}
 
