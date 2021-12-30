@@ -647,7 +647,6 @@ public class ImpresionConsetimientoPdf {
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-					document.save("/home/desarrollo8/Documents/adan2.pdf");
 					conte =null;								
 					return output.toByteArray();
 					
@@ -1024,9 +1023,7 @@ public class ImpresionConsetimientoPdf {
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,
 				true);
 		
-		
-		
-		List<PaqueteCoberturaProjection> cobertura = impresionForm.getCoberturas();
+
 
 		if (impresionForm.getCoberturas().size() > 0) {
 			for (int i = 0; i < impresionForm.getCoberturas().size(); i++) {
