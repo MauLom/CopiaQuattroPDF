@@ -87,7 +87,7 @@ public class MapfreVidaBModel {
 				fin = contenido.lastIndexOf("Prima neta:");
 			}
 			
-			System.out.println(inicio +"-->" + fin);
+		
 			leerCoberturas(inicio,fin);
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
