@@ -16,7 +16,9 @@ import java.util.Locale;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 
+import com.copsis.clients.projections.PaqueteCoberturaProjection;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
@@ -644,7 +646,7 @@ public class ImpresionConsetimientoPdf {
 					}
 
 					output = new ByteArrayOutputStream();
-					document.save(output);			
+					document.save(output);
 					conte =null;								
 					return output.toByteArray();
 					
@@ -1020,6 +1022,8 @@ public class ImpresionConsetimientoPdf {
 				true);
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,
 				true);
+		
+
 
 		if (impresionForm.getCoberturas().size() > 0) {
 			for (int i = 0; i < impresionForm.getCoberturas().size(); i++) {
@@ -1105,7 +1109,7 @@ public class ImpresionConsetimientoPdf {
 					} else {
 						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
 								padding3, bgColor);
-						communsPdf.setCell(baseRow, 15, "", azul, false, "L", 10, lineBoders64, "",
+						communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
 								padding3, bgColor);
 
 					}
@@ -1126,17 +1130,16 @@ public class ImpresionConsetimientoPdf {
 					}
 
 				} else {
-					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-						communsPdf.setCell(baseRow, 15, ImageUtils.readImage(
-								"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2109/Polizas/2109/dhd7xuhDqRRsXrMilIVOUo+PkOOMPjOEAgFFuMPDLu0dyS+FhVxhSdAaobuLjYY/SI.png")
-								.scale(60, 40), 1, 103, black).setLeftPadding(16f);
-					} else {
-						communsPdf.setCell(baseRow, 15, ImageUtils.readImage(
-								"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2109/Polizas/2109/dhd7xuhDqRRsXrMilIVOUv8PqdQS5ACLtuslkwHG2y1yEWPdejQZ7f+V8t4K4Oy/NO.png")
-								.scale(60, 40), 1, 103, black).setLeftPadding(16f);
-
-					}
-
+					   
+							 if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
+									communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
+											padding3, bgColor);
+								} else {										
+								communsPdf.setCell(baseRow, 15, "", azul, false, "C", 10, lineBoders64, "",
+												padding3, bgColor);
+								}							 
+						 
+	
 				}
 
 			}
