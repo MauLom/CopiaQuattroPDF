@@ -31,6 +31,7 @@ public class AnaAutosModelRoja {
 		contenido = contenido.replace("Fecha de Exp.", "Fecha de Expedición")
 				.replace("Mens. prorrat", "Mensual")
 				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", "Forma de pago")
+                .replace("Forma de Pago:", "Forma de pago:")
 				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
 				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL );
 
@@ -151,9 +152,10 @@ public class AnaAutosModelRoja {
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
 
 					}
+						
 					if (newcontenido.split("\n")[i].contains("pago:")
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.SUBSECUENTE)
-							&& newcontenido.split("\n")[i].contains("I.V.A:")) {
+							&& newcontenido.split("\n")[i].contains("I.V.A:")) {						
 						modelo.setFormaPago(fn
 								.formaPago(newcontenido.split("\n")[i].split("Forma de pago:")[1].split(ConstantsValue.SUBSECUENTE)[0]
 										.replace("###", "").replace(".", "").trim()));
