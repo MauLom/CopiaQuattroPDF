@@ -8,6 +8,7 @@ public final class ConstantsValue {
 	public static final String AGENTE2 = "Agente";
 	public static final String AVISO_COBRO = "AVISO DE COBRO";
 	public static final String AMPARADA = "Amparada";
+	public static final String ASEGURADO = "Asegurado:";
 
 	public static final String BENEFICIOS_CUBIERTOS = "BENEFICIOS CUBIERTOS";
 	public static final String BENEFICIARIOS = "BENEFICIARIOS";
@@ -25,9 +26,11 @@ public final class ConstantsValue {
 	public static final String CONTRATANTE_POLIZA = "Contratante Póliza";
 	public static final String COBERTURAS_SUMAS_ASEGURADAS = "COBERTURAS Y SUMAS ASEGURADAS";
 	public static final String CERTIFICADO_INDIVIDUAL = "Certificado Individual";
+	public static final String CLAVE_DE_AGENTE = "Clave de Agente:";
 	public static final String CLAVE_INTERNA_AGENTE = "Clave interna del agente:";
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
+	public static final String CODIGO_POSTAL = "C.P. :";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
 
 	public static final String DOMICILIO_HASH = "Domicilio:###";
@@ -55,9 +58,12 @@ public final class ConstantsValue {
 
 	public static final String FINANCIAMIENTO = "Financiamiento";
 	public static final String FINANCIAMIENTO_MAYUS = "FINANCIAMIENTO:";
+	public static final String FINANCIAMIENTO_MAYUS2 = "FINANCIAMIENTO";
 	public static final String FRACCIONADO = "Fraccionado";
 	public static final String FORMA_PAGO = "Forma de pago:";
 	public static final String FORMA_PAGO2 = "Forma de pago";
+	public static final String FORMA_PAGO3 = "Forma de Pago:";
+	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
@@ -68,7 +74,10 @@ public final class ConstantsValue {
 	public static final String HASTA = "Hasta:";
 	public static final String HASTA2 = "Hasta";
 	public static final String HORAS = "horas";
+	public static final String HORAS2 = "Horas";
 	public static final String HASTA_EL = "Hasta el";
+	public static final String HASTA_LAS = "Hasta las";
+
 
 	public static final String INCISO = "Inciso:";
 	public static final String INICIO_VIGENCIA = "Inicio de Vigencia";
@@ -77,6 +86,7 @@ public final class ConstantsValue {
 	public static final String IVA3 = "I.V.A";
 	public static final String INCENDIO = "INCENDIO";
 	public static final String IMPORTE = "Importe";
+	
 	public static final String LAS_HORAS = "LAS 12 HRS DEL DÍA";
 	
 
@@ -101,6 +111,8 @@ public final class ConstantsValue {
 	public static final String NUMERO = "Número";
 	public static final String NO_POLIZA = "No. Póliza";
 	public static final String NACIONAL = "− Nacional";
+	public static final String NUMERO2 = "Nú m er o     :";
+
 
 	public static final String PRIMA = "Prima";
 	public static final String PRIMA_MAYUS = "PRIMA";
@@ -109,16 +121,21 @@ public final class ConstantsValue {
 	public static final String PRIMA_NETA_MAYUS = "PRIMA NETA:";
 	public static final String PRIMA_NETA2 = "Prima neta";
 	public static final String PRIMA_NETA3 = "Prima Neta:";
+	public static final String PRIMA_NETA_MAYUS2 = "PRIMA NETA";
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
+	public static final String POLIZA_NUMERO = "Póliza Número:";
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
 	public static final String PLACAS_MAYUS = "PLACAS:";
 	public static final String PLAN = "Plan:";
+	public static final String PLAN_SEGURO = "PLAN DE SEGURO:";
+	public static final String PLAN_SEGURO2 = "Plan de Seguro:";
 	public static final String PRIMA_TOTAL = "Prima Total:";
 	public static final String PRIMA_TOTAL_MAYUS = "PRIMA TOTAL:";
+	public static final String PRIMA_TOTAL_MAYUS2 = "PRIMA TOTAL";
 	public static final String PRIMA_TOTAL2 = "Prima Total";
 	public static final String PERIODO = "Periodo";
 	public static final String PESOS_MAYUS = "PESOS";
@@ -128,12 +145,13 @@ public final class ConstantsValue {
 	public static final String PAGAR = "Pagar";
 	public static final String PLAZO_EDAD_ALCANZADA = "Plazo: Edad Alcanzada";
 	public static final String PLAZO = "Plazo";
-	
+	public static final String POLIZA_NUMERO2 = "Póliza Número    :";
 
 	public static final String RFC_HASH = "R.F.C.:###";
 	public static final String RFC_HASH2 = "###RFC:###";
 	public static final String RFC = "R.F.C:";
 	public static final String RFC2 = "R.F.C";
+	public static final String RFC3 = "R.F.C.:";
 	public static final String RIESGOS_CUBIERTOS = "RIESGOS CUBIERTOS";
 	public static final String RECIBO_PRIMAS = "RECIBO DE PRIMAS";
 	public static final String RECARGO = "Recargo:";
@@ -151,8 +169,11 @@ public final class ConstantsValue {
 	public static final String TIME = "12:15";
 	public static final String TECHO = "Techo:";
 	public static final String TECHOS = "Techos";
-
+	public static final String TANTE = "tante:";
+	public static final String TRATANTE = "tratante:";
+	
 	public static final String SECCION = "SECCION";
+	public static final String SECCION2 = "SECCIÓN";
 	public static final String SECCIONES_AMPARADAS = "Secciones amparadas";
 	public static final String SECCIONES_COBERTURAS = "SECCIONES Y COBERTURAS";
 	public static final String SUBSECUENTE = "Subsecuente";
