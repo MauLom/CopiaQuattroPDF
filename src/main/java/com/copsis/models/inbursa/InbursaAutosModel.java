@@ -2,6 +2,8 @@ package com.copsis.models.inbursa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -16,6 +18,7 @@ public class InbursaAutosModel {
 	private String contenido = "";
 
 	private String recibosText = "";
+	private static final String POLIZA_REGEX = "(PÓLIZA \\s*(\\w{5} \\w{8}))";
 
 	public InbursaAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
@@ -45,6 +48,9 @@ public class InbursaAutosModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 horas", "");
+				
+				obtenerPolizaRegex();
+				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 					if (newcontenido.split("\n")[i].contains("DATOS DEL CONTRATANTE")) {
@@ -54,17 +60,9 @@ public class InbursaAutosModel {
 							modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0]);
 						}
 					}
-					if (newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS)
-							&& newcontenido.split("\n")[i].contains("CIS")
-							&& newcontenido.split("\n")[i].contains("ID CLIENTE")) {
-						modelo.setPoliza(newcontenido.split("\n")[i - 1].split("###")[1]);
-					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS)
-							&& newcontenido.split("\n")[i].contains("CIS")
-							&& newcontenido.split("\n")[i].contains("Cliente Inbursa")) {
-						modelo.setPoliza(newcontenido.split("\n")[i - 1].split("###")[1]);
-					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS)
-							&& newcontenido.split("\n")[i].contains("FAMILIA")) {
-						modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[0]);
+					
+					if(modelo.getPoliza().isEmpty()) {
+						obtenerPolizaOtraUbicacion(newcontenido.split("\n"), i);
 					}
 					// proceso direccion
 					if (newcontenido.split("\n")[i].contains("R.F.C.")) {
@@ -102,6 +100,7 @@ public class InbursaAutosModel {
 						String x = a + " " + b + " " + c;
 						modelo.setCteDireccion(x.replace("###", ""));
 					}
+					System.err.println("Sin dir");
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
 						if (newcontenido.split("\n")[i].split("C.P.")[1].split("###").length > 0) {
@@ -300,6 +299,27 @@ public class InbursaAutosModel {
 			modelo.setError(InbursaAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
+		}
+	}
+	
+	private void obtenerPolizaRegex() {
+		Pattern pattern = Pattern.compile(POLIZA_REGEX);
+		Matcher matcher = pattern.matcher(contenido);
+		modelo.setPoliza(matcher.find() ? matcher.group(2) : "");
+	}
+	
+	private void obtenerPolizaOtraUbicacion(String[] arrContenido,int i) {
+		if (arrContenido[i].contains(ConstantsValue.POLIZA_MAYUS)
+				&& arrContenido[i].contains("CIS")
+				&& arrContenido[i].contains("ID CLIENTE")) {
+			modelo.setPoliza(arrContenido[i - 1].split("###")[1]);
+		} else if (arrContenido[i].contains(ConstantsValue.POLIZA_MAYUS)
+				&& arrContenido[i].contains("CIS")
+				&& arrContenido[i].contains("Cliente Inbursa")) {
+			modelo.setPoliza(arrContenido[i - 1].split("###")[1]);
+		} else if (arrContenido[i].contains(ConstantsValue.POLIZA_MAYUS)
+				&& arrContenido[i].contains("FAMILIA")) {
+			modelo.setPoliza(arrContenido[i + 1].split("###")[0]);
 		}
 	}
 
