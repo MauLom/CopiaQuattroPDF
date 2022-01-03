@@ -3,6 +3,8 @@ package com.copsis.models.axa;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.boot.Banner.Mode;
+
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -31,10 +33,32 @@ public class AxaAutos2Model {
 			// cia
 			modelo.setCia(20);
 
+
+			inicio = contenido.indexOf("Carátula de póliza");
+			fin = contenido.indexOf("Datos del asegurado");
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					if(newcontenido.split("\n")[i].contains("-")) {
+                     modelo.setPlan(newcontenido.split("\n")[i].split("###")[1].split("-")[1]);		
+                     
+					}
+					if(modelo.getPlan().length()  == 0 && newcontenido.split("\n")[i].length() == 2) {
+						
+							modelo.setPlan(newcontenido.split("\n")[i].split("###")[1]);
+					
+					}
+				}			
+			}
+			
+			
+
 			inicio = contenido.indexOf("Datos del asegurado");
 			fin = contenido.indexOf("Datos del vehículo");
 
-			if (inicio > 0 && fin > 0 && inicio < fin) {
+			
+			
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Name:")) {
@@ -46,7 +70,7 @@ public class AxaAutos2Model {
 					if (newcontenido.split("\n")[i].contains("Address:")
 							&& newcontenido.split("\n")[i].contains("Desde")) {
 						modelo.setCteDireccion(
-								newcontenido.split("\n")[i].split("Address:")[1].split("Desde")[0].replace("###", " "));
+								newcontenido.split("\n")[i].split("Address:")[1].split("Desde")[0].replace("###", " ").trim());
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("From:")[1].replace("###", "")));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -75,7 +99,13 @@ public class AxaAutos2Model {
 					if (newcontenido.split("\n")[i].contains("Currency")) {
 						modelo.setMoneda(2);
 					}
-					if (newcontenido.split("\n")[i].contains(ConstantsValue.VEHICLE_ID_NUMBER)) {
+					
+					if(newcontenido.split("\n")[i].contains("No. de Serie") &&  newcontenido.split("\n")[i].contains("Ocupantes") ) {						 
+				     	modelo.setSerie(newcontenido.split("\n")[i].split("de Serie")[1].split("Ocupantes")[0].replace("###", "").replace("-", "").trim());				     
+			     	}
+					
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.VEHICLE_ID_NUMBER) && modelo.getSerie().length() == 0) {
+					
 						if (newcontenido.split("\n")[i].contains("Ocupantes")) {
 							modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.VEHICLE_ID_NUMBER)[1]
 									.split("Ocupantes")[0].replace("###", ""));
@@ -84,6 +114,13 @@ public class AxaAutos2Model {
 									.replace("###", ""));
 						}
 					}
+					
+
+				
+					
+										
+					
+					
 					if (newcontenido.split("\n")[i].contains("Placas")
 							&& newcontenido.split("\n")[i].contains("Plate No:")) {
 						modelo.setPlacas(newcontenido.split("\n")[i].split("Plate No:")[1].replace("###", ""));
