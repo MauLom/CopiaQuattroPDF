@@ -100,7 +100,6 @@ public class InbursaAutosModel {
 						String x = a + " " + b + " " + c;
 						modelo.setCteDireccion(x.replace("###", ""));
 					}
-					System.err.println("Sin dir");
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
 						if (newcontenido.split("\n")[i].split("C.P.")[1].split("###").length > 0) {
@@ -108,13 +107,10 @@ public class InbursaAutosModel {
 						} else {
 							modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim());
 						}
-					} else if (newcontenido.split("\n")[i].contains("MONEDA")) {
-						if (newcontenido.split("\n")[i + 1].contains("###")) {
-							modelo.setMoneda(fn
-									.moneda(newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").trim()));
-						} else {
-							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i + 1].replace("###", "").trim()));
-						}
+					}
+					
+					if (newcontenido.split("\n")[i].contains("MONEDA")) {
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i + 1]));						
 					}
 					// primas
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)
@@ -178,14 +174,10 @@ public class InbursaAutosModel {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1]));
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
 					}
-					if (newcontenido.split("\n")[i].contains("CLAVE")
-							&& newcontenido.split("\n")[i].contains("ISIS:")) {
-						modelo.setClave(newcontenido.split("\n")[i].split("ISIS:")[1].split(" ")[0]
-								.replace("MARCA:", "").trim().replace("###", ""));
-						if (modelo.getClave().length() > 1) {
-							modelo.setDescripcion(newcontenido.split("\n")[i].split(modelo.getClave())[1].trim());
-						}
+					if (modelo.getClave().isEmpty()) {
+						obtenerClaveYDescripcionAuto(newcontenido.split("\n")[i]);
 					}
+	
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.MODELO_MAYUS)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS_MAYUS)) {
 						modelo.setModelo(fn.castInteger(
@@ -322,5 +314,21 @@ public class InbursaAutosModel {
 			modelo.setPoliza(arrContenido[i + 1].split("###")[0]);
 		}
 	}
+	
+	private void obtenerClaveYDescripcionAuto(String texto) {
+		if (texto.contains("CLAVE")) {
+			if (texto.contains("ISIS:")) {
+				modelo.setClave(texto.split("ISIS:")[1].split(" ")[0].replace("MARCA:", "").trim().replace("###", ""));
+			} else if (texto.contains("VEHICULAR")) {
+				modelo.setClave(
+						texto.split("VEHICULAR:")[1].split(" ")[0].replace("MARCA:", "").trim().replace("###", ""));
+			}
 
+		}
+
+		if (modelo.getClave().length() > 1) {
+			modelo.setDescripcion(texto.split(modelo.getClave())[1].trim());
+		}
+		
+	}
 }
