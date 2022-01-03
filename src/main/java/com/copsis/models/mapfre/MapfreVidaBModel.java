@@ -24,7 +24,9 @@ public class MapfreVidaBModel {
 		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", ConstantsValue.POLIZA_NUMERO)
 				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
 				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
-				.replace("Prima Neta:", "Prima neta:").replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO);
+				.replace("Prima Neta:", "Prima neta:").replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
+                .replace("DESCRIPCIÓN DE COBERTURAS","DESCRIPCION DE COBERTURAS");;
+
 		String newcontenido = "";
 		int inicio = 0;
 		int fin = 0;
@@ -47,6 +49,7 @@ public class MapfreVidaBModel {
 						.replace("### 00.00", "### 00.00###");
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
+				
 					renglon = arrNewContenido[i];
 					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {
 						
@@ -71,6 +74,7 @@ public class MapfreVidaBModel {
 			if(fin  ==  -1) {
 				fin = contenido.indexOf("Asegurados que ampara");
 			}
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				arrNewContenido = newcontenido.split("\n");
@@ -79,6 +83,11 @@ public class MapfreVidaBModel {
 
 			inicio = contenido.indexOf("DESCRIPCION DE COBERTURAS");
 			fin = contenido.indexOf("EL PLAZO DE GRACIA");
+			if(fin == -1) {
+				fin = contenido.lastIndexOf("Prima neta:");
+			}
+			
+		
 			leerCoberturas(inicio,fin);
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
@@ -97,6 +106,7 @@ public class MapfreVidaBModel {
 			modelo.setCteNombre(renglon.split("Contratante:")[1].split(ConstantsValue.RFC)[0]
 					.replace("###", "").replace("C.U.R.P:", "").trim());
 			modelo.setRfc(renglon.split(ConstantsValue.RFC)[1].replace("###", "").trim());
+			
 		}
 		if (renglon.contains("Domicilio:")
 				&& renglon.contains("Tel:")) {
@@ -106,14 +116,21 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerDatosAgenteYVigencia(String renglon, String[] arrNewContenido, int i) {
-		if (renglon.contains("Desde")
-				&& renglon.contains("Clave de Agente:")) {
+		if (renglon.contains("Desde") && renglon.contains("Clave de Agente:")) {
 			modelo.setVigenciaDe(fn.formatDateMonthCadena(
 					renglon.split("Desde")[1].split("Clave de Agente:")[0]
 							.replace("###", "").trim()));
 			
 			modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim());
 			modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
+			
+			if(arrNewContenido[i+1].split("-").length  == 3) {
+				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
+				modelo.setAgente(arrNewContenido[i + 1].split("###")[3].replace("###", "").trim());	
+			}else {
+				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim());
+				modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
+			}
 		}
 		if (renglon.contains(ConstantsValue.HASTA2)) {
 			if(renglon.split(ConstantsValue.HASTA2)[1].split("###")[0].contains("-")) {
@@ -202,7 +219,10 @@ public class MapfreVidaBModel {
 			newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(" ", "###")
 					.replace("###VIDA###", "VIDA###")
 					.replace("###MUERTE###ACCIDENTAL", "MUERTE ACCIDENTAL")
-					.replace("###SERVICIOS###FUNERARIOS", "SERVICIOS FUNERARIOS");
+					.replace("###SERVICIOS###FUNERARIOS", "SERVICIOS FUNERARIOS")
+                    .replace("EXENCIÓN###DE###PAGO###DE###PRIMAS###POR###INVALIDEZ###TOTAL###Y###PERMANENTE", "EXENCIÓN DE PAGO DE PRIMAS POR INVALIDEZ TOTAL Y PERMANENTE")
+                    .replace("PAGO###ADICIONAL###DE###SUMA###ASEGURADA###POR###INVALIDEZ###TOTAL###Y###PERMANENTE","PAGO ADICIONAL DE SUMA ASEGURADA POR INVALIDEZ TOTAL Y PERMANENTE");
+    
 			arrNewContenido = newcontenido.split("\n");
 			for (int i = 0; i < arrNewContenido.length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -235,7 +255,8 @@ public class MapfreVidaBModel {
 		
 		if (inicio > -1 ) {
 			newcontenido = newcontenido.replace("@@@", "").replace("\r", "")
-					.replace("CONYUGE", "###CONYUGE###");
+					.replace("CONYUGE", "###CONYUGE###")
+                    .replace("MADRE", "###MADRE###");;
 			arrNewContenido = newcontenido.split("\n"); 
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			for (int i = 0; i < arrNewContenido.length; i++) {
