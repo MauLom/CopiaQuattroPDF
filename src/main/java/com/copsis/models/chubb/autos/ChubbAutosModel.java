@@ -260,14 +260,13 @@ public class ChubbAutosModel {
 			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
+				fin = contenido.indexOf("Descripción del vehículo") > -1 ? contenido.indexOf("Descripción del vehículo") : (inicio + 150);
 				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
 					inicio = inicio + 25;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					modelo.setAgente(
 							newcontenido.split(saltolinea)[0].contains("-")
-									? newcontenido.split(saltolinea)[0]
-											.split("-")[newcontenido.split(saltolinea)[0].split("-").length - 1].trim()
-													.replace("###", " ")
+									? fn.eliminaSpacios(newcontenido.split("-")[newcontenido.split("-").length-1].replace("###", " ").replace("\r", " ").replace("\n", " ").replace("@", " ")).trim()//.replace("\r\r\n@@@"," ")
 									: "");
 				}
 			}

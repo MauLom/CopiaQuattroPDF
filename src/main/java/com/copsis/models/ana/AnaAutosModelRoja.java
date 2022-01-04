@@ -25,11 +25,13 @@ public class AnaAutosModelRoja {
 		String vigencias = "";
 		int inicio = 0;
 		int fin = 0;
+		boolean cp = true;
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Fecha de Exp.", "Fecha de Expedición")
 				.replace("Mens. prorrat", "Mensual")
 				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", "Forma de pago")
+                .replace("Forma de Pago:", "Forma de pago:")
 				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
 				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL );
 
@@ -97,9 +99,12 @@ public class AnaAutosModelRoja {
 						}
 
 					}
-					if (newcontenido.split("\n")[i].contains("C.P.")) {
-						modelo.setCp(newcontenido.split("C.P.")[1].substring(0, 5).trim());
+
+					if (newcontenido.split("\n")[i].contains("C.P.") && fn.isNumeric(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5).trim()) && cp) {												
+							modelo.setCp(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5));		
+							cp =false;
 					}
+					
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
@@ -147,9 +152,10 @@ public class AnaAutosModelRoja {
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
 
 					}
+						
 					if (newcontenido.split("\n")[i].contains("pago:")
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.SUBSECUENTE)
-							&& newcontenido.split("\n")[i].contains("I.V.A:")) {
+							&& newcontenido.split("\n")[i].contains("I.V.A:")) {						
 						modelo.setFormaPago(fn
 								.formaPago(newcontenido.split("\n")[i].split("Forma de pago:")[1].split(ConstantsValue.SUBSECUENTE)[0]
 										.replace("###", "").replace(".", "").trim()));
