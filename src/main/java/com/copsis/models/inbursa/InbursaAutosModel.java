@@ -31,12 +31,13 @@ public class InbursaAutosModel {
 		StringBuilder resultado = new StringBuilder();
 
 		String newcontenido = "";
+		String textoAux = "";
 		int inicio = 0;
 		int fin = 0;
-		int indice = 0;
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("IVA", ConstantsValue.IVA2).replace("ACTUAL", "RENOVACION");
+
 		try {
 			// tipo
 			modelo.setTipo(1);
@@ -67,7 +68,7 @@ public class InbursaAutosModel {
 						obtenerPolizaOtraUbicacion(newcontenido.split("\n"), i);
 					}
 					// proceso direccion
-					/*if (newcontenido.split("\n")[i].contains("R.F.C.")) {
+					if (newcontenido.split("\n")[i].contains("R.F.C.")) {
 						resultado.append(newcontenido.split("\n")[i].split("R.F.C.")[0]);
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_MAYUS)
@@ -86,22 +87,28 @@ public class InbursaAutosModel {
 						String c = "";
 						if (newcontenido.split("\n")[i + 2].trim().contains(".00")) {
 							a = newcontenido.split("\n")[i + 1].split("SUMA")[0].trim();
-						} else {
-							a = newcontenido.split("\n")[i + 2].trim();
+						} else if(!newcontenido.split("\n")[i + 1].isBlank()){
+			
+							a = newcontenido.split("\n")[i + 1].trim() +" "+ newcontenido.split("\n")[i + 2].trim();
+						}else {
+							a =  newcontenido.split("\n")[i + 2].trim();
 						}
-						if (newcontenido.split("\n")[i + 3].trim().contains(ConstantsValue.RFC)) {
+						
+						if (newcontenido.split("\n")[i + 3].trim().contains(ConstantsValue.RFC) && b.isEmpty()) {
 							b = newcontenido.split("\n")[i + 3].split(ConstantsValue.RFC)[0].trim();
 						} else {
-							b = newcontenido.split("\n")[i + 3].trim();
+							b = newcontenido.split("\n")[i + 3].trim().isBlank()? newcontenido.split("\n")[i + 4].trim() :newcontenido.split("\n")[i + 3].trim();
 						}
+						
 						if (newcontenido.split("\n")[i + 6].trim().contains(".00")) {
 							c = newcontenido.split("\n")[i + 4].split("C.P.")[0].trim();
 						} else {
 							c = newcontenido.split("\n")[i + 6].trim();
 						}
+
 						String x = a + " " + b + " " + c;
 						modelo.setCteDireccion(x.replace("###", ""));
-					}*/
+					}
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
 						if (newcontenido.split("\n")[i].split("C.P.")[1].split("###").length > 0) {
@@ -133,24 +140,24 @@ public class InbursaAutosModel {
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
 						if(!fn.extraerNumeros(newcontenido.split("\n")[i+1]).isEmpty()) {
-							modelo.setDerecho(fn.castBigDecimal(
+							modelo.setRecargo(fn.castBigDecimal(
 									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", ""))));
 						}else {
-							modelo.setDerecho(fn.castBigDecimal(
+							modelo.setRecargo(fn.castBigDecimal(
 									fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1].replace("###", ""))));
 						}
 
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)) {
-						modelo.setDerecho(fn.castBigDecimal(
+						modelo.setRecargo(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.FINANCIAMIENTO_MAYUS)[1]
 										.replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)
 							&& newcontenido.split("\n")[i].contains("MONEDA:")) {
-						modelo.setRecargo(fn.castBigDecimal(
+						modelo.setDerecho(fn.castBigDecimal(
 								fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i + 1]))));
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)) {
-						modelo.setRecargo(fn.castBigDecimal(
+						modelo.setDerecho(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION_MAYUS)[1]
 										.replace("###", ""))));
 					}
@@ -179,14 +186,16 @@ public class InbursaAutosModel {
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL_MAYUS)[1]
 										.replace("###", ""))));
 					}
+
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.DESDE)
-							&& newcontenido.split("\n")[i].contains(ConstantsValue.HASTA2)
+							&& Pattern.compile(ConstantsValue.HASTA2,Pattern.CASE_INSENSITIVE).matcher(newcontenido.split("\n")[i]).find()
 							&& newcontenido.split("\n")[i].contains("-")) {
+						textoAux = newcontenido.split("\n")[i].toUpperCase();
 						modelo.setVigenciaDe(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.DESDE)[1]
-										.split(ConstantsValue.HASTA2)[0].replace("###", "").trim()));
+								fn.formatDateMonthCadena(textoAux.split("DESDE")[1]
+										.split("HASTA")[0].replace("###", "").trim()));
 						modelo.setVigenciaA(fn.formatDateMonthCadena(
-								newcontenido.split("\n")[i].split(ConstantsValue.HASTA2)[1].split("RENOVACION")[0]
+								textoAux.split("HASTA")[1].split("RENOVACION")[0]
 										.replace("###", "").trim()));
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.DESDE)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.HASTA2)) {
@@ -230,20 +239,22 @@ public class InbursaAutosModel {
 						modelo.setConductor(
 								newcontenido.split("\n")[i].split("PROPIETARIO:")[1].replace("###", "").trim());
 					}
-					if (newcontenido.split("\n")[i].contains("PRODUCTO:")
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRODUCTO)
 							&& newcontenido.split("\n")[i].contains("PAGO")) {
-						modelo.setPlan(newcontenido.split("\n")[i].split("PRODUCTO:")[1].split("FORMA")[0]
+						modelo.setPlan(newcontenido.split("\n")[i].split(ConstantsValue.PRODUCTO)[1].split(ConstantsValue.FORMA)[0]
 								.replace("###", "").trim());
-					} else if (newcontenido.split("\n")[i].contains("PRODUCTO")) {
-						modelo.setPlan(newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").trim());
+					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.FORMA)) {
+						modelo.setPlan(newcontenido.split("\n")[i].split(ConstantsValue.FORMA)[0].replace("###", "").replace(ConstantsValue.PRODUCTO, "").replace("@", "").trim());
 					}
 				}
 			}
 
+			limpiarCteDireccion();
+			
 			/* Agente y Cve */
 
 			inicio = contenido.indexOf("NOMBRE DEL AGENTE");
-
+			int renglonesARetroceder = -1;
 			if (inicio > 0) {
 				newcontenido = contenido.split("NOMBRE DEL AGENTE")[0];
 				if (newcontenido.length() > 200) {
@@ -252,14 +263,22 @@ public class InbursaAutosModel {
 					for (int j = 0; j < newcontenido.split("\n").length; j++) {
 
 						if (newcontenido.split("\n")[j].contains("CLAVE")) {
-							modelo.setCveAgente(fn.extraerNumeros(newcontenido.split("\n")[j - 2]));
+							
+							if(!fn.numTx(newcontenido.split("\n")[j - 2]).contains("-")) {
+								renglonesARetroceder = 2;
+							}else if(fn.isNumeric(fn.numTx(newcontenido.split("\n")[j - 3]))){
+								renglonesARetroceder = 3;
+							}
+
+							modelo.setCveAgente(fn.numTx(newcontenido.split("\n")[j - renglonesARetroceder]));
+
 							if (modelo.getCveAgente().length() > 0) {
 								String a = newcontenido.split("\n")[j - 1].replace(" ", "###").split("###")[0].trim();
 								if (a.contains("@")) {
 									a = "";
 								}
 								modelo.setAgente(
-										(newcontenido.split("\n")[j - 2].split(modelo.getCveAgente())[1] + "" + a).trim());
+										(fn.eliminaSpacios(newcontenido.split("\n")[j-renglonesARetroceder].split(modelo.getCveAgente())[1] + " " + a)));
 							}
 						}
 					}
@@ -267,43 +286,44 @@ public class InbursaAutosModel {
 			}
 
 			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS);
-			fin = contenido.indexOf("En caso de Siniestro");
-
-			if (fin == -1) {
-				fin = contenido.indexOf("AVISO IMPORTANTE");
-				if (fin == -1) {
-					fin = contenido.indexOf("OPERAN COMO");
-					if(fin == -1) {
-						fin  = contenido.indexOf("* Para hacer válida ");
-					}
-				}
-			}
+			fin = limiteFinalCoberturas();
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 horas", "");
+				if(!newcontenido.contains("RESPONSABILIDAD CIVIL EN ESTADOS UNIDOS Y CANADÁ") || !newcontenido.contains("Responsabilidad civil en Estados Unidos y Canadá *")) {
+					newcontenido = newcontenido.replace("CANADÁ", "RESPONSABILIDAD CIVIL EN ESTADOS UNIDOS Y CANADÁ").replace("Canadá *","Responsabilidad civil en Estados Unidos y Canadá *");
+				}
+				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+
 					if (!newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS_CONTRATADAS)
 							&& !newcontenido.split("\n")[i].contains("MÍNIMO")
 							&& !newcontenido.split("\n")[i].contains("Cobertura")
-							&& !newcontenido.split("\n")[i].contains("Deducible")
 							&& !newcontenido.split("\n")[i].contains("**")
 							&& !newcontenido.split("\n")[i].contains("UMA")
-							&& !newcontenido.split("\n")[i].contains("OPERAN")) {
-
+							&& !newcontenido.split("\n")[i].contains("OPERAN")
+							&& !newcontenido.split("\n")[i].contains("CLIENTE INBURSA")
+							&& !newcontenido.split("\n")[i].contains("Cláusula adicional de asistencia:")
+							&& !newcontenido.split("\n")[i].contains("CLAUSULA ADICIONAL DE ASISTENCIA:")) {
+						
+					
 						int sp = newcontenido.split("\n")[i].split("###").length;
-						if (newcontenido.split("\n")[i].split("###")[0].length() > 3) {
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-							if (sp > 1) {
-								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-							}
-							if (sp > 3) {
-								cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2]);
-							}
-							coberturas.add(cobertura);
 
+						if (newcontenido.split("\n")[i].split("###")[0].length() > 3) {
+
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+							if (sp == 2 ) {
+								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+								coberturas.add(cobertura);
+							}
+							if (sp > 2) {
+								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+								cobertura.setDeducible(!newcontenido.split("\n")[i].split("###")[2].contains(".00")?newcontenido.split("\n")[i].split("###")[2]:"");
+								coberturas.add(cobertura);
+							}
 						}
 					}
 				}
@@ -361,6 +381,25 @@ public class InbursaAutosModel {
 			if(fn.formaPago(palabra) > 0) {
 				modelo.setFormaPago(fn.formaPago(palabra));
 			}
+		}
+	}
+	
+	private int limiteFinalCoberturas() {
+		int indexTemporal = contenido.length();
+		List<String> listPalabras = Arrays.asList("En caso de Siniestro","AVISO IMPORTANTE","**AVISO ###IMPORTANTE","OPERAN COMO","* Para hacer válida");
+		//Se toma el indice inmediato donde finaliza la sección de coberturas
+		for(String palabra:listPalabras) {
+			if(contenido.indexOf(palabra)>-1 && contenido.indexOf(palabra)<indexTemporal) {
+				indexTemporal = contenido.indexOf(palabra);
+			}
+		}
+		return indexTemporal != contenido.length() ? indexTemporal : -1;
+	}
+	
+	private void limpiarCteDireccion() {
+		String direccion = fn.cleanString(modelo.getCteDireccion().replace("@", " "));
+		if(direccion.indexOf("C.P")>-1) {
+			modelo.setCteDireccion(direccion.substring(0,direccion.indexOf("C.P")).trim());
 		}
 	}
 }
