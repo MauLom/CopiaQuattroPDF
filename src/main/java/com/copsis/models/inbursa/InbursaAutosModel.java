@@ -1,6 +1,7 @@
 package com.copsis.models.inbursa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,7 @@ public class InbursaAutosModel {
 		String newcontenido = "";
 		int inicio = 0;
 		int fin = 0;
+		int indice = 0;
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("IVA", ConstantsValue.IVA2).replace("ACTUAL", "RENOVACION");
@@ -65,7 +67,7 @@ public class InbursaAutosModel {
 						obtenerPolizaOtraUbicacion(newcontenido.split("\n"), i);
 					}
 					// proceso direccion
-					if (newcontenido.split("\n")[i].contains("R.F.C.")) {
+					/*if (newcontenido.split("\n")[i].contains("R.F.C.")) {
 						resultado.append(newcontenido.split("\n")[i].split("R.F.C.")[0]);
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_MAYUS)
@@ -99,7 +101,7 @@ public class InbursaAutosModel {
 						}
 						String x = a + " " + b + " " + c;
 						modelo.setCteDireccion(x.replace("###", ""));
-					}
+					}*/
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
 						if (newcontenido.split("\n")[i].split("C.P.")[1].split("###").length > 0) {
@@ -115,8 +117,14 @@ public class InbursaAutosModel {
 					// primas
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)
 							&& newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {
-						modelo.setPrimaneta(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1])));
+						if(newcontenido.split("\n")[i].contains("NOMBRE")) {
+							modelo.setPrimaneta(
+									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1])));
+						}else {
+							modelo.setPrimaneta(
+									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1])));
+						}
+
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(
 								fn.extraerNumeros(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA_MAYUS)[1]
@@ -124,8 +132,14 @@ public class InbursaAutosModel {
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
-						modelo.setDerecho(fn.castBigDecimal(
-								fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1].replace("###", ""))));
+						if(!fn.extraerNumeros(newcontenido.split("\n")[i+1]).isEmpty()) {
+							modelo.setDerecho(fn.castBigDecimal(
+									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", ""))));
+						}else {
+							modelo.setDerecho(fn.castBigDecimal(
+									fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1].replace("###", ""))));
+						}
+
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)) {
 						modelo.setDerecho(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.FINANCIAMIENTO_MAYUS)[1]
@@ -134,7 +148,7 @@ public class InbursaAutosModel {
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)
 							&& newcontenido.split("\n")[i].contains("MONEDA:")) {
 						modelo.setRecargo(fn.castBigDecimal(
-								fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", ""))));
+								fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i + 1]))));
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION_MAYUS)) {
 						modelo.setRecargo(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION_MAYUS)[1]
@@ -143,17 +157,23 @@ public class InbursaAutosModel {
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.IVA2)
 							&& newcontenido.split("\n")[i].contains("PAGO")) {
 						modelo.setIva(fn.castBigDecimal(
-								fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", ""))));
-						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[0].trim()));
+								fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i + 1].replace("###", "")))));
+						obtenerFormaDePago(newcontenido.split("\n")[i + 1].trim());
+						
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.IVA2)) {
 						modelo.setIva(fn.castBigDecimal(fn.castDouble(
 								newcontenido.split("\n")[i].split(ConstantsValue.IVA2)[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL_MAYUS)
 							&& newcontenido.split("\n")[i].contains("DOCUMENTO")) {
-						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1]
-								.split("###")[newcontenido.split("\n")[i + 1].split("###").length - 1].replace("###",
-										""))));
+						if(!fn.extraerNumeros(newcontenido.split("\n")[i + 1]).isEmpty()) {
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1]
+									.split("###")[newcontenido.split("\n")[i + 1].split("###").length - 1].replace("###",
+											""))));
+						}else {
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(fn.extraerNumeros(newcontenido.split("\n")[i+2]))));
+						}
+
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL_MAYUS)) {
 						modelo.setPrimaTotal(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL_MAYUS)[1]
@@ -248,10 +268,14 @@ public class InbursaAutosModel {
 
 			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS);
 			fin = contenido.indexOf("En caso de Siniestro");
+
 			if (fin == -1) {
 				fin = contenido.indexOf("AVISO IMPORTANTE");
 				if (fin == -1) {
 					fin = contenido.indexOf("OPERAN COMO");
+					if(fin == -1) {
+						fin  = contenido.indexOf("* Para hacer válida ");
+					}
 				}
 			}
 
@@ -330,5 +354,13 @@ public class InbursaAutosModel {
 			modelo.setDescripcion(texto.split(modelo.getClave())[1].trim());
 		}
 		
+	}
+	
+	private void obtenerFormaDePago(String lineaTexto) {
+		for(String palabra:Arrays.asList(lineaTexto.split("###"))) {
+			if(fn.formaPago(palabra) > 0) {
+				modelo.setFormaPago(fn.formaPago(palabra));
+			}
+		}
 	}
 }
