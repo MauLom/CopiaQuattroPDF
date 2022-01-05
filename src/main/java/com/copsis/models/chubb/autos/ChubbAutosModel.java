@@ -64,7 +64,6 @@ public class ChubbAutosModel {
 					ConstantsValue.PRIMA_TOTAL2);
 
 			// tipo
-			modelo.setTipo(1);
 
 			// aseguradora
 			modelo.setCia(1);
@@ -476,6 +475,7 @@ public class ChubbAutosModel {
 
 			// recibos
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
+	
 
 			if (!recibos.equals("")) {
 				recibosList = recibosExtract();
@@ -503,54 +503,6 @@ public class ChubbAutosModel {
 					recibosList.add(recibo);
 				}
 				break;
-			case 2:
-				if (recibosList.size() == 1) {
-					EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-					recibo.setReciboId("");
-					recibo.setSerie("2/2");
-					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
-					recibo.setVigenciaA(modelo.getVigenciaA());
-					recibo.setVencimiento("");
-					recibo.setPrimaneta(restoPrimaNeta);
-					recibo.setPrimaTotal(restoPrimaTotal);
-					recibo.setRecargo(restoRecargo);
-					recibo.setDerecho(restoDerecho);
-					recibo.setIva(restoIva);
-					recibo.setAjusteUno(restoAjusteUno);
-					recibo.setAjusteDos(restoAjusteDos);
-					recibo.setCargoExtra(restoCargoExtra);
-					recibosList.add(recibo);
-				}
-				break;
-			case 3:
-			case 4:
-			case 5:
-			case 6: // NINGUN PDF TRAE RECIBOS SE QUEDA PENDIENTE ESTE CASO
-				if (!recibosList.isEmpty()) {
-					BigDecimal restoRec = fn.castBigDecimal(fn.getTotalRec(modelo.getFormaPago()) - recibosList.size());
-					int totalRec = fn.getTotalRec(modelo.getFormaPago());
-					for (int i = recibosList.size(); i <= restoRec.intValue(); i++) {
-						EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-						recibo.setSerie(i + 1 + "/" + totalRec);
-						recibo.setReciboId("");
-						recibo.setVigenciaDe(recibosList.get(i - 1).getVigenciaA());
-						recibo.setVigenciaA("");
-						recibo.setVencimiento("");
-						recibo.setPrimaneta(restoPrimaNeta.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setPrimaTotal(restoPrimaTotal.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setRecargo(restoRecargo.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setDerecho(restoDerecho.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setIva(restoIva.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteUno(restoAjusteUno.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setAjusteDos(restoAjusteDos.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibo.setCargoExtra(restoCargoExtra.divide(restoRec, 2, RoundingMode.HALF_EVEN));
-						recibosList.add(recibo);
-					}
-				}
-				break;
-			default:
-				break;
-
 			}
 			modelo.setRecibos(recibosList);
 
