@@ -64,7 +64,7 @@ public class ChubbAutosModel {
 					ConstantsValue.PRIMA_TOTAL2);
 
 			// tipo
-
+			modelo.setTipo(1);
 			// aseguradora
 			modelo.setCia(1);
 
