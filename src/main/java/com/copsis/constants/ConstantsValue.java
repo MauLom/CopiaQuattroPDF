@@ -65,6 +65,7 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO3 = "Forma de Pago:";
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
+	public static final String FORMA = "FORMA";
 
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
@@ -145,6 +146,8 @@ public final class ConstantsValue {
 	public static final String PAGAR = "Pagar";
 	public static final String PLAZO_EDAD_ALCANZADA = "Plazo: Edad Alcanzada";
 	public static final String PLAZO = "Plazo";
+	public static final String PRODUCTO = "PRODUCTO:";
+	
 	public static final String POLIZA_NUMERO2 = "Póliza Número    :";
 
 	public static final String RFC_HASH = "R.F.C.:###";

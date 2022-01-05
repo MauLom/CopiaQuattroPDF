@@ -25,7 +25,8 @@ public class InbursaModel {
 		try {
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
-				modelo = new InbursaAutosModel(fn.caratula(1, 2, stripper, doc),
+				int fin = doc.getNumberOfPages() == 5 ? 4 : 2;
+				modelo = new InbursaAutosModel(fn.caratula(1, fin, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
 				break;
 			case 2:// Salud
