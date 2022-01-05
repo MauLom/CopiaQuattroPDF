@@ -1021,6 +1021,53 @@ public class DataToolsModel {
 		return dato;
 	}
 	
+	public int buscaMonedaEnTexto(String texto) {
+		int resultado = 0;
+		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP", "PESO", "DÓLARES","DOLARES","DÓLAR AMERICANO","DOLARES US","USD","DÓLARES SIN REVALUACIÓN","U.S.DOLLAR","UDIS","UDI","UVACS");
+		
+		for(String moneda: listMonedas) {
+			if(texto.toUpperCase().contains(moneda)) {
+				switch (moneda) {
+				case "NACIONAL":
+				case "NAL.":
+				case "PESOS":
+				case "PESO MEXICANO":
+				case "M.N.":
+				case "PESOS CON REVALUACIÓN ANUAL":
+				case "PESOS SIN REVALUACIÓN":
+				case "M.NAC":
+				case "PRIMA EN MONEDA NACIONAL":
+				case "MXP":
+				case "PESO":
+					resultado = 1;
+					break;
+				case "DÓLARES":
+				case "DOLARES":
+				case "DÓLAR AMERICANO":
+				case "DOLARES US":
+				case "USD":
+				case "DÓLARES SIN REVALUACIÓN":
+				case "U.S.DOLLAR":
+					resultado = 2;
+					break;
+				case "UDIS":
+				case "UDI":
+					resultado = 3;
+					break;
+				case "UVACS":
+					resultado = 4;
+					break;
+				default:
+					resultado = 5;
+					break;
+
+				}
+			}
+			
+		}
+	return resultado;
+		
+	}
 	public String obtenerFecha(String texto) {
 		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_FECHA);
 		Matcher matcher = pattern.matcher(texto);
