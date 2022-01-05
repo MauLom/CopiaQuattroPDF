@@ -131,7 +131,6 @@ public class MapfreDiversosModel {
 			}
 
 			// cp
-			inicio = contenido.indexOf("C.P.:");
 			modelo.setCp(fn.obtenerCPRegex(contenido));
 
 			// cte_direccion
@@ -252,7 +251,7 @@ public class MapfreDiversosModel {
 			}
 
 			// renovacion
-			inicio = inicontenido.indexOf("SUMA ASEGURADA DEDUCIBLE");
+			inicio = inicontenido.indexOf("SUMA ASEGURADA  DEDUCIBLE");
 			fin = inicontenido.indexOf("ABREVIATURAS");
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -261,11 +260,11 @@ public class MapfreDiversosModel {
 				resultado = "";
 				for (String x : newcontenido.split("\r\n")) {
 					if (!x.contains("BIENES Y RIESGOS CUBIERTOS") && !x.contains("---") && !x.contains("DEDUCIBLE")) {
-						resultado = x.trim();
-						resultado = fn.remplazaGrupoSpace(resultado.trim());
+						resultado = fn.gatos(x.replaceAll("  +", "###").trim());
 						resultado = resultado.replace("A.###MIN", "A. MIN").replace("###DSMG", " DSMG")
 								.replace(".###MIN", ". MIN").replace(".###MAX", ". MAX");
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+
 						switch (resultado.split("###").length) {
 						case 2:
 							cobertura.setNombre(resultado.split("###")[0].trim());
@@ -295,7 +294,7 @@ public class MapfreDiversosModel {
 					}
 				}
 			} else {// SEGUNDO CASO
-				inicio = inicontenido.indexOf("BIENES Y RIESGOS");
+				inicio = inicontenido.indexOf("SECCIÓN   BIENES Y RIESGOS");
 				fin = inicontenido.indexOf("ABREVIATURAS");
 
 				if (fin == -1) {
@@ -313,7 +312,6 @@ public class MapfreDiversosModel {
 					resultado = "";
 					for (String x : newcontenido.split("\r\n")) {
 						if (!x.contains("SUMA ASEGURADA") && !x.contains("---")) {
-
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 							x = fn.gatos(x.replaceAll("  +", "###").trim());
 							x = x.replace("###$###", "###$ ");
@@ -400,10 +398,8 @@ public class MapfreDiversosModel {
 
 				// cp
 				if (resultado.contains(", C.P.")) {
-
-					ubicacion.setCp(resultado.split("\r\n")[0].split(", C.P.")[1].replace(".", "").trim());
+					ubicacion.setCp(resultado.split(", C.P.")[1].replace(".", "").split("\r\n")[0].trim());
 				}
-
 				// calle
 				// colonia
 				// no_externo
@@ -441,18 +437,17 @@ public class MapfreDiversosModel {
 				if (inicio == -1) {
 					inicio = contenido.indexOf("CARACTERÍSTICAS");
 				}
+
 				if (inicio > -1) {
 					newcontenido = contenido.substring(inicio, contenido.indexOf(".", inicio)).split(":")[1]
 							.replace("\r\n", "").replace("CONSTRUCCION", "CONSTRUCCIÓN").trim();
-					fin = newcontenido.lastIndexOf(" Y ");
+					fin = newcontenido.lastIndexOf(" Y");
 					if (fin > -1) {
-
-						resultado = newcontenido.substring(0, fin).split("CONSTRUCCIÓN MUROS")[1].trim();
+						resultado = newcontenido.substring(0, fin).split("CONSTRUCCIÓN MURO")[1].trim();
 						ubicacion.setMuros(fn.material(resultado));
 
 						resultado = newcontenido.substring(fin + 3, newcontenido.length()).replace("TECHO DE", "")
 								.trim();
-
 						ubicacion.setTechos(fn.material(resultado));
 					}
 				}
@@ -577,6 +572,8 @@ public class MapfreDiversosModel {
 						recibosList.add(recibo);
 					}
 				}
+				break;
+			default:
 				break;
 			}
 			modelo.setRecibos(recibosList);
