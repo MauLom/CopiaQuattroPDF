@@ -2,12 +2,15 @@ package com.copsis.models.atlas;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class AtlasVidaModel {
@@ -16,7 +19,8 @@ public class AtlasVidaModel {
 		private EstructuraJsonModel modelo = new EstructuraJsonModel();
 		// Varaibles
 		private String contenido = "";
-
+		private static final String COBERTURA_SUMA = "Cobertura###Suma Asegurada";
+		
 		public AtlasVidaModel(String contenido) {
 			this.contenido = contenido;
 			
@@ -31,6 +35,8 @@ public class AtlasVidaModel {
 			antcontenido = fn.fixContenido(contenido);
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido =contenido.replace("las 12:00 Hrs.del", "");
+			contenido = Pattern.compile("Plan", Pattern.CASE_INSENSITIVE).matcher(contenido).replaceFirst("PLAN");
+
 			try {
 				//tipo
 				modelo.setTipo(5);
@@ -40,7 +46,7 @@ public class AtlasVidaModel {
 				
 				//Datos del Contrantante
 				inicio = contenido.indexOf("PÓLIZA");
-	            fin = contenido.indexOf("Asegurado");
+	            fin = contenido.indexOf("Coberturas y Primas");
 
 	            
 	            if(inicio > 0 && fin > 0 && inicio < fin) {
@@ -79,8 +85,8 @@ public class AtlasVidaModel {
 						if(newcontenido.split("\n")[i].contains("IVA:")) {
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("IVA:")[1].replace("###", ""))));
 						}					
-						if(newcontenido.split("\n")[i].contains("PLAN:")) {
-							modelo.setPlan(newcontenido.split("\n")[i].split("PLAN:")[1].replace("###", ""));
+						if(newcontenido.split("\n")[i].contains("PLAN")) {
+							modelo.setPlan(newcontenido.split("\n")[i].split("PLAN")[1].replace("###", ""));
 						}
 						if(newcontenido.split("\n")[i].contains("CP")) {
 							modelo.setCp(newcontenido.split("\n")[i].split("CP")[1].replace("###", ""));
@@ -239,13 +245,45 @@ public class AtlasVidaModel {
 					else modelo.setAgente(newcontenido);
 				}
 				
-
+				//Coberturas
+				obtenerCoberturas();
 				return modelo;
 			} catch (Exception ex) {
 				modelo.setError(
 						AtlasVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 				return modelo;
 			}
+			
+		}
+		
+		private void obtenerCoberturas() {
+			int fin = -1;
+			
+			if(contenido.indexOf(COBERTURA_SUMA) >-1) {
+				String newContenido = contenido.split(COBERTURA_SUMA)[1];
+				fin = newContenido.indexOf("@@@");
+				
+				if(fin>-1) {
+					newContenido = newContenido.substring(0,fin).replace("\r", "");
+					List<String> listContenido = Arrays.asList(newContenido.split("\n"));
+					
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					listContenido.forEach(texto ->{
+						if(!texto.contains(COBERTURA_SUMA) && !texto.contains("Prima")) {
+							String[] valores = texto.split("###");
+							if(valores.length> 2) {
+								EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+								cobertura.setNombre(valores[0]);
+								cobertura.setSa(valores[1]);
+								coberturas.add(cobertura);
+							}
+						}
+					});
+					modelo.setCoberturas(coberturas);
+				}
+			}
+			
+			
 			
 		}
 
