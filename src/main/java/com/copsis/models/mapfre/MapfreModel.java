@@ -17,6 +17,7 @@ public class MapfreModel {
 	private PDDocument doc;
 	private String contenido;
 	private int pagFin = 0;
+	private int tipo  = 0;
 
 
 	public MapfreModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
@@ -28,7 +29,12 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
-			switch (fn.tipoPoliza(contenido)) {
+			tipo =fn.tipoPoliza(contenido);
+			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
+				tipo =5;
+			}
+			switch (tipo) {
+			
 			case 1:// Autos
 				if (contenido.contains("CONTRATANTE Y CONDUCTOR" ) || contenido.contains("INFORMACIÓN GENERAL")) {
 					pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");
@@ -44,21 +50,23 @@ public class MapfreModel {
 				break;
 				
 			case 2://Salud
-
-				if(contenido.contains("INFORMACIÓN GENERAL") && (contenido.contains("COBERTURAS Y SERVICIOS") || contenido.contains("ASEGURADO TITULAR") )) {
-					modelo = new MapfreSaludRojoModel(fn.caratula(1, 5, stripper, doc)).procesar();
-				}else {
-					modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
-				}
-			
+				
+					if(contenido.contains("INFORMACIÓN GENERAL") && (contenido.contains("COBERTURAS Y SERVICIOS") || contenido.contains("ASEGURADO TITULAR") )) {
+						modelo = new MapfreSaludRojoModel(fn.caratula(1, 5, stripper, doc)).procesar();
+					}else {
+						modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+					}
 				
 				break;
 			case 4://Diversos
 				modelo = new MapfreDiversosModel(fn.caratula(1, 37, stripper, doc),"","").procesar();
 				break;
 			case 5://vida
-				modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();
-				
+				if(contenido.contains("ACCIDENTES PERSONALES")) {
+					 modelo = new MapfreVidaCModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				}else {
+					 modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+				}
 				break;
 			}
 			
