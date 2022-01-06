@@ -58,6 +58,9 @@ public class MapfreModel {
 					}
 				
 				break;
+			case 4://Diversos
+				modelo = new MapfreDiversosModel(fn.caratula(1, 37, stripper, doc),"","").procesar();
+				break;
 			case 5://vida
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
 					 modelo = new MapfreVidaCModel(fn.caratula(1, 5, stripper, doc)).procesar();
