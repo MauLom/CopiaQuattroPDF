@@ -28,7 +28,6 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
-
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 				if (contenido.contains("CONTRATANTE Y CONDUCTOR" ) || contenido.contains("INFORMACIÓN GENERAL")) {
@@ -53,6 +52,9 @@ public class MapfreModel {
 				}
 			
 				
+				break;
+			case 4://Diversos
+				modelo = new MapfreDiversosModel(fn.caratula(1, 37, stripper, doc),"","").procesar();
 				break;
 			case 5://vida
 				modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();

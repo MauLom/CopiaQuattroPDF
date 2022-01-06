@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
+
 public class DataToolsModel {
 	DateTimeFormatter formatter;
 	SimpleDateFormat simpleDateFormat;
@@ -1066,4 +1068,44 @@ public class DataToolsModel {
 	return resultado;
 		
 	}
+	public String obtenerFecha(String texto) {
+		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_FECHA);
+		Matcher matcher = pattern.matcher(texto);
+		return matcher.find() ? matcher.group() : "";
+	}
+	
+	public String obtenerPolizaRegex(String texto,int lengthNumPoliza) {
+		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_POLIZA);
+		Matcher matcher = pattern.matcher(texto);
+		String result = matcher.find() ? matcher.group(3).trim():"";
+	
+		if (result.length() < lengthNumPoliza) {
+			int inicio = matcher.start();
+			result = texto.substring(inicio + 14, inicio + 60).split("\r\n")[0].replace(":", "").replace(" ", "")
+					.trim();
+		}
+		return result;
+	}
+	
+	public String obtenerCPRegex(String texto) {
+		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_CP);
+		Matcher matcher = pattern.matcher(texto);
+		String result = matcher.find() ? matcher.group(3).trim() : "";
+		if(result.length()> 0 && result.length() < 5 ) {
+			int inicio = matcher.start();
+			result = texto.substring(inicio, inicio + 30).split("\r\n")[0].split(":")[1].replace(" ", "")
+					.trim();
+		}
+		return result;
+	}
+	
+	public List<String> obtenerListNumeros(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile("-?\\d+(,\\d+)*?\\.[0-9]?\\d+?").matcher(cadena);
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}	
+
 }
