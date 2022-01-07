@@ -830,7 +830,8 @@ public class DataToolsModel {
 				"AUTO INDIVIDUAL",
 				"VEHÍCULO",
 				"SEGURO DE AUTOS",
-				"CONTRATANTE Y CONDUCTOR",				
+				"CONTRATANTE Y CONDUCTOR",
+				"CUATRIMOTOS",
 				"ACCIDENTES PERSONALES",
 				"GASTOS M", "TRADICIONALES DE VIDA","GASTOS MÉDICOS MAYORES",
 				"GASTOS MÉDICOS","TECHOS",
@@ -854,6 +855,7 @@ public class DataToolsModel {
 				case "AUTOS":
 				case "CONTRATANTE Y CONDUCTOR":
 				case "VEHÍCULO":
+				case "CUATRIMOTOS":
 					dato = 1;
 					encontro = true;
 					break;
