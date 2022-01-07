@@ -47,11 +47,11 @@ public class MapfreAutosBModel {
 			modelo.setTipo(1);
 			modelo.setCia(22);
 
-
-			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
+ 	        inicio = contenido.indexOf("TIPO DE DOCUMENTO:");
 			if(inicio == -1) {
 				inicio = contenido.indexOf("SEGURO DE MOTOCICLETAS");
 			}
+			 
 			fin = contenido.indexOf("Coberturas Amparadas");
 			
 			if(fin == -1) {

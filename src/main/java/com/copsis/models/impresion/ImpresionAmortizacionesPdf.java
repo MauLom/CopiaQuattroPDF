@@ -1,18 +1,27 @@
 package com.copsis.models.impresion;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.dto.AmortizacionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
+import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
@@ -34,7 +43,7 @@ public class ImpresionAmortizacionesPdf {
 	private List<Float> paddingBody = new ArrayList<>();
 	private List<Float> paddingBody2 = new ArrayList<>();
 	private float yStartNewPage = 760;
-	private float yStart = 770;
+	private float yStart = 670;
 	private float bottomMargin = 26;
 	private float fullWidth = 564;
 	float height = 0;
@@ -111,6 +120,8 @@ public class ImpresionAmortizacionesPdf {
 						BaseTable table2;
 						Row<PDPage> baseRow2;
 
+						// Logo
+						getLogo(document, page);
 						// PRODUCTO
 						getEncabezadoPdf(document, page , impresionForm);
 						// ENCABEZADO TABLA//
@@ -126,6 +137,9 @@ public class ImpresionAmortizacionesPdf {
 						while(x < listAmortizacion.size()) {
 							
 							AmortizacionDTO amortizacionDTO = listAmortizacion.get(x);
+							if (x % 12 == 0 && x != (listAmortizacion.size()- 1)) {
+								amortizacionDTO.setSeguroDanos(listAmortizacion.get(0).getSeguroDanos());
+							}
 							
 							acomula = true;
 							// CREACION CUERPO DE PDF
@@ -139,33 +153,40 @@ public class ImpresionAmortizacionesPdf {
 								// CRACION NUEVA PAGINA
 								page = new PDPage();
 								document.addPage(page);
-																
+								// Logo
+								
+								getLogo(document, page);
 								// PRODUCTO
 								getEncabezadoPdf(document, page, impresionForm);
 								// ENCABEZADO TABLA//
 								getEncabezadoTabla(document, page);
 							
 								// BORDE DEL CUERPO DE LA TABLA EN NUEVA PAGINA
-								table2 = new BaseTable(650, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-								baseRow2 = communsPdf.setRow(table2, 620);
+								table2 = new BaseTable(610, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+								baseRow2 = communsPdf.setRow(table2, 580);
 								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
-								table2.draw();	
+								table2.draw();
+								//marcaAgua
+								getMarcaAgua(document, page);
 								
 								acomula = false;
 								
 							} else {
 								if(x == 0) {
 									// BORDE DEL CUERPO DE TABLA PRIMER PAGINA
-									table2 = new BaseTable(650, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-									baseRow2 = communsPdf.setRow(table2, 620 );
+									table2 = new BaseTable(610, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+									baseRow2 = communsPdf.setRow(table2, 580);
 									communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
-									table2.draw();	
+									table2.draw();
+									//marcaAgua
+									getMarcaAgua(document, page);
 								}
 								// PINTA LA DATA DE LA TABLA
 								table.draw();
 								yStart -= table.getHeaderAndDataHeight();
 								heightBorder = height -yStart;
 							}
+							
 							if(acomula) {								
 								x++;
 							} 
@@ -191,7 +212,7 @@ public class ImpresionAmortizacionesPdf {
 			
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 20);
-			communsPdf.setCell(baseRow,3, String.valueOf(amortizacionDTO.getId()), black, isBold, "C", 8, cellStyle, "", paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,3, String.valueOf(amortizacionDTO.getId()+1), black, isBold, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			
 			communsPdf.setCell(baseRow,1,"$", black, true, "C", 8, cellStyle, "", paddingBody2,bgColor);	
 			communsPdf.setCell(baseRow,11,amortizacionDTO.getSeguroDanos().toString().equals("0.0")? "" : formatoDinero(amortizacionDTO.getSeguroDanos())  , black, true, "R", 8, cellStyle, "", paddingBody,bgColor);
@@ -224,12 +245,27 @@ public class ImpresionAmortizacionesPdf {
 		}
 	}
 	
+	private void getMarcaAgua(PDDocument document, PDPage page) {
+		try (PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND,true,true )) {
+
+			URL marcaAgua = new URL("https://storage.googleapis.com/sio4/BiiBiiC/MarcaAguaScotia/img_informativo2.png");
+			BufferedImage imgMar = ImageIO.read(marcaAgua);
+			PDImageXObject pdImage2 = LosslessFactory.createFromImage(document, imgMar);
+			
+			content.drawImage(pdImage2, 20, 30, 612, 792);
+			
+		} catch (Exception e) {
+		throw new GeneralServiceException("Error:", e.getMessage());
+		}
+	}
+	
 	
 	private void getEncabezadoTabla(PDDocument document, PDPage page)   {
 		try {
+			
 			BaseTable table;
 			Row<PDPage> baseRow;
-			yStart = 670;
+			yStart = 630;
 			height = yStart;
 			
 			
@@ -264,7 +300,7 @@ public class ImpresionAmortizacionesPdf {
 		try {
 			BaseTable table;
 			Row<PDPage> baseRow;
-			yStart = 770;
+			yStart = 730;
 			String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
 	  
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
@@ -308,6 +344,22 @@ public class ImpresionAmortizacionesPdf {
 		}
 	}
 	
+	private void getLogo(PDDocument document, PDPage page)   {
+		try {
+			BaseTable table;
+			Row<PDPage> baseRow;
+			yStart = 780;
+			height = yStart;
+			
+			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
+			baseRow = communsPdf.setRow(table, 35);
+			communsPdf.setCell(baseRow,30, ImageUtils.readImage("https://storage.googleapis.com/sio4/BiiBiiC/LogoScotiaBank.png"));
+			table.draw();
+			
+		} catch (Exception e) {
+			throw new GeneralServiceException("Error=>", e.getMessage());
+		}
+	}
 	
 	
 	
