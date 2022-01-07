@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -25,7 +26,7 @@ public class AxaVidaModel {
 	}
 
 	public EstructuraJsonModel procesar() {
-		StringBuilder resultado = new StringBuilder();
+	
 	
 		String newcontenido = "";
 		int inicio = 0;
@@ -46,6 +47,10 @@ public class AxaVidaModel {
 			 newcontenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 			 
 			 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				  if(newcontenido.split("\n")[i].contains("CARATULA DE POLIZA")) {
+					  modelo.setPlan(newcontenido.split("\n")[i+2]);
+				  }
+						 
 				
 				 if(newcontenido.split("\n")[i].contains("Contratante") && newcontenido.split("\n")[i].contains("Póliza")) {					
 					 modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza")[1].split("###")[1]);
@@ -170,7 +175,29 @@ public class AxaVidaModel {
 				     }
 				     modelo.setCoberturas(coberturas);
 				}
+				
+				//Asegurado
+		
 
+				inicio = contenido.indexOf("Datos del Asegurado");
+				fin = contenido.indexOf("Datos de la Póliza ");				
+				if (inicio > -1 && fin > -1 && inicio < fin) {
+						newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+						List<EstructuraAseguradosModel> asegurados = new ArrayList<>();						
+						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+						for (int i = 0; i < newcontenido.split("\n").length; i++) {
+							if(newcontenido.split("\n")[i].contains("Nombre") && newcontenido.split("\n")[i].contains("Edad") ){
+								asegurado.setNombre(newcontenido.split("\n")[i].split("Nombre")[1].split("Edad")[0].replace("###", "").trim());
+								asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("Edad")[1].replace("###", "").trim()));
+							}
+							if(newcontenido.split("\n")[i].contains("Nacimiento")) {
+								String fecha = newcontenido.split("\n")[i].split("Nacimiento")[1].split("Edad")[0].replace("###", "").replace("de", "-").replace(" ", "");
+							   asegurado.setNacimiento(fn.formatDateMonthCadena(fecha));							
+							}
+						}
+						asegurados.add(asegurado);
+						modelo.setAsegurados(asegurados);											
+					}
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
