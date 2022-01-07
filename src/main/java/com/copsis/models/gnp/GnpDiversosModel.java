@@ -477,6 +477,7 @@ public class GnpDiversosModel {
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 			inicio = contenido.indexOf(ConstantsValue.DESCRIPCION_MOVIMIENTO);
 			fin = contenido.indexOf("Ubicado a Más");
+
 			if (inicio > -1 && fin > inicio) {
 
 				resultado = new StringBuilder();
@@ -673,6 +674,35 @@ public class GnpDiversosModel {
 
 				}
 			}
+			
+			if(modelo.getUbicaciones().isEmpty()) {
+			
+				
+				inicio = contenido.indexOf("Asegurado y ubicación");
+				fin = contenido.indexOf("Prima del movimiento");
+				
+				newcontenido = new StringBuilder();
+				if(inicio > -1 && fin >  -1 && inicio < fin )
+								newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").trim());
+	
+				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {									
+	
+					if(newcontenido.toString().split("\n")[i].contains("CALLE")) {				
+						ubicacion.setCalle(newcontenido.toString().split("\n")[i].split(" ")[1]);
+						ubicacion.setNoInterno(newcontenido.toString().split("\n")[i].split(" ")[2]);
+						ubicacion.setCp(newcontenido.toString().split("\n")[i].split(" ")[3].replace(",", "").trim());						
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Tipo constructivo")) {
+			           ubicacion.setMuros(fn.material(newcontenido.toString().split("\n")[i].split("###")[1]));
+					}
+								
+				}
+				ubicaciones.add(ubicacion);
+				modelo.setUbicaciones(ubicaciones);
+				
+			}
+			
 
 			// **************************************RECIBOS
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
