@@ -129,8 +129,9 @@ public class primeroAutosModel {
 	            
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-	                for (int i = 0; i < newcontenido.split("\n").length; i++) {                  
-	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de Expedición###Subtotal###IVA###Total")) {
+	                for (int i = 0; i < newcontenido.split("\n").length; i++) {  
+	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de") &&
+	                    	newcontenido.split("\n")[i].contains("Subtotal###IVA###Total")) {
 	                        modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
 	                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[1])));
 	                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[2])));
@@ -185,7 +186,7 @@ public class primeroAutosModel {
 	                            EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                            cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 	                            cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
-	                            if (newcontenido.split("\n")[i].split("###").length > 2) {
+	                            if (newcontenido.split("\n")[i].split("###").length == 3 || newcontenido.split("\n")[i].split("###").length == 4) {
 	                                cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
 	                            }
 	                            coberturas.add(cobertura);
