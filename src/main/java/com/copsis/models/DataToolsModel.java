@@ -569,6 +569,7 @@ public class DataToolsModel {
 			break;
 		case "CONY.":
 		case "CONYUGE":
+		case "CÓNYUGE":
 			dato = 2;
 			break;
 		case "HIJO":
@@ -596,6 +597,7 @@ public class DataToolsModel {
 		case "HERMANO":
 		case "SUEGRA":
 		case "ABUELO":
+		case "PADRE-MADRE":
 			dato = 4;
 			break;
 		default:
