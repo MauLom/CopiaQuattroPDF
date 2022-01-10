@@ -31,12 +31,12 @@ public class PrimeroDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
-	
+    
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
-	                		if(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###").length > 1) {
+	                		if(newcontenido.split("\n")[i].contains("###")) {
 	                			modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1]);
 	                		}else {
@@ -76,7 +76,6 @@ public class PrimeroDiversosModel {
 			   
 	            inicio = contenido.indexOf("Prima Neta");
 	            fin = contenido.indexOf("EN CASO DE SINIESTRO");
-	            
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
@@ -94,7 +93,8 @@ public class PrimeroDiversosModel {
 
 	                }
 	            }
-
+	            obtenerAgente();
+	            obtenerTextoDiversos();
 			
 	            inicio = contenido.indexOf("Datos del Riesgo");
 				fin = contenido.indexOf("Coberturas");
@@ -179,5 +179,22 @@ public class PrimeroDiversosModel {
 		} catch (Exception e) {
 		  return modelo;
 		}
+	}
+	
+	private void obtenerAgente() {
+        int inicio = contenido.indexOf("AVISO DE PRIVACIDAD");
+        int fin = contenido.indexOf("Nombre del Agente");
+        String newContenido = "";
+        if (inicio > 0 && fin > 0 && inicio < fin) {
+        	newContenido = contenido.substring(inicio,fin).replace("@@@", "");
+        	if(newContenido.split("\n").length>1) {
+        		modelo.setAgente(newContenido.split("\n")[newContenido.split("\n").length-1].replace("\r", ""));
+        	}
+        }
+	}
+	
+	private void obtenerTextoDiversos() {
+		int inicio = contenido.indexOf("Datos del Embarque");
+		int fin = contenido.indexOf("Coberturas Amparadas");
 	}
 }
