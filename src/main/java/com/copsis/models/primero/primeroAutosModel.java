@@ -31,13 +31,20 @@ public class primeroAutosModel {
 			modelo.setCia(49);
 			modelo.setTipo(1);
 			modelo.setInciso(1);
-
+			//Fecha de Emisión
+			inicio = contenido.indexOf("Fecha de Emisión");
+			fin = contenido.indexOf("Datos generales");
+			if(inicio>-1 && fin>-1 && inicio<fin) {
+				 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				 modelo.setFechaEmision(fn.formatDate(fn.obtenerFecha(newcontenido),"dd-MM-yy"));
+			}
 			inicio = contenido.indexOf("Datos generales");
 			fin = contenido.indexOf("Coberturas Amparadas");
 			
 			
 		      if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "");
+
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Cp.")) {
 	                        modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
@@ -63,11 +70,11 @@ public class primeroAutosModel {
 	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1].trim()));
 	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));
-	                            modelo.setFechaEmision(modelo.getVigenciaDe());
+	                            modelo.setFechaEmision(modelo.getFechaEmision().isBlank()? modelo.getVigenciaDe():modelo.getFechaEmision());
 	                        } else {
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
 	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[4].trim()));
-	                            modelo.setFechaEmision(modelo.getVigenciaDe());
+	                            modelo.setFechaEmision(modelo.getFechaEmision().isBlank()? modelo.getVigenciaDe():modelo.getFechaEmision());
 	                        }
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Clave") && newcontenido.split("\n")[i].contains("Marca")) {
@@ -75,7 +82,15 @@ public class primeroAutosModel {
 	                        modelo.setMarca(newcontenido.split("\n")[i + 1].split("###")[1].split("-")[0]);
 	                        modelo.setDescripcion(newcontenido.split("\n")[i + 1].split("###")[1].split("-")[1]);
 	                        modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i + 1].split("###")[2]));
+	                    }else if(newcontenido.split("\n")[i].contains("Marca de Fábrica")&& newcontenido.split("\n")[i].contains("Descripción")) {
+	                    	modelo.setMarca(newcontenido.split("\n")[i + 2].split("###")[1].split("-")[0].trim());
+	                        modelo.setDescripcion(newcontenido.split("\n")[i + 2].split("###")[1].split("-")[1].trim());
 	                    }
+	                    
+	                    if(modelo.getModelo() == 0 && newcontenido.split("\n")[i].contains("Modelo") && newcontenido.split("\n")[i].contains("###")) {
+	                    	modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo")[1].split("###")[1]));
+	                    }
+	                    
 	                    if (newcontenido.split("\n")[i].contains("Placas") && newcontenido.split("\n")[i].contains("Serie")) {
 
 	                        if (newcontenido.split("\n")[i + 1].split("###").length == 4) {
@@ -86,6 +101,8 @@ public class primeroAutosModel {
 	                            modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[2]);
 	                        }
 
+	                    }else if(newcontenido.split("\n")[i].contains("Serie")) {
+	                    	modelo.setSerie(newcontenido.split("\n")[i].split("Serie")[1].split("\n")[0].replace("###", ""));
 	                    }
 	                }
 	            }
@@ -99,7 +116,10 @@ public class primeroAutosModel {
 	                      if(newcontenido.split("\n")[i].contains("VEHICULOS")){
 	                          modelo.setPoliza(newcontenido.split("\n")[i].split("VEHICULOS")[1].replace("###", "").replace("-", ""));
 	                           modelo.setPolizaGuion(newcontenido.split("\n")[i].split("VEHICULOS")[1].replace("###", ""));
-	                      }
+	                      }else if(newcontenido.split("\n")[i].contains("CUATRIMOTOS") && newcontenido.split("\n")[i-1].split("###").length>0) {
+		                    	modelo.setPolizaGuion(newcontenido.split("\n")[i-1].split("###")[1]);
+		                    	modelo.setPoliza(newcontenido.split("\n")[i-1].split("###")[1].replace("-", ""));
+		                    }
 	                  }
 	            }
 	            
@@ -109,8 +129,9 @@ public class primeroAutosModel {
 	            
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-	                for (int i = 0; i < newcontenido.split("\n").length; i++) {                  
-	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de Expedición###Subtotal###IVA###Total")) {
+	                for (int i = 0; i < newcontenido.split("\n").length; i++) {  
+	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de") &&
+	                    	newcontenido.split("\n")[i].contains("Subtotal###IVA###Total")) {
 	                        modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
 	                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[1])));
 	                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[2])));
@@ -139,6 +160,15 @@ public class primeroAutosModel {
 	                }
 	            }
 	            
+	            inicio = contenido.indexOf("AVISO DE PRIVACIDAD");
+	            fin = contenido.indexOf("Nombre del Agente");
+
+	            if (inicio > 0 && fin > 0 && inicio < fin) {
+	            	newcontenido = contenido.substring(inicio,fin).replace("@@@", "");
+	            	if(newcontenido.split("\n").length>1) {
+	            		modelo.setAgente(newcontenido.split("\n")[newcontenido.split("\n").length-1].replace("\r", ""));
+	            	}
+	            }
 	            
 	            //Coberturas
 	            inicio = contenido.indexOf("Coberturas Amparadas");
@@ -149,18 +179,18 @@ public class primeroAutosModel {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-	                    if (newcontenido.split("\n")[i].split("###")[0].contains("Coberturas Amparadas") || newcontenido.split("\n")[i].split("###")[0].contains("Coberturas")) {
-	                    } else {
-	                        if (newcontenido.split("\n")[i].split("###").length > 1) {
+						if (!newcontenido.split("\n")[i].split("###")[0].contains("Coberturas Amparadas")
+								&& !newcontenido.split("\n")[i].split("###")[0].contains("Coberturas")
+								&& !newcontenido.split("\n")[i].contains("Responsabilidad###Deducible")) {
+	                    	if (newcontenido.split("\n")[i].split("###").length > 1) {
 	                            EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                            cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 	                            cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
-	                            if (newcontenido.split("\n")[i].split("###").length == 4) {
+	                            if (newcontenido.split("\n")[i].split("###").length == 3 || newcontenido.split("\n")[i].split("###").length == 4) {
 	                                cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
 	                            }
 	                            coberturas.add(cobertura);
 	                        }
-
 	                    }
 	                }
 	                modelo.setCoberturas(coberturas);

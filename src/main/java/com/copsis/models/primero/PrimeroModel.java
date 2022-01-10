@@ -31,7 +31,7 @@ public class PrimeroModel {
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:// Autos
 	
-				if(contenido.contains("Motor")) {
+				if(contenido.contains("Motor") || contenido.contains("Serie")) {
 					modelo  = new primeroAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				}else {
 					modelo  = new PrimeroAutosBModel(fn.caratula(1, 3, stripper, doc)).procesar();	
