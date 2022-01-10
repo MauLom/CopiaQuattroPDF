@@ -179,18 +179,27 @@ public class MapfreSaludRojoModel {
 			
 			 if(modelo.getAsegurados().isEmpty()) {
 				 newcontenido = contenido.split("RIESGO###NOMBRES###SEXO###EDAD###PARENTESCO###FECHA DE###ANTIGÜEDAD")[1].split("FECHAS###DE###ANTIGÜEDAD")[0];
-				 
+				 String[] arrNewContenido = newcontenido.split("\r\n");
+				 StringBuilder nombre;
 				 List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				 for (String a : newcontenido.split("\r\n")) {
+				 
+				 for (int i=0; i< arrNewContenido.length;i++) {
 	                    EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-	                    if(a.split("-").length > 3) {
-	                    	 int sp = a.split("###").length;
-	                         if (sp == 7) {	         	                
-	 	                    	asegurado.setNombre(a.split("###")[1].replace("@@@", "").trim());
-	 	                    	asegurado.setSexo(fn.sexo(a.split("###")[2]) ? 1:0);
-	 	                    	asegurado.setParentesco(fn.parentesco(a.split("###")[4]));
-	 	                    	asegurado.setNacimiento(fn.formatDateMonthCadena(a.split("###")[5]));
-	 	                    	asegurado.setFechaAlta(fn.formatDateMonthCadena(a.split("###")[6]));
+	                    if(arrNewContenido[i].split("-").length > 3) {
+	                    	 int sp = arrNewContenido[i].split("###").length;
+	                         if (sp == 7) {	         	  
+	                        	nombre = new StringBuilder();
+	 	                    	nombre.append(arrNewContenido[i].split("###")[1].replace("@@@", "").trim());
+	 	                    	if(!arrNewContenido[i+1].contains("#")) {
+	 	                    		nombre.append(" ");
+	 	                    		nombre.append(arrNewContenido[i+1].replace("@@@","").replace("\r", "").trim());
+	 	                    	}
+	 	                    	asegurado.setNombre(nombre.toString());
+	 	                    	asegurado.setSexo(fn.sexo(arrNewContenido[i].split("###")[2]) ? 1:0);
+	 	                    	asegurado.setParentesco(fn.parentesco(arrNewContenido[i].split("###")[4]));
+	 	                    	asegurado.setNacimiento(fn.formatDateMonthCadena(arrNewContenido[i].split("###")[5]));
+	 	                    	asegurado.setFechaAlta(fn.formatDateMonthCadena(arrNewContenido[i].split("###")[6].replace("\r", "")));
+	 	                    	
 	 	                    	asegurados.add(asegurado);
 	 	                       
 	 	                    }
