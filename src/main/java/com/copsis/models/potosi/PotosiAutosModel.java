@@ -172,9 +172,8 @@ public class PotosiAutosModel {
 			
 			
 			return modelo;
-		} catch (Exception e) {
-			e.printStackTrace();
-					return modelo;
+		} catch (Exception e) {			
+			 return modelo;
 		}
 		
 	}
