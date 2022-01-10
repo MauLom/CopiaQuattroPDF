@@ -3,6 +3,7 @@ package com.copsis.models.qualitas;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -33,12 +34,15 @@ public class qualitasAutosModel {
 		 String texto = "";
 		 String subtxt = "";
 		 String newcontenido = "";
+		 String[] arrNewContenido;
 	
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
 				.replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición")
-				.replace("Servic i o :", "Servicio:");
+				.replace("Servic i o :", "Servicio:")
+				.replace("Dom i c il i o ", "Domicilio");
+
 		try {
 			// cia
 			modelo.setCia(29);
@@ -48,7 +52,6 @@ public class qualitasAutosModel {
 
 			// ramo
 			modelo.setRamo("Autos");
-
 
 			// fecha_emision
 			inicio = contenido.indexOf("IMPORTE TOTAL");
@@ -66,7 +69,7 @@ public class qualitasAutosModel {
 								x = x.split("A ")[1];
 								x = x.replace(" DE ", "-");
 								if (x.split("-").length > 2) {
-									modelo.setFechaEmision(fn.formatDate(x, "dd-MM-yy"));
+									modelo.setFechaEmision(fn.formatDate(x, ConstantsValue.FORMATO_FECHA));
 								}
 
 							}
@@ -83,20 +86,21 @@ public class qualitasAutosModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				arrNewContenido = newcontenido.split("\n");
+				for (int i = 0; i < arrNewContenido.length; i++) {
 
-					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES")) {
-						if ((i + 1) == newcontenido.split("\n").length) {
-							modelo.setPoliza(newcontenido.split("\n")[i].split("###")[1]);
-							modelo.setEndoso(newcontenido.split("\n")[i].split("###")[2]);
-							if (fn.isNumeric(newcontenido.split("\n")[i].split("###")[3].trim())) {
-								modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split("###")[3].trim()));
+					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().isBlank()) {
+						if ((i + 1) == arrNewContenido.length) {
+							modelo.setPoliza(arrNewContenido[i].split("###")[1]);
+							modelo.setEndoso(arrNewContenido[i].split("###")[2]);
+							if (fn.isNumeric(arrNewContenido[i].split("###")[3].trim())) {
+								modelo.setInciso(Integer.parseInt(arrNewContenido[i].split("###")[3].trim()));
 							}
 
 						} else {
-							modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[0]);
-							modelo.setEndoso(newcontenido.split("\n")[i + 1].split("###")[1]);
-							if (fn.isNumeric(newcontenido.split("\n")[i + 1].split("###")[2].trim())) {
+							modelo.setPoliza(arrNewContenido[i + 1].split("###")[0]);
+							modelo.setEndoso(arrNewContenido[i + 1].split("###")[1]);
+							if (fn.isNumeric(arrNewContenido[i + 1].split("###")[2].trim())) {
 								modelo.setInciso(
 										Integer.parseInt(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
 							}
@@ -106,11 +110,11 @@ public class qualitasAutosModel {
 					} else {
 						if (newcontenido.split("\n")[i].contains("ENDOSO")
 								&& newcontenido.split("\n")[i].contains("INCISO")) {
-							modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[0]);
-							modelo.setEndoso(newcontenido.split("\n")[i + 1].split("###")[1]);
-							if (fn.isNumeric(newcontenido.split("\n")[i + 1].split("###")[2].trim())) {
+							modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[0]);
+							modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
+							if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim())) {
 								modelo.setInciso(
-										Integer.parseInt(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
+										Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
 							}
 						}
 
@@ -227,7 +231,7 @@ public class qualitasAutosModel {
 						if (x.contains("Municipio:")) {
 							inicio = x.indexOf("Municipio:");
 							index = 10;
-							fin = x.indexOf("Estado:");
+							fin = x.indexOf("Estado:") > -1 ? x.indexOf("Estado:") : x.indexOf("Colonia") ;
 							if (inicio > -1 && fin > inicio) {
 								texto += ", " + x.substring(inicio + index, fin).replace("###", "").trim();
 							}
@@ -243,6 +247,8 @@ public class qualitasAutosModel {
 							texto += ", " + subtxt.split("Colonia")[0].replace("###", "").trim();
 						} else if (subtxt.contains("R.F.C.")) {
 							texto += ", " + subtxt.split("R.F.C.")[0].replace("###", "").trim();
+						}else {
+							texto += ", "+subtxt.trim();
 						}
 					}
 
@@ -257,7 +263,7 @@ public class qualitasAutosModel {
 
 				}
 			}
-			modelo.setCteDireccion(texto);
+			modelo.setCteDireccion(texto.trim());
 
 			// rfc
 			inicio = contenido.indexOf("R.F.C.:");
@@ -284,8 +290,9 @@ public class qualitasAutosModel {
 				fin = contenido.indexOf("VEHÍCULO ASEGURADO");
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {						
-						if(newcontenido.split("\n")[i].contains("R.F.C:")) {
+						if(newcontenido.split("\n")[i].split("R.F.C:").length>1) {
 							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("-", "").trim());
 						}
 					
@@ -423,10 +430,10 @@ public class qualitasAutosModel {
 			}
 
 			// renovacion
-			inicio = contenido.indexOf("RENUEVA A:");
+			inicio = contenido.indexOf("RENUEVA A");
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10))
-						.replace("###", "").replace("-", "").trim();
+						.replace("###", "").replace("-", "").replace(":", "").trim();
 				modelo.setRenovacion(newcontenido);
 			}
 
@@ -566,13 +573,15 @@ public class qualitasAutosModel {
 				if (newcontenido.contains("Plazo")) {
 					newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
 					if (newcontenido.length() == 11) {
-						modelo.setVigenciaA(fn.formatDate(newcontenido, "dd-MM-yy"));
+						modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
 					}
+				}else {
+					newcontenido = newcontenido.split("###").length>2 ?newcontenido.split("###")[1] : "";
+					modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
 				}
 			}
 			// vigencia_de
 			inicio = contenido.lastIndexOf("Desde las");
-			
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
 						.replace("del:", "del").replace("Servic  i o  :", "Servicio:").replace("Servic ###io:", "Servicio:");
@@ -581,7 +590,7 @@ public class qualitasAutosModel {
 					newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
 	
 					if (newcontenido.split("###").length == 2 ||( newcontenido.split("###").length == 1 && newcontenido.contains("-") )) {
-						newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), "dd-MM-yy");
+						newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), ConstantsValue.FORMATO_FECHA);
 						if (newcontenido.length() == 10) {
 							modelo.setVigenciaDe(newcontenido);
 						}
@@ -589,7 +598,7 @@ public class qualitasAutosModel {
 				} else {
 					if (newcontenido.contains("Hasta las")) {
 						newcontenido = newcontenido.split("Hasta las")[0].split("del")[1].replace("###", "").trim();
-						modelo.setVigenciaDe(fn.formatDate(newcontenido, "dd-MM-yy"));
+						modelo.setVigenciaDe(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
 						if (modelo.getVigenciaA().length() > 0) {
 						} else {
 
@@ -597,8 +606,10 @@ public class qualitasAutosModel {
 									.replace("del:", "del").replace("Servic  i o  :", "Servicio:");
 							modelo.setVigenciaA(
 									fn.formatDate(newcontenido.split("\r\n")[0].split("Hasta las")[1].split("del")[1]
-											.replace("###", "").trim(), "dd-MM-yy"));
+											.replace("###", "").trim(), ConstantsValue.FORMATO_FECHA));
 						}
+					}else if(newcontenido.contains("del") && newcontenido.split("###").length>1) {
+						modelo.setVigenciaDe(fn.formatDate(newcontenido.split("###")[1].trim(),ConstantsValue.FORMATO_FECHA));
 					}
 				}
 			}
@@ -638,7 +649,7 @@ public class qualitasAutosModel {
 
 			// marca
 			// descripcion
-			inicio = contenido.indexOf("VEHÍCULO ASEGURADO\r\n");
+			inicio = contenido.indexOf("VEHÍCULO ASEGURADO");
 			index = 20;
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index));
@@ -651,6 +662,9 @@ public class qualitasAutosModel {
 					newcontenido = newcontenido.split("###")[1].trim();
 					modelo.setMarca(newcontenido.split(" ")[0].trim());
 					modelo.setDescripcion(newcontenido);
+				}else if( !newcontenido.contains("#") && newcontenido.split(" ").length > 2) {
+					modelo.setMarca(newcontenido.split(" ")[1].trim());
+					modelo.setDescripcion(newcontenido.split(modelo.getMarca())[1].replace("\r", "").trim());
 				}
 			}
 

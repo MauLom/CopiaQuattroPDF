@@ -52,8 +52,12 @@ public class ChubbModel {
 									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
 
 						}
-						encontro = true;
-						break;
+						if(modelo.getVigenciaA().contains("-") && modelo.getVigenciaDe().contains("-") && modelo.getFormaPago() !=0 ) {
+							encontro = true;
+							break;
+						}
+						
+						
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":
 					case "Placas:":
