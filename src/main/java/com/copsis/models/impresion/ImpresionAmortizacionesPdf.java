@@ -212,7 +212,7 @@ public class ImpresionAmortizacionesPdf {
 			
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 20);
-			communsPdf.setCell(baseRow,3, String.valueOf(amortizacionDTO.getId()+1), black, isBold, "C", 8, cellStyle, "", paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,3, String.valueOf(amortizacionDTO.getId()), black, isBold, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			
 			communsPdf.setCell(baseRow,1,"$", black, true, "C", 8, cellStyle, "", paddingBody2,bgColor);	
 			communsPdf.setCell(baseRow,11,amortizacionDTO.getSeguroDanos().toString().equals("0.0")? "" : formatoDinero(amortizacionDTO.getSeguroDanos())  , black, true, "R", 8, cellStyle, "", paddingBody,bgColor);
