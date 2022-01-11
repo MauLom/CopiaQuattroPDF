@@ -37,8 +37,7 @@ public class BexmasSaludBModel {
 			fin = contenido.indexOf("Datos de los Asegurados");
 			
 			if(inicio >  -1 && fin > -1  &&  inicio < fin) {
-				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("12:00 HORAS", "").replace("ANUAL", "CONTADO")
-						.replace("SEMESTR","SEMESTRAL"));
+				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("12:00 HORAS", ""));
 				
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 				
