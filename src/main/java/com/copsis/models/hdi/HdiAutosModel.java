@@ -7,6 +7,7 @@ import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.itextpdf.text.log.SysoCounter;
 
 public class HdiAutosModel {
 	// Clases
@@ -180,7 +181,9 @@ public class HdiAutosModel {
 						modelo.setFormaPago(2);
 					}
 				}
-
+				if(modelo.getFormaPago() == 0) {
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido));
+				}
 			}
 
 			modelo.setMoneda(1);
