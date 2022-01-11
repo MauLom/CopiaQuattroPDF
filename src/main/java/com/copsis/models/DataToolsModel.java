@@ -1002,7 +1002,7 @@ public class DataToolsModel {
 				"MENSUALSR", "MENSUALS/R", "MENSUALS/R", "MEN.DER.PRORRATEA", "MENSUALVITRO", "MENSUALS/RDERP",
 				"MEN.S/REC.", "MENSUALS-R", "QUIN", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO" };
 		for (String tipo : tiposP) {	
-			if (x.toUpperCase().contains(tipo+" ")) {
+			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
 				case "CONT":
 				case CONTADO:

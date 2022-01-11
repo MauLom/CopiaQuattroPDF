@@ -89,7 +89,7 @@ public class qualitasAutosModel {
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
 
-					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().isBlank()) {
+					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length()==0) {
 						if ((i + 1) == arrNewContenido.length) {
 							modelo.setPoliza(arrNewContenido[i].split("###")[1]);
 							modelo.setEndoso(arrNewContenido[i].split("###")[2]);
