@@ -143,7 +143,6 @@ public class PotosiAutosModel {
 	            if (inicio > -1 && fin > -1 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	                newcontenido .append(contenido.substring(inicio, fin).replace("@@@", ""));
-	                System.out.println(newcontenido);
 	                for (String x : newcontenido.toString().split("\r\n")) {
 	                  	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                    int sp = x.split("###").length;
