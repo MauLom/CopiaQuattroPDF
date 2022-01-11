@@ -199,9 +199,8 @@ public class PrimeroDiversosModel {
 		String[] arrContenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r","").split("\n");
 		StringBuilder texto = new StringBuilder();
 		String textoEnOtroRenglon = "";
-		
-		for(int i=0;i<arrContenido.length;i++) {
 
+		for(int i=0;i<arrContenido.length;i++) {
 				switch (arrContenido[i].split("###").length) {
 				case 1:
 					if(!arrContenido[i].isBlank()) {
@@ -217,11 +216,10 @@ public class PrimeroDiversosModel {
 					texto.append(arrContenido[i].split("###")[0]);
 					texto.append(":");
 					texto.append(arrContenido[i].split("###")[1]);
-					if(arrContenido[i].split("###")[1].contains("Descripcion") && arrContenido[i+1].contains("###")) {
-						texto.append(" Descripción: ");
-						textoEnOtroRenglon = arrContenido[i+1].split("###")[arrContenido[i].length()-1];
+					if(arrContenido[i].split("###")[2].contains("Descripción") && arrContenido[i+1].contains("###")) {
+						texto.append(",Descripción: ");
+						textoEnOtroRenglon = arrContenido[i+1].split("###")[arrContenido[i+1].split("###").length-1];
 						texto.append(textoEnOtroRenglon);
-						arrContenido[i+1] = arrContenido[i+1].replace(textoEnOtroRenglon,"");
 					}
 					break;
 				
@@ -229,7 +227,7 @@ public class PrimeroDiversosModel {
 					if(arrContenido[i].split("###")[0].contains("Trayecto")) {
 						texto.append("Trayecto: Origen:");
 						texto.append(arrContenido[i].split("###")[2]);
-						texto.append(" Destino:");
+						texto.append(",Destino:");
 						textoEnOtroRenglon = arrContenido[i+1].split("###")[1].trim();
 						texto.append(textoEnOtroRenglon);
 						arrContenido[i+1] = arrContenido[i+1].replace("Destin###"+textoEnOtroRenglon,"");
