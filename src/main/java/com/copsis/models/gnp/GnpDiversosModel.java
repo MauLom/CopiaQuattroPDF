@@ -229,6 +229,9 @@ public class GnpDiversosModel {
 				}
 			}
 
+			if(modelo.getFormaPago() == 0) {
+				modelo.setFormaPago(fn.formaPagoSring(contenido));
+			}
 			// vigencia_de
 			inicio = contenido.indexOf("Desde las 12 hrs");
 			if (inicio > -1) {
