@@ -569,6 +569,7 @@ public class DataToolsModel {
 			break;
 		case "CONY.":
 		case "CONYUGE":
+		case "CÓNYUGE":
 			dato = 2;
 			break;
 		case "HIJO":
@@ -596,6 +597,7 @@ public class DataToolsModel {
 		case "HERMANO":
 		case "SUEGRA":
 		case "ABUELO":
+		case "PADRE-MADRE":
 			dato = 4;
 			break;
 		default:
@@ -997,7 +999,7 @@ public class DataToolsModel {
 		for (String tipo : tiposP) {	
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
-				case CONTADO:
+				case CONTADO: 
 					dato=1;
 					break;
 				case SEMESTRAL:
@@ -1108,6 +1110,28 @@ public class DataToolsModel {
 			resultado.add(m.group());
 		}
 		return resultado;
-	}	
+	}
+	
+	  public String formatDate(String formatear) {
+	        {
+	            String str_date = formatear.replaceAll("/", "-");
+	            String resul = "";
+	            String rtfecha = "";
+	            String day = "";
+	            try {
+	                DateFormat formatter;
+	                Date date;
+	                formatter = new SimpleDateFormat("dd-MMM-yy");
+	                date = formatter.parse(str_date);
+	                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	                resul = simpleDateFormat.format(date).toUpperCase();
+	                return resul.toString();
+	            } catch (Exception ex) {
+	                return resul.toString();
+	            }
+	        }
+
+	    }
+
 
 }
