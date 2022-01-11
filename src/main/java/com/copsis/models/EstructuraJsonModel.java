@@ -80,5 +80,6 @@ public class EstructuraJsonModel {
     private String ramo ="";
     private String subramo ="";
     private String error ="";
+    private String textoDiversos = "";
 
 }

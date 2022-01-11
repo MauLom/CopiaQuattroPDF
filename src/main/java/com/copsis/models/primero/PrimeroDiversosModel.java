@@ -31,12 +31,12 @@ public class PrimeroDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
-	
+    
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
-	                		if(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###").length > 1) {
+	                		if(newcontenido.split("\n")[i].contains("###")) {
 	                			modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1]);
 	                		}else {
@@ -76,7 +76,6 @@ public class PrimeroDiversosModel {
 			   
 	            inicio = contenido.indexOf("Prima Neta");
 	            fin = contenido.indexOf("EN CASO DE SINIESTRO");
-	            
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
@@ -94,7 +93,8 @@ public class PrimeroDiversosModel {
 
 	                }
 	            }
-
+	            obtenerAgente();
+	            obtenerTextoDiversos();
 			
 	            inicio = contenido.indexOf("Datos del Riesgo");
 				fin = contenido.indexOf("Coberturas");
@@ -179,5 +179,78 @@ public class PrimeroDiversosModel {
 		} catch (Exception e) {
 		  return modelo;
 		}
+	}
+	
+	private void obtenerAgente() {
+        int inicio = contenido.indexOf("AVISO DE PRIVACIDAD");
+        int fin = contenido.indexOf("Nombre del Agente");
+        String newContenido = "";
+        if (inicio > 0 && fin > 0 && inicio < fin) {
+        	newContenido = contenido.substring(inicio,fin).replace("@@@", "");
+        	if(newContenido.split("\n").length>1) {
+        		modelo.setAgente(newContenido.split("\n")[newContenido.split("\n").length-1].replace("\r", ""));
+        	}
+        }
+	}
+	
+	private void obtenerTextoDiversos() {
+		int inicio = contenido.indexOf("Datos del Embarque");
+		int fin = contenido.indexOf("Coberturas Amparadas");
+		String[] arrContenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r","").split("\n");
+		StringBuilder texto = new StringBuilder();
+		String textoEnOtroRenglon = "";
+
+		for(int i=0;i<arrContenido.length;i++) {
+				switch (arrContenido[i].split("###").length) {
+				case 1:
+					if(!arrContenido[i].isBlank()) {
+						texto.append(arrContenido[i]);
+					}
+					break;
+				case 2:
+					texto.append(arrContenido[i].split("###")[0]);
+					texto.append(":");
+					texto.append(arrContenido[i].split("###")[1]);
+					break;
+				case 3:
+					texto.append(arrContenido[i].split("###")[0]);
+					texto.append(":");
+					texto.append(arrContenido[i].split("###")[1]);
+					if(arrContenido[i].split("###")[2].contains("Descripción") && arrContenido[i+1].contains("###")) {
+						texto.append(",Descripción: ");
+						textoEnOtroRenglon = arrContenido[i+1].split("###")[arrContenido[i+1].split("###").length-1];
+						texto.append(textoEnOtroRenglon);
+					}
+					break;
+				
+				case 4:
+					if(arrContenido[i].split("###")[0].contains("Trayecto")) {
+						texto.append("Trayecto: Origen:");
+						texto.append(arrContenido[i].split("###")[2]);
+						texto.append(",Destino:");
+						textoEnOtroRenglon = arrContenido[i+1].split("###")[1].trim();
+						texto.append(textoEnOtroRenglon);
+						arrContenido[i+1] = arrContenido[i+1].replace("Destin###"+textoEnOtroRenglon,"");
+					}else {
+						texto.append(arrContenido[i].split("###")[0]);
+						texto.append(":");
+						texto.append(arrContenido[i].split("###")[1].trim());
+						texto.append(",");
+						texto.append(arrContenido[i].split("###")[2]);
+						texto.append(":");
+						texto.append(arrContenido[i].split("###")[3].trim());
+					}
+					
+					break;
+
+				default:
+					break;
+				}
+				if(!arrContenido[i].isBlank()) {
+				    texto.append(",");
+				}
+	
+		}
+		modelo.setTextoDiversos(texto.toString().substring(0,texto.length()-1));
 	}
 }
