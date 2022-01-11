@@ -995,29 +995,73 @@ public class DataToolsModel {
 	
 	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
-		String[] tiposP = {CONTADO,"ANUAL",SEMESTRAL,TRIMESTRAL,MENSUAL,QUINCENAL,SEMANAL};
+		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA",
+				"ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R", "SEMESTRALS-R",
+				"TRIM", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
+				"TRIMESTRAL12MESES", "TRIM.S/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
+				"MENSUALSR", "MENSUALS/R", "MENSUALS/R", "MEN.DER.PRORRATEA", "MENSUALVITRO", "MENSUALS/RDERP",
+				"MEN.S/REC.", "MENSUALS-R", "QUIN", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO" };
 		for (String tipo : tiposP) {	
-			if (x.toUpperCase().contains(tipo)) {
+			if (x.toUpperCase().contains(tipo+" ")) {
 				switch (tipo) {
-				case CONTADO: 
-					dato=1;
+				case "CONT":
+				case CONTADO:
+				case "PRIMA UNICA":
+				case "PAGO ÚNICO":
+				case "PAGO UNICO":
+				case "ANUA":
+				case "ANUAL":
+				case "ÚNICA":
+				case "ANUALMENTE":
+				case "ANUAL EXTENDIDA":
+					dato = 1;
 					break;
+				case "SEME":
+				case "SEM.":
 				case SEMESTRAL:
-					dato=2;
+				case "SEMESTR":
+				case "SEMESTRAL S/R":
+				case "SEMESTRAL S-R":
+					dato = 2;
 					break;
+				case "TRIM":
+				case "TRIMESTR":
 				case TRIMESTRAL:
-					dato=3;
+				case "Trimestral":
+				case "TRIMESTRAL S/R":
+				case "TRIMESTRAL S-R":
+				case "TRIMESTRAL SR DERP":
+				case "TRIMESTRAL 12 MESES":
+				case "TRIM.S/REC":
+					dato = 3;
 					break;
+				case "MENS":
+				case "MEN.":
 				case MENSUAL:
-					dato=4;
+				case "MENSUAL SIN RPF":
+				case "MENSUAL SR DERP":
+				case "MENSUAL SR":
+				case "MENSUAL S/R":
+				case "MENSUALS/R":
+				case "MEN.DER.PRORRATEA":
+				case "MENSUAL VITRO":
+				case "MENSUAL S/R DERP":
+				case "MEN.S/REC.":
+				case "MENSUAL S-R":
+					dato = 4;
 					break;
-				case QUINCENAL:
-					dato=5;
+				case "QUIN":
+				case "QUICENAL":
+				case "QUINCENAL DXN VITRO":
+					dato = 5;
 					break;
+				case "SEMA":
 				case SEMANAL:
-					dato=6;
+				case "SEMANAL VITRO":
+					dato = 6;
 					break;
 				default:
+					dato = 0;
 					break;
 				}			
 			}				
