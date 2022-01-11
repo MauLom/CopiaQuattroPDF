@@ -18,6 +18,7 @@ import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
+import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
@@ -324,16 +325,30 @@ public class IdentificaPolizaService {
 			}
 			
 			
-		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){
-		    			    
-		   
+		
+		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		  
                 if (contenido.contains("Seguros el Potosí S.A.")) {
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;
                 }
             }
+		    
+
+			// ENTRADA PARA VEXMAS
+            if (! encontro && contenido.contains("Seguros Ve Por")
+                        || contenido.contains("Seguros Ve por Más, S.A.")
+                        || contenido.contains("Seguros Ve por Más, S. A.")
+                        || contenido.contains("www.vepormas.com")) {//Ve por Más
+
+            	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
+                    modelo = datosVeporMas.procesar();
+                    encontro = true;
+                
+            }
 			
+			
+
 
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
