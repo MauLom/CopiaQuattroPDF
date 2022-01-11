@@ -1121,7 +1121,7 @@ public class DataToolsModel {
 	            try {
 	                DateFormat formatter;
 	                Date date;
-	                formatter = new SimpleDateFormat("dd-MMM-yy");
+	                formatter = new SimpleDateFormat("yy-MM-dd");
 	                date = formatter.parse(str_date);
 	                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	                resul = simpleDateFormat.format(date).toUpperCase();
