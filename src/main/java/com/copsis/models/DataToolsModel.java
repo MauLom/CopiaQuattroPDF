@@ -414,7 +414,6 @@ public class DataToolsModel {
 	}
 
 	public int formaPago(String x) { // FORMA DE PAGO
-		System.out.println(x);
 		int dato = 0;
 		switch (x.toUpperCase()) {
 		case "CONT":
