@@ -196,5 +196,63 @@ public class PrimeroDiversosModel {
 	private void obtenerTextoDiversos() {
 		int inicio = contenido.indexOf("Datos del Embarque");
 		int fin = contenido.indexOf("Coberturas Amparadas");
+		String[] arrContenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r","").split("\n");
+		StringBuilder texto = new StringBuilder();
+		String textoEnOtroRenglon = "";
+		
+		for(int i=0;i<arrContenido.length;i++) {
+
+				switch (arrContenido[i].split("###").length) {
+				case 1:
+					if(!arrContenido[i].isBlank()) {
+						texto.append(arrContenido[i]);
+					}
+					break;
+				case 2:
+					texto.append(arrContenido[i].split("###")[0]);
+					texto.append(":");
+					texto.append(arrContenido[i].split("###")[1]);
+					break;
+				case 3:
+					texto.append(arrContenido[i].split("###")[0]);
+					texto.append(":");
+					texto.append(arrContenido[i].split("###")[1]);
+					if(arrContenido[i].split("###")[1].contains("Descripcion") && arrContenido[i+1].contains("###")) {
+						texto.append(" Descripción: ");
+						textoEnOtroRenglon = arrContenido[i+1].split("###")[arrContenido[i].length()-1];
+						texto.append(textoEnOtroRenglon);
+						arrContenido[i+1] = arrContenido[i+1].replace(textoEnOtroRenglon,"");
+					}
+					break;
+				
+				case 4:
+					if(arrContenido[i].split("###")[0].contains("Trayecto")) {
+						texto.append("Trayecto: Origen:");
+						texto.append(arrContenido[i].split("###")[2]);
+						texto.append(" Destino:");
+						textoEnOtroRenglon = arrContenido[i+1].split("###")[1].trim();
+						texto.append(textoEnOtroRenglon);
+						arrContenido[i+1] = arrContenido[i+1].replace("Destin###"+textoEnOtroRenglon,"");
+					}else {
+						texto.append(arrContenido[i].split("###")[0]);
+						texto.append(":");
+						texto.append(arrContenido[i].split("###")[1].trim());
+						texto.append(",");
+						texto.append(arrContenido[i].split("###")[2]);
+						texto.append(":");
+						texto.append(arrContenido[i].split("###")[3].trim());
+					}
+					
+					break;
+
+				default:
+					break;
+				}
+				if(!arrContenido[i].isBlank()) {
+				    texto.append(",");
+				}
+	
+		}
+		modelo.setTextoDiversos(texto.toString().substring(0,texto.length()-1));
 	}
 }
