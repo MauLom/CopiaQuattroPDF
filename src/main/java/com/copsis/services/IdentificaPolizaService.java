@@ -26,6 +26,7 @@ import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
+import com.copsis.models.potosi.PotosiModel;
 import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
@@ -321,6 +322,18 @@ public class IdentificaPolizaService {
 				modelo = datosAna.procesar();
 				encontro = true;
 			}
+			
+			
+		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){
+		    			    
+		   
+                if (contenido.contains("Seguros el Potosí S.A.")) {
+                	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
+                	modelo = datospotosi.procesar();
+                    encontro = true;
+                }
+            }
+			
 
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF

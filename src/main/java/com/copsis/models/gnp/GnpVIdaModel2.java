@@ -325,8 +325,7 @@ public class GnpVIdaModel2 {
 				for (String beneficiariod : b.split("\n")) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int aseg = beneficiariod.split("###").length;
-					if (aseg == 4 && !beneficiariod.contains("Nombre") && beneficiariod.contains("@@@")
-							&& beneficiariod.split("-").length > 2) {
+					if (aseg == 4 && !beneficiariod.contains("Nombre") && beneficiariod.split("-").length > 2) {
 
 						beneficiario.setNombre(beneficiariod.split("###")[0].replace("@@@", "").trim());
 						beneficiario.setNacimiento(fn.formatDate(beneficiariod.split("###")[1], "dd-MM-yy"));
