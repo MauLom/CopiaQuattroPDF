@@ -8,7 +8,6 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 public class SegurosMtySalud {
 
