@@ -236,11 +236,6 @@ public class BanorteAutosModel {
 	    
 				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 	            
-	            
-	            if (recibosText.length() > 0) {
-					recibosList = recibosExtract();
-					
-				}
 	        	switch (modelo.getFormaPago()) {
 				case 1:
 					if(recibosList.size() ==  0) {
@@ -319,22 +314,21 @@ public class BanorteAutosModel {
 					String x = recibosText.split("AVISO DE COBRO")[i].split("Importe con Letra")[0];
 					    if(x.contains("Prima Neta") && x.contains("Recargos")) {
 					    	recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(x.split("Prima Neta")[1].split("Recargos")[0].split("###")[1])));
-					    
-					    	recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(x.split("Recargos")[1].split("\n")[0].replace("###", ""))));
-					    	
+							recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(x.split("Recargos")[1].split("\n")[0]
+									.replace("###", "").replace("\r", "").replace(":", ""))));
 					    	 recibosLis.add(recibo);
 					    }
 					    if(x.contains("Serie:")){
 					    	recibo.setSerie(x.split("Serie:")[1].split("Folio")[0].replace("###", ""));
 					    }
 					    
-					    if(x.contains("IVA")){					 
-					    	recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(x.split("IVA")[1].split(":")[1].split("\n")[0].replace("###", ""))));
-					    } 
+					    if(x.contains(" IVA")){	
+					    	recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(x.split(" IVA")[1].split(":")[1].split("\n")[0].replace("###", "").replace("\r", ""))));
+					    }
 					    if(x.contains("Prima Total")){
-					    	recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(x.split("Derecho Póliza")[1].split("Prima")[0].split("\n")[0].replace("###", ""))));
-					    	recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(x.split("Prima Total")[1].split("\n")[0].replace("###", ""))));
-					    } 
+					    	recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(x.split("Derecho Póliza")[1].split("Prima")[0].split("\n")[0].replace("###", "").replace(":",""))));
+					    	recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(x.split("Prima Total")[1].split("\n")[0].replace("###", "").replace("\r", "").replace(":",""))));
+					    }
 					   
 					}			
 				}
