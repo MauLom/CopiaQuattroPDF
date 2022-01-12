@@ -199,17 +199,23 @@ public class GnpVIdaModel2 {
 
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					if (newcontenido.toString().split("\n")[i].contains("Asegurado 1")) {
 						asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
-
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Edad Emisión")) {
 						asegurado.setEdad(fn.castInteger(newcontenido.toString().split("\n")[i].split("Edad Emisión:")[1]
 								.replace("###", "").replace("años", "").trim()));
 					}
-
+				
+					if (newcontenido.toString().split("\n")[i].contains("Edad Contratación")) {
+						if(asegurado.getNombre().length() == 0){
+							asegurado.setNombre(newcontenido.toString().split("\n")[i -1].split("###")[0]);
+						}
+						asegurado.setEdad(fn.castInteger(fn.numTx(newcontenido.toString().split("\n")[i])));
+					}
 				}
 				asegurados.add(asegurado);
 
