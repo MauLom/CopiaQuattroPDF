@@ -287,6 +287,7 @@ public class AxaSaludModel {
 			inicio = contenido.indexOf("Familia Asegurada");
 			fin = contenido.indexOf("Prima Total Asegurados:");
 			int index = -1;
+			String texto;
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
@@ -301,6 +302,12 @@ public class AxaSaludModel {
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].replace(" ", "")));
 						asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) != null  ? fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) : 0 );
+
+						if(newcontenido.split("\n")[i].split("###").length == 7 && asegurado.getNacimiento().split("-")[0].length()>4) {							
+							texto = asegurado.getNacimiento().substring(4,6);//  se extrae los digitos que no corresponden al año 195863-03-17 = 63
+							asegurado.setEdad(fn.castInteger(texto));
+							asegurado.setNacimiento(fn.formatDateMonthCadena(asegurado.getNacimiento().replace(texto, "")));
+						}
 						index = fn.castDouble(newcontenido.split("\n")[i].split("###")[5]) != null ? 5 : 4;
 						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[index])));
 						index = newcontenido.split("\n")[i].split("###")[6].contains("-") ? 6 : 5;
