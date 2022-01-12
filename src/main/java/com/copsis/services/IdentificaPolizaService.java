@@ -104,6 +104,7 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
+				
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
 						|| contenido.contains("COLECTIVO EMPRESARIAL")) {
@@ -113,6 +114,7 @@ public class IdentificaPolizaService {
 					encontro = true;
 				} else {
 					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);
+					
 
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
@@ -326,21 +328,19 @@ public class IdentificaPolizaService {
 			
 			
 		
-		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		  
-                if (contenido.contains("Seguros el Potosí S.A.")) {
+		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
-                    encontro = true;
-                }
+                    encontro = true;                
             }
 		    
 
 			// ENTRADA PARA VEXMAS
-            if (! encontro && contenido.contains("Seguros Ve Por")
+            if (! encontro &&( contenido.contains("Seguros Ve Por")
                         || contenido.contains("Seguros Ve por Más, S.A.")
                         || contenido.contains("Seguros Ve por Más, S. A.")
-                        || contenido.contains("www.vepormas.com")) {//Ve por Más
-
+                        || contenido.contains("Seguros Ve Por Más")
+                        || contenido.contains("www.vepormas.com"))) {//Ve por Más 
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;

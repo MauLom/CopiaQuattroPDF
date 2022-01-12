@@ -8,6 +8,7 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 public class SegurosMtySalud {
 
@@ -15,7 +16,8 @@ public class SegurosMtySalud {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	// Varaibles
 	private String contenido = "";
-	private String newcontenido = "";	
+	private String newcontenido = "";
+	StringBuilder newcon = new StringBuilder();
 	private int inicio = 0;
 	private int fin = 0;
 	
@@ -130,9 +132,18 @@ public class SegurosMtySalud {
 	        					}
 	        			
 	        				}else {
-	        					modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0].trim() +" " + newcontenido.split("\n")[i+1].split("###")[1].trim());
-		    					modelo.setSa(newcontenido.split("\n")[i+1].split("###")[2].trim());
-		    				
+	        					newcon.append(fn.gatos( newcontenido.split("\n")[i+1]));
+	        			
+	        					if(newcon.toString().split("###").length == 3) {
+	        						modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0].trim() +" " + newcontenido.split("\n")[i+1].split("###")[1].trim());
+	        						modelo.setSa(newcontenido.split("\n")[i+1].split("###")[2].trim());
+	        					}
+	        					
+	        					if(newcon.toString().split("###").length == 2) {
+	        						modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0].trim());
+	        						modelo.setSa(newcontenido.split("\n")[i+1].split("###")[1].trim());
+	        					}
+	        		
 	        				}
 	    					
 	    				}
@@ -142,11 +153,12 @@ public class SegurosMtySalud {
 	         inicio = contenido.indexOf("PRIMAS");
 	         fin = contenido.indexOf("EN TESTIMONIO DE LO CUAL");
 	         
+	      
 	 
 	         if(inicio > 0 &&  fin >  0 && inicio < fin) {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replaceAll("### ###", "###");
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	        				
+	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	
 	        				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("###")[1].trim()));
 	        				modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("###")[3].trim())));	        				
 	        			}
@@ -236,6 +248,7 @@ public class SegurosMtySalud {
 		newcontenido ="";
 	     inicio = contenido.indexOf("ANEXOS");
          fin = contenido.indexOf("COBERTURA BÁSICA");
+  
          if(inicio > 0 &&  fin >  0 && inicio < fin) {
         		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim();
         		
@@ -243,6 +256,7 @@ public class SegurosMtySalud {
          inicio = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");
          fin = contenido.indexOf("ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO");
          if(inicio > 0 &&  fin >  0 && inicio < fin) {
+        	 String coberturas="";
         		newcontenido += "\n"+ contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim()
         				.replace("COBERTURA DE ASISTENCIA EN EL EXTRANJEROCAE", "COBERTURA DE ASISTENCIA EN EL EXTRANJERO(CAE)  ### ### ###")
         				.replace("COBERTURA DE ENFERMEDADES CATASTRÓFICAS EN EL EXTRANJEROCEC", "COBERTURA DE ENFERMEDADES CATASTRÓFICAS EN EL EXTRANJERO(CEC)  ### ### ###")
@@ -251,21 +265,27 @@ public class SegurosMtySalud {
         				.replace("### ###", "###")
         				.replace("COBERTURAS OPCIONALES CON COSTO ", "")
         				.replace("COBERTURA ###SUMA ###DEDUCIBLE ###COASEGURO ###ASEGURADO ###PRIMA", "")
-        				.replace("ASEGURADA ###CUBIERTO ", "");
+        				.replace("ASEGURADA ###CUBIERTO ", "").replace("ANEXOS", "").replace("TOTAL", "").replace("PRIMA DE LAS COBERTURAS OPCIONALES ", "");
+        		
+        	  	for (int i = 0; i < newcontenido.split("\n").length; i++) {
+            		if(newcontenido.split("\n")[i].length() > 7) {
+            			coberturas += newcontenido.split("\n")[i] +"\n";	
+            		}					
+				}
+        	  	newcontenido = coberturas;
         	
          }
+
+
          if(newcontenido.length() ==  0 ||  newcontenido.length() < 20) {
+        	 newcontenido ="";
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
-             fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");        
-             if(inicio > 0 &&  fin >  0 && inicio < fin) {
-            		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").replace("###1", "")
-            				.replace("ASEGURA###DO", "").trim()
-            				.replace("ASEGURA###DA", "ASEGURADA")
-            				.replace("### ### ### ###", "")
-            				.replace("### ###", "###");
-             }
+             fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
+           
+             newcontenido = getCoberturas (inicio,fin,contenido);
          }
-         
+           
+
 
          if(inicio > 0 &&  fin >  0 && inicio < fin) {
         	 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();  
@@ -274,10 +294,15 @@ public class SegurosMtySalud {
          		if(!newcontenido.split("\n")[i].contains("ANEXOS") && !newcontenido.split("\n")[i].contains("ASEGURADO")
          		  && !newcontenido.split("\n")[i].contains("ASEGURADA") && !newcontenido.split("\n")[i].contains("CAE")
          		  && !newcontenido.split("\n")[i].contains("TOTAL") && !newcontenido.split("\n")[i].contains("CEC")
-         		 && !newcontenido.split("\n")[i].contains("SUMA")
-         		) {   	         				         			         	
-         		          			 
-              		if(newcontenido.split("\n")[i].split("###").length > 1   && newcontenido.split("\n")[i].split("###").length < 6) {                   		
+         		 && !newcontenido.split("\n")[i].contains("SUMA") && !newcontenido.split("\n")[i].contains("ESTE DOCUMENTO")
+         		&& !newcontenido.split("\n")[i].contains("Paseo de la") && !newcontenido.split("\n")[i].contains("CARÁTULA DE PÓLIZ")
+         		&& !newcontenido.split("\n")[i].contains("NÚMERO DE PÓLIZA") && !newcontenido.split("\n")[i].contains("PRIMA DE LA")
+         		&& !newcontenido.split("\n")[i].contains("MKT OP") && !newcontenido.split("\n")[i].contains("RV-")
+         		&& !newcontenido.split("\n")[i].contains("Página")
+         				) {   	         				         			         	
+       		          			 
+              		if((newcontenido.split("\n")[i].split("###").length > 1   && newcontenido.split("\n")[i].split("###").length < 6) && newcontenido.split("\n")[i].split("###")[0].length() > 6) {    
+
               			 cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
              			 if(newcontenido.split("\n")[i].split("###").length == 2) {
              				cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());	 
@@ -286,7 +311,12 @@ public class SegurosMtySalud {
              					cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());
              				 }
              				 if(newcontenido.split("\n")[i].split("###").length == 4 ) {
-              					cobertura.setSa(newcontenido.split("\n")[i].split("###")[3].trim());
+             					 if(newcontenido.split("\n")[i].split("###")[3].trim().length() > 7){
+             						cobertura.setSa(newcontenido.split("\n")[i].split("###")[3].trim());
+             					 }else {
+             						cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());	 
+             					 }
+              					
               				 }             			 
              			 }             			 
              			coberturas.add(cobertura);	
@@ -297,9 +327,37 @@ public class SegurosMtySalud {
          }
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					SegurosMtySalud.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
+		
+	
 	}
+	
+
+	public String getCoberturas(int inicio,int fin,String cobertura) {
+
+		String coberturastx ="";
+            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+            	cobertura = cobertura.substring(inicio,fin).replace("\r", "").replace("@@@", "").replace("###1", "")
+           				.replace("ASEGURA###DO", "").trim()
+           				.replace("ASEGURA###DA", "ASEGURADA")
+           				.replace("### ### ### ###", "")
+           				.replace("### ###", "###")
+           				.replace(" ###", "###");
+
+            	
+            	for (int i = 0; i < cobertura.split("\n").length; i++) {
+            		if(cobertura.split("\n")[i].length() > 7) {
+            			coberturastx += cobertura.split("\n")[i]+"\n";	
+            		}
+					
+				}
+            }
+            return coberturastx;
+      }
+		
 }
+
