@@ -70,7 +70,8 @@ public class AxaSaludModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.split("Póliza:")[1].split("Solicitud")[0].replace("\r\n", "")
-						.replace("@@@", "").replace("###", "").replace(ConstantsValue.CONTRATANTE2, "").replace("  ", "");
+						.replace("@@@", "").replace("###", "").replace(ConstantsValue.CONTRATANTE2, "").replace("  ", "")
+						.replace("\r","");
 				modelo.setPoliza(newcontenido);
 			}
 
@@ -256,10 +257,14 @@ public class AxaSaludModel {
 						modelo.setSa(newcontenido.split("\n")[i].split("Suma Asegurada:")[1].replace("###", ""));
 						
 					}
+
 					if (newcontenido.split("\n")[i].contains("Deducible:") && newcontenido.split("\n")[i].contains(ConstantsValue.COASASEGURO2)) {
 						modelo.setDeducible(newcontenido.split("\n")[i].split("Deducible:")[1].split("Coaseguro:")[0].replace("###", ""));
 						modelo.setCoaseguro(newcontenido.split("\n")[i].split("Coaseguro:")[1].replace("###", ""));
-					}
+					}else if(newcontenido.split("\n")[i].contains("Deducible:") && newcontenido.split("\n")[i].contains("Coaseguro Máximo")) {
+						modelo.setDeducible(newcontenido.split("\n")[i].split("Deducible:")[1].split("Coaseguro Máximo:")[0].replace("###", ""));
+						modelo.setCoaseguro(newcontenido.split("\n")[i-1].split("Coaseguro:")[1].replace("###", ""));			
+						}
 					
 					
 				}
@@ -281,6 +286,7 @@ public class AxaSaludModel {
 			
 			inicio = contenido.indexOf("Familia Asegurada");
 			fin = contenido.indexOf("Prima Total Asegurados:");
+			int index = -1;
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
@@ -295,8 +301,10 @@ public class AxaSaludModel {
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].replace(" ", "")));
 						asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) != null  ? fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) : 0 );
-						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[5])));
-						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[6].replace(" ", "").replace("\r", "")));
+						index = fn.castDouble(newcontenido.split("\n")[i].split("###")[5]) != null ? 5 : 4;
+						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[index])));
+						index = newcontenido.split("\n")[i].split("###")[6].contains("-") ? 6 : 5;
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[index].replace(" ", "").replace("\r", "")));
 						asegurados.add(asegurado);
 						break;
 
