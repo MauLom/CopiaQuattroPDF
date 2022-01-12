@@ -28,7 +28,7 @@ public class qualitasAutosMotosModel {
 
 	public EstructuraJsonModel procesar() {
 		String newcontenido = "";
-
+		String[] arrNewContenido;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		agente = fn.remplazarMultiple(agente, fn.remplazosGenerales())
 				.replace("En cumplimiento", "En###cumplimiento");
@@ -184,16 +184,15 @@ public class qualitasAutosMotosModel {
 						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Expedición")[1].replace("###", "").trim())));						
 					}
 					if(newcontenido.split("\n")[i].contains("I.V.A.")) {	
-						
-						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A.")[1].split("###")[2].replace("###", "").trim())));						
+						arrNewContenido = newcontenido.split("\n")[i].split("I.V.A.")[1].split("###");
+						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(arrNewContenido[arrNewContenido.length-1].replace("###", "").trim())));						
 					}
-					if(newcontenido.split("\n")[i].contains("TOTAL")) {							
+					if(newcontenido.split("\n")[i].contains("TOTAL")) {	
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("TOTAL")[1].replace("###", "").trim())));						
 					}
 					
 				}
 			}
-			
 			
 
 			// coberturas
