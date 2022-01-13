@@ -26,7 +26,13 @@ public class BexmasModel {
 		
 
 			if(fn.tipoPoliza(contenido) == 2) {	
-				 modelo =  new BexmasSaludModel(fn.caratula(0, 3, stripper, doc)).procesar();
+
+				if(fn.caratula(0, 3, stripper, doc).contains("Individual/Familiar") && fn.caratula(0, 3, stripper, doc).contains("Plan:")) {
+					 modelo =  new BexmasSaludBModel(fn.caratula(0, 3, stripper, doc)).procesar();
+				}else{
+					 modelo =  new BexmasSaludModel(fn.caratula(0, 3, stripper, doc)).procesar();
+				}
+			
 				
 			}
 			
