@@ -141,7 +141,7 @@ public class MultivaDiversosModel {
         	for (int i = 0; i < arrNewContenido.length; i++) {	
         		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
         		lineaTexto = arrNewContenido[i];
-        		if(!lineaTexto.contains("DESGLOSE") || !lineaTexto.contains("Sección")) {            			
+        		if(!lineaTexto.contains("DESGLOSE") && !lineaTexto.contains("Sección")) {
         			cobertura.setSeccion(lineaTexto.split("###")[0]);
         		    cobertura.setNombre(lineaTexto.split("###")[1]);
         		    cobertura.setSa(lineaTexto.split("###")[2]);
