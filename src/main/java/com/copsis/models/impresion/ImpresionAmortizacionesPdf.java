@@ -300,6 +300,9 @@ public class ImpresionAmortizacionesPdf {
 			Row<PDPage> baseRow;
 			yStart = 730;
 			String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
+			String[] dateNew = dateString.split("\\s+");
+			
+			dateString = dateNew[0] + " de " + dateNew[1] + " del " + dateNew[2];
 	  
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 			baseRow = communsPdf.setRow(table, 87);
@@ -332,7 +335,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,15, impresionForm.getTasa().toString()+"%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			
 			baseRow = communsPdf.setRow(table, 15);
-			communsPdf.setCell(baseRow,99,dateString +" Válido 15 días apartir de su impresión.", black, false, "R", 8, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,99,dateString, black, false, "R", 8, cellStyle, "", paddingHeadData, bgColor);
 			
 			table.draw();
 			yStart -= table.getHeaderAndDataHeight() + 20;
