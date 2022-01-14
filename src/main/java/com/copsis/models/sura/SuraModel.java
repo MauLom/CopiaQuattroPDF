@@ -26,7 +26,7 @@ public class SuraModel {
 		try {
 			int tipo = fn.tipoPoliza(contenido);
 		
-			if(tipo == 1 &&  contenido.contains("MEDIC")) {
+			if(tipo == 1 &&  contenido.contains("MEDIC ")) {
 				tipo =2;
 			}
 
