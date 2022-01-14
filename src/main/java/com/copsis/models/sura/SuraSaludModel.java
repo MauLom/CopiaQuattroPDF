@@ -3,6 +3,7 @@ package com.copsis.models.sura;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -25,12 +26,9 @@ public class SuraSaludModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			modelo.setTipo(3);
 			modelo.setCia(88);
-			modelo.setFormaPago(1);
-			modelo.setMoneda(1);
 
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
-			fin = contenido.indexOf("Coberturas contratadas");
-
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("12hrs. de", "").replace("|", "-");
@@ -55,14 +53,12 @@ public class SuraSaludModel {
 
 						int sp = newcontenido.split("\n")[i + 1].replace(" ", "###").split("###").length;
 						String rx = newcontenido.split("\n")[i + 1].replace(" ", "###");
-						switch (sp) {
-						case 8:
+						if (sp == 8) {
 							modelo.setCteNombre(
 									rx.split("###")[0] + " " + rx.split("###")[1] + " " + rx.split("###")[3]);
 							modelo.setRfc(rx.split("###")[4]);
-							break;
-
 						}
+						
 						String direccion = newcontenido.split("\n")[i + 2] + " "
 								+ newcontenido.split("\n")[i + 3].split("C.P.")[0];
 						modelo.setCteDireccion(direccion);
@@ -79,16 +75,13 @@ public class SuraSaludModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Prima Neta")) {
 						int sp = newcontenido.split("\n")[i + 1].split("###").length;
-
-						switch (sp) {
-						case 5:
+						if(sp == 5) {
 							modelo.setPrimaneta(fn
 									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
 							modelo.setIva(fn
 									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[3])));
 							modelo.setPrimaTotal(fn
 									.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[4])));
-							break;
 						}
 					}
 
@@ -96,7 +89,7 @@ public class SuraSaludModel {
 			}
 
 			inicio = contenido.indexOf("Asegurado Titular");
-			fin = contenido.indexOf("Coberturas contratadas");
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
@@ -120,7 +113,7 @@ public class SuraSaludModel {
 				modelo.setAsegurados(asegurados);
 			}
 
-			inicio = contenido.indexOf("Coberturas contratadas");
+			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
 			fin = contenido.indexOf("Prima Neta###Tasa de");
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -128,16 +121,11 @@ public class SuraSaludModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					int sp = newcontenido.split("\n")[i].split("###").length;
-					if (newcontenido.split("\n")[i].contains("Deducible")) {
-					} else {
-						switch (sp) {
-						case 4:
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-							cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[2]);
-							coberturas.add(cobertura);
-							break;
-						}
+					if (!newcontenido.split("\n")[i].contains("Deducible") && sp == 4) {
+						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+						cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[2]);
+						coberturas.add(cobertura);
 					}
 				}
 			}
