@@ -3,6 +3,7 @@ package com.copsis.models.sura;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -23,7 +24,7 @@ public class SuraAutosModel {
 	public EstructuraJsonModel procesar() {
 		try {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			contenido = contenido.replace("R. F. C:", "R.F.C:");
+			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC);
 			modelo.setTipo(1);
 			modelo.setCia(88);
 		
@@ -75,8 +76,8 @@ public class SuraAutosModel {
 					}
 					
 
-					if (newcontenido.split("\n")[i].contains("R.F.C:")) {
-						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("###")[0]);
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
+						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].split("###")[0]);
 					}
 					if (newcontenido.split("\n")[i].contains("Datos del contratante")) {
 
@@ -94,17 +95,12 @@ public class SuraAutosModel {
 					if (newcontenido.split("\n")[i].contains("Motor") && newcontenido.split("\n")[i].contains("Serie")) {
 
 						int sp = newcontenido.split("\n")[i + 1].split("###").length;
-						switch (sp) {
-						case 3:	
+						if (sp == 3) {
 							modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[0]);
-							break;
-						case 4:
+						} else if (sp == 4) {
 							modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[0]);
 							modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[1]);
-							break;
-
-						}
-	
+						}	
 					}
 					if (newcontenido.split("\n")[i].contains("Cve")) {
 						modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());
@@ -118,15 +114,13 @@ public class SuraAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
 					if(newcontenido.split("\n")[i].contains("Prima neta")) {
-						int sp = newcontenido.split("\n")[i+1].split("###").length;					
-						switch (sp) {
-						case 6:
+						int sp = newcontenido.split("\n")[i+1].split("###").length;
+						if(sp== 6) {
                             modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
                             modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[2])));
                             modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[3])));
                             modelo.setIva(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[4])));
                             modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[5])));
-							break;
 						}
 					}
 					
@@ -142,26 +136,19 @@ public class SuraAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(newcontenido.split("\n")[i].contains("contratadas") || newcontenido.split("\n")[i].contains("Prima neta")) {
-						
-					}else {
+					if(!newcontenido.split("\n")[i].contains("contratadas") || !newcontenido.split("\n")[i].contains("Prima neta")) {
 						int sp = newcontenido.split("\n")[i].split("###").length;
 					
-						switch (sp) {
-						case 3:
+						if(sp == 3 ) {
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);	
 							coberturas.add(cobertura);
-							break;
-						case 4:
+						}else if( sp == 4) {
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[3]);
 							coberturas.add(cobertura);
-							break;
-
-						}
-						
+						}						
 					}
 				}
 				modelo.setCoberturas(coberturas);
