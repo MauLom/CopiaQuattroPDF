@@ -13,6 +13,7 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
+import com.copsis.models.allians.AlliansModel;
 import com.copsis.models.ana.AnaModel;
 import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
@@ -347,7 +348,17 @@ public class IdentificaPolizaService {
                 
             }
 			
-			
+            // ENTRADA PARA ALLIANZ
+            if (!encontro && (contenido.split("@@@")[1].contains("Allianz México")
+                        || contenido.contains("www.allianz.com.mx")
+                        || contenido.contains("MERCADO MEDIANO") //Plan Daños
+                        || (contenido.split("@@@")[1].contains("En cumplimiento a lo dispuesto") && contenido.split("@@@")[5].contains("Nombre del Asegurado"))
+                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS") && contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")))) {
+                	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
+                	modelo = datosAllianz.procesar();
+                    encontro = true;
+                
+            }
 
 
 			if (!encontro) {
