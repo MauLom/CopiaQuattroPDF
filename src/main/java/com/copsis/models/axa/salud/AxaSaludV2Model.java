@@ -290,9 +290,10 @@ public class AxaSaludV2Model {
 					newcontenido = inicontenido.substring(inicio, fin).replaceAll("  +", "###").replace("/", "-")
 							.replace("######", "###").replace("######", "###").replace("### ###", "###")
 							.replace("T   it u  l ar", "Titular").replace("T###i t u###l ar", "Titular")
+							.replace("T###it u###l ar", "Titular")
 							.replace("C   ó  n  y  uge", "Conyuge").replace("C###ó###n###y###u ###ge", "Conyuge")
 							.replace("H   i j o", "Hijo").replace("H###i j o", "Hijo").replace("H###i j a", "Hija")
-							.replace("R ###odriguez", "Rodriguez");
+							.replace("R ###odriguez", "Rodriguez").replace(" ###", "");
 
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -300,7 +301,6 @@ public class AxaSaludV2Model {
 						
 						if (newcontenido.split("\n")[i].split("-").length > 5) {
 							if (x == 11) {
-
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 								if (nombre.contains(", ")) {
 									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
