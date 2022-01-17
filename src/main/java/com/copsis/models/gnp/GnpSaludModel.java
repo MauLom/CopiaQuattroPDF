@@ -655,7 +655,6 @@ public class GnpSaludModel {
 
 									newcontenido1 = contenidoCoberturas.substring(inicioCob, (inicioCob + 90))
 											.split("\r\n")[0].trim();
-									System.err.println(newcontenido1);
 								}
 
 							} else if (cobertura.equals(ConstantsValue.EXTRANJERO)) { // CUANDO VIENE DOS VESES
