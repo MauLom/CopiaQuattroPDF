@@ -50,7 +50,7 @@ public class MultivaSaludModel {
 					if(lineaTexto.contains("Domicilio") && lineaTexto.contains("Moneda:") && lineaTexto.contains("Pago:")) {
 						modelo.setMoneda(fn.moneda(lineaTexto.split("Moneda:")[1].split("Forma")[0].replace("###", "")));
 						modelo.setFormaPago(fn.formaPago(lineaTexto.split("Pago:")[1].replace("###", "")));
-						modelo.setCteDireccion(arrNewContenido[i+1] +" "+ arrNewContenido[i+2].split("###")[0]);
+						modelo.setCteDireccion(arrNewContenido[i+1] +" "+ arrNewContenido[i+2].split("###")[0].replace("UEN:", ""));
 					}
 					if(lineaTexto.contains("Plan:")) {
 						modelo.setPlan(newcontenido.split("Plan:")[1].split("###")[1]);
