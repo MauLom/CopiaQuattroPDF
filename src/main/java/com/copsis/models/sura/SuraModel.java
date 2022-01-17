@@ -23,16 +23,22 @@ public class SuraModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
-		try {		
+		try {
+			int tipo = fn.tipoPoliza(contenido);
+		
+			if(tipo == 1 &&  contenido.contains("MEDIC ")) {
+				tipo =2;
+			}
 
-			switch (fn.tipoPoliza(contenido)) {				
+			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			case 1://Autos
 					modelo  = new SuraAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 				break;
 			case 2://Salud
 				modelo  = new SuraSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 			break;
-
+			default:
+				break;
 
 			}
 
