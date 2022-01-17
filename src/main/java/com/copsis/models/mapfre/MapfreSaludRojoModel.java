@@ -214,13 +214,19 @@ public class MapfreSaludRojoModel {
 			
 			 newcontenido ="";
 			 for (int i = 0; i < contenido.split("COBERTURAS Y SERVICIOS").length; i++) {
+		
 	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("VER ANEXOS")) {
 	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("VER ANEXOS")[0];
 	                }
 	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("CONCEPTOS###ECONÃ“MICOS")) {
 	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("CONCEPTOS###ECONÃ“MICOS")[0];
 	                }
+	                if (contenido.split("COBERTURAS Y SERVICIOS")[i].contains("CONCEPTOS###ECONÓMICOS")) {
+	                    newcontenido += contenido.split("COBERTURAS Y SERVICIOS")[i].split("CONCEPTOS###ECONÓMICOS")[0];
+	                }
+	                
 	            }
+		
 	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", aed).replace("EndosoElemental", "Elemental")
 	            		.replace("EndosoAsistencia", "Asistencia")
 	            		.replace("ReducciÃ³n de deducible por", "ReducciÃ³n de deducible por accidente");
@@ -243,10 +249,11 @@ public class MapfreSaludRojoModel {
 	                int sp = x.split("###").length;
 
 	                if (!x.contains("ASEGURADA") && !x.contains("COBERTURAS") && !x.contains("COASEGURO") && !x.contains("a###a") && !x.contains("ContinuaciÃ³n")
-	                		&& !x.contains("EXTRANJERO###URO")
+	                		&& !x.contains("EXTRANJERO###URO") 	&& !x.contains("Continuación") && !x.contains("Dental") && !x.contains("Visión")
+	                		&& !x.contains("Tabulador")
 	                		) {	                
 	                	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-	              
+	                	
 	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                        cobertura.setNombre(x.split("###")[0]);
 	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
