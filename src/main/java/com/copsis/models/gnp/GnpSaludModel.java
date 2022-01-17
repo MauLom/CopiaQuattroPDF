@@ -588,7 +588,7 @@ public class GnpSaludModel {
 								asegurado.setNombre(dato.split("###")[1]
 										.split(dato.split("###")[1].trim().split(" ")[longitudSplit])[0].trim());
 								asegurado.setSexo(1);
-								asegurado.setParentesco(asegurados.size() == 0 ? 1 : 3);
+								asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
 								asegurados.add(asegurado);
 
 							}
@@ -599,7 +599,7 @@ public class GnpSaludModel {
 									fn.formatDate(dato.split("###")[2].trim(), ConstantsValue.FORMATO_FECHA));
 							asegurado.setNombre(dato.split("###")[1].trim());
 							asegurado.setSexo(1);
-							asegurado.setParentesco(asegurados.size() == 0 ? 1 : 3);
+							asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
 							asegurados.add(asegurado);
 							break;
 
