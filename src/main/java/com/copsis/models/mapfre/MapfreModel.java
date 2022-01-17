@@ -33,8 +33,15 @@ public class MapfreModel {
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
-			switch (tipo) {
 			
+			if(tipo == 0 &&  contenido.contains("Dental PLATA")) {
+				tipo =2;
+			}
+
+
+			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
+			
+	
 			case 1:// Autos
 				if (contenido.contains("CONTRATANTE Y CONDUCTOR" ) || contenido.contains("INFORMACIÓN GENERAL")) {
 					pagFin = fn.pagFinRango(stripper, doc, "Coberturas Amparadas");

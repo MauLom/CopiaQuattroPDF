@@ -1177,5 +1177,66 @@ public class DataToolsModel {
 
 	    }
 
+		public int buscaParentesco(String texto) {
+			int tipoParentesco = 0;
+	
+			List<String> listParentescos = Arrays.asList("TIT","TITULAR","ASEGURADO PRINCIPAL","CONY.","CONYUGE","CÓNYUGE","HIJO",
+	        "HIJO","HIJO A","HIJA","HIJO/A","HIJO-A","HIJO M","HIJA F"
+	        ,"PADRE","NIETO","MADRE","ESPOSA","ESPOSO","","ESPOSA F","ASEGURADO","DEPENDIENTES"
+	        ,"OTRO","HERMANO/A","PARENTESCOS","PERTENECIENTE","HERMANA","HERMANO","ABUELO","PADRE-MADRE"
+	        );
+		
+			for(String parentesco: listParentescos) {
+
+				if(texto.toUpperCase().contains(parentesco)) {
+
+				switch (parentesco) {
+	                case "TIT":
+	                case "TITULAR":
+	                case "ASEGURADO PRINCIPAL":
+	                tipoParentesco = 1;
+	                    break;
+	                case "CONY.":
+	                case "CONYUGE":
+	                case "CÓNYUGE":
+	                tipoParentesco = 2;
+	                    break;
+	                case "HIJO":
+	                case "HIJO A":
+	                case "HIJA":
+	                case "HIJO/A":
+	                case "HIJO-A":
+	                case "HIJO M":
+	                case "HIJA F":
+	                tipoParentesco = 3;
+	                    break;
+	                case "PADRE":
+	                case "NIETO":
+	                case "MADRE":
+	                case "ESPOSA":
+	                case "ESPOSO":
+	                case "ESPOSA F":
+	                case "ASEGURADO":
+	                case "DEPENDIENTES":
+	                case "OTRO":
+	                case "HERMANO/A":
+	                case "PARENTESCOS":
+	                case "PERTENECIENTE":
+	                case "HERMANA":
+	                case "HERMANO":
+	                case "SUEGRA":
+	                case "ABUELO":
+	                case "PADRE-MADRE":
+	                tipoParentesco = 4;
+	                    break;
+	           
+	                }
+	               
+				}
+			}
+	
+		return tipoParentesco;
+			
+		}
 
 }
