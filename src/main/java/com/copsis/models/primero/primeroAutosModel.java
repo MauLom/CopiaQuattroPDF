@@ -210,8 +210,7 @@ public class primeroAutosModel {
 
 
 			return modelo;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {		
 			return modelo;
 		}
 	}
