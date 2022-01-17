@@ -288,13 +288,15 @@ public class AxaSaludModel {
 			fin = contenido.indexOf("Prima Total Asegurados:");
 			int index = -1;
 			String texto;
+		
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				  if(newcontenido.split("\n")[i].contains("-")) {	
+
 			  switch (newcontenido.split("\n")[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((newcontenido.split("\n")[i].split("###")[0].split(",")[1] +" " + newcontenido.split("\n")[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			

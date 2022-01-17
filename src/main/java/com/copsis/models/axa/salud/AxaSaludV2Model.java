@@ -32,19 +32,17 @@ public class AxaSaludV2Model {
 		int fin = 0;
 
 		inicontenido = fn.fixContenido(contenido);
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("Costo###por###Servicio", "Costo por Servicio")
-			.replace("P ###rotección Dental", "Protección Dental")
-			.replace("T ###u Médico 24 Hrs", "Tu Médico 24 Hrs###")
-			.replace("B ###eneficio de Atn Médica", "Beneficio de Atn Médica###")
-			.replace("C ###omplicaciones de GMM no cubiertos", "Complicaciones de GMM no cubiertos###")
-			.replace("D ###e acuerdo a Condiciones Generales", " De acuerdo a Condiciones Generales")
-			.replace("D ###educible Cero por Accidente", "Deducible Cero por Accidente###")
-			.replace("N ###-A", "###N-A")
-			.replace("C ###osto Preferencial", "Costo Preferencial ")
-			.replace("C ###obertura Nacional", "Cobertura Nacional")
-			.replace("###N ###o Aplica", "###No Aplica")
-			.replace("N ###o Aplica ", "No Aplica ")
-				;
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+				.replace("Costo###por###Servicio", "Costo por Servicio")
+				.replace("P ###rotección Dental", "Protección Dental")
+				.replace("T ###u Médico 24 Hrs", "Tu Médico 24 Hrs###")
+				.replace("B ###eneficio de Atn Médica", "Beneficio de Atn Médica###")
+				.replace("C ###omplicaciones de GMM no cubiertos", "Complicaciones de GMM no cubiertos###")
+				.replace("D ###e acuerdo a Condiciones Generales", " De acuerdo a Condiciones Generales")
+				.replace("D ###educible Cero por Accidente", "Deducible Cero por Accidente###")
+				.replace("N ###-A", "###N-A").replace("C ###osto Preferencial", "Costo Preferencial ")
+				.replace("C ###obertura Nacional", "Cobertura Nacional").replace("###N ###o Aplica", "###No Aplica")
+				.replace("N ###o Aplica ", "No Aplica ");
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(20);
@@ -112,10 +110,11 @@ public class AxaSaludV2Model {
 						modelo.setVigenciaDe(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1]
 										.replace("###", "").replace("\r", "")));
-						if(newcontenido.split("\n")[i+1].contains("-")) {
-							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].replace("@@@", "").trim()));						
-					   }
-					
+						if (newcontenido.split("\n")[i + 1].contains("-")) {
+							modelo.setVigenciaA(fn
+									.formatDateMonthCadena(newcontenido.split("\n")[i + 1].replace("@@@", "").trim()));
+						}
+
 						cp = true;
 						vigenciaD = true;
 					} else if (newcontenido.split("\n")[i].contains("C.P.")
@@ -142,21 +141,27 @@ public class AxaSaludV2Model {
 						modelo.setVigenciaDe(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("inicio de vigencia")[1]
 										.replace("###", "").trim().replace("\r", "")));
-						
-					}
-					  if (newcontenido.split("\n")[i].contains("R.F.C:")  && newcontenido.split("\n")[i].contains("Teléfono") ) {
-						   modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "").replace("\u00A0","").trim() );
-					   }
-					   
 
-					if (newcontenido.split("\n")[i].contains("R.F.C.") && newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA3) && newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1].length() > 7 ) {
-	   
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1].replace("###", "").trim().replace("\r", "")));
+					}
+					if (newcontenido.split("\n")[i].contains("R.F.C:")
+							&& newcontenido.split("\n")[i].contains("Teléfono")) {
+						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0]
+								.replace("###", "").replace("\u00A0", "").trim());
+					}
+
+					if (newcontenido.split("\n")[i].contains("R.F.C.")
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA3)
+							&& newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1].length() > 7) {
+
+						modelo.setVigenciaA(
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.VIGENCIA3)[1]
+										.replace("###", "").trim().replace("\r", "")));
 					} else if (newcontenido.split("\n")[i].contains("Fecha de fin de vigencia")) {
 
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Fecha de fin de vigencia")[1]
+						modelo.setVigenciaA(fn
+								.formatDateMonthCadena(newcontenido.split("\n")[i].split("Fecha de fin de vigencia")[1]
 										.replace("###", "").trim().replace("\r", "")));
-						
+
 					}
 
 					if (newcontenido.split("\n")[i].contains("emisión")) {
@@ -174,7 +179,8 @@ public class AxaSaludV2Model {
 									(newcontenido.split("\n")[i].split(modelo.getCveAgente())[1].replace("###", " ")
 											+ " "
 											+ newcontenido.split("\n")[i + 1].split(ConstantsValue.PERIODO)[0].trim())
-													.trim().replace("@@@", "").replace("\r", "").replace("###", "").trim());
+													.trim().replace("@@@", "").replace("\r", "").replace("###", "")
+													.trim());
 						} else {
 							modelo.setAgente((newcontenido.split("\n")[i].split(modelo.getCveAgente())[1]
 									.split(ConstantsValue.PERIODO)[0].replace("###", " ")).replace("\r", "").trim());
@@ -261,7 +267,8 @@ public class AxaSaludV2Model {
 					if (newcontenido.split("\n")[i].split("-").length > 5) {
 						String x = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 						asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
-						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4]).trim());
+						asegurado.setNacimiento(
+								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4]).trim());
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5]));
 						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3]));
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[3]).booleanValue() ? 1 : 0);
@@ -280,17 +287,69 @@ public class AxaSaludV2Model {
 				inicio = inicontenido.indexOf("Relación de Asegurados");
 				fin = inicontenido.indexOf("AXA Seguros, S.A. de C.V.");
 				if (inicio > 0 && fin > 0 && inicio < fin) {
-					newcontenido = inicontenido.substring(inicio, fin).replace("T   it u  l ar", "Titular")
-							.replace("C   ó  n  y  uge", "Conyuge").replace("H   i j o", "Hijo")
-							.replaceAll("  +", "###").replace("/", "-").replace("######", "###").replace("H###i j a", "Hija")
-							.replace("L ###una", "Luna");
+					newcontenido = inicontenido.substring(inicio, fin).replaceAll("  +", "###").replace("/", "-")
+							.replace("######", "###").replace("######", "###").replace("### ###", "###")
+							.replace("T   it u  l ar", "Titular").replace("T###i t u###l ar", "Titular")
+							.replace("T###it u###l ar", "Titular")
+							.replace("C   ó  n  y  uge", "Conyuge").replace("C###ó###n###y###u ###ge", "Conyuge")
+							.replace("H   i j o", "Hijo").replace("H###i j o", "Hijo").replace("H###i j a", "Hija")
+							.replace("R ###odriguez", "Rodriguez").replace(" ###", "");
 
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						int x = newcontenido.split("\n")[i].split("###").length;
-
+						
 						if (newcontenido.split("\n")[i].split("-").length > 5) {
-				
+							if (x == 11) {
+								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
+								if (nombre.contains(", ")) {
+									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
+								} else {
+									asegurado.setNombre(nombre);
+								}
+								asegurado.setSexo(
+										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
+								asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[2]));
+								asegurado.setParentesco(fn.buscaParentesco(newcontenido.split("\n")[i]));
+
+								fechaN = newcontenido.split("\n")[i].split("###")[3] + ""
+										+ newcontenido.split("\n")[i].split("###")[4].replace(" ", "");
+								fechaN = (fechaN.length() > 10
+										? newcontenido.split("\n")[i].split("###")[4].replace(" ", "")
+										: fechaN);
+
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
+								asegurado.setAntiguedad(
+										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5]));
+
+								asegurados.add(asegurado);
+							}
+
+							if (x == 12) {
+								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
+								if (nombre.contains(", ")) {
+									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
+								} else {
+									asegurado.setNombre(nombre);
+								}
+
+								fechaN = newcontenido.split("\n")[i].split("###")[4] + ""
+										+ newcontenido.split("\n")[i].split("###")[5].replace(" ", "");
+
+								fechaN = (fechaN.length() > 10
+										? newcontenido.split("\n")[i].split("###")[5].replace(" ", "")
+										: fechaN);
+								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
+
+								fechaA = newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
+								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
+
+								asegurado.setParentesco(fn.buscaParentesco(newcontenido.split("\n")[i]));
+								asegurado.setSexo(
+										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
+								asegurados.add(asegurado);
+							}
+
 							if (x == 13) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 								asegurado.setNombre(nombre.split(",")[1] + " "
@@ -305,53 +364,44 @@ public class AxaSaludV2Model {
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
 								asegurados.add(asegurado);
 							}
-							if (x == 12) {
-								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
-								asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
-
-								fechaN = newcontenido.split("\n")[i].split("###")[4] + ""
-										+ newcontenido.split("\n")[i].split("###")[5].replace(" ", "");
-								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
-								fechaA = newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
-								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
-								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3]));
-								asegurado.setSexo(
-										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
-								asegurados.add(asegurado);
-							}
 							if (x == 14) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
-								if(nombre.contains(", ")) {
+								if (nombre.contains(", ")) {
 									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
-								}else {
+								} else {
 									asegurado.setNombre(nombre);
 								}
-								
+
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6] + ""
 										+ newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
 								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
-								fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "").contains("-") ? newcontenido.split("\n")[i].split("###")[8].replace(" ", "") :newcontenido.split("\n")[i].split("###")[9];						
+								fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "").contains("-")
+										? newcontenido.split("\n")[i].split("###")[8].replace(" ", "")
+										: newcontenido.split("\n")[i].split("###")[9];
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
-								 
-								asegurado.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[3]));
+
+								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3]));
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
-					           asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[1])[1].split(newcontenido.split("\n")[i].split("###")[3])[0].replace("###", "").trim()));
-					     	  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[10]));
+								asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i]
+										.split(newcontenido.split("\n")[i].split("###")[1])[1]
+												.split(newcontenido.split("\n")[i].split("###")[3])[0]
+														.replace("###", "").trim()));
+								asegurado.setFechaAlta(
+										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[10]));
 								asegurados.add(asegurado);
 							}
 
 							if (x == 15) {
-				
+
 								nombre = newcontenido.split("\n")[i].replace("A ###", "A").split("###")[0]
 										.replace("@@@", "").trim();
-								if(nombre.contains(", ")) {
+								if (nombre.contains(", ")) {
 									asegurado.setNombre((nombre.split(",")[1] + " " + nombre.split(",")[0]).trim());
-								}else {
+								} else {
 									asegurado.setNombre(nombre);
 								}
-								
 
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6] + ""
@@ -369,12 +419,15 @@ public class AxaSaludV2Model {
 											fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1
 													: 0);
 								}
-								
-					
-								  asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[11]));
-								
-							  asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[1])[1].split(newcontenido.split("\n")[i].split("###")[4])[0].replace("###", "").trim()));
-								
+
+								asegurado.setFechaAlta(
+										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[11]));
+
+								asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i]
+										.split(newcontenido.split("\n")[i].split("###")[1])[1]
+												.split(newcontenido.split("\n")[i].split("###")[4])[0]
+														.replace("###", "").trim()));
+
 								asegurados.add(asegurado);
 							}
 						}
@@ -392,47 +445,45 @@ public class AxaSaludV2Model {
 			fin = contenido.indexOf("Costo por Servicio");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r","").replace("######", "###")
-					.replace("###1 ###0 % ", "###10 %");
-			   for (int i = 0; i < newcontenido.split("\n").length;i++) {
-				   EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-				   if(!newcontenido.split("\n")[i].contains("Coberturas-Servicios") && !newcontenido.split("\n")[i].contains("Tope de Coaseguro")
-						   && !newcontenido.split("\n")[i].contains("Coberturas adicionales con costo")
-						   && !newcontenido.split("\n")[i].contains("Servicios con costo")
-						   && !newcontenido.split("\n")[i].contains("Servicio###")
-						   && !newcontenido.split("\n")[i].contains("###Suma")
-						   && !newcontenido.split("\n")[i].contains("Tabulador Médico")
-						   ) {
-					
-				 switch (newcontenido.split("\n")[i].split("###").length) {
-					 case 3: case 6:
-						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
-						cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
-                        coberturas.add(cobertura);
-						  break;
-					case 4: case 5:
-						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
-						cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
-						cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[3].replace("\r", "").trim());
-						coberturas.add(cobertura);
-						break;
-			
-					default:
-						break;
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
+						.replace("######", "###").replace("###1 ###0 % ", "###10 %");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					if (!newcontenido.split("\n")[i].contains("Coberturas-Servicios")
+							&& !newcontenido.split("\n")[i].contains("Tope de Coaseguro")
+							&& !newcontenido.split("\n")[i].contains("Coberturas adicionales con costo")
+							&& !newcontenido.split("\n")[i].contains("Servicios con costo")
+							&& !newcontenido.split("\n")[i].contains("Servicio###")
+							&& !newcontenido.split("\n")[i].contains("###Suma")
+							&& !newcontenido.split("\n")[i].contains("Tabulador Médico")) {
+
+						switch (newcontenido.split("\n")[i].split("###").length) {
+						case 3:
+						case 6:
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
+							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+							coberturas.add(cobertura);
+							break;
+						case 4:
+						case 5:
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
+							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+							cobertura
+									.setCoaseguro(newcontenido.split("\n")[i].split("###")[3].replace("\r", "").trim());
+							coberturas.add(cobertura);
+							break;
+
+						default:
+							break;
+						}
+
 					}
-						
-				  }	
-			   }	
-			   modelo.setCoberturas(coberturas);
+				}
+				modelo.setCoberturas(coberturas);
 			}
-			
-			
-			
-			
-			
-			
+
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 			if (modelo.getFormaPago() == 1) {
@@ -459,7 +510,7 @@ public class AxaSaludV2Model {
 			modelo.setRecibos(recibos);
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {	
 			modelo.setError(
 					AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
