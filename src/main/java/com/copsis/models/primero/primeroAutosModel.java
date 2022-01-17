@@ -69,19 +69,19 @@ public class primeroAutosModel {
 	                        }
 	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1].trim()));
-	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));
-	                            modelo.setFechaEmision(modelo.getFechaEmision().isBlank()? modelo.getVigenciaDe():modelo.getFechaEmision());
+	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));	                      
+	                            modelo.setFechaEmision( ( modelo.getVigenciaDe().trim().length() >  0  ? modelo.getVigenciaDe():""));
 	                        } else {
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
 	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[4].trim()));
-	                            modelo.setFechaEmision(modelo.getFechaEmision().isBlank()? modelo.getVigenciaDe():modelo.getFechaEmision());
+	                            modelo.setFechaEmision(modelo.getFechaEmision().length()  >  0 ? modelo.getVigenciaDe():"");
 	                        }
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Clave") && newcontenido.split("\n")[i].contains("Marca")) {
 	                        modelo.setClave(newcontenido.split("\n")[i + 1].split("###")[0]);
 	                        modelo.setMarca(newcontenido.split("\n")[i + 1].split("###")[1].split("-")[0]);
 	                        modelo.setDescripcion(newcontenido.split("\n")[i + 1].split("###")[1].split("-")[1]);
-	                        modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i + 1].split("###")[2]));
+	                        modelo.setModelo(Integer.parseInt(fn.cleanString(newcontenido.split("\n")[i + 1].split("###")[2])));
 	                    }else if(newcontenido.split("\n")[i].contains("Marca de Fábrica")&& newcontenido.split("\n")[i].contains("Descripción")) {
 	                    	modelo.setMarca(newcontenido.split("\n")[i + 2].split("###")[1].split("-")[0].trim());
 	                        modelo.setDescripcion(newcontenido.split("\n")[i + 2].split("###")[1].split("-")[1].trim());
@@ -126,12 +126,15 @@ public class primeroAutosModel {
 	            
 	            inicio = contenido.indexOf("Prima Neta");
 	            fin = contenido.indexOf("EN CASO DE SINIESTRO");
+	           
 	            
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {  
-	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de") &&
-	                    	newcontenido.split("\n")[i].contains("Subtotal###IVA###Total")) {
+
+                      if(newcontenido.split("\n")[i].contains("Prima Neta") && newcontenido.split("\n")[i].contains("Financiamiento")
+                    	  && newcontenido.split("\n")[i].contains("Financiamiento")) 
+                      {
 	                        modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
 	                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[1])));
 	                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[2])));
@@ -142,6 +145,14 @@ public class primeroAutosModel {
 	                    if (newcontenido.split("\n")[i].contains("Moneda")) {
 	                        modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i + 1].split("###")[0]));
 	                        modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[1]));
+	                        
+	                        if(modelo.getFormaPago() == 0) {
+	                        	modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i + 1]));
+	                        }
+	                        if(modelo.getMoneda() == 0) {
+	                        	modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i + 1]));
+	                        }
+	                        
 	                    }
 
 	                }
@@ -200,6 +211,7 @@ public class primeroAutosModel {
 
 			return modelo;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return modelo;
 		}
 	}
