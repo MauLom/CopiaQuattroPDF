@@ -283,11 +283,15 @@ public class GnpSaludModel {
 						case 2:
 						case 3:
 							newcontenido = new StringBuilder();
-							newcontenido.append(fn.cleanString(dato.split("%")[1].replace("###", "")));
+							if(dato.contains("%")) {
+								newcontenido.append(fn.cleanString(dato.split("%")[1].replace("###", "")));
+							}else {
+								newcontenido.append(fn.cleanString(dato.split("###")[2]));
+							}
+							
 							if (fn.isNumeric(newcontenido.toString())) {
 								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
 							}
-
 							break;
 						default:
 							break;
@@ -328,6 +332,12 @@ public class GnpSaludModel {
 								if (dato.split("###")[0].trim().equals(ConstantsValue.PAGAR)) {
 									modelo.setPrimaTotal(
 											fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
+								}
+								break;
+							case 3:
+								if (dato.split("###")[1].trim().equals(ConstantsValue.PAGAR)) {
+									modelo.setPrimaTotal(
+											fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[2].trim())));
 								}
 								break;
 							case 4:
@@ -578,7 +588,7 @@ public class GnpSaludModel {
 								asegurado.setNombre(dato.split("###")[1]
 										.split(dato.split("###")[1].trim().split(" ")[longitudSplit])[0].trim());
 								asegurado.setSexo(1);
-								asegurado.setParentesco(1);
+								asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
 								asegurados.add(asegurado);
 
 							}
@@ -589,7 +599,7 @@ public class GnpSaludModel {
 									fn.formatDate(dato.split("###")[2].trim(), ConstantsValue.FORMATO_FECHA));
 							asegurado.setNombre(dato.split("###")[1].trim());
 							asegurado.setSexo(1);
-							asegurado.setParentesco(1);
+							asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
 							asegurados.add(asegurado);
 							break;
 
@@ -604,7 +614,7 @@ public class GnpSaludModel {
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// coberturas{nombre sa deducible coaseguro}
-			String[] coberturasTxt = { "E mergencia de gastos médico s", "Emergencia de gastos médico s",
+			String[] coberturasTxt = {"B ###ásica", "E mergencia de gastos médico s", "Emergencia de gastos médico s","E ###mergencia de gastos médico s",
 					"Emergencia en el Extranjero", "E mergencia en el Extranjero", "Catastróficas Nacional",
 					"C atastróficas Nacional", "Enfermedades Catastróficas", "n el Extranjero", "Asistencia en Viajes",
 					"A sistencia en Viajes", "Membresía Médica Móvil", "M embresía Médica Móvil",
@@ -625,7 +635,6 @@ public class GnpSaludModel {
 						newcontenido1 = "";
 						contenidoCoberturas = filtrado.split(ConstantsValue.COASASEGURO)[1].split("Coberturas")[0]
 								.trim();
-
 						inicioCob = contenidoCoberturas.indexOf(cobertura);
 						if (inicioCob > -1) {
 
@@ -680,7 +689,39 @@ public class GnpSaludModel {
 												.trim();
 									}
 								}
-							} else {// TODAS LAS DEMAS COBETURAS
+							}else if(cobertura.equals("B ###ásica")) {
+								StringBuilder strbCobertura = new StringBuilder();
+								inicio = contenidoCoberturas.indexOf("B ###ásica");
+								fin = contenidoCoberturas.indexOf("%");
+								if(fin == -1) {
+									fin = contenidoCoberturas.indexOf("Desde las");
+								}else {
+									fin = fin +4;
+								}
+								if(inicio>-1 && fin>-1 && inicio<fin) {
+									String textoFiltrado = contenidoCoberturas.substring(inicio,fin);
+									String[] detalleCoberturas = textoFiltrado.split("\n");
+									if(detalleCoberturas.length >0 ) {
+										if(detalleCoberturas[1].contains("acional")) {
+											strbCobertura.append("Básica");;
+											strbCobertura.append(detalleCoberturas[1]);
+											newcontenido1 = strbCobertura.toString().replace("\r","").replace("###−", "-").trim();
+										}
+									}
+								}
+							}else if(cobertura.equals("E ###mergencia de gastos médico s")) {
+								StringBuilder strbCobertura = new StringBuilder();
+								String textoFiltrado = contenidoCoberturas.split("E ###mergencia de gastos médico s")[1];
+								String[] detalleCoberturas = textoFiltrado.split("\n");
+
+								if(detalleCoberturas.length > 3 && detalleCoberturas[1].contains("mayores no cubiertos")) {
+										strbCobertura.append("Emergencia de gastos médicos mayores no cubiertos");
+										strbCobertura.append(detalleCoberturas[2]);
+										newcontenido1 = strbCobertura.toString().replace("\r","").replace("###−", "-").trim();
+									
+								}
+								
+							}else {// TODAS LAS DEMAS COBETURAS
 								if (!newcontenido.toString().contains(cobertura)) {
 
 									newcontenido1 = contenidoCoberturas
@@ -746,7 +787,7 @@ public class GnpSaludModel {
 					StringBuilder datotexto = new StringBuilder();
 					for (String dato : newcontenido.toString().split("\r\n")) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-
+						datotexto = new StringBuilder();
 						datotexto.append(dato.replace("−", "").trim());
 						String auxStr = datotexto.toString();
 						if (datotexto.toString().contains("E mergencia de gastos médico s")
@@ -762,8 +803,9 @@ public class GnpSaludModel {
 							datotexto = new StringBuilder(); 
 							datotexto.append("Enfermedades ").append(auxStr);
 
-						} else if (datotexto.toString().contains("n el Extranjero") && !datotexto.toString().contains("ergen")) {
-
+						} else if (datotexto.toString().contains("n el Extranjero")
+								&& !datotexto.toString().contains("ergen")
+								&& !datotexto.toString().contains("Enfermedades Catastróficas en el Extranjero")) {
 							datotexto = new StringBuilder();
 							datotexto.append("Enfermedades Catastróficas ").append(auxStr);
 						}
@@ -947,7 +989,7 @@ public class GnpSaludModel {
 						newcontenido.append(x.substring(inicio + 12, x.indexOf("\n", inicio + 12)));
 
 						if (newcontenido.toString().contains("Prima")) {
-							certificado = fn.gatos(newcontenido.toString().split("Prima")[0]);
+							certificado = fn.gatos(newcontenido.toString().split("Prima")[0]).replace("###", "").trim();
 						}
 					}
 					inicio = x.indexOf("Sexo:");
@@ -955,8 +997,7 @@ public class GnpSaludModel {
 					if (inicio > -1) {
 						newcontenido = new StringBuilder();
 						newcontenido.append(fn.gatos(x.substring(inicio + 5, inicio + 150).split("\n")[0]).trim());
-
-						sexo = (fn.sexo(newcontenido.toString()).booleanValue()) ? 1 : 0;
+						sexo = (fn.sexo(newcontenido.toString().replace("###", "").trim()).booleanValue()) ? 1 : 0;
 
 					}
 					if (nombre.length() > 0) {
