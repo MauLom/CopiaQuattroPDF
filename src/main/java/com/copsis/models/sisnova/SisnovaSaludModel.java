@@ -59,6 +59,8 @@ public class SisnovaSaludModel {
             if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.trim().replaceAll(" +", " ").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("   ", " ");
+				System.err.println(newcontenido);
+				modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_NOM)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
@@ -70,10 +72,11 @@ public class SisnovaSaludModel {
 						modelo.setPoliza(modelo.getPolizaGuion().replace("-", ""));
 					}
 
-					if(newcontenido.split("\n")[i].contains("CP:")) {
-						modelo.setCp(newcontenido.split("CP:")[1].substring(0,6).trim());
+					if( modelo.getCp().length() == 0) {
+						obtenerCP(newcontenido.split("\n")[i], newcontenido);
 					}
-					if(newcontenido.split("\n")[i].contains("Fecha de emisión")) {	
+
+					if(newcontenido.split("\n")[i].contains("Fecha de emisión") && modelo.getFechaEmision().length() == 0) {	
 						
 						if(newcontenido.split("\n")[i].split("Fecha de emisión")[1].replace("###", "").trim().replace(" ", "").replace("\u00A0","").split("-")[0].length() == 4 ) {
 							modelo.setFechaEmision(newcontenido.split("\n")[i].split("Fecha de emisión")[1].replace("###", "").trim().replace(" ", "").replace("\u00A0",""));
@@ -146,7 +149,7 @@ public class SisnovaSaludModel {
             			.replace("las###12###Hrs.###del###día###", "").replace("::", ":");
             	        //El caracter unicode
             	  
-            	
+            	System.out.println(newcontenido);
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
             	
@@ -288,5 +291,28 @@ public class SisnovaSaludModel {
 		}
 	}
 	
+	private void obtenerCP(String lineaTexto, String newContenido) {
+		System.err.println(newContenido);
+		if(lineaTexto.contains("CP:")) {
+			modelo.setCp(lineaTexto.substring(0,6).trim());
+		}else if(newContenido.toUpperCase().contains("COLONIA")){
+			int inicio = newContenido.toUpperCase().indexOf("COLONIA");
+			int fin = newContenido.toUpperCase().indexOf("NOMBRE Y DOMICILIO DEL TITULAR");
 
+			if(inicio<fin) {
+				newContenido = newContenido.substring(inicio,fin);
+				String[] arrContenido = newContenido.split(",");
+				System.out.println("p"+arrContenido[3]+"p");
+				if(arrContenido.length > 3) {
+					if(fn.isvalidCp(arrContenido[3].replace("\n","").trim())) {
+						modelo.setCp(arrContenido[3].trim());
+					}else {
+						System.out.println("No");
+					}
+				}
+				System.err.println(arrContenido.length);
+				
+			}
+	}
+	}
 }
