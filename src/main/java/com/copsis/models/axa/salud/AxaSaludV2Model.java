@@ -21,7 +21,6 @@ public class AxaSaludV2Model {
 	private boolean vigenciaD = false;
 
 	public AxaSaludV2Model(String contenido) {
-		System.err.println("AxaSaludV2Model");
 		this.contenido = contenido;
 	}
 
