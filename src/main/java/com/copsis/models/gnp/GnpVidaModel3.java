@@ -106,7 +106,11 @@ public class GnpVidaModel3 {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					System.out.println(newcont.toString().split("\n")[i]);
+
+					if( newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i].contains("Clave")) {
+						modelo.setAgente(newcont.toString().split("\n")[i].split("Agente")[1].split("Clave")[0].replace("###", " ").trim());
+						modelo.setCveAgente(newcont.toString().split("\n")[i].split("Clave")[1].split("###")[1].replace("###", " ").trim());
+					}
 				}
 			}
 			
