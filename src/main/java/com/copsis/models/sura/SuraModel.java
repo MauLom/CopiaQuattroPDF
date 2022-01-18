@@ -35,7 +35,12 @@ public class SuraModel {
 					modelo  = new SuraAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 				break;
 			case 2://Salud
-				modelo  = new SuraSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+				 if(fn.caratula(1, 1, stripper, doc).contains("Desde las")) {
+					 
+				 }else {
+						modelo  = new SuraSaludBModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				 }
+							
 			break;
 			default:
 				break;
