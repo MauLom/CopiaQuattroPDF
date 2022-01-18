@@ -308,7 +308,7 @@ public class AxaSaludModel {
 						if(newcontenido.split("\n")[i].split("###").length == 7 && asegurado.getNacimiento().split("-")[0].length()>4) {							
 							texto = asegurado.getNacimiento().substring(4,6);//  se extrae los digitos que no corresponden al año 195863-03-17 = 63
 							asegurado.setEdad(fn.castInteger(texto));
-							asegurado.setNacimiento(fn.formatDateMonthCadena(asegurado.getNacimiento().replace(texto, "")));
+							asegurado.setNacimiento(asegurado.getNacimiento().replace(texto, ""));
 						}
 						index = fn.castDouble(newcontenido.split("\n")[i].split("###")[5]) != null ? 5 : 4;
 						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[index])));
