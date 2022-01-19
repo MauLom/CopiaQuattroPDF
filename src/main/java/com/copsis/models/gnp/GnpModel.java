@@ -69,9 +69,18 @@ public class GnpModel {
 							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 1).procesar();
 				}
 			} else if (contenido.contains("Póliza de Seguro de Daños") || contenido.contains("Daños")) {
-				modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
-						fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
 
+				if(contenido.contains("Póliza Multiple")){
+					modelo = new GnpDiversosBModelo(fn.caratula(1, 12, stripper, doc),
+							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false)														
+							).procesar();
+
+				}else {
+					modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
+							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
+
+				}
+				
 			}
 			return modelo;
 		} catch (Exception ex) {
