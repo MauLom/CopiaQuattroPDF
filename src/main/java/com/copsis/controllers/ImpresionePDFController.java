@@ -27,7 +27,7 @@ import com.copsis.utils.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/pdf/impresion-pdf")
+@RequestMapping("/impresion-pdf")
 @RequiredArgsConstructor
 public class ImpresionePDFController {
 
