@@ -53,7 +53,7 @@ public class GnpModel {
 				}
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
-				contenido = "";
+		
 				if(contenido.contains("Seguro de Vida")) {
 					modelo = new GnpVIdaModel2(fn.caratula(1, 5, stripper, doc)).procesar();	
 				}else {
