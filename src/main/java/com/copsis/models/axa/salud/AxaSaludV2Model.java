@@ -356,6 +356,12 @@ public class AxaSaludV2Model {
 										+ newcontenido.split("\n")[i + 1].split("###")[0] + " " + nombre.split(",")[0]);
 								fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
 										+ newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
+								if(fechaN.length() == 9 && fechaN.split("-")[0].length() == 1 ) {
+									fechaN = newcontenido.split("\n")[i].split("###")[4] +
+											newcontenido.split("\n")[i].split("###")[5] + ""
+											+ newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
+								}
+								
 								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								fechaA = newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
 								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
