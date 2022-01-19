@@ -1,72 +1,72 @@
 package com.copsis.config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
 
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.ExternalDocumentation;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
-
-@ConfigurationProperties(prefix = "swagger", ignoreInvalidFields = true, ignoreUnknownFields = true)
 @Configuration
+@EnableSwagger2
 public class SwaggerConfig {
-	@Value("${spring.profiles.active}")
-	private String ambiente;
+
+	@Bean
+	public Docket apiDocketPrivate() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.globalOperationParameters(Arrays.asList(
+					new ParameterBuilder().
+						name("X-Tenant-Instance")
+							.description("DB instance name").modelRef(new ModelRef("string"))
+							.parameterType("header")
+							.required(false)
+						.build(),
+					new ParameterBuilder().
+						name("X-Tenant-Db")
+							.description("DB name").modelRef(new ModelRef("string"))
+							.parameterType("header")
+							.required(false)
+						.build()
+					))
+				.groupName("Private")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.copsis.controllers"))
+				.paths(PathSelectors.any())
+				.build()
+				.apiInfo(getApiInfo())
+				;
+	}
 	
-	private static final String BEARER_KEY = "bearer-key";
-
-	private Map<Object, Object> server = new LinkedHashMap<>();
-
-	private List<Server> listServers = new ArrayList<>();
-
-	public Map<Object, Object> getServer() {
-		return server;
-	}
-
-	public void setServer(Map<String, Map<String, String>> server) {
-		server.forEach((key, value) -> {
-			Server ser = new Server();
-			ser.url(convert(value, "url"));
-			ser.description(convert(value, "description"));
-			listServers.add(ser);
-		});
-	}
-
-	public String convert(Map<String, String> source, String prop) {
-		return source.get(prop);
-	}
-
 	@Bean
-	public GroupedOpenApi adminApi() {
-		return GroupedOpenApi.builder().group("Private").packagesToScan("com.copsis.controllers").pathsToMatch("/**")
-				.build();
+	public Docket apiDocketPublic() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Publics")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.copsis.controllers.publics"))
+				.paths(PathSelectors.any())
+				.build()
+				.apiInfo(getApiInfo())
+				;
 	}
-
-	@Bean
-	public OpenAPI customOpenAPI() {
-		Components components = new Components();
-		components.addSecuritySchemes(BEARER_KEY, new SecurityScheme().type(SecurityScheme.Type.HTTP)
-				  .description("Bearer Token").scheme("bearer").bearerFormat("JWT"));
-		
-		return new OpenAPI().servers(listServers).components(components)
-				.info(new Info().title("quattro pdf API").description("Apis expuestas").version("v 1.0.0")
-						.license(new License().name("Copsis API 1.0").url("https://copsis.com")))
-				.externalDocs(new ExternalDocumentation().description("Documentación quattro-pdf")
-						.url("https://copsis.com"))
-				.security(Arrays.asList(new SecurityRequirement().addList(BEARER_KEY)));
+	
+	private ApiInfo getApiInfo() {
+		return new ApiInfo(
+				"Quattro PDF API",
+				"API Quattro PDF API Description",
+				"1.0",
+				"https://copsis.com",
+				new Contact("Copsis", "https://copsis.com", "hola@copsis.com"),
+				"LICENSE",
+				"LICENSE URL",
+				Collections.emptyList()
+				);
 	}
 }
