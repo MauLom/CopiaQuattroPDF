@@ -126,6 +126,7 @@ public class SisnovaSaludModel {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[1]);
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").trim()));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].trim()));
+						asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
 						asegurados.add(asegurado);
 					}
 				}
@@ -199,7 +200,7 @@ public class SisnovaSaludModel {
             if(modelo.getPrimaneta() == BigDecimal.ZERO && modelo.getRecargo() == BigDecimal.ZERO && modelo.getDerecho() == BigDecimal.ZERO) {
             	 inicio = contenido.indexOf("Prima básica");
                  fin = contenido.indexOf("Advertencia");
-                //System.err.println(contenido);
+
                  if (inicio > -1 && fin > -1 && inicio < fin) {
                 	 newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("\u00A0","").replaceAll("@@@", "").replace("######", "###");
                 		for (int i = 0; i < newcontenido.split("\n").length; i++) {   
