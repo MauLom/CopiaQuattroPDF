@@ -33,7 +33,6 @@ public class SisnovaSaludModel {
 		 boolean calle = true;
 		 int inicio;
 		 int fin ;
-		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("DATOS DE LOS ASEGURADOS", "Datos de los asegurados")
 				.replace("PÓLIZA NO.", "PÓLIZA NO.").replace("FECHA DE EMISIÓN", "Fecha de emisión")
@@ -116,12 +115,11 @@ public class SisnovaSaludModel {
             //ASEGURADOS           
             inicio = contenido.indexOf("Datos de los asegurados");
             fin = contenido.indexOf("Descripción de la póliza");
-            //System.out.println(contenido);
             if (inicio > 0 && fin > 0 && inicio < fin) {
             	List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replaceAll("### ###", "###").replaceAll("  +", "").replace("  ", " ");
-				//System.out.println("ASeguraod\n"+newcontenido+"\n================");
+
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if(newcontenido.split("\n")[i].split("-").length > 4) {					
@@ -148,7 +146,7 @@ public class SisnovaSaludModel {
             			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "").replace("Hasta", "Hasta:")
             			.replace("las###12###Hrs.###del###día###", "").replace("::", ":");
             	        //El caracter unicode
-            	  
+            	  //System.out.println(newcontenido);
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
             			if(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim().split("-")[0].length() == 4) {
@@ -201,7 +199,7 @@ public class SisnovaSaludModel {
             if(modelo.getPrimaneta() == BigDecimal.ZERO && modelo.getRecargo() == BigDecimal.ZERO && modelo.getDerecho() == BigDecimal.ZERO) {
             	 inicio = contenido.indexOf("Prima básica");
                  fin = contenido.indexOf("Advertencia");
-                
+                //System.err.println(contenido);
                  if (inicio > -1 && fin > -1 && inicio < fin) {
                 	 newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("\u00A0","").replaceAll("@@@", "").replace("######", "###");
                 		for (int i = 0; i < newcontenido.split("\n").length; i++) {   
@@ -221,7 +219,33 @@ public class SisnovaSaludModel {
                     			}
                 			}
                 		}
+                 }else if(inicio == -1) {
+                	 inicio = contenido.indexOf("Prima ###EXTRA ###Prima ###Prima Neta ###GASTOS DE ");
+                	 newcontenido = contenido.substring(inicio,fin).replace("### ###", "###").trim().replace("\r", "").replace("@@@", "");
+                	 String[] arrContenido = newcontenido.split("\n");
+
+                	 for(int i=0;i<arrContenido.length;i++) {
+                		 if(arrContenido[i].contains("Prima Neta") || arrContenido[i].contains("GASTOS") ) {
+                			 if(fn.numTx(arrContenido[i+1]).length()==0 && fn.numTx(arrContenido[i+2]).length()==0) {
+                				 List<String> valores = fn.obtenerListNumeros(arrContenido[i+3]);
+                				 if(valores.size() == 8) {
+                    				 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+                    				 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+                    				 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
+                				 }
+                			 }
+                		 }else if(arrContenido[i].contains("Prima Total") ) {
+                			 String[] valores = arrContenido[i+1].split("###");
+                			 
+                			 if(valores.length == 5) {
+                     			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores[2])));
+                     			modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores[3])));
+                     			modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores[4])));
+                			 }
+                		 }
+                	 }
                  }
+                 
             }
 
             if(modelo.getFormaPago() == 0) {
