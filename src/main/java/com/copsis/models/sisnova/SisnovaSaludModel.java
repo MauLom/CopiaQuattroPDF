@@ -147,7 +147,6 @@ public class SisnovaSaludModel {
             			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "").replace("Hasta", "Hasta:")
             			.replace("las###12###Hrs.###del###día###", "").replace("::", ":");
             	        //El caracter unicode
-            	  //System.out.println(newcontenido);
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
             			if(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim().split("-")[0].length() == 4) {
