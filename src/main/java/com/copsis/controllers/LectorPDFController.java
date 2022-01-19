@@ -24,7 +24,7 @@ import com.copsis.utils.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/pdf/lector-pdf")
+@RequestMapping("/lector-pdf")
 @RequiredArgsConstructor
 public class LectorPDFController   {
 	

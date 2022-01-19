@@ -65,7 +65,7 @@ public class SwaggerConfig {
 		return new OpenAPI().servers(listServers).components(components)
 				.info(new Info().title("quattro pdf API").description("Apis expuestas").version("v 1.0.0")
 						.license(new License().name("Copsis API 1.0").url("https://copsis.com")))
-				.externalDocs(new ExternalDocumentation().description("Documentación quattro-pdf")
+				.externalDocs(new ExternalDocumentation().description("Documentación pdf")
 						.url("https://copsis.com"))
 				.security(Arrays.asList(new SecurityRequirement().addList(BEARER_KEY)));
 	}
