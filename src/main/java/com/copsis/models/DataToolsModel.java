@@ -445,6 +445,9 @@ public class DataToolsModel {
 		case "TRIMESTRAL SR DERP":
 		case "TRIMESTRAL 12 MESES":
 		case "TRIM.S/REC":
+		case "TRIM.S-REC":
+		case "TRIM.C-REC":
+		case "TRIM.C/REC":	
 			dato = 3;
 			break;
 		case "MENS":
@@ -998,10 +1001,10 @@ public class DataToolsModel {
 		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA",
 				"ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R", "SEMESTRALS-R",
 				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
-				"TRIMESTRAL12MESES", "TRIM.S/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
+				"TRIMESTRAL12MESES", "TRIM.S/REC","TRIM.S-REC","TRIM.C-REC","TRIM.C/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
 				"MENSUALSR", "MENSUALS/R", "MENSUALS/R", "MEN.DER.PRORRATEA", "MENSUALVITRO", "MENSUALS/RDERP",
-				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO" };
-		for (String tipo : tiposP) {	
+				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO","" };
+		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
 				case "CONT":
@@ -1033,6 +1036,9 @@ public class DataToolsModel {
 				case "TRIMESTRAL SR DERP":
 				case "TRIMESTRAL 12 MESES":
 				case "TRIM.S/REC":
+				case "TRIM.S-REC":
+				case "TRIM.C-REC":
+				case "TRIM.C/REC":	
 					dato = 3;
 					break;
 				case "MENS":
@@ -1060,12 +1066,10 @@ public class DataToolsModel {
 				case "SEMANAL VITRO":
 					dato = 6;
 					break;
-				default:
-					dato = 0;
-					break;
 				}			
 			}				
 		}
+
 		return dato;
 	}
 	
