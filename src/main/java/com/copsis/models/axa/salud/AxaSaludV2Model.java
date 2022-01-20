@@ -466,7 +466,6 @@ public class AxaSaludV2Model {
 						int x = newcontenido.split("\n")[i].split("###").length;
 						
 						if (newcontenido.split("\n")[i].split("-").length > 5) {
-							System.out.println(newcontenido.split("\n")[i] +"--->" + x);
 							
 							if (x == 11) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
@@ -489,7 +488,8 @@ public class AxaSaludV2Model {
 								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								asegurado.setAntiguedad(
 										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5]));
-
+								asegurado.setFechaAlta( fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -3].trim()));
+								asegurado.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2])));
 								asegurados.add(asegurado);
 							}
 
