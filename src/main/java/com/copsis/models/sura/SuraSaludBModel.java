@@ -44,7 +44,8 @@ public class SuraSaludBModel {
 				
 					if(newCont.toString().split("\n")[i].contains("Vigencia") && newCont.toString().split("\n")[i].split("-").length > 2 && newCont.toString().split("\n")[i].contains("Importes"))
 					{
-					modelo.setVigenciaDe(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("Vigencia")[1].split("Importes")[0].replace("desde", "").replace("###", "").trim()));	
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("Vigencia")[1].split("Importes")[0].replace("desde", "").replace("###", "").trim()));
+					obtenerDireccion(newCont.toString().split("\n"),i);
 						
 					}
 					if(newCont.toString().split("\n")[i].contains("Hasta las") && newCont.toString().split("\n")[i].split("-").length > 2 && newCont.toString().split("\n")[i].contains("SUB-SEC."))
@@ -99,7 +100,7 @@ public class SuraSaludBModel {
 							 && !newCont.toString().split("\n")[i].contains("Coberturas")) {
 					
 						 cobertura.setNombre(newCont.toString().split("\n")[i].split("###")[0]);
-						 cobertura.setSa(newCont.toString().split("\n")[i].split("###")[2]);
+						 cobertura.setSa(newCont.toString().split("\n")[i].split("###")[1]);
 						  coberturas.add(cobertura);	        
 					}
 				}
@@ -131,5 +132,19 @@ public class SuraSaludBModel {
 			return modelo;
 		}
 	
+	}
+	
+	private void obtenerDireccion(String[] arrContenido, int index) {
+		StringBuilder strbDireccion = new StringBuilder();
+		if(arrContenido[index].split("Vigencia")[0].toUpperCase().contains("COL")) {
+			strbDireccion.append(arrContenido[index].split("Vigencia")[0]);
+		}
+		
+		if(arrContenido[index+1].contains("C.P") && arrContenido[index+1].contains("las 12hrs.")) {
+			strbDireccion.append(" ");
+			strbDireccion.append(arrContenido[index+1].split("las 12hrs.")[0]);
+		}
+		modelo.setCteDireccion(strbDireccion.toString().replace("@@@","").replace("###", "").trim());
+		
 	}
 }
