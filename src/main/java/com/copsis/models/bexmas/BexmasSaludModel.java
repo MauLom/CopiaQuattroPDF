@@ -133,6 +133,7 @@ public class BexmasSaludModel {
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					
 					if(newcont.toString().split("\n")[i].contains("%")) {
+						modelo.setPlan(newcont.toString().split("\n")[i].split("###")[0]);
 						modelo.setSa(newcont.toString().split("\n")[i].split("###")[1]);
 						modelo.setDeducible(newcont.toString().split("\n")[i].split("###")[2]);
 						modelo.setCoaseguro(newcont.toString().split("\n")[i].split("###")[3]);			
