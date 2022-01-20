@@ -163,6 +163,13 @@ public class SisnovaSaludModel {
             			modelo.setPlan(newcontenido.split("\n")[i].split("Plan:")[1].replace("###", " ").trim());
             		}
             		
+            		if(newcontenido.split("\n")[i].contains("ASEGURADA:") && modelo.getSa().length() == 0) {
+            			modelo.setSa(newcontenido.split("\n")[i].split("ASEGURADA:")[1].split("###")[1]);
+            		}
+            		
+            		if(newcontenido.split("\n")[i].contains("COASEGURO:") && modelo.getCoaseguro().length() == 0) {
+            			modelo.setCoaseguro(newcontenido.split("\n")[i].split("COASEGURO:")[1].replace("###", ""));
+            		}
 
             		if(newcontenido.split("\n")[i].contains("Prima") && newcontenido.split("\n")[i].contains("Neta") ) {
             			if(newcontenido.split("\n")[i+2].split("###").length == 4) {            	
