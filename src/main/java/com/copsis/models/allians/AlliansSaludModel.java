@@ -44,6 +44,11 @@ public class AlliansSaludModel {
 									);
 							modelo.setPlan(newcont.toString().split("\n")[i].split("PLAN")[1].replace("###", "").trim());
 						}
+						
+						if(modelo.getPlan().length() == 0  && newcont.toString().split("\n")[i].contains("PLAN")) {
+							modelo.setPlan(newcont.toString().split("\n")[i].split("PLAN")[1].replace("###", "").trim());
+						}
+						
 						if(newcont.toString().split("\n")[i].contains("C.P:")) {
 							modelo.setCp(newcont.toString().split("\n")[i].split("###")[1]);
 						}
