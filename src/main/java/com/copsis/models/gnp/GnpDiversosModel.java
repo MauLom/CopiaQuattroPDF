@@ -458,14 +458,33 @@ public class GnpDiversosModel {
 				fin = contenido.lastIndexOf("Para mayor información contáctenos:");
 				if (inicio > -1 && fin > inicio) {	
 					newcontenido = new StringBuilder();
-					newcontenido.append(contenido.substring(inicio + 21, fin).replace("@@@", "").replace("\r", ""));
+					newcontenido.append(contenido.substring(inicio + 21, fin).replace("@@@", "").replace("\r", "")
+							.replace("Importe Total Actualizado###", "")
+							.replace("Importe Total Anterior###",""));
+					
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						if(!newcontenido.toString().split("\n")[i].contains("Vigencia") &&
 							!newcontenido.toString().split("\n")[i].contains("Importe Total") &&
-							!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") && newcontenido.toString().split("\n")[i].split("###").length == 3) {
-							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);			
-							coberturas.add(cobertura);
+							!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") &&
+							!newcontenido.toString().split("\n")[i].contains("Descripción del Movimiento") &&
+							!newcontenido.toString().split("\n")[i].contains("Especificación de Bienes") && 
+							!newcontenido.toString().split("\n")[i].contains("Petición del Asegurado") &&
+							!newcontenido.toString().split("\n")[i].contains("Duración") &&
+							!newcontenido.toString().split("\n")[i].contains("po Nacional Pr")&&
+							!newcontenido.toString().split("\n")[i].contains("Agente")) {
+							
+							if(newcontenido.toString().split("\n")[i].trim().split("###").length == 3 || 
+							    newcontenido.toString().split("\n")[i].contains("Equipo Electrónico")) {
+								cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);			
+								coberturas.add(cobertura);
+							}else if(newcontenido.toString().split("\n")[i].contains("Presión") && (i-1)>0){
+								if(newcontenido.toString().split("\n")[i-1].contains("Calderas y Recipientes Sujetos a")) {
+									String textAuxiliar = "Calderas y Recipientes Sujetos a Presión";
+									cobertura.setNombre(newcontenido.toString().split("\n")[i-1].contains("No contratada")? textAuxiliar+" No contratada": textAuxiliar);
+									coberturas.add(cobertura);
+								}
+							}
 						}
 					}
 					modelo.setCoberturas(coberturas);
