@@ -91,6 +91,8 @@ public class AxaAutos2Model {
 							&& newcontenido.split("\n")[i].contains("Term")) {
 						modelo.setDescripcion(newcontenido.split("\n")[i].split("Vehículo")[1].split("Term:")[0]
 								.replace("###", "").trim());
+					}else if(newcontenido.split("\n")[i].contains("Vehicle")&& newcontenido.split("\n")[i].contains("Term") ) {
+						modelo.setDescripcion(newcontenido.split("\n")[i].split("Vehicle")[1].split("Term:")[0].replace(":", "").replace("###", " ").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Modelo")) {
 						modelo.setModelo(
