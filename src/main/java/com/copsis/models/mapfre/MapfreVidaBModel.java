@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.afirme.AfirmeAutosBModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class MapfreVidaBModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -41,7 +42,7 @@ public class MapfreVidaBModel {
 
 			
 			
-			if (inicio > -1 & fin > -1 & inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("### 00.00", "### 00.00###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -66,7 +67,9 @@ public class MapfreVidaBModel {
 								.replace("###", "").trim());
 					}
 			
-					
+					if(modelo.getAsegurados().isEmpty()) {
+						obtenerAsegurado(newcontenido.split("\n"),i);
+					}
 					
 					if (newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("Clave de Agente:")) {
 						
@@ -155,7 +158,7 @@ public class MapfreVidaBModel {
 			if(fin  ==  -1) {
 				fin = contenido.indexOf("Asegurados que ampara");
 			}
-			if (inicio > -1 & fin > -1 & inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
@@ -226,7 +229,7 @@ public class MapfreVidaBModel {
 						int sp =newcontenido.split("\n")[i].split("###").length;
 						if(sp == 3) {
 							beneficiario.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-							beneficiario.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[0]));
+							beneficiario.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));
 							beneficiario.setPorcentaje(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].trim()));
 							beneficiarios.add(beneficiario);
 						}
@@ -234,8 +237,7 @@ public class MapfreVidaBModel {
 				}
 				modelo.setBeneficiarios(beneficiarios);				
 			}
-			
-
+			buildRecibos();
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(MapfreVidaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
@@ -243,5 +245,49 @@ public class MapfreVidaBModel {
 			return modelo;
 		}
 
+	}
+	
+	private void obtenerAsegurado(String[] arrContenido,int i) {
+		List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+
+		if(arrContenido[i].contains("Asegurado") && arrContenido[i].contains("R.F.C") && arrContenido[i].contains("Nacimiento")) {
+			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+			asegurado.setNombre(arrContenido[i].split("Asegurado")[1].split("R.F.C")[0].replace("###","").trim());
+			asegurado.setNacimiento(fn.formatDate(arrContenido[i].split("Nacimiento")[1].replace(":", "").replace("###", ""),"dd-MM-yyyy"));
+			asegurado.setParentesco(1);
+			
+			if(arrContenido[i+1].contains("Edad")) {
+				asegurado.setEdad(fn.castInteger(arrContenido[i+1].split("Edad")[1].replace(":", "").replace("###", "")));
+			}
+			listAsegurados.add(asegurado);
+			modelo.setAsegurados(listAsegurados);
+			
+		}
+	}
+	
+	private void buildRecibos() {
+		if (modelo.getFormaPago() == 1) {
+			List<EstructuraRecibosModel> listRecibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+
+			recibo.setReciboId("");
+			recibo.setSerie("1/1");
+			recibo.setVigenciaDe(modelo.getVigenciaDe());
+			recibo.setVigenciaA(modelo.getVigenciaA());
+			if (recibo.getVigenciaDe().length() > 0) {
+				recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+			}
+
+			recibo.setPrimaneta(modelo.getPrimaneta());
+			recibo.setDerecho(modelo.getDerecho());
+			recibo.setRecargo(modelo.getRecargo());
+			recibo.setIva(modelo.getIva());
+			recibo.setPrimaTotal(modelo.getPrimaTotal());
+			recibo.setAjusteUno(modelo.getAjusteUno());
+			recibo.setAjusteDos(modelo.getAjusteDos());
+			recibo.setCargoExtra(modelo.getCargoExtra());
+			listRecibos.add(recibo);
+			modelo.setRecibos(listRecibos);
+		}
 	}
 }
