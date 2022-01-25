@@ -80,7 +80,7 @@ public class AnaAutosModelRoja {
 							if (newcontenido.split("\n")[i + 5].contains("Fecha de Expedición")) {
 								direccion.append(newcontenido.split("\n")[i + 4].split("Fecha")[0]);
 							}
-							modelo.setCteDireccion(direccion.toString());
+							modelo.setCteDireccion(direccion.toString().replace("###", ""));
 						}
 					} else {
 						if (newcontenido.split("\n")[i].contains("Nombre")

@@ -29,6 +29,7 @@ public class GnpModel {
 		int pagFin = 0;
 
 		try {
+		
 			if (contenido.contains("Motor") && contenido.contains("Placas")) {
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
 					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
@@ -51,9 +52,14 @@ public class GnpModel {
 							fn.textoBusqueda(stripper, doc, "Asegurado (s)", true)).procesar();
 				}
 			} // termina el codigo de salud
-			else if (contenido.contains("Póliza de Seguro de Vida")) {
-				contenido = "";
-				modelo = new GnpVIdaModel2(fn.caratula(1, 5, stripper, doc)).procesar();
+			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
+		
+				if(contenido.contains("Seguro de Vida")) {
+					modelo = new GnpVIdaModel2(fn.caratula(1, 5, stripper, doc)).procesar();	
+				}else {
+					modelo = new GnpVidaModel3(fn.caratula(1, 5, stripper, doc)).procesar();
+				}
+				
 			} // termina el codigo de vida
 			else if (contenido.contains("Coberturas Amparadas") && contenido.contains("Ubicación de los bienes asegurados") || contenido.contains("Secciones Contratadas") && contenido.contains("Póliza de Seguro de Daños ")
 					|| contenido.contains("secciones contratadas") && contenido.contains("Daños")) {
@@ -63,9 +69,18 @@ public class GnpModel {
 							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 1).procesar();
 				}
 			} else if (contenido.contains("Póliza de Seguro de Daños") || contenido.contains("Daños")) {
-				modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
-						fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
 
+				if(contenido.contains("Póliza Multiple")){
+					modelo = new GnpDiversosBModelo(fn.caratula(1, 12, stripper, doc),
+							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false)														
+							).procesar();
+
+				}else {
+					modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
+							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
+
+				}
+				
 			}
 			return modelo;
 		} catch (Exception ex) {
