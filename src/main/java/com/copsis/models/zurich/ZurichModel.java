@@ -42,7 +42,7 @@ public class ZurichModel {
 				break;
 				
 			case 4:// 
-				modelo  = new ZurichDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				modelo  = new ZurichDiversosModel(fn.caratula(1, 8, stripper, doc)).procesar();				
 				break;
 				default:
 			
