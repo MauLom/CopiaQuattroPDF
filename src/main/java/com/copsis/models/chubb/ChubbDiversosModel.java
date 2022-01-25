@@ -48,6 +48,7 @@ public class ChubbDiversosModel {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
+				obtenerEndoso(newcontenido);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza:")
 							&& newcontenido.split("\n")[i].contains("Vigencia")) {
@@ -148,8 +149,10 @@ public class ChubbDiversosModel {
 				}
 			}
 
-			modelo.setAgente(recibos.split("Clave interna del agente:")[1].split("Desglose de pago")[0]
-					.replace("###", "").replace("\r\n", "").trim());
+			if(recibos.contains("Desglose de pago")){
+				modelo.setAgente(recibos.split("Clave interna del agente:")[1].split("Desglose de pago")[0]
+						.replace("###", "").replace("\r\n", "").trim());
+			}
 
 			// UBICACIONES
 			inicio = contenido.indexOf("Características del riesgo");
@@ -225,12 +228,16 @@ public class ChubbDiversosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("###Prima", "").trim();
 				for (String x : newcontenido.split("\r\n")) {
 					if (!x.contains("Tipo Vivienda") && !x.contains("Coberturas###Suma") && !x.contains("página#")) {
+						x = completaTitulosCoberturas(x);
 						resultado.append(x.trim()).append("\r\n");
 					}
 				}
+
 				if (resultado.toString().split("\r\n").length > 1) {
 					String seccion = "";
-
+					String sumaAsegurada = "";
+					String coaseguro = "";
+					String auxiliar = "";
 					for (int i = 0; i < resultado.toString().split("\r\n").length; i++) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						String a = "";
@@ -246,34 +253,56 @@ public class ChubbDiversosModel {
 							if (i + 2 < resultado.toString().split("\r\n").length) {
 								c = resultado.toString().split("\r\n")[i + 2].trim();
 							}
+							System.err.println(b.split("###").length + "b=="+b);
+							System.out.println("Longituf "+a.split("###").length + " texto=="+a);
 
-							if (a.split("###").length == 3) {
+							if ((a.split("###").length == 3 || a.split("###").length == 4) && fn.castDouble(a.split("###")[0]) == null) {
 								nombre = a.split("###")[0].trim();
+								coaseguro = "";
+								//Suma asegurada
+								sumaAsegurada = a.split("###")[1].trim();
+								if(a.split("###")[1].equals("Sublimite de") && b.split("###").length>0) {
+									auxiliar = b.split("###")[0];
+									sumaAsegurada+= " "+auxiliar;
+									b = b.replace(auxiliar+"###", "");
+								}
+								//Coaseguro
+								if(a.split("###").length == 4) {
+									coaseguro = a.split("###")[3];
+								}else if(b.split("###").length>0){
+									coaseguro = b.split("###")[1];
+								}
+								
 								deducible.append(a.split("###")[2].trim());
 								if (deducible.toString().contains("de la pérdida")
 										|| deducible.toString().contains("del eq. dañado")|| deducible.toString().contains("sobre el monto")) {
 
-									if (b.split("###").length == 1 && !b.contains(ConstantsValue.SECCION)) {
-										deducible.append(" ").append(b);
-										deducible = new StringBuilder();
+									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION)) {
+										if( b.split("###").length == 2){
+											deducible.append(" ").append(b.split("###")[0]);
+										}else {
+											deducible.append(" ").append(b);
+										}
+										//deducible = new StringBuilder();
 
 									}
 
-									if (c.split("###").length == 1 && b.split("###").length == 1
+									if (c.split("###").length == 1 && (b.split("###").length == 1 ||  b.split("###").length == 2)
 											&& !c.contains(ConstantsValue.SECCION)) {
 										deducible.append(" ").append(c);
-										deducible = new StringBuilder();
+										//deducible = new StringBuilder();
 									}
+									
 
 								} else {
 									cobertura.setDeducible(deducible.toString());
-									deducible = new StringBuilder();
 								}
 								cobertura.setSeccion(seccion.replace("SECCION", "").trim());
 								cobertura.setNombre(nombre);
-								cobertura.setSa(a.split("###")[1].trim());
+								cobertura.setSa(sumaAsegurada);
 								cobertura.setDeducible(deducible.toString());
-
+								cobertura.setCoaseguro(coaseguro);
+								deducible = new StringBuilder();
 								coberturas.add(cobertura);
 
 							}
@@ -316,5 +345,27 @@ public class ChubbDiversosModel {
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
+	}
+	
+	private void obtenerEndoso(String newContenido) {
+		int inicio = newContenido.indexOf("Endoso:");
+		int fin = newContenido.indexOf("Tipo de endoso");
+		
+		if(inicio>-1 && inicio<fin) {
+			String text = newContenido.split("Endoso:")[1].split("Tipo de endoso")[0];
+			modelo.setEndoso(text.replace("###","").replace("\n", "").trim());
+		}
+		
+	}
+	
+	private String completaTitulosCoberturas(String texto) {
+		if(texto.contains("Según condición Fenómenos") && !texto.contains("Hidrometeorológicos")) {
+			texto =texto.replace("Según condición Fenómenos", "Según condición Fenómenos Hidrometeorológicos");
+		}
+		
+		if(texto.contains("CONTEN###") && !texto.contains("COBERTURA AMPLIA DE INCENDIO PARA")) {
+			texto = texto.replace("CONTEN", "COBERTURA AMPLIA DE INCENDIO PARA CONTEN");
+		}
+		return texto;
 	}
 }
