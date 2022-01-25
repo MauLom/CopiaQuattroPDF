@@ -24,7 +24,7 @@ public class ChubbModel {
 			int pagFin = 0;
 			int pagIni = 0;
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA","HOGAR", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA","TECHO" };
+					"SEGURO CONCRETA","TECHO","RESPONSABILIDAD CIVIL" };
 			 boolean encontro = false;
 			for (String tipo : tipos) {
 				if (contenido.contains(tipo) && !encontro) {
