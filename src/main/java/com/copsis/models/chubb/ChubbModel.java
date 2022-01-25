@@ -35,7 +35,7 @@ public class ChubbModel {
 					case "HOGAR":
 					case "SEGURO CONCRETA":
 					case "PYME SEGURA":
-
+					case "RESPONSABILIDAD CIVIL":
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
 
 						if (pagFin == 0) {
