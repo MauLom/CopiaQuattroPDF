@@ -74,6 +74,10 @@ public class ChubbDiversosModel {
 								+ " " + newcontenido.split("\n")[i + 1].split("RFC:")[0]).replace("###", " ")
 										.replace("\r", "").trim());
 					}
+					if(modelo.getCp().length() == 0 && newcontenido.split("\n")[i].contains("C.P:")) {
+						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").trim());
+					}
+					
 					if (newcontenido.split("\n")[i].contains("RFC:")) {
 						modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].replace("\r", "").replace("###", "")
 								.trim());
@@ -121,8 +125,10 @@ public class ChubbDiversosModel {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta")[1]
 								.replace("###", "").replace("\r", "").trim())));
 					}
+				
 					if (newcontenido.split("\n")[i].contains("Financiamiento")
 							&& newcontenido.split("\n")[i].contains("expedición")) {
+						
 						modelo.setRecargo(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split("fraccionado")[1].split("Gastos")[0]
 										.replace("###", "").replace("\r", "").trim())));
@@ -130,6 +136,13 @@ public class ChubbDiversosModel {
 								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
 										.replace("###", "").replace("\r", "").trim())));
 					}
+					
+					if(modelo.getRecargo().intValue() == 0 && newcontenido.split("\n")[i].contains("fraccionado") ) {
+						modelo.setRecargo(
+								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("fraccionado")[1]
+										.replace("###", "").replace("\r", "").trim())));
+					}
+					
 					if(modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains("expedición") ) {
 						modelo.setDerecho(
 								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
