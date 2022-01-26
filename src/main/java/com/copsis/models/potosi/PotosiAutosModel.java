@@ -37,9 +37,9 @@ public class PotosiAutosModel {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("Nombre")) {
-						modelo.setVigenciaDe(fn.formatDate(newcontenido.toString().split("\n")[i].split("Desde:")[1].split("Nombre")[0].replace("###", "").trim()));
+						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("Desde:")[1].split("Nombre")[0].replace("###", "").trim())));
 						if(newcontenido.toString().split("\n")[i+1].contains("Hasta")) {
-							modelo.setVigenciaA(fn.formatDate(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()));
+							modelo.setVigenciaA(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[1].trim())));
 							modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[2].trim());
 						}
 						modelo.setFechaEmision(modelo.getVigenciaDe());					
@@ -157,7 +157,7 @@ public class PotosiAutosModel {
 	                          
 	                            cobertura.setNombre(x.split("###")[0]);
 	                            cobertura.setSa(x.split("###")[1]);
-	                            cobertura.setDeducible(x.split("###")[3]);
+	                            cobertura.setDeducible(x.split("###")[3].replace("\r",""));
 	                            coberturas.add(cobertura);
 
 	                        }

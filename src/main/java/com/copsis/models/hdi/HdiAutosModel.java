@@ -180,7 +180,9 @@ public class HdiAutosModel {
 						modelo.setFormaPago(2);
 					}
 				}
-
+				if(modelo.getFormaPago() == 0) {
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido));
+				}
 			}
 
 			modelo.setMoneda(1);
