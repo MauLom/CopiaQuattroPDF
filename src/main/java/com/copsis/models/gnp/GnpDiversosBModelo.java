@@ -57,11 +57,12 @@ public class GnpDiversosBModelo {
 		            }
 		            if(newcontenido.toString().split("\n")[i].contains("Día Mes Año") && newcontenido.toString().split("\n")[i].length() < 20) {
 	                   String  x =newcontenido.toString().split("\n")[i+1];
-	             
-	                   modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[1]+"-" + x.split("###")[2]+"-" + x.split("###")[3]));
-	                   modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[5]+"-" + x.split("###")[6]+"-" + x.split("###")[7]));
-	                    modelo.setFechaEmision(modelo.getVigenciaDe());
-	                 
+	            
+		             if(x.split("###").length == 11 ) {
+		            	   modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[5]+"-" + x.split("###")[6]+"-" + x.split("###")[7]));
+		                   modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[8]+"-" + x.split("###")[9]+"-" + x.split("###")[10]));
+		                    modelo.setFechaEmision(modelo.getVigenciaDe());
+		             }
 		            }
 				}
 			}
