@@ -188,6 +188,9 @@ public class ImpresionAmortizacionesPdf {
 								x++;
 							} 
 						}
+						if(x == listAmortizacion.size()) {
+							getInfotmation(document, page);
+						}
 						output = new ByteArrayOutputStream();
 						document.save(output);
 						return output.toByteArray();
@@ -284,7 +287,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,12,"CAPITAL NUEVO", black, true, "C", 8, cellStyle, "", paddingHead, bgColor);
 			yStart -= table.getHeaderAndDataHeight();
 			table.draw();
-			getFooter(document, page);
+			//getFooter(document, page);
 			
 		} catch (Exception e) {
 			throw new GeneralServiceException("Error=>", e.getMessage());
@@ -377,6 +380,39 @@ public class ImpresionAmortizacionesPdf {
 			table.draw();
 			
 		} catch (Exception e) {
+			throw new GeneralServiceException("Error=>", e.getMessage());
+		}
+	}
+	
+	//getInfotmation(document, page);
+	private void getInfotmation(PDDocument document, PDPage page) {
+		try {
+			StringBuilder txt = new StringBuilder();
+			txt.append("<br>");
+			txt.append("<ul>");
+        	txt.append("<li> Las mensualidades incluyen intereses, IVA, seguro de daños con cobertura amplia y seguro de vida. </li> \n");
+        	txt.append("<li> En la primera mensualidad se cobra solamente comisión por apertura más intereses e IVA</li> \n");
+        	txt.append("<li> Cotizaciones de carácter informativo y sujetas a cambio sin previo aviso.</li> \n");
+        	txt.append("<li> Este documento no tiene ninguna validez oficial.</li> \n");
+        	txt.append("<li> El monto del seguro comprende 12 meses. Al terminar este periodo se renueva en forma automática.</li> \n");
+        	txt.append("<li> Sujeto a autorización de crédito.</li> \n");
+        	txt.append("<li> Se solicitará la contratación de los seguros correspondientes. Scotiabank <br> \n");
+        	txt.append("  reconoce el derecho innegable que tiene el Cliente de contratar los <br> \n");
+        	txt.append("  productos y/o servicios adicionales o ligados a la operación o servicio a <br> \n");
+        	txt.append("  través de un tercero independiente</li> \n");        	
+        	txt.append("</ul>");
+        	txt.append("<b>Documentación requerida**: </b> \n ");
+        	txt.append("- Identificación oficial \n");
+        	txt.append("- Comprobante de domicilio \n");
+        	txt.append("- Comprobante de ingresos \n");
+        	txt.append("<i> **Scotiabank Inverlat se reserva el derecho de solicitar información adicional. <i>" );
+        
+            BaseTable table = new BaseTable(yStart, 26, 10, fullWidth, 20, document, page, false, true);
+            Row<PDPage> baseRow = communsPdf.setRow(table, 15);
+            communsPdf.setCell(baseRow,100, Sio4CommunsPdf.eliminaHtmlTags3(txt.toString()), black, false, "L", 9, cellStyle, "", paddingHeadData, bgColor);
+            table.draw();
+			
+		}catch (Exception e) {
 			throw new GeneralServiceException("Error=>", e.getMessage());
 		}
 	}
