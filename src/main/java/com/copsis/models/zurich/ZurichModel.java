@@ -27,7 +27,13 @@ public class ZurichModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-			switch (fn.tipoPoliza(contenido)) {
+
+			int tipo = fn.tipoPoliza(contenido);
+			if(tipo == 0 && contenido.contains("Ubicación del riesgo:")) {
+				tipo =4;
+			}
+	
+			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
 				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
 				break;
@@ -36,8 +42,11 @@ public class ZurichModel {
 				break;
 				
 			case 4:// 
-				//modelo  = new ZurichDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
+				modelo  = new ZurichDiversosModel(fn.caratula(1, 8, stripper, doc)).procesar();				
 				break;
+				default:
+			
+					break;
 			
 			}
 			return modelo;
