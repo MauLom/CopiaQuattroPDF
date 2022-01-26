@@ -20,7 +20,6 @@ public class ChubbDiversosModel {
 
 	// constructor
 	public ChubbDiversosModel(String contenido, String recibos) {
-		System.err.println("Diversos 	");
 		this.contenido = contenido;
 		this.recibos = recibos;
 
@@ -250,29 +249,27 @@ public class ChubbDiversosModel {
 					}
 					index++;
 				}
-				System.err.println("="+resultado+"=");
 				if (resultado.toString().split("\r\n").length > 1) {
 					String seccion = "";
 					StringBuilder sumaAsegurada = new StringBuilder();
 					String coaseguro = "";
 					String auxiliar = "";
-					for (int i = 0; i < resultado.toString().split("\r\n").length; i++) {
+					String[] arrResultado = resultado.toString().split("\r\n");
+					for (int i = 0; i < arrResultado.length; i++) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						String a = "";
 						String b = "";
 						String c = "";
-						a = resultado.toString().split("\r\n")[i];
+						a = arrResultado[i];
 						if (a.contains(ConstantsValue.SECCION)) {
 							seccion = a;
 						} else {
-							if (i + 1 < resultado.toString().split("\r\n").length) {
-								b = resultado.toString().split("\r\n")[i + 1].trim();
+							if (i + 1 < arrResultado.length) {
+								b = arrResultado[i + 1].trim();
 							}
-							if (i + 2 < resultado.toString().split("\r\n").length) {
-								c = resultado.toString().split("\r\n")[i + 2].trim();
+							if (i + 2 < arrResultado.length) {
+								c = arrResultado[i + 2].trim();
 							}
-							//System.err.println(b.split("###").length + "b=="+b);
-							//System.out.println("Longituf "+a.split("###").length + " texto=="+a);
 
 							if ((a.split("###").length == 3 || a.split("###").length == 4) && fn.castDouble(a.split("###")[0]) == null) {
 								nombre = a.split("###")[0].trim();
@@ -283,9 +280,16 @@ public class ChubbDiversosModel {
 								sumaAsegurada.append(a.split("###")[1].trim());
 								if(a.split("###")[1].equalsIgnoreCase("Sublimite de") && b.split("###").length>0) {
 									auxiliar = b.split("###")[0];
+									if(coberturasNombreIncompleto.toString().contains(auxiliar)) {
+										auxiliar = b.split("###")[1];
+										nombre = b.split("###")[0];
+										b = b.replace(nombre+"###", "");
+										arrResultado[i+1] = arrResultado[i+1].replace(nombre+"###", "");
+									}
 									sumaAsegurada.append(" ").append(auxiliar);
 									b = b.replace(auxiliar+"###", "");
 								}
+								
 								//Coaseguro
 								if(existeTituloCoaseguro) {
 									if(a.split("###").length == 4) {
@@ -300,23 +304,21 @@ public class ChubbDiversosModel {
 								if (deducible.toString().contains("de la pérdida")
 										|| deducible.toString().contains("del eq. dañado")
 										|| deducible.toString().contains("sobre el monto")
+										|| deducible.toString().contains("de reposición")
 										|| deducible.toString().contains("de reposicion")
 										|| deducible.toString().contains("suma asegurada")) {
-
 									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION)) {
 										if( b.split("###").length == 2){
 											deducible.append(" ").append(b.split("###")[0]);
 										}else {
 											deducible.append(" ").append(b);
 										}
-										//deducible = new StringBuilder();
 
 									}
 
 									if (c.split("###").length == 1 && (b.split("###").length == 1 ||  b.split("###").length == 2)
 											&& !c.contains(ConstantsValue.SECCION) && !coberturasNombreIncompleto.toString().contains(c)) {
 										deducible.append(" ").append(c);
-										//deducible = new StringBuilder();
 									}
 									
 
@@ -335,6 +337,7 @@ public class ChubbDiversosModel {
 
 						}
 					}
+
 				}
 				modelo.setCoberturas(coberturas);
 			}
@@ -388,22 +391,53 @@ public class ChubbDiversosModel {
 		String texto =  arrTexto[i];
 		if(texto.contains("Según condición Fenómenos") && !texto.contains("Hidrometeorológicos")) {
 			texto =texto.replace("Según condición Fenómenos", "Según condición Fenómenos Hidrometeorológicos");
-			coberturasNombreIncompleto.append("Según condición Fenómenos,");
-		}else if(texto.contains("CONTEN###") && !texto.contains("COBERTURA AMPLIA DE INCENDIO PARA")) {
-			texto = texto.replace("CONTEN", "COBERTURA AMPLIA DE INCENDIO PARA CONTEN");
-			coberturasNombreIncompleto.append("CONTEN,");
-		}else if(texto.contains("###")) {
-			if(texto.split("###")[0].equals("sublimite") && (i-1)>-1) {
-				if(arrTexto[i-1].contains("Robo de bienes y Valores de Empleados y Clientes")) {
-					texto = texto.replace("sublimite","Robo de bienes y Valores de Empleados y Clientes sublimite");
-					coberturasNombreIncompleto.append("Robo de bienes y Valores de Empleados y Clientes,");
-				}else if(arrTexto[i-1].contains("REMOCION DE ESCOMBROS CONTENIDOS")) {
-					texto = texto.replace("SUB","REMOCION DE ESCOMBROS CONTENIDOS SUB");
-					coberturasNombreIncompleto.append("REMOCION DE ESCOMBROS CONTENIDOS");
+		}else
+		if(texto.contains("###") && (i-1)>-1) {
+			switch (texto.split("###")[0]) {
+			case "sublimite":
+				texto = completaTextoConLineaSuperior(arrTexto, i,coberturasNombreIncompleto, "sublimite","Robo de bienes y Valores de Empleados y Clientes");
+				break;
+			case "CONTEN":
+				texto = completaTextoConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "CONTEN", "COBERTURA AMPLIA DE INCENDIO PARA");
+				break;
+			case "SUB":
+				texto = completaTextoConLineaSuperior(arrTexto, i,coberturasNombreIncompleto, "SUB","REMOCION DE ESCOMBROS CONTENIDOS");
+				break;
+			case "MOVIL DENTRO Y FUERA DEL PREDIO":
+				texto = completaTextoConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "MOVIL DENTRO Y FUERA DEL PREDIO", "ROBO CON VIOLENCIA Y-O ASALTO EQUIPO");
+				break;
+			case "FIJO DENTRO DEL PREDIO":
+				if (texto.split("###").length == 4 && arrTexto[i - 1].contains("ROBO CON VIOLENCIA Y-O ASALTO DE EQUIPO") && arrTexto[i - 1].contains("###")) {
+					String[] auxiliar = arrTexto[i - 1].split("###");
+					if (auxiliar[auxiliar.length - 1].contains("del valor de reposición")) {
+						String deducible = texto.split("###")[2];
+						String inicioDeducible = auxiliar[auxiliar.length - 1].replace("\r", "");
+
+						texto.split("###")[2] = texto.split("###")[2].concat(" del valor de reposición");
+						texto = texto
+								.replace("FIJO DENTRO DEL PREDIO",
+										"ROBO CON VIOLENCIA Y-O ASALTO DE EQUIPO FIJO DENTRO DEL PREDIO")
+								.replace(deducible, inicioDeducible + " " + deducible);
+					}
+
 				}
+				break;
+			default:
+				break;
 			}
+
+		}
+		return texto;
+	}
+	
+	private String completaTextoConLineaSuperior(String[] arrTexto,int i,StringBuilder coberturasNombreIncompleto, String textoOld, String textSuperiorAcompletar) {
+		String texto = arrTexto[i];
+		if (arrTexto[i - 1].contains(textSuperiorAcompletar)) {
+				texto = texto.replace(textoOld, textSuperiorAcompletar + " " + textoOld);
+				coberturasNombreIncompleto.append(textSuperiorAcompletar + " " + textoOld).append(",");
 		}
 
 		return texto;
 	}
+	
 }
