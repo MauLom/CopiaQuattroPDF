@@ -14,13 +14,13 @@ public class ChubbDiversosModel {
 	// Clases
 	DataToolsModel fn = new DataToolsModel();
 	EstructuraJsonModel modelo = new EstructuraJsonModel();
-
 	// Variables
 	private String contenido;
 	private String recibos = "";
 
 	// constructor
 	public ChubbDiversosModel(String contenido, String recibos) {
+		System.err.println("Diversos 	");
 		this.contenido = contenido;
 		this.recibos = recibos;
 
@@ -239,16 +239,21 @@ public class ChubbDiversosModel {
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("###Prima", "").trim();
+				boolean existeTituloCoaseguro = newcontenido.toUpperCase().contains("COASEGURO");
+				int index = 0;
+				StringBuilder coberturasNombreIncompleto = new StringBuilder();
+				
 				for (String x : newcontenido.split("\r\n")) {
-					if (!x.contains("Tipo Vivienda") && !x.contains("Coberturas###Suma") && !x.contains("página#")) {
-						x = completaTitulosCoberturas(x);
+					if (!x.contains("Tipo Vivienda") && !x.contains("Coberturas###Suma") && !x.contains("página#") && !x.contains("No. Sótanos") && !x.contains("Tipo Techo")) {
+						x = completaTextoCoberturas(newcontenido.split("\r\n"),index,coberturasNombreIncompleto);
 						resultado.append(x.trim()).append("\r\n");
 					}
+					index++;
 				}
-
+				System.err.println("="+resultado+"=");
 				if (resultado.toString().split("\r\n").length > 1) {
 					String seccion = "";
-					String sumaAsegurada = "";
+					StringBuilder sumaAsegurada = new StringBuilder();
 					String coaseguro = "";
 					String auxiliar = "";
 					for (int i = 0; i < resultado.toString().split("\r\n").length; i++) {
@@ -266,29 +271,37 @@ public class ChubbDiversosModel {
 							if (i + 2 < resultado.toString().split("\r\n").length) {
 								c = resultado.toString().split("\r\n")[i + 2].trim();
 							}
-							System.err.println(b.split("###").length + "b=="+b);
-							System.out.println("Longituf "+a.split("###").length + " texto=="+a);
+							//System.err.println(b.split("###").length + "b=="+b);
+							//System.out.println("Longituf "+a.split("###").length + " texto=="+a);
 
 							if ((a.split("###").length == 3 || a.split("###").length == 4) && fn.castDouble(a.split("###")[0]) == null) {
 								nombre = a.split("###")[0].trim();
+												
 								coaseguro = "";
 								//Suma asegurada
-								sumaAsegurada = a.split("###")[1].trim();
-								if(a.split("###")[1].equals("Sublimite de") && b.split("###").length>0) {
+								sumaAsegurada = new StringBuilder();
+								sumaAsegurada.append(a.split("###")[1].trim());
+								if(a.split("###")[1].equalsIgnoreCase("Sublimite de") && b.split("###").length>0) {
 									auxiliar = b.split("###")[0];
-									sumaAsegurada+= " "+auxiliar;
+									sumaAsegurada.append(" ").append(auxiliar);
 									b = b.replace(auxiliar+"###", "");
 								}
 								//Coaseguro
-								if(a.split("###").length == 4) {
-									coaseguro = a.split("###")[3];
-								}else if(b.split("###").length>0){
-									coaseguro = b.split("###")[1];
+								if(existeTituloCoaseguro) {
+									if(a.split("###").length == 4) {
+										coaseguro = a.split("###")[3];
+									}else if(b.split("###").length>0){
+										coaseguro = b.split("###")[1];
+									}
 								}
+							
 								
 								deducible.append(a.split("###")[2].trim());
 								if (deducible.toString().contains("de la pérdida")
-										|| deducible.toString().contains("del eq. dañado")|| deducible.toString().contains("sobre el monto")) {
+										|| deducible.toString().contains("del eq. dañado")
+										|| deducible.toString().contains("sobre el monto")
+										|| deducible.toString().contains("de reposicion")
+										|| deducible.toString().contains("suma asegurada")) {
 
 									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION)) {
 										if( b.split("###").length == 2){
@@ -301,7 +314,7 @@ public class ChubbDiversosModel {
 									}
 
 									if (c.split("###").length == 1 && (b.split("###").length == 1 ||  b.split("###").length == 2)
-											&& !c.contains(ConstantsValue.SECCION)) {
+											&& !c.contains(ConstantsValue.SECCION) && !coberturasNombreIncompleto.toString().contains(c)) {
 										deducible.append(" ").append(c);
 										//deducible = new StringBuilder();
 									}
@@ -312,8 +325,8 @@ public class ChubbDiversosModel {
 								}
 								cobertura.setSeccion(seccion.replace("SECCION", "").trim());
 								cobertura.setNombre(nombre);
-								cobertura.setSa(sumaAsegurada);
-								cobertura.setDeducible(deducible.toString());
+								cobertura.setSa(sumaAsegurada.toString().trim());
+								cobertura.setDeducible(deducible.toString().trim());
 								cobertura.setCoaseguro(coaseguro);
 								deducible = new StringBuilder();
 								coberturas.add(cobertura);
@@ -371,14 +384,26 @@ public class ChubbDiversosModel {
 		
 	}
 	
-	private String completaTitulosCoberturas(String texto) {
+	private String completaTextoCoberturas(String[] arrTexto,int i, StringBuilder coberturasNombreIncompleto) {
+		String texto =  arrTexto[i];
 		if(texto.contains("Según condición Fenómenos") && !texto.contains("Hidrometeorológicos")) {
 			texto =texto.replace("Según condición Fenómenos", "Según condición Fenómenos Hidrometeorológicos");
-		}
-		
-		if(texto.contains("CONTEN###") && !texto.contains("COBERTURA AMPLIA DE INCENDIO PARA")) {
+			coberturasNombreIncompleto.append("Según condición Fenómenos,");
+		}else if(texto.contains("CONTEN###") && !texto.contains("COBERTURA AMPLIA DE INCENDIO PARA")) {
 			texto = texto.replace("CONTEN", "COBERTURA AMPLIA DE INCENDIO PARA CONTEN");
+			coberturasNombreIncompleto.append("CONTEN,");
+		}else if(texto.contains("###")) {
+			if(texto.split("###")[0].equals("sublimite") && (i-1)>-1) {
+				if(arrTexto[i-1].contains("Robo de bienes y Valores de Empleados y Clientes")) {
+					texto = texto.replace("sublimite","Robo de bienes y Valores de Empleados y Clientes sublimite");
+					coberturasNombreIncompleto.append("Robo de bienes y Valores de Empleados y Clientes,");
+				}else if(arrTexto[i-1].contains("REMOCION DE ESCOMBROS CONTENIDOS")) {
+					texto = texto.replace("SUB","REMOCION DE ESCOMBROS CONTENIDOS SUB");
+					coberturasNombreIncompleto.append("REMOCION DE ESCOMBROS CONTENIDOS");
+				}
+			}
 		}
+
 		return texto;
 	}
 }
