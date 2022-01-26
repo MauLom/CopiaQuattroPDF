@@ -108,13 +108,25 @@ public class qualitasAutosModel {
 						}
 
 					} else {
-						if (newcontenido.split("\n")[i].contains("ENDOSO")
-								&& newcontenido.split("\n")[i].contains("INCISO")) {
-							modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[0]);
-							modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
-							if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim())) {
-								modelo.setInciso(
-										Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+						if (newcontenido.split("\n")[i].contains("ENDOSO")&& newcontenido.split("\n")[i].contains("INCISO")) {
+							if(arrNewContenido[arrNewContenido.length-1].split("###")[0].length()  < 4){
+								
+								if(arrNewContenido[arrNewContenido.length-1].split("###")[0].contains("AUTOMÓVILES") ) {
+									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
+									modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[2]);
+									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[3].trim())) {
+										modelo.setInciso(
+												Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+									}
+									
+								}else {
+									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[0]);
+									modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
+									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim())) {
+										modelo.setInciso(
+												Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+									}
+								}
 							}
 						}
 
