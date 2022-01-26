@@ -445,6 +445,9 @@ public class DataToolsModel {
 		case "TRIMESTRAL SR DERP":
 		case "TRIMESTRAL 12 MESES":
 		case "TRIM.S/REC":
+		case "TRIM.S-REC":
+		case "TRIM.C-REC":
+		case "TRIM.C/REC":	
 			dato = 3;
 			break;
 		case "MENS":
@@ -997,12 +1000,12 @@ public class DataToolsModel {
 		int dato = 0;
 		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA",
 				"ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R", "SEMESTRALS-R",
-				"TRIM", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
-				"TRIMESTRAL12MESES", "TRIM.S/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
+				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
+				"TRIMESTRAL12MESES", "TRIM.S/REC","TRIM.S-REC","TRIM.C-REC","TRIM.C/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
 				"MENSUALSR", "MENSUALS/R", "MENSUALS/R", "MEN.DER.PRORRATEA", "MENSUALVITRO", "MENSUALS/RDERP",
-				"MEN.S/REC.", "MENSUALS-R", "QUIN", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO" };
-		for (String tipo : tiposP) {	
-			if (x.toUpperCase().contains(tipo+" ")) {
+				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO","" };
+		for (String tipo : tiposP) {
+			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
 				case "CONT":
 				case CONTADO:
@@ -1033,6 +1036,9 @@ public class DataToolsModel {
 				case "TRIMESTRAL SR DERP":
 				case "TRIMESTRAL 12 MESES":
 				case "TRIM.S/REC":
+				case "TRIM.S-REC":
+				case "TRIM.C-REC":
+				case "TRIM.C/REC":	
 					dato = 3;
 					break;
 				case "MENS":
@@ -1060,12 +1066,10 @@ public class DataToolsModel {
 				case "SEMANAL VITRO":
 					dato = 6;
 					break;
-				default:
-					dato = 0;
-					break;
 				}			
 			}				
 		}
+
 		return dato;
 	}
 	
@@ -1177,5 +1181,66 @@ public class DataToolsModel {
 
 	    }
 
+		public int buscaParentesco(String texto) {
+			int tipoParentesco = 0;
+	
+			List<String> listParentescos = Arrays.asList("TIT","TITULAR","ASEGURADO PRINCIPAL","CONY.","CONYUGE","CÓNYUGE","HIJO",
+	        "HIJO","HIJO A","HIJA","HIJO/A","HIJO-A","HIJO M","HIJA F"
+	        ,"PADRE","NIETO","MADRE","ESPOSA","ESPOSO","","ESPOSA F","ASEGURADO","DEPENDIENTES"
+	        ,"OTRO","HERMANO/A","PARENTESCOS","PERTENECIENTE","HERMANA","HERMANO","ABUELO","PADRE-MADRE"
+	        );
+		
+			for(String parentesco: listParentescos) {
+
+				if(texto.toUpperCase().contains(parentesco)) {
+
+				switch (parentesco) {
+	                case "TIT":
+	                case "TITULAR":
+	                case "ASEGURADO PRINCIPAL":
+	                tipoParentesco = 1;
+	                    break;
+	                case "CONY.":
+	                case "CONYUGE":
+	                case "CÓNYUGE":
+	                tipoParentesco = 2;
+	                    break;
+	                case "HIJO":
+	                case "HIJO A":
+	                case "HIJA":
+	                case "HIJO/A":
+	                case "HIJO-A":
+	                case "HIJO M":
+	                case "HIJA F":
+	                tipoParentesco = 3;
+	                    break;
+	                case "PADRE":
+	                case "NIETO":
+	                case "MADRE":
+	                case "ESPOSA":
+	                case "ESPOSO":
+	                case "ESPOSA F":
+	                case "ASEGURADO":
+	                case "DEPENDIENTES":
+	                case "OTRO":
+	                case "HERMANO/A":
+	                case "PARENTESCOS":
+	                case "PERTENECIENTE":
+	                case "HERMANA":
+	                case "HERMANO":
+	                case "SUEGRA":
+	                case "ABUELO":
+	                case "PADRE-MADRE":
+	                tipoParentesco = 4;
+	                    break;
+	           
+	                }
+	               
+				}
+			}
+	
+		return tipoParentesco;
+			
+		}
 
 }

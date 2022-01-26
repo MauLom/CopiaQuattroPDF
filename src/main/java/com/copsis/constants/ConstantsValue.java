@@ -30,7 +30,7 @@ public final class ConstantsValue {
 	public static final String CLAVE_INTERNA_AGENTE = "Clave interna del agente:";
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
-	public static final String CODIGO_POSTAL = "C.P. :";
+	public static final String COBERTURAS_CONTRATADAS2 = "Coberturas contratadas";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
 
 	public static final String DOMICILIO_HASH = "Domicilio:###";

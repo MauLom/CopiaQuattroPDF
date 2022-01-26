@@ -201,6 +201,7 @@ public class InbursaAutosModel {
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.HASTA2)) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[0]));
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1]));
+						
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
 					}
 					if (modelo.getClave().isEmpty()) {
@@ -249,6 +250,9 @@ public class InbursaAutosModel {
 				}
 			}
 
+			if(!modelo.getVigenciaDe().isEmpty()) {
+				modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
 			limpiarCteDireccion();
 			
 			/* Agente y Cve */
@@ -328,6 +332,22 @@ public class InbursaAutosModel {
 					}
 				}
 				modelo.setCoberturas(coberturas);
+			}
+			
+			
+			
+			fin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
+
+			if(inicio > -1) {
+				newcontenido = (contenido.split("CLAVE Y NOMBRE DEL AGENTE")[0].length() > 200 ? contenido.substring(fin-199,fin)  :  contenido.substring(fin-100,fin));
+				newcontenido = newcontenido.replace("@@@", "").replace("\r", "");		
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+			        if(newcontenido.split("\n")[i].split("-").length >  2) {
+			        	modelo.setCveAgente(newcontenido.split("\n")[i].split(" ")[0]);
+			        	modelo.setAgente(newcontenido.split("\n")[i].split("###")[0].split(modelo.getCveAgente())[1]);
+			        }
+				}
+				
 			}
 
 			return modelo;

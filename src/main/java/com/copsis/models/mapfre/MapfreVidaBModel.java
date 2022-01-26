@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 
 public class MapfreVidaBModel {
@@ -273,6 +275,50 @@ public class MapfreVidaBModel {
 				}
 			}
 			modelo.setBeneficiarios(beneficiarios);				
+		}
+	}
+	
+	private void obtenerAsegurado(String[] arrContenido,int i) {
+		List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+
+		if(arrContenido[i].contains("Asegurado") && arrContenido[i].contains("R.F.C") && arrContenido[i].contains("Nacimiento")) {
+			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+			asegurado.setNombre(arrContenido[i].split("Asegurado")[1].split("R.F.C")[0].replace("###","").trim());
+			asegurado.setNacimiento(fn.formatDate(arrContenido[i].split("Nacimiento")[1].replace(":", "").replace("###", ""),"dd-MM-yyyy"));
+			asegurado.setParentesco(1);
+			
+			if(arrContenido[i+1].contains("Edad")) {
+				asegurado.setEdad(fn.castInteger(arrContenido[i+1].split("Edad")[1].replace(":", "").replace("###", "")));
+			}
+			listAsegurados.add(asegurado);
+			modelo.setAsegurados(listAsegurados);
+			
+		}
+	}
+	
+	private void buildRecibos() {
+		if (modelo.getFormaPago() == 1) {
+			List<EstructuraRecibosModel> listRecibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+
+			recibo.setReciboId("");
+			recibo.setSerie("1/1");
+			recibo.setVigenciaDe(modelo.getVigenciaDe());
+			recibo.setVigenciaA(modelo.getVigenciaA());
+			if (recibo.getVigenciaDe().length() > 0) {
+				recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+			}
+
+			recibo.setPrimaneta(modelo.getPrimaneta());
+			recibo.setDerecho(modelo.getDerecho());
+			recibo.setRecargo(modelo.getRecargo());
+			recibo.setIva(modelo.getIva());
+			recibo.setPrimaTotal(modelo.getPrimaTotal());
+			recibo.setAjusteUno(modelo.getAjusteUno());
+			recibo.setAjusteDos(modelo.getAjusteDos());
+			recibo.setCargoExtra(modelo.getCargoExtra());
+			listRecibos.add(recibo);
+			modelo.setRecibos(listRecibos);
 		}
 	}
 }

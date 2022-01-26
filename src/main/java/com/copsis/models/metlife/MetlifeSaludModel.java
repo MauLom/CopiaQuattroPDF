@@ -108,7 +108,7 @@ public class MetlifeSaludModel {
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("Agente")) { 
                     	if(modelo.getFormaPago() == 0) {
-                    		  modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[0].trim()));
+                    		  modelo.setFormaPago(fn.formaPagoSring(fn.cleanString(newcontenido.split("\n")[i + 1].split("###")[0].trim())));
                     	}
                       
                         modelo.setCveAgente(newcontenido.split("\n")[i + 1].split("###")[1].trim());

@@ -13,6 +13,7 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aig.AigModel;
+import com.copsis.models.allians.AlliansModel;
 import com.copsis.models.ana.AnaModel;
 import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
@@ -85,7 +86,7 @@ public class IdentificaPolizaService {
 
 			if (!encontro && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
-					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP"))) {
+					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") || contenido.contains("gnp.com.mx") )) {
 
 				GnpModel datosGnp = new GnpModel(pdfStripper, pdDoc, contenido);
 				modelo = datosGnp.procesa();
@@ -104,6 +105,7 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
+				
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
 						|| contenido.contains("COLECTIVO EMPRESARIAL")) {
@@ -113,6 +115,7 @@ public class IdentificaPolizaService {
 					encontro = true;
 				} else {
 					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);
+					
 
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
@@ -326,28 +329,36 @@ public class IdentificaPolizaService {
 			
 			
 		
-		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		  
-                if (contenido.contains("Seguros el Potosí S.A.")) {
+		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
-                    encontro = true;
-                }
+                    encontro = true;                
             }
 		    
 
 			// ENTRADA PARA VEXMAS
-            if (! encontro && contenido.contains("Seguros Ve Por")
+            if (! encontro &&( contenido.contains("Seguros Ve Por")
                         || contenido.contains("Seguros Ve por Más, S.A.")
                         || contenido.contains("Seguros Ve por Más, S. A.")
-                        || contenido.contains("www.vepormas.com")) {//Ve por Más
-
+                        || contenido.contains("Seguros Ve Por Más")
+                        || contenido.contains("www.vepormas.com"))) {//Ve por Más 
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;
                 
             }
 			
-			
+            // ENTRADA PARA ALLIANZ
+            if (!encontro && (contenido.split("@@@")[1].contains("Allianz México")
+                        || contenido.contains("www.allianz.com.mx")
+                        || contenido.contains("MERCADO MEDIANO") //Plan Daños
+                        || (contenido.split("@@@")[1].contains("En cumplimiento a lo dispuesto") && contenido.split("@@@")[5].contains("Nombre del Asegurado"))
+                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS") && contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")))) {
+                	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
+                	modelo = datosAllianz.procesar();
+                    encontro = true;
+                
+            }
 
 
 			if (!encontro) {

@@ -137,10 +137,7 @@ public class ImpresionAmortizacionesPdf {
 						while(x < listAmortizacion.size()) {
 							
 							AmortizacionDTO amortizacionDTO = listAmortizacion.get(x);
-							if (x % 12 == 0 && x != (listAmortizacion.size()- 1)) {
-								amortizacionDTO.setSeguroDanos(listAmortizacion.get(0).getSeguroDanos());
-							}
-							
+
 							acomula = true;
 							// CREACION CUERPO DE PDF
 							table = getCuerpoPdf(document, page, amortizacionDTO, x);
@@ -163,7 +160,7 @@ public class ImpresionAmortizacionesPdf {
 							
 								// BORDE DEL CUERPO DE LA TABLA EN NUEVA PAGINA
 								table2 = new BaseTable(610, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-								baseRow2 = communsPdf.setRow(table2, 580);
+								baseRow2 = communsPdf.setRow(table2, 575);
 								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 								table2.draw();
 								//marcaAgua
@@ -175,7 +172,7 @@ public class ImpresionAmortizacionesPdf {
 								if(x == 0) {
 									// BORDE DEL CUERPO DE TABLA PRIMER PAGINA
 									table2 = new BaseTable(610, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-									baseRow2 = communsPdf.setRow(table2, 580);
+									baseRow2 = communsPdf.setRow(table2, 575);
 									communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 									table2.draw();
 									//marcaAgua
@@ -215,7 +212,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,3, String.valueOf(amortizacionDTO.getId()), black, isBold, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			
 			communsPdf.setCell(baseRow,1,"$", black, true, "C", 8, cellStyle, "", paddingBody2,bgColor);	
-			communsPdf.setCell(baseRow,11,amortizacionDTO.getSeguroDanos().toString().equals("0.0")? "" : formatoDinero(amortizacionDTO.getSeguroDanos())  , black, true, "R", 8, cellStyle, "", paddingBody,bgColor);
+			communsPdf.setCell(baseRow,11,amortizacionDTO.getSeguroDanos().toString().equals("0.0")? "" : formatoDinero(amortizacionDTO.getSeguroDanos()) , black, true, "R", 8, cellStyle, "", paddingBody,bgColor);
 			
 			communsPdf.setCell(baseRow,1,"$", black, true, "C", 8, cellStyle, "", paddingBody2,bgColor);
 			communsPdf.setCell(baseRow,12,amortizacionDTO.getAportacionCapital().toString().equals("0.0")? "-" : formatoDinero(amortizacionDTO.getAportacionCapital()) , black, isBold, "R", 8, cellStyle, "",paddingBody, bgColor);
@@ -287,6 +284,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,12,"CAPITAL NUEVO", black, true, "C", 8, cellStyle, "", paddingHead, bgColor);
 			yStart -= table.getHeaderAndDataHeight();
 			table.draw();
+			getFooter(document, page);
 			
 		} catch (Exception e) {
 			throw new GeneralServiceException("Error=>", e.getMessage());
@@ -302,6 +300,9 @@ public class ImpresionAmortizacionesPdf {
 			Row<PDPage> baseRow;
 			yStart = 730;
 			String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
+			String[] dateNew = dateString.split("\\s+");
+			
+			dateString = dateNew[0] + " de " + dateNew[1] + " del " + dateNew[2];
 	  
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 			baseRow = communsPdf.setRow(table, 87);
@@ -334,7 +335,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,15, impresionForm.getTasa().toString()+"%", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			
 			baseRow = communsPdf.setRow(table, 15);
-			communsPdf.setCell(baseRow,99,dateString +" Válido 15 días apartir de su impresión.", black, false, "R", 8, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,99,dateString, black, false, "R", 8, cellStyle, "", paddingHeadData, bgColor);
 			
 			table.draw();
 			yStart -= table.getHeaderAndDataHeight() + 20;
@@ -343,6 +344,25 @@ public class ImpresionAmortizacionesPdf {
 			throw new GeneralServiceException("Error => ", e.getMessage() );
 		}
 	}
+	
+	private void getFooter(PDDocument document, PDPage page) {
+        try {
+        	
+        	StringBuilder txt = new StringBuilder();
+        	
+        	txt.append("* Esta tabla de amortización, es tan sólo una estimación de cómo se comportarían los pagos. \n");
+        	txt.append("* Esta cotización es de carácter informativo y sujeto a cambio sin previo aviso. \n");
+        	txt.append("* Este documento no tiene ninguna validez oficial y sujeto a autorización de crédito, aplican restricciones. ");
+        	
+            BaseTable table = new BaseTable(35, 26, 10, fullWidth, 20, document, page, false, true);
+            Row<PDPage> baseRow = communsPdf.setRow(table, 15);
+            communsPdf.setCell(baseRow,100, Sio4CommunsPdf.eliminaHtmlTags3(txt.toString()), black, false, "L", 8, cellStyle, "", paddingHeadData, bgColor);
+            table.draw();
+
+        } catch (Exception ex) {
+        	throw new GeneralServiceException("Error => ", ex.getMessage() );
+        }
+    }
 	
 	private void getLogo(PDDocument document, PDPage page)   {
 		try {

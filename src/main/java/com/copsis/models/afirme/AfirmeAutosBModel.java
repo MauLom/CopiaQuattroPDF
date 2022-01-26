@@ -124,6 +124,12 @@ public class AfirmeAutosBModel {
                         modelo.setDescripcion(newcontenido.split("\n")[i].split("Versión:")[1].split("Número")[0].replace("###", "").trim());
                         modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", "").trim());
 
+                    }else if(modelo.getPlacas().length() == 0 && newcontenido.split("\n")[i].contains("Placas:") && (i-2)>0) {
+                    	if(newcontenido.split("\n")[i-2].contains("Versión") && newcontenido.split("\n")[i-1].contains("###")) {
+                    		if(newcontenido.split("\n")[i-1].split("###").length == 2) {
+                    			modelo.setPlacas(newcontenido.split("\n")[i-1].split("###")[0]);
+                    		}
+                    	}
                     }
 
                 }
@@ -135,7 +141,9 @@ public class AfirmeAutosBModel {
             	modelo.setClave(obtenerValoresPorRegex(CLAVE_REGEX,newcontenido));
             }
             //placas
-            modelo.setPlacas(obtenerValoresPorRegex(PLACAS_REGEX ,contenido));
+            if(modelo.getPlacas().length() == 0) {
+                modelo.setPlacas(obtenerValoresPorRegex(PLACAS_REGEX ,contenido));
+            }
             //
             inicio = contenido.indexOf("COBERTURAS");
             fin = contenido.indexOf("Prima Neta");
