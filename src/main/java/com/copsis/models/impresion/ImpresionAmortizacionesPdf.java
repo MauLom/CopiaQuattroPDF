@@ -141,10 +141,10 @@ public class ImpresionAmortizacionesPdf {
 							acomula = true;
 							// CREACION CUERPO DE PDF
 							table = getCuerpoPdf(document, page, amortizacionDTO, x);
-							
+
 							// SALTO DE PAGINA
 							if(isEndOfPage(table)) {
-								
+
 								table.getRows().remove(table.getRows().size()-1);
 								table.draw();
 								// CRACION NUEVA PAGINA
@@ -187,6 +187,27 @@ public class ImpresionAmortizacionesPdf {
 							if(acomula) {								
 								x++;
 							} 
+						}
+						
+						if(x == listAmortizacion.size() ) { // insertar informacion
+							if(yStart <= 110.0) { // para plazo de 24 meses
+								page = new PDPage();
+								document.addPage(page);
+								// Logo
+								getLogo(document, page);
+								// PRODUCTO
+								getEncabezadoPdf(document, page, impresionForm);
+								// BORDE DEL CUERPO DE TABLA
+								table2 = new BaseTable(610, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+								baseRow2 = communsPdf.setRow(table2, 575);
+								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
+								table2.draw();
+								//marcaAgua
+								getMarcaAgua(document, page);
+								getInfo(document, page, 620);
+							} else {
+								getInfo(document, page, yStart);
+							}
 						}
 						output = new ByteArrayOutputStream();
 						document.save(output);
@@ -284,7 +305,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,12,"CAPITAL NUEVO", black, true, "C", 8, cellStyle, "", paddingHead, bgColor);
 			yStart -= table.getHeaderAndDataHeight();
 			table.draw();
-			getFooter(document, page);
+			//getFooter(document, page);
 			
 		} catch (Exception e) {
 			throw new GeneralServiceException("Error=>", e.getMessage());
@@ -377,6 +398,36 @@ public class ImpresionAmortizacionesPdf {
 			table.draw();
 			
 		} catch (Exception e) {
+			throw new GeneralServiceException("Error=>", e.getMessage());
+		}
+	}
+	
+	private void getInfo(PDDocument document, PDPage page, float inicio) {
+		try {
+			StringBuilder txt = new StringBuilder();
+			txt.append("<br>");
+			txt.append("<br>");
+        	txt.append("• Las mensualidades incluyen intereses, IVA ,seguro de daños con cobertura amplia y seguro de vida. \n");
+        	txt.append("• En la primera mensualidad se cobra solamente comisión por apertura más intereses e IVA \n");
+        	txt.append("• Cotizaciones de carácter informativo y sujetas a cambio sin previo aviso. \n");
+        	txt.append("• Este documento no tiene ninguna validez oficial. \n");
+        	txt.append("• El monto del seguro comprende 12 meses. Al terminar este periodo se renueva en forma automática. \n");
+        	txt.append("• Sujeto a autorización de crédito. \n");
+        	txt.append("• Se solicitará la contratación de los seguros correspondientes. Scotiabank \n");
+        	txt.append("   reconoce el derecho innegable que tiene el Cliente de contratar los \n");
+        	txt.append("   productos y/o servicios adicionales o ligados a la operación o servicio a \n");
+        	txt.append("   través de un tercero independiente. \n ");        	
+        	txt.append("<b>Documentación requerida**: </b> \n");
+        	txt.append("- Identificación oficial \n");
+        	txt.append("- Comprobante de domicilio \n");
+        	txt.append("- Comprobante de ingresos \n");
+        	txt.append("<i>**Scotiabank Inverlat se reserva el derecho de solicitar información adicional. <i>" );
+            BaseTable table = new BaseTable(inicio, 26, 10, fullWidth, 20, document, page, false, true);
+            Row<PDPage> baseRow = communsPdf.setRow(table, 15);
+            communsPdf.setCell(baseRow,100, Sio4CommunsPdf.eliminaHtmlTags3(txt.toString()), black, false, "L", 9, cellStyle, "", paddingHeadData, bgColor);
+            table.draw();
+			
+		}catch (Exception e) {
 			throw new GeneralServiceException("Error=>", e.getMessage());
 		}
 	}
