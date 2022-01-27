@@ -8,6 +8,7 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class MapfreVidaCModel {
 	
@@ -254,9 +255,34 @@ public class MapfreVidaCModel {
 							modelo.setBeneficiarios(beneficiarios);	
 					}
 						
+			buildRecibos();
 			return modelo;
 		} catch (Exception e) {
 			return modelo;
+		}
+	}
+	
+	private void buildRecibos() {
+		if(modelo.getFormaPago() == 1 ) {
+            List<EstructuraRecibosModel> listRecibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			recibo.setReciboId("");
+			recibo.setSerie("1/1");
+			recibo.setVigenciaDe(modelo.getVigenciaDe());
+			recibo.setVigenciaA(modelo.getVigenciaA());
+			if (recibo.getVigenciaDe().length() > 0) {
+				recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+			}			
+			recibo.setPrimaneta(modelo.getPrimaneta());
+			recibo.setDerecho(modelo.getDerecho());
+			recibo.setRecargo(modelo.getRecargo());
+			recibo.setIva(modelo.getIva());
+			recibo.setPrimaTotal(modelo.getPrimaTotal());
+			recibo.setAjusteUno(modelo.getAjusteUno());
+			recibo.setAjusteDos(modelo.getAjusteDos());
+			recibo.setCargoExtra(modelo.getCargoExtra());
+			listRecibos.add(recibo);
+			modelo.setRecibos(listRecibos);
 		}
 	}
 
