@@ -36,10 +36,12 @@ public class ImpresionePDFController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> impresionesMain (@RequestBody ImpresionForm impresionForm,@RequestHeader HttpHeaders headers) {
 		try {
+		
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionServicePdf(impresionForm,headers)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
+		ex.printStackTrace();
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 		  

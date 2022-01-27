@@ -463,6 +463,27 @@ public class Sio4CommunsPdf {
 		return lineBoders;
     	
     }
+    
+    public List<Float> setPadding(Float Padding){
+        List<Float> pading = new ArrayList<>();
+           //Solo son 4 L,R,T,B
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	    return pading;
+       }
+
+  
+    public List<Float> setPadding(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
+     List<Float> pading = new ArrayList<>();
+        //Solo son 4 L,R,T,B
+	     pading.add(PaddingB);
+	     pading.add(PaddingR);
+	     pading.add(PaddingT);
+	     pading.add(PaddingB);
+	    return pading;
+    }
 
 	
 }

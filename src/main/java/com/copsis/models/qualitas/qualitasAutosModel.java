@@ -88,9 +88,10 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
-
+System.out.println(newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length()==0);
 					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length()==0) {
 						if ((i + 1) == arrNewContenido.length) {
+							
 							modelo.setPoliza(arrNewContenido[i].split("###")[1]);
 							modelo.setEndoso(arrNewContenido[i].split("###")[2]);
 							if (fn.isNumeric(arrNewContenido[i].split("###")[3].trim())) {
@@ -108,14 +109,28 @@ public class qualitasAutosModel {
 						}
 
 					} else {
-						if (newcontenido.split("\n")[i].contains("ENDOSO")
-								&& newcontenido.split("\n")[i].contains("INCISO")) {
-							modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[0]);
-							modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
-							if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim())) {
-								modelo.setInciso(
-										Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+						if (newcontenido.split("\n")[i].contains("ENDOSO") && newcontenido.split("\n")[i].contains("INCISO")) {
+							if(arrNewContenido[arrNewContenido.length-1].split("###")[0].length()  < 4){
+								
+								if(arrNewContenido[arrNewContenido.length-1].split("###")[0].contains("AUTOMÓVILES") ) {
+									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
+									modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[2]);
+									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[3].trim())) {
+										modelo.setInciso(
+												Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+									}
+									
+								}else {
+									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[0]);
+									modelo.setEndoso(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
+									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim())) {
+										modelo.setInciso(
+												Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
+									}
+								}
 							}
+							
+							
 						}
 
 					}

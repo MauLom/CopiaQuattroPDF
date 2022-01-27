@@ -6,6 +6,7 @@ import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.models.impresion.ImpresionConsetimientoPdf;
 import com.copsis.models.impresion.ImpresionConsolidadoModelPdf;
 import com.copsis.models.impresion.ImpresionInter;
+import com.copsis.models.impresion.ImpresionReclamacionPdf;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +33,11 @@ public class ImpresioneTipoService {
 			ImpresionConsetimientoPdf impresionConsetimientoPdf = new ImpresionConsetimientoPdf();
 			this.byteArrayPDF = impresionConsetimientoPdf.buildPDF(impresionForm);
 			break;
+		case 105:
+			ImpresionReclamacionPdf impresionReclamacionPdf = new ImpresionReclamacionPdf();
+			this.byteArrayPDF = impresionReclamacionPdf.buildPDF(impresionForm);
+			break;	
+			
 		default:
 			break;
 		}
