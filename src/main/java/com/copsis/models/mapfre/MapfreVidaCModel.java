@@ -245,7 +245,7 @@ public class MapfreVidaCModel {
 									int sp =newcontenido.split("\n")[i].split("###").length;
 									if(sp == 3) {
 										beneficiario.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-										beneficiario.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[0]));
+										beneficiario.setParentesco(fn.parentesco( newcontenido.split("\n")[i].split("###")[1].trim()));
 										beneficiario.setPorcentaje(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].replace("%", "").trim()));
 										beneficiarios.add(beneficiario);
 									}
