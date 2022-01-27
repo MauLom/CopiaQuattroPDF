@@ -109,7 +109,7 @@ public class qualitasAutosModel {
 
 					} else {
 						if (newcontenido.split("\n")[i].contains("ENDOSO")&& newcontenido.split("\n")[i].contains("INCISO")) {
-							if(arrNewContenido[arrNewContenido.length-1].split("###")[0].length()  < 4){
+							if(arrNewContenido[arrNewContenido.length-1].split("###").length  < 4){
 								
 								if(arrNewContenido[arrNewContenido.length-1].split("###")[0].contains("AUTOMÓVILES") ) {
 									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
