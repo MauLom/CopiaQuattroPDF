@@ -215,12 +215,12 @@ public class SegurosMtySalud {
 					
 					if(newcontenido.split("\n")[i].split("###").length == 8) {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim() +" " + newcontenido.split("\n")[i].split("###")[1].trim() +" "+newcontenido.split("\n")[i].split("###")[2].trim());
-						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[3]));					
+						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[3].trim()));					
 						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[4]) ? 1:0);
 						
 					}else {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[1]));					
+						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[1].trim()));					
 						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
 					}
 					
@@ -276,7 +276,7 @@ public class SegurosMtySalud {
          }
 
 
-         if(newcontenido.length() ==  0 ||  newcontenido.length() < 20) {
+         if(newcontenido.length() ==  0 ||  newcontenido.length() < 66) {
         	 newcontenido ="";
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
              fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
