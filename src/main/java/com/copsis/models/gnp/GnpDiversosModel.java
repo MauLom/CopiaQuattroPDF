@@ -740,7 +740,7 @@ public class GnpDiversosModel {
 						ubicacion.setNoExterno(fn.numTx(calle));
 						ubicacion.setCalle(calle.split(ubicacion.getNoExterno())[0].replace("###", "").trim());
 						
-						if(arrDetalle.length >0) {
+						if(arrDetalle.length >1) {
 							//No. interno
 							if(fn.isNumeric(arrDetalle[1])) {
 								ubicacion.setNoInterno(arrDetalle[1]);
@@ -812,7 +812,7 @@ public class GnpDiversosModel {
 				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
 				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
 				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getIva(), 2));
 
 				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
 				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
