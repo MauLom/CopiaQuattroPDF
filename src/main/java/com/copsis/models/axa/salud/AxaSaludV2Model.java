@@ -459,7 +459,7 @@ public class AxaSaludV2Model {
 					.replace("T###i t u###l ar", "Titular")
 					.replace("###C###ó###n###y###u ###ge", "###Conyuge")
 					.replace("H###i j o", "Hijo")
-					;
+					.replace("R ###odriguez", "Rodriguez");
 						 
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -541,11 +541,15 @@ public class AxaSaludV2Model {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
-						.replace("######", "###").replace("###1 ###0 % ", "###10 %");
+						.replace("######", "###").replace("###1 ###0 % ", "###10 %")
+						.replace("M ###aternidad", "Maternidad")
+						.replace("P ###reexistencias","Preexistencias");
+				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if (!newcontenido.split("\n")[i].contains("Coberturas-Servicios")
 							&& !newcontenido.split("\n")[i].contains("Tope de Coaseguro")
+							&& !newcontenido.split("\n")[i].contains("Tope de coaseguro")
 							&& !newcontenido.split("\n")[i].contains("Coberturas adicionales con costo")
 							&& !newcontenido.split("\n")[i].contains("Servicios con costo")
 							&& !newcontenido.split("\n")[i].contains("Servicio###")
