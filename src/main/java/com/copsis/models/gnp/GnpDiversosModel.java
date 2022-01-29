@@ -413,6 +413,7 @@ public class GnpDiversosModel {
 						}
 
 						if (x.split("###").length == 3) {
+							nombre = new StringBuilder();
 							nombre.append(x.split("###")[1].trim());
 							if (y.length() > 0) {
 								nombre.append(" ").append(y.trim());
@@ -626,9 +627,11 @@ public class GnpDiversosModel {
 					resultado = new StringBuilder();
 					newcontenido = new StringBuilder();
 					if (inicio > -1 && fin > inicio) {
+                        System.err.println("UBICACIONEST primer caso");
 
 						EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 						newcontenido.append(ubicacionesT.substring(inicio + 26, fin).replace("@@@", "").trim());
+						System.out.println(newcontenido);
 						for (String x : newcontenido.toString().split("\r\n")) {
 							if (x.contains("###CARTERA"))
 								resultado.append(x.split("###CARTERA")[0].trim()).append("\r\n");
@@ -655,13 +658,14 @@ public class GnpDiversosModel {
 							newcontenido.append(resultado.substring(inicio + 6, fin).replace("###", "")
 									.replace("\r\n", " ").trim());
 
+							System.out.println(newcontenido);
 							if (newcontenido.toString().contains("MATERIALES INCOMBUSTIBLES")) {
 								auxStr = newcontenido.toString();
 								newcontenido = new StringBuilder();
 								newcontenido.append(auxStr.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
 										.replace("(", "").replace(")", "").trim());
 							}
-
+							System.out.println("="+fn.material(newcontenido.toString())+"=");
 							ubicacion.setTechos(fn.material(newcontenido.toString()));
 						}
 
@@ -672,6 +676,7 @@ public class GnpDiversosModel {
 							newcontenido = new StringBuilder();
 							newcontenido.append(
 									resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "").trim());
+							System.out.println(newcontenido);
 							ubicacion.setMuros(fn.material(newcontenido.toString()));
 						}
 
@@ -688,7 +693,11 @@ public class GnpDiversosModel {
 								ubicacion.setNiveles(Integer.parseInt(newcontenido.toString()));
 							}
 						}
-						if (ubicacion.getNombre().length() > 0 && !ubicaciones.isEmpty())
+						
+						if(ubicacion.getNombre().length() > 0) {
+							ubicaciones.add(ubicacion);
+						}
+						if (!ubicaciones.isEmpty())
 							modelo.setUbicaciones(ubicaciones);
 					}
 
@@ -732,7 +741,8 @@ public class GnpDiversosModel {
 				String[] arrContenido = newcontenido.toString().split("\r\n");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				String textAuxiliar = "";
-				
+                System.out.println("Si es aqui ubicaciones****************");
+
 				for(int i=0;i<arrContenido.length;i++) {
 					if(arrContenido[i].contains("Asegurado") && ubicacion.getCalle().length() == 0) {
 						String[] arrDetalle = arrContenido[i+2].split(",");
@@ -765,13 +775,13 @@ public class GnpDiversosModel {
 						inicio = newcontenido.toString().indexOf("Giro / Actividad");
 						fin = newcontenido.toString().indexOf("Número de Equipos a Asegurar");
 						if(inicio<fin) {
-							ubicacion.setGiro(fn.eliminaSpacios(newcontenido.substring(inicio + 16, fin).replace("###", "")
-									.replace("\r", "").replace("\n", "").trim()));
+							ubicacion.setGiro(fn.gatos(newcontenido.substring(inicio + 16, fin)).replace("###", "")
+									.replace("\r", "").replace("\n", "").trim());
 							ubicacion.setNombre(ubicacion.getGiro());
 						}
 						
-					} else if (arrContenido[i].contains("Giro")) {
-						ubicacion.setGiro(arrContenido[i].split("Giro")[1].replace("###", "").trim());
+					} else if (arrContenido[i].contains("Giro") && ubicacion.getGiro().length() == 0) {
+						ubicacion.setGiro(fn.gatos(arrContenido[i].split("Giro")[1]).replace("###", "").replace("\r\n","").trim());
 						ubicacion.setNombre(ubicacion.getGiro());
 					}
 
@@ -787,7 +797,8 @@ public class GnpDiversosModel {
 					}
 					//muros
 					if(arrContenido[i].contains("Muros")) {
-						ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1]));
+						System.out.println(arrContenido[i].split("Muros")[1]);
+						ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1].replace("###", "").replace("\r\n", "").trim()));
 					}
 				}
 				if(ubicacion.getCalle().length() >0 ) {
