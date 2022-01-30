@@ -646,8 +646,7 @@ public class ImpresionConsetimientoPdf {
 					}
 
 					output = new ByteArrayOutputStream();
-					document.save(output);
-					document.save(new File("/home/desarrollo8/Pictures/axa.pdf"));
+					document.save(output);	
 					conte =null;								
 					return output.toByteArray();
 					
