@@ -46,6 +46,7 @@ public final class ConstantsValue {
 	public static final String DESCRIPCION_MOVIMIENTO = "Descripción del Movimiento";
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
 	public static final String DURACION = "Duración";
+	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
 
 	public static final String EXPEDICION = "expedición";
 	public static final String EXPEDICION2 = "Expedición:";
@@ -123,6 +124,7 @@ public final class ConstantsValue {
 	public static final String PRIMA_NETA2 = "Prima neta";
 	public static final String PRIMA_NETA3 = "Prima Neta:";
 	public static final String PRIMA_NETA_MAYUS2 = "PRIMA NETA";
+	public static final String PRIMA_NETA4 = "Prima neta:";
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
 	public static final String POLIZA_ACENT = "Póliza";
