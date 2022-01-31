@@ -26,8 +26,8 @@ public class MapfreVidaBModel {
 		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", ConstantsValue.POLIZA_NUMERO)
 				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
 				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
-				.replace("Prima Neta:", "Prima neta:").replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
-                .replace("DESCRIPCIÓN DE COBERTURAS","DESCRIPCION DE COBERTURAS");;
+				.replace("Prima Neta:", ConstantsValue.PRIMA_NETA4).replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
+                .replace("DESCRIPCIÓN DE COBERTURAS",ConstantsValue.DESCRIPCION_COBERTURAS);
 
 		String newcontenido = "";
 		int inicio = 0;
@@ -60,7 +60,10 @@ public class MapfreVidaBModel {
 					}
 
 			
-					leerDatosContratante(renglon);
+					leerDatosContratante(renglon,arrNewContenido,i);
+					if(modelo.getAsegurados().isEmpty()) {
+						obtenerAsegurado(arrNewContenido,i);
+					}
 					leerDatosAgenteYVigencia(renglon, arrNewContenido, i);
 					leerDatosDePago(arrNewContenido, i);
 					leerPrimasDerechoYRecargo(arrNewContenido, i, renglon);
@@ -72,7 +75,7 @@ public class MapfreVidaBModel {
 
 		
 			inicio = contenido.indexOf(ConstantsValue.PLAN_SEGURO);
-			fin = contenido.indexOf("DESCRIPCION DE COBERTURAS");
+			fin = contenido.indexOf(ConstantsValue.DESCRIPCION_COBERTURAS);
 			if(fin  ==  -1) {
 				fin = contenido.indexOf("Asegurados que ampara");
 			}
@@ -83,16 +86,17 @@ public class MapfreVidaBModel {
 				leerPlan(arrNewContenido);
 			}
 
-			inicio = contenido.indexOf("DESCRIPCION DE COBERTURAS");
+			inicio = contenido.indexOf(ConstantsValue.DESCRIPCION_COBERTURAS);
 			fin = contenido.indexOf("EL PLAZO DE GRACIA");
 			if(fin == -1) {
-				fin = contenido.lastIndexOf("Prima neta:");
+				fin = contenido.lastIndexOf(ConstantsValue.PRIMA_NETA4);
 			}
 			
 		
 			leerCoberturas(inicio,fin);
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
+			buildRecibos();
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(MapfreVidaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
@@ -102,12 +106,15 @@ public class MapfreVidaBModel {
 
 	}
 	
-	private void leerDatosContratante(String renglon) {
+	private void leerDatosContratante(String renglon,String[] arrNewContenido,int i) {
 		if (renglon.contains("Contratante:")
 				&& renglon.contains(ConstantsValue.RFC)) {
 			modelo.setCteNombre(renglon.split("Contratante:")[1].split(ConstantsValue.RFC)[0]
 					.replace("###", "").replace("C.U.R.P:", "").trim());
 			modelo.setRfc(renglon.split(ConstantsValue.RFC)[1].replace("###", "").trim());
+			if (arrNewContenido[i+1].contains("C.P:")) {
+				modelo.setCp(arrNewContenido[i+1].split("C.P:")[1].replace("###", "").trim().substring(0, 5).trim());
+			}
 			
 		}
 		if (renglon.contains("Domicilio:")
@@ -162,7 +169,7 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerPrimasDerechoYRecargo(String[] arrNewContenido, int i,String renglon) {
-		if (renglon.contains("Prima neta:")
+		if (renglon.contains(ConstantsValue.PRIMA_NETA4)
 				&& renglon.contains("Expedición")
 				&& renglon.contains("Prima Total:")) {
 			int sp = arrNewContenido[i + 1].split("###").length;
@@ -258,7 +265,7 @@ public class MapfreVidaBModel {
 		if (inicio > -1 ) {
 			newcontenido = newcontenido.replace("@@@", "").replace("\r", "")
 					.replace("CONYUGE", "###CONYUGE###")
-                    .replace("MADRE", "###MADRE###");;
+                    .replace("MADRE", "###MADRE###");
 			arrNewContenido = newcontenido.split("\n"); 
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			for (int i = 0; i < arrNewContenido.length; i++) {
@@ -268,7 +275,7 @@ public class MapfreVidaBModel {
 					int sp =renglon.split("###").length;
 					if(sp == 3) {
 						beneficiario.setNombre(renglon.split("###")[0].trim());
-						beneficiario.setParentesco(fn.parentesco( renglon.split("###")[0]));
+						beneficiario.setParentesco(fn.parentesco( renglon.split("###")[1]));
 						beneficiario.setPorcentaje(Integer.parseInt(renglon.split("###")[2].trim()));
 						beneficiarios.add(beneficiario);
 					}
