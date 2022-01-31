@@ -740,7 +740,7 @@ public class ImpresionConsetimientoPdf {
 		communsPdf.setCell(baseRow, 100, "Comentarios", azul, true, "L", 10, lineBoders, "", padding2,
 				bgColorAb);
 
-		if (impresionForm.getComentario().length() >= 123) {
+		if (impresionForm.getComentario() != null &&  impresionForm.getComentario().length() >= 123) {
 			baseRow = communsPdf.setRow(table, 24);
 		} else {
 			baseRow = communsPdf.setRow(table, 15);
@@ -1086,11 +1086,11 @@ public class ImpresionConsetimientoPdf {
 				}
 
 				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")) {
-					communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :"Meses de Sueldo"), azul, false, "L", 10, lineBoders41,
+					communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41,
 							"", padding3, bgColor);
 				} else {
 					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-						communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :"Meses de Sueldo"), azul, false, "L", 10,
+						communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10,
 								lineBoders41, "", padding3, bgColor);
 					} else {
 						communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41, "",
