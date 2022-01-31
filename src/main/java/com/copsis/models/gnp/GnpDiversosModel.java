@@ -353,6 +353,7 @@ public class GnpDiversosModel {
 						resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
 					}
 				}
+				newcontenido = new StringBuilder();
 				newcontenido.append(clearCoberturas(resultado.toString()));
 			}
 
@@ -361,11 +362,12 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Renovación póliza");
 			if (inicio > -1) {
 				newcontenido = new StringBuilder();
-				newcontenido.append(contenido.substring(inicio + 17, contenido.length()).trim());
+				newcontenido.append(contenido.substring(inicio + 17, contenido.length()).trim().replace("Gru po Nacional", "Grupo Nacional"));
 				fin = newcontenido.indexOf("Grupo Nacional");
 				if (fin > -1) {
 					resultado = new StringBuilder();
 					resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
+					newcontenido = new StringBuilder();
 					newcontenido.append(clearCoberturas(resultado.toString()));
 				}
 			}
@@ -623,15 +625,12 @@ public class GnpDiversosModel {
 
 					inicio = ubicacionesT.indexOf("Descripción del Movimiento");
 					fin = ubicacionesT.lastIndexOf("Resumen de secciones contratada");
-
 					resultado = new StringBuilder();
 					newcontenido = new StringBuilder();
 					if (inicio > -1 && fin > inicio) {
-                        System.err.println("UBICACIONEST primer caso");
 
 						EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 						newcontenido.append(ubicacionesT.substring(inicio + 26, fin).replace("@@@", "").trim());
-						System.out.println(newcontenido);
 						for (String x : newcontenido.toString().split("\r\n")) {
 							if (x.contains("###CARTERA"))
 								resultado.append(x.split("###CARTERA")[0].trim()).append("\r\n");
@@ -658,14 +657,12 @@ public class GnpDiversosModel {
 							newcontenido.append(resultado.substring(inicio + 6, fin).replace("###", "")
 									.replace("\r\n", " ").trim());
 
-							System.out.println(newcontenido);
 							if (newcontenido.toString().contains("MATERIALES INCOMBUSTIBLES")) {
 								auxStr = newcontenido.toString();
 								newcontenido = new StringBuilder();
 								newcontenido.append(auxStr.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
 										.replace("(", "").replace(")", "").trim());
 							}
-							System.out.println("="+fn.material(newcontenido.toString())+"=");
 							ubicacion.setTechos(fn.material(newcontenido.toString()));
 						}
 
@@ -676,7 +673,6 @@ public class GnpDiversosModel {
 							newcontenido = new StringBuilder();
 							newcontenido.append(
 									resultado.substring(inicio + 5, fin).replace("###", "").replace("\r\n", "").trim());
-							System.out.println(newcontenido);
 							ubicacion.setMuros(fn.material(newcontenido.toString()));
 						}
 
@@ -713,7 +709,7 @@ public class GnpDiversosModel {
 				newcontenido = new StringBuilder();
 				if(inicio > -1 && fin >  -1 && inicio < fin ) {
 					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").trim());
-					
+
 					EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {									
 		
@@ -738,17 +734,15 @@ public class GnpDiversosModel {
 				newcontenido = new StringBuilder();
 				newcontenido.append(ubicacionesT.split("Ubicación")[1].replace("@@@", "").replace("Descripción del movimiento","").replace("PRODUCCION NUEVA", ""));
 				
-				String[] arrContenido = newcontenido.toString().split("\r\n");
+				String[] arrContenido = newcontenido.toString().split("\n");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				String textAuxiliar = "";
-                System.out.println("Si es aqui ubicaciones****************");
-
 				for(int i=0;i<arrContenido.length;i++) {
-					if(arrContenido[i].contains("Asegurado") && ubicacion.getCalle().length() == 0) {
+					if(arrContenido[i].contains("Asegurado") && ubicacion.getCalle().length() == 0 && (i+2)< arrContenido.length) {
 						String[] arrDetalle = arrContenido[i+2].split(",");
 						String calle = arrDetalle[0];
 						ubicacion.setNoExterno(fn.numTx(calle));
-						ubicacion.setCalle(calle.split(ubicacion.getNoExterno())[0].replace("###", "").trim());
+						ubicacion.setCalle(calle.replace(ubicacion.getNoExterno(), "").replace("local", "").trim());
 						
 						if(arrDetalle.length >1) {
 							//No. interno
@@ -797,10 +791,18 @@ public class GnpDiversosModel {
 					}
 					//muros
 					if(arrContenido[i].contains("Muros")) {
-						System.out.println(arrContenido[i].split("Muros")[1]);
-						ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1].replace("###", "").replace("\r\n", "").trim()));
+						inicio = arrContenido[i].indexOf("Muros");
+						fin = arrContenido[i].indexOf("Hasta");
+
+						if(inicio < fin) {
+							textAuxiliar = arrContenido[i].substring(inicio+5,fin).replace("###", "").replace("\r\n", "").trim();
+							ubicacion.setMuros(fn.material(textAuxiliar));
+						}else {
+							ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1].replace("###", "").replace("\r\n", "").trim()));
+						}
 					}
 				}
+				
 				if(ubicacion.getCalle().length() >0 ) {
 					ubicaciones.add(ubicacion);
 					modelo.setUbicaciones(ubicaciones);
@@ -997,10 +999,14 @@ public class GnpDiversosModel {
 						cobertura = true;
 					}
 					
-					fin = x.indexOf("Importe");
+					fin = fn.gatos(x).indexOf("Importe");
 					if (fin > -1) {
-						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
-						cobertura = true;
+						if(fin == 0) {
+							cobertura = true;
+						}else if(fin > 0) {
+							a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
+							cobertura = true;
+						}
 					} else {
 						fin = x.indexOf("mporte Total");
 						if (fin > -1) {
@@ -1028,9 +1034,11 @@ public class GnpDiversosModel {
 						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
-					fin = x.indexOf("Vigencia");
-					if (fin > -1) {
+					fin = fn.gatos(x).indexOf("Vigencia");
+					if (fin > 0) {
 						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
+						cobertura = true;
+					}else if(fin == 0) {
 						cobertura = true;
 					}
 					if (!cobertura) {
