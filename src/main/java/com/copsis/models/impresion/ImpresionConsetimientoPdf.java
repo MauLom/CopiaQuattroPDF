@@ -1030,7 +1030,7 @@ public class ImpresionConsetimientoPdf {
 				baseRow = communsPdf.setRow(table, 17);
 				baseRow4 = communsPdf.setRow(table4, 17);
 
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")) {
+				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
 					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
 							bgColor);
 					communsPdf.setCell(baseRow, 47,
@@ -1085,7 +1085,7 @@ public class ImpresionConsetimientoPdf {
 							lineBoders65, "", padding3, bgColor);
 				}
 
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")) {
+				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
 					communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41,
 							"", padding3, bgColor);
 				} else {
@@ -1100,7 +1100,7 @@ public class ImpresionConsetimientoPdf {
 
 				communsPdf.setCell(baseRow, 38, "", azul, false, "L", 10, lineBoders41, "", padding3,
 						bgColor);
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento")) {
+				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
 					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
 						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
 								padding3, bgColor);
