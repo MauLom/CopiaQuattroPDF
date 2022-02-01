@@ -179,8 +179,7 @@ public class GnpVIdaModel2 {
 							modelo.setAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1].split("Clave")[0].replace("###", ""));
 						}
 					
-						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2)){
-							
+						if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2) && !newcontenido.toString().split("\n")[i].contains("Hombre") && modelo.getCveAgente().length() == 0){							
 							modelo.setCveAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.CLAVE2)[1].split("###")[1].replace(" ", "").trim());
 							
 						}
