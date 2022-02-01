@@ -1053,8 +1053,8 @@ public class ImpresionConsetimientoPdf {
 								padding3, bgColor);
 					}
 
-		}
-								}							 
+				}
+			}						 
 						 
 	
 		if (coberturas.size() == 0) {
