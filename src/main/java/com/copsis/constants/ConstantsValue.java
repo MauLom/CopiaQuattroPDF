@@ -47,7 +47,7 @@ public final class ConstantsValue {
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
 	public static final String DURACION = "Duración";
 	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
-
+	
 	public static final String EXPEDICION = "expedición";
 	public static final String EXPEDICION2 = "Expedición:";
 	public static final String EXPEDICION3 = "Expedición";
