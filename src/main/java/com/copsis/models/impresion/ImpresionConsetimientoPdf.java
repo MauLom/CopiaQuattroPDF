@@ -9,6 +9,7 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ImpresionConsetimientoPdf {
 	private Color black = new Color(0, 0, 0);
@@ -646,7 +648,8 @@ public class ImpresionConsetimientoPdf {
 					}
 
 					output = new ByteArrayOutputStream();
-					document.save(output);	
+					document.save(output);
+
 					conte =null;								
 					return output.toByteArray();
 					
@@ -1003,151 +1006,63 @@ public class ImpresionConsetimientoPdf {
 
 
 		baseRow = communsPdf.setRow(table, 15);
-		communsPdf.setCell(baseRow, 100, "Coberturas amparadas", bgColor, true, "L", 10, lineBoders1, "",
+		communsPdf.setCell(baseRow, 100, "Coberturas amparadas", bgColor, true, "L", 10, communsPdf.setLineStyle(azul, azul, Color.gray, Color.green), "",
 				padding2, bgColorA);
 
 		baseRow = communsPdf.setRow(table, 15);
 		communsPdf.setCell(baseRow, 82, "Regla para determinar la Suma Asegurada", azul, false, "R", 10,
-				lineBoders, "", padding3, bgColor);
+				communsPdf.setLineStyle(azul, azul,azul, azul), "", padding3, bgColor);
 		communsPdf
 				.setCell(baseRow, 18, "Incluido", azul, true, "c", 10, lineBoders33, "", padding3, bgColor)
 				.setLeftPadding(16);
-		baseRow = communsPdf.setRow(table, 5);
-		communsPdf.setCell(baseRow, 100, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
+	
 		table.remoBordes(false, 1);
 		table.draw();
-		yStart -= table.getHeaderAndDataHeight();
+		yStart -= table.getHeaderAndDataHeight()+3;
 
 		table4 = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,
 				true);
 		table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,
 				true);
 		
+		List<String> meses = Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+		ArrayList<PaqueteCoberturaProjection> coberturas = new ArrayList<PaqueteCoberturaProjection>();
 
-
-		if (impresionForm.getCoberturas().size() > 0) {
 			for (int i = 0; i < impresionForm.getCoberturas().size(); i++) {
+			PaqueteCoberturaProjection cob = new PaqueteCoberturaProjection();
+
+			cob.setLetra(meses.get(i));
+			cob.setNombres( impresionForm.getCoberturas().get(i).getNombres());
+			cob.setIncluido( impresionForm.getCoberturas().get(i).getIncluido());
+			cob.setCoberturaValor( impresionForm.getCoberturas().get(i).getCoberturaValor());
+			coberturas.add(cob);
+				}
+
+		if (coberturas.size() > 0) {
+			for (int i = 0; i < coberturas.size(); i++) {
 				baseRow = communsPdf.setRow(table, 17);
-				baseRow4 = communsPdf.setRow(table4, 17);
-
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"a) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-				if (impresionForm.getCoberturas().get(i).getNombres()
-						.equals("Indemnización por Muerte Accidental (DI)")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"b) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Pérdidas Orgánicas (PO)")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"c) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-				if (impresionForm.getCoberturas().get(i).getNombres()
-						.equals("Cobertura por Invalidez Total y Permanente (BITP)")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"d) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-				if (impresionForm.getCoberturas().get(i).getNombres()
-						.equals("Beneficio Seguro Saldado por Invalidez Total (SSIT)")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"e) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-
-				if (impresionForm.getCoberturas().get(i).getNombres().contains("Tu médico 24 horas")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"f) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-				if (impresionForm.getCoberturas().get(i).getNombres()
-						.equals("Servicio de Asistencia Funeraria")) {
-					communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,
-							bgColor);
-					communsPdf.setCell(baseRow, 47,
-							"g) " + impresionForm.getCoberturas().get(i).getNombres(), azul, false, "L", 10,
-							lineBoders65, "", padding3, bgColor);
-				}
-
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
-					communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41,
-							"", padding3, bgColor);
-				} else {
-					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-						communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10,
-								lineBoders41, "", padding3, bgColor);
-					} else {
-						communsPdf.setCell(baseRow4, 38, (impresionForm.getCoberturas().get(i).getCoberturaValor().length() > 0 ? impresionForm.getCoberturas().get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41, "",
-								padding3, bgColor);
-					}
-				}
-
-				communsPdf.setCell(baseRow, 38, "", azul, false, "L", 10, lineBoders41, "", padding3,
-						bgColor);
-				if (impresionForm.getCoberturas().get(i).getNombres().equals("Fallecimiento (BASICAGC)")) {
-					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
-								padding3, bgColor);
+				baseRow4 = communsPdf.setRow(table4, 17);				
+				communsPdf.setCell(baseRow4, 47, "", azul, false, "L", 10, lineBoders65, "", padding3,bgColor);
+				communsPdf.setCell(baseRow, 47 ,coberturas.get(i).getLetra() +")"+ coberturas.get(i).getNombres(), azul, false, "L", 10,lineBoders65, "", padding3, bgColor);
+				communsPdf.setCell(baseRow, 38, (coberturas.get(i).getCoberturaValor().length() > 0 ? coberturas.get(i).getCoberturaValor() :""), azul, false, "L", 10, lineBoders41, "",padding3, bgColor);
+				 if (coberturas.get(i).getIncluido() == 1) {
 						communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
 								padding3, bgColor);
-					} else {
-						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
-								padding3, bgColor);
-						communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
-								padding3, bgColor);
-
-					}
-				} else if (impresionForm.getCoberturas().get(i).getNombres().equals("Tu médico 24 horas ®")
-						|| impresionForm.getCoberturas().get(i).getNombres()
-								.equals("Servicio de Asistencia Funeraria")) {
-					if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
-								padding3, bgColor);
-						communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
-								padding3, bgColor);
-					} else {
-						communsPdf.setCell(baseRow4, 15, "", azul, false, "L", 10, lineBoders64, "",
-								padding3, bgColor);
-						communsPdf.setCell(baseRow, 15, "", azul, false, "L", 10, lineBoders64, "",
-								padding3, bgColor);
-
 					}
 
-				} else {
-					   
-							 if (impresionForm.getCoberturas().get(i).getIncluido() == 1) {
-									communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
-											padding3, bgColor);
-								} else {										
-								communsPdf.setCell(baseRow, 15, "", azul, false, "C", 10, lineBoders64, "",
-												padding3, bgColor);
+					}
 								}							 
 						 
 	
-				}
+		if (coberturas.size() == 0) {
+			baseRow = communsPdf.setRow(table, 125);
+			communsPdf.setCell(baseRow, 100, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 
-			}
-		}
-
+		}else {
 		baseRow = communsPdf.setRow(table, 5);
 		communsPdf.setCell(baseRow, 100, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 
+		}
 		baseRow4 = communsPdf.setRow(table4, 5);
 		communsPdf.setCell(baseRow4, 100, "", azul, false, "L", 10, lineBoders, "", padding3, bgColor);
 
