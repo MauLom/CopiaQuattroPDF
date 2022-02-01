@@ -1048,10 +1048,13 @@ public class ImpresionConsetimientoPdf {
 				 if (coberturas.get(i).getIncluido() == 1) {
 						communsPdf.setCell(baseRow, 15, "Incluido", azul, false, "C", 10, lineBoders64, "",
 								padding3, bgColor);
+					}else {
+						communsPdf.setCell(baseRow, 15, "", azul, false, "C", 10, lineBoders64, "",
+								padding3, bgColor);
 					}
 
-					}
-								}							 
+				}
+			}						 
 						 
 	
 		if (coberturas.size() == 0) {
