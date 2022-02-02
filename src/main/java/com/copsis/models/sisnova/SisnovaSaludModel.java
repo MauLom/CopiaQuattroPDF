@@ -118,12 +118,12 @@ public class SisnovaSaludModel {
             if (inicio > 0 && fin > 0 && inicio < fin) {
             	List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
-						.replaceAll("### ###", "###").replaceAll("  +", "").replace("  ", " ");
+						.replaceAll("### ###", "###").replaceAll("  +", "").replaceAll("\\u00A0{2,}", " ");
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if(newcontenido.split("\n")[i].split("-").length > 4) {					
-						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[1]);
+						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[1].trim());
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").trim()));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].trim()));
 						asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
@@ -145,7 +145,7 @@ public class SisnovaSaludModel {
             	newcontenido = contenido.substring(inicio, fin).replace("\r", "").replaceAll("@@@", "").replaceAll("### ###", "###")
             		    .trim().replaceAll("\u00A0", " ")	.replaceAll(" +", "###").replaceAll("######", "###").replace("######", "###")
             			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "").replace("Hasta", "Hasta:")
-            			.replace("las###12###Hrs.###del###día###", "").replace("::", ":");
+            			.replace("las###12###Hrs.###del###día###", "").replace("::", ":").replace("Tope###Coaseguro","Tope Coaseguro");
             	        //El caracter unicode
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
@@ -169,6 +169,10 @@ public class SisnovaSaludModel {
             		
             		if(newcontenido.split("\n")[i].contains("COASEGURO:") && modelo.getCoaseguro().length() == 0) {
             			modelo.setCoaseguro(newcontenido.split("\n")[i].split("COASEGURO:")[1].replace("###", ""));
+            		}
+            		
+            		if(newcontenido.split("\n")[i].contains("Tope Coaseguro:") && modelo.getCoaseguroTope().length() == 0) {
+            			modelo.setCoaseguroTope(newcontenido.split("\n")[i].split("Tope Coaseguro:")[1].replace("###", ""));
             		}
 
             		if(newcontenido.split("\n")[i].contains("Prima") && newcontenido.split("\n")[i].contains("Neta") ) {
@@ -228,7 +232,7 @@ public class SisnovaSaludModel {
                 		}
                  }else if(inicio == -1) {
                 	 inicio = contenido.indexOf("Prima ###EXTRA ###Prima ###Prima Neta ###GASTOS DE ");
-                	 newcontenido = contenido.substring(inicio,fin).replace("### ###", "###").trim().replace("\r", "").replace("@@@", "");
+                	 newcontenido = contenido.substring(inicio,fin).replace("### ###", "###").trim().replace("\r", "").replace("@@@", "").replaceAll("\\u00A0{2,}", " ");
                 	 String[] arrContenido = newcontenido.split("\n");
 
                 	 for(int i=0;i<arrContenido.length;i++) {
@@ -245,9 +249,9 @@ public class SisnovaSaludModel {
                 			 String[] valores = arrContenido[i+1].split("###");
                 			 
                 			 if(valores.length == 5) {
-                     			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores[2])));
-                     			modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores[3])));
-                     			modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores[4])));
+                     			modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores[2].trim())));
+                     			modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores[3].trim())));
+                     			modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores[4].trim())));
                 			 }
                 		 }
                 	 }
@@ -310,7 +314,7 @@ public class SisnovaSaludModel {
                 			 cobertura.setCoaseguroTope(newcontenido.split("\n")[i+4].split("###")[1].trim());
                 			 coberturas.add(cobertura);
                 		 }
-                		 if(newcontenido.split("\n")[i].contains("contratadas:")) {
+                		 if(newcontenido.split("\n")[i].contains("contratadas:") || newcontenido.split("\n")[i].contains("CONTRATADAS:")) {
                 			 cobertura.setNombre(newcontenido.split("\n")[i+1].split("###")[0].trim());
                 			 cobertura.setSa(newcontenido.split("\n")[i+1].split("###")[1].trim()); 
                 			 cobertura.setCoaseguro(newcontenido.split("\n")[i+1].split("###")[2].trim());
