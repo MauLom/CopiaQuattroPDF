@@ -56,7 +56,7 @@ public class MapfreVidaBModel {
 					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {
 						
 						modelo.setPoliza(
-								renglon.split(ConstantsValue.POLIZA_NUMERO)[1].replace("###", "").trim());
+								renglon.split(ConstantsValue.POLIZA_NUMERO)[1].replace("###", "").replace(":","").trim());
 					}
 
 			
@@ -130,15 +130,15 @@ public class MapfreVidaBModel {
 					renglon.split("Desde")[1].split("Clave de Agente:")[0]
 							.replace("###", "").trim()));
 			
-			modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim());
-			modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
+			modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").replace(":","").trim());
+			modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
 			
 			if(arrNewContenido[i+1].split("-").length  == 3) {
-				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
-				modelo.setAgente(arrNewContenido[i + 1].split("###")[3].replace("###", "").trim());	
+				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
+				modelo.setAgente(arrNewContenido[i + 1].split("###")[3].replace("###", "").replace(":","").trim());	
 			}else {
-				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim());
-				modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").trim());
+				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").replace(":","").trim());
+				modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
 			}
 		}
 		if (renglon.contains(ConstantsValue.HASTA2)) {
@@ -214,7 +214,7 @@ public class MapfreVidaBModel {
 			if (arrNewContenido[i].contains(ConstantsValue.PLAN_SEGURO)) {
 				modelo.setPlan(
 						
-						arrNewContenido[i].split(ConstantsValue.PLAN_SEGURO)[1].replace("####", "").trim());
+						arrNewContenido[i].split(ConstantsValue.PLAN_SEGURO)[1].replace("####", "").replace(":","").trim());
 			}
 		}
 	}
@@ -290,7 +290,7 @@ public class MapfreVidaBModel {
 
 		if(arrContenido[i].contains("Asegurado") && arrContenido[i].contains("R.F.C") && arrContenido[i].contains("Nacimiento")) {
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-			asegurado.setNombre(arrContenido[i].split("Asegurado")[1].split("R.F.C")[0].replace("###","").trim());
+			asegurado.setNombre(arrContenido[i].split("Asegurado")[1].split("R.F.C")[0].replace("###","").replace(":", "").trim());
 			asegurado.setNacimiento(fn.formatDate(arrContenido[i].split("Nacimiento")[1].replace(":", "").replace("###", ""),"dd-MM-yyyy"));
 			asegurado.setParentesco(1);
 			
