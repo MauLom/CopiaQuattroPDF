@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
+import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionForm;
@@ -14,6 +15,7 @@ import com.copsis.encryptor.SiO4EncryptorAES;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
+import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -69,6 +71,19 @@ public class ImpresionService {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 	}
+	
+	public byte[] impresionReclamacion(ImpresionReclamacionProjection impresionReclamacionProjection) {
+		try {
+			ImpresionReclamacionPdf impresionReclamacionPdf = new ImpresionReclamacionPdf();
+			return impresionReclamacionPdf.buildPDF(impresionReclamacionProjection);
+			
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+
 
 	
 	

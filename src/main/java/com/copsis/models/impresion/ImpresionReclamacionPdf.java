@@ -7,12 +7,10 @@ import java.io.File;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.json.JSONObject;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 
-import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
-import com.copsis.models.Tabla.HorizontalAlignment;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
@@ -25,7 +23,7 @@ public class ImpresionReclamacionPdf {
 	private final Color bgColorA = new Color(0, 0, 143);
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 	private float fullWidth = 542;
-	public byte[] buildPDF(ImpresionForm impresionForm) {
+	public byte[] buildPDF(ImpresionReclamacionProjection impresionReclamacionProjection) {
 		ByteArrayOutputStream output;
 		try {
 			try (PDDocument document = new PDDocument()) {

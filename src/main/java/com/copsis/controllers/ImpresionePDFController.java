@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.exceptions.GeneralServiceException;
@@ -55,6 +56,20 @@ public class ImpresionePDFController {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionAmortizacion(impresionForm)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+	@PostMapping(value = "reclamacion")
+	public ResponseEntity<CopsisResponse> impresionReclmacion (@Valid @RequestBody ImpresionReclamacionProjection impresionReclamacionProjection, BindingResult bindingResult) {
+		try {
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionReclamacion(impresionReclamacionProjection)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
