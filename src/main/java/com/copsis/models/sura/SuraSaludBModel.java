@@ -37,16 +37,25 @@ public class SuraSaludBModel {
 				newCont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
 				modelo.setFormaPago(fn.formaPagoSring(newCont.toString()));
 				modelo.setMoneda(fn.buscaMonedaEnTexto(newCont.toString()));
+
 				for (int i = 0; i < newCont.toString().split("\n").length; i++) {
 					if(newCont.toString().split("\n")[i].contains("Póliza no.")) {
 						modelo.setPoliza(newCont.toString().split("\n")[i+1].split("###")[newCont.toString().split("\n")[i+1].split("###").length-1]);
 					}
 				
+					
 					if(newCont.toString().split("\n")[i].contains("Vigencia") && newCont.toString().split("\n")[i].split("-").length > 2 && newCont.toString().split("\n")[i].contains("Importes"))
 					{
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("Vigencia")[1].split("Importes")[0].replace("desde", "").replace("###", "").trim()));
 					obtenerDireccion(newCont.toString().split("\n"),i);
 						
+					}
+					if(newCont.toString().split("\n")[i].contains("Emisión") && (i+2)<newCont.toString().split("\n")[i].length() && modelo.getFechaEmision().length() == 0) {
+						if(newCont.toString().split("\n")[i+2].contains("###") && newCont.toString().split("\n")[i+2].contains("-")) {
+							if(newCont.toString().split("\n")[i+2].split("###")[0].length() == 10) {
+								modelo.setFechaEmision(fn.formatDateMonthCadena(newCont.toString().split("\n")[i+2].split("###")[0]));
+							}
+						}
 					}
 					if(newCont.toString().split("\n")[i].contains("Hasta las") && newCont.toString().split("\n")[i].split("-").length > 2 && newCont.toString().split("\n")[i].contains("SUB-SEC."))
 					{
@@ -74,10 +83,10 @@ public class SuraSaludBModel {
 				for (int i = 0; i < newCont.toString().split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();   
 					if(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-1].contains("-")) {
-						asegurado.setAntiguedad(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-1]);
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-1]));
 						asegurado.setParentesco(fn.parentesco( newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-2]));
 						asegurado.setSexo(fn.sexo( newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-3]).booleanValue() ? 1:0);
-						asegurado.setNacimiento(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-4]);
+						asegurado.setNacimiento(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-4]));
 						asegurado.setNombre(newCont.toString().split("\n")[i].split(newCont.toString().split("\n")[i].split("###")[newCont.toString().split("\n")[i].split("###").length-4])[0].replace("###", " ").trim());
 						asegurados.add(asegurado);
 					}
@@ -117,8 +126,8 @@ public class SuraSaludBModel {
 					
 					if(!newCont.toString().split("\n")[i].contains("expedición") || newCont.toString().split("\n")[i].split("###").length == 6) {
 					    modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[0])));
-                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[2])));
-                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i].split("###")[3])));
+                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[1])));
+                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i].split("###")[2])));
                         modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[4])));
                         modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i].split("###")[5])));
 					}

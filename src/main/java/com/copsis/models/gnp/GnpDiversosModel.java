@@ -353,6 +353,7 @@ public class GnpDiversosModel {
 						resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
 					}
 				}
+				newcontenido = new StringBuilder();
 				newcontenido.append(clearCoberturas(resultado.toString()));
 			}
 
@@ -361,11 +362,12 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Renovación póliza");
 			if (inicio > -1) {
 				newcontenido = new StringBuilder();
-				newcontenido.append(contenido.substring(inicio + 17, contenido.length()).trim());
+				newcontenido.append(contenido.substring(inicio + 17, contenido.length()).trim().replace("Gru po Nacional", "Grupo Nacional"));
 				fin = newcontenido.indexOf("Grupo Nacional");
 				if (fin > -1) {
 					resultado = new StringBuilder();
 					resultado.append(newcontenido.substring(0, fin).replace("@@@", "").trim());
+					newcontenido = new StringBuilder();
 					newcontenido.append(clearCoberturas(resultado.toString()));
 				}
 			}
@@ -413,6 +415,7 @@ public class GnpDiversosModel {
 						}
 
 						if (x.split("###").length == 3) {
+							nombre = new StringBuilder();
 							nombre.append(x.split("###")[1].trim());
 							if (y.length() > 0) {
 								nombre.append(" ").append(y.trim());
@@ -622,7 +625,6 @@ public class GnpDiversosModel {
 
 					inicio = ubicacionesT.indexOf("Descripción del Movimiento");
 					fin = ubicacionesT.lastIndexOf("Resumen de secciones contratada");
-
 					resultado = new StringBuilder();
 					newcontenido = new StringBuilder();
 					if (inicio > -1 && fin > inicio) {
@@ -661,7 +663,6 @@ public class GnpDiversosModel {
 								newcontenido.append(auxStr.replace("MATERIALES INCOMBUSTIBLES NO MACIZOS", "")
 										.replace("(", "").replace(")", "").trim());
 							}
-
 							ubicacion.setTechos(fn.material(newcontenido.toString()));
 						}
 
@@ -688,7 +689,11 @@ public class GnpDiversosModel {
 								ubicacion.setNiveles(Integer.parseInt(newcontenido.toString()));
 							}
 						}
-						if (ubicacion.getNombre().length() > 0 && !ubicaciones.isEmpty())
+						
+						if(ubicacion.getNombre().length() > 0) {
+							ubicaciones.add(ubicacion);
+						}
+						if (!ubicaciones.isEmpty())
 							modelo.setUbicaciones(ubicaciones);
 					}
 
@@ -704,7 +709,7 @@ public class GnpDiversosModel {
 				newcontenido = new StringBuilder();
 				if(inicio > -1 && fin >  -1 && inicio < fin ) {
 					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").trim());
-					
+
 					EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {									
 		
@@ -729,18 +734,17 @@ public class GnpDiversosModel {
 				newcontenido = new StringBuilder();
 				newcontenido.append(ubicacionesT.split("Ubicación")[1].replace("@@@", "").replace("Descripción del movimiento","").replace("PRODUCCION NUEVA", ""));
 				
-				String[] arrContenido = newcontenido.toString().split("\r\n");
+				String[] arrContenido = newcontenido.toString().split("\n");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				String textAuxiliar = "";
-				
 				for(int i=0;i<arrContenido.length;i++) {
-					if(arrContenido[i].contains("Asegurado") && ubicacion.getCalle().length() == 0) {
+					if(arrContenido[i].contains("Asegurado") && ubicacion.getCalle().length() == 0 && (i+2)< arrContenido.length) {
 						String[] arrDetalle = arrContenido[i+2].split(",");
 						String calle = arrDetalle[0];
 						ubicacion.setNoExterno(fn.numTx(calle));
-						ubicacion.setCalle(calle.split(ubicacion.getNoExterno())[0].replace("###", "").trim());
+						ubicacion.setCalle(calle.replace(ubicacion.getNoExterno(), "").replace("local", "").trim());
 						
-						if(arrDetalle.length >0) {
+						if(arrDetalle.length >1) {
 							//No. interno
 							if(fn.isNumeric(arrDetalle[1])) {
 								ubicacion.setNoInterno(arrDetalle[1]);
@@ -765,13 +769,13 @@ public class GnpDiversosModel {
 						inicio = newcontenido.toString().indexOf("Giro / Actividad");
 						fin = newcontenido.toString().indexOf("Número de Equipos a Asegurar");
 						if(inicio<fin) {
-							ubicacion.setGiro(fn.eliminaSpacios(newcontenido.substring(inicio + 16, fin).replace("###", "")
-									.replace("\r", "").replace("\n", "").trim()));
+							ubicacion.setGiro(fn.gatos(newcontenido.substring(inicio + 16, fin)).replace("###", "")
+									.replace("\r", "").replace("\n", "").trim());
 							ubicacion.setNombre(ubicacion.getGiro());
 						}
 						
-					} else if (arrContenido[i].contains("Giro")) {
-						ubicacion.setGiro(arrContenido[i].split("Giro")[1].replace("###", "").trim());
+					} else if (arrContenido[i].contains("Giro") && ubicacion.getGiro().length() == 0) {
+						ubicacion.setGiro(fn.gatos(arrContenido[i].split("Giro")[1]).replace("###", "").replace("\r\n","").trim());
 						ubicacion.setNombre(ubicacion.getGiro());
 					}
 
@@ -787,9 +791,18 @@ public class GnpDiversosModel {
 					}
 					//muros
 					if(arrContenido[i].contains("Muros")) {
-						ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1]));
+						inicio = arrContenido[i].indexOf("Muros");
+						fin = arrContenido[i].indexOf("Hasta");
+
+						if(inicio < fin) {
+							textAuxiliar = arrContenido[i].substring(inicio+5,fin).replace("###", "").replace("\r\n", "").trim();
+							ubicacion.setMuros(fn.material(textAuxiliar));
+						}else {
+							ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1].replace("###", "").replace("\r\n", "").trim()));
+						}
 					}
 				}
+				
 				if(ubicacion.getCalle().length() >0 ) {
 					ubicaciones.add(ubicacion);
 					modelo.setUbicaciones(ubicaciones);
@@ -812,7 +825,7 @@ public class GnpDiversosModel {
 				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
 				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
 				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getIva(), 2));
 
 				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
 				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
@@ -986,10 +999,14 @@ public class GnpDiversosModel {
 						cobertura = true;
 					}
 					
-					fin = x.indexOf("Importe");
+					fin = fn.gatos(x).indexOf("Importe");
 					if (fin > -1) {
-						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
-						cobertura = true;
+						if(fin == 0) {
+							cobertura = true;
+						}else if(fin > 0) {
+							a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
+							cobertura = true;
+						}
 					} else {
 						fin = x.indexOf("mporte Total");
 						if (fin > -1) {
@@ -1017,9 +1034,11 @@ public class GnpDiversosModel {
 						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
 						cobertura = true;
 					}
-					fin = x.indexOf("Vigencia");
-					if (fin > -1) {
+					fin = fn.gatos(x).indexOf("Vigencia");
+					if (fin > 0) {
 						a.append(fn.gatos(x.substring(0, fin).trim()).trim()).append("\r\n");
+						cobertura = true;
+					}else if(fin == 0) {
 						cobertura = true;
 					}
 					if (!cobertura) {

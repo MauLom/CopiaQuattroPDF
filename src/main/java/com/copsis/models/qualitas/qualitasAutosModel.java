@@ -109,8 +109,8 @@ System.out.println(newcontenido.split("\n")[i].contains("AUTOMÓVILES") && model
 						}
 
 					} else {
-						if (newcontenido.split("\n")[i].contains("ENDOSO") && newcontenido.split("\n")[i].contains("INCISO")) {
-							if(arrNewContenido[arrNewContenido.length-1].split("###")[0].length()  < 4){
+						if (newcontenido.split("\n")[i].contains("ENDOSO")&& newcontenido.split("\n")[i].contains("INCISO")) {
+							if(arrNewContenido[arrNewContenido.length-1].split("###").length  < 4){
 								
 								if(arrNewContenido[arrNewContenido.length-1].split("###")[0].contains("AUTOMÓVILES") ) {
 									modelo.setPoliza(arrNewContenido[arrNewContenido.length-1].split("###")[1]);
@@ -553,8 +553,9 @@ System.out.println(newcontenido.split("\n")[i].contains("AUTOMÓVILES") && model
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
 						.replace("###", "");
 				if (newcontenido.contains("Tasa Financiamiento")) {
-					newcontenido = newcontenido.split("Tasa Financiamiento")[0].trim();
+					newcontenido = newcontenido.split("Tasa Financiamiento")[0].replace(",", "").trim();
 				}
+				
 				if (fn.isNumeric(newcontenido)) {
 					modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 				}
@@ -571,8 +572,9 @@ System.out.println(newcontenido.split("\n")[i].contains("AUTOMÓVILES") && model
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + 19))
 						.replace("###", "");
 				if (newcontenido.contains("Gastos por")) {
-					newcontenido = newcontenido.split("Gastos por")[0].trim();
+					newcontenido = newcontenido.split("Gastos por")[0].replace(",", "").trim();
 				}
+				
 				if (fn.isNumeric(newcontenido)) {
 					modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
 				}
