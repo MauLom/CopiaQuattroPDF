@@ -176,9 +176,13 @@ public class MapfreSaludRojoModel {
 	                }
 	                modelo.setAsegurados(asegurados);
 	            }
-			
-			 if(modelo.getAsegurados().isEmpty()) {
+
+			 if (modelo.getAsegurados().isEmpty()
+					&& contenido.contains("RIESGO###NOMBRES###SEXO###EDAD###PARENTESCO###FECHA DE###ANTIGÜEDAD")
+					&& contenido.contains("FECHAS###DE###ANTIGÜEDAD")) {
+				
 				 newcontenido = contenido.split("RIESGO###NOMBRES###SEXO###EDAD###PARENTESCO###FECHA DE###ANTIGÜEDAD")[1].split("FECHAS###DE###ANTIGÜEDAD")[0];
+
 				 String[] arrNewContenido = newcontenido.split("\r\n");
 				 StringBuilder nombre;
 				 List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
@@ -275,6 +279,7 @@ public class MapfreSaludRojoModel {
 			
 			return modelo;
 		} catch (Exception e) {
+			modelo.setError(MapfreSaludRojoModel.this.getClass().getTypeName()+ " - catch:"+ e.getMessage() + " | "+e.getCause());
 			return modelo;
 		}
 	}
