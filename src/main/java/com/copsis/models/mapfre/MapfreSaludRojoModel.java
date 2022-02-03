@@ -56,8 +56,10 @@ public class MapfreSaludRojoModel {
 					
 					if(newcontenido.split("\n")[i].contains("PÓLIZA-ENDOSO")  && newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().contains("-")) {
 						
-							 modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().replace("-", "/"));							 
-										
+							 modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", "").trim().replace("-", "/"));
+							 if(modelo.getPoliza().contains("/")) {
+								 modelo.setEndoso(modelo.getPoliza().split("/")[1]); 
+							 }										
 					}
 					if(newcontenido.split("\n")[i].contains("FECHA DE EMISIÓN")) {
 						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("FECHA DE EMISIÓN")[1].replace("###", "").trim()));
@@ -246,18 +248,22 @@ public class MapfreSaludRojoModel {
 	            	}	                        	
 	            }
 	            
-
 	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-	            for (String x : newcontenido.split("\r\n")) {
-	               
-	                int sp = x.split("###").length;
+	            String[] arrContenido = newcontenido.split("\r\n");
+	            int index = 0;
 
+	            for (String x : arrContenido) {
+	               
+	                
 	                if (!x.contains("ASEGURADA") && !x.contains("COBERTURAS") && !x.contains("COASEGURO") && !x.contains("a###a") && !x.contains("ContinuaciÃ³n")
 	                		&& !x.contains("EXTRANJERO###URO") 	&& !x.contains("Continuación") && !x.contains("Dental") && !x.contains("Visión")
 	                		&& !x.contains("Tabulador")
 	                		) {	                
+
 	                	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                	
+	                	x = completaTextoCobertura(arrContenido, index);
+	                	int sp = x.split("###").length;
 	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                        cobertura.setNombre(x.split("###")[0]);
 	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
@@ -271,7 +277,7 @@ public class MapfreSaludRojoModel {
 	                        coberturas.add(cobertura);	
 	                    }
 	                }
-
+	                index++;
 	            }
 	            modelo.setCoberturas(coberturas);
 			
@@ -283,5 +289,38 @@ public class MapfreSaludRojoModel {
 			return modelo;
 		}
 	}
+	
+	private String completaTextoCobertura(String[] arrTexto, int i) {
+		String texto = arrTexto[i];
+		if(i+1 < arrTexto.length) {
+			if(texto.contains("Prótesis y aparatos")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Prótesis y aparatos", "ortopédicos");
+			}else if(texto.contains("Tratamientos Reconstructivos")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Tratamientos Reconstructivos", "y estéticos");
+			}else if(texto.contains("Complicaciones de gastos no")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Complicaciones de gastos no", "cubiertos");
+			}else if(texto.contains("Padecimientos preexistentes")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Padecimientos preexistentes", "no declarados");
+				if(!texto.contains("Padecimientos preexistentes no declarados")) {
+					texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Padecimientos preexistentes", "declarados");
+				}
+			}else if(texto.contains("Reducción de deducible por")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Reducción de deducible por", "accidente");
+			}
+			
 
+		}
+		
+		return texto;
+	}
+	
+	private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+		String texto = arrTexto[i];
+		if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+			texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
+			arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente,"");
+		}
+		return texto;
+	}
+	
 }
