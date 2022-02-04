@@ -32,7 +32,14 @@ public class BanorteModel {
 		try {
 			Integer pagIni =0;
 			
-			switch (fn.tipoPoliza(contenido)) {
+			int tipo = fn.tipoPoliza(contenido);
+
+			if(tipo == 4 ) {
+				contenido = fn.caratula(1, doc.getNumberOfPages(), stripper, doc);
+				tipo = fn.tipoPoliza(contenido);
+			}
+			
+			switch (tipo) {
 			case 1://Autos
 
 				pagIni = fn.pagFinRango(stripper, doc, "PÓLIZA DE SEGURO DE");

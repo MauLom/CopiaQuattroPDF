@@ -211,19 +211,21 @@ public class BanorteAutosModel {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").trim();
 	            	modelo.setPlan(newcontenido.split("PAQUETE:")[1].split("\n")[0].replace("###", "").trim());
-	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	 
+	            	String[] arrContenido = newcontenido.split("\n");
+	            	for (int i = 0; i < arrContenido.length; i++) {	 
 	            		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-	            		if(newcontenido.split("\n")[i].contains("DETALLES")  || newcontenido.split("\n")[i].contains("PAQUETE")  || newcontenido.split("\n")[i].contains("Coberturas") 
-	            				|| newcontenido.split("\n")[i].contains("Primas") || newcontenido.split("\n")[i].contains("COBERTURAS")	) {	            			
+	            		if(arrContenido[i].contains("DETALLES")  || arrContenido[i].contains("PAQUETE")  || arrContenido[i].contains("Coberturas") 
+	            				|| arrContenido[i].contains("Primas") || arrContenido[i].contains("COBERTURAS")	) {	            			
 	            		}else {	
-	            			if( newcontenido.split("\n")[i].split("###").length > 1) {	            			
-	            				cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+	            			if( arrContenido[i].split("###").length > 1) {	      
+	            				arrContenido[i] = completaTextoCobertura(arrContenido, i);
+	            				cobertura.setNombre(arrContenido[i].split("###")[0]);
 	            				if(newcontenido.split("\n")[i].split("###").length == 4) {
-	            					cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2]);
-		            				cobertura.setSa(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -3]);	
+	            					cobertura.setDeducible(arrContenido[i].split("###")[arrContenido[i].split("###").length -2]);
+		            				cobertura.setSa(arrContenido[i].split("###")[arrContenido[i].split("###").length -3]);	
 	            				}else {
-	            					cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -1]);
-		            				cobertura.setSa(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length -2]);	            					
+	            					cobertura.setDeducible(arrContenido[i].split("###")[arrContenido[i].split("###").length -1]);
+		            				cobertura.setSa(arrContenido[i].split("###")[arrContenido[i].split("###").length -2]);	            					
 	            				}	            				
 		            			coberturas.add(cobertura);	
 	            			}	            					            				            				          
@@ -341,6 +343,25 @@ public class BanorteAutosModel {
 			}
 		}
 		
+		private String completaTextoCobertura(String[] arrTexto,int i) {
+			String texto = arrTexto[i];
+			if(texto.contains("RESPONSABILIDAD CIVIL POR DAÑOS POR LA")) {
+				texto = completaTextoActualConLineaSiguiente(texto,arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS POR LA", "CARGA");
+				if(texto.contains("MISMO QUE") && (i+1)< arrTexto.length) {
+					texto = completaTextoActualConLineaSiguiente(texto,arrTexto, i, "MISMO QUE", "RESPONSABILIDAD");
+				}
+			}
+			
+			return texto;
+		}
 		
+		private String completaTextoActualConLineaSiguiente(String texto, String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+
+			if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+				texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
+				arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente, "").replace(textoSiguiente+"###", "");
+			}
+			return texto;
+		}
 
 }
