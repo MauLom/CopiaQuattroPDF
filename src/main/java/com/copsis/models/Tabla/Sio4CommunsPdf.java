@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.util.Matrix;
+import org.jsoup.Jsoup;
 
 
 public class Sio4CommunsPdf {
@@ -463,6 +464,47 @@ public class Sio4CommunsPdf {
 		return lineBoders;
     	
     }
+    
+    public List<Float> setPadding(Float Padding){
+        List<Float> pading = new ArrayList<>();
+           //Solo son 4 L,R,T,B
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	     pading.add(Padding);
+   	    return pading;
+       }
 
+  
+    public List<Float> setPadding(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
+     List<Float> pading = new ArrayList<>();
+        //Solo son 4 L,R,T,B
+	     pading.add(PaddingB);
+	     pading.add(PaddingR);
+	     pading.add(PaddingT);
+	     pading.add(PaddingB);
+	    return pading;
+    }
+
+    public static String extractAllText(String htmlText){
+    	String text ="";
+//    	System.out.println(htmlText);
+//    	 
+//       
+//            Source segment = new Source(htmlText);
+//            segment.fullSequentialParse();
+//            SourceFormatter formatter = new SourceFormatter(
+//                    segment);
+//            text = formatter.toString();
+//            System.out.println(text);
+            
+    	text= Jsoup.parse(htmlText).text();
+    	text = text.replaceAll("De:", "\nDe:").replaceAll("Para:", "\nPara:").replaceAll("Asunto:", "\nAsunto:");
+    	return text;
+
+    	
+    	
+      
+    }
 	
 }
