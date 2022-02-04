@@ -346,7 +346,7 @@ public class BanorteAutosModel {
 		private String completaTextoCobertura(String[] arrTexto,int i) {
 			String texto = arrTexto[i];
 			if(texto.contains("RESPONSABILIDAD CIVIL POR DAÑOS POR LA")) {
-				texto = completaTextoActualConLineaSiguiente(texto,arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS POR LA", "CARGA");
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS POR LA", "CARGA");
 				if(texto.contains("MISMO QUE") && texto.contains("###") && (i+1)< arrTexto.length) {
 					if(!texto.split("###")[2].contains("MISMO QUE RESPONSABILIDAD CIVIL") && arrTexto[i+1].contains("RESPONSABILIDAD")) {
 						texto = texto.replace("MISMO QUE", "MISMO QUE RESPONSABILIDAD CIVIL");
@@ -358,8 +358,8 @@ public class BanorteAutosModel {
 			return texto;
 		}
 		
-		private String completaTextoActualConLineaSiguiente(String texto, String[] arrTexto, int i, String textoActual, String textoSiguiente) {
-
+		private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+			String texto = arrTexto[i];
 			if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
 				texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
 				arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente, "").replace(textoSiguiente+"###", "");
