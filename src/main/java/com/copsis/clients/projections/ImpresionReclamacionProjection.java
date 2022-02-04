@@ -23,6 +23,10 @@ public class ImpresionReclamacionProjection {
 	public Contratante contratantes;
 	@JsonProperty("c2")
     public ArrayList<C2> datos;
+	public int modelo=0;
+	public String imagenSocio="";
+	@JsonProperty("imagenes")
+	public ArrayList<Imagenes> imagenes;
 	@Getter
 	@Setter
 	@ToString
@@ -260,6 +264,13 @@ public class ImpresionReclamacionProjection {
 	    public String c7;
 	    public String c1;
 	    public boolean c2;
+	}
+	@Getter
+	@Setter
+	@ToString
+	public static class Imagenes {
+		 public String nombre;
+		 public String path;
 	}
 
 }

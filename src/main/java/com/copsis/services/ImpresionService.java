@@ -17,6 +17,7 @@ import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.utils.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +76,7 @@ public class ImpresionService {
 	public byte[] impresionReclamacion(ImpresionReclamacionProjection impresionReclamacionProjection) {
 		try {
 			ImpresionReclamacionPdf impresionReclamacionPdf = new ImpresionReclamacionPdf();
+					
 			return impresionReclamacionPdf.buildPDF(impresionReclamacionProjection);
 			
 		} catch(ValidationServiceException e) {

@@ -24,6 +24,7 @@ import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;
 import com.copsis.services.ImpresionService;
 import com.copsis.utils.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,6 +66,7 @@ public class ImpresionePDFController {
 	@PostMapping(value = "reclamacion")
 	public ResponseEntity<CopsisResponse> impresionReclmacion (@Valid @RequestBody ImpresionReclamacionProjection impresionReclamacionProjection, BindingResult bindingResult) {
 		try {
+			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);

@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.util.Matrix;
+import org.jsoup.Jsoup;
 
 
 public class Sio4CommunsPdf {
@@ -485,5 +486,25 @@ public class Sio4CommunsPdf {
 	    return pading;
     }
 
+    public static String extractAllText(String htmlText){
+    	String text ="";
+//    	System.out.println(htmlText);
+//    	 
+//       
+//            Source segment = new Source(htmlText);
+//            segment.fullSequentialParse();
+//            SourceFormatter formatter = new SourceFormatter(
+//                    segment);
+//            text = formatter.toString();
+//            System.out.println(text);
+            
+    	text= Jsoup.parse(htmlText).text();
+    	text = text.replaceAll("De:", "\nDe:").replaceAll("Para:", "\nPara:").replaceAll("Asunto:", "\nAsunto:");
+    	return text;
+
+    	
+    	
+      
+    }
 	
 }
