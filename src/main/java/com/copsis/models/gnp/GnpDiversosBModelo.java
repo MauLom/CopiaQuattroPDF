@@ -6,6 +6,7 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraUbicacionesModel;
 
 public class GnpDiversosBModelo {
 	private DataToolsModel fn = new DataToolsModel();
@@ -89,6 +90,8 @@ public class GnpDiversosBModelo {
 				}
 			}
 			
+			obtenerUbicacion(contenido);
+			
 			inicio = contenido.indexOf("DETALLE DE COBERTURAS");
 			fin = contenido.lastIndexOf("Para mayor información");
 	
@@ -122,10 +125,80 @@ public class GnpDiversosBModelo {
 			
 			return modelo;
 		} catch (Exception e) {
-			 return modelo;
+			modelo.setError(GnpDiversosBModelo.this.getClass().getTypeName()+ " | "+e.getMessage()+" | "+e.getCause());
+			 return modelo; 
 		}
 		
 	}
-	
+
+	private void obtenerUbicacion(String contenido) {
+		int inicio = contenido.indexOf("Nombre y domicilio del Asegurado");
+		int fin = contenido.indexOf("DETALLE DE COBERTURAS");
+		
+		if (inicio > -1 && inicio < fin) {
+			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+			String newContenido = contenido.substring(inicio + 32,fin).replace("@@@", "").replace("\r", "");
+			//calle
+			if(newContenido.indexOf("Teléfono") > -1) {
+				String[] domicilio = newContenido.substring(0,newContenido.indexOf("Teléfono")).split("\n");
+				for(int i = 0 ; i<domicilio.length;i++) {
+					if(domicilio[i].contains("Ubicación") && (i+2) < domicilio.length) {
+						if(domicilio[i+2].contains(",")) {
+							if(domicilio[i+2].split(",").length == 3) {
+								ubicacion.setCalle(domicilio[i+2].split(",")[0]);
+								ubicacion.setColonia(domicilio[i+2].split(",")[1]);
+							}
+						}
+					}else if(domicilio[i].contains("C.P")) {
+						String auxiliar = domicilio[i].split("C.P")[1].replace(":","").replace("###", "").replace(".", "").trim();
+						ubicacion.setCp(fn.isvalidCp(auxiliar)? auxiliar : "");
+					}
+				}
+			}
+			
+			if(newContenido.indexOf("Datos de la Ubicación") > -1) {
+				String datosUbicacion = newContenido.substring(newContenido.indexOf("Datos de la Ubicación"),newContenido.length());
+				String[] arrContenido = datosUbicacion.split("\n");
+
+				int indexInicio = -1;
+				int indexFin = -1;
+				
+				//Giro
+				indexInicio = datosUbicacion.indexOf("Giro");
+				indexFin = datosUbicacion.indexOf("Descripción del Inmueble");
+				if(indexInicio> -1 && indexInicio < indexFin) {
+					ubicacion.setGiro(datosUbicacion.substring(indexInicio+4,indexFin).replace("###","").replace("\n", " ").replace(":", "").trim());
+					ubicacion.setNombre(ubicacion.getGiro());
+				}
+				
+				for(int i=0;i< arrContenido.length;i++) {
+					//Niveles //Sótanos
+					if(arrContenido[i].contains("pisos") && arrContenido[i].contains("Número de Sótanos") && arrContenido[i].contains(":"))
+					{
+						ubicacion.setNiveles(fn.castInteger(arrContenido[i].split("pisos")[1].split(":")[1].split("Número de Sótanos")[0].replace("###", " ").trim()));
+						ubicacion.setSotanos(fn.castInteger(arrContenido[i].split("Número de Sótanos")[1].split(":")[1].replace("###", " ").trim()));
+					}
+					//muros
+					if(arrContenido[i].contains("Muros")) {
+						ubicacion.setMuros(fn.material(arrContenido[i].split("Muros")[1].replace("###", "").replace("\n", "").replace(":", "").trim()));
+					}
+					//Techos
+					if(arrContenido[i].contains("Techos")) {
+						ubicacion.setMuros(fn.material(arrContenido[i].split("Techos")[1].replace("###", "").replace("\n", "").replace(":", "").trim()));
+					}					
+				}
+
+				
+			
+			}
+			
+			
+			if(ubicacion.getCalle().length() > 0) {
+				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
+				ubicaciones.add(ubicacion);
+				modelo.setUbicaciones(ubicaciones);
+			}
+		}
+	}
 
 }
