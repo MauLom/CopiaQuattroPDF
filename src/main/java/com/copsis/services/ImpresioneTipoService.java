@@ -33,11 +33,6 @@ public class ImpresioneTipoService {
 			ImpresionConsetimientoPdf impresionConsetimientoPdf = new ImpresionConsetimientoPdf();
 			this.byteArrayPDF = impresionConsetimientoPdf.buildPDF(impresionForm);
 			break;
-		case 105:
-//			ImpresionReclamacionPdf impresionReclamacionPdf = new ImpresionReclamacionPdf();
-//			this.byteArrayPDF = impresionReclamacionPdf.buildPDF(impresionForm);
-			break;	
-			
 		default:
 			break;
 		}

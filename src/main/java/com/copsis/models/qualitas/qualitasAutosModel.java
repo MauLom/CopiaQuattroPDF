@@ -88,7 +88,6 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
-System.out.println(newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length()==0);
 					if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length()==0) {
 						if ((i + 1) == arrNewContenido.length) {
 							
