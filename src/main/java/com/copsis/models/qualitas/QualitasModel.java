@@ -28,6 +28,11 @@ public class QualitasModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
+			
+			if(!contenido.contains("SEGURO DE AUTOMÓVILES") || !contenido.contains("POLIZA VEHICULOS ")) {
+				contenido = fn.textoBusqueda(stripper, doc, "Placas", false);
+			}
+		
 			if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")) {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
