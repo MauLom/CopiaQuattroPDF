@@ -347,8 +347,11 @@ public class BanorteAutosModel {
 			String texto = arrTexto[i];
 			if(texto.contains("RESPONSABILIDAD CIVIL POR DAÑOS POR LA")) {
 				texto = completaTextoActualConLineaSiguiente(texto,arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS POR LA", "CARGA");
-				if(texto.contains("MISMO QUE") && (i+1)< arrTexto.length) {
-					texto = completaTextoActualConLineaSiguiente(texto,arrTexto, i, "MISMO QUE", "RESPONSABILIDAD");
+				if(texto.contains("MISMO QUE") && texto.contains("###") && (i+1)< arrTexto.length) {
+					if(!texto.split("###")[2].contains("MISMO QUE RESPONSABILIDAD CIVIL") && arrTexto[i+1].contains("RESPONSABILIDAD")) {
+						texto = texto.replace("MISMO QUE", "MISMO QUE RESPONSABILIDAD CIVIL");
+						arrTexto[i+1] = arrTexto[i+1].replace("RESPONSABILIDAD", "").replace("###RESPONSABILIDAD", "");
+					}
 				}
 			}
 			
