@@ -38,6 +38,10 @@ public class MapfreModel {
 				tipo =2;
 			}
 
+			if(tipo == 5 && contenido.contains("DENTAL")) {
+				tipo = 2;
+			}
+
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
