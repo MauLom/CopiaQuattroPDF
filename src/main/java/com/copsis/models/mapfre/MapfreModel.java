@@ -76,10 +76,8 @@ public class MapfreModel {
 			case 5://vida
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
 					 modelo = new MapfreVidaCModel(fn.caratula(1, 5, stripper, doc)).procesar();
-					 System.out.println("MapfreVidaCModel");
 				}else {
 					 modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();
-					 System.err.println("MapfreVidaBModel");
 				}
 				break;
 			}
