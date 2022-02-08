@@ -22,6 +22,7 @@ public class GnpVIdaModel2 {
 	public EstructuraJsonModel procesar() {
 		StringBuilder newcontenido = new StringBuilder();
 		StringBuilder newcontenidodire = new StringBuilder();
+		StringBuilder newAseguradosi = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;
 
@@ -200,25 +201,65 @@ public class GnpVIdaModel2 {
 
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
-
-				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					if (newcontenido.toString().split("\n")[i].contains("Asegurado 1")) {
-						asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
-					}
-					if (newcontenido.toString().split("\n")[i].contains("Edad Emisión")) {
-						asegurado.setEdad(fn.castInteger(newcontenido.toString().split("\n")[i].split("Edad Emisión:")[1]
-								.replace("###", "").replace("años", "").trim()));
-					}
 				
-					if (newcontenido.toString().split("\n")[i].contains("Edad Contratación")) {
-						if(asegurado.getNombre().length() == 0){
-							asegurado.setNombre(newcontenido.toString().split("\n")[i -1].split("###")[0]);
-						}
-						asegurado.setEdad(fn.castInteger(fn.numTx(newcontenido.toString().split("\n")[i])));
-					}
+				if(newcontenido.toString().contains("Asegurado del Ahorro") && newcontenido.toString().contains("Supervivencia")) {
+					newcontenido = new StringBuilder();
+					inicio = contenido.indexOf("Asegurado s");
+					fin = contenido.indexOf("Asegurado del Ahorro");
+					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+					
+					
+					inicio = contenido.indexOf("Asegurado del Ahorro");
+					fin = contenido.indexOf(ConstantsValue.COBERTURAS);
+					
+					newAseguradosi.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				}
-				asegurados.add(asegurado);
+				
+			
+			
+				if(newcontenido.length() > 100) {
+					
+			
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					
+						if (newcontenido.toString().split("\n")[i].contains("Asegurado 1")) {
+							asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
+						}
+						if (newcontenido.toString().split("\n")[i].contains("Nacimiento:")) {
+							asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[1]));
+						}
+											
+						if (newcontenido.toString().split("\n")[i].contains("Edad Emisión")) {
+							asegurado.setEdad(fn.castInteger(newcontenido.toString().split("\n")[i].split("Edad Emisión:")[1]
+									.replace("###", "").replace("años", "").trim()));
+						}
+					
+						if (newcontenido.toString().split("\n")[i].contains("Edad Contratación")) {
+							if(asegurado.getNombre().length() == 0){
+								asegurado.setNombre(newcontenido.toString().split("\n")[i -1].split("###")[0]);
+							}
+							asegurado.setEdad(fn.castInteger(fn.numTx(newcontenido.toString().split("\n")[i])));
+						}
+					}			
+					asegurados.add(asegurado);
+					
+					
+				}
+				if(newAseguradosi.toString().contains("Asegurado del Ahorro") && newAseguradosi.toString().contains("Supervivencia")) {
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					for (int i = 0; i < newAseguradosi.toString().split("\n").length; i++) {
+
+						if (newAseguradosi.toString().split("\n")[i].contains("Asegurado del Ahorro")) {
+							asegurado.setNombre(newAseguradosi.toString().split("\n")[i + 1].split("###")[0]);
+						}
+						if (newAseguradosi.toString().split("\n")[i].contains("Nacimiento:")) {
+							asegurado.setNacimiento(fn.formatDateMonthCadena( (newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1] +"" + newAseguradosi.toString().split("\n")[i+1]).replace("de", "-").replace("###", "").replace(" ", "").trim()));
+						}
+					}
+					
+					asegurados.add(asegurado);
+				}
 
 				modelo.setAsegurados(asegurados);
 			}
@@ -325,7 +366,21 @@ public class GnpVIdaModel2 {
 					b = contenido.substring(inicio, fin);
 				}
 			}
+			
+			inicio = contenido.indexOf("Beneficiarios:");
+			fin = contenido.lastIndexOf("Especificaciones especiales");
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				String primer =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();
+				for (String bene : primer.split("\n")) {
+					if( bene.split("-").length > 2) {
+					b = b+bene;
+					}
+				}
+			
+			}
+		
 
+			
 			if (b.length() > 0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 
