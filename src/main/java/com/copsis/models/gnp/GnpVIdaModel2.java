@@ -119,13 +119,15 @@ public class GnpVIdaModel2 {
 								newcontenido.toString().split("\n")[i].split("Importe a pagar")[1].replace("###", ""))));
 					}
 
-					if (newcontenido.toString().split("\n")[i].contains("Dólares")) {
-						modelo.setMoneda(2);
+				}
+				
+				//moneda
+				if (newcontenido.toString().contains("Dólares")) {
+					modelo.setMoneda(2);
 
-					} else {
-						modelo.setMoneda(1);
+				} else {
+					modelo.setMoneda(1);
 
-					}
 				}
 			}
 
