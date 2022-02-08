@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.net.URL;
 import java.text.DecimalFormat;
 
@@ -22,7 +21,7 @@ public class ImpresionReclamacionPdf {
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 	private Color black = new Color(0, 0, 0);
 	private final Color bgColor = new Color(255, 255, 255, 0);
-	private final Color bgColorA = new Color(0, 0, 143);
+
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26,yStartnw =600;
 	private float fullWidth = 542;
 	public byte[] buildPDF(ImpresionReclamacionProjection impresionReclamacionProjection) {
@@ -440,6 +439,19 @@ public class ImpresionReclamacionPdf {
 								final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());							
 								pdfMerger.appendDocument(document, documentToBeParsed);
 							
+							}else if(
+									impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpg") > -1
+									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".png") > -1
+									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpeg") > -1
+									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".gif") > -1
+									) {
+								page = new PDPage();
+								document.addPage(page);
+								table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
+								baseRow = communsPdf.setRow(table, 15);
+								communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenes().get(j).getPath()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
+							    table.draw();
+								
 							}
 						}
 						pdfMerger.mergeDocuments();

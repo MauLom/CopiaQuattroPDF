@@ -24,7 +24,6 @@ import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;
 import com.copsis.services.ImpresionService;
 import com.copsis.utils.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +74,7 @@ public class ImpresionePDFController {
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
+			
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}		  
 	}
