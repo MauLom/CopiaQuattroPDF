@@ -1,6 +1,6 @@
 package com.copsis.clients.projections;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,20 +13,25 @@ import lombok.ToString;
 @ToString
 public class ImpresionReclamacionProjection {
 	@JsonProperty("c3")
-	public ArrayList<C3> tramites;
+	public List<C3> tramites;
 	@JsonProperty("c4")
-	public ArrayList<C4> primas;
+	public List<C4> primas;
+	@JsonProperty("c5")
 	public C5 c5;
-	public ArrayList<C6> c6;
+	@JsonProperty("c6")
+	public List<C6> c6;
+	@JsonProperty("c7")
 	public int c7;
 	@JsonProperty("c1")
 	public Contratante contratantes;
 	@JsonProperty("c2")
-    public ArrayList<C2> datos;
+    public List<C2> datos;
+	@JsonProperty("modelo")
 	public int modelo=0;
+	@JsonProperty("imagenSocio")
 	public String imagenSocio="";
 	@JsonProperty("imagenes")
-	public ArrayList<Imagenes> imagenes;
+	public List<Imagenes> imagenes;
 	@Getter
 	@Setter
 	@ToString
@@ -47,7 +52,7 @@ public class ImpresionReclamacionProjection {
 		@JsonProperty("c7")
 		private String c7;
 		@JsonProperty("c8")
-		private ArrayList<C8> pruebas;
+		private List<C8> pruebas;
 		@JsonProperty("c9")
 		private String c9;
 	}
@@ -90,7 +95,7 @@ public class ImpresionReclamacionProjection {
 	@ToString
 	public static class C5 {
 		@JsonProperty("c1")
-		private ArrayList<C1> documentos;
+		private List<C1> documentos;
 		@JsonProperty("c2")
 		public documentolist2 c2;
 	}
@@ -171,9 +176,9 @@ public class ImpresionReclamacionProjection {
 		@JsonProperty("c3")
 		private DatosGenerales datosGenerale;
 		@JsonProperty("c4")
-		public ArrayList<Monedas> moneda;
+		public List<Monedas> moneda;
 		@JsonProperty("c1")
-		public ArrayList<Servicios> Servicio;
+		public List<Servicios> Servicio;
 		@JsonProperty("c2")
 		private Asegurados asegurados;
 	}
@@ -257,13 +262,13 @@ public class ImpresionReclamacionProjection {
 	@Setter
 	@ToString
 	public  static class C2{
-	    public boolean c3;
-	    public String c4;
-	    public boolean c5;
-	    public boolean c6;
-	    public String c7;
-	    public String c1;
-	    public boolean c2;
+	    private boolean c3;
+	    private String c4;
+	    private boolean c5;
+	    private boolean c6;
+	    private String c7;
+	    private String c1;
+	    private boolean c2;
 	}
 	@Getter
 	@Setter

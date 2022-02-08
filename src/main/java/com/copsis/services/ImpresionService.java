@@ -17,7 +17,6 @@ import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.utils.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -82,6 +81,7 @@ public class ImpresionService {
 		} catch(ValidationServiceException e) {
 			throw e;
 		} catch(Exception ex) {
+		
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 	}
