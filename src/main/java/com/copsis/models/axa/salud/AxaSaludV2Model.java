@@ -543,8 +543,8 @@ public class AxaSaludV2Model {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("######", "###").replace("###1 ###0 % ", "###10 %")
 						.replace("M ###aternidad", "Maternidad")
-						.replace("P ###reexistencias","Preexistencias");
-				
+						.replace("P ###reexistencias","Preexistencias")
+						.replace("### ###","###");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if (!newcontenido.split("\n")[i].contains("Coberturas-Servicios")
@@ -562,6 +562,9 @@ public class AxaSaludV2Model {
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+							if(newcontenido.split("\n")[i].split("###").length  == 6) {
+								cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[3].trim());
+							}
 							coberturas.add(cobertura);
 							break;
 						case 4:
