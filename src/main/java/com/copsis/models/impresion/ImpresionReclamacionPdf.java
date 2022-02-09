@@ -431,11 +431,18 @@ public class ImpresionReclamacionPdf {
 					yStart -= table.getHeaderAndDataHeight();
 					
 				
+					String pahtpdf;
 					try {
 						if(!impresionReclamacionProjection.getImagenes().isEmpty()) {
 						for (int j = 0; j < impresionReclamacionProjection.getImagenes().size(); j++) {
 							if(impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".pdf") > -1) {
-								URL scalaByExampleUrl = scalaByExampleUrl = new URL(impresionReclamacionProjection.getImagenes().get(j).getPath());	
+								pahtpdf = impresionReclamacionProjection.getImagenes().get(j).getPath();
+								if(pahtpdf.contains(" ")) {
+									pahtpdf = pahtpdf.replace(" ", "%20");
+								}
+								
+								URL scalaByExampleUrl = scalaByExampleUrl = new URL(pahtpdf);	
+							
 								final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());							
 								pdfMerger.appendDocument(document, documentToBeParsed);
 							
@@ -445,12 +452,12 @@ public class ImpresionReclamacionPdf {
 									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpeg") > -1
 									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".gif") > -1
 									) {
-								page = new PDPage();
-								document.addPage(page);
-								table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
-								baseRow = communsPdf.setRow(table, 15);
-								communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenes().get(j).getPath()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
-							    table.draw();
+//								page = new PDPage();
+//								document.addPage(page);
+//								table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
+//								baseRow = communsPdf.setRow(table, 15);
+//								communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenes().get(j).getPath()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
+//							    table.draw();
 								
 							}
 						}
@@ -458,6 +465,7 @@ public class ImpresionReclamacionPdf {
 						}
 						
 					} catch (Exception ex) {
+						ex.printStackTrace();
 						throw new GeneralServiceException("00001",
 								"Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 					}
