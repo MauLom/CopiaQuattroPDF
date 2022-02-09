@@ -74,6 +74,10 @@ public class GnpVIdaModel2 {
 						 }else {
 							 modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", ""));	 
 						 }
+						 
+						 if(modelo.getCp().length() == 0 && fn.isvalidCp(newcontenido.toString().split("\n")[i+1].substring(0,5))) {
+							 modelo.setCp(newcontenido.toString().split("\n")[i+1].substring(0,5));							 
+						 }
 						
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Desde el")) {
@@ -261,18 +265,39 @@ public class GnpVIdaModel2 {
 							
 							if(newcontenido.toString().split("\n")[i].contains("Nombre del menor")) {
 								EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+							if(fn.isNumeric(newcontenido.toString().split("\n")[i + 2].split("###")[0].trim())) {
+								asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0].trim());
+							}else {
 								asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0].trim()
 										+" "+ newcontenido.toString().split("\n")[i + 2].split("###")[0].trim()
 										);
+							}
+								
 								
 								if(newcontenido.toString().split("\n")[i+1].contains("Nacimiento:")) {
-							    String nacimiento =  newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1].replace("de", "-").replace("###", "").replace(" ", "").trim();
 								
-								if(nacimiento.split("-").length == 2) {
-									String viga = nacimiento.substring( nacimiento.length()-4,nacimiento.length());
-								   nacimiento = nacimiento.replace(viga, "") +"-" + viga;
-								}
-							   asegurado.setNacimiento(fn.formatDateMonthCadena(nacimiento));
+							    String nacimiento =  newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1].replace("de", "-").replace("###", "").replace(" ", "").trim();
+							  
+									if(nacimiento.split("-").length == 2) {
+										String viga = nacimiento.substring( nacimiento.length()-4,nacimiento.length());
+									
+										if(fn.isNumeric(viga)) {
+											   nacimiento = nacimiento.replace(viga, "") +"-" + viga;
+										}
+										else {
+											nacimiento = newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1]
+													.split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim()
+													+"-" + newcontenido.toString().split("\n")[i+2].split("###")[0];
+									
+										}
+								
+									}
+									
+									if(nacimiento.split("-").length == 3) {
+										  asegurado.setNacimiento(fn.formatDateMonthCadena(nacimiento));
+									}
+									
+							    
 								}
 								
 								asegurados.add(asegurado);
