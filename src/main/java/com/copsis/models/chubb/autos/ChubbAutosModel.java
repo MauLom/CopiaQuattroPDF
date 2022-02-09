@@ -171,16 +171,18 @@ public class ChubbAutosModel {
 			}
 
 			// rfc
-			conceptos = Arrays.asList("R.F.C.:", "RFC:###");
+			conceptos = Arrays.asList("R.F.C.:", "RFC:###","R.F.C:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1) {
 					switch (x) {
 					case "R.F.C.:":
 					case "RFC:###":
+					case "R.F.C:###":
 						inicio = inicio + 7;
+						fin = (inicio + 100 )< contenido.length() ? (inicio + 100 ) : (inicio +50);
 						newcontenido = contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0];
-						modelo.setRfc(newcontenido.split(separador)[0].trim());
+						modelo.setRfc(newcontenido.split(separador)[0].replace("#", "").trim());
 						break;
 					default:
 						break;
@@ -221,7 +223,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Prima Total")) {
 					inicio = inicio + 11;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)).replace(":", ""));
+					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 30);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin).replace(":", ""));
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setPrimaTotal(
 								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
@@ -235,7 +238,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.IVA)) {
 					inicio = inicio + 6;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 100)));
+					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 30);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
 					}
@@ -248,7 +252,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
 					inicio = inicio + 25;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 30);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					modelo.setCveAgente(newcontenido.contains("-")
 							? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
 							: "");
@@ -308,7 +313,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("por pago fraccionado###")) {
 					inicio = inicio + 23;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
+					newcontenido = contenido.substring(inicio, fin);
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setRecargo(
 								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
@@ -322,7 +328,9 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.GASTOS_DE_EXPEDICION)) {
 					inicio = inicio + 20;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+					int finIndex = (inicio+150) < contenido.length() ? (inicio+150) : (inicio+100);
+					
+					newcontenido = fn.gatos(contenido.substring(inicio, finIndex).split(saltolinea)[0])
 							.split(separador)[0].split(ConstantsValue.IVA)[0];
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setDerecho(
@@ -337,7 +345,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Descripción del vehículo*:")) {
 					inicio = inicio + 26;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
 				}
 			}
@@ -348,7 +357,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Clave vehicular:")) {
 					inicio = inicio + 16;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					modelo.setClave(newcontenido.split(separador)[0].trim());
 				}
 			}
@@ -359,7 +369,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Modelo:")) {
 					inicio = inicio + 7;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					if (NumberUtils.isParsable(newcontenido.split(separador)[0].trim())) {
 						modelo.setModelo(Integer.parseInt(newcontenido.split(separador)[0].trim()));
 					}
