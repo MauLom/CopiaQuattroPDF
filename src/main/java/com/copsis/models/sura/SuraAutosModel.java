@@ -35,6 +35,11 @@ public class SuraAutosModel {
 			if (inicio == -1) {
 				inicio = contenido.indexOf("SEGUROS MOTOR TECHNICAL");
 			}
+			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Seguro de Movilidad");
+			}
+			
 			fin = contenido.indexOf("Coberturas contratadas");
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
