@@ -452,12 +452,12 @@ public class ImpresionReclamacionPdf {
 									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpeg") > -1
 									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".gif") > -1
 									) {
-//								page = new PDPage();
-//								document.addPage(page);
-//								table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
-//								baseRow = communsPdf.setRow(table, 15);
-//								communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenes().get(j).getPath()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
-//							    table.draw();
+								page = new PDPage();
+								document.addPage(page);
+								table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
+								baseRow = communsPdf.setRow(table, 15);
+								communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenes().get(j).getPath()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
+							    table.draw();
 								
 							}
 						}
