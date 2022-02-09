@@ -322,7 +322,9 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.GASTOS_DE_EXPEDICION)) {
 					inicio = inicio + 20;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0])
+					int finIndex = (inicio+150) < contenido.length() ? (inicio+150) : (inicio+100);
+					
+					newcontenido = fn.gatos(contenido.substring(inicio, finIndex).split(saltolinea)[0])
 							.split(separador)[0].split(ConstantsValue.IVA)[0];
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setDerecho(
