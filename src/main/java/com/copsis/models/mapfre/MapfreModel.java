@@ -38,6 +38,10 @@ public class MapfreModel {
 				tipo =2;
 			}
 
+			if(tipo == 5 && contenido.contains("DENTAL")) {
+				tipo = 2;
+			}
+
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
@@ -59,7 +63,8 @@ public class MapfreModel {
 			case 2://Salud
 				
 					if(contenido.contains("INFORMACIÓN GENERAL") && (contenido.contains("COBERTURAS Y SERVICIOS") || contenido.contains("ASEGURADO TITULAR") )) {
-						modelo = new MapfreSaludRojoModel(fn.caratula(1, 5, stripper, doc)).procesar();
+						pagFin = contenido.contains("COLECTIVIDAD ASEGURABLE")? 6: 5;
+						modelo = new MapfreSaludRojoModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}else {
 						modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
 					}
