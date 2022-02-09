@@ -249,8 +249,7 @@ public class MapfreSaludRojoModel {
 	                }
 	                
 	            }
-		
-	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", aed).replace("EndosoElemental", "Elemental")
+	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", "").replace("EndosoElemental", "Elemental")
 	            		.replace("EndosoAsistencia", "Asistencia")
 	            		.replace("ReducciÃ³n de deducible por", "ReducciÃ³n de deducible por accidente");
 	          	            
