@@ -249,6 +249,7 @@ public class ChubbDiversosModel {
 					}
 					index++;
 				}
+				System.out.println(resultado);
 				if (resultado.toString().split("\r\n").length > 1) {
 					String seccion = "";
 					StringBuilder sumaAsegurada = new StringBuilder();
@@ -294,7 +295,8 @@ public class ChubbDiversosModel {
 								if(existeTituloCoaseguro) {
 									if(a.split("###").length == 4) {
 										coaseguro = a.split("###")[3];
-									}else if(b.split("###").length>0){
+									}else if(b.split("###").length>1){
+										System.out.println("Antes de ");
 										coaseguro = b.split("###")[1];
 									}
 								}
@@ -326,6 +328,7 @@ public class ChubbDiversosModel {
 									cobertura.setDeducible(deducible.toString());
 								}
 								cobertura.setSeccion(seccion.replace("SECCION", "").trim());
+								System.err.println(nombre);
 								cobertura.setNombre(nombre);
 								cobertura.setSa(sumaAsegurada.toString().trim());
 								cobertura.setDeducible(deducible.toString().trim());
@@ -407,12 +410,14 @@ public class ChubbDiversosModel {
 				texto = completaTextoConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "MOVIL DENTRO Y FUERA DEL PREDIO", "ROBO CON VIOLENCIA Y-O ASALTO EQUIPO");
 				break;
 			case "FIJO DENTRO DEL PREDIO":
-				if (texto.split("###").length == 4 && arrTexto[i - 1].contains("ROBO CON VIOLENCIA Y-O ASALTO DE EQUIPO") && arrTexto[i - 1].contains("###")) {
+				System.err.println(arrTexto[i - 1]);
+				if ((texto.split("###").length == 4 || texto.split("###").length == 3) && arrTexto[i - 1].contains("ROBO CON VIOLENCIA Y-O ASALTO DE EQUIPO") && arrTexto[i - 1].contains("###")) {
 					String[] auxiliar = arrTexto[i - 1].split("###");
 					if (auxiliar[auxiliar.length - 1].contains("del valor de reposición")) {
 						String deducible = texto.split("###")[2];
+						System.out.println("deducible ="+deducible);
 						String inicioDeducible = auxiliar[auxiliar.length - 1].replace("\r", "");
-
+						System.err.println("="+inicioDeducible+"=");
 						texto.split("###")[2] = texto.split("###")[2].concat(" del valor de reposición");
 						texto = texto
 								.replace("FIJO DENTRO DEL PREDIO",
