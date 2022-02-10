@@ -458,7 +458,7 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Otros descuentos###")) {
 					inicio = inicio + 19;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 50);
-					newcontenido = contenido.substring(inicio, fin));
+					newcontenido = contenido.substring(inicio, fin);
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setAjusteUno(
 								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
