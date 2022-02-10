@@ -441,9 +441,10 @@ public class ChubbDiversosModel {
 			case "R.C. TALLERES CRISTALES":
 				//linea actual nombre,suma linea siguiente complemento de suma asegurada, deducible,coaseguro
 				if(i+1 < arrTexto.length && texto.split("###").length == 2) {
-					if((texto.split("###")[1].equals("Sublimite de\r") || texto.split("###")[1].equals("Sublimite de\n")) && arrTexto[i+1].contains("###")) {
+					texto = texto.replace("\r","").replace("\n", "");
+					if((texto.split("###")[1].equals("Sublimite de") || fn.numTx(texto.split("###")[1]).length() == 0) && arrTexto[i+1].contains("###")) {
 						if(fn.isNumeric(arrTexto[i+1].split("###")[0].replace(",", ""))) {
-							texto = texto.concat(" ").concat(arrTexto[i+1]).replace("\r", "");
+							texto = texto.concat(" ").concat(arrTexto[i+1]).trim();
 							arrTexto[i+1] = "";
 						}
 					}
