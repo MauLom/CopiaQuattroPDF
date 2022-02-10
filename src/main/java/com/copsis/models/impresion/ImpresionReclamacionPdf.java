@@ -431,11 +431,18 @@ public class ImpresionReclamacionPdf {
 					yStart -= table.getHeaderAndDataHeight();
 					
 				
+					String pahtpdf;
 					try {
 						if(!impresionReclamacionProjection.getImagenes().isEmpty()) {
 						for (int j = 0; j < impresionReclamacionProjection.getImagenes().size(); j++) {
 							if(impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".pdf") > -1) {
-								URL scalaByExampleUrl = scalaByExampleUrl = new URL(impresionReclamacionProjection.getImagenes().get(j).getPath());	
+								pahtpdf = impresionReclamacionProjection.getImagenes().get(j).getPath();
+								if(pahtpdf.contains(" ")) {
+									pahtpdf = pahtpdf.replace(" ", "%20");
+								}
+								
+								URL scalaByExampleUrl = scalaByExampleUrl = new URL(pahtpdf);	
+							
 								final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());							
 								pdfMerger.appendDocument(document, documentToBeParsed);
 							
@@ -457,7 +464,7 @@ public class ImpresionReclamacionPdf {
 						pdfMerger.mergeDocuments();
 						}
 						
-					} catch (Exception ex) {
+					} catch (Exception ex) {					
 						throw new GeneralServiceException("00001",
 								"Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 					}

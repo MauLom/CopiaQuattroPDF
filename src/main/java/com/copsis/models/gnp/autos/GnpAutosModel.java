@@ -130,10 +130,17 @@ public class GnpAutosModel {
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin));
+
 					if (fn.isNumeric(
-							newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim()))
+							newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim())) {
 						modelo.setCp(
 								newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim());
+					}else if( newcontenido.toString().contains("C.P.")){
+						if(fn.isvalidCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim()))
+						{
+							modelo.setCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim());
+						}
+					}
 				}
 
 			}
