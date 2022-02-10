@@ -223,7 +223,7 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Prima Total")) {
 					inicio = inicio + 11;
-					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 30);
+					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 20);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin).replace(":", ""));
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setPrimaTotal(
@@ -238,7 +238,7 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.IVA)) {
 					inicio = inicio + 6;
-					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 30);
+					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 20);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
@@ -281,7 +281,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Vigencia:###Del###")) {
 					inicio = inicio + 18;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = contenido.substring(inicio, fin);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
 				}
 			}
@@ -292,7 +293,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("horas al###")) {
 					inicio = inicio + 11;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = contenido.substring(inicio, fin);
 					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
 				}
 			}
@@ -302,7 +304,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("C.P:###")) {
 					inicio = inicio + 7;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = contenido.substring(inicio, fin);
 					modelo.setCp(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
@@ -383,7 +386,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Serie:")) {
 					inicio = inicio + 6;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin));
 					modelo.setSerie(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
@@ -394,7 +398,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Motor:")) {
 					inicio = inicio + 6;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin).split(saltolinea)[0]);
 					modelo.setMotor(newcontenido);
 				}
 			}
@@ -405,7 +410,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Placas:")) {
 					inicio = inicio + 7;
-					newcontenido = fn.gatos(contenido.substring(inicio, (inicio + 150)).split(saltolinea)[0]);
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = fn.gatos(contenido.substring(inicio, fin).split(saltolinea)[0]);
 					modelo.setPlacas(newcontenido);
 				}
 			}
@@ -416,7 +422,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Fecha de emisión:###")) {
 					inicio = inicio + 20;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					newcontenido = contenido.substring(inicio, fin);
 					newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
 					modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
 				}
@@ -450,7 +457,8 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Otros descuentos###")) {
 					inicio = inicio + 19;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 50);
+					newcontenido = contenido.substring(inicio, fin));
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setAjusteUno(
 								fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
