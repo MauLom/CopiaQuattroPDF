@@ -40,7 +40,6 @@ public class GnpAutosModel {
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(18);
-
 			// poliza
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.NO_POLIZA);
@@ -180,10 +179,17 @@ public class GnpAutosModel {
 						}
 
 						if (newcontenido.toString().split("\n")[i + 1].contains(ConstantsValue.IVA)) {
+
 							modelo.setModelo(
 									fn.castInteger(newcontenido.toString().split("\n")[i + 1].split("###")[0]));
-							modelo.setPlacas(newcontenido.toString().split("\n")[i + 1].split("###")[1]);
-							modelo.setMotor(newcontenido.toString().split("\n")[i + 1].split("###")[2]);
+
+							if (newcontenido.toString().split("\n")[i + 1].split("###")[1].length() > 10) {
+								modelo.setMotor(newcontenido.toString().split("\n")[i + 1].split("###")[1]);
+							} else {
+								modelo.setPlacas(newcontenido.toString().split("\n")[i + 1].split("###")[1]);
+							}
+
+							
 							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(
 									newcontenido.toString().split("\n")[i + 1].split(ConstantsValue.IVA)[1]
 											.replace("###", "").trim())));
