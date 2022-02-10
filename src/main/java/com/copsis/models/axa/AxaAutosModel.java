@@ -40,7 +40,7 @@ public class AxaAutosModel {
 		StringBuilder newcontenido = new StringBuilder();
 		StringBuilder resultado = new StringBuilder();
 
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C:", "R.F.C.:");
 		try {
 			// tipo
 			modelo.setTipo(1);
@@ -347,8 +347,8 @@ public class AxaAutosModel {
 			// moneda
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "R.F.C:###");
+			
 			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length == 2) {
-
 				if (contenido.split("@@@")[donde].split("\r\n")[0].contains("R.F.C.:###")) {
 					modelo.setRfc(contenido.split("@@@")[donde].split("\r\n")[0].split("###")[1].trim());
 				}
