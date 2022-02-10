@@ -284,16 +284,29 @@ public class GnpVIdaModel2 {
 							  
 									if(nacimiento.split("-").length == 2) {
 										String viga = nacimiento.substring( nacimiento.length()-4,nacimiento.length());
+										
+		
 									
 										if(fn.isNumeric(viga)) {
 											   nacimiento = nacimiento.replace(viga, "") +"-" + viga;
 										}
 										else {
-											nacimiento = newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1]
-													.split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim()
-													+"-" + newcontenido.toString().split("\n")[i+2].split("###")[0];
+											nacimiento = newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim();
+													
+									     if(newcontenido.toString().split("\n")[i+2].split("###").length == 2 ) {
+									    	 if(fn.isNumeric(newcontenido.toString().split("\n")[i+2].split("###")[1])) {
+									    		nacimiento += "-" + newcontenido.toString().split("\n")[i+2].split("###")[1]; 
+									    	 }
+									     }
+										 if(newcontenido.toString().split("\n")[i+2].split("###").length == 1 ) {
+									    	 if(fn.isNumeric(newcontenido.toString().split("\n")[i+2].split("###")[0])) {
+									    		nacimiento += "-" + newcontenido.toString().split("\n")[i+2].split("###")[0]; 
+									    	 }
+									     }
+								     
 									
 										}
+										
 								
 									}
 									
@@ -458,26 +471,43 @@ public class GnpVIdaModel2 {
 				}
 			}
 			
-			inicio = contenido.indexOf("Beneficiarios:");
-			fin = contenido.lastIndexOf("Especificaciones especiales");
-			if (inicio > -1 && fin > -1 && inicio < fin) {
-				String primer =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();
-				for (String bene : primer.split("\n")) {
-					if( bene.split("-").length > 2) {
-					b = b+bene;
+			if( b.split("-").length > 2) {
+				inicio = contenido.indexOf("Beneficiarios:");
+				fin = contenido.lastIndexOf("Especificaciones especiales");
+				if (inicio > -1 && fin > -1 && inicio < fin) {
+					String primer =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();
+					for (String bene : primer.split("\n")) {
+						if( bene.split("-").length > 2) {
+						b = b+bene;
+						}
 					}
+				
+				
 				}
-			
+				
+			}else {
+				
+				inicio = contenido.indexOf("Beneficiarios:");
+				fin = contenido.lastIndexOf("Especificaciones especiales");
+				
+				if (inicio > -1 && fin > -1 && inicio < fin) {
+					b =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();					
+				}
 			}
-		
-
 			
+		
+		
+		
+		
+			
+		
 			if (b.length() > 0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 
 				for (String beneficiariod : b.split("\n")) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 					int aseg = beneficiariod.split("###").length;
+				
 					if (aseg == 4 && !beneficiariod.contains("Nombre") && beneficiariod.split("-").length > 2) {
 
 						beneficiario.setNombre(beneficiariod.split("###")[0].replace("@@@", "").trim());
