@@ -229,7 +229,9 @@ public class ChubbDiversosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Secciones amparadas");
 			}
-			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Coberturas");
+			}			
 		    fin = contenido.indexOf("Prima Neta");
 		    
 
@@ -439,14 +441,21 @@ public class ChubbDiversosModel {
 			case "R.C. TALLERES CRISTALES":
 				//linea actual nombre,suma linea siguiente complemento de suma asegurada, deducible,coaseguro
 				if(i+1 < arrTexto.length && texto.split("###").length == 2) {
-					if((texto.split("###")[1].equals("Sublimite de\r") || texto.split("###")[1].equals("Sublimite de\n")) && arrTexto[i+1].contains("###")) {
+					texto = texto.replace("\r","").replace("\n", "");
+					if((texto.split("###")[1].equals("Sublimite de") || fn.numTx(texto.split("###")[1]).length() == 0) && arrTexto[i+1].contains("###")) {
 						if(fn.isNumeric(arrTexto[i+1].split("###")[0].replace(",", ""))) {
-							texto = texto.concat(" ").concat(arrTexto[i+1]).replace("\r", "");
+							texto = texto.concat(" ").concat(arrTexto[i+1]).trim();
 							arrTexto[i+1] = "";
 						}
 					}
 				}
 				break;
+			case "guerra":
+				texto = completaTextoActualConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "guerra", "Apresamiento, secuestro o decomiso y actos de");
+				break;
+			case "labour":
+				texto = completaTextoActualConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "labour", "Gastos de salvamento, remolque o auxilio, sue &");
+				break;				
 			default:
 				break;
 			}
