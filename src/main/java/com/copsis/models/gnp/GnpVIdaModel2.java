@@ -249,6 +249,10 @@ public class GnpVIdaModel2 {
 							if(newcontenido.toString().split("\n")[i].contains("Asegurado 2")) {
 								EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 								asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[1] + " " + newcontenido.toString().split("\n")[i + 2].trim());
+								if(asegurado.getNombre().contains("Fecha de Nacimiento")) {
+									String auxiliar = asegurado.getNombre();
+									asegurado.setNombre(auxiliar.split("Fecha de Nacimiento")[0].replace("###", "").trim());
+								}
 								if(newcontenido.toString().split("\n")[i+2].contains("Nacimiento:")) {
 									asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+2].split("###")[3]));
 								}
