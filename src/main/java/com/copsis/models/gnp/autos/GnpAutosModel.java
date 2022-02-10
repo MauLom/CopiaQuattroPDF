@@ -40,7 +40,6 @@ public class GnpAutosModel {
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(18);
-
 			// poliza
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.NO_POLIZA);
