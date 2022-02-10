@@ -229,7 +229,9 @@ public class ChubbDiversosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Secciones amparadas");
 			}
-			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Coberturas");
+			}			
 		    fin = contenido.indexOf("Prima Neta");
 		    
 
@@ -447,6 +449,12 @@ public class ChubbDiversosModel {
 					}
 				}
 				break;
+			case "guerra":
+				texto = completaTextoActualConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "guerra", "Apresamiento, secuestro o decomiso y actos de");
+				break;
+			case "labour":
+				texto = completaTextoActualConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "labour", "Gastos de salvamento, remolque o auxilio, sue &");
+				break;				
 			default:
 				break;
 			}
