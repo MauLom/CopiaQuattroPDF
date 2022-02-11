@@ -600,7 +600,6 @@ public class GnpVIdaModel2 {
 				
 			}
 
-
 			return modelo;
 		} catch (Exception ex) {	
 			modelo.setError(
