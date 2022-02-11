@@ -63,11 +63,11 @@ public class GnpDiversosModel {
 			if (inicio > -1) {
 				resultado.append(contenido.substring(inicio + 8, inicio + 150).trim().split("\r\n")[0].trim());
 				if (resultado.toString().contains(ConstantsValue.DESDE_LAS)) {
-					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()).replace("##", ""));
 				} else if (resultado.toString().contains("Hasta las")) {
-					modelo.setRfc(fn.gatos(resultado.toString().split("Hasta las")[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split("Hasta las")[0].trim()).replace("##", ""));
 				} else if (resultado.toString().contains(ConstantsValue.VIGENCIA2)) {
-					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()).replace("##", ""));
 				}
 			}
 
@@ -214,6 +214,10 @@ public class GnpDiversosModel {
 				resultado.append((contenido.substring(inicio + 6, inicio + 150).trim().split("\r\n")[0].trim()));
 				if (resultado.toString().contains("Derecho de P")) {
 					modelo.setMoneda(fn.moneda(fn.gatos(resultado.toString().split("Derecho de P")[0].trim())));
+				}
+				
+				if(modelo.getMoneda() == 0 || modelo.getMoneda() == 5) {
+				  modelo.setMoneda(fn.buscaMonedaEnTexto(resultado.toString()));
 				}
 			}
 
