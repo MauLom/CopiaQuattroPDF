@@ -23,6 +23,7 @@ public class GnpDiversosModel {
 	private int fin = 0;
 	private int tipo;
 	private boolean esverdad;
+	private static final String TIPO_DE = "Tipo de";
 
 	// constructor
 	public GnpDiversosModel(String contenido, String ubicaciones, int tipo) {
@@ -62,11 +63,11 @@ public class GnpDiversosModel {
 			if (inicio > -1) {
 				resultado.append(contenido.substring(inicio + 8, inicio + 150).trim().split("\r\n")[0].trim());
 				if (resultado.toString().contains(ConstantsValue.DESDE_LAS)) {
-					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.DESDE_LAS)[0].trim()).replace("##", ""));
 				} else if (resultado.toString().contains("Hasta las")) {
-					modelo.setRfc(fn.gatos(resultado.toString().split("Hasta las")[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split("Hasta las")[0].trim()).replace("##", ""));
 				} else if (resultado.toString().contains(ConstantsValue.VIGENCIA2)) {
-					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()));
+					modelo.setRfc(fn.gatos(resultado.toString().split(ConstantsValue.VIGENCIA2)[0].trim()).replace("##", ""));
 				}
 			}
 
@@ -214,6 +215,10 @@ public class GnpDiversosModel {
 				if (resultado.toString().contains("Derecho de P")) {
 					modelo.setMoneda(fn.moneda(fn.gatos(resultado.toString().split("Derecho de P")[0].trim())));
 				}
+				
+				if(modelo.getMoneda() == 0 || modelo.getMoneda() == 5) {
+				  modelo.setMoneda(fn.buscaMonedaEnTexto(resultado.toString()));
+				}
 			}
 
 			// forma_pago
@@ -234,7 +239,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Desde las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").replace(".", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaDe(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -245,7 +250,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Hasta las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").replace(".", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaA(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -259,12 +264,19 @@ public class GnpDiversosModel {
 				resultado = new StringBuilder();
 				resultado.append(contenido.substring(inicio + 19, inicio + 150).split("\r\n")[0]);
 				auxStr = resultado.toString();
-				if (resultado.toString().contains("Tipo de")) {
+				if (resultado.toString().contains(TIPO_DE)) {
 					resultado = new StringBuilder();
-					resultado.append(fn.gatos(auxStr.split("Tipo de")[0].trim()).replace("###", "-"));
+					resultado.append(fn.gatos(auxStr.split(TIPO_DE)[0].trim()).replace("###", "-"));
 				} else if (resultado.toString().contains(ConstantsValue.IVA)) {
 					resultado = new StringBuilder();
 					resultado.append(fn.gatos(auxStr.split(ConstantsValue.IVA)[0].trim()).replace("###", "-"));
+				}else if(auxStr.contains("Día###Mes###Año") &&  inicio < contenido.indexOf(TIPO_DE)) {
+					String texto = contenido.split("Fecha de expedición")[1];
+					if(texto.contains("\n")) {
+						texto = texto.split("\n")[1].split(TIPO_DE)[0];						
+						resultado = new StringBuilder();
+						resultado.append(fn.gatos(texto.trim()).replace("###", "-"));
+					}
 				}
 
 				if (resultado.toString().split("-").length == 3 && resultado.length() == 10) {

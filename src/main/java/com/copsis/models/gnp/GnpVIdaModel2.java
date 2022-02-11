@@ -358,7 +358,15 @@ public class GnpVIdaModel2 {
 							asegurado.setNombre(newAseguradosi.toString().split("\n")[i + 1].split("###")[0].trim());
 						}
 						if (newAseguradosi.toString().split("\n")[i].contains("Nacimiento:")) {
-							asegurado.setNacimiento(fn.formatDateMonthCadena( (newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1] +"" + newAseguradosi.toString().split("\n")[i+1]).replace("de", "-").replace("###", "").replace(" ", "").trim()));
+							StringBuilder fechaNacimiento = new StringBuilder();
+							fechaNacimiento.append(newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim());
+							
+							if(newAseguradosi.toString().split("\n")[i+1].split("###").length == 1 && fechaNacimiento.toString().split("-").length == 2) {
+						    	 if(fn.isNumeric(newAseguradosi.toString().split("\n")[i+1].split("###")[0])) {
+						    		 fechaNacimiento.append("-").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0]);
+						    	 }
+						     }
+							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento.toString().trim()));
 						}
 					}
 					
