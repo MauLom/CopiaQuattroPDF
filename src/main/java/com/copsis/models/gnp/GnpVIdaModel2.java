@@ -52,6 +52,8 @@ public class GnpVIdaModel2 {
 							&& newcontenido.toString().split("\n")[i + 1].length() < 20) {
 						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 2].replace("###", "")).trim());
 					
+					}else if(newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+2].contains("Edad")){
+						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 1].split("Edad")[0].replace("###", "")).trim());
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Vigencia")) {
 						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 1].split("Vigencia")[0].replace("###", "")).trim());
@@ -362,8 +364,8 @@ public class GnpVIdaModel2 {
 							fechaNacimiento.append(newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim());
 							
 							if(newAseguradosi.toString().split("\n")[i+1].split("###").length == 1 && fechaNacimiento.toString().split("-").length == 2) {
-						    	 if(fn.isNumeric(newAseguradosi.toString().split("\n")[i+1].split("###")[0])) {
-						    		 fechaNacimiento.append("-").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0]);
+						    	 if(fn.isNumeric(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de", "").trim())) {
+						    		 fechaNacimiento.append("-").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de","").replace("###", "").replace(" ", ""));
 						    	 }
 						     }
 							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento.toString().trim()));
