@@ -23,6 +23,7 @@ public class GnpDiversosModel {
 	private int fin = 0;
 	private int tipo;
 	private boolean esverdad;
+	private static final String TIPO_DE = "Tipo de";
 
 	// constructor
 	public GnpDiversosModel(String contenido, String ubicaciones, int tipo) {
@@ -234,7 +235,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Desde las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").replace(".", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaDe(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -245,7 +246,7 @@ public class GnpDiversosModel {
 			inicio = contenido.indexOf("Hasta las 12 hrs");
 			if (inicio > -1) {
 				resultado = new StringBuilder();
-				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").trim().split("\r\n")[0].trim())
+				resultado.append(fn.gatos(contenido.substring(inicio + 16, inicio + 150).replace("del", "").replace(".", "").trim().split("\r\n")[0].trim())
 						.replace("###", "-"));
 				if (resultado.toString().split("-").length == 3) {
 					modelo.setVigenciaA(fn.formatDate(resultado.toString(), ConstantsValue.FORMATO_FECHA));
@@ -259,12 +260,19 @@ public class GnpDiversosModel {
 				resultado = new StringBuilder();
 				resultado.append(contenido.substring(inicio + 19, inicio + 150).split("\r\n")[0]);
 				auxStr = resultado.toString();
-				if (resultado.toString().contains("Tipo de")) {
+				if (resultado.toString().contains(TIPO_DE)) {
 					resultado = new StringBuilder();
-					resultado.append(fn.gatos(auxStr.split("Tipo de")[0].trim()).replace("###", "-"));
+					resultado.append(fn.gatos(auxStr.split(TIPO_DE)[0].trim()).replace("###", "-"));
 				} else if (resultado.toString().contains(ConstantsValue.IVA)) {
 					resultado = new StringBuilder();
 					resultado.append(fn.gatos(auxStr.split(ConstantsValue.IVA)[0].trim()).replace("###", "-"));
+				}else if(auxStr.contains("Día###Mes###Año") &&  inicio < contenido.indexOf(TIPO_DE)) {
+					String texto = contenido.split("Fecha de expedición")[1];
+					if(texto.contains("\n")) {
+						texto = texto.split("\n")[1].split(TIPO_DE)[0];						
+						resultado = new StringBuilder();
+						resultado.append(fn.gatos(texto.trim()).replace("###", "-"));
+					}
 				}
 
 				if (resultado.toString().split("-").length == 3 && resultado.length() == 10) {
