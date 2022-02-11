@@ -86,7 +86,8 @@ public class AxaModel {
 							modelo = datosAxaDiversos.procesar();
 						
 							break;
-						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR							
+						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR
+						   case "PROTECCIÓN A BIENES EMPRESARIALES":
 							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxaDive.procesar();								
 								break;
