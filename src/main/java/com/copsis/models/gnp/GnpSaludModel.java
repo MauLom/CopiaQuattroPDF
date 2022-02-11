@@ -121,8 +121,18 @@ public class GnpSaludModel {
 						}
 					} else if (dato.contains("C.P")) {
 						if (dato.split("###").length == 5 && dato.split("###")[0].contains("C.P")) {
-							newcontenido.append(" ").append(dato.split("###")[0].split("C.P")[0].trim());
-							modelo.setCp(dato.split("###")[0].split("C.P")[1].trim());
+							dato = dato.replace("C.P", "C/P");
+							newcontenido.append(" ").append(dato.split("###")[0].split("C/P")[0].trim());
+							
+							if(newcontenido.substring(newcontenido.length()-1).equals(",")) {
+								String auxiliar = newcontenido.substring(0,newcontenido.length()-1);
+								newcontenido = new StringBuilder();
+								newcontenido.append(auxiliar);
+							}
+
+							if(fn.isvalidCp(dato.split("###")[0].split("C/P")[1].replace(":","").replace(".","").trim())) {
+								modelo.setCp(dato.split("###")[0].split("C/P")[1].replace(":","").replace(".","").trim());
+							}
 							if (dato.split("###")[1].contains("hrs.")) {
 								modelo.setVigenciaDe(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
 										+ "-" + dato.split("###")[2].trim());
