@@ -316,7 +316,7 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("por pago fraccionado###")) {
 					inicio = inicio + 23;
-					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
+					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 30);
 					newcontenido = contenido.substring(inicio, fin);
 					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
 						modelo.setRecargo(
@@ -331,7 +331,7 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals(ConstantsValue.GASTOS_DE_EXPEDICION)) {
 					inicio = inicio + 20;
-					int finIndex = (inicio+150) < contenido.length() ? (inicio+150) : (inicio+100);
+					int finIndex = (inicio+150) < contenido.length() ? (inicio+150) : (inicio+20);
 					
 					newcontenido = fn.gatos(contenido.substring(inicio, finIndex).split(saltolinea)[0])
 							.split(separador)[0].split(ConstantsValue.IVA)[0];
