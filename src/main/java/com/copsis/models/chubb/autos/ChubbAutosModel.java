@@ -496,9 +496,9 @@ public class ChubbAutosModel {
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 	
 
-			if (!recibos.equals("")) {
-				recibosList = recibosExtract();
-			}
+//			if (!recibos.equals("")) {
+//				recibosList = recibosExtract();
+//			}
 
 			switch (modelo.getFormaPago()) {
 			case 1:
