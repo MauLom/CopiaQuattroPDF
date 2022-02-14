@@ -7,12 +7,14 @@ import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraUbicacionesModel;
 
 public class AxaDiversos2Model {
 	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
+	private static final String UBICACION = "Ubicación###Contratante";
 	
 	
 	public AxaDiversos2Model(String contenidox) {
@@ -50,12 +52,19 @@ public class AxaDiversos2Model {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[3].trim()));
 					}
 					
-					if(newcontenido.split("\n")[i].contains("Datos Generales del Asegurado") && newcontenido.split("\n")[i+1].contains("RFC:") ) {
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.DATOS_GENERALES_ASEGURADO) && newcontenido.split("\n")[i+1].contains("RFC:") ) {
 						modelo.setCteNombre(newcontenido.split("\n")[i+1].split("Nombre")[1].split("RFC:")[0].replace(":", "").replace("###", "").trim());
 						modelo.setRfc(newcontenido.split("\n")[i+1].split("RFC:")[1].trim());
 					}
-					if(newcontenido.split("\n")[i].contains("Domicilio")) {
-						modelo.setCteDireccion(  newcontenido.split("\n")[i].split("Domicilio")[1].replace("###", ""));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.DOMICILIO2)) {
+						modelo.setCteDireccion(  newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO2)[1].replace("###", "").replace(":", "").trim());
+						StringBuilder direccion = new StringBuilder();
+						direccion.append(newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO)[1].replace("###", "").trim());
+						
+						if(newcontenido.split("\n")[i+1].contains("C.P:")) {
+							direccion.append(" ").append(newcontenido.split("\n")[i+1].split("C.P:")[0].replace("###","").trim());
+						}
+						modelo.setCteDireccion(direccion.toString());
 					}
 					if(newcontenido.split("\n")[i].contains("C.P:") && newcontenido.split("\n")[i].contains("Tel:")) {
 						modelo.setCp(  newcontenido.split("\n")[i].split("C.P:")[1].split("Tel:")[0].trim());
@@ -107,7 +116,7 @@ public class AxaDiversos2Model {
 			}
 			
 			
-
+			obtenerDatosubicacion(contenido,modelo);
 			
 			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Coberturas");
@@ -140,8 +149,14 @@ public class AxaDiversos2Model {
 				}
 				modelo.setCoberturas(coberturas);
 			}
-		
-			
+			if(modelo.getCoberturas().isEmpty()) {
+				inicio = contenido.indexOf("Sección Coberturas Suma Asegurada");
+				fin = contenido.indexOf("En testimonio de lo cual la");
+				
+				if(inicio> -1 && inicio < fin) {
+					obtenerCoberturasSeccion(contenido, inicio, fin,modelo);
+				}
+			}
 			
 			
 			return modelo;
@@ -154,5 +169,85 @@ public class AxaDiversos2Model {
 		
 	}
 	
+	private void obtenerCoberturasSeccion(String contenido, int inicio, int fin,EstructuraJsonModel modelo ) {
+		String newcontenido = contenido.substring(inicio,fin).replace("@@@", "");
+		String[] arrContenido = newcontenido.split("\n");
+		List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+		String seccion = "";
 
+		for(int i=0;i< arrContenido.length;i++) {
+			int numValores = arrContenido[i].split("###").length;
+			String[] valoresCoberura = arrContenido[i].split("###");
+			if(fn.seccion(valoresCoberura[0].trim()).length() > 0 ) {
+				seccion = valoresCoberura[0].trim();
+			}
+			if(numValores == 4) {
+				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+				cobertura.setSeccion(seccion);
+				cobertura.setNombre(valoresCoberura[1].trim());
+				cobertura.setSa(valoresCoberura[2].trim());
+				coberturas.add(cobertura);
+			}
+		}
+		modelo.setCoberturas(coberturas);
+	}
+
+	private void obtenerDatosubicacion(String contenido, EstructuraJsonModel modelo) {
+		String texto = contenido.replace("Ubicación  ###Contratante", UBICACION);
+		int inicio = texto.indexOf(UBICACION);
+		
+		if(inicio != texto.lastIndexOf(UBICACION)) {
+			inicio = texto.lastIndexOf(UBICACION);
+		}
+		
+		int fin = texto.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS3);
+		
+		if(fin != texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS3)) {
+			fin = texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS3);
+		}
+
+		if(inicio > -1 && inicio < fin) {
+			String newContenido = texto.substring(inicio,fin).replace("@@@","")
+					.replace("D ###omicilio", ConstantsValue.DOMICILIO2)
+					.replace("###F ###RANCISCO", "FRANCISCO")
+					.replace("C.P", "C/P");
+
+			if(newContenido.contains(ConstantsValue.DATOS_GENERALES_ASEGURADO)) {
+				newContenido = newContenido.split(ConstantsValue.DATOS_GENERALES_ASEGURADO)[1];
+				String[] arrNewContenido = newContenido.split("\n");
+				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+
+				for(int i =0; i< arrNewContenido.length;i++) {
+
+					if(arrNewContenido[i].contains(ConstantsValue.DOMICILIO) && (i+1)< arrNewContenido.length) {
+						StringBuilder direccion = new StringBuilder();
+						direccion.append(arrNewContenido[i].split(ConstantsValue.DOMICILIO)[1].replace("###", "").trim());
+						
+						if(arrNewContenido[i+1].contains("C/P")) {
+							direccion.append(" ").append(arrNewContenido[i+1].split("C/P")[0].replace("###",""));
+						}
+						ubicacion.setCalle(direccion.toString().trim());
+					}
+					//CP
+					if(arrNewContenido[i].contains("C/P") && arrNewContenido[i].contains("Tel") ) {
+						String aux = arrNewContenido[i].split("C/P")[1].split("Tel")[0].replace(":","").replace(".", "").trim();
+						if(fn.isvalidCp(aux)) {
+							ubicacion.setCp(aux);
+						}
+					}
+					//
+					if(arrNewContenido[i].contains("Giro tarifa")) {
+						ubicacion.setGiro(arrNewContenido[i].split("Giro tarifa")[1].replace("###", "").replace(".-", "").trim());
+						ubicacion.setNombre(ubicacion.getNombre());
+					}
+				}
+				
+				if(ubicacion.getCalle().length() > 0) {
+					List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
+					ubicaciones.add(ubicacion);
+					modelo.setUbicaciones(ubicaciones);
+				}
+			}
+		}
+	}
 }
