@@ -154,17 +154,22 @@ public class GnpDiversosModel {
 				resultado.append(contenido.substring(inicio + 11, inicio + 200).trim());
 				int idx = 0;
 				for (String x : resultado.toString().split("\n")) {
+				
 					if (idx == 1) {
 						if (x.contains(ConstantsValue.NUMERO)) {
 							x = fn.gatos(x.split(ConstantsValue.NUMERO)[0].trim());
 						}
 						newcontenido.append(fn.gatos(x.trim()));
-					} else if (idx == 2  && !(x.contains("CALLE") || x.contains("Vigencia") || x.contains("AVENIDA") || x.contains("BOULEVARD")|| x.contains("CARRETERA") || x.contains("Número"))) {					
-							newcontenido.append(fn.gatos(x.trim()));
+					} else if (idx == 2  && x.length() < 10 &&  !(x.contains("CALLE") || x.contains("Vigencia") 
+							|| x.contains("AVENIDA") || x.contains("BOULEVARD")|| x.contains("CARRETERA") || x.contains("Número"))) {					
+						
+							newcontenido.append(fn.gatos(x.trim()));	
+						
+						
 					}
 					idx++;
 				}
-				modelo.setCteNombre(newcontenido.toString());
+				modelo.setCteNombre(newcontenido.toString().trim());
 			}
 
 			// cte_direccion
