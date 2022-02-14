@@ -283,18 +283,18 @@ public class GnpVIdaModel2 {
 								if(newcontenido.toString().split("\n")[i+1].contains("Nacimiento:")) {
 								
 							    String nacimiento =  newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1].replace("de", "-").replace("###", "").replace(" ", "").trim();
-							  
+							
 									if(nacimiento.split("-").length == 2) {
 										String viga = nacimiento.substring( nacimiento.length()-4,nacimiento.length());
 										
-		
+									
 									
 										if(fn.isNumeric(viga)) {
 											   nacimiento = nacimiento.replace(viga, "") +"-" + viga;
 										}
 										else {
 											nacimiento = newcontenido.toString().split("\n")[i+1].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim();
-													
+												
 									     if(newcontenido.toString().split("\n")[i+2].split("###").length == 2 ) {
 									    	 if(fn.isNumeric(newcontenido.toString().split("\n")[i+2].split("###")[1])) {
 									    		nacimiento += "-" + newcontenido.toString().split("\n")[i+2].split("###")[1]; 
@@ -305,6 +305,10 @@ public class GnpVIdaModel2 {
 									    		nacimiento += "-" + newcontenido.toString().split("\n")[i+2].split("###")[0]; 
 									    	 }
 									     }
+										 
+										 if(fn.isNumeric(newcontenido.toString().split("\n")[i+2].split("###")[0]) && newcontenido.toString().split("\n")[i+2].contains("Día")) {
+												nacimiento += "-" + newcontenido.toString().split("\n")[i+2].split("###")[0]; 
+										 }
 								     
 									
 										}
@@ -362,13 +366,28 @@ public class GnpVIdaModel2 {
 						if (newAseguradosi.toString().split("\n")[i].contains("Nacimiento:")) {
 							StringBuilder fechaNacimiento = new StringBuilder();
 							fechaNacimiento.append(newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim());
-							
+
 							if(newAseguradosi.toString().split("\n")[i+1].split("###").length == 1 && fechaNacimiento.toString().split("-").length == 2) {
 						    	 if(fn.isNumeric(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de", "").trim())) {
-						    		 fechaNacimiento.append("-").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de","").replace("###", "").replace(" ", ""));
+						    		fechaNacimiento.append("-").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de","").replace("###", "").replace(" ", ""));
 						    	 }
 						     }
-							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento.toString().trim()));
+							
+							
+							if(fechaNacimiento.toString().split("-").length == 2 && newAseguradosi.toString().split("\n")[i+1].contains("Vigencia Póliza")) {
+								
+								
+								if(fn.isNumeric(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de", "").trim())) {
+			
+									 fechaNacimiento.append("").append(newAseguradosi.toString().split("\n")[i+1].split("###")[0].replace("de","").replace("###", "").replace(" ", "")); 
+								 }
+							}
+						
+							if(fechaNacimiento.toString().split("-").length == 3) {
+									asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento.toString().trim()));
+							}
+						
+							
 						}
 					}
 					
@@ -601,7 +620,7 @@ public class GnpVIdaModel2 {
 			}
 
 			return modelo;
-		} catch (Exception ex) {	
+		} catch (Exception ex) {
 			modelo.setError(
 					GnpVIdaModel2.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
