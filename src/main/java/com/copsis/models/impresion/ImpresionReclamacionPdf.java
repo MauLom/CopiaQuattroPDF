@@ -46,17 +46,19 @@ public class ImpresionReclamacionPdf {
 					boolean acomula4 = false;
 			
 					
-					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenSocio()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
-				    table.draw();
-					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 500, document, page, false,true);				 
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 40, ImageUtils.readImage(impresionReclamacionProjection.getContratantes().getAsegurados().c6), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
 				    table.draw();
 					
-				    yStart -= table.getHeaderAndDataHeight()+7;
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 80, ImageUtils.readImage(impresionReclamacionProjection.getImagenSocio()), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
+				    table.draw();
+					
+					
+					
+					yStart -= table.getHeaderAndDataHeight()+3;
 				    yStartnw =yStart;
 			
 				
