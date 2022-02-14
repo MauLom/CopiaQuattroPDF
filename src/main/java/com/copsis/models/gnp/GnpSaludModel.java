@@ -386,6 +386,11 @@ public class GnpSaludModel {
 								modelo.setPlan(dato.split("###")[1].trim());
 							}
 							break;
+						case 6:
+							if(dato.split("###")[2].contains("Desde las")) {
+								modelo.setPlan(dato.split("###")[1].trim());
+							}
+							break;
 						default:
 							break;
 						}
@@ -625,7 +630,7 @@ public class GnpSaludModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// coberturas{nombre sa deducible coaseguro}
 			String[] coberturasTxt = {"B ###ásica", "E mergencia de gastos médico s", "Emergencia de gastos médico s","E ###mergencia de gastos médico s",
-					"Emergencia en el Extranjero", "E mergencia en el Extranjero", "Catastróficas Nacional",
+					"Emergencia en el Extranjero","− Extranjero", "E mergencia en el Extranjero", "Catastróficas Nacional",
 					"C atastróficas Nacional", "Enfermedades Catastróficas", "n el Extranjero", "Asistencia en Viajes",
 					"A sistencia en Viajes", "Membresía Médica Móvil", "M embresía Médica Móvil",
 					"Cero Deducible por Accidente", "C ero Deducible por Accidente", "ero Deducible por Accidente",
@@ -634,10 +639,12 @@ public class GnpSaludModel {
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.COASASEGURO);
 			dondeAux = fn.recorreContenido(contenido, ConstantsValue.AGENTE2);
+
 			if (donde > 0 && dondeAux > 0) {
 				inicio = contenido.indexOf(contenido.split("@@@")[donde]);
 				fin = contenido.indexOf(contenido.split("@@@")[dondeAux]);
-				filtrado = contenido.substring(inicio, fin).replace("@@@", "").trim();
+				filtrado = contenido.substring(inicio, fin).replace("@@@", "").replace("A ###sistencia", "Asistencia")
+						.replace("E ###mergencia", "Emergencia").trim();
 				if (filtrado.contains(ConstantsValue.COASASEGURO) && filtrado.contains("Coberturas")) {
 					newcontenido = new StringBuilder();
 					int inicioCob = 0;
@@ -673,7 +680,7 @@ public class GnpSaludModel {
 									inicioCob = 0;
 									inicioCob = contenidoCoberturas.lastIndexOf(cobertura);
 								}
-								if (encontroExt) {
+								if (!encontroExt) {
 									encontroExtranjero = inicioCob;
 									newcontenido1 = contenidoCoberturas
 											.substring(inicioCob, contenidoCoberturas.indexOf("\r\n", inicioCob))
