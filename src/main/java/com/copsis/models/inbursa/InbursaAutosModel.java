@@ -116,7 +116,16 @@ public class InbursaAutosModel {
 						} else {
 							modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim());
 						}
+						
+						//rfc 
+						if(newcontenido.split("\n")[i-1].contains("R.F.C") && newcontenido.split("\n")[i].split("###").length>2) {
+							String aux = newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-2];
+							if(aux.trim().length()>11) {
+								modelo.setRfc(aux.trim());
+							}
+						}
 					}
+					
 					
 					if (newcontenido.split("\n")[i].contains("MONEDA")) {
 						modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i + 1]));						
@@ -296,36 +305,42 @@ public class InbursaAutosModel {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 horas", "");
-				if(!newcontenido.contains("RESPONSABILIDAD CIVIL EN ESTADOS UNIDOS Y CANADÁ") || !newcontenido.contains("Responsabilidad civil en Estados Unidos y Canadá *")) {
-					newcontenido = newcontenido.replace("CANADÁ", "RESPONSABILIDAD CIVIL EN ESTADOS UNIDOS Y CANADÁ").replace("Canadá *","Responsabilidad civil en Estados Unidos y Canadá *");
+
+				if(!modelo.getPoliza().isEmpty()) {
+					//descarta texto que esta en el lateral izquierdo del pdf 
+					newcontenido =newcontenido.replace("###"+modelo.getPoliza()+"###", "").replace(modelo.getPoliza(), "");
 				}
-				
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+
+				String[] arrContenido = newcontenido.split("\n");
+				for(int i=0; i< arrContenido.length;i++) {
+					arrContenido[i] = completaTextoCobertura(arrContenido, i);
+				}
+
+				for (int i = 0; i <arrContenido.length ; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
-					if (!newcontenido.split("\n")[i].contains(ConstantsValue.COBERTURAS_CONTRATADAS)
-							&& !newcontenido.split("\n")[i].contains("MÍNIMO")
-							&& !newcontenido.split("\n")[i].contains("Cobertura")
-							&& !newcontenido.split("\n")[i].contains("**")
-							&& !newcontenido.split("\n")[i].contains("UMA")
-							&& !newcontenido.split("\n")[i].contains("OPERAN")
-							&& !newcontenido.split("\n")[i].contains("CLIENTE INBURSA")
-							&& !newcontenido.split("\n")[i].contains("Cláusula adicional de asistencia:")
-							&& !newcontenido.split("\n")[i].contains("CLAUSULA ADICIONAL DE ASISTENCIA:")) {
+					if (!arrContenido[i].contains(ConstantsValue.COBERTURAS_CONTRATADAS)
+							&& !arrContenido[i].contains("MÍNIMO")
+							&& !arrContenido[i].contains("Cobertura")
+							&& !arrContenido[i].contains("**")
+							&& !arrContenido[i].contains("UMA")
+							&& !arrContenido[i].contains("OPERAN")
+							&& !arrContenido[i].contains("CLIENTE INBURSA")
+							&& !arrContenido[i].contains("Cláusula adicional de asistencia:")
+							&& !arrContenido[i].contains("CLAUSULA ADICIONAL DE ASISTENCIA:")) {
 						
 					
-						int sp = newcontenido.split("\n")[i].split("###").length;
+						int sp = arrContenido[i].split("###").length;
 
-						if (newcontenido.split("\n")[i].split("###")[0].length() > 3) {
-
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						if (arrContenido[i].split("###")[0].length() > 3) {
+							cobertura.setNombre(arrContenido[i].split("###")[0].trim());
 							if (sp == 2 ) {
-								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+								cobertura.setSa(arrContenido[i].split("###")[1]);
 								coberturas.add(cobertura);
 							}
 							if (sp > 2) {
-								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
-								cobertura.setDeducible(!newcontenido.split("\n")[i].split("###")[2].contains(".00")?newcontenido.split("\n")[i].split("###")[2]:"");
+								cobertura.setSa(arrContenido[i].split("###")[1]);
+								cobertura.setDeducible(!arrContenido[i].split("###")[2].contains(".00")?arrContenido[i].split("###")[2]:"");
 								coberturas.add(cobertura);
 							}
 						}
@@ -337,8 +352,7 @@ public class InbursaAutosModel {
 			
 			
 			fin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
-
-			if(inicio > -1) {
+			if(inicio > -1 && modelo.getAgente().isEmpty() && modelo.getCveAgente().isEmpty()) {
 				newcontenido = (contenido.split("CLAVE Y NOMBRE DEL AGENTE")[0].length() > 200 ? contenido.substring(fin-199,fin)  :  contenido.substring(fin-100,fin));
 				newcontenido = newcontenido.replace("@@@", "").replace("\r", "");		
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -371,7 +385,7 @@ public class InbursaAutosModel {
 			modelo.setPoliza(arrContenido[i - 1].split("###")[1]);
 		} else if (arrContenido[i].contains(ConstantsValue.POLIZA_MAYUS)
 				&& arrContenido[i].contains("CIS")
-				&& arrContenido[i].contains("Cliente Inbursa")) {
+				&& (arrContenido[i].contains("Cliente Inbursa") || arrContenido[i].contains("CLIENTE INBURSA"))) {
 			modelo.setPoliza(arrContenido[i - 1].split("###")[1]);
 		} else if (arrContenido[i].contains(ConstantsValue.POLIZA_MAYUS)
 				&& arrContenido[i].contains("FAMILIA")) {
@@ -421,5 +435,37 @@ public class InbursaAutosModel {
 		if(direccion.indexOf("C.P")>-1) {
 			modelo.setCteDireccion(direccion.substring(0,direccion.indexOf("C.P")).trim());
 		}
+	}
+	
+	private String completaTextoCobertura(String[] arrTexto,int i) {
+		String texto = arrTexto[i];
+		if(texto.split("###")[0].trim().equals("M Responsabilidad civil por daños a Terceros en su") && (i+1) < arrTexto.length ) {
+			texto = completaTextoActualConLineaSiguiente(arrTexto, i, "M Responsabilidad civil por daños a Terceros en su", "persona");
+		}else if(texto.contains("bienes")) {
+			texto = completaTextoActualConLineaAnterior(arrTexto, i, "bienes", "M Responsabilidad civil por daños a Terceros en sus");
+		}else if(texto.contains("CANADÁ *")) {
+			texto = completaTextoActualConLineaAnterior(arrTexto, i, "CANADÁ *", "RESPONSABILIDAD CIVIL EN ESTADOS UNIDOS Y");
+		}
+		return texto;
+	}
+	
+	private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+		String texto = arrTexto[i];
+		if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+			texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
+			arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente+"###", "").replace(textoSiguiente, "");
+		}
+		return texto;
+	}
+	
+	private String completaTextoActualConLineaAnterior(String[] arrTexto, int i, String textoActual, String textoLineaAnterior) {
+		String texto = arrTexto[i];
+		if((i-1)< arrTexto.length) {
+			if(!texto.contains(textoLineaAnterior) && arrTexto[i-1].contains(textoLineaAnterior)) {
+				texto = texto.replace(textoActual, textoLineaAnterior + " "+textoActual);
+				arrTexto[i-1] = arrTexto[i-1].replace(textoLineaAnterior+"###", "").replace(textoLineaAnterior, "");
+			}
+		}
+		return texto;
 	}
 }
