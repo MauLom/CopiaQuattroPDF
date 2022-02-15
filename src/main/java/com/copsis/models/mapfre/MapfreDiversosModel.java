@@ -60,7 +60,11 @@ public class MapfreDiversosModel {
 				.replaceFirst("R . F . C", "R.F.C")
 				.replaceFirst("Con tratante:","Contratante:")
 				.replace("C . P . ","C.P.")
-				.replace("T e l :", "Tel:");
+				.replace("T e l :", "Tel:")
+				.replace("VIGENCIA","Vigencia")
+				.replace("HASTA###LAS###12:00", "hasta las 12:00")
+				.replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
+				.replace("FORMA###DE###PAGO", "FORMA DE PAGO");
 
 		try {
 
@@ -70,20 +74,39 @@ public class MapfreDiversosModel {
 			modelo.setCia(22);
 
 			// poliza
-			modelo.setPoliza(fn.obtenerPolizaRegex(contenido,13));
-			/*inicio = contenido.indexOf("Póliza Número:");
+			inicio = contenido.indexOf("Póliza Número:");
 			if (inicio == -1) {
 				inicio = contenido.indexOf("Póliza número:");
 				if (inicio == -1) {
 					inicio = contenido.indexOf("Póliza número");
 				}
 			}
+			
+	
 
 			if (inicio > -1) {
 				modelo.setPoliza(contenido.substring(inicio + 14, inicio + 60).split("\r\n")[0].replace(":", "")
 						.replace(" ", "").trim());
 			}
-			*/
+			
+	
+			if(modelo.getPoliza().length() == 0 ) {
+				inicio = contenido.indexOf("PÓLIZA-ENDOSO");
+				fin = contenido.indexOf("FECHA DE EMISIÓN");
+				
+				if((inicio>-1 && inicio < fin) ) {
+					String newcontenido = contenido.split("PÓLIZA-ENDOSO")[1].split("FECHA DE EMISIÓN")[0].replace("@@@", "").trim();
+					if(newcontenido.contains("###") && newcontenido.contains("-")) {
+						newcontenido = newcontenido.split("###")[1];
+						modelo.setPoliza(newcontenido.split("-")[0].trim());
+						modelo.setEndoso(newcontenido.split("-")[1].trim());
+					}					
+				}
+			}
+			
+			if(modelo.getPoliza().length() == 0) {
+				modelo.setPoliza(fn.obtenerPolizaRegex(contenido,13));
+			}
 
 			// endoso
 			inicio = contenido.indexOf("Endoso Número");
@@ -97,14 +120,20 @@ public class MapfreDiversosModel {
 
 			// cte_nombre
 			inicio = contenido.indexOf("Contratante:");
-			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("CONTRATANTE:");
+			}
 
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0];
+
 				if (newcontenido.contains("R.F.C")) {
 					modelo.setCteNombre(fn.gatos(
 							contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0].split("R.F.C")[0].trim()));
+				}else if(newcontenido.contains("DOMICILIO")) {
+					modelo.setCteNombre(newcontenido.split("DOMICILIO")[0].replace("###","").replace(":", "").trim());
 				}
+				
 			} else {
 				inicio = contenido.indexOf("R.F.C");
 				if (inicio > -1) {
@@ -129,16 +158,41 @@ public class MapfreDiversosModel {
 					modelo.setRfc(resultado);
 				}
 			}
+			
+			if(modelo.getRfc().length() == 0) {
+				inicio = contenido.indexOf("R.F.C");
+				fin = contenido.indexOf("C.P");
+				
+				if(inicio> -1 && inicio < fin) {
+					String texto = contenido.substring(inicio,fin).replace("C.P", "C/P");
+					modelo.setRfc(texto.split("R.F.C")[1].split("C/P")[0].replace("###", "").replace(":", "").trim());
+				}
+			}
 
 			// cp
 			modelo.setCp(fn.obtenerCPRegex(contenido));
+			if(modelo.getCp().length() == 0) {
+				inicio = contenido.indexOf("C.P");
+				String texto = contenido.substring(inicio).replace("C.P", "C/P");
+				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace("###", "").trim();
+				
+				if(fn.isvalidCp(texto)) {
+					modelo.setCp(texto);
+				}
+			}
 
 			// cte_direccion
 			inicio = contenido.indexOf("icilio:");
+			if(inicio == -1) {
+				inicio =  contenido.indexOf("ICILIO:");
+			}
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 7, inicio + 150);
 				if (newcontenido.contains("Tel")) {
 					modelo.setCteDireccion(fn.gatos(newcontenido.split("Tel")[0].replace(".", "").trim()));
+				}else if(newcontenido.contains("R.F.C")) {
+					modelo.setCteDireccion(fn.eliminaSpacios(fn.gatos(
+							newcontenido.split("R.F.C")[0].replace("\r", " ").replace("\n", "").replace("@@@", ""))));
 				}
 			}
 
@@ -157,9 +211,12 @@ public class MapfreDiversosModel {
 				inicio = contenido.indexOf("hasta las 12:00");
 			}
 			fin = contenido.indexOf("Fecha de emisión");
+			if(fin == -1) {
+				fin = contenido.indexOf("CLIENTE MAPFRE");
+			}
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + 15, fin).replace("@@@", "");
-				
 				if (newcontenido.contains("de:")) {
 					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));
@@ -168,9 +225,20 @@ public class MapfreDiversosModel {
 						modelo.setCveAgente(newcontenido.split("###")[1].trim());
 						modelo.setAgente(newcontenido.split("###")[2].trim());
 					}
+				}else if(newcontenido.contains("DEL:")){
+					newcontenido = newcontenido.split("DEL:")[1].replace("###", "");
+					if(newcontenido.split("-").length == 3) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido.trim())));
+					}
 				}
 			}
 
+			if(modelo.getAgente().length() == 0 && modelo.getCveAgente().length() == 0) {
+				if(contenido.contains("AGENTE:") && contenido.contains("CLAVE DE AGENTE:")) {
+					modelo.setAgente(contenido.split("AGENTE:")[1].split("\n")[0].trim());
+					modelo.setCveAgente(contenido.split("CLAVE DE AGENTE:")[1].split("\n")[0].trim());
+				}
+			}
 			// moneda
 			// forma_pago
 			inicio = contenido.indexOf("Cobro:");
@@ -190,9 +258,23 @@ public class MapfreDiversosModel {
 				}
 
 			}
+			
+			if(modelo.getFormaPago() == 0) {
+				if(contenido.contains("FORMA DE PAGO:")) {
+					String aux = fn.gatos(contenido.split("FORMA DE PAGO:")[1].split("\n")[0]);
+					
+					if(aux.contains("###")) {
+						aux = aux.split("###")[0];
+						modelo.setFormaPago(fn.formaPago(aux));
+					}
+				}
+			}
 
 			// fecha_emision
 			inicio = contenido.indexOf("Gestor de cobro:");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("FECHA DE EMISIÓN");
+			}
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0];
 				fin = newcontenido.lastIndexOf("/");
