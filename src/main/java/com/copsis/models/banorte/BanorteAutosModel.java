@@ -115,7 +115,11 @@ public class BanorteAutosModel {
 						}
                         
 						if(newcontenido.split("\n")[i].contains("pago:") && newcontenido.split("\n")[i].contains("I.V.A:")){
-							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim()));
+							String aux = newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim();
+							if(aux.contains("12 MESES")) {
+								aux = aux.split("12 MESES")[0].trim();
+							}
+							modelo.setFormaPago(fn.formaPago(aux));
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].split("###")[newcontenido.split("\n")[i].split("I.V.A:")[1].split("###").length -1].replace("###", "").trim())));						
 						}
 						 if(newcontenido.split("\n")[i].contains("Prima Total:")) {
@@ -198,16 +202,18 @@ public class BanorteAutosModel {
 	            }
 //	            //COBERTURAS
 	            inicio = contenido.indexOf("DETALLES DE COBERTURAS");
+
 	            if(inicio == -1) {
 	            	 inicio = contenido.indexOf("DETALLE COBERTURAS"); 	
 	            }
 	           
-	            fin = contenido.indexOf("La Unidad de Medida ");
-	            if(fin == -1){
-	            	fin =contenido.indexOf("La Compañía podrá en cualquier");
+	            fin = obtenerIndexFinalCoberturas(contenido,false);
+	            
+	            if(inicio > fin) {
+	            	fin = obtenerIndexFinalCoberturas(contenido,true);
 	            }
 
-	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
+	            if(inicio > -1 &&  fin >  -1 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").trim();
 	            	modelo.setPlan(newcontenido.split("PAQUETE:")[1].split("\n")[0].replace("###", "").trim());
@@ -365,6 +371,23 @@ public class BanorteAutosModel {
 				arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente, "").replace(textoSiguiente+"###", "");
 			}
 			return texto;
+		}
+		
+		private int obtenerIndexFinalCoberturas(String contenido, boolean lastIndex) {
+			int finIndex = -1;
+			if(lastIndex) {
+				finIndex = contenido.lastIndexOf("La Unidad de Medida ");
+	            if(finIndex == -1){
+	            	finIndex =contenido.lastIndexOf("La Compañía podrá en cualquier");
+	            }			
+			}else{
+				finIndex = contenido.indexOf("La Unidad de Medida ");
+	            if(finIndex == -1){
+	            	finIndex =contenido.indexOf("La Compañía podrá en cualquier");
+	            }			
+			}
+		
+            return finIndex;
 		}
 
 }
