@@ -115,7 +115,11 @@ public class BanorteAutosModel {
 						}
                         
 						if(newcontenido.split("\n")[i].contains("pago:") && newcontenido.split("\n")[i].contains("I.V.A:")){
-							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim()));
+							String aux = newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim();
+							if(aux.contains("12 MESES")) {
+								aux = aux.split("12 MESES")[0].trim();
+							}
+							modelo.setFormaPago(fn.formaPago(aux));
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].split("###")[newcontenido.split("\n")[i].split("I.V.A:")[1].split("###").length -1].replace("###", "").trim())));						
 						}
 						 if(newcontenido.split("\n")[i].contains("Prima Total:")) {
