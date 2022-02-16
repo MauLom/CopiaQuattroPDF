@@ -296,13 +296,36 @@ public class AxaSaludModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				  if(newcontenido.split("\n")[i].contains("-")) {	
-
 			  switch (newcontenido.split("\n")[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((newcontenido.split("\n")[i].split("###")[0].split(",")[1] +" " + newcontenido.split("\n")[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
-						asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[1]));
+						int parentesco = fn.parentesco(newcontenido.split("\n")[i].split("###")[1]);
+			        	if(parentesco == 1 &&  !esValidoParentescoTitular(newcontenido.split("\n")[i].split("###")[1]) ) {
+			        		//Se extrae la ultima palabra de la sección del nombre de asegurado, para validar si es un valor de parentesco
+			        		String[] aux = newcontenido.split("\n")[i].split("###")[0].split(" ");
+			        		String nombreParentesco = aux[aux.length-1];
+			        		parentesco = fn.parentesco(nombreParentesco);
+			        		if((parentesco == 1 && esValidoParentescoTitular(nombreParentesco)) || parentesco > 1) {
+			        			parentesco = fn.parentesco(nombreParentesco);
+			        			//quita parentesco de la propiedad nombre
+			        			String nombre = fn.eliminaSpacios(asegurado.getNombre().replace(nombreParentesco,"").trim());
+			        			asegurado.setNombre(nombre);
+			        		}
+			        	}
+			        	asegurado.setParentesco(parentesco);
 						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
-						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].replace(" ", "")));
+
+						String fechaNacimiento = "";
+						if(newcontenido.split("\n")[i].split("###")[3].replace(" ", "").split("-").length == 3) {
+							fechaNacimiento = newcontenido.split("\n")[i].split("###")[3].replace(" ", "");
+						}else if(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").split("-").length == 3) {
+							fechaNacimiento = newcontenido.split("\n")[i].split("###")[2].replace(" ", "");
+							String siguienteSeccion = newcontenido.split("\n")[i].split("###")[3].trim();
+							if(fechaNacimiento.split("-")[2].length() == 1  && fn.eliminaSpacios(siguienteSeccion).length() == 3) {
+								fechaNacimiento += siguienteSeccion;					
+							}
+						}
+						asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento));
 						asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) != null  ? fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) : 0 );
 
 						if(newcontenido.split("\n")[i].split("###").length == 7 && asegurado.getNacimiento().split("-")[0].length()>4) {							
@@ -312,6 +335,7 @@ public class AxaSaludModel {
 						}
 						index = fn.castDouble(newcontenido.split("\n")[i].split("###")[5]) != null ? 5 : 4;
 						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[index])));
+						
 						index = newcontenido.split("\n")[i].split("###")[6].contains("-") ? 6 : 5;
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[index].replace(" ", "").replace("\r", "")));
 						asegurados.add(asegurado);
@@ -390,6 +414,9 @@ public class AxaSaludModel {
 		}
 	}
 
+	private boolean esValidoParentescoTitular(String valor) {
+		return (valor.equalsIgnoreCase("TITULAR") || valor.equalsIgnoreCase("TIT") || valor.equalsIgnoreCase("ASEGURADO PRINCIPAL"));
+	}
 
 
 }
