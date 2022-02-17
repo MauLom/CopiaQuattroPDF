@@ -186,9 +186,8 @@ public class IdentificaPolizaService {
 				}
 			}
 
-
 			// ENTRADA PARA BANORTE
-			if (!encontro && contenido.contains("Banorte")
+			if (!encontro && contenido.contains("Banorte") && !contenido.contains("Servicios Integrales de Salud Nova")
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))) {
