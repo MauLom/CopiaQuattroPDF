@@ -977,6 +977,11 @@ public class GnpDiversosModel {
 				}
 			}
 
+			if(!contenido.contains(ConstantsValue.SUMA_ASEGURADA) && contenido.contains("Cobertura###Límite###Deducible")) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(contenido.split("Cobertura###Límite###Deducible")[1].split("Clave")[0].replace("@@@", ""));
+			}
+			
 			for (String co : newcontenido.toString().split("\n")) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				int x = co.split("###").length;
@@ -986,7 +991,7 @@ public class GnpDiversosModel {
 						cobertura.setNombre(co.split("###")[0]);
 						cobertura.setSa(co.split("###")[1]);
 						cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
-						cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
+						//cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
 						coberturas.add(cobertura);
 					}
 					if (x == 4) {
