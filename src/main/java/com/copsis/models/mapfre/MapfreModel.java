@@ -30,7 +30,6 @@ public class MapfreModel {
 
 		try {
 			tipo =fn.tipoPoliza(contenido);
-			System.out.println(tipo);
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}

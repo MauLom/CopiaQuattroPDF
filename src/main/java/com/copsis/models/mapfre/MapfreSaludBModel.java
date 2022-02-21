@@ -51,7 +51,6 @@ public class MapfreSaludBModel {
 			}
 			
 	
-System.err.println(contenido);
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -168,7 +167,44 @@ System.err.println(contenido);
 				}
 				modelo.setCoberturas(coberturas);
 			}
+		
+			if(modelo.getCoberturas().isEmpty() && contenido.contains("COBERTURAS SUMA ASEGURADA") && contenido.contains("cobertura Segurviaje Suma Asegurada")) {
+				StringBuilder contenidoCoberturas = new StringBuilder();
+				contenidoCoberturas.append(contenido.split("COBERTURAS SUMA ASEGURADA")[1].split("PLAN")[0].replace("@@@", ""));
+			    boolean existenValoresDeducibleCoasegurso = contenidoCoberturas.toString().contains("DEDUCIBLE COASEGURO");
+								
+				if(!contenidoCoberturas.toString().contains("cobertura Segurviaje Suma Asegurada")) {
+					contenidoCoberturas.append(contenido.split("cobertura Segurviaje Suma Asegurada")[1].split("En testimonio")[0].replace("@@@", ""));
+				}
+				if(contenidoCoberturas.length() > 0) {
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					String[] arrContenido = contenidoCoberturas.toString().split("\n");
+					for(int i=0;i<arrContenido.length;i++) {
+						String texto = arrContenido[i];
+						EstructuraCoberturasModel cobertura =  new EstructuraCoberturasModel();
+						if(!texto.contains("###") && !existenValoresDeducibleCoasegurso) {
+							String[] detalle = texto.replace(" USD", "").trim().split("\s");
+							String valorSumaAsegurada = detalle[detalle.length-1];
+							
+							if (fn.numTx(valorSumaAsegurada).length() > 0 || valorSumaAsegurada.contains("Incluido")){
+								texto =  texto.replace(valorSumaAsegurada, "###"+valorSumaAsegurada);
+							}else if(valorSumaAsegurada.contains("días") && fn.numTx(valorSumaAsegurada).length() == 0 && (i-1)> detalle.length) {
+								valorSumaAsegurada = detalle[detalle.length-2];
+							    texto =  texto.replace(valorSumaAsegurada, "###"+valorSumaAsegurada);
+							}else if(texto.contains("Hasta")) {
+								texto =  texto.replace("Hasta", "###Hasta");
+							}
+						}
+						if(texto.split("###").length > 1) {
+							cobertura.setNombre(texto.split("###")[0].trim());
+							cobertura.setSa(texto.split("###")[1].trim());
+							coberturas.add(cobertura);
+						}
+					}
+					modelo.setCoberturas(coberturas);
+				}
 				
+			}
 				
 				inicio = contenido.indexOf("LISTA DE ASEGURADOS:");
 				fin = contenido.indexOf("FECHAS DE ANTIGÜEDAD: ");	
@@ -205,10 +241,11 @@ System.err.println(contenido);
 					}
 					modelo.setAsegurados(asegurados);
 				}				
+				   inicio = contenido.indexOf("Asegurados que ampara");				
+				   fin = contenido.indexOf("EL CONTRATANTE GOZARÁ");
+				   
+					if(modelo.getAsegurados().isEmpty() && inicio >-1 && inicio < fin) {
 
-					if(modelo.getAsegurados().isEmpty()) {
-						   inicio = contenido.indexOf("Asegurados que ampara");				
-						   fin = contenido.indexOf("EL CONTRATANTE GOZARÁ");
 						   List<EstructuraAseguradosModel> asegurados = new ArrayList<>();						  				
 										newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace(" F ", "###F###")
@@ -235,7 +272,6 @@ System.err.println(contenido);
 					if(modelo.getAsegurados().isEmpty() && contenido.contains("Asegurado:")) {
 						String texto = fn.gatos(contenido.split("Asegurado:")[1].split("\n")[0]);
 						texto = texto.split("###")[0];
-						System.err.println("Asegurado");
 						List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 						if(texto.length() > 0) {
 							EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
