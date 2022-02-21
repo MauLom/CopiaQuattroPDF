@@ -183,7 +183,7 @@ public class MapfreSaludBModel {
 						String texto = arrContenido[i];
 						EstructuraCoberturasModel cobertura =  new EstructuraCoberturasModel();
 						if(!texto.contains("###") && !existenValoresDeducibleCoasegurso) {
-							String[] detalle = texto.replace(" USD", "").trim().split("\s");
+							String[] detalle = texto.replace(" USD", "").trim().split(" ");
 							String valorSumaAsegurada = detalle[detalle.length-1];
 							
 							if (fn.numTx(valorSumaAsegurada).length() > 0 || valorSumaAsegurada.contains("Incluido")){
