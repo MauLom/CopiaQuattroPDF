@@ -73,7 +73,9 @@ public class ChubbAutosModel {
 					.replace("ME###XIC###O", "MEXICO")
 					.replace("G###astos","Gastos")
 					.replace("I.V###.A###.", ConstantsValue.IVA)
-					.replace("H###E###C###H###O E###N","HECHO EN");
+					.replace("H###E###C###H###O E###N","HECHO EN")
+					.replace("C###H###E###VR###OLE###T", "CHEVROLET")
+					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS");
 
 			// tipo
 			modelo.setTipo(1);
@@ -362,10 +364,8 @@ public class ChubbAutosModel {
 					inicio = inicio + 26;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin)).replace("PIC###K UP", "PICK UP")
-							.replace("C###H###E###VR###OLE###T", "CHEVROLET")
 							.replace("PA###Q", "PAQ")
-							.replace(" S###E ", " SE ")
-							.replace(" C###B\r", " CB");
+							.replace(" S###E ", " SE ");
 					modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
 				}
 			}
