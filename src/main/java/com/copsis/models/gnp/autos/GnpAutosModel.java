@@ -102,13 +102,14 @@ public class GnpAutosModel {
 					modelo.setIdCliente(newcontenido.toString().split("###")[0].trim());
 				}
 			}
-
+			System.err.println("???"+("467230801".length()));
 			// vigencia_a
 			// cte_direccion
 			// rfc
 			// cp
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
+			StringBuilder direccionCte = new StringBuilder();
 			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length > 1 || contenido.split("@@@")[donde].split("\n").length > 1) {
 				String separador = contenido.split("@@@")[donde].split("\r\n").length > 1 ? "\r\n" : "\n";
 				
@@ -122,6 +123,7 @@ public class GnpAutosModel {
 							newcontenido.append(dato.split("###")[1].trim());
 						}else if(dato.split("###")[1].contains("del") && dato.split("###")[2].split("-").length == 3) {
 							modelo.setVigenciaA(fn.formatDate(dato.split("###")[2].trim(), "dd-MM-yy"));
+							direccionCte.append(dato.split("###")[0]);
 						}
 					} else if (dato.split("###").length == 2) {
 						if (dato.split("###")[1].contains("Duración:") && dato.split("###")[0].contains("C.P.")) {
@@ -132,10 +134,15 @@ public class GnpAutosModel {
 						} else if (dato.split("###").length == 2 && dato.split("###")[0].trim().length() == 5
 								&& fn.isNumeric(dato.split("###")[0].trim())) {
 							modelo.setCp(dato.split("###")[0].trim());
+						}else if(dato.contains(", C.P.###Duración") && !direccionCte.isEmpty()){
+							direccionCte.append(" ").append(dato.split(", C.P.###Duración")[0].trim());
 						}
 					}
 				}
 				modelo.setCteDireccion(newcontenido.toString().replace(", C.P.", "").trim());
+				if(modelo.getCteDireccion().length() == 0 && !direccionCte.isEmpty()) {
+					modelo.setCteDireccion(direccionCte.toString());
+				}
 
 			}
 
@@ -145,7 +152,7 @@ public class GnpAutosModel {
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin));
-
+					System.out.println(newcontenido);
 					if (fn.isNumeric(
 							newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim())) {
 						modelo.setCp(
@@ -285,6 +292,20 @@ public class GnpAutosModel {
 						}else if(newcontenido.toString().split("\n")[i].contains("Neta")) {
 							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Neta")[1].replace("###", "").trim() )));
 						}
+						if (modelo.getDescripcion().length() == 0 && modelo.getSerie().length() == 0
+								&& newcontenido.toString().split("\n")[i].contains("Descripción###Serie###")
+								&& (i + 2) < newcontenido.toString().split("\n")[i].length()) {
+							String[] texto = newcontenido.toString().split("\n")[i+1].split("###");
+							if(texto.length > 1) {
+								String descripcion = texto[0];
+								if(!descripcion.contains("STD")) {
+									descripcion += " STD";
+									modelo.setDescripcion(descripcion.trim());
+								}
+								modelo.setSerie(texto[1].trim());
+							}
+							
+						}
 						if (newcontenido.toString().split("\n")[i].contains("Modelo") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
 							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", ""),
@@ -292,6 +313,12 @@ public class GnpAutosModel {
 
 						}else if(newcontenido.toString().split("\n")[i].contains("Póliza")) {
 							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim())));
+						}
+						
+						if(modelo.getModelo() == 0 && newcontenido.toString().split("\n")[i].contains("Modelo###Placas##") && (i+1)<newcontenido.toString().split("\n")[i].length() ) {
+							if(fn.isNumeric(newcontenido.toString().split("\n")[i+1].split("###")[0].trim())) {
+								modelo.setModelo(fn.castInteger(newcontenido.toString().split("\n")[i+1].split("###")[0].trim()));
+							}
 						}
 
 						if (newcontenido.toString().split("\n")[i].contains("Importe")) {
