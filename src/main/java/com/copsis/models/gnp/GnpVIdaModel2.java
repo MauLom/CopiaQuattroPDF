@@ -244,6 +244,8 @@ public class GnpVIdaModel2 {
 								if (newcontenido.toString().split("\n")[i+4].contains("Edad Contratación")) {
 									
 									asegurado.setEdad(fn.castInteger(fn.numTx(newcontenido.toString().split("\n")[i+4].split("###")[1].replace("años", "").trim())));
+								}else if(newcontenido.toString().split("\n")[i+2].contains("Edad Contratación")) {
+									asegurado.setEdad(fn.castInteger(fn.numTx(newcontenido.toString().split("\n")[i+2].split("###")[1].replace("años", "").trim())));
 								}
 								asegurados.add(asegurado);
 							}
