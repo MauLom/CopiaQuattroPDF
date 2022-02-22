@@ -2,13 +2,17 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
@@ -27,10 +31,10 @@ public class ImpresionCertificadoHogarPdf {
 	private float yStartNewPage = 770, yStart = 830, bottomMargin = 26;
 	private float fullWidth = 542;
 	private float margin = 40;
-	private float ystarpos =0;
+
 	private boolean acumula;
 	
-	public byte[] buildPDF(ImpresionForm impresionForm) {
+	public byte[] buildPDF(SURAImpresionEmsionDTO suraImpresionEmsionDTO) {
 		ByteArrayOutputStream output;
 		try {
 			try (PDDocument document = new PDDocument()) {
@@ -46,6 +50,8 @@ public class ImpresionCertificadoHogarPdf {
 					
 			
 					StringBuilder contenido = new StringBuilder();
+					StringBuilder direccion = new StringBuilder();
+					StringBuilder ubicacion = new StringBuilder();
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 385, document, page, false,true);				 
 					baseRow = communsPdf.setRow(table, 20);
@@ -57,7 +63,7 @@ public class ImpresionCertificadoHogarPdf {
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 30, document, page, false,true);				 
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 60, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2202/Polizas/2202/0pMkKygY9dNFfOOz4qe6G5h1E2yMYCk8K4QTvoUllnNimx5QyJntaUOddqT5Wdn/sura.png"), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
+					communsPdf.setCell(baseRow, 60, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/sura.png"), 1, 1, bgColor).setValign(VerticalAlignment.MIDDLE);
 				    table.draw();
 				    
 				    yStart -= table.getHeaderAndDataHeight()+7;
@@ -86,12 +92,11 @@ public class ImpresionCertificadoHogarPdf {
 					
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, 187, 395, document, page, true,true);
 						baseRow = communsPdf.setRow(table, 21);
-						communsPdf.setCell(baseRow, 50, "Oficina:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
-						communsPdf.setCell(baseRow, 50, "Ramo:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
+						communsPdf.setCell(baseRow, 50, "Oficina:"  + (suraImpresionEmsionDTO.getOficina() != null ?  suraImpresionEmsionDTO.getOficina() :""), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
+						communsPdf.setCell(baseRow, 50, "Ramo:"  + (suraImpresionEmsionDTO.getRamo() != null ?  suraImpresionEmsionDTO.getRamo() :""), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
 						baseRow = communsPdf.setRow(table, 21);
-						communsPdf.setCell(baseRow, 50, "Póliza:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;
-						
-						communsPdf.setCell(baseRow, 50, "Inciso:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;
+						communsPdf.setCell(baseRow, 50, "Póliza:" + (suraImpresionEmsionDTO.getOficina() != null ?  suraImpresionEmsionDTO.getNoPoliza() :"") , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;						
+						communsPdf.setCell(baseRow, 50, "Inciso:"  + (suraImpresionEmsionDTO.getInciso() != null ?  suraImpresionEmsionDTO.getInciso() :""), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;
 						table.draw();
 						
 						yStart -= table.getHeaderAndDataHeight()+7;
@@ -99,8 +104,8 @@ public class ImpresionCertificadoHogarPdf {
 						
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true,true);
 						baseRow = communsPdf.setRow(table, 15);
-						communsPdf.setCell(baseRow, 60, "Vigencia:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 20, "Endoso:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 60, "Vigencia: "+ "Del " + (suraImpresionEmsionDTO.getVigenciaDe() != null ? formarDate( suraImpresionEmsionDTO.getVigenciaDe(),"") :"") +" 12:00 Hrs. Al "+(suraImpresionEmsionDTO.getVigenciaA() != null ?  formarDate(suraImpresionEmsionDTO.getVigenciaA(),"") :"") +" 12:00 Hrs."  , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 20, "Endoso: " , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						communsPdf.setCell(baseRow, 20, "Asegurado:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						table.draw();
 						
@@ -112,11 +117,16 @@ public class ImpresionCertificadoHogarPdf {
 					
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 18, "Asegurado:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 82, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 82,(suraImpresionEmsionDTO.getContratanteNombre() != null ?  suraImpresionEmsionDTO.getContratanteNombre() :"") +" "+
+								(suraImpresionEmsionDTO.getContratanteApPaterno() != null ?  suraImpresionEmsionDTO.getContratanteApMaterno() :"") +" "+
+								(suraImpresionEmsionDTO.getContratanteApMaterno() != null ?  suraImpresionEmsionDTO.getInciso() :"")
+								, black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						
+						direccion.append((suraImpresionEmsionDTO.getContratanteCalleNo() != null ?  suraImpresionEmsionDTO.getContratanteCalleNo() :""));
+						direccion.append((suraImpresionEmsionDTO.getContratanteColonia() != null ?  suraImpresionEmsionDTO.getContratanteColonia() :""));
 						baseRow = communsPdf.setRow(table, 47);						
 						communsPdf.setCell(baseRow, 18, "Domicilio:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 82, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 82, direccion.toString(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
 						baseRow = communsPdf.setRow(table, 15);						
 						communsPdf.setCell(baseRow, 18, "Telefono:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
@@ -124,32 +134,33 @@ public class ImpresionCertificadoHogarPdf {
 					   
 						baseRow = communsPdf.setRow(table, 15);						
 						communsPdf.setCell(baseRow, 18, "RFC:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 32, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 32,(suraImpresionEmsionDTO.getContratanteColonia() != null ?  suraImpresionEmsionDTO.getContratanteRFC() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
 						communsPdf.setCell(baseRow, 18, "Contracto:", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 32, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 32, (suraImpresionEmsionDTO.getContratoNo() != null ?  suraImpresionEmsionDTO.getContratoNo() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						
 						table.draw();
-					
+						SimpleDateFormat formatter= new SimpleDateFormat("d/MM/yyyy");
+						Date fecha = new Date();					
 						
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, 217, 365, document, page, true,true);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 100, "DATOS GENERALES DEL PÓLIZA", black, true, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);						
 						baseRow = communsPdf.setRow(table, 15);
-						communsPdf.setCell(baseRow, 30, "Asegurado:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 70, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 20, "Agente:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 80, (suraImpresionEmsionDTO.getClaveAgente() != null ?  suraImpresionEmsionDTO.getClaveAgente() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 45, "Fecha de Emisión:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 55, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 55, formatter.format(fecha), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 40, "Fecha de pago:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 60, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 60, (suraImpresionEmsionDTO.getFormaPagoEnum() != null ?  suraImpresionEmsionDTO.getFormaPagoEnum() :"") , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 30, "Descuento:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 70, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 25, "Moneda:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 75, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 75,(suraImpresionEmsionDTO.getMonedaEnum() != null ?  suraImpresionEmsionDTO.getMonedaEnum() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 20, "Giro:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 80, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
@@ -183,27 +194,28 @@ public class ImpresionCertificadoHogarPdf {
 									yStart -= table.getHeaderAndDataHeight();	
 						int x=0;
 						int c=0;
+						
+						DecimalFormat formateador = new DecimalFormat("#,##0.00");
 
-						while(x < impresionForm.getCoberturasLista().size()) {
+						while(x < suraImpresionEmsionDTO.getCoberturas().size()) {
 							acumula  =true;
 							c++;
 							
 							
 
 							table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true,true);					
-						    baseRow = communsPdf.setRow(table, 18);
-						    if(c == impresionForm.getCoberturasLista().size()) {
-						    	communsPdf.setCell(baseRow, 60,impresionForm.getCoberturasLista().get(x).getNombres() , black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE); 	
-						    	communsPdf.setCell(baseRow, 20, impresionForm.getCoberturasLista().get(x).getSa(), black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-								communsPdf.setCell(baseRow, 20, impresionForm.getCoberturasLista().get(x).getPrima(), black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						    baseRow = communsPdf.setRow(table, 15);
+						    if(c == suraImpresionEmsionDTO.getCoberturas().size()) {
+						    	communsPdf.setCell(baseRow, 60," "+suraImpresionEmsionDTO.getCoberturas().get(x).getNombre().toUpperCase() , black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f),bgColor).setValign(VerticalAlignment.MIDDLE); 	
+						    	communsPdf.setCell(baseRow, 20,"  $"+formateador.format( suraImpresionEmsionDTO.getCoberturas().get(x).getSa()) , black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								communsPdf.setCell(baseRow, 20,"", black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					
 						    }else {
-						    	communsPdf.setCell(baseRow, 60,impresionForm.getCoberturasLista().get(x).getNombres() , black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						    	communsPdf.setCell(baseRow, 20, impresionForm.getCoberturasLista().get(x).getSa(), black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-								communsPdf.setCell(baseRow, 20, impresionForm.getCoberturasLista().get(x).getPrima(), black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						    	communsPdf.setCell(baseRow, 60," "+suraImpresionEmsionDTO.getCoberturas().get(x).getNombre().toUpperCase() , black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						    	communsPdf.setCell(baseRow, 20,"  $"+ formateador.format( suraImpresionEmsionDTO.getCoberturas().get(x).getSa()), black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								communsPdf.setCell(baseRow, 20, "", black, false, "L", 9, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					
-						    }
-							
+						    }						
 						
 							if(isEndOfPage(table)) {
 
@@ -245,6 +257,7 @@ public class ImpresionCertificadoHogarPdf {
 						 baseRow = communsPdf.setRow(table, 5);
 						 communsPdf.setCell(baseRow, 100, "", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 
+						 
 						 baseRow = communsPdf.setRow(table, 30);
 						 communsPdf.setCell(baseRow, 31, "Ubicacion:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						 communsPdf.setCell(baseRow, 69, "Autofinanciamiento de Automóviles Monterrey, S.A. de C.V.", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
@@ -253,29 +266,33 @@ public class ImpresionCertificadoHogarPdf {
 						table.draw();
 					    
 					    table = new BaseTable(yStart, yStartNewPage, bottomMargin, 217, 365, document, page, false,true);					
+					   
+					    baseRow = communsPdf.setRow(table, 7);
+					    communsPdf.setCell(baseRow, 100, "", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					
 					    baseRow = communsPdf.setRow(table, 12);
-					    communsPdf.setCell(baseRow, 50, "Prima Neta", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 50, "", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50, "Prima Neta", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, formateador.format(suraImpresionEmsionDTO.getPrimaNeta()), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						
 						baseRow = communsPdf.setRow(table, 12);
-						communsPdf.setCell(baseRow, 50, "Otros Descuentos", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					    communsPdf.setCell(baseRow, 50, "", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, "Otros Descuentos", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50,  formateador.format(0.00), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						
 					    baseRow = communsPdf.setRow(table, 15);
-						communsPdf.setCell(baseRow, 50, "Finacimiento por Pago Fracionado", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					    communsPdf.setCell(baseRow, 50, "", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, "Finacimiento por Pago Fracionado", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50,  formateador.format(suraImpresionEmsionDTO.getRecargo()), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					    
 					    baseRow = communsPdf.setRow(table, 12);
-						communsPdf.setCell(baseRow, 50, "Gastos de Expedición", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					    communsPdf.setCell(baseRow, 50, "", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, "Gastos de Expedición", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50,  formateador.format(suraImpresionEmsionDTO.getDerecho()), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					    
 					    baseRow = communsPdf.setRow(table, 12);
-						communsPdf.setCell(baseRow, 50, "IVA", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					    communsPdf.setCell(baseRow, 50, "", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, "IVA", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50,  formateador.format(suraImpresionEmsionDTO.getIva()), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					    
 					    baseRow = communsPdf.setRow(table, 12);
-						communsPdf.setCell(baseRow, 50, "Prima Total", black, true, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					    communsPdf.setCell(baseRow, 50, "", black, true, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 50, "Prima Total", black, true, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					    communsPdf.setCell(baseRow, 50,  formateador.format(suraImpresionEmsionDTO.getPrimaTotal()), black, true, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						table.draw();
 						
 						
@@ -319,16 +336,9 @@ public class ImpresionCertificadoHogarPdf {
 						baseRow = communsPdf.setRow(table, 10);
 						communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags("Blvd. Adolfo López Mateos No.2448,Col. Altravista Delegación Alvaro Obegrón,C.P. 01060 México, D.F. Tels. 57-23-79-99, 01800-723-79-00"), black, false, "C", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 			
-					    table.draw();
-
-					    
-					    
-					    
-					 
-	
+					    table.draw();					   
 					output = new ByteArrayOutputStream();				
-					document.save(output);
-					document.save(new File("/home/desarrollo8/Pictures/certificado.pdf"));
+					document.save(output);			
 					return output.toByteArray();
 				} finally {
 				
@@ -347,4 +357,30 @@ public class ImpresionCertificadoHogarPdf {
         float currentY = yStart - table.getHeaderAndDataHeight();
         return currentY <= bottomMargin;
     }
+	
+	private static String formarDate(String dateD, String format) {		
+		SimpleDateFormat formatter = null;
+		Date date = null;
+		try {
+			formatter = new SimpleDateFormat("yyyy-MM-dd");
+			date = formatter.parse(dateD);
+		} catch (ParseException e) {
+			throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
+		}
+
+		DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+		sym.setMonths(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+				"Septiembre", "Octubre", "Noviembre", "Diciembre" });
+
+		sym.setShortMonths(
+				new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" });
+
+		if (format.equals("")) {
+			formatter = new SimpleDateFormat("dd/MM/yyyy", sym);
+		} else {
+			formatter = new SimpleDateFormat(format, sym);
+		}
+
+		return formatter.format(date);
+	}
 }

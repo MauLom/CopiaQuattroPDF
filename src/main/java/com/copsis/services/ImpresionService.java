@@ -11,6 +11,7 @@ import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
@@ -88,11 +89,11 @@ public class ImpresionService {
 	}
 	
 	
-	public byte[] impresionCertificado(ImpresionForm impresionForm) {
+	public byte[] impresionCertificado(SURAImpresionEmsionDTO suraImpresionEmsionDTO) {
 		try {
 			ImpresionCertificadoHogarPdf impresionReclamacionPdf = new ImpresionCertificadoHogarPdf();
 					
-			return impresionReclamacionPdf.buildPDF( impresionForm);
+			return impresionReclamacionPdf.buildPDF( suraImpresionEmsionDTO);
 			
 		} catch(ValidationServiceException e) {
 			throw e;

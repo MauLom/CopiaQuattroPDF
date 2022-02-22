@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;
@@ -80,14 +81,14 @@ public class ImpresionePDFController {
 	}
 	
 	@PostMapping(value = "certificado")
-	public ResponseEntity<CopsisResponse> impresionCertificado (@Valid @RequestBody ImpresionForm impresionForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionCertificado ( @RequestBody SURAImpresionEmsionDTO suraImpresionEmsionDTO, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCertificado(impresionForm)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCertificado(suraImpresionEmsionDTO)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
