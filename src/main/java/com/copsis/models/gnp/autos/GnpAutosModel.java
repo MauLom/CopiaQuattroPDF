@@ -363,8 +363,12 @@ public class GnpAutosModel {
 				}
 			}
 			
-			if(modelo.getPlan().length() == 0 && newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("Amplia")) {				
+			if(modelo.getPlan().length() == 0 ) {				
+				if(newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("Amplia")) {
 					modelo.setPlan("Amplia");				
+				}else if(newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("AMPLIA")) {
+					modelo.setPlan("AMPLIA");				
+				}			
 			}
 
 			// conductor
@@ -394,6 +398,12 @@ public class GnpAutosModel {
 						cobertura.setDeducible(x.split("###")[2].trim());
 						coberturas.add(cobertura);
 
+					}else if(x.split("###").length == 2) {
+						cobertura.setNombre(x.split("###")[0].trim());
+						if(fn.numTx(x.split("###")[1]).length() >0){
+							cobertura.setSa(x.split("###")[1].trim());
+							coberturas.add(cobertura);
+						}
 					}
 				}
 			}
