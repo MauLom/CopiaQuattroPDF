@@ -637,14 +637,14 @@ public class qualitasAutosModel {
 						.replace(".:", "").replace(".", "").replace(":", "");
 				if (newcontenido.contains("Municipio")) {
 					newcontenido = newcontenido.split("Municipio")[0].replace("###", "").trim();
-					modelo.setCp(newcontenido);
+					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
 				} else if (newcontenido.split("###").length > 2) {
 					newcontenido = fn.gatos(newcontenido);
 					if (fn.isNumeric(newcontenido.split("###")[0].trim())) {
-						modelo.setCp(newcontenido.split("###")[0].trim());
-					}
+						String cp = newcontenido.split("###")[0].trim();
+						modelo.setCp(cp.length() < 5? "0"+cp :cp);					}
 				} else {
-					modelo.setCp(newcontenido);
+					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
 				}
 			}
 
