@@ -1,6 +1,5 @@
 package com.copsis.models.gnp.autos;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +101,7 @@ public class GnpAutosModel {
 					modelo.setIdCliente(newcontenido.toString().split("###")[0].trim());
 				}
 			}
-			System.err.println("???"+("467230801".length()));
+
 			// vigencia_a
 			// cte_direccion
 			// rfc
@@ -146,13 +145,22 @@ public class GnpAutosModel {
 
 			}
 
+			if(modelo.getRfc().length() == 0  && contenido.contains(ConstantsValue.RFC2)) {
+				String[] texto = contenido.split(ConstantsValue.RFC2)[1].split("\n");
+				if(texto.length > 1) {
+					String aux = texto[2].split("###")[0].replace("@@@", "").trim();
+					if(aux.length() == 12  || aux.length() < 13) {
+						modelo.setRfc(aux);
+					}
+				}
+			}
+
 			if (modelo.getCp().length() == 0) {
 				inicio = contenido.indexOf(ConstantsValue.REFERENCIA);
 				fin = contenido.indexOf("Descripción");
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin));
-					System.out.println(newcontenido);
 					if (fn.isNumeric(
 							newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim())) {
 						modelo.setCp(
@@ -161,6 +169,13 @@ public class GnpAutosModel {
 						if(fn.isvalidCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim()))
 						{
 							modelo.setCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim());
+						}else if(newcontenido.toString().split("C.P.")[1].split("\n").length >1){
+							String textoOtraLinea = fn.gatos(newcontenido.toString().split("C.P.")[1].split("\n")[1]);
+							String[] aux = textoOtraLinea.split("###");
+							if (fn.isNumeric(aux[aux.length - 1].trim())) {
+								modelo.setCp(aux[aux.length - 1].trim());
+							}
+							
 						}
 					}
 				}
