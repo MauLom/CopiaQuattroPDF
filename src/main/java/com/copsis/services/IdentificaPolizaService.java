@@ -346,7 +346,7 @@ public class IdentificaPolizaService {
                     encontro = true;
                 
             }
-			
+           
             // ENTRADA PARA ALLIANZ
             if (!encontro && (contenido.split("@@@")[1].contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")

@@ -284,8 +284,7 @@ public class ImpresionAmortizacionesPdf {
 			BaseTable table;
 			Row<PDPage> baseRow;
 			yStart = 630;
-			height = yStart;
-			
+			height = yStart;			
 			
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
 			baseRow = communsPdf.setRow(table, 20 );
