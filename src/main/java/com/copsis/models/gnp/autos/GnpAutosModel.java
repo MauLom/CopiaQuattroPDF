@@ -133,13 +133,13 @@ public class GnpAutosModel {
 						} else if (dato.split("###").length == 2 && dato.split("###")[0].trim().length() == 5
 								&& fn.isNumeric(dato.split("###")[0].trim())) {
 							modelo.setCp(dato.split("###")[0].trim());
-						}else if(dato.contains(", C.P.###Duración") && !direccionCte.isEmpty()){
+						}else if(dato.contains(", C.P.###Duración") && direccionCte.length()>0){
 							direccionCte.append(" ").append(dato.split(", C.P.###Duración")[0].trim());
 						}
 					}
 				}
 				modelo.setCteDireccion(newcontenido.toString().replace(", C.P.", "").trim());
-				if(modelo.getCteDireccion().length() == 0 && !direccionCte.isEmpty()) {
+				if(modelo.getCteDireccion().length() == 0 && direccionCte.length()>0) {
 					modelo.setCteDireccion(direccionCte.toString());
 				}
 
