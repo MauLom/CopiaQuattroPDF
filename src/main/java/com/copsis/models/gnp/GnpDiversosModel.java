@@ -101,7 +101,7 @@ public class GnpDiversosModel {
 			}
 
 			// agente
-			inicio = contenido.indexOf(ConstantsValue.AGENTE2);
+			inicio = contenido.lastIndexOf(ConstantsValue.AGENTE2);
 			if (inicio > -1) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.gatos(contenido.substring(inicio + 6, inicio + 180)).replace("@@@", "").trim());
@@ -192,7 +192,7 @@ public class GnpDiversosModel {
 					}
 					if (newcontenido.toString().contains("C.P")) {
 						modelo.setCteDireccion(
-								newcontenido.toString().split("C.P")[0].trim().replace("###", " ").replace("\r\n", ""));
+								newcontenido.toString().split("C.P")[0].trim().replace("###", " ").replace("\r\n", "").replace("@@@", ""));
 					}
 				}
 			}
@@ -977,7 +977,17 @@ public class GnpDiversosModel {
 				}
 			}
 
-			for (String co : newcontenido.toString().split("\n")) {
+			if(!contenido.contains(ConstantsValue.SUMA_ASEGURADA) && contenido.contains("Cobertura###Límite###Deducible")) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(contenido.split("Cobertura###Límite###Deducible")[1].split("Clave")[0].replace("@@@", ""));
+			}
+			
+			String[] arrContenido = newcontenido.toString().split("\n");
+			for(int i=0; i< arrContenido.length;i++) {
+				arrContenido[i] = completaTextoCobertura(arrContenido, i);
+			}
+
+			for (String co : arrContenido) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				int x = co.split("###").length;
 				if (x > 1 && !co.contains("Deducible")) {
@@ -986,7 +996,7 @@ public class GnpDiversosModel {
 						cobertura.setNombre(co.split("###")[0]);
 						cobertura.setSa(co.split("###")[1]);
 						cobertura.setDeducible(co.split("###")[2].replace("\r", ""));
-						cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
+						//cobertura.setCoaseguro(co.split("###")[2].replace("\r", ""));
 						coberturas.add(cobertura);
 					}
 					if (x == 4) {
@@ -1068,5 +1078,30 @@ public class GnpDiversosModel {
 			return a.toString();
 		}
 	}
-
+	
+	private String completaTextoCobertura(String[] arrTexto,int i) {
+		String texto = arrTexto[i];
+		if(texto.split("###").length == 2) {
+			if(texto.split("###")[0].trim().equals("RC Profesional Agentes de Seguros y-o")  && texto.split("###")[1].contains("L. U.C") && (i+2) < arrTexto.length ) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RC Profesional Agentes de Seguros y-o", "de Fianzas");
+				if(arrTexto[i+1].contains("reclamación") && !arrTexto[i+1].contains("con un mínimo de") && arrTexto[i+2].contains("con un mínimo de")) {
+					StringBuilder aux = new StringBuilder();
+					aux.append(arrTexto[i+1].trim()).append(" ").append( fn.gatos(arrTexto[i+2]));
+					texto= texto.trim()+"###"+aux.toString().replace("######", "###").trim();
+					arrTexto[i+1] = "";
+					arrTexto[i+2] = "";
+				}				
+			}
+		}
+		return texto;
+	}
+	private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+		String texto = arrTexto[i];
+		if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+			texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
+			arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente+"###", "").replace(textoSiguiente, "");
+		}
+		return texto;
+	}
+	
 }

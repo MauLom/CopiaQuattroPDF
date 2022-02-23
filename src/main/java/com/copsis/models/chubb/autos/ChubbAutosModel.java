@@ -61,7 +61,21 @@ public class ChubbAutosModel {
 
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("Prima neta", ConstantsValue.PRIMA_NETA).replace("Prima total",
-					ConstantsValue.PRIMA_TOTAL2);
+					ConstantsValue.PRIMA_TOTAL2)
+					.replace("Vigencia:###De###l","Vigencia:###Del")
+					.replace("horas a###l", "horas al")
+					.replace("D###E F###E###BR###E###R###O D###E","DE FEBRERO DE")
+					.replace("Prima ne###ta", "Prima Neta")
+					.replace("C###ARLO###S LO###R###E###NZ###O C###ARBALLO SAN###G###E###AD###O","CARLOS LORENZZO CABALLO SANGEADO")
+					.replace("C###ARR F###E###D###E###RAL C###ARD###E###NAS A VILLAH###E###RMO###SA E###XT###. KM 160 3", "CARR FEDERAL CARDENAS A VILLAHERMOSA EXT. KM 160 3")
+					.replace("C###E###NTR###O", "CENTRO")
+					.replace("TABAS###C###O", "TABASCO")
+					.replace("ME###XIC###O", "MEXICO")
+					.replace("G###astos","Gastos")
+					.replace("I.V###.A###.", ConstantsValue.IVA)
+					.replace("H###E###C###H###O E###N","HECHO EN")
+					.replace("C###H###E###VR###OLE###T", "CHEVROLET")
+					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS");
 
 			// tipo
 			modelo.setTipo(1);
@@ -181,7 +195,7 @@ public class ChubbAutosModel {
 					case "R.F.C:###":
 						inicio = inicio + 7;
 						fin = (inicio + 100 )< contenido.length() ? (inicio + 100 ) : (inicio +50);
-						newcontenido = contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0];
+						newcontenido = contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0].replace("C###AS###C730528SX5","CASC730528SX5");
 						modelo.setRfc(newcontenido.split(separador)[0].replace("#", "").trim());
 						break;
 					default:
@@ -267,7 +281,7 @@ public class ChubbAutosModel {
 				fin = contenido.indexOf("Descripción del vehículo") > -1 ? contenido.indexOf("Descripción del vehículo") : (inicio + 150);
 				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
 					inicio = inicio + 25;
-					newcontenido = fn.gatos(contenido.substring(inicio, fin));
+					newcontenido = fn.gatos(contenido.substring(inicio, fin)).replace("MANU###EL C###ARBALLO LO###P###E###Z", "MANUEL CABALLO LOPEZ");
 					modelo.setAgente(
 							newcontenido.split(saltolinea)[0].contains("-")
 									? fn.eliminaSpacios(newcontenido.split("-")[newcontenido.split("-").length-1].replace("###", " ").replace("\r", " ").replace("\n", " ").replace("@", " ")).trim()//.replace("\r\r\n@@@"," ")
@@ -349,7 +363,9 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Descripción del vehículo*:")) {
 					inicio = inicio + 26;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 130);
-					newcontenido = fn.gatos(contenido.substring(inicio, fin));
+					newcontenido = fn.gatos(contenido.substring(inicio, fin)).replace("PIC###K UP", "PICK UP")
+							.replace("PA###Q", "PAQ")
+							.replace(" S###E ", " SE ");
 					modelo.setDescripcion(newcontenido.split(saltolinea)[0].trim().replace("###", " "));
 				}
 			}
@@ -388,7 +404,7 @@ public class ChubbAutosModel {
 					inicio = inicio + 6;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin));
-					modelo.setSerie(newcontenido.split(saltolinea)[0].trim());
+					modelo.setSerie(newcontenido.split(saltolinea)[0].replace("###", "").trim());
 				}
 			}
 
@@ -474,7 +490,25 @@ public class ChubbAutosModel {
 			fin = contenido.indexOf(conceptosFin.get(0));
 			if (inicio > -1 && fin > -1) {
 				inicio = inicio + 34;
-				newcontenido = contenido.substring(inicio, fin);
+				newcontenido = contenido.substring(inicio, fin).replace("VALO###R C###OME###R###C###IAL", "VALOR COMERCIAL")
+						.replace("N###O APLIC###A","NO APLICA")
+						.replace("DAÑ###O###S MAT###E###RIALE###S", "DAÑOS MATERIALES")
+						.replace("R###O###B###O T###O###TAL","ROBO TOTAL")
+						.replace("R###E###SP###O###NSABILIDAD C###IVIL", "RESPONSABILIDAD CIVIL")
+						.replace("P###O###R DAÑ###O###S A T###E###R###C###E###R###O###S", "POR DAÑOS A TERCERSOS")
+						.replace("BIE###N###E###S", "BIENES")
+						.replace("T###E###R###C###E###R###O###S", "TERCEROS")
+						.replace("P###E###RS###O###NAS", "PERSONAS")
+						.replace("F###AMILIAR", "FAMILIAR")
+						.replace("E###N USA Y C###ANADÁ", "EN USA Y CANADÁ")
+						.replace("C###AR###G###A", "CARGA")
+						.replace("ADAPTA###C###IO###N###E###S Y C###O###NV###E###RSIO###N###E###S", "ADAPTACIONES Y CONVERSIONES")
+						.replace("P###O###R F###ALLE###C###IMIE###NT###O", "POR FALLE CIMIENTO")
+						.replace("G###AST###O###S MÉ###DIC###O###S O###C###UPANT###E###S", "GASTOS MÉDICOS OCUPANTES")
+						.replace("ASIST###E###N###C###IA LE###G###AL PR###O###VIAL", "ASISTENCIA LEGAL PROVIAL")
+						.replace("ASIST###E###N###C###IA E###N VIAJE IK###E", "ASISTENCIA EN VIAJE IKE")
+						.replace("A###C###C###ID###E###NT###E###S AUT###OMO###VILÍSTIC###O###S AL C###O###NDU###C###T###O###R", "ACCIDENTES AUTOMOVILÍSTICOS AL CONDUCTOR")
+						.replace("A###C###C###ID###E###NT###E###S P###E###RS###O###NALE###S", "ACCIDENTES PERSONALES");
 				int i = 0;
 				for (String dato : newcontenido.split("\n")) {
 					if (dato.split("###").length >= 3) {

@@ -32,7 +32,9 @@ public class GnpAutosModel {
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Importe###por###Pagar", "Importe por Pagar").replace("Derecho###de###Póliza",
-				ConstantsValue.DERECHO_POLIZA);
+				ConstantsValue.DERECHO_POLIZA)
+				.replace("Desde###las###12###hrs###del", "Desde las 12 hrs del")
+				.replace("Hasta###las###12###hrs###del", "Hasta las 12 hrs del");
 
 		try {
 
@@ -80,6 +82,17 @@ public class GnpAutosModel {
 
 			}
 
+			//Otro formato
+			if(modelo.getVigenciaDe().length() == 0 && contenido.contains("Desde las 12 hrs del")) {
+				String fecha = "";
+				for(String texto:contenido.split("Desde las 12 hrs del")) {
+					if(texto.split("\n")[0].split("-").length == 3) {
+						fecha =  texto.split("\n")[0].replace("###", "").trim();
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fecha));
+					}
+				}
+			}
+			
 			inicio = contenido.indexOf("ersión###Renovación");
 			if (inicio > -1) {
 				newcontenido.append(contenido.substring(inicio + 19, inicio + 150).trim().split("\r\n")[0]
@@ -95,17 +108,21 @@ public class GnpAutosModel {
 			// cp
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "###Hasta las 12 hrs del");
-
-			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length > 1) {
-
+			StringBuilder direccionCte = new StringBuilder();
+			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length > 1 || contenido.split("@@@")[donde].split("\n").length > 1) {
+				String separador = contenido.split("@@@")[donde].split("\r\n").length > 1 ? "\r\n" : "\n";
+				
 				newcontenido = new StringBuilder();
-				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+				for (String dato : contenido.split("@@@")[donde].split(separador)) {
 
 					if (dato.split("###").length == 3) {
 						if (dato.split("###")[2].contains("del") && dato.split("###")[2].split("-").length == 3) {
 							modelo.setVigenciaA(fn.formatDate(dato.split("###")[2].split("del")[1].trim(), "dd-MM-yy"));
 							modelo.setRfc(dato.split("###")[0].trim());
 							newcontenido.append(dato.split("###")[1].trim());
+						}else if(dato.split("###")[1].contains("del") && dato.split("###")[2].split("-").length == 3) {
+							modelo.setVigenciaA(fn.formatDate(dato.split("###")[2].trim(), "dd-MM-yy"));
+							direccionCte.append(dato.split("###")[0]);
 						}
 					} else if (dato.split("###").length == 2) {
 						if (dato.split("###")[1].contains("Duración:") && dato.split("###")[0].contains("C.P.")) {
@@ -116,11 +133,26 @@ public class GnpAutosModel {
 						} else if (dato.split("###").length == 2 && dato.split("###")[0].trim().length() == 5
 								&& fn.isNumeric(dato.split("###")[0].trim())) {
 							modelo.setCp(dato.split("###")[0].trim());
+						}else if(dato.contains(", C.P.###Duración") && direccionCte.length()>0){
+							direccionCte.append(" ").append(dato.split(", C.P.###Duración")[0].trim());
 						}
 					}
 				}
 				modelo.setCteDireccion(newcontenido.toString().replace(", C.P.", "").trim());
+				if(modelo.getCteDireccion().length() == 0 && direccionCte.length()>0) {
+					modelo.setCteDireccion(direccionCte.toString());
+				}
 
+			}
+
+			if(modelo.getRfc().length() == 0  && contenido.contains(ConstantsValue.RFC2)) {
+				String[] texto = contenido.split(ConstantsValue.RFC2)[1].split("\n");
+				if(texto.length > 1) {
+					String aux = texto[2].split("###")[0].replace("@@@", "").trim();
+					if(aux.length() == 12  || aux.length() < 13) {
+						modelo.setRfc(aux);
+					}
+				}
 			}
 
 			if (modelo.getCp().length() == 0) {
@@ -129,7 +161,6 @@ public class GnpAutosModel {
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin));
-
 					if (fn.isNumeric(
 							newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim())) {
 						modelo.setCp(
@@ -138,6 +169,13 @@ public class GnpAutosModel {
 						if(fn.isvalidCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim()))
 						{
 							modelo.setCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim());
+						}else if(newcontenido.toString().split("C.P.")[1].split("\n").length >1){
+							String textoOtraLinea = fn.gatos(newcontenido.toString().split("C.P.")[1].split("\n")[1]);
+							String[] aux = textoOtraLinea.split("###");
+							if (fn.isNumeric(aux[aux.length - 1].trim())) {
+								modelo.setCp(aux[aux.length - 1].trim());
+							}
+							
 						}
 					}
 				}
@@ -249,7 +287,6 @@ public class GnpAutosModel {
 						fn.preparaPrimas(fn.remplazarMultiple(newcontenido.toString(), fn.remplazosGenerales()))));
 
 			}
-
 			/**
 			 * otro formato de gnp
 			 */
@@ -261,18 +298,42 @@ public class GnpAutosModel {
 					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", ""));
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
-						if (newcontenido.toString().split("\n")[i].contains("Descripción")) {
+						if (newcontenido.toString().split("\n")[i].contains("Descripción") && newcontenido.toString().split("\n")[i].contains("Neta")) {
 							modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.toString().split("\n")[i].split("Neta")[1].replace("###", ""),
 									fn.remplazosGenerales()))));
 							modelo.setDescripcion(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
 							modelo.setSerie(newcontenido.toString().split("\n")[i + 1].split("###")[1]);
+						}else if(newcontenido.toString().split("\n")[i].contains("Neta")) {
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Neta")[1].replace("###", "").trim() )));
 						}
-						if (newcontenido.toString().split("\n")[i].contains("Modelo")) {
+						if (modelo.getDescripcion().length() == 0 && modelo.getSerie().length() == 0
+								&& newcontenido.toString().split("\n")[i].contains("Descripción###Serie###")
+								&& (i + 2) < newcontenido.toString().split("\n")[i].length()) {
+							String[] texto = newcontenido.toString().split("\n")[i+1].split("###");
+							if(texto.length > 1) {
+								String descripcion = texto[0];
+								if(!descripcion.contains("STD")) {
+									descripcion += " STD";
+									modelo.setDescripcion(descripcion.trim());
+								}
+								modelo.setSerie(texto[1].trim());
+							}
+							
+						}
+						if (newcontenido.toString().split("\n")[i].contains("Modelo") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
 							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", ""),
 									fn.remplazosGenerales()))));
 
+						}else if(newcontenido.toString().split("\n")[i].contains("Póliza")) {
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim())));
+						}
+						
+						if(modelo.getModelo() == 0 && newcontenido.toString().split("\n")[i].contains("Modelo###Placas##") && (i+1)<newcontenido.toString().split("\n")[i].length() ) {
+							if(fn.isNumeric(newcontenido.toString().split("\n")[i+1].split("###")[0].trim())) {
+								modelo.setModelo(fn.castInteger(newcontenido.toString().split("\n")[i+1].split("###")[0].trim()));
+							}
 						}
 
 						if (newcontenido.toString().split("\n")[i].contains("Importe")) {
@@ -280,6 +341,10 @@ public class GnpAutosModel {
 									newcontenido.toString().split("\n")[i].split("Pagar")[1].replace("###", ""),
 									fn.remplazosGenerales()))));
 
+						}
+						
+						if(newcontenido.toString().split("\n")[i].contains("Fraccionado")) {
+							modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Fraccionado")[1].replace("###", "").trim())));
 						}
 
 					}
@@ -307,8 +372,9 @@ public class GnpAutosModel {
 			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length == 2) {
 
 				for (int i = 0; i < contenido.split("@@@")[donde].split("\r\n").length; i++) {
-					if (i == 0 && contenido.split("@@@")[donde].split("\r\n")[i].contains("Forma###de###Pago###Moneda")
-							&& contenido.split("@@@")[donde].split("\r\n")[i + 1].split("###").length == 4
+					if ((i == 0 || (i+1)< contenido.split("@@@")[donde].split("\r\n").length) 
+							&& contenido.split("@@@")[donde].split("\r\n")[i].contains("Forma###de###Pago###Moneda")
+							&& (contenido.split("@@@")[donde].split("\r\n")[i + 1].split("###").length == 4 || contenido.split("@@@")[donde].split("\r\n")[i + 1].split("###").length == 3)
 							&& contenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[1].trim()
 									.split(" ").length == 1
 							&& contenido.split("@@@")[donde].split("\r\n")[i + 1].split("###")[2].trim()
@@ -363,8 +429,12 @@ public class GnpAutosModel {
 				}
 			}
 			
-			if(modelo.getPlan().length() == 0 && newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("Amplia")) {				
+			if(modelo.getPlan().length() == 0 ) {				
+				if(newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("Amplia")) {
 					modelo.setPlan("Amplia");				
+				}else if(newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("AMPLIA")) {
+					modelo.setPlan("AMPLIA");				
+				}			
 			}
 
 			// conductor
@@ -382,6 +452,9 @@ public class GnpAutosModel {
 			inicio = 0;
 			fin = 0;
 			inicio = contenido.indexOf("Descripción###Suma###Asegurada###Deducible");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Coberturas###Suma###Asegurada###Deducible");
+			}
 			fin = contenido.indexOf("Total###Coberturas");
 			longitudTexto = 42;
 			if (inicio > -1 && fin > inicio) {
@@ -394,6 +467,12 @@ public class GnpAutosModel {
 						cobertura.setDeducible(x.split("###")[2].trim());
 						coberturas.add(cobertura);
 
+					}else if(x.split("###").length == 2) {
+						cobertura.setNombre(x.split("###")[0].trim());
+						if(fn.numTx(x.split("###")[1]).length() >0){
+							cobertura.setSa(x.split("###")[1].trim());
+							coberturas.add(cobertura);
+						}
 					}
 				}
 			}

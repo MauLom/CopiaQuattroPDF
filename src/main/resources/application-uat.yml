@@ -1,0 +1,21 @@
+serviceUrl:
+  quattro-upload:
+    baseURL: https://quattro-upload-jazkd5ckiq-uc.a.run.app
+  quattro-poliza:
+    baseURL: https://quattro-poliza-jazkd5ckiq-uc.a.run.app  
+userlogin:
+  autorization:
+    username: 5fw1y-q0477-r0gKx-8CcGh-vTJdh
+    password: Jr0QPbS5L7Bui7UfIiNNxVqTd3c8Ep1aAwzmK6owDkzDh__xUe-l
+userproxy:
+  token:
+    username: Io77z-cB2OL-fFPw9-4s5MD-Eiex1
+    password: Alh1a18hGbslio0axcRt4kLmMbto0WjdcE36gy5vllf6s5S8EnoaT2ie__m01-cZi
+#Produccion
+tenants:
+  datasources:
+    "quattro-uat":
+      jdbcUrl: jdbc:mysql://10.24.176.3:3306/quattro00398?allowPublicKeyRetrieval=true&useSSL=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+      username: root
+      password: "Copsis123"
