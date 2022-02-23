@@ -50,8 +50,8 @@ public class ImpresionCertificadoHogarPdf {
 					
 			
 					StringBuilder contenido = new StringBuilder();
-					StringBuilder direccion = new StringBuilder();
-					StringBuilder ubicacion = new StringBuilder();
+					String direccion = "";
+					String ubicacion = "";
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, 385, document, page, false,true);				 
 					baseRow = communsPdf.setRow(table, 20);
@@ -122,11 +122,14 @@ public class ImpresionCertificadoHogarPdf {
 								(suraImpresionEmsionDTO.getContratanteApMaterno() != null ?  suraImpresionEmsionDTO.getInciso() :"")
 								, black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						
-						direccion.append((suraImpresionEmsionDTO.getContratanteCalleNo() != null ?  suraImpresionEmsionDTO.getContratanteCalleNo() :""));
-						direccion.append((suraImpresionEmsionDTO.getContratanteColonia() != null ?  suraImpresionEmsionDTO.getContratanteColonia() :""));
+						direccion =(suraImpresionEmsionDTO.getContratanteCalleNo() != null ?  suraImpresionEmsionDTO.getContratanteCalleNo() :"") +"\n";
+						direccion +=(suraImpresionEmsionDTO.getContratanteColonia() != null ?  suraImpresionEmsionDTO.getContratanteColonia() :"" ) +"\n";
+						direccion +=(suraImpresionEmsionDTO.getContratanteMunicipio() != null ?  suraImpresionEmsionDTO.getContratanteMunicipio() :"");
+						direccion +=(suraImpresionEmsionDTO.getContratanteCP() != null ?   " C.P."+suraImpresionEmsionDTO.getContratanteCP() :"");
+						
 						baseRow = communsPdf.setRow(table, 47);						
 						communsPdf.setCell(baseRow, 18, "Domicilio:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 82, direccion.toString(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 82,Sio4CommunsPdf.eliminaHtmlTags3( direccion.toString()), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
 						baseRow = communsPdf.setRow(table, 15);						
 						communsPdf.setCell(baseRow, 18, "Telefono:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
@@ -252,15 +255,24 @@ public class ImpresionCertificadoHogarPdf {
 						table = new BaseTable((yStart-10), yStartNewPage, bottomMargin, 314, margin+10, document, page, true,true);					
 					    baseRow = communsPdf.setRow(table, 15);
 					    communsPdf.setCell(baseRow, 32, "Beneficiario Preferente:", black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 67, "Autofinanciamiento de Automóviles Monterrey, S.A. de C.V.", black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 67,(suraImpresionEmsionDTO.getBeneficiario() != null ?  suraImpresionEmsionDTO.getBeneficiario() :""), black, false, "L", 8, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					    
 						 baseRow = communsPdf.setRow(table, 5);
 						 communsPdf.setCell(baseRow, 100, "", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					
+						 
+						 ubicacion =(suraImpresionEmsionDTO.getUbicacionCalleNo() != null ?  suraImpresionEmsionDTO.getUbicacionCalleNo() :"") +"\n";
+							ubicacion +=(suraImpresionEmsionDTO.getUbicacionColonia() != null ?  suraImpresionEmsionDTO.getUbicacionColonia() :"" ) +"\n";
+							ubicacion +=(suraImpresionEmsionDTO.getUbicacionMunicipio() != null ?  suraImpresionEmsionDTO.getUbicacionMunicipio() :"");
+							ubicacion +=(suraImpresionEmsionDTO.getUbicacionCP() != null ?   " C.P."+suraImpresionEmsionDTO.getUbicacionCP() :"");
+							
+						 
 
+					
 						 
 						 baseRow = communsPdf.setRow(table, 30);
 						 communsPdf.setCell(baseRow, 31, "Ubicacion:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						 communsPdf.setCell(baseRow, 69, "Autofinanciamiento de Automóviles Monterrey, S.A. de C.V.", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						 communsPdf.setCell(baseRow, 69,Sio4CommunsPdf.eliminaHtmlTags3( ubicacion), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						 
 						
 						table.draw();
@@ -308,7 +320,7 @@ public class ImpresionCertificadoHogarPdf {
 					    communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags(contenido.toString()), black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					    table.draw();
 					    
-					    yStart -= table.getHeaderAndDataHeight()+14;
+					    yStart -= table.getHeaderAndDataHeight()+16;
 				    
 					     
 					    
@@ -369,11 +381,6 @@ public class ImpresionCertificadoHogarPdf {
 		}
 
 		DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
-		sym.setMonths(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-				"Septiembre", "Octubre", "Noviembre", "Diciembre" });
-
-		sym.setShortMonths(
-				new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" });
 
 		if (format.equals("")) {
 			formatter = new SimpleDateFormat("dd/MM/yyyy", sym);

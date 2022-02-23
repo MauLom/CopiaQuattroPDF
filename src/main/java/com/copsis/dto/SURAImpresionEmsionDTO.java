@@ -1,9 +1,6 @@
 package com.copsis.dto;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +47,9 @@ public class SURAImpresionEmsionDTO {
 	private String oficina;
 	private String formaPagoEnum;
 	private String monedaEnum;
+	private String beneficiario;
+	private String contratanteMunicipio;
+	private String ubicacionMunicipio;
 	
 
 }
