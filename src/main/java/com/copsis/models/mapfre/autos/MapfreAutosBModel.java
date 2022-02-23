@@ -39,6 +39,7 @@ public class MapfreAutosBModel {
 				.replace("PÓLIZA-ENDOSO", "PÓLIZA NÚMERO:")
 				.replace("Contratante:", "CONTRATANTE:")
 				.replace("Domicilio:", "DOMICILIO:")
+				.replace("Conductor Habitual", "CONDUCTOR HABITUAL")
 				;
 		String newcontenido = "";
 		int inicio = 0;
@@ -59,12 +60,9 @@ public class MapfreAutosBModel {
 			}
 
 
-			if (inicio > -1 & fin > -1 & inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-				
-
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
 					if (newcontenido.split("\n")[i].contains("PÓLIZA NÚMERO:")) {
 						if(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].contains("-")) {
 							modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].split("-")[0].replace("###", "").trim());
@@ -78,7 +76,7 @@ public class MapfreAutosBModel {
 					if (newcontenido.split("\n")[i].contains("CONTRATANTE:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
                       modelo.setCteNombre(newcontenido.split("\n")[i].split("CONTRATANTE:")[1].split("R.F.C:")[0].replace("###", "").trim());
                       if(newcontenido.split("\n")[i].contains("Sexo")) {
-                          modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0].replace("###", ""));
+                          modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0].replace("###", "").trim());
                       }else {
                     	  modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].trim());
                       }
@@ -92,19 +90,35 @@ public class MapfreAutosBModel {
 					
 					if (newcontenido.split("\n")[i].contains("Desde  de:") && newcontenido.split("\n")[i].contains("Clave de agente:") && newcontenido.split("\n")[i].contains("Nombre del agente:")  ) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Vigencia Desde  de:")[1].split("Clave de agente:")[0].replace("###", "")));
-                        modelo.setFechaEmision(modelo.getVigenciaDe());
                         modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("Hasta  de:")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Hasta  de:")[1].split("###")[1].replace("###", "")));
 
 					}
+					if (newcontenido.split("\n")[i].contains("Fecha de emisión") && (i+1)<newcontenido.split("\n").length ) {
+						String texto = newcontenido.split("\n")[i+1].split("###")[0].trim();
+						if(texto.split("-").length == 3) {
+							modelo.setFechaEmision(fn.formatDateMonthCadena(texto));
+						}
+					}
 					if (newcontenido.split("\n")[i].contains("Forma de pago:")  && newcontenido.split("\n")[i].contains("Moneda")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("###")[1].trim()));
 						modelo.setMoneda(1);
 					}
-					if (newcontenido.split("\n")[i].contains("AGENTE")) {
-						modelo.setCveAgente(newcontenido.split("\n")[i].split("AGENTE")[1].replace("###", "").trim());
+					if (newcontenido.split("\n")[i].contains("AGENTE") &&  !newcontenido.split("\n")[i].contains("CAMBIO AGENTE")) {
+						String texto = newcontenido.split("\n")[i].split("AGENTE")[1].replace("###", "").trim();
+						if(!texto.contains("SA DE CV")) {
+							modelo.setCveAgente(newcontenido.split("\n")[i].split("AGENTE")[1].replace("###", "").trim());
+						}
+					}else if(newcontenido.split("\n")[i].contains("Clave de agente:") && (i+1)<newcontenido.split("\n").length) {
+						if(newcontenido.split("\n")[i+1].contains(modelo.getAgente())) {
+							String texto = fn.gatos(newcontenido.split("\n")[i+1].split(modelo.getAgente())[0]);
+							String[] aux = texto.split("###");
+							if(aux.length>0) {
+								modelo.setCveAgente(aux[aux.length-1].trim());
+							}
+						}
 					}
 					if (newcontenido.split("\n")[i].contains("Descripción:") &&  newcontenido.split("\n")[i].contains("Uso:") &&  newcontenido.split("\n")[i].contains("Placas:")) {		
 						modelo.setDescripcion(newcontenido.split("\n")[i].split("Descripción:")[1].split("Uso:")[0].replace("###", "").trim());
@@ -128,7 +142,8 @@ public class MapfreAutosBModel {
 						
 					}
 					if(newcontenido.split("\n")[i].contains("CONDUCTOR HABITUAL:") && newcontenido.split("\n")[i].contains("Sexo")) {					
-						modelo.setConductor(newcontenido.split("\n")[i].split("CONDUCTOR HABITUAL:")[1].split("Sexo")[0].replace("###", "").trim());
+						modelo.setConductor(newcontenido.split("\n")[i].split("CONDUCTOR HABITUAL:")[1].split("Sexo")[0].split("R.F.C")[0].replace("###", "").trim());
+						
 					}				
 					
 					if (newcontenido.split("\n")[i].contains("Prima neta:") &&  newcontenido.split("\n")[i].contains("Prima total")) {					
@@ -142,25 +157,30 @@ public class MapfreAutosBModel {
 				}
 			}
 			
+			if(modelo.getFechaEmision().length() == 0) {
+                modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
 
 			inicio = contenido.indexOf("Coberturas Amparadas");
 			fin = contenido.indexOf("Prima Neta:");
 
-			if (inicio > -1 & fin > -1 & inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### ###", "###");
+				String[] arrContenido = newcontenido.split("\n");
 		         List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				for (int i = 0; i < arrContenido.length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(newcontenido.split("\n")[i].contains("Coberturas Amparadas") || newcontenido.split("\n")[i].split("-").length > 3){
+					if(newcontenido.split("\n")[i].contains("###") && newcontenido.split("\n")[i].contains(newcontenido)) {
 						
-					}else {
-
-						int sp =newcontenido.split("\n")[i].split("###").length;
+					}
+					if(!arrContenido[i].contains("Coberturas Amparadas") || arrContenido[i].split("-").length < 3){
+						arrContenido[i] = agregarSeparadorCobertura(arrContenido[i]);
+						int sp =arrContenido[i].split("###").length;
 						switch (sp) {
 						case  3:
-                              cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-                              cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
-                              cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+                              cobertura.setNombre(arrContenido[i].split("###")[0].trim());
+                              cobertura.setSa(arrContenido[i].split("###")[1].trim());
+                              cobertura.setDeducible(arrContenido[i].split("###")[2].trim());
                               coberturas.add(cobertura);
 							break;
 
@@ -172,10 +192,25 @@ public class MapfreAutosBModel {
 
 			return modelo;
 		} catch (Exception e) {
-			modelo.setError(e.getMessage());
+			modelo.setError(MapfreAutosBModel.this.getClass().getTypeName() + " | "+ e.getMessage() + " | "+e.getCause());
 			return modelo;
 		}
 
 	}
 
+	private String agregarSeparadorCobertura(String texto) {
+		if(!texto.contains("###") && texto.contains("INT. OCUP. VEHIC. PART")) {
+			texto = texto.replace("INT. OCUP. VEHIC. PART", "INT. OCUP. VEHIC. PART###");
+		}
+		if(texto.split("###").length == 2) {
+			if (texto.contains("UMA")) {
+				String[] aux = texto.trim().split(" ");
+				if(aux[aux.length-1].startsWith("UMA") && aux.length >2) {
+					String deducible = aux[aux.length-2] +" " + aux[aux.length-1];
+					texto = texto.replace(deducible, "###"+deducible);
+				}
+			}
+		}
+		return texto;
+	}
 }
