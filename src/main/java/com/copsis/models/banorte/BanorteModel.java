@@ -39,6 +39,9 @@ public class BanorteModel {
 				tipo = fn.tipoPoliza(contenido);
 			}
 			
+			if(tipo == 1 && contenido.contains("DATOS DEL BIEN ASEGURADO")) {
+				tipo = 4;
+			}
 			switch (tipo) {
 			case 1://Autos
 
