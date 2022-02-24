@@ -82,8 +82,9 @@ public class AxaModel {
 							break;
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
-						// HOGAR							
-							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, 3, stripper, doc));
+						// HOGAR
+							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
+							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
 							modelo = datosAxaDiversos.procesar();
 						
 							break;
