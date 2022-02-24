@@ -30,13 +30,15 @@ public class AxaDiversosModel {
 		String newcontenido = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("D omicilio:", ConstantsValue.DOMICILIO).replace("F RESNOS", "FRESNOS")
+				.replace("Datos del Contratante","Datos del contratante")
+				.replace("Costo del Seguro", "Costo del seguro")
 				.replace("P r i m a T o t a l", ConstantsValue.PRIMA_TOTAL2).replace("Prima###neta:", "Prima Neta:").replace("Prima neta:", "Prima Neta:")
 				.replace("expedición", ConstantsValue.EXPEDICION3).replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
 				.replace("@@@I.V.A:", ConstantsValue.IVA).replace("I.V.A", ConstantsValue.IVA).replace("I.V.A..", ConstantsValue.IVA).replace("Prima###Total", ConstantsValue.PRIMA_TOTAL2).replace("financiamiento", ConstantsValue.FINANCIAMIENTO);
 		try {
 			modelo.setTipo(7);
 			modelo.setCia(20);
-
+System.out.println(contenido);
 			textbusq="Datos del contratante";
 			inicio = contenido.indexOf("Datos del contratante");
 			if(inicio == -1) {
