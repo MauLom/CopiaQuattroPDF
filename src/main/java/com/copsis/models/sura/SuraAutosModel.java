@@ -78,6 +78,11 @@ public class SuraAutosModel {
 						modelo.setVigenciaA(
 								fn.formatDateMonthCadena(newcontenido.split("Hasta las")[1].split("###")[1]));
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim());
+					}else if(newcontenido.split("\n")[i].contains("Hasta las")) {
+						String texto = fn.gatos(newcontenido.split("\n")[i].split("Hasta las")[1]);
+						if(texto.split("###")[0].split("-").length == 3) {
+							modelo.setVigenciaA(fn.formatDateMonthCadena(texto.split("###")[0].trim()));
+						}
 					}
 					
 
@@ -88,7 +93,7 @@ public class SuraAutosModel {
 
 						modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").trim());
 						String direccion = newcontenido.split("\n")[i + 2] + " "
-								+ newcontenido.split("\n")[i + 3].split("C.P.")[0];
+								+ newcontenido.split("\n")[i + 3].split("C.P.")[0].split("Hasta")[0].replace("###", "").trim();
 						modelo.setCteDireccion(direccion);
 					}
 					if (newcontenido.split("\n")[i].contains("Descripción")
