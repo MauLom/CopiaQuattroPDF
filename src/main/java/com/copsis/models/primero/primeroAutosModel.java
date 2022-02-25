@@ -188,6 +188,9 @@ public class primeroAutosModel {
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	            	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+	                boolean tituloPrimasCobertura = newcontenido.contains("Deducible###Primas");
+	                String deducible = "";
+
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 						if (!newcontenido.split("\n")[i].split("###")[0].contains("Coberturas Amparadas")
@@ -198,7 +201,12 @@ public class primeroAutosModel {
 	                            cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 	                            cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
 	                            if (newcontenido.split("\n")[i].split("###").length == 3 || newcontenido.split("\n")[i].split("###").length == 4) {
-	                                cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+	                                deducible = newcontenido.split("\n")[i].split("###")[2].trim();
+	                                //se verifica que el valor no sea prima neta
+	                                if(newcontenido.split("\n")[i].split("###").length == 3 && tituloPrimasCobertura && !deducible.contains("%")) {
+	                                  deducible = "";
+	                                }
+	                                cobertura.setDeducible(deducible);
 	                            }
 	                            coberturas.add(cobertura);
 	                        }
