@@ -231,6 +231,7 @@ public class AxaDiversosModel {
 			}
 			
 
+			obtenerPlan(contenido,modelo);
 			
 			//Proceso para ubicaciones
 			inicio = contenido.indexOf("Descripción de la ");
@@ -418,5 +419,11 @@ public class AxaDiversosModel {
 			}
 		}
 		return contenidoCoberturas;
+	}
+	
+	private void obtenerPlan(String texto, EstructuraJsonModel model) {
+		if(texto.contains("Paquete contratado:")) {
+			modelo.setPlan(texto.split("Paquete contratado:")[1].split("\n")[0].replace("###", "").trim());
+		}
 	}
 }
