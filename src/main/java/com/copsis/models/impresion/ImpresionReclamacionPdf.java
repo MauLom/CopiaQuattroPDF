@@ -2,6 +2,7 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.URL;
 import java.text.DecimalFormat;
 
@@ -22,7 +23,7 @@ public class ImpresionReclamacionPdf {
 	private Color black = new Color(0, 0, 0);
 	private final Color bgColor = new Color(255, 255, 255, 0);
 
-	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26,yStartnw =600;
+	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 	private float fullWidth = 542;
 	public byte[] buildPDF(ImpresionReclamacionProjection impresionReclamacionProjection) {
 		ByteArrayOutputStream output;
@@ -59,7 +60,7 @@ public class ImpresionReclamacionPdf {
 					
 					
 					yStart -= table.getHeaderAndDataHeight()+3;
-				    yStartnw =yStart;
+			
 			
 				
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
@@ -199,9 +200,9 @@ public class ImpresionReclamacionPdf {
 							communsPdf.setCell(baseRow, 40, "OBLIGATORIO", Color.red, false, "R", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						}
 						if(isEndOfPage(table)) {
-							table.getRows().remove(table.getRows().size()-1);
-							table.draw();
-							yStart = yStartnw;
+							table.getRows().remove(table.getRows().size()-1);				
+							yStart = 720;
+							
 							// CRACION NUEVA PAGINA
 							page = new PDPage();
 							document.addPage(page);
@@ -282,7 +283,7 @@ public class ImpresionReclamacionPdf {
 						if(isEndOfPage(table)) {
 							table.getRows().remove(table.getRows().size()-1);
 							table.draw();
-							yStart = yStartnw;
+							yStart = 620;
 							// CRACION NUEVA PAGINA
 							page = new PDPage();
 							document.addPage(page);
@@ -323,6 +324,7 @@ public class ImpresionReclamacionPdf {
 					int x =0;
 					while(x <  impresionReclamacionProjection.tramites.size() ) {
 						acomula3 = true;
+					
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 50, document, page, false,true);
 						baseRow = communsPdf.setRow(table, 15);
 					    	
@@ -340,10 +342,9 @@ public class ImpresionReclamacionPdf {
 								
 						
 						if(isEndOfPage(table)) {
-							table.getRows().remove(table.getRows().size()-1);
-							table.draw();
-							yStart = yStartnw;
-							// CRACION NUEVA PAGINA
+							table.getRows().remove(true);					
+							yStart = 720;
+							
 							page = new PDPage();
 							document.addPage(page);
 							acomula3 = false;
@@ -351,12 +352,16 @@ public class ImpresionReclamacionPdf {
 						}else {
 							table.draw();
 							yStart -= table.getHeaderAndDataHeight();
+							
 						}
 						
 						if(acomula3) {								
 							x++;
 						} 
-					
+					    if (i > 80) {
+                            table.draw();
+                            break;
+                        }
 						
 					}
 					
@@ -399,10 +404,10 @@ public class ImpresionReclamacionPdf {
 						
 						if(isEndOfPage(table)) {
 			
-							table.getRows().remove(table.getRows().size()-3);
-							table.draw();
+							table.getRows().remove(true);					
+							yStart = 720;
 							// CRACION NUEVA PAGINA
-							yStart = yStartnw;
+						
 							page = new PDPage();
 							document.addPage(page);
 							acomula4 = false;
@@ -437,7 +442,10 @@ public class ImpresionReclamacionPdf {
 					try {
 						if(!impresionReclamacionProjection.getImagenes().isEmpty()) {
 						for (int j = 0; j < impresionReclamacionProjection.getImagenes().size(); j++) {
-							if(impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".pdf") > -1) {
+							if(impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".pdf") > -1 
+							   || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".PDF") > -1
+							   || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".Pdf") > -1
+									) {
 								pahtpdf = impresionReclamacionProjection.getImagenes().get(j).getPath();
 								if(pahtpdf.contains(" ")) {
 									pahtpdf = pahtpdf.replace(" ", "%20");
@@ -475,7 +483,7 @@ public class ImpresionReclamacionPdf {
 				
 					document.save(output);
 				
-				
+			
 
 					return output.toByteArray();
 					
