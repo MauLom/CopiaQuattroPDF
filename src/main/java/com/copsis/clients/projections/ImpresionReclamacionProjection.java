@@ -2,7 +2,10 @@ package com.copsis.clients.projections;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +14,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@JsonInclude(value = Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImpresionReclamacionProjection {
 	@JsonProperty("c3")
 	public List<C3> tramites;
@@ -60,6 +65,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class C8 {		
 		private String c1;
 	}
@@ -68,6 +74,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class C4 {
 		@JsonProperty("c3")
 		public String c3;
@@ -93,6 +100,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class C5 {
 		@JsonProperty("c1")
 		private List<C1> documentos;
@@ -103,6 +111,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class C1 {
 		@JsonProperty("c3")
 		public String c3;
@@ -157,6 +166,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class C6 {
 		public String c3;
 		public String c4;
@@ -172,6 +182,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public  static class Contratante {
 		@JsonProperty("c3")
 		private DatosGenerales datosGenerale;
@@ -186,6 +197,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class DatosGenerales {
 		public String c11;
 		public String c10;
@@ -223,6 +235,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Monedas {
 		public String c1;
 		public String c2;
@@ -231,6 +244,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Servicios {
 		  public String c3;
 		  public int c4;
@@ -240,6 +254,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Asegurados {
 		  public String c13;
 		    public int c15;
@@ -261,6 +276,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public  static class C2{
 	    private boolean c3;
 	    private String c4;
@@ -273,6 +289,7 @@ public class ImpresionReclamacionProjection {
 	@Getter
 	@Setter
 	@ToString
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Imagenes {
 		 public String nombre;
 		 public String path;
