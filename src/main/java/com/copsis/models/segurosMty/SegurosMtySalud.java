@@ -275,8 +275,7 @@ public class SegurosMtySalud {
         	
          }
 
-
-         if(newcontenido.length() ==  0 ||  newcontenido.length() < 66) {
+         if(newcontenido.length() ==  0 ||  newcontenido.length() < 80) {
         	 newcontenido ="";
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
              fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
