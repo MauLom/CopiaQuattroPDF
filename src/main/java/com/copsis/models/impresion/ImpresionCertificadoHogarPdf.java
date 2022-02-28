@@ -166,8 +166,7 @@ public class ImpresionCertificadoHogarPdf {
 						communsPdf.setCell(baseRow, 75,(suraImpresionEmsionDTO.getMonedaEnum() != null ?  suraImpresionEmsionDTO.getMonedaEnum() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 20, "Giro:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 80, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
-			
+						communsPdf.setCell(baseRow, 80,(suraImpresionEmsionDTO.getGiro() != null ?  suraImpresionEmsionDTO.getGiro() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);			
 						table.draw();
 						
 	                    yStart -= table.getHeaderAndDataHeight()+6;	
