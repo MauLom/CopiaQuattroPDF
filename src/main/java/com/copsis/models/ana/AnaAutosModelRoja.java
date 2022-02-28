@@ -1,7 +1,11 @@
 package com.copsis.models.ana;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -13,7 +17,8 @@ public class AnaAutosModelRoja {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
-	
+	private static final String FORMATDATE="yyyy-MM-dd";
+
 
 	public AnaAutosModelRoja(String contenido) {
 		this.contenido = contenido;
@@ -200,6 +205,16 @@ public class AnaAutosModelRoja {
 
 			modelo.setMoneda(1);
 
+			if(modelo.getFormaPago() == 0 && modelo.getVigenciaDe().length() == 10 && modelo.getVigenciaA().length() == 10 && contenido.contains(ConstantsValue.FORMA_PAGO2) ) {
+				long diasVigencia = calculaDiasVigencia(modelo.getVigenciaDe(), modelo.getVigenciaA());
+				String textoFormaPago = fn.gatos(contenido.split(ConstantsValue.FORMA_PAGO2)[1].replace(":", "").trim());
+				textoFormaPago = textoFormaPago.split("###")[0].trim();
+			
+				if(diasVigencia>27 && diasVigencia<32 && textoFormaPago.equalsIgnoreCase("Domiciliada")) {
+					modelo.setFormaPago(fn.formaPago("CONTADO"));
+				}
+			}
+			
 			inicio = contenido.indexOf("Canal de Venta, Agente:");
 			fin = contenido.indexOf("Tel");
 
@@ -267,5 +282,20 @@ public class AnaAutosModelRoja {
 			return modelo;
 		}
 
+	}
+	
+	private long calculaDiasVigencia(String vigenciaDe, String vigenciaA) {
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMATDATE);
+        Date dateVigenciaDe;
+        Date dateVigenciaA;
+        long diferencia = 0;
+		try {
+			dateVigenciaDe = sdf.parse(vigenciaDe);
+			dateVigenciaA = sdf.parse(vigenciaA);
+
+			long diferenciaMilli = Math.abs(dateVigenciaA.getTime() - dateVigenciaDe.getTime());
+		     diferencia = TimeUnit.DAYS.convert(diferenciaMilli, TimeUnit.MILLISECONDS);
+		} catch (ParseException e) {}
+		return diferencia;
 	}
 }
