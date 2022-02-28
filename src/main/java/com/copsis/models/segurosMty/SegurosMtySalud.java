@@ -254,7 +254,7 @@ public class SegurosMtySalud {
          }
          inicio = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");
          fin = contenido.indexOf("ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO");
-         if(inicio > 0 &&  fin >  0 && inicio < fin) {
+         if(inicio > -1 && inicio < fin) {
         	 String coberturas="";
         		newcontenido += "\n"+ contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim()
         				.replace("COBERTURA DE ASISTENCIA EN EL EXTRANJEROCAE", "COBERTURA DE ASISTENCIA EN EL EXTRANJERO(CAE)  ### ### ###")
@@ -275,17 +275,18 @@ public class SegurosMtySalud {
         	
          }
 
-         if(newcontenido.length() ==  0 ||  newcontenido.length() < 80) {
+         if(newcontenido.length() ==  0 ||  newcontenido.length() < 20) {
         	 newcontenido ="";
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
              fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
-           
              newcontenido = getCoberturas (inicio,fin,contenido);
+         }else if(newcontenido.length() > 19) {
+        	 inicio = contenido.indexOf("COBERTURA BÁSICA");
+             fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
+             newcontenido += getCoberturas (inicio,fin,contenido);
          }
-           
 
-
-         if(inicio > 0 &&  fin >  0 && inicio < fin) {
+         if(inicio > -1 && inicio < fin) {
         	 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();  
          	for (int i = 0; i < newcontenido.split("\n").length; i++) {	         		 
          		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();         		
@@ -297,10 +298,10 @@ public class SegurosMtySalud {
          		&& !newcontenido.split("\n")[i].contains("NÚMERO DE PÓLIZA") && !newcontenido.split("\n")[i].contains("PRIMA DE LA")
          		&& !newcontenido.split("\n")[i].contains("MKT OP") && !newcontenido.split("\n")[i].contains("RV-")
          		&& !newcontenido.split("\n")[i].contains("Página")
+         		&& !newcontenido.split("\n")[i].contains("DP ###DENTAL PREMIUM")
          				) {   	         				         			         	
-       		          			 
-              		if((newcontenido.split("\n")[i].split("###").length > 1   && newcontenido.split("\n")[i].split("###").length < 6) && newcontenido.split("\n")[i].split("###")[0].length() > 6) {    
-
+              		if((newcontenido.split("\n")[i].split("###").length > 1   && newcontenido.split("\n")[i].split("###").length < 7) && (newcontenido.split("\n")[i].split("###")[0].length() > 6 || newcontenido.split("\n")[i].split("###")[0].trim().equals("DP"))) {    
+              			
               			 cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
              			 if(newcontenido.split("\n")[i].split("###").length == 2) {
              				cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());	 
@@ -315,7 +316,12 @@ public class SegurosMtySalud {
              						cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());	 
              					 }
               					
-              				 }             			 
+              				 }else if(newcontenido.split("\n")[i].split("###").length == 6 ) {
+              					cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
+              					cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+              					cobertura.setCoaseguro(newcontenido.split("\n")[i].split("###")[3].trim());
+
+              				 }
              			 }             			 
              			coberturas.add(cobertura);	
               		}         	         		
