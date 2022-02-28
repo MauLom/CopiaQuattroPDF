@@ -181,24 +181,24 @@ public class ChubbDiversosModel {
 								.replace("\r", ""));
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHO)) {
-						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "")));
-						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "")));
+						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "").trim()));
+						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "").trim()));
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHOS)) {				
-						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHOS)[1].split("Incendio:")[1].toUpperCase().replace("###", "")));						
+						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHOS)[1].split("Incendio:")[1].toUpperCase().replace("###", "").trim()));						
 						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.MUROS)[1].split(ConstantsValue.TECHOS)[0].toUpperCase().replace("###", "").trim()));
 					}
 					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.NIVELES)) {						
 						if(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].contains("No. Sótanos:")) {
-							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("No. Sótanos:")[0].replace("###", "").replace("\r", "")));
+							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("No. Sótanos:")[0].replace("###", "").replace("\r", "").trim()));
 						}else {
-							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("En qué piso")[0].replace("###", "").replace("\r", "")));	
+							ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.NIVELES)[1].split("En qué piso")[0].replace("###", "").replace("\r", "").trim()));	
 						}
 						
 					}
 					if (newcontenido.split("\n")[i].contains("Núm. pisos incendio:")) {
-						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "")));
+						ubicacion.setNiveles(Integer.parseInt(newcontenido.split("\n")[i].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "").trim()));
 					}
 					if (newcontenido.split("\n")[i].contains("Giro:")) {
 						ubicacion.setGiro(newcontenido.split("\n")[i].split("Giro:")[1].replace("###", "").trim());
