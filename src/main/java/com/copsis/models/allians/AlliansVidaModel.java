@@ -9,7 +9,7 @@ public class AlliansVidaModel {
 	private String contenido = "";
 	
 	
-	public AlliansVidaModel(Strinh ) {
+	public AlliansVidaModel(String contenido ) {
 		
 	}
 	
