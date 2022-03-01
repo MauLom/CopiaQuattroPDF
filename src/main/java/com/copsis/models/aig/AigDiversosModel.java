@@ -37,6 +37,7 @@ public class AigDiversosModel {
 				.replace("ROBO CON VIOLENCIA Y-O ASALTO", "ROBO CON VIOLENCIA Y-O ASALTO###")
 				.replace("SERVICIOS ADICIONALES", "SERVICIOS ADICIONALES###");
 		try {
+			System.out.println(contenido);
 			// tipo
 			modelo.setTipo(7);
 			// cia
@@ -53,17 +54,18 @@ public class AigDiversosModel {
 					}
 					if (newcontenido.split("\n")[i].contains("NOMBRE:")
 							&& newcontenido.split("\n")[i].contains("R.F.C:")) {
-						modelo.setCteNombre(newcontenido.split("\n")[i].split("NOMBRE:")[1].split("R.F.C:")[0].trim());
+						modelo.setCteNombre(newcontenido.split("\n")[i].split("NOMBRE:")[1].split("R.F.C:")[0].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("DIRECCIÓN:")) {
 						newresultado = newcontenido.split("\n")[i].split("DIRECCIÓN:")[1] + " "
 								+ newcontenido.split("\n")[i + 1];
-						modelo.setCteDireccion(newresultado.trim());
+						modelo.setCteDireccion(newresultado.replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("CÓDIGO POSTAL:")) {
-						modelo.setCp(newcontenido.split("\n")[i].split("CÓDIGO POSTAL:")[1].trim());
+						modelo.setCp(newcontenido.split("\n")[i].split("CÓDIGO POSTAL:")[1].replace("###", "").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("PAGO")) {
+						System.err.println("R??"+newcontenido.split("\n")[i + 1].split("###")[1]);
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[1]));
 						newresultado = newcontenido.split("\n")[i + 2].replace("DÍAS", "").trim().replace(" ", "/");
 						String a = newresultado.split("/")[0] + "-" + newresultado.split("/")[1] + "-"
