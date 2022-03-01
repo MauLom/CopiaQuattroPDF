@@ -24,17 +24,25 @@ public class BexmasModel {
 	public EstructuraJsonModel procesar() {
 		try {
 		
-
-			if(fn.tipoPoliza(contenido) == 2) {	
-
+System.out.println(fn.tipoPoliza(contenido));
+			switch (fn.tipoPoliza(contenido)) {
+			case 1:
+				 modelo =  new BexmasAutosModel(fn.caratula(0, 3, stripper, doc)).procesar();
+				break;
+			case 2:
 				if(fn.caratula(0, 3, stripper, doc).contains("Individual/Familiar") && fn.caratula(0, 3, stripper, doc).contains("Plan:")) {
 					 modelo =  new BexmasSaludBModel(fn.caratula(0, 3, stripper, doc)).procesar();
 				}else{
 					 modelo =  new BexmasSaludModel(fn.caratula(0, 3, stripper, doc)).procesar();
 				}
-			
 				
+				break;
+			default:
+				break;
 			}
+			
+		
+			
 			
 			return modelo;
 		} catch (Exception ex) {
