@@ -23,9 +23,7 @@ public class AigModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-			System.out.println("Aqui ando ");
 			int tipo = fn.tipoPoliza(contenido);
-			System.out.println("Tipo?"+tipo);
 			if(tipo == 0 && contenido.contains("TRA- TRANSPORTE COMBINADO")) {
 				tipo = 4;
 			}
