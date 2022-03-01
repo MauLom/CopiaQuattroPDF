@@ -458,9 +458,13 @@ public class ImpresionReclamacionPdf {
 							
 							}else if(
 									impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpg") > -1
-									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".png") > -1
-									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpeg") > -1
-									|| impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".gif") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".JPG") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".PNG") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".png") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".JPEG") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".jpeg") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".GIF") > -1
+                                    || impresionReclamacionProjection.getImagenes().get(j).getPath().indexOf(".gif") > -1
 									) {
 								page = new PDPage();
 								document.addPage(page);
