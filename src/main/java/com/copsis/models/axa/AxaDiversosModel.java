@@ -423,9 +423,21 @@ public class AxaDiversosModel {
 	
 	private void obtenerPlan(String texto, EstructuraJsonModel model) {
 		if(texto.contains("Paquete contratado:")) {
-			modelo.setPlan(texto.split("Paquete contratado:")[1].split("\n")[0].replace("###", "").trim());
-		}else if(texto.contains("PLANPROTEGE")) {
-			modelo.setPlan("Planprotege");
+			model.setPlan(texto.split("Paquete contratado:")[1].split("\n")[0].replace("###", "").trim());
+		}else{
+			int inicioIndex = contenido.indexOf("CARÁTULA DE PÓLIZA");
+			int finIndex = contenido.indexOf("Datos del contratante");
+			if(inicioIndex > -1 && inicioIndex < finIndex) {
+				String text = contenido.substring(inicioIndex,finIndex).replace("@@@", "");
+				if(text.split("\n").length > 0) {
+					text = text.split("\n")[1];
+					text = text.split("###")[text.split("###").length-1];
+					model.setPlan(text.split("-")[0].trim());
+					if(model.getPlan().equals("PLANPROTEGE")) {
+						model.setPlan("Planprotege");
+					}
+				}
+			}
 		}
 	}
 }
