@@ -424,6 +424,8 @@ public class AxaDiversosModel {
 	private void obtenerPlan(String texto, EstructuraJsonModel model) {
 		if(texto.contains("Paquete contratado:")) {
 			modelo.setPlan(texto.split("Paquete contratado:")[1].split("\n")[0].replace("###", "").trim());
+		}else if(texto.contains("PLANPROTEGE")) {
+			modelo.setPlan("PLANPROTEGE");
 		}
 	}
 }
