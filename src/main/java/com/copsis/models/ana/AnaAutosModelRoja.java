@@ -258,12 +258,12 @@ public class AnaAutosModelRoja {
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						switch (sp) {
 						case 2:case 3:
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]));
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
 							coberturas.add(cobertura);
 							break;
 						case 4:
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]));
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[1].trim());
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[2]);
 							coberturas.add(cobertura);
@@ -297,5 +297,13 @@ public class AnaAutosModelRoja {
 		     diferencia = TimeUnit.DAYS.convert(diferenciaMilli, TimeUnit.MILLISECONDS);
 		} catch (ParseException e) {}
 		return diferencia;
+	}
+	
+	private String eliminaNumeroDeNombreCobertura(String nombre) {
+		String resultado = nombre.trim();
+		if(fn.isNumeric(resultado.split(" ")[0])){
+			resultado = resultado.replace(resultado.split(" ")[0], "");
+		}
+		return resultado;
 	}
 }
