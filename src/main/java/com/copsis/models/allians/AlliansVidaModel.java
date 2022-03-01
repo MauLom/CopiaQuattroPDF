@@ -28,7 +28,7 @@ public class AlliansVidaModel {
 			modelo.setTipo(5);		
 			modelo.setCia(4);
 			modelo.setMoneda(1);
-//System.out.println(contenido);
+
 			
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -43,6 +43,11 @@ public class AlliansVidaModel {
 						 modelo.setCteDireccion( newcont.toString().split("\n")[i+2].split("###")[0] +" " + newcont.toString().split("\n")[i+3].split("###")[0]
 								 +" " + newcont.toString().split("\n")[i+4].split("###")[0]
 								 );
+						 
+						 if(fn.isNumeric( newcont.toString().split("\n")[i+3].substring(0,5))) {
+							 modelo.setCp(newcont.toString().split("\n")[i+3].substring(0,5));
+						 }
+						
 					 }
 					 if(newcont.toString().split("\n")[i].contains("RFC")) {
 						modelo.setRfc(newcont.toString().split("\n")[i].split("###")[1].trim()); 
@@ -52,6 +57,9 @@ public class AlliansVidaModel {
 						 modelo.setVigenciaDe(fn.formatDateMonthCadena( newcont.toString().split("\n")[i+1].split("###")[2].trim().split(" ")[0]));
 						 modelo.setVigenciaA(fn.formatDateMonthCadena( newcont.toString().split("\n")[i+1].split("###")[2].trim().split(" ")[1]));
 						 modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i+1].split("###")[3].trim()));
+					   if(modelo.getVigenciaDe().length() > 0) {
+						   modelo.setFechaEmision(modelo.getVigenciaDe());
+					   }
 					 }
 					 if(newcont.toString().split("\n")[i].contains("Asegurado") && newcont.toString().split("\n")[i].contains("Fumador")) {
 						asegurado.setNombre(newcont.toString().split("\n")[i+1].split("###")[0]);
@@ -86,8 +94,7 @@ public class AlliansVidaModel {
 				 modelo.setCoberturas(coberturas);
 			 }
 			 
-			 
-//			 System.out.println(contenido);
+
 			 
 			 inicio =  contenido.indexOf("Prima Neta");
 			 fin = contenido.indexOf("Beneficiarios");
@@ -125,18 +132,30 @@ public class AlliansVidaModel {
 					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("Principal", "###Principal"));
 					 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
 							EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-						 if(newcont.toString().split("\n")[i].contains("Beneficiarios")) {
-							System.out.println("paso 1");
-							 
+						 if(newcont.toString().split("\n")[i].contains("Beneficiarios")) {											
 							 beneficiario.setNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
-							 beneficiario.setParentesco(fn.parentesco(newcont.toString().split("\n")[i+1].split("###")[2].trim()));
-							 System.out.println(newcont.toString().split("\n")[i+1].split("###")[3].trim());
+							 beneficiario.setParentesco(fn.parentesco(newcont.toString().split("\n")[i+1].split("###")[2].trim()));					
 							 beneficiario.setPorcentaje(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[3].replace("%", "").trim()));
 							 beneficiarios.add(beneficiario);
 						 }
 					 }
 					 modelo.setBeneficiarios(beneficiarios);
 				 }
+				 
+
+				 inicio =  contenido.indexOf("Nombre del Agente");
+				 fin = contenido.indexOf("En el caso de");
+				 
+				 if (inicio > -1 && fin > -1 && inicio < fin) {				
+					 newcont  = new StringBuilder();
+					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+					 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
+						 if(newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i+1].contains("Tarjeta de Crédito")) {
+                            modelo.setAgente(newcont.toString().split("\n")[i+2].split("###")[1]);
+                            modelo.setCveAgente(newcont.toString().split("\n")[i+2].split("###")[0]);
+						 }
+					 }					 
+				 }							 
 			 
 			 
 			
