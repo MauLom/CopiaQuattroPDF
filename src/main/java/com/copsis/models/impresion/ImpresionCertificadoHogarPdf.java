@@ -95,7 +95,7 @@ public class ImpresionCertificadoHogarPdf {
 						communsPdf.setCell(baseRow, 50, "Oficina:"  + (suraImpresionEmsionDTO.getOficina() != null ?  suraImpresionEmsionDTO.getOficina() :""), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
 						communsPdf.setCell(baseRow, 50, "Ramo:"  + (suraImpresionEmsionDTO.getRamo() != null ?  suraImpresionEmsionDTO.getRamo() :""), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);					
 						baseRow = communsPdf.setRow(table, 21);
-						communsPdf.setCell(baseRow, 50, "Póliza:" + (suraImpresionEmsionDTO.getOficina() != null ?  suraImpresionEmsionDTO.getNoPoliza() :"") , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;						
+						communsPdf.setCell(baseRow, 50, "Póliza:" + (suraImpresionEmsionDTO.getNoPoliza() != null ?  suraImpresionEmsionDTO.getNoPoliza() :"") , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;						
 						communsPdf.setCell(baseRow, 50, "Inciso:"  + (suraImpresionEmsionDTO.getInciso() != null ?  suraImpresionEmsionDTO.getInciso() :""), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);;
 						table.draw();
 						
@@ -118,8 +118,8 @@ public class ImpresionCertificadoHogarPdf {
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 18, "Asegurado:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 82,(suraImpresionEmsionDTO.getContratanteNombre() != null ?  suraImpresionEmsionDTO.getContratanteNombre() :"") +" "+
-								(suraImpresionEmsionDTO.getContratanteApPaterno() != null ?  suraImpresionEmsionDTO.getContratanteApMaterno() :"") +" "+
-								(suraImpresionEmsionDTO.getContratanteApMaterno() != null ?  suraImpresionEmsionDTO.getInciso() :"")
+								(suraImpresionEmsionDTO.getContratanteApPaterno() != null ?  suraImpresionEmsionDTO.getContratanteApPaterno() :"") +" "+
+								(suraImpresionEmsionDTO.getContratanteApMaterno() != null ?  suraImpresionEmsionDTO.getContratanteApMaterno() :"")
 								, black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						
 						direccion =(suraImpresionEmsionDTO.getContratanteCalleNo() != null ?  suraImpresionEmsionDTO.getContratanteCalleNo() :"") +"\n";
