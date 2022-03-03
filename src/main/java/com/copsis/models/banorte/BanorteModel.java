@@ -60,10 +60,10 @@ public class BanorteModel {
 				if(pagFin <= pagIni) {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
 				}
-
-
-				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 				
+				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
+					pagFin = pagFin == 1 && doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() : pagFin;
+					
 					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
 				}
 				break;
