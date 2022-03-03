@@ -87,7 +87,7 @@ public class MapfreDiversosModel {
 
 			if (inicio > -1) {
 				modelo.setPoliza(contenido.substring(inicio + 14, inicio + 60).split("\r\n")[0].replace(":", "")
-						.replace(" ", "").trim());
+						.replace(" ", "").trim().replace("###", ""));
 			}
 			
 	
@@ -100,14 +100,14 @@ public class MapfreDiversosModel {
 					isVersionMayusculas = true;
 					if(newcontenido.contains("###") && newcontenido.contains("-")) {
 						newcontenido = newcontenido.split("###")[1];
-						modelo.setPoliza(newcontenido.split("-")[0].trim());
-						modelo.setEndoso(newcontenido.split("-")[1].trim());
+						modelo.setPoliza(newcontenido.split("-")[0].trim().replace("###", ""));
+						modelo.setEndoso(newcontenido.split("-")[1].trim().replace("###", ""));
 					}					
 				}
 			}
 			
 			if(modelo.getPoliza().length() == 0) {
-				modelo.setPoliza(fn.obtenerPolizaRegex(contenido,13));
+				modelo.setPoliza(fn.obtenerPolizaRegex(contenido,13).replace("###", ""));
 			}
 
 			// endoso
