@@ -65,7 +65,8 @@ public class MapfreDiversosModel {
 				.replace("VIGENCIA","Vigencia")
 				.replace("HASTA###LAS###12:00", "hasta las 12:00")
 				.replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
-				.replace("FORMA###DE###PAGO", "FORMA DE PAGO");
+				.replace("FORMA###DE###PAGO", "FORMA DE PAGO")
+				.replace("óliza número ###:", "óliza número:");
 
 		try {
 
@@ -319,6 +320,7 @@ public class MapfreDiversosModel {
 			}
 
 			// plan
+			//System.out.println(contenido);
 			inicio = contenido.indexOf("Póliza Número:");
 			fin = contenido.indexOf("###Endoso Número");
 			if (inicio > -1 && fin > -1 && inicio < fin) {
@@ -326,18 +328,19 @@ public class MapfreDiversosModel {
 				if (newcontenido.split("\r\n").length == 2) {
 					newcontenido = newcontenido.split("\r\n")[1];
 					if (newcontenido.split("###").length == 2) {
-						modelo.setPlan(newcontenido.split("###")[1].replace("\"", "").trim());
+						modelo.setPlan(newcontenido.split("###")[1].replace("\"", "").replace("@@@", "").trim());
 					}
 				}
 			} else {
 				inicio = contenido.indexOf("ocumento:");
 				fin = contenido.indexOf("óliza número:");
+
 				if (inicio > -1 && fin > -1 && inicio < fin) {
 					newcontenido = contenido.substring(inicio + 9, fin);
 					if (newcontenido.split("\r\n").length == 2
 							&& newcontenido.split("\r\n")[1].split("###").length == 2) {
 
-						modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "").trim());
+						modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "").replace("@@@", "").trim());
 
 					}
 				}
