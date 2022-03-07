@@ -80,7 +80,7 @@ public class MapfreSaludRojoModel {
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("DESDE") && newcontenido.split("\n")[i].contains("TIPO")) {
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("DESDE")[1].split("TIPO")[0].replace("###", "")));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("DESDE")[1].split("TIPO")[0].replace(":", "").replace("###", "")));
 					}
 					if(newcontenido.split("\n")[i].contains("HASTA") && newcontenido.split("\n")[i].contains("CLIENTE")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].replace("HASTA","HASTA:").replace("::", ":").split("HASTA:")[1].split("CLIENTE")[0].replace("###", "")));
@@ -113,8 +113,15 @@ public class MapfreSaludRojoModel {
 					
 				}
 			}
-			
-			modelo.setMoneda(1);
+
+			if(modelo.getPlan().length() == 0) {
+				if(contenido.contains("ASISTENCIAS QUE COMPONEN LA COBERTURA")) {
+					String textoPlan = contenido.split("ASISTENCIAS QUE COMPONEN LA COBERTURA")[1].split("\n")[0].trim();
+					if(textoPlan.length()> 0) {
+						modelo.setPlan(textoPlan);
+					}
+				}
+			}
 	
 			inicio = contenido.indexOf("FORMA DE PAGO:");
 			fin = contenido.indexOf("PRÁCTICA DE DEPORTE");
@@ -143,7 +150,7 @@ public class MapfreSaludRojoModel {
 					if(newcontenido.split("\n")[i].contains("FRACCIONADO") && newcontenido.split("\n")[i].contains("I.V.A.")) {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A.")[1].replace("###", "").trim())));
 					}
-					if(newcontenido.split("\n")[i].contains("RENOVACIÓN") && newcontenido.split("\n")[i].contains("MONTO") && newcontenido.split("\n")[i].contains("I.V.A.")) {
+					if((newcontenido.split("\n")[i].contains("RENOVACIÓN") || newcontenido.split("\n")[i].contains("DIAS")) && newcontenido.split("\n")[i].contains("MONTO") && newcontenido.split("\n")[i].contains("I.V.A.")) {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A.")[1].replace("###", "").trim())));
 					}
 					if(newcontenido.split("\n")[i].contains("FRACCIONADO:") && newcontenido.split("\n")[i].contains("PRIMA TOTAL:")) {		
@@ -153,10 +160,16 @@ public class MapfreSaludRojoModel {
 							modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("FRACCIONADO:")[1].split("PRIMA")[0].replace("###", "").trim())));
 						}											
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("TOTAL:")[1].replace("###", "").trim())));
-					}						
+					}
+					if(newcontenido.split("\n")[i].contains("MONEDA:###")) {
+						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("MONEDA:###")[1].split("###")[0].trim()));
+					}
 				}
 			}
-
+			
+			if(modelo.getMoneda() == 0) {
+				modelo.setMoneda(1);
+			}
 			
 			 if (contenido.contains("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD") || contenido.contains("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD") && contenido.contains("Av.###Revolución")) {
 	                newcontenido = contenido.split("NOMBRE###EDAD###SEXO###EXTRAPRIMA###ANTIGÜEDAD###ANTIGÜEDAD")[1].split("Av.###Revolución#")[0];
@@ -249,6 +262,19 @@ public class MapfreSaludRojoModel {
 	                }
 	                
 	            }
+			 
+			 if(!contenido.contains("COBERTURAS Y SERVICIOS")) {
+				 inicio = contenido.indexOf("COBERTURAS");
+				 fin = contenido.indexOf("PLAN");
+				 if(inicio > -1 && inicio < fin) {
+					 newcontenido = contenido.substring(inicio,fin);
+				 }
+				 inicio = contenido.indexOf("Asistencia que componen la cobertura");
+				 fin = contenido.indexOf("AVISO DE PRIVACIDAD");
+				 newcontenido += contenido.substring(inicio+36,fin); 
+				 newcontenido = newcontenido.replace("noches por###hasta 150 Euros por \r\r\nnoche" ,"noches por hasta 150 Euros por noche");
+			 }
+			 
 	            newcontenido = fn.gatos(newcontenido).replace("### ### ### ", "").replace("@@@", "").replace("EndosoElemental", "Elemental")
 	            		.replace("EndosoAsistencia", "Asistencia")
 	            		.replace("ReducciÃ³n de deducible por", "ReducciÃ³n de deducible por accidente");
@@ -273,7 +299,7 @@ public class MapfreSaludRojoModel {
 	                
 	                if (!x.contains("ASEGURADA") && !x.contains("COBERTURAS") && !x.contains("COASEGURO") && !x.contains("a###a") && !x.contains("ContinuaciÃ³n")
 	                		&& !x.contains("EXTRANJERO###URO") 	&& !x.contains("Continuación") && !x.contains("Dental") && !x.contains("Visión")
-	                		&& !x.contains("Tabulador")
+	                		&& !x.contains("Tabulador") && !x.contains("Segurviaje###Suma Asegurada")
 	                		) {	                
 
 	                	 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
