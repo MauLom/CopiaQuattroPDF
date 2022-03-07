@@ -68,6 +68,17 @@ public class GnpAutosModel {
 					}
 				}
 			}
+			//cteNombre
+			//idCte
+			if(modelo.getCteNombre().length() == 0) {
+				if(contenido.contains("Código###de###Cliente###Nombre###")) {
+					String textoSiguienteLinea = contenido.split("Código###de###Cliente###Nombre###")[1].split("\n")[1];
+					if(textoSiguienteLinea.split("###").length>1) {
+						modelo.setIdCliente(textoSiguienteLinea.split("###")[0].trim());
+						modelo.setCteNombre(textoSiguienteLinea.split("###")[1].trim());
+					}
+				}
+			}
 
 			// vigencia_de
 			donde = 0;
@@ -88,13 +99,16 @@ public class GnpAutosModel {
 				for(String texto:contenido.split("Desde las 12 hrs del")) {
 					if(texto.split("\n")[0].split("-").length == 3) {
 						fecha =  texto.split("\n")[0].replace("###", "").trim();
+						if(fecha.split("-")[2].length() > 4 && fecha.split("-")[2].contains("Importe")) {
+							fecha = fecha.split("Importe")[0];
+						}
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(fecha));
 					}
 				}
 			}
 			
 			inicio = contenido.indexOf("ersión###Renovación");
-			if (inicio > -1) {
+			if (inicio > -1 && modelo.getIdCliente().length() == 0) {
 				newcontenido.append(contenido.substring(inicio + 19, inicio + 150).trim().split("\r\n")[0]
 						.replace("@@@", "").trim());
 				if (newcontenido.toString().split("###").length == 4) {
@@ -143,18 +157,56 @@ public class GnpAutosModel {
 					modelo.setCteDireccion(direccionCte.toString());
 				}
 
+			}else {
+				inicio = contenido.indexOf("R.F.C.###Dirección");
+				fin = contenido.indexOf("VEHÍCULO###ASEGURADO");
+				if(inicio > -1 && inicio < fin) {
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio + 15,fin).replace("@@@", "").replace("C.P", "C/P"));
+
+					String[] arrlineasTexto = newcontenido.toString().split("\n");
+					int indexValorDireccion = 0;
+					boolean encontroTextpCP = false;
+					String direccion = "";
+					for(int i=1;i<arrlineasTexto.length;i++) {
+						if(arrlineasTexto[i].split("-").length == 3 && arrlineasTexto[i].split("###").length == 2) {
+							if(tieneLongitudRFC(arrlineasTexto[i].split("###")[0].trim())) {
+								modelo.setRfc(arrlineasTexto[i].split("###")[0].trim());
+							}
+							modelo.setVigenciaA(fn.formatDateMonthCadena(arrlineasTexto[i].split("###")[1].trim()));
+						}else {
+							if(arrlineasTexto[i].split("###").length < 4 && arrlineasTexto[i].split("###").length > 1 && !encontroTextpCP ){
+								indexValorDireccion = arrlineasTexto[i].split("###").length -2;
+								direccion = arrlineasTexto[i].split("###")[indexValorDireccion];
+								if(direccion.contains(", C/P")) {
+									String aux = direccion;
+									direccion = direccion.split(", C/P")[0].trim();
+									encontroTextpCP = true;
+									if(fn.isNumeric(aux.split("C/P")[1].replace(".", "").trim())){
+										modelo.setCp(aux.split("C/P")[1].replace(".", "").trim());
+									}
+								}
+								direccionCte.append(" ").append(direccion);
+							}
+						}
+					}
+					
+					modelo.setCteDireccion(direccionCte.toString().trim());					
+				}
 			}
 
+			//rfc 
 			if(modelo.getRfc().length() == 0  && contenido.contains(ConstantsValue.RFC2)) {
 				String[] texto = contenido.split(ConstantsValue.RFC2)[1].split("\n");
 				if(texto.length > 1) {
 					String aux = texto[2].split("###")[0].replace("@@@", "").trim();
-					if(aux.length() == 12  || aux.length() < 13) {
+					if(tieneLongitudRFC(aux)) {
 						modelo.setRfc(aux);
 					}
 				}
 			}
-
+			
+			
 			if (modelo.getCp().length() == 0) {
 				inicio = contenido.indexOf(ConstantsValue.REFERENCIA);
 				fin = contenido.indexOf("Descripción");
@@ -166,9 +218,13 @@ public class GnpAutosModel {
 						modelo.setCp(
 								newcontenido.toString().split(ConstantsValue.REFERENCIA)[1].replace("###", "").trim());
 					}else if( newcontenido.toString().contains("C.P.")){
-						if(fn.isvalidCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim()))
+						String cp = newcontenido.toString().split("C.P.")[1].replace("###", "").trim();
+						if(cp.contains("Duración")) {
+							cp = cp.split("Duración")[0];
+						}
+						if(fn.isNumeric(cp))
 						{
-							modelo.setCp(newcontenido.toString().split("C.P.")[1].replace("###", "").trim());
+							modelo.setCp(cp);
 						}else if(newcontenido.toString().split("C.P.")[1].split("\n").length >1){
 							String textoOtraLinea = fn.gatos(newcontenido.toString().split("C.P.")[1].split("\n")[1]);
 							String[] aux = textoOtraLinea.split("###");
@@ -181,7 +237,11 @@ public class GnpAutosModel {
 				}
 
 			}
-
+			
+			if(modelo.getCp().length() == 4 && fn.isNumeric(modelo.getCp())) {
+				String cp = modelo.getCp();
+				modelo.setCp("0"+cp);
+			}
 			// descripcion (vehiculo)
 			// serie
 			// prima_neta
@@ -333,6 +393,14 @@ public class GnpAutosModel {
 						if(modelo.getModelo() == 0 && newcontenido.toString().split("\n")[i].contains("Modelo###Placas##") && (i+1)<newcontenido.toString().split("\n")[i].length() ) {
 							if(fn.isNumeric(newcontenido.toString().split("\n")[i+1].split("###")[0].trim())) {
 								modelo.setModelo(fn.castInteger(newcontenido.toString().split("\n")[i+1].split("###")[0].trim()));
+							}
+							
+							if(newcontenido.toString().split("\n")[i].contains("Modelo###Placas###Motor")) {
+								if (newcontenido.toString().split("\n")[i + 1].split("###")[1].length() > 10) {
+									modelo.setMotor(newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());
+								} else {
+									modelo.setPlacas(newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());
+								}
 							}
 						}
 
@@ -513,5 +581,9 @@ public class GnpAutosModel {
 			return modelo;
 		}
 
+	}
+	
+	private boolean tieneLongitudRFC(String rfc) {
+		return (rfc.length() == 12 || rfc.length() == 13);
 	}
 }
