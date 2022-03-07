@@ -320,7 +320,6 @@ public class MapfreDiversosModel {
 			}
 
 			// plan
-			//System.out.println(contenido);
 			inicio = contenido.indexOf("Póliza Número:");
 			fin = contenido.indexOf("###Endoso Número");
 			if (inicio > -1 && fin > -1 && inicio < fin) {
