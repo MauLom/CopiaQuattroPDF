@@ -38,6 +38,7 @@ public class SegurosMtySalud {
 				.replace("EN CUMPLIMIENTO A LO DISPUESTO", "EN ###CUMPLIMIENTO ###A ###LO ###DISPUESTO")
 				.replace("ASEGURA###DO ###F IGURA ###G ###ÉNERO ### ###EDAD", "ASEGURADO ###TIPO DE ###GÉNERO ###EDAD")
 				.replace("ASEGURA###DO ###F IGURA ###G ###ÉNERO ###EDAD", "ASEGURADO ###TIPO DE ###GÉNERO ###EDAD")
+				.replace("RECARGO ###POR PAGO ###", "RECARGO POR PAGO###")
 				;
 			
 		try {
@@ -156,12 +157,18 @@ public class SegurosMtySalud {
 	 
 	         if(inicio > 0 &&  fin >  0 && inicio < fin) {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replaceAll("### ###", "###");
+	        		boolean encontroRecargo = false;
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	
 	        				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("###")[1].trim()));
 	        				modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("###")[3].trim())));	        				
 	        			}
-	        			if(newcontenido.split("\n")[i].contains("FRACCIONADO")) {
+	        			if(newcontenido.split("\n")[i].contains("RECARGO POR PAGO") && newcontenido.split("\n")[i].contains("###")) {
+        					modelo.setRecargo(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("RECARGO POR PAGO")[1].split("###")[1].trim())));
+        					encontroRecargo = true;
+	        			}
+	        			
+	        			if(newcontenido.split("\n")[i].contains("FRACCIONADO") && !encontroRecargo) {
 	        				if(newcontenido.split("\n")[i].split("FRACCIONADO")[1].split("###").length > 1) {
 	        					modelo.setRecargo(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("FRACCIONADO")[1].split("###")[1].trim())));
 	        				}else {
@@ -252,6 +259,7 @@ public class SegurosMtySalud {
         		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim();
         		
          }
+         System.out.println(inicio+ "fin "+fin);
          inicio = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");
          fin = contenido.indexOf("ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO");
          if(inicio > -1 && inicio < fin) {
@@ -265,7 +273,6 @@ public class SegurosMtySalud {
         				.replace("COBERTURAS OPCIONALES CON COSTO ", "")
         				.replace("COBERTURA ###SUMA ###DEDUCIBLE ###COASEGURO ###ASEGURADO ###PRIMA", "")
         				.replace("ASEGURADA ###CUBIERTO ", "").replace("ANEXOS", "").replace("TOTAL", "").replace("PRIMA DE LAS COBERTURAS OPCIONALES ", "");
-        		
         	  	for (int i = 0; i < newcontenido.split("\n").length; i++) {
             		if(newcontenido.split("\n")[i].length() > 7) {
             			coberturas += newcontenido.split("\n")[i] +"\n";	
