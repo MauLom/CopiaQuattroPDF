@@ -86,7 +86,8 @@ public class IdentificaPolizaService {
 
 			if (!encontro && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
-					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") || contenido.contains("gnp.com.mx") )) {
+					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") 					
+					|| contenido.contains("gnp.com.mx")|| rangoSimple(2, 4, pdfStripper, pdDoc).contains("gnp.com.mx") )) {
 
 				GnpModel datosGnp = new GnpModel(pdfStripper, pdDoc, contenido);
 				modelo = datosGnp.procesa();
