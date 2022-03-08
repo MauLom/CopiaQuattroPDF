@@ -29,5 +29,21 @@ public class AmortizacionPdfForm {
 	@NotBlank(message = "El parametro codigoPostal no puede ir vacio")
 	private String codigoPostal;
 	@NotNull(message = "El parametro amortizacion no puede ir vacio")
+	private Double comisionApertura;
+	private Double certificadoRenovacion;
+	private Double garantiaExtendida;
+	private Double comisionAmperturaIva;
+	private String montoSeguroFinacimiento;
+	private Double montoSeguroVida;
+	private Double montoSeguroDesempleo;
+	private Double derecho;
+	private Double montoSeguroEngache;
+	private Double montoSegurosDanos;
+	private Double montoFinanciar;
+	private Double valor;
+	private Double coberturasAdicionales;
+	private Double engache;
+	private Double mesualida;
+	private String cliente;
 	private List<AmortizacionDTO> amortizacion;
 }
