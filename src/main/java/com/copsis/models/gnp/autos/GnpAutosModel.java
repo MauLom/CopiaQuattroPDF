@@ -502,7 +502,14 @@ public class GnpAutosModel {
 					modelo.setPlan("Amplia");				
 				}else if(newcontenido.append(contenido.split("CONTRATANTE")[0]).toString().contains("AMPLIA")) {
 					modelo.setPlan("AMPLIA");				
-				}			
+				}else if(contenido.contains(ConstantsValue.NO_POLIZA))	{
+					String texto = contenido.split(ConstantsValue.NO_POLIZA)[0];
+					if(texto.split("-").length == 2) {
+						modelo.setPlan(texto.split("-")[1].trim());
+					}else if(texto.split("\n").length > 1){
+						modelo.setPlan(texto.split("\n")[1].trim());
+					}
+				}
 			}
 
 			// conductor
