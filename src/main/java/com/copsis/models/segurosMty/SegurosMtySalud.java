@@ -38,6 +38,9 @@ public class SegurosMtySalud {
 				.replace("EN CUMPLIMIENTO A LO DISPUESTO", "EN ###CUMPLIMIENTO ###A ###LO ###DISPUESTO")
 				.replace("ASEGURA###DO ###F IGURA ###G ###ÉNERO ### ###EDAD", "ASEGURADO ###TIPO DE ###GÉNERO ###EDAD")
 				.replace("ASEGURA###DO ###F IGURA ###G ###ÉNERO ###EDAD", "ASEGURADO ###TIPO DE ###GÉNERO ###EDAD")
+				.replace("RECARGO ###POR PAGO ###", "RECARGO POR PAGO###")
+				.replace("ESTE DOCUMENTO ###NO ES VÁLIDO ###COMO RECIBO","ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO")
+				.replace("ASEGURA###DA", "ASEGURADA")
 				;
 			
 		try {
@@ -156,12 +159,18 @@ public class SegurosMtySalud {
 	 
 	         if(inicio > 0 &&  fin >  0 && inicio < fin) {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replaceAll("### ###", "###");
+	        		boolean encontroRecargo = false;
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	
 	        				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("###")[1].trim()));
 	        				modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("###")[3].trim())));	        				
 	        			}
-	        			if(newcontenido.split("\n")[i].contains("FRACCIONADO")) {
+	        			if(newcontenido.split("\n")[i].contains("RECARGO POR PAGO") && newcontenido.split("\n")[i].contains("###")) {
+        					modelo.setRecargo(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("RECARGO POR PAGO")[1].split("###")[1].trim())));
+        					encontroRecargo = true;
+	        			}
+	        			
+	        			if(newcontenido.split("\n")[i].contains("FRACCIONADO") && !encontroRecargo) {
 	        				if(newcontenido.split("\n")[i].split("FRACCIONADO")[1].split("###").length > 1) {
 	        					modelo.setRecargo(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("FRACCIONADO")[1].split("###")[1].trim())));
 	        				}else {
@@ -254,6 +263,7 @@ public class SegurosMtySalud {
          }
          inicio = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");
          fin = contenido.indexOf("ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO");
+         boolean hayTituloDeducible = false;
          if(inicio > -1 && inicio < fin) {
         	 String coberturas="";
         		newcontenido += "\n"+ contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim()
@@ -265,7 +275,6 @@ public class SegurosMtySalud {
         				.replace("COBERTURAS OPCIONALES CON COSTO ", "")
         				.replace("COBERTURA ###SUMA ###DEDUCIBLE ###COASEGURO ###ASEGURADO ###PRIMA", "")
         				.replace("ASEGURADA ###CUBIERTO ", "").replace("ANEXOS", "").replace("TOTAL", "").replace("PRIMA DE LAS COBERTURAS OPCIONALES ", "");
-        		
         	  	for (int i = 0; i < newcontenido.split("\n").length; i++) {
             		if(newcontenido.split("\n")[i].length() > 7) {
             			coberturas += newcontenido.split("\n")[i] +"\n";	
@@ -273,7 +282,24 @@ public class SegurosMtySalud {
 				}
         	  	newcontenido = coberturas;
         	
-         }
+         }else if(fin>-1 &&  inicio > fin) {
+         	String texto = contenido.split("COBERTURAS OPCIONALES CON COSTO")[1].replace("\r", "").replace("@@@", "").trim();
+         	int indexFinal = texto.indexOf("ANEXOS");
+         	int indexCobertura = texto.indexOf("SUMA");
+         	if(indexFinal > -1 && indexCobertura>-1 && indexCobertura < indexFinal  && indexFinal< texto.indexOf("ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO") ) {
+         		texto = texto.split("ANEXOS")[0];
+         		newcontenido += texto +"\n";
+         		if(texto.contains("Deducible")) {
+         			hayTituloDeducible = true;
+         		}
+         	}else if(indexFinal == -1) {
+         		texto = texto.split("ESTE DOCUMENTO NO ES VÁLIDO")[0];
+         		if(texto.contains("Deducible")) {
+         			hayTituloDeducible = true;
+         		}
+         		newcontenido += texto +"\n";
+         	}
+         }	
 
          if(newcontenido.length() ==  0 ||  newcontenido.length() < 20) {
         	 newcontenido ="";
@@ -287,8 +313,10 @@ public class SegurosMtySalud {
          }
 
          if(inicio > -1 && inicio < fin) {
-        	 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();  
-         	for (int i = 0; i < newcontenido.split("\n").length; i++) {	         		 
+        	 List<EstructuraCoberturasModel> coberturas = new ArrayList<>(); 
+        	 newcontenido = newcontenido.replace("PRIMA###DE###LA COBERTURA BÁSICA", "")
+        	 				.replace("CRFCA ###COBERTURA ###DE REDUCCIÓN ###DE ###FRANQUICIA ###Y COPAGO POR ACCIDENTE", "CRFCA COBERTURA DE REDUCCIÓN DE FRANQUICIA Y COPAGO POR ACCIDENTE");
+        	 for (int i = 0; i < newcontenido.split("\n").length; i++) {	         		 
          		EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();         		
          		if(!newcontenido.split("\n")[i].contains("ANEXOS") && !newcontenido.split("\n")[i].contains("ASEGURADO")
          		  && !newcontenido.split("\n")[i].contains("ASEGURADA") && !newcontenido.split("\n")[i].contains("CAE")
@@ -324,7 +352,14 @@ public class SegurosMtySalud {
               				 }
              			 }             			 
              			coberturas.add(cobertura);	
-              		}         	         		
+              		}else if(newcontenido.split("\n")[i].split("###").length == 7 && newcontenido.split("\n")[i].split("###")[0].trim().equals("CRFCA")) {
+              			cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+              			cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
+              			if(hayTituloDeducible) {
+                  			cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+              			}
+              			coberturas.add(cobertura);
+              		}
          		}         	         	
          	}
          	modelo.setCoberturas(coberturas);
@@ -350,7 +385,10 @@ public class SegurosMtySalud {
            				.replace("ASEGURA###DA", "ASEGURADA")
            				.replace("### ### ### ###", "")
            				.replace("### ###", "###")
-           				.replace(" ###", "###");
+           				.replace(" ###", "###")
+           				.replace("PROTECCIÓN###PATRIMONIAL", "PROTECCIÓN PATRIMONIAL")
+           				.replace("COBERTURA###VIH", "COBERTURA VIH")
+           				.replace("~", "");
 
             	
             	for (int i = 0; i < cobertura.split("\n").length; i++) {

@@ -29,6 +29,7 @@ public class GnpAutosModel {
 		int longitudTexto = 0;
 
 		StringBuilder newcontenido = new StringBuilder();
+		StringBuilder newdireccion = new StringBuilder();
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Importe###por###Pagar", "Importe por Pagar").replace("Derecho###de###Póliza",
@@ -97,11 +98,13 @@ public class GnpAutosModel {
 			if(modelo.getVigenciaDe().length() == 0 && contenido.contains("Desde las 12 hrs del")) {
 				String fecha = "";
 				for(String texto:contenido.split("Desde las 12 hrs del")) {
+
 					if(texto.split("\n")[0].split("-").length == 3) {
 						fecha =  texto.split("\n")[0].replace("###", "").trim();
 						if(fecha.split("-")[2].length() > 4 && fecha.split("-")[2].contains("Importe")) {
 							fecha = fecha.split("Importe")[0];
 						}
+												
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(fecha));
 					}
 				}
@@ -194,6 +197,19 @@ public class GnpAutosModel {
 					modelo.setCteDireccion(direccionCte.toString().trim());					
 				}
 			}
+			
+			
+			//Otro formato vigencia_A
+			if(modelo.getVigenciaA().length() == 0 && contenido.contains("Hasta las 12 hrs del")) {
+				String fecha = "";
+				for(String texto:contenido.split("Hasta las 12 hrs del")) {
+					if(texto.split("\n")[0].split("-").length == 3) {						
+						fecha =  texto.split("\n")[0].replace("###", "").trim();
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fecha));
+					}
+				}
+			}
+			
 
 			//rfc 
 			if(modelo.getRfc().length() == 0  && contenido.contains(ConstantsValue.RFC2)) {
@@ -242,6 +258,28 @@ public class GnpAutosModel {
 				String cp = modelo.getCp();
 				modelo.setCp("0"+cp);
 			}
+			
+			if(modelo.getCteDireccion().length() == 0 && contenido.contains("Dirección")) {
+				newcontenido = new StringBuilder();
+				direccionCte =new StringBuilder();
+				inicio = contenido.indexOf("Dirección");
+				fin = contenido.indexOf("Giro");
+				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("/r", ""));
+				
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+					if(newcontenido.toString().split("\n")[i].contains("Dirección") && newcontenido.toString().split("\n")[i+1].contains("Hasta") && newcontenido.toString().split("\n")[i+2].contains("Duración")) {
+						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1].split("###")[1].split("Hasta")[0]
+								+ " " + newcontenido.toString().split("\n")[i+2].split("###")[0]);
+					}
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
 			// descripcion (vehiculo)
 			// serie
 			// prima_neta
@@ -396,14 +434,20 @@ public class GnpAutosModel {
 							}
 							
 							if(newcontenido.toString().split("\n")[i].contains("Modelo###Placas###Motor")) {
-								if (newcontenido.toString().split("\n")[i + 1].split("###")[1].length() > 10) {
+//								
+								if (newcontenido.toString().split("\n")[i + 1].split("###").length >2 && newcontenido.toString().split("\n")[i + 1].split("###")[1].length() > 10) {
 									modelo.setMotor(newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());
 								} else {
-									modelo.setPlacas(newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());
+								
+									if(newcontenido.toString().split("\n")[i + 1].contains("###") ) {
+								
+										modelo.setPlacas(newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());	
+									}
+									
 								}
 							}
 						}
-
+						
 						if (newcontenido.toString().split("\n")[i].contains("Importe")) {
 							modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(fn.remplazarMultiple(
 									newcontenido.toString().split("\n")[i].split("Pagar")[1].replace("###", ""),
@@ -583,6 +627,7 @@ public class GnpAutosModel {
 			newcontenido = new StringBuilder();
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					GnpAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
