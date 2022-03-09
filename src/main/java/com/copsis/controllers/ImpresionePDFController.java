@@ -92,7 +92,6 @@ public class ImpresionePDFController {
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
-			
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}		  
 	}
