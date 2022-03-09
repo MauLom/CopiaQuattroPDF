@@ -225,7 +225,7 @@ public class GnpAutosModel {
 					if(tieneLongitudRFC(aux)) {
 						modelo.setRfc(aux);
 					}
-					System.out.println(texto[2].split("###")[0].replace("@@@", "").trim());
+					
 					if(texto.length > 1 && modelo.getRfc().length() == 0) {
 						String aux2 = texto[1].split("###")[0].replace("@@@", "").trim();
 						if(tieneLongitudRFC(aux2)) {
