@@ -53,6 +53,10 @@ public class ZurichDiversosModel {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcont.toString().split("\n")[i].split("Vigencia")[1].split("Desde")[1].split("Fecha")[0].replace("###", "").replace(":", "").replace("el", "").replace("de", "-").replace(" ", "").trim().toUpperCase()));
 					}
 					
+					if( newcont.toString().split("\n")[i].contains("Fecha Emisión")) {
+						String[] valores = newcont.toString().split("\n")[i].split("###");
+						modelo.setFechaEmision(fn.formatDateMonthCadena(valores[valores.length-1].replace("de", "-").replace(" ", "").trim()));
+					}
 					if( newcont.toString().split("\n")[i].contains("Hasta")&& newcont.toString().split("\n")[i].contains("Folio") ) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena( newcont.toString().split("\n")[i].split("Hasta")[1].split("Folio")[0].replace("###", "").replace(":", "").replace("el", "").replace("de", "-").replace(" ", "").trim().toUpperCase()));
 					}
@@ -61,9 +65,19 @@ public class ZurichDiversosModel {
 						contratancte=false;
 						
 					}
-					if( newcont.toString().split("\n")[i].contains("R.F.C.")) {
-						modelo.setRfc( newcont.toString().split("\n")[i].split("R.F.C.")[1].replace("###", "").replace("-", "").trim());
-						modelo.setCteDireccion(newcont.toString().split("\n")[i+1]);
+					if( newcont.toString().split("\n")[i].contains("R.F.C.") && (i+1) < newcont.toString().split("\n").length) {
+						modelo.setRfc(newcont.toString().split("\n")[i].split("R.F.C.")[1].replace("###", "").replace("-", "").replace(" ", "").trim());
+						String textoOtroRenglon = newcont.toString().split("\n")[i+1];
+						String direccion = textoOtroRenglon.split("###")[ textoOtroRenglon.split("###").length -1];
+						 
+						if((i+2) < newcont.toString().split("\n").length) {
+							String textoAux = newcont.toString().split("\n")[i+2];
+							if(!textoAux.contains("Zurich")) {
+								direccion += " "+ textoAux.split("###")[ textoAux.split("###").length -1].replace("\n", "").trim();
+							}
+						}
+						
+						modelo.setCteDireccion(direccion);
 					}
 				}
 			}
@@ -119,6 +133,33 @@ public class ZurichDiversosModel {
 				modelo.setCoberturas(coberturas);
 			}
 			
+			if(modelo.getCoberturas().isEmpty()) {
+				inicio = contenido.indexOf("Coberturas Amparadas");
+				fin = contenido.indexOf("Si el contenido de");
+				if(inicio > -1 && inicio < fin) {
+					newcont = new StringBuilder();
+					newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					for (int i = 0; i < newcont.toString().split("\n").length; i++) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(!newcont.toString().split("\n")[i].contains("Coberturas") &&
+						   !newcont.toString().split("\n")[i].contains("Prima neta") &&
+						   !newcont.toString().split("\n")[i].contains("Gastos de expedición") &&
+						   !newcont.toString().split("\n")[i].contains("I. V. A") &&
+						   !newcont.toString().split("\n")[i].contains("C. I:")) {
+							if(newcont.toString().split("\n")[i].split("###").length == 3 || newcont.toString().split("\n")[i].split("###").length == 2) {
+								cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0].trim());
+								cobertura.setSa(newcont.toString().split("\n")[i].split("###")[1].trim());
+								coberturas.add(cobertura);
+							
+							}
+						}
+						
+					}
+					modelo.setCoberturas(coberturas);
+				}
+				
+			}
 	
 			
 			inicio = contenido.indexOf("Prima neta");
@@ -128,7 +169,7 @@ public class ZurichDiversosModel {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					if(newcont.toString().split("\n")[i].contains("Prima neta")) {
+					if(newcont.toString().split("\n")[i].contains("Prima neta") && newcont.toString().split("\n")[i].split("Prima neta").length == 2) {
 						modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("neta")[1].replace("###", "").trim())));
 					 }
 					if(newcont.toString().split("\n")[i].contains("expedición")) {
@@ -151,6 +192,8 @@ public class ZurichDiversosModel {
 			
 			return modelo;
 		} catch (Exception e) {
+			modelo.setError(ZurichDiversosModel.this.getClass().getTypeName() + " - catch:" + e.getMessage() + " | "
+					+ e.getCause());
 			 return modelo;
 		}
 	}
