@@ -221,8 +221,16 @@ public class GnpAutosModel {
 				String[] texto = contenido.split(ConstantsValue.RFC2)[1].split("\n");
 				if(texto.length > 1) {
 					String aux = texto[2].split("###")[0].replace("@@@", "").trim();
+					
 					if(tieneLongitudRFC(aux)) {
 						modelo.setRfc(aux);
+					}
+					
+					if(texto.length > 1 && modelo.getRfc().length() == 0) {
+						String aux2 = texto[1].split("###")[0].replace("@@@", "").trim();
+						if(tieneLongitudRFC(aux2)) {
+							modelo.setRfc(aux2);
+						}
 					}
 				}
 			}
@@ -259,11 +267,28 @@ public class GnpAutosModel {
 
 			}
 			
+		
+	
+			if(modelo.getCp().length() == 0 &&  contenido.contains("C.P.") ) {
+				inicio = contenido.indexOf("Dirección");
+				fin = contenido.indexOf("Giro");
+				if(fin == -1) {
+					fin = contenido.indexOf("VEHÍCULO###ASEGURADO");
+				}
+				if(inicio > -1 && inicio < fin) {
+					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("/r", ""));
+					modelo.setCp(newcontenido.toString().split("C.P.")[1].trim().substring(0, 5).replace("#", "").replace("#", "").replace("###", "").trim());
+				}
+			} 
 			if(modelo.getCp().length() == 4 && fn.isNumeric(modelo.getCp())) {
 				String cp = modelo.getCp();
 				modelo.setCp("0"+cp);
 			}
+			if(modelo.getCteDireccion().length() < 15) {
+				modelo.setCteDireccion("");
+			}
 			
+		
 
 			if(modelo.getCteDireccion().length() == 0 && contenido.contains("Dirección")) {
 				newcontenido = new StringBuilder();
@@ -275,17 +300,18 @@ public class GnpAutosModel {
 					fin = contenido.indexOf("VEHÍCULO###ASEGURADO");
 				}
 				if(inicio > -1 && inicio < fin) {
-				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("/r", ""));
-				
-				if(modelo.getCp().length() == 0  && newcontenido.toString().contains("C.P.") && newcontenido.toString().split("C.P.")[1] .length() > 5) {
-					modelo.setCp(newcontenido.toString().split("C.P.")[1].trim().substring(0, 5));
-				}
-				
-				
+				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+		
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+				
 					if(newcontenido.toString().split("\n")[i].contains("Dirección") && newcontenido.toString().split("\n")[i+1].contains("Hasta") && newcontenido.toString().split("\n")[i+2].contains("Duración")) {
-						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1].split("###")[1].split("Hasta")[0]
-								+ " " + newcontenido.toString().split("\n")[i+2].split("###")[0]);
+						modelo.setCteDireccion((newcontenido.toString().split("\n")[i+1].split("###")[1].split("Hasta")[0]
+								+ " " + newcontenido.toString().split("\n")[i+2].split("###")[0]).trim());
+					}
+					
+					if(newcontenido.toString().split("\n")[i].contains("Dirección") && newcontenido.toString().split("\n")[i+1].contains("Hasta") && newcontenido.toString().split("\n")[i+3].contains("Duración")) {
+						modelo.setCteDireccion((newcontenido.toString().split("\n")[i+1].split("###")[1].split("Hasta")[0]
+								+ " " + newcontenido.toString().split("\n")[i+2].split("###")[0]).trim());
 					}
 				  }
 				}
