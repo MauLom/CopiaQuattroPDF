@@ -7,6 +7,7 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class MapfreSaludRojoModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -324,6 +325,7 @@ public class MapfreSaludRojoModel {
 	            modelo.setCoberturas(coberturas);
 			
 			
+	            buildRecibos(modelo);
 			
 			return modelo;
 		} catch (Exception e) {
@@ -416,4 +418,29 @@ public class MapfreSaludRojoModel {
 		}
 		modelo.setAsegurados(asegurados);
 	}
+	
+	private void buildRecibos(EstructuraJsonModel model) {
+		if(model.getFormaPago() == 1 ) {
+            List<EstructuraRecibosModel> listRecibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			recibo.setReciboId("");
+			recibo.setSerie("1/1");
+			recibo.setVigenciaDe(model.getVigenciaDe());
+			recibo.setVigenciaA(model.getVigenciaA());
+			if (recibo.getVigenciaDe().length() > 0) {
+				recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+			}			
+			recibo.setPrimaneta(model.getPrimaneta());
+			recibo.setDerecho(model.getDerecho());
+			recibo.setRecargo(model.getRecargo());
+			recibo.setIva(model.getIva());
+			recibo.setPrimaTotal(model.getPrimaTotal());
+			recibo.setAjusteUno(model.getAjusteUno());
+			recibo.setAjusteDos(model.getAjusteDos());
+			recibo.setCargoExtra(model.getCargoExtra());
+			listRecibos.add(recibo);
+			modelo.setRecibos(listRecibos);
+		}
+	}
+
 }
