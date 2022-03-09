@@ -270,15 +270,15 @@ public class AfirmeAutosBModel {
                  if (newcontenido.split("\n")[i].contains("Financiamiento:") && !recargo && !newcontenido.split("\n")[i].contains("$") && newcontenido.split("\n")[i + 1].contains("$")) {
                      recibo.setFinanciamiento(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i + 1].replace("$", "").trim()))));
                  }
-
+       
                  if (newcontenido.split("\n")[i].contains("Expedición:") && newcontenido.split("\n")[i].contains("$")) {
                      recibo.setDerecho(fn.castBigDecimal(fn.castDouble(fn.cleanString( newcontenido.split("\n")[i].split("Expedición:")[1].replace("###", "").trim()))));
                  }
                  if (newcontenido.split("\n")[i].contains("expedición Exentos de IVA") ){
                   recibo.setCargoExtra(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split(" expedición Exentos de IVA")[1].replace(":", "").replace("###", "")))));
                  }
-                 if (newcontenido.split("\n")[i].contains("IVA:") && newcontenido.split("\n")[i].contains("$")) {
-                     recibo.setIva(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split("IVA:")[1].replace("###", "").trim()))));
+                 if (newcontenido.split("\n")[i].contains("tasa de 16") && newcontenido.split("\n")[i].contains("%")) {                	 
+                     recibo.setIva(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split("%")[1].replace("###", "").replace(":", "").replace("$", "").trim()))));
                  }
                  if (newcontenido.split("\n")[i].contains(ConstantsValue.TOTAL) && newcontenido.split("\n")[i].contains("$")) {
                      recibo.setTotal(fn.castBigDecimal(fn.castDouble(fn.cleanString(newcontenido.split("\n")[i].split(ConstantsValue.TOTAL)[1].replace("###", "").trim()))));
@@ -304,12 +304,27 @@ public class AfirmeAutosBModel {
           		   }
           		   recibo2.setSerie(c);
           		   recibo2.setTotalSerie(serietota);
-                  	recibo2.setPrimaNeta(modelo.getRecibosAfirme().get(0).getPrimaNeta());
-                  	recibo2.setFinanciamiento(modelo.getRecibosAfirme().get(0).getFinanciamiento());
-                  	recibo2.setDerecho(modelo.getRecibosAfirme().get(0).getDerecho());
-                  	recibo2.setIva(modelo.getRecibosAfirme().get(0).getIva());
+                   recibo2.setPrimaNeta(new BigDecimal(modelo.getPrimaneta().doubleValue()/serietota).setScale(2, BigDecimal.ROUND_HALF_EVEN));
+                   recibo2.setCargoExtra(modelo.getRecibosAfirme().get(0).getCargoExtra());
+                   recibo2.setFinanciamiento(new BigDecimal(modelo.getRecargo().doubleValue()/serietota).setScale(2, BigDecimal.ROUND_HALF_EVEN));
+                  
+                   
+                   if(modelo.getRecibosAfirme().get(0).getFinanciamiento() != new BigDecimal(0) && i !=0) {
+                  		recibo2.setDerecho(new BigDecimal(0));
+                  	}else {
+                  		recibo2.setDerecho(modelo.getRecibosAfirme().get(0).getDerecho());
+                  	}
+                  	
+                	if(modelo.getRecibosAfirme().get(0).getFinanciamiento() != new BigDecimal(0) && i !=0) {
+                		System.out.println( " suma ==> "+  + modelo.getRecibosAfirme().get(0).getFinanciamiento().doubleValue());
+                		recibo2.setIva(new BigDecimal(modelo.getRecibosAfirme().get(0).getPrimaNeta().doubleValue()  + modelo.getRecargo().doubleValue()/serietota).setScale(2, BigDecimal.ROUND_HALF_EVEN) );
+                	}else {
+                		recibo2.setIva(modelo.getRecibosAfirme().get(0).getIva());
+                	}
+                  	
+                  	
                   	recibo2.setTotal(modelo.getRecibosAfirme().get(0).getTotal());
-                  	recibo2.setCargoExtra(modelo.getRecibosAfirme().get(0).getCargoExtra());
+                 
                   	recibosLi.add(recibo2);
                   
           	   }  
