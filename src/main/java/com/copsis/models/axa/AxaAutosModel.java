@@ -40,13 +40,24 @@ public class AxaAutosModel {
 		StringBuilder newcontenido = new StringBuilder();
 		StringBuilder resultado = new StringBuilder();
 
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C:", "R.F.C.:");
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C:", "R.F.C.:")
+				.replace("DATOS DEL ASEGURADO", ConstantsValue.DATOS_ASEGURADO)
+				.replace("Nombre: ", ConstantsValue.NOMBRE_HASH)
+				.replace("PRIMA NETA",ConstantsValue.PRIMA_NETA2)
+				.replace("Financiamiento","financiamiento")
+				.replace("Expedición", "expedición")
+				.replace("PRECIO TOTAL", "Precio Total")
+				.replace("CONDUCTORES", "Conductores")
+				.replace("No. de Cliente", "No. de cliente")
+				.replace("DATOS DEL VEHÍCULO", "Datos del vehículo")
+				.replace("DATOS ADICIONALES", ConstantsValue.DATOS_ADICIONALES);
+		
 		try {
 			// tipo
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(20);
-
+System.err.println(contenido);
 			// poliza
 			// cte_nombre
 			donde = 0;
@@ -166,7 +177,9 @@ public class AxaAutosModel {
 					}
 					if (dato.contains("Serie:") && dato.split("###").length == 5) {
 						modelo.setSerie(dato.split("###")[1].trim());
-						modelo.setEndoso(dato.split("###")[4].trim());
+						if(!dato.split("###")[4].trim().contains("Anterior")) {
+							modelo.setEndoso(dato.split("###")[4].trim());
+						}
 					}
 					if (dato.contains(ConstantsValue.PLACAS) && dato.split("###").length == 2
 							|| dato.contains(ConstantsValue.PLACAS) && dato.split("###").length == 4) {
@@ -302,7 +315,22 @@ public class AxaAutosModel {
 					}
 				}
 			}
-
+			
+			// poliza
+			// cte_nombre
+			donde = 0;
+			donde = fn.recorreContenido(contenido, ConstantsValue.DATOS_ASEGURADO);
+			if (donde > 0 && (modelo.getCteNombre().length() == 0 || modelo.getPoliza().length() == 0)) {
+				for (String dato : contenido.split("@@@")[donde].split("\n")) {
+					if (dato.contains("Nombre:###")) {
+						modelo.setCteNombre(dato.split("Nombre:###")[1].replace("###", " ").trim());
+					} else if (!dato.contains("Vigencia") && dato.contains(ConstantsValue.DOMICILIO2) && modelo.getPoliza().split(" ").length > 1) {
+						String[] valores = dato.split("###");
+						modelo.setPoliza(valores[valores.length -1].trim());
+					}
+				}
+			}
+			
 			// cp
 			// cte_direccion
 			donde = 0;
@@ -347,7 +375,7 @@ public class AxaAutosModel {
 			// moneda
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "R.F.C:###");
-			
+			System.out.println("L378 "+contenido.split("@@@")[donde].split("\r\n").length);
 			if (donde > 0 && contenido.split("@@@")[donde].split("\r\n").length == 2) {
 				if (contenido.split("@@@")[donde].split("\r\n")[0].contains("R.F.C.:###")) {
 					modelo.setRfc(contenido.split("@@@")[donde].split("\r\n")[0].split("###")[1].trim());
@@ -367,10 +395,10 @@ public class AxaAutosModel {
 					 String x = contenido.substring(inicio ,fin).replace("@@@", "").replace("\r", "");
 					 	for (int i = 0; i < x.split("\n").length; i++) {
 					        if(x.split("\n")[i].contains("Desde:")) {
-					        	modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("\n")[i].split("Desde:")[1].replace("###", "")));
+					        	modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("\n")[i].split("Desde:")[1].replace("###", "").trim()));
 					        }
 					if(x.split("\n")[i].contains("Hasta:")) {
-						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("\n")[i].split("Hasta:")[1].replace("###", "")));				        
+						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("\n")[i].split("Hasta:")[1].replace("###", "").trim()));				        
 						       }
 						  }
 					}
@@ -403,7 +431,9 @@ public class AxaAutosModel {
 					}
 					if (dato.contains("Serie:") && dato.split("###").length == 5) {
 						modelo.setSerie(dato.split("###")[1].trim());
-						modelo.setEndoso(dato.split("###")[4].trim());
+						if(!dato.split("###")[4].trim().contains("Anterior")) {
+							modelo.setEndoso(dato.split("###")[4].trim());
+						}
 					}
 					if ((dato.contains("Placas:") && dato.split("###").length == 2)
 							|| (dato.contains("Placas:") && dato.split("###").length == 4)) {
@@ -565,7 +595,89 @@ public class AxaAutosModel {
 				}
 			}
 
-			if(modelo.getMoneda() == 0) {
+			//Direccion, CP
+			if(modelo.getCteDireccion().length() == 0) {
+				inicio = contenido.indexOf(ConstantsValue.DOMICILIO);
+				fin = contenido.indexOf("R.F.C");
+				
+				if(inicio > -1 && inicio < fin) {
+					StringBuilder domicilio = new StringBuilder();
+					String texto = contenido.substring(inicio + 10,fin).replace("\r", "");
+					for(String textoRenglon: texto.split("\n")) {
+						textoRenglon = fn.gatos(textoRenglon.trim());
+						domicilio.append(" ").append(textoRenglon.split("###")[0]);
+					}
+					
+					if(domicilio.length() > 0) {
+						if(domicilio.toString().contains("C.P")) {
+							String cp = fn.numTx(domicilio.toString().split("C.P")[1].trim());
+							if(fn.isNumeric(cp)) {
+								modelo.setCp(cp);
+							}
+						}
+						modelo.setCteDireccion(fn.eliminaSpacios(domicilio.toString().trim()));
+					}
+				}
+				
+			}
+			
+			//RFC
+			if(modelo.getRfc().length() == 0 && contenido.contains("R.F.C")) {
+				String texto = fn.gatos(contenido.split("R.F.C.:")[1].split("\n")[0].trim());
+				if(texto.split("###")[0].trim().length() == 12 || texto.split("###")[0].trim().length() == 13) {
+					modelo.setRfc(texto.split("###")[0].trim());
+				}
+				
+			}
+			
+			//motor,modelo, placas,fecha emisión
+			inicio = contenido.indexOf("Datos del vehículo");
+			fin = contenido.indexOf(ConstantsValue.DATOS_ADICIONALES);
+			System.out.println("L636 "+inicio+" fin:"+fin);
+
+			if(inicio > - 1 && inicio < fin) {
+				newcontenido = new StringBuilder();
+				newcontenido.append(
+						contenido.substring(inicio + 18, fin).replace("\r", "").replace("Motor: ###", "Motor:###").replace("Modelo: ###", "Modelo:###"));
+				System.out.println("L641:"+newcontenido);
+				String[] arrContenido = newcontenido.toString().split("\n");
+				for (int i = 0; i < arrContenido.length; i++) {
+					if (arrContenido[i].contains("Vehículo:") && modelo.getDescripcion().length() == 0) {
+						modelo.setDescripcion(
+								fn.gatos(arrContenido[i].split("Vehículo:")[1].trim()).split("###")[0].trim());
+					}
+					if (arrContenido[i].contains("Motor:###") && modelo.getMotor().length() == 0) {
+						modelo.setMotor(arrContenido[i].split("Motor:###")[1].split("###")[0].trim());
+					}
+					if (arrContenido[i].contains("Modelo:###") && modelo.getModelo() == 0) {
+						modelo.setModelo(fn.castInteger(arrContenido[i].split("Modelo:###")[1].split("###")[0].trim()));
+					}
+					if (arrContenido[i].contains(ConstantsValue.PLACAS)) {
+						modelo.setPlacas(
+								fn.gatos(arrContenido[i].split(ConstantsValue.PLACAS)[1].trim()).split("###")[0]
+										.trim());
+					}
+					if (modelo.getFechaEmision().length() == 0 && arrContenido[i].contains("Emisión")) {
+						String fecha = "";
+						if ((i + 1) < arrContenido.length || (i + 2) < arrContenido.length) {
+							if (arrContenido[i + 1].split("-").length == 3) {
+								fecha = arrContenido[i + 1].split("###")[arrContenido[i + 1].split("###").length - 1]
+										.trim();
+								modelo.setFechaEmision(fn.formatDateMonthCadena(fecha));
+							} else if (arrContenido[i + 2].split("-").length == 3) {
+								fecha = arrContenido[i + 2].split("###")[arrContenido[i + 2].split("###").length - 1]
+										.trim();
+								modelo.setFechaEmision(fn.formatDateMonthCadena(fecha));
+							}
+						}
+					}
+
+				}
+			}
+			
+			
+			
+			if(modelo.getMoneda() == 1000000) {
 				modelo.setMoneda(1);
 			}
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

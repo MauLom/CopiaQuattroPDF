@@ -29,8 +29,7 @@ public class AxaModel {
 		try {
 
 
-			
-			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description")) { // AUTOS
+			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description") || contenido.contains("DATOS DEL VEHÍCULO")) { // AUTOS
 				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false));
 				modelo = datosAxaAutos.procesar();
@@ -51,6 +50,7 @@ public class AxaModel {
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES"};
 				contenido = contenido.toUpperCase();
+				System.err.println("Aqui ando");
 				for (String tipo : tipos) {
 					if (contenido.contains(tipo)) {
 						switch (tipo) {
