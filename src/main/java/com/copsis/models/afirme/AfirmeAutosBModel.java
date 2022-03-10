@@ -316,14 +316,17 @@ public class AfirmeAutosBModel {
                   	}
                   	
                 	if(modelo.getRecibosAfirme().get(0).getFinanciamiento() != new BigDecimal(0) && i !=0) {
-                		System.out.println( " suma ==> "+  + modelo.getRecibosAfirme().get(0).getFinanciamiento().doubleValue());
-                		recibo2.setIva(new BigDecimal(modelo.getRecibosAfirme().get(0).getPrimaNeta().doubleValue()  + modelo.getRecargo().doubleValue()/serietota).setScale(2, BigDecimal.ROUND_HALF_EVEN) );
+          
+                	recibo2.setIva(new BigDecimal(((recibo2.getPrimaNeta().doubleValue() + recibo2.getFinanciamiento().doubleValue()))*.16).setScale(2, BigDecimal.ROUND_HALF_EVEN) );
                 	}else {
                 		recibo2.setIva(modelo.getRecibosAfirme().get(0).getIva());
                 	}
                   	
-                  	
-                  	recibo2.setTotal(modelo.getRecibosAfirme().get(0).getTotal());
+                	if(modelo.getRecibosAfirme().get(0).getFinanciamiento() != new BigDecimal(0) && i !=0) {                  	
+                  	recibo2.setTotal(new BigDecimal(((recibo2.getPrimaNeta().doubleValue() + recibo2.getFinanciamiento().doubleValue()  + recibo2.getIva().doubleValue() + recibo2.getCargoExtra().doubleValue()))).setScale(2, BigDecimal.ROUND_HALF_EVEN) );
+                	}else {
+                		recibo2.setTotal(modelo.getRecibosAfirme().get(0).getTotal());
+                	}
                  
                   	recibosLi.add(recibo2);
                   
