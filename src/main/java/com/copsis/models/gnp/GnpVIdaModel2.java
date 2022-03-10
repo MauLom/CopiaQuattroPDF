@@ -26,6 +26,8 @@ public class GnpVIdaModel2 {
 		int inicio = 0;
 		int fin = 0;
 
+
+	
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("### ### ###", "###").replace("### ### ", "###").replace("######", "###")
 				.replace("E ###specificaciones del Plan", ConstantsValue.ESPECIFICACIONES_PLAN)
@@ -37,11 +39,29 @@ public class GnpVIdaModel2 {
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(18);
+			
+			inicio =contenido.indexOf("Vigencia Versión");
+			fin  = contenido.indexOf("Moneda");
+
+		
+			if (inicio > -1 || fin > -1 || inicio < fin) {
+				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					
+					if(newcontenido.toString().split("\n")[i].contains("Desde el")) {						
+                      modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].split("Desde el")[1]).trim().replace("###", "-")));				
+					}
+					
+					if(newcontenido.toString().split("\n")[i].contains("Hasta el")) {					
+                      modelo.setVigenciaA(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].split("Hasta el")[1]).trim().replace("###", "-")));				
+					}
+				}
+			}
 
 			inicio = contenido.indexOf("Póliza de Seguro de Vida");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
-
 			if (inicio > -1 || fin > -1 || inicio < fin) {
+				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
@@ -82,12 +102,12 @@ public class GnpVIdaModel2 {
 						 }
 						
 					}
-					if (newcontenido.toString().split("\n")[i].contains("Desde el")) {
+					if (newcontenido.toString().split("\n")[i].contains("Desde el") && modelo.getVigenciaDe().length() == 0) {
 
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								fn.elimgatos(newcontenido.toString().split("\n")[i].split("Desde el")[1]).replace("###", "-")));
 					}
-					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA_EL)) {
+					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA_EL) && modelo.getVigenciaA().length() == 0) {
 
 						modelo.setVigenciaA(fn.formatDateMonthCadena(
 								fn.elimgatos(newcontenido.toString().split("\n")[i].split("Hasta el")[1]).replace("###", "-")));
@@ -531,7 +551,8 @@ public class GnpVIdaModel2 {
 			}
 			
 		
-		
+			
+			
 		
 		
 			
