@@ -32,6 +32,9 @@ public class ZurichModel {
 			if(tipo == 0 && contenido.contains("Ubicación del riesgo:")) {
 				tipo =4;
 			}
+			if(tipo == 5 && contenido.contains("Incendio")) {
+				tipo = 4;
+			}
 	
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
@@ -42,7 +45,8 @@ public class ZurichModel {
 				break;
 				
 			case 4:// 
-				modelo  = new ZurichDiversosModel(fn.caratula(1, 8, stripper, doc)).procesar();				
+				String textoFormaPago = fn.textoBusqueda(stripper, doc, "Forma de pago", false);
+				modelo  = new ZurichDiversosModel(fn.caratula(1, 8, stripper, doc) + textoFormaPago).procesar();				
 				break;
 				default:
 			
