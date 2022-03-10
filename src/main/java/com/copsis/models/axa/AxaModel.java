@@ -50,7 +50,6 @@ public class AxaModel {
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES"};
 				contenido = contenido.toUpperCase();
-				System.err.println("Aqui ando");
 				for (String tipo : tipos) {
 					if (contenido.contains(tipo)) {
 						switch (tipo) {
