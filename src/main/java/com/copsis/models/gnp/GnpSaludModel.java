@@ -158,8 +158,9 @@ public class GnpSaludModel {
 								&& (dato.split("###")[0].contains("R.F.C:") && dato.split("###")[1].contains("del"))
 								|| (dato.split("###")[0].contains("R.F.C. :")
 										&& dato.split("###")[1].contains("del"))) {
-
-							modelo.setRfc(dato.split("###")[0].split(":")[1].replace("-", "").trim());
+							if(dato.split("###")[0].split(":").length>1) {
+								modelo.setRfc(dato.split("###")[0].split(":")[1].replace("-", "").trim());
+							}
 							if (dato.split("###")[1].contains("hrs.")) {
 
 								modelo.setVigenciaA(dato.split("###")[4].trim() + "-" + dato.split("###")[3].trim()
@@ -371,6 +372,10 @@ public class GnpSaludModel {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 					if (dato.contains("Plan")) {
 						switch (dato.trim().split("###").length) {
+						case 3:
+							String plan = fn.gatos(dato.split("Plan")[1].trim());
+							modelo.setPlan(plan.split("###")[0].trim());
+							break;
 						case 4:
 							if (dato.split("###")[0].trim().equals("Plan") && dato.split("###")[1].contains("Día")) {
 								modelo.setPlan(dato.split("###")[1].split("Día")[0].trim());
@@ -503,6 +508,7 @@ public class GnpSaludModel {
 							modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
 						} else if (n == 7 || n == 9 || n == 8) {
 							modelo.setSa(A.split("###")[1].trim());
+							A = A.replace("###pesos", "pesos");
 							if (A.split("###")[5].contains("%")) {
 								modelo.setDeducible(A.split("###")[3].trim());
 								modelo.setCoaseguro(A.split("###")[5].trim());
@@ -582,6 +588,10 @@ public class GnpSaludModel {
 						} else if (dato.contains("Sustitución")) {
 							newcontenido.append(
 									dato.split("Sustitución")[0].replace("###", "   ").trim().replace("   ", "###"))
+									.append("\r\n");
+						} else if (dato.contains("###D ###escripción")) {
+							newcontenido.append(
+									dato.split("###D ###escripción")[0].replace("###", "   ").trim().replace("   ", "###"))
 									.append("\r\n");
 						} else {
 							newcontenido.append(dato.replace("###", "   ").trim().replace("   ", "###")).append("\r\n");
