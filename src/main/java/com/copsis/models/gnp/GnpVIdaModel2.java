@@ -82,12 +82,12 @@ public class GnpVIdaModel2 {
 						 }
 						
 					}
-					if (newcontenido.toString().split("\n")[i].contains("Desde el")) {
+					if (newcontenido.toString().split("\n")[i].contains("Desde el") && modelo.getVigenciaDe().length() == 0) {
 
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								fn.elimgatos(newcontenido.toString().split("\n")[i].split("Desde el")[1]).replace("###", "-")));
 					}
-					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA_EL)) {
+					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA_EL) && modelo.getVigenciaA().length() == 0) {
 
 						modelo.setVigenciaA(fn.formatDateMonthCadena(
 								fn.elimgatos(newcontenido.toString().split("\n")[i].split("Hasta el")[1]).replace("###", "-")));
@@ -535,6 +535,7 @@ public class GnpVIdaModel2 {
 		
 		
 			
+		
 		
 			if (b.length() > 0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();

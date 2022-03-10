@@ -206,7 +206,13 @@ public class GnpSaludModel {
 
 					if (dato.contains(ConstantsValue.FORMA_PAGO2)) {
 						switch (dato.trim().split("###").length) {
-						case 7:
+						case 8:
+							if (dato.split("###")[6].contains("de Póliza")) {
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
+							}						
+							break;
+						case 7: 
+						
 							if (dato.contains(ConstantsValue.FORMA_PAGO2)) {
 								modelo.setFormaPago(fn.formaPago(
 										dato.trim().split(ConstantsValue.FORMA_PAGO2)[1].split("###")[1].trim()));
@@ -230,14 +236,18 @@ public class GnpSaludModel {
 												.replace("###", "").trim()));
 
 							}
-
-							break;
+							break;				
 						default:
 							break;
+						}
+						
+						if(modelo.getFormaPago() == 0) {
+							modelo.setFormaPago(fn.formaPagoSring(dato));
 						}
 					}
 
 					if (dato.contains(ConstantsValue.MONEDA)) {
+						
 						switch (dato.split("###").length) {
 						case 7:
 							if (dato.split("###")[4].trim().equals(ConstantsValue.MONEDA)
@@ -257,6 +267,12 @@ public class GnpSaludModel {
 								modelo.setMoneda(fn.moneda(dato.split("###")[5].trim()));
 
 							}
+							if(dato.contains("I.V.A.")) {
+								
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.toString().split("I.V.A.")[1].replace("###", "").trim())));
+							}
+							
+							
 							break;
 						case 10:
 							if (dato.contains(ConstantsValue.MONEDA) && dato.contains(ConstantsValue.FRACCIONADO)) {
@@ -268,6 +284,10 @@ public class GnpSaludModel {
 							break;
 						default:
 							break;
+						}
+						
+						if(modelo.getMoneda() == 0) {
+							modelo.setMoneda(fn.buscaMonedaEnTexto(dato));
 						}
 					}
 
@@ -927,6 +947,14 @@ public class GnpSaludModel {
 
 			modelo.setIdCliente(
 					contenido.split("Código Cliente")[1].split(ConstantsValue.DURACION)[0].replace("###", "").trim());
+			
+			
+			if(modelo.getDerecho().doubleValue() == 0) {
+				inicio = contenido.indexOf("");
+				fin = contenido.indexOf("");
+				
+			}
+			
 
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
