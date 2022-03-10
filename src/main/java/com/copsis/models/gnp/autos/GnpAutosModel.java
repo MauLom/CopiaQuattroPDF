@@ -707,7 +707,6 @@ public class GnpAutosModel {
 			newcontenido = new StringBuilder();
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					GnpAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
