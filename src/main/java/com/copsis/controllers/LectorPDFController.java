@@ -17,6 +17,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;
+import com.copsis.models.ImportacionValidacionModel;
 import com.copsis.services.IdentificaCertificadoService;
 import com.copsis.services.IdentificaPolizaService;
 import com.copsis.utils.ErrorCode;
@@ -38,6 +39,7 @@ public class LectorPDFController   {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
+		
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
 		}catch(ValidationServiceException e) {
 			throw e;
