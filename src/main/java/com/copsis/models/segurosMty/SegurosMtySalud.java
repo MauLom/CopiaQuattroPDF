@@ -41,6 +41,7 @@ public class SegurosMtySalud {
 				.replace("RECARGO ###POR PAGO ###", "RECARGO POR PAGO###")
 				.replace("ESTE DOCUMENTO ###NO ES VÁLIDO ###COMO RECIBO","ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO")
 				.replace("ASEGURA###DA", "ASEGURADA")
+				.replace("ASEGURA###DO ###FIGURA ###GÉNERO ###EDAD", "ASEGURADO ###FIGURA ###GÉNERO ###EDAD")
 				;
 			
 		try {
@@ -200,9 +201,18 @@ public class SegurosMtySalud {
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	        		
 	        			if(newcontenido.split("\n")[i].contains("CANAL DE VENTA") && newcontenido.split("\n")[i+1].split("###").length > 2) {	 
-
-	        					modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[1]);
-	        					modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2]);	        						      	        					
+	        					if(newcontenido.split("\n")[i+1].split("###")[1].split(" ").length>1) {
+		        					modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[1].trim());
+		        					modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].trim());	
+	        					}else {
+	        						String texto = newcontenido.split("\n")[i+1];
+	        						texto = texto.substring(texto.indexOf("###")+3);
+	        						
+	        						modelo.setCveAgente(texto.split("###")[texto.split("###").length-1]);
+	        						String agente = texto.split(modelo.getCveAgente())[0].replace("###", " ");
+	        						modelo.setAgente(fn.eliminaSpacios(agente.trim()));
+	        					}
+        						      	        					
 	        			}
 	        		}	         
 	         }
