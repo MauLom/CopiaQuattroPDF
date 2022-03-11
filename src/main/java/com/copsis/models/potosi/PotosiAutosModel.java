@@ -189,7 +189,8 @@ public class PotosiAutosModel {
 			
 			
 			return modelo;
-		} catch (Exception e) {			
+		} catch (Exception ex) {	
+			modelo.setError(PotosiAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			 return modelo;
 		}
 		

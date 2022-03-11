@@ -77,6 +77,24 @@ public class qualitasAutosModel {
 					}
 				}
 			}
+			
+			if(modelo.getFechaEmision().length() == 0) {
+				inicio = contenido.indexOf("IMPORTE TOTAL");
+				fin = contenido.indexOf("Funcionario Autorizado");
+				
+				if(inicio > -1 && inicio < fin) {
+					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+					for(String textoRenglon: newcontenido.split("\n")) {
+						if (textoRenglon.split(" DE ").length == 3 && textoRenglon.split("A ").length > 1) {
+							String fecha = textoRenglon.split("A ")[1].replace(" DE ", "-").trim();
+							if(fecha.split("-").length > 2) {
+								modelo.setFechaEmision(fn.formatDateMonthCadena(fecha));
+							}
+							
+						}
+					}
+				}
+			}
 
 			// poliza
 			// endoso
@@ -835,7 +853,7 @@ public class qualitasAutosModel {
 				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
 				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
 				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getIva(), 2));
 
 				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
 				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
