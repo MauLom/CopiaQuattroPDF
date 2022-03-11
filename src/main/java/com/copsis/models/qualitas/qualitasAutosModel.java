@@ -84,7 +84,6 @@ public class qualitasAutosModel {
 				
 				if(inicio > -1 && inicio < fin) {
 					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-					System.err.println(newcontenido);
 					for(String textoRenglon: newcontenido.split("\n")) {
 						if (textoRenglon.split(" DE ").length == 3 && textoRenglon.split("A ").length > 1) {
 							String fecha = textoRenglon.split("A ")[1].replace(" DE ", "-").trim();
