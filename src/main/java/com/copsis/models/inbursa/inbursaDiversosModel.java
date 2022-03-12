@@ -50,6 +50,10 @@ public class inbursaDiversosModel {
 							&& newcontenido.toString().split("\n")[i].contains("CIS")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i + 1].split("###")[2]);
 						resultado = newcontenido.toString().split("\n")[i + 2];
+					}else if(newcontenido.toString().split("\n")[i].contains("PÓLIZA")
+							&& newcontenido.toString().split("\n")[i].contains("CIS")
+							&& newcontenido.toString().split("\n")[i].contains("CLIENTE INBURSA")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i - 1].split("###")[1]);
 					}
 					if (newcontenido.toString().split("\n")[i].contains("C.P.")
 							&& newcontenido.toString().split("\n")[i].contains("R.F.C")) {
@@ -149,7 +153,7 @@ public class inbursaDiversosModel {
 									.split("###")[newcontenido.toString().split("\n")[i + 2].split("###").length - 1]));
 						}
 						iva = true;
-					} else if (newcontenido.toString().split("\n")[i].contains("IVA") && !iva) {
+					} else if (newcontenido.toString().split("\n")[i].split("IVA").length > 1 && !iva) {
 						modelo.setIva(fn.castBigDecimal(
 								fn.castDouble(newcontenido.toString().split("\n")[i].split("IVA")[1].split("###")[1]
 										.replace("###", ""))));
@@ -220,6 +224,8 @@ public class inbursaDiversosModel {
 				}
 			}
 
+			obtenerDatosAgente(contenido, modelo);
+			
 			inicio = contenido.indexOf("SECCION###COBERTURAS#");
 			fin = contenido.indexOf("COBERTURAS###ADICIONALES");
 			if (fin == -1) {
@@ -291,5 +297,27 @@ public class inbursaDiversosModel {
 			return modelo;
 		}
 	}
-
+	
+	private void obtenerFechaDeEmision(String textoContenido, EstructuraJsonModel model) {
+		
+	}
+	
+	private void obtenerDatosAgente(String textoContenido, EstructuraJsonModel model) {
+		int indexInicio = contenido.indexOf("Término máximo para el pago de segunda fracción");
+		int indexFin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
+		String newcontenido = textoContenido.substring(indexInicio,indexFin);
+		newcontenido = newcontenido.replace("@@@", "").replace("\r", "");	
+		System.err.println(newcontenido);
+		StringBuilder agente = new StringBuilder();
+		String[] arrContenido =  newcontenido.split("\n");
+		for (int i = 0; i < arrContenido.length; i++) {
+	        if(arrContenido[i].trim().length() > 0 && !arrContenido[i].contains("Término ")) {
+	        	agente.append(arrContenido[i].split("###")[0]).append(" ");
+	        }
+		}
+		
+		model.setAgente(fn.eliminaSpacios(agente.toString()));
+		String cveAgente = modelo.getAgente().split(" ")[0];
+		modelo.setCveAgente(cveAgente);
+	}
 }
