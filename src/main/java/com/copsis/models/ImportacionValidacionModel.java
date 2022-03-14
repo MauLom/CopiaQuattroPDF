@@ -12,8 +12,8 @@ public class ImportacionValidacionModel {
 			if(poliza.getCp().length() == 0) {
 				respuesta +="El cp esta vacio\n";
 			}
-			if(poliza.getPlan().length() == 0) {
-				respuesta +="El plan  esta vacio\n";
+			if(poliza.getCteNombre().length() == 0) {
+				respuesta +="El campo  getCteNombre no debe estar vacio\n";
 			}
 			if(poliza.getCoberturas().isEmpty()) {
 				respuesta +="La poliza debe contener coberturas\n";
@@ -28,6 +28,51 @@ public class ImportacionValidacionModel {
 			if(poliza.getMoneda() == 0){
 				respuesta +="La moneda no esta definida\n";
 			}
+			
+			if(poliza.getPrimaneta().doubleValue() == 0 || poliza.getPrimaTotal().doubleValue() == 0  ) {
+				respuesta +="El campo  prima o prima total no pueden estar cero\n";
+			
+			}
+			
+			if(poliza.getCteDireccion().length() == 0 &&  poliza.getCteDireccion().length() > 200 ) {
+				respuesta +="La direccion no puede estar vacia o  tener mas de 200 caracteres\n";
+			}
+			
+			if(poliza.getAgente() .length() == 0 || poliza.getCveAgente().length() == 0) {
+				respuesta +="El campo  agente o cveAgente no pueden estar vacios\n";
+			}
+			if(poliza.getPlan().length() == 0 ) {
+				respuesta +="Alerta solo revisar si trae plan la poliza\n";			
+			}
+			
+			if(poliza.getTipo() == 1) {//autos
+				if(poliza.getModelo() == 0) {
+					respuesta +="Alerta solo revisar si trae *modelo la poliza\n";			
+				}
+				if(poliza.getMarca().length() == 0) {
+					respuesta +="Alerta solo revisar si trae *marca la poliza\n";			
+				}
+				if(poliza.getSerie().length() == 0) {
+					respuesta +="Alerta solo revisar si trae *serie la poliza\n";			
+				}
+				if(poliza.getMotor().length() == 0) {
+					respuesta +="Alerta solo revisar si trae *motor la poliza\n";			
+				}
+				if(poliza.getPlacas().length() == 0) {
+					respuesta +="Alerta solo revisar si trae *placas la poliza\n";			
+				}
+				if(poliza.getDescripcion().length() == 0) {
+					respuesta +="Alerta solo revisar si trae descripcion del auto la poliza\n";			
+				}
+			}
+			
+			if(poliza.getTipo() == 1) {//salud
+				if(poliza.getAsegurados().isEmpty()) {
+					respuesta +="Alerta solo revisar si trae *Asegurados la poliza\n";		
+				}
+			}
+			 
+			respuesta +="Clase==> "+  poliza.getError() +"\n" ;		
 			
 
 			return respuesta;

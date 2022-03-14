@@ -1244,5 +1244,13 @@ public class DataToolsModel {
 		return tipoParentesco;
 			
 		}
+		
+		public String extracted(int inicio, int fin, String contenido) {
+			String texto = "";
+			if(inicio > 0 && fin > 0 && inicio < fin ) {			   	
+				texto = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim();
+			}			
+		  return texto;	
+		}
 
 }

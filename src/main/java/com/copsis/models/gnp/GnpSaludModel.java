@@ -71,6 +71,7 @@ public class GnpSaludModel {
 			donde = fn.searchTwoTexts(contenido, ConstantsValue.RENOVACION, "Versión");
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+				
 					if (dato.contains(ConstantsValue.RENOVACION)) {
 						switch (dato.split("###").length) {
 						case 3:
@@ -90,6 +91,7 @@ public class GnpSaludModel {
 						}
 					}
 					if (dato.contains(ConstantsValue.VIGENCIA2)) {
+				
 						switch (dato.trim().split("###").length) {
 						case 1:
 							modelo.setCteNombre(dato.trim().split(ConstantsValue.VIGENCIA2)[0]);
@@ -103,6 +105,7 @@ public class GnpSaludModel {
 							break;
 						}
 					}
+					
 				}
 			}
 
@@ -205,11 +208,20 @@ public class GnpSaludModel {
 					}
 
 					if (dato.contains(ConstantsValue.FORMA_PAGO2)) {
+						
 						switch (dato.trim().split("###").length) {
 						case 8:
 							if (dato.split("###")[6].contains("de Póliza")) {
 								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
-							}						
+							}
+							
+							if (dato.split("###")[6].contains("Fraccionado")) {								
+								if(dato.split("###")[7].trim().contains("−")) {								
+									modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas( dato.split("###")[7].replace("−", "").trim())).negate());
+								}else {
+									modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
+								}								
+							}
 							break;
 						case 7: 
 						
@@ -293,6 +305,7 @@ public class GnpSaludModel {
 
 					if (dato.contains("de Póliza")) {
 						dato = dato.replace("######### ###", "###").trim();
+						
 
 						if (dato.split("###").length == 2 && dato.split("###")[0].contains("Póliza")) {
 							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
@@ -300,9 +313,12 @@ public class GnpSaludModel {
 						if (dato.split("###").length == 3 && dato.split("###")[1].contains("Póliza")) {
 							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[2].trim())));
 						}
+						if (dato.split("###").length == 8 && dato.split("###")[6].contains("Póliza")) {
+							modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[7].trim())));
+						}
 					}
 
-					if (dato.contains(ConstantsValue.IVA)) {
+					if (dato.contains(ConstantsValue.IVA)) {;
 						switch (dato.split("###").length) {
 						case 1:
 							if (dato.trim().split(" ").length == 2 && Double.parseDouble(
@@ -324,6 +340,10 @@ public class GnpSaludModel {
 								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
 							}
 							break;
+						case 4:
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split(ConstantsValue.IVA)[1]).replace("###", "").trim()));
+						
+							 break;
 						default:
 							break;
 						}
@@ -345,10 +365,14 @@ public class GnpSaludModel {
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "Grupo###Nacional");
 			if (donde > 0) {
-				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
+				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {					
 					if (dato.contains(ConstantsValue.PAGAR) && dato.split("###").length == 2
 							&& dato.split("###")[0].contains(ConstantsValue.PAGAR)) {
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("###")[1].trim())));
+					}
+					
+					if(modelo.getPrimaTotal().doubleValue() == 0 && dato.contains("Total a Pagar")) {						
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(dato.split("Total a Pagar")[1].replace("###", "").trim())));
 					}
 				}
 			}
@@ -422,6 +446,8 @@ public class GnpSaludModel {
 					}
 				}
 			}
+			
+			
 
 			inicio = contenido.indexOf(ConstantsValue.CLAVE2);
 			if (inicio > 0) {
@@ -457,6 +483,9 @@ public class GnpSaludModel {
 					modelo.setAgente((agente.toString().replace("### ###", "")).replace("###", "").trim());
 				}
 			}
+			
+			
+
 
 			// sa
 			// deducible
@@ -545,8 +574,7 @@ public class GnpSaludModel {
 			String a = contenido.split("Fecha de Expedición")[1].split("Moneda")[0];
 			modelo.setFechaEmision(a.split("###")[3] + "-" + a.split("###")[2] + "-" + a.split("###")[1]);
 
-			// asegurados { nombre nacimiento antiguedad sexo parentesco }
-			// inicio = contenido.indexOf("Asegurado (s)");
+
 			donde = 0;
 			donde = fn.recorreContenido(contenido, "segurado s");
 			dondeAux = fn.recorreContenido(contenido, "Coberturas###Suma");
@@ -949,10 +977,30 @@ public class GnpSaludModel {
 					contenido.split("Código Cliente")[1].split(ConstantsValue.DURACION)[0].replace("###", "").trim());
 			
 			
-			if(modelo.getDerecho().doubleValue() == 0) {
-				inicio = contenido.indexOf("");
-				fin = contenido.indexOf("");
+			if(modelo.getCteNombre().length() == 0  && modelo.getRfc().length() == 0  
+					&& modelo.getVigenciaDe().length() == 0	&& modelo.getVigenciaA().length() == 0
+					&& modelo.getCp().length() == 0) {
+				newcontenido = new StringBuilder();
+				inicio = contenido.indexOf(ConstantsValue.RENOVACION);
+				fin = contenido.indexOf("Código Cliente");
 				
+				newcontenido.append(fn.extracted(inicio, fin, contenido).replace("las 12 hrs. del", ""));
+				for (int i = 0; i <newcontenido.toString().split("\n").length; i++) {					
+
+					if(newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].length() > 10) {
+				
+						modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", ""));
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("C.P")){
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].split("Desde")[0].replace("###", "").trim());
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].split("Desde")[1]).replace("###", "-")));
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("R.F.C:")){
+						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Hasta")[0].replace("###", "").trim());
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].toString().split("Hasta")[1]).replace("###", "-")));
+					} 
+				}
+		
 			}
 			
 
@@ -1076,6 +1124,8 @@ public class GnpSaludModel {
 			return modelo;
 		}
 	}
+
+	
 
 	private String extraigoPipe(String txtfull) {// EXTRAE LOS 2 PRIMEROS NUMEROS QUE ENCUENTRA DE
 		StringBuilder texto = new StringBuilder();

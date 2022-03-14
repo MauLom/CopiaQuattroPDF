@@ -43,12 +43,12 @@ public class ImpresionePDFController {
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
-		ex.printStackTrace();
+	
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 		  
 	}
-	
+
 	@PostMapping(value = "amortizacion")
 	public ResponseEntity<CopsisResponse> impresionScotia (@Valid @RequestBody AmortizacionPdfForm impresionForm, BindingResult bindingResult) {
 		try {

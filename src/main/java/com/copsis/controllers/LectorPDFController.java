@@ -17,6 +17,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;
+import com.copsis.models.ImportacionValidacionModel;
 import com.copsis.services.IdentificaCertificadoService;
 import com.copsis.services.IdentificaPolizaService;
 import com.copsis.utils.ErrorCode;
@@ -38,6 +39,7 @@ public class LectorPDFController   {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
+		
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(identificaPolizaService.queIndentificaPoliza(pdfForm)).build();
 		}catch(ValidationServiceException e) {
 			throw e;
@@ -45,6 +47,23 @@ public class LectorPDFController   {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 	}
+	@PostMapping(value = "/lectormasi", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CopsisResponse> lectorpdfs (@Valid @RequestBody PdfForm pdfForm ,BindingResult bindingResult){
+		try {
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
+			}
+			
+			ImportacionValidacionModel  importacionValidacionModel = new ImportacionValidacionModel();			
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(importacionValidacionModel.isValidImportacion(identificaPolizaService.queIndentificaPoliza(pdfForm))).build();
+		}catch(ValidationServiceException e) {
+			throw e;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+	
 	
 	@PostMapping(value = "/lectorCertificados", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> lectorCertificadospdf (@Valid @RequestBody PdfForm pdfForm, BindingResult bindingResult){
