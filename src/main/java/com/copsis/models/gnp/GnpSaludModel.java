@@ -1119,7 +1119,6 @@ public class GnpSaludModel {
 
 			return modelo;
 		} catch (Exception ex) {
-		 ex.printStackTrace();
 			modelo.setError(
 					GnpSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
