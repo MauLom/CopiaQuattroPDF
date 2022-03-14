@@ -83,8 +83,8 @@ public class IdentificaPolizaService {
 				modelo = datosQualitas.procesa();
 				encontro = true;
 			}
-
-			if (!encontro && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
+			
+			if (!encontro && !rangoSimple(2, 4, pdfStripper, pdDoc).contains("Seguros el Potosí S.A") && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
 					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") 					
 					|| contenido.contains("gnp.com.mx")|| rangoSimple(2, 4, pdfStripper, pdDoc).contains("gnp.com.mx") )) {

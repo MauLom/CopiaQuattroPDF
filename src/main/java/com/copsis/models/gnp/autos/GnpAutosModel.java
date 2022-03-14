@@ -1,5 +1,6 @@
 package com.copsis.models.gnp.autos;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class GnpAutosModel {
 		int longitudTexto = 0;
 
 		StringBuilder newcontenido = new StringBuilder();
-		StringBuilder newdireccion = new StringBuilder();
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Importe###por###Pagar", "Importe por Pagar").replace("Derecho###de###Póliza",
 				ConstantsValue.DERECHO_POLIZA)
 				.replace("Desde###las###12###hrs###del", "Desde las 12 hrs del")
-				.replace("Hasta###las###12###hrs###del", "Hasta las 12 hrs del");
+				.replace("Hasta###las###12###hrs###del", "Hasta las 12 hrs del")
+		        .replace("I.V.A.","I.V.A.");
 
 		try {
 
@@ -428,12 +429,36 @@ public class GnpAutosModel {
 			inicio = contenido.indexOf("I.V.A.");
 			if (inicio > 0) {
 				newcontenido = new StringBuilder();
-				newcontenido.append(contenido.split("I.V.A.")[1].split("\n")[0].replace("###", "").replace("$", "")
-						.replace(",", "").trim());
-				modelo.setIva(fn.castBigDecimal(
-						fn.preparaPrimas(fn.remplazarMultiple(newcontenido.toString(), fn.remplazosGenerales()))));
+				newcontenido.append(contenido.split("I.V.A.")[1]);
 
+				if(newcontenido.length() < 10) {
+					modelo.setIva(fn.castBigDecimal(
+							fn.preparaPrimas(fn.remplazarMultiple(newcontenido.toString(), fn.remplazosGenerales()))));				
+				}
 			}
+			
+
+			if(modelo.getIva().doubleValue() ==  0) {
+				inicio = contenido.indexOf("Motor");
+				fin = contenido.indexOf("Importe");				
+				if(inicio > -1 && fin > -1 && inicio <  fin) {
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));					
+					for (int j = 0; j < newcontenido.toString().split("\n").length; j++) {				
+						if(newcontenido.toString().split("\n")[j].contains("Motor") && newcontenido.toString().split("\n")[j].contains("I.V.A.") ) {
+							
+							modelo.setIva(fn.castBigDecimal(
+									fn.preparaPrimas(fn.remplazarMultiple( newcontenido.toString().split("\n")[j].split("Motor")[1].replace("I.V.A.", "").replace("###", ""),fn.remplazosGenerales()))));
+						}
+					}
+					
+				}
+			}
+			
+			
+			
+			
+			
 			/**
 			 * otro formato de gnp
 			 */
