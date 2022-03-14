@@ -33,7 +33,8 @@ public class GnpVIdaModel2 {
 				.replace("E ###specificaciones del Plan", ConstantsValue.ESPECIFICACIONES_PLAN)
 				.replace("Periodicidad de Pago", ConstantsValue.FORMA_PAGO2)
 				.replace("Importe a Pagar", "Importe a pagar")
-				.replace("C ###ontratante", "Contratante");
+				.replace("C ###ontratante", "Contratante")
+				.replace("E ###ste documento no", "Este documento no");
 		        
 
 		try {
@@ -490,6 +491,37 @@ public class GnpVIdaModel2 {
 				modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].replace("###", "").trim());	
 			}
 			
+			
+			/*Proceso unico cuando las  primas de las vienen cero*/
+			  if(modelo.getDerecho().doubleValue() == 0  || modelo.getRecargo().doubleValue() == 0 || modelo.getDerecho().doubleValue() == 0 
+					  &&  modelo.getIva().doubleValue() == 0 &&  modelo.getPrimaTotal().doubleValue() == 0) {
+				  
+				  
+					inicio = contenido.indexOf("Coberturas");
+					fin = contenido.indexOf("Agente");
+					if(fin < inicio ) {
+						fin = contenido.indexOf("Este documento no");
+					}
+				
+				
+					if (inicio > 0 && fin > 0 && inicio < fin) {
+						newcontenido = new StringBuilder();
+						newcontenido.append(contenido.substring(inicio,fin));
+						 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+
+							if(newcontenido.toString().split("\n")[i].contains("Importe Total") 
+							&& newcontenido.toString().split("\n")[i+1].contains("Actual")&& newcontenido.toString().split("\n")[i+1].split("Actual")[1].length() > 5) {															
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(
+										newcontenido.toString().split("\n")[i+1].split("Actual")[1].replace("###", "").trim())));
+								modelo.setPrimaneta(modelo.getPrimaTotal());
+							}
+						}
+					}
+			  }
+			
+			
+			
+			
 			String beneficiarios1 = "";
 			inicio = contenido.indexOf("Beneficiarios de Ahorro Garantizado:");
 			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
@@ -547,6 +579,18 @@ public class GnpVIdaModel2 {
 				
 				if (inicio > -1 && fin > -1 && inicio < fin) {
 					b =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();					
+				}
+			}
+	
+			
+			inicio = contenido.indexOf("Beneficiarios");
+			fin = contenido.lastIndexOf("Beneficiarios de Ahorro Garantizado");
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				String primer =contenido.substring(inicio, fin + 10).replace("@@@", "").trim();
+				for (String bene : primer.split("\n")) {
+					if( bene.split("-").length > 2) {
+					b = b+bene;
+					}
 				}
 			}
 			
