@@ -54,9 +54,8 @@ public class LectorPDFController   {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
-			ImportacionValidacionModel  importacionValidacionModel = new ImportacionValidacionModel();
 			
-			System.out.println(importacionValidacionModel.isValidImportacion(identificaPolizaService.queIndentificaPoliza(pdfForm)));
+			ImportacionValidacionModel  importacionValidacionModel = new ImportacionValidacionModel();			
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(importacionValidacionModel.isValidImportacion(identificaPolizaService.queIndentificaPoliza(pdfForm))).build();
 		}catch(ValidationServiceException e) {
 			throw e;
