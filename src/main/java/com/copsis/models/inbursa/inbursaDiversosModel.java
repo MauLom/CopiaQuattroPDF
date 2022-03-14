@@ -223,7 +223,7 @@ public class inbursaDiversosModel {
 
 					if (newcontenido.toString().split("\n")[i].contains("PRODUCTO")
 							&& newcontenido.toString().split("\n")[i].contains("TIPO")) {
-						modelo.setPlan("*"+newcontenido.toString().split("\n")[i].split("###")[1].replace("###", ""));
+						modelo.setPlan(newcontenido.toString().split("\n")[i].split("###")[1].replace("###", ""));
 						if(modelo.getPlan().contains("TIPO DE DOCUMENTO:") && newcontenido.toString().split("\n")[i].contains("PRODUCTO:###TIPO DE DOCUMENTO:")) {
 							modelo.setPlan(newcontenido.toString().split("\n")[i + 1].split("###")[0].replace("###", "").trim());
 						}
