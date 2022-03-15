@@ -25,12 +25,10 @@ public class InsigniaModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-			
-			tipo =fn.tipoPoliza(contenido);
-			System.out.println(tipo);
-			
-		 if (tipo == 1) {
-				modelo = new InsigniaVidaModel(fn.caratula(1, 2, stripper, doc)).procesar();
+		
+			tipo =fn.tipoPoliza(contenido);		
+		    if (tipo == 5) {
+				modelo = new InsigniaVidaModel(fn.caratula(1, 3, stripper, doc)).procesar();
 			}
 			
 			return modelo;

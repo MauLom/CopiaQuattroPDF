@@ -19,6 +19,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.constants.ConstantsValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataToolsModel {
 	DateTimeFormatter formatter;
@@ -1251,6 +1252,15 @@ public class DataToolsModel {
 				texto = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim();
 			}			
 		  return texto;	
+		}
+		
+		public List<String> obtenVigePoliza(String cadena) {
+			List<String> resultado = new ArrayList<>();
+			Matcher m = Pattern.compile(ConstantsValue.REGEX_FECHA).matcher(cadena);
+			while (m.find()) {
+				resultado.add(m.group());
+			}
+			return resultado;
 		}
 
 }
