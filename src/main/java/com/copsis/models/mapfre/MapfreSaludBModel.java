@@ -8,6 +8,7 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
+import com.copsis.models.inbursa.inbursaDiversosModel;
 
 public class MapfreSaludBModel {
 
@@ -29,7 +30,8 @@ public class MapfreSaludBModel {
 				.replace("Poliza Numero :", "Póliza Número:")
 				.replace("Endoso Numero", "Endoso Número")
 				.replace("Fecha de Emision", "Fecha de Emisión")
-				.replace("Expedicion", "Expedición");
+				.replace("Expedicion", "Expedición")
+				.replace("GASTOS MEDICOS MAYORES", "GASTOS MÉDICOS MAYORES");
 		
 		String newcontenido = "";
 		int inicio = 0;
@@ -131,6 +133,22 @@ public class MapfreSaludBModel {
 				modelo.setPlan(contenido.split("PLAN:###")[1].split("###")[0].trim());
 			}
 
+			if(modelo.getPlan().length() == 0 && contenido.contains("Tipo de Documento")) {
+				String texto = contenido.split("Tipo de Documento")[1];
+				if(texto.contains("GASTOS MÉDICOS MAYORES")) {
+					texto = texto.split("GASTOS MÉDICOS MAYORES")[1].split("\n")[1].split("###")[0].replace("@@@", "").trim();
+					if(!texto.startsWith("Endoso") && !texto.startsWith("Av")) {
+						modelo.setPlan(texto);
+					}
+				}else {
+					texto = texto.split("\n")[1].split("###")[0].replace("@@@", "").trim();
+					System.out.println("="+texto+"=");
+					if(!texto.startsWith("Endoso") && !texto.startsWith("Av")) {
+						modelo.setPlan(texto);
+					}
+				}
+				
+			}
 			
 			inicio = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
 			fin = contenido.indexOf("LAS ANTERIORES COBERTURAS");	
@@ -141,7 +159,9 @@ public class MapfreSaludBModel {
 						.replace("10%", "###10%###")
 						.replace("Usd", "###Usd###")
 						.replace("30%", "###30%###")
-						.replace("VISIÓN", "VISIÓN###");
+						.replace("VISIÓN", "VISIÓN###")
+						.replace("COBERTURA BÁSICA ", "COBERTURA BÁSICA###");
+				//System.out.println(newcontenido);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
@@ -285,7 +305,9 @@ public class MapfreSaludBModel {
 					buildRecibos(modelo);
 			
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			modelo.setError(MapfreSaludBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
+					+ ex.getCause());
 			return modelo;
 		}
 		
