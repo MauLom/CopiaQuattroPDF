@@ -31,6 +31,7 @@ public class GmxDiversosModel {
 			inicio = contenido.indexOf("POLIZA NUEVA");
 			fin = contenido.indexOf("Descripción de Bienes");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
+
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
@@ -68,7 +69,20 @@ public class GmxDiversosModel {
 					
 					if (newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("horas de la ")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
+
 					}
+					if (newcontenido.split("\n")[i].contains("Domicilio") && newcontenido.split("\n")[i].contains("Fecha de Nacimiento") && modelo.getCteDireccion().length() == 0 ) {
+						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio")[1].split("Fecha de Nacimiento")[0].replace("###", "").trim()
+								+"  " + newcontenido.split("\n")[i+1]	
+								);
+					}
+
+
+					if(newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i].contains("-")){
+						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente")[1].split("-")[0].replace("###", "").trim());
+						modelo.setAgente(newcontenido.split("\n")[i].split("Agente")[1].split("-")[1].replace("###", "").trim());
+					}
+
 
 					if (newcontenido.split("\n")[i].contains("Moneda") ) {
 						modelo.setMoneda(fn.buscaMonedaEnTexto((newcontenido.split("\n")[i]))); 
@@ -78,7 +92,7 @@ public class GmxDiversosModel {
 						modelo.setFormaPago(fn.formaPagoSring((newcontenido.split("\n")[i]))); 
 					}
 					
-					
+
 				}
 
 			}
@@ -92,11 +106,10 @@ public class GmxDiversosModel {
 				newcontenido = "";
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					System.out.println(newcontenido.split("\n")[i]);
 					if(newcontenido.split("\n")[i].contains("Prima Neta") && newcontenido.split("\n")[i].contains("Derecho") 						
 					&& newcontenido.split("\n")[i+1].length() > 30) {
 						int sp = newcontenido.split("\n")[i].split("###")[1].length();
-						System.out.println(sp);
+		
 						if(sp == 8) {
 							modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(
 									newcontenido.split("\n")[i+1].split("###")[1].trim())));
