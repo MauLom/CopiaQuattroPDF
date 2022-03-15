@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class PlanSeguroSaludModel {
@@ -77,7 +78,6 @@ public class PlanSeguroSaludModel {
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				System.out.println(newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Deducible") && newcontenido.toString().split("\n")[i].contains("Coaseguro")
 						
 						&& newcontenido.toString().split("\n")[i].contains("Plan Avanzado")		) {
@@ -100,10 +100,9 @@ public class PlanSeguroSaludModel {
 					
 					if(newcontenido.toString().split("\n")[i].split("###").length == 6) {
 						asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-						asegurado.setSexo( fn.sexo(newcontenido.toString().split("\n")[i].split("###")[1]) ? 0 :1) ;
+						asegurado.setSexo( fn.sexo(newcontenido.toString().split("\n")[i].split("###")[1]).booleanValue() ? 0 :1) ;
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[2]));
-						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[3]));
-						
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[3]));						
 						asegurados.add(asegurado);
 					}
 				}
@@ -145,12 +144,32 @@ public class PlanSeguroSaludModel {
 			 modelo.setAgente(newcontenido.toString().split("\n")[1].split("###")[1].replace(".", "").trim());
 		 }
 
-		 
-		 
+
+		    inicio = contenido.indexOf("COBERTURA BASICA");
+			fin = contenido.indexOf("Financiamiento");
+
+			newcontenido = new StringBuilder();
+			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 			
-			
-		 
-			
+				if(!newcontenido.toString().split("\n")[i].contains("Son las que se describen") 
+				 && !newcontenido.toString().split("\n")[i].contains("COBERTURAS ADICIONALES")
+				 && !newcontenido.toString().split("\n")[i].contains("Primas")
+				 && !newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
+					if(newcontenido.toString().split("\n")[i].contains("COBERTURA BASICA")) {
+						cobertura.setNombre("COBERTURA BASICA");
+						coberturas.add(cobertura);
+					}else {						
+						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+						coberturas.add(cobertura);
+					}
+					
+				}				
+			}
+			modelo.setCoberturas(coberturas);
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(PlanSeguroSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
