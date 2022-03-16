@@ -1,7 +1,9 @@
 package com.copsis.models.inbursa;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -50,6 +52,10 @@ public class inbursaDiversosModel {
 							&& newcontenido.toString().split("\n")[i].contains("CIS")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i + 1].split("###")[2]);
 						resultado = newcontenido.toString().split("\n")[i + 2];
+					}else if(newcontenido.toString().split("\n")[i].contains("PÓLIZA")
+							&& newcontenido.toString().split("\n")[i].contains("CIS")
+							&& newcontenido.toString().split("\n")[i].contains("CLIENTE INBURSA")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i - 1].split("###")[1]);
 					}
 					if (newcontenido.toString().split("\n")[i].contains("C.P.")
 							&& newcontenido.toString().split("\n")[i].contains("R.F.C")) {
@@ -149,11 +155,15 @@ public class inbursaDiversosModel {
 									.split("###")[newcontenido.toString().split("\n")[i + 2].split("###").length - 1]));
 						}
 						iva = true;
-					} else if (newcontenido.toString().split("\n")[i].contains("IVA") && !iva) {
+					} else if (newcontenido.toString().split("\n")[i].split("IVA").length > 1 && !iva) {
 						modelo.setIva(fn.castBigDecimal(
 								fn.castDouble(newcontenido.toString().split("\n")[i].split("IVA")[1].split("###")[1]
 										.replace("###", ""))));
 						iva = true;
+					}else if((i+1) < newcontenido.toString().split("\n").length && newcontenido.toString().split("\n")[i].contains("IVA") && !iva) {
+						String ivaTexto = newcontenido.toString().split("\n")[i+1];
+						ivaTexto = ivaTexto.split("###")[ivaTexto.split("###").length -1];
+						modelo.setIva(fn.castBigDecimal(fn.castDouble(fn.preparaPrimas(ivaTexto.trim()))));
 					}
 					if (modelo.getFormaPago() == 0
 							&& newcontenido.toString().split("\n")[i].contains("FORMA DE PAGO")) {
@@ -214,12 +224,21 @@ public class inbursaDiversosModel {
 					if (newcontenido.toString().split("\n")[i].contains("PRODUCTO")
 							&& newcontenido.toString().split("\n")[i].contains("TIPO")) {
 						modelo.setPlan(newcontenido.toString().split("\n")[i].split("###")[1].replace("###", ""));
+						if(modelo.getPlan().contains("TIPO DE DOCUMENTO:") && newcontenido.toString().split("\n")[i].contains("PRODUCTO:###TIPO DE DOCUMENTO:")) {
+							modelo.setPlan(newcontenido.toString().split("\n")[i + 1].split("###")[0].replace("###", "").trim());
+						}
 					} else if (newcontenido.toString().split("\n")[i].contains("PRODUCTO")) {
 						modelo.setPlan(newcontenido.toString().split("\n")[i + 1].split("###")[0].replace("###", ""));
+					}
+					
+					if (newcontenido.toString().split("\n")[i].contains("DATOS DEL CONTRATANTE") && newcontenido.toString().split("\n")[i + 1].contains("NOMBRE:")) {
+						modelo.setCteNombre(newcontenido.toString().split("\n")[i + 2].split("###")[0].trim());
 					}
 				}
 			}
 
+			obtenerDatosAgenteYFechaEmision(contenido, modelo);
+			
 			inicio = contenido.indexOf("SECCION###COBERTURAS#");
 			fin = contenido.indexOf("COBERTURAS###ADICIONALES");
 			if (fin == -1) {
@@ -283,6 +302,10 @@ public class inbursaDiversosModel {
 				}
 				modelo.setCoberturas(coberturas);
 			}
+			
+			if(modelo.getCoberturas().isEmpty()) {
+				obtenerCoberturasOtroFormato(contenido, modelo);
+			}
 
 			return modelo;
 		} catch (Exception ex) {
@@ -291,5 +314,161 @@ public class inbursaDiversosModel {
 			return modelo;
 		}
 	}
+	
+	
+	
+	private void obtenerDatosAgenteYFechaEmision(String textoContenido, EstructuraJsonModel model) {
+		int indexInicio = contenido.indexOf("Término máximo para el pago de segunda fracción");
+		int indexFin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
+		
+		String newcontenido = textoContenido.substring(indexInicio,indexFin);
+		newcontenido = newcontenido.replace("@@@", "").replace("\r", "");	
+		
+		StringBuilder aux = new StringBuilder();
+		String[] arrContenido =  newcontenido.split("\n");
+		String fecha = "";
+		
+		for (int i = 0; i < arrContenido.length; i++) {
+	        if(arrContenido[i].trim().length() > 0 && !arrContenido[i].contains("Término ")) {
+	        	aux.append(arrContenido[i].split("###")[0]).append(" ");
+	        }
+	        if(arrContenido[i].split("-").length == 3 && arrContenido[i].split("-").length > 1 ) {
+	        	
+	        	fecha = arrContenido[i].split("###")[1].trim();
+	        	if(fecha.split("-").length == 3) {
+	        		model.setFechaEmision(fn.formatDateMonthCadena(fecha));
+	        	}
+	        }
+		}
+		
+		model.setCveAgente(aux.toString().split(" ")[0]);
+		model.setAgente(aux.toString().split(model.getCveAgente())[1].trim());
+	}
 
+	private void obtenerCoberturasOtroFormato(String texto, EstructuraJsonModel model) {
+		int indexInicio = texto.indexOf("COBERTURAS ADICIONALES CONTRATADAS");
+		int indexFin = texto.indexOf("DEDUCIBLES");
+		List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+		
+		if(indexInicio > -1 && indexInicio < indexFin) {
+			String newContenido = texto.substring(indexInicio +35, indexFin).replace("@@@", "").replace("\r", "");
+			if(!newContenido.contains("SUMA ASEGURADA")) {
+				//FORMATO donde en un apartado estan nombres de coberturas y el valor de deducible se encuentra en otro apartado 
+				Map<String, String> mapDeducibles = obtenerApartadoDeducible(texto);
+				String deducibleDemasCoberturas = mapDeducibles.containsKey("DEMÁS COBERTURAS") ? mapDeducibles.get("DEMÁS COBERTURAS") : "";
+				String nombre = "";
+				String deducible = "";
+				int sp = 0;
+				
+				StringBuilder strbCoberturas = new StringBuilder();
+				if(texto.split("Cobertura básica").length>1) {
+					String coberturaB = fn.elimgatos(texto.split("Cobertura básica")[1].split("\n")[0].trim());
+					coberturaB = "Cobertura básica###" +coberturaB.split("###")[0].replace(":", "")+ "\n";
+					newContenido = coberturaB + newContenido;
+				}
+
+				String[] arrContenido = newContenido.split("\n");
+				for(int i=0;i< arrContenido.length;i++) {
+					arrContenido[i] = completaTextoCobertura(arrContenido, i);
+					if (arrContenido[i].length() > 1 && !arrContenido[i].contains("Página")
+							&& !arrContenido[i].contains("CARÁTULA") && arrContenido[i].split("-").length < 3
+							&& !arrContenido[i].contains("CLIENTE INBURSA")) {
+
+						nombre = arrContenido[i].split("###")[0].trim().toUpperCase();
+						
+						if(mapDeducibles.containsKey(nombre)) {
+							deducible  = mapDeducibles.get(nombre);
+						}else if(nombre.equalsIgnoreCase("Cobertura Básica")) {
+							deducible = mapDeducibles.containsKey("BÁSICA") ? mapDeducibles.get("BÁSICA")
+									: deducibleDemasCoberturas;
+						}else if(nombre.length() >0){
+							deducible = deducibleDemasCoberturas;						
+						}
+						sp = arrContenido[i].split("###").length;
+						if(sp == 1) {
+							strbCoberturas.append(arrContenido[i]).append("### ###").append(deducible);
+							strbCoberturas.append("\n");
+						}else if(sp == 2) {
+							strbCoberturas.append(arrContenido[i]).append("###").append(deducible);
+							strbCoberturas.append("\n");
+						}
+					}
+
+			
+				}
+				
+				arrContenido = strbCoberturas.toString().split("\n");
+				for(String textoCobertura:arrContenido) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					sp = textoCobertura.split("###").length;
+					if(textoCobertura.split("###").length> 1) {
+						cobertura.setNombre(textoCobertura.split("###")[0].trim());
+						cobertura.setSa(textoCobertura.split("###")[1].trim());
+						if(sp == 3) {
+							cobertura.setDeducible(textoCobertura.split("###")[2].trim());
+						}						
+						coberturas.add(cobertura);
+					}
+				}
+				
+				if(!coberturas.isEmpty()) {
+					model.setCoberturas(coberturas);
+				}
+			}
+		}
+		
+		
+	}
+	private String completaTextoCobertura(String[] arrTexto,int i) {
+		String texto = arrTexto[i];
+		if(texto.contains("RESPONSABILIDAD CIVIL MANIOBRAS DE CARGA Y")) {
+			texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL MANIOBRAS DE CARGA Y", "DESCARGA");
+		} else if (texto.contains("RESPONSABILIDAD CIVIL INSTALACIONES")) {
+			texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL INSTALACIONES",
+					"SUBTERRANEAS");
+		} else if (texto.contains("RESPONSABILIDAD CIVIL PRODUCTOS Y-O TRABAJOS")) {
+			texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL PRODUCTOS Y-O TRABAJOS",
+					"TERMINADOS");
+		}
+		
+		return texto;
+	}
+	
+	private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
+		String texto = arrTexto[i];
+		if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+			texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
+			arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente, "").replace(textoSiguiente+"###", "");
+		}
+		return texto;
+	}
+	
+	private Map<String, String> obtenerApartadoDeducible(String texto) {
+		int indexInicio = texto.indexOf("DEDUCIBLES");
+		int indexFin = texto.indexOf("La presente póliza");	
+		Map<String, String> deducibles = new HashMap<>();
+
+		if(indexInicio > -1 && indexInicio < indexFin) {
+			String newContenido = texto.substring(indexInicio, indexFin).replace("@@@", "").replace("\r", "");
+			String[] arrewContenido = newContenido.split("\n");
+			String key = "";
+			StringBuilder valor = new StringBuilder();
+			for(String renglon : arrewContenido) {
+				if(renglon.split("###").length == 2 && (renglon.contains("%") || renglon.contains("porciento"))) {
+					key = "";
+					valor = new StringBuilder();
+					key = renglon.split("###")[0].toUpperCase().trim();
+					valor.append(renglon.split("###")[1]);
+				}else if(renglon.split("###").length ==1) {
+					valor.append(" ").append(renglon);
+				}
+				
+				if(key.length() > 0) {
+					deducibles.put(key, fn.eliminaSpacios(valor.toString()).trim());
+				}
+			}
+		}
+
+		return deducibles;
+	}
 }
