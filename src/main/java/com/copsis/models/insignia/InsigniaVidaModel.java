@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -35,13 +37,17 @@ public class InsigniaVidaModel {
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+			
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].replace("###", ""));
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Forma de pago") && newcontenido.toString().split("\n")[i].contains("Moneda")) {
-					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+				if(newcontenido.toString().split("\n")[i].contains("Forma de pago") && newcontenido.toString().split("\n")[i].contains("Moneda") 
+					&& newcontenido.toString().split("\n")[i].contains("Producto")	
+						) {
+					System.out.println(newcontenido.toString().split("\n")[i].trim());
+					modelo.setPlan(newcontenido.toString().split("\n")[i].trim().split("###")[3]);
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1].trim()));
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i+1].contains("RFC")) {
@@ -66,17 +72,54 @@ public class InsigniaVidaModel {
 				}								
 			}
 			
-			
-
-			
-			
 		
-					inicio = contenido.indexOf("Suma asegurada");
-					fin  = contenido.indexOf("DESIGNACIÓN DE BENEFICIARIOS");
-					
+					inicio = contenido.indexOf("ASEGURADO TITULAR");
+					fin  = contenido.indexOf("Suma asegurada");
 					newcontenido = new StringBuilder();
+					newcontenido.append(fn.extracted(inicio, fin, contenido));
+					List<EstructuraAseguradosModel> asegurados = new ArrayList<>();	
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+						if(newcontenido.toString().split("\n")[i].contains("NOMBRE:")) {
+							asegurado.setNombre(newcontenido.toString().split("\n")[i].split("NOMBRE:")[1].replace("###", "").trim());
+						}
+						if(newcontenido.toString().split("\n")[i].contains("NACIMIENTO:") && newcontenido.toString().split("\n")[i].contains("EDAD:")
+						 && newcontenido.toString().split("\n")[i].contains("SEXO:")	) {
+							
+							asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("NACIMIENTO:")[1].split("EDAD")[0].replace("###", "").trim()));
+							asegurado.setEdad(fn.castInteger(newcontenido.toString().split("\n")[i].split("EDAD:")[1].split("SEXO")[0].replace("###", "").trim()));
+							asegurado.setSexo(fn.sexo((newcontenido.toString().split("\n")[i].split("SEXO:")[1].replace("###", "").trim())) ? 1: 0);
+						}
+					}
+					asegurados.add(asegurado);
+					  modelo.setAsegurados(asegurados); 
+			         
+			        
+			
+			        
+			    	inicio = contenido.lastIndexOf("INFORMACIÓN DEL ASEGURADO");
+					fin  = contenido.indexOf("BENEFICIARIOS SECUNDARIOS");
+					newcontenido = new StringBuilder();
+					newcontenido.append(fn.extracted(inicio, fin, contenido).replace("CONYUGE", "###CONYUGE###"));
+					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 					
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();				
+						if(newcontenido.toString().split("\n")[i].contains("CONYUGE")) {
+							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
+							beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));							
+							beneficiario.setPorcentaje(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].replace("%", "").trim()));
+							beneficiarios.add(beneficiario);
+						}
+					}
+				
+					modelo.setBeneficiarios(beneficiarios);
 					
+					   
+
+					inicio = contenido.indexOf("Suma asegurada");
+					fin  = contenido.indexOf("DESIGNACIÓN DE BENEFICIARIOS");					
+					newcontenido = new StringBuilder();									
 					newcontenido.append(fn.extracted(inicio, fin, contenido));
 					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
@@ -120,6 +163,17 @@ public class InsigniaVidaModel {
 						}
 						
 					}
+					
+					inicio = contenido.indexOf("Agente");
+					fin = contenido.indexOf("En cumplimiento");
+					newcontenido = new StringBuilder();									
+					newcontenido.append(fn.extracted(inicio, fin, contenido));
+					
+					if(newcontenido.length() > 50) {
+						modelo.setAgente(newcontenido.toString().split("\n")[0].split("Agente:")[1].split("Clave")[0].replace("###", "").trim());
+						modelo.setCveAgente(newcontenido.toString().split("\n")[0].split("Clave:")[1].replace("###", "").trim());
+					}
+				
 					
 			
 			return modelo;

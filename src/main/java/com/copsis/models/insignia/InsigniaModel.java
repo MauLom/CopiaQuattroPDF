@@ -28,7 +28,7 @@ public class InsigniaModel {
 		
 			tipo =fn.tipoPoliza(contenido);		
 		    if (tipo == 5) {
-				modelo = new InsigniaVidaModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				modelo = new InsigniaVidaModel(fn.caratula(1, 4, stripper, doc)).procesar();
 			}
 			
 			return modelo;
