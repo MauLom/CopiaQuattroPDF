@@ -57,7 +57,7 @@ public class IdentificaPolizaService {
 			COSDocument cosDoc = documentToBeParsed.getDocument();
 			PDDocument pdDoc = new PDDocument(cosDoc);
 			pdfStripper.setStartPage(1);
-			pdfStripper.setEndPage(3);
+			pdfStripper.setEndPage(1);
 			pdfStripper.setParagraphStart("@@@");
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
