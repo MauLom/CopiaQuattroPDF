@@ -29,6 +29,7 @@ import com.copsis.models.insignia.InsigniaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
+import com.copsis.models.planSeguro.PlanSeguroModel;
 import com.copsis.models.potosi.PotosiModel;
 import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.qualitas.QualitasModel;
@@ -61,8 +62,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-
-
+	      
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
 				ChubbModel datosChubb = new ChubbModel();
@@ -361,6 +361,7 @@ public class IdentificaPolizaService {
             }
             
             
+
             //ENTRADA PARA INSIGNIA
             if(!encontro && (rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.insignialife.com") 
             || rangoSimple(1, 4, pdfStripper, pdDoc).contains("Insignia Life"))) {
@@ -372,6 +373,18 @@ public class IdentificaPolizaService {
                 encontro = true;
             
             }
+
+            // ENTRADA PARA PLAN SEGURO
+            
+   
+                if (!encontro && contenido.contains("Plan Seguro")) {
+            
+                	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
+                    modelo = datosPlan.procesar();
+                    encontro = true;
+                }
+            
+
 
 
 			if (!encontro) {
