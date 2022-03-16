@@ -66,11 +66,21 @@ public class ImportacionValidacionModel {
 				}
 			}
 			
-			if(poliza.getTipo() == 1) {//salud
-				if(poliza.getAsegurados().isEmpty()) {
-					respuesta +="Alerta solo revisar si trae *Asegurados la poliza\n";		
+			if(poliza.getTipo() == 3 && poliza.getAsegurados().isEmpty()) {//salud		
+					respuesta +="Alerta solo revisar si trae *Asegurados la poliza\n";						
+			}
+			if(poliza.getTipo() == 3 && !poliza.getAsegurados().isEmpty()) {
+				for (int i = 0; i <  poliza.getAsegurados().size(); i++) {
+				  if(poliza.getAsegurados().get(i).getNacimiento().isEmpty()) {
+					  respuesta +="La fecha nacimiento esta vacia\n";
+					  break;
+				  }
 				}
 			}
+			
+			
+			
+			
 			 
 			respuesta +="Clase==> "+  poliza.getError() +"\n" ;		
 			
