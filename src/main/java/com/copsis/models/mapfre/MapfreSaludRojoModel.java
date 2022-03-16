@@ -249,6 +249,22 @@ public class MapfreSaludRojoModel {
 					obtenerAseguradosPolizaColectiva(contenido);
 			}
 			
+			if(modelo.getAsegurados().isEmpty()) {
+				int inicioIndex = contenido.indexOf("ASEGURADO###TITULAR");
+				int finIndex = contenido.indexOf("CONCEPTOS###ECONÓMICOS");
+				String texto = fn.extracted(inicioIndex, finIndex, contenido);
+				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+				
+				if(texto.split("ASEGURADO:").length > 1 ) {
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					asegurado.setNombre(texto.split("ASEGURADO:")[1].split("\n")[0].replace("###", "").trim());
+					asegurado.setParentesco(1);
+					asegurados.add(asegurado);
+					modelo.setAsegurados(asegurados);
+				}
+				
+			}
+			
 			 newcontenido ="";
 			 for (int i = 0; i < contenido.split("COBERTURAS Y SERVICIOS").length; i++) {
 		
