@@ -45,7 +45,6 @@ public class InsigniaVidaModel {
 				if(newcontenido.toString().split("\n")[i].contains("Forma de pago") && newcontenido.toString().split("\n")[i].contains("Moneda") 
 					&& newcontenido.toString().split("\n")[i].contains("Producto")	
 						) {
-					System.out.println(newcontenido.toString().split("\n")[i].trim());
 					modelo.setPlan(newcontenido.toString().split("\n")[i].trim().split("###")[3]);
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1].trim()));
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
