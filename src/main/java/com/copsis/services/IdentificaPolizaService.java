@@ -25,6 +25,7 @@ import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.hdi.HdiModel;
 import com.copsis.models.inbursa.InbursaModel;
+import com.copsis.models.insignia.InsigniaModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
@@ -59,8 +60,7 @@ public class IdentificaPolizaService {
 			pdfStripper.setEndPage(1);
 			pdfStripper.setParagraphStart("@@@");
 			String contenido = pdfStripper.getText(pdDoc);
-			String contenidoAux = "";
-
+			String contenidoAux = "";		
 			boolean encontro = false;
 	      
 			// CHUBB
@@ -361,6 +361,19 @@ public class IdentificaPolizaService {
             }
             
             
+
+            //ENTRADA PARA INSIGNIA
+            if(!encontro && (rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.insignialife.com") 
+            || rangoSimple(1, 4, pdfStripper, pdDoc).contains("Insignia Life"))) {
+            
+            	contenido =rangoSimple(1, 4, pdfStripper, pdDoc);
+            	
+            	InsigniaModel insigniaModel = new InsigniaModel(pdfStripper, pdDoc, contenido);
+            	modelo = insigniaModel.procesar();
+                encontro = true;
+            
+            }
+
             // ENTRADA PARA PLAN SEGURO
             
    
@@ -371,7 +384,7 @@ public class IdentificaPolizaService {
                     encontro = true;
                 }
             
-            
+
 
 
 			if (!encontro) {
