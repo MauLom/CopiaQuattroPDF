@@ -45,8 +45,16 @@ public class PotosiAutosModel {
 						modelo.setFechaEmision(modelo.getVigenciaDe());					
 					}
 					if(newcontenido.toString().split("\n")[i].contains("CP") && cp) {
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("CP")[1].trim().substring(0,5));
-						cp= false;
+						if(newcontenido.toString().split("\n")[i].trim().split("CP").length > 1) {
+							modelo.setCp(newcontenido.toString().split("\n")[i].split("CP")[1].trim().substring(0,5));
+							cp= false;
+						}else if((i+1)<newcontenido.toString().split("\n").length){
+							String valorCp = newcontenido.toString().split("\n")[i+1].split("###")[newcontenido.toString().split("\n")[i+1].split("###").length-1].trim();
+							if(valorCp.contains(",")) {
+								valorCp = valorCp.split(",")[0].trim();
+							}
+							modelo.setCp(fn.isNumeric(valorCp) ? valorCp : "");
+						}
 					}
 					if(newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Teléfono")) {
 						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "").replace("-", "").trim());
