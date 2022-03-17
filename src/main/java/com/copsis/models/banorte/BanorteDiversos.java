@@ -42,6 +42,7 @@ public class BanorteDiversos {
 				.replace("hasta a las 12 hrs:", "Hasta las 12 hrs:").replace("Expreso", "###Expreso")
 				.replace("Dentro", "Dentro###").replace("SUBLIMITE DEL ", "SUBLIMITE DEL###")
 				.replace("Fuera SUBLIMITE", "Fuera SUBLIMITE###").replace("Asalto", "Asalto###")
+				.replace("Financiamiento", "financiamiento")
 
 		;
 		recibosText = fn.remplazarMultiple(recibosText, fn.remplazosGenerales());
@@ -56,6 +57,17 @@ public class BanorteDiversos {
 			// Poliza
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO");
 			fin = contenido.indexOf("DATOS DE LAS COBERTURAS");
+			
+			if(fin>-1 && inicio> fin) {
+				if(contenido.substring(0,inicio).contains("SOLICITUD DE SEGURO")) {
+					//se extrae desde PÓLIZA DE SEGURO EN ADELANTE
+					contenido = contenido.substring(inicio);
+					inicio = contenido.indexOf("PÓLIZA DE SEGURO");
+					fin = contenido.indexOf("DATOS DE LAS COBERTURAS");
+				}
+
+			}
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("A las 12 hrs desde:", "").replace("Hasta las 12 hrs:", "");
@@ -116,7 +128,11 @@ public class BanorteDiversos {
 
 					}
 					if (newcontenido.split("\n")[i].contains("Pago:")) {
-						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Pago:")[1].replace("###", "").replace("PAGOS","").trim()));
+						String texto = newcontenido.split("\n")[i].split("Pago:")[1].replace("###", "").replace("PAGOS","").trim();
+						if(texto.equalsIgnoreCase("PAGO ANUAL")){
+							texto = "ANUAL";
+						}
+						modelo.setFormaPago(fn.formaPago(texto));
 
 					}
 					if (newcontenido.split("\n")[i].contains("Código Postal:")) {
@@ -124,13 +140,21 @@ public class BanorteDiversos {
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)
 							&& newcontenido.split("\n")[i + 1].contains("fraccionado")) {
-
+						
+						String[] conceptos = newcontenido.split("\n")[i].split("###");
 						String x = newcontenido.split("\n")[i + 2];
+	
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castFloat(x.split("###")[0])));
 						modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
 						modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
 						modelo.setIva(fn.castBigDecimal(fn.castFloat(x.split("###")[3])));
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(x.split("###")[4])));
+						
+						if(conceptos[1].contains("financiamiento")) {
+							modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
+							modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
+
+						}
 
 					}
 				}
@@ -306,14 +330,10 @@ public class BanorteDiversos {
 					String sumaAsegurada = texto.split("###")[1];
 					texto = texto.replace(sumaAsegurada+"###", sumaAsegurada+"###S.E.A###");
 					arrTexto[i+1] = textoSiguiente;
-				}
-				
-				if(!textoSiguiente.contains("EQUIPO ELECTRONICO") && arrTexto[i+2].contains("EQUIPO ELECTRONICO")) {
-					texto = texto.replace("* ROBO CON VIOLENCIA Y-O ASALTO FUERA EN", "*ROBO CON VIOLENCIA Y-O ASALTO FUERA EN PODER DE EMPLEADOS S EQUIPO ELECTRONICO");
-					arrTexto[i+2] = arrTexto[i+2].replace("EQUIPO ELECTRONICO", "");
-				}
-				
-				
+				}else if(arrTexto[i+1].replace("###", "").trim().equals("PODER DE EMPLEADOS S")){
+					texto = texto.replace("* ROBO CON VIOLENCIA Y-O ASALTO FUERA EN", "* ROBO CON VIOLENCIA Y-O ASALTO FUERA EN PODER DE EMPLEADOS S");
+					arrTexto[i+1] = "";
+				}				
 			}
 		}
 		
