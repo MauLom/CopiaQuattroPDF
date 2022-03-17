@@ -29,7 +29,7 @@ public class GnpModel {
 		int pagFin = 0;
 
 		try {
-		
+
 			if (contenido.contains("Motor") && contenido.contains("Placas")) {
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
 					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
@@ -82,6 +82,14 @@ public class GnpModel {
 				}
 				
 			}
+			
+			//proceso para cuando no se pudo  indentificar ,aplica para pdfs de Gnp SEGURO HOGAR VERSATIL
+			if(modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("CARACTERÍSTICAS###DEL###RIESGO")) {
+				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();
+			
+			}
+			
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
