@@ -45,7 +45,8 @@ public class BanorteAutosModel {
 					.replace("12:00hrs", "")
 					.replace("13:13hrs", "")
 					.replace("habitual:", "Habitual:")
-					.replace("Prima total:", "Prima Total:");
+					.replace("Prima total:", "Prima Total:")
+					.replace("DATOS DEFLI AVNEHZAÍCSULO", "DATOS DEL VEHÍCULO");
 			this.recibosText =  fn.remplazarMultiple(this.recibosText,fn.remplazosGenerales());
 			try {
 				
@@ -118,7 +119,10 @@ public class BanorteAutosModel {
 							String aux = newcontenido.split("\n")[i].split("pago:")[1].split("Impuesto")[0].replace("###", "").replace(":", "").trim();
 							if(aux.contains("12 MESES")) {
 								aux = aux.split("12 MESES")[0].trim();
+							}else if(aux.contains("6 MESES")) {
+								aux = aux.split("6 MESES")[0].trim();
 							}
+							
 							modelo.setFormaPago(fn.formaPago(aux));
 							modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A:")[1].split("###")[newcontenido.split("\n")[i].split("I.V.A:")[1].split("###").length -1].replace("###", "").trim())));						
 						}
@@ -126,6 +130,15 @@ public class BanorteAutosModel {
 					
 							 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima Total:")[1].replace("###", ""))));
 						 }
+						 //Agente,cveAgente
+						 if(newcontenido.split("\n")[i].split("Intermediario:").length > 1) {
+							 String texto = fn.elimgatos(newcontenido.split("\n")[i].split("Intermediario:")[1].trim());
+							 texto = texto.split("###")[0];
+							 
+							 String cveAgente = texto.split(" ")[0];
+							 modelo.setCveAgente(cveAgente);
+							 modelo.setAgente(texto.split(cveAgente)[1].trim());
+						}
 					}
 	            }
 	            
@@ -195,6 +208,9 @@ public class BanorteAutosModel {
 	            		if(newcontenido.split("\n")[i].contains("Motor:") && newcontenido.split("\n")[i].contains("Serie:")){	            	
 	            			modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].split("Motor")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
 	            		}
+	            		if(newcontenido.split("\n")[i].split("Motor:").length > 1) {
+            				modelo.setMotor(fn.elimgatos(newcontenido.split("\n")[i].split("Motor:")[1].trim()).split("###")[0].trim());
+            			}
 	            		if(newcontenido.split("\n")[i].contains("Carrocería:") && newcontenido.split("\n")[i].contains("Placas:")){	            	
 	            			modelo.setPlacas(newcontenido.split("\n")[i].split("Placas:")[1].replace("###", ""));
 	            		}
@@ -226,7 +242,7 @@ public class BanorteAutosModel {
 	            			if( arrContenido[i].split("###").length > 1) {	      
 	            				arrContenido[i] = completaTextoCobertura(arrContenido, i);
 	            				cobertura.setNombre(arrContenido[i].split("###")[0]);
-	            				if(newcontenido.split("\n")[i].split("###").length == 4) {
+	            				if(arrContenido[i].split("###").length == 4) {
 	            					cobertura.setDeducible(arrContenido[i].split("###")[arrContenido[i].split("###").length -2]);
 		            				cobertura.setSa(arrContenido[i].split("###")[arrContenido[i].split("###").length -3]);	
 	            				}else {
@@ -359,6 +375,8 @@ public class BanorteAutosModel {
 						arrTexto[i+1] = arrTexto[i+1].replace("RESPONSABILIDAD", "").replace("###RESPONSABILIDAD", "");
 					}
 				}
+			}else if(texto.contains("Protección En Estados Unidos###AMPARADA SEGÚN")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Protección En Estados Unidos###AMPARADA SEGÚN", "CERTIFICADO###NO APLICA###");
 			}
 			
 			return texto;
