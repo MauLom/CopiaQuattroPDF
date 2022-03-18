@@ -89,7 +89,7 @@ public class GnpDiversosCModelo {
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if(!newcontenido.toString().split("\n")[i].contains("DESGLOSE")
 					&& !newcontenido.toString().split("\n")[i].contains("Coberturas")
 					&& !newcontenido.toString().split("\n")[i].contains("Del Hogar")
@@ -102,6 +102,18 @@ public class GnpDiversosCModelo {
 					&& newcontenido.toString().split("\n")[i].length() > 3
 					){
 						System.out.println(newcontenido.toString().split("\n")[i] +" " + newcontenido.toString().split("\n")[i].split("###").length);
+					
+						switch (newcontenido.toString().split("\n")[i].split("###").length) {
+						case 2:
+							
+							break;
+						case 4:
+							
+							break;	
+
+						default:
+							break;
+						}
 						
 						
 					}
