@@ -35,7 +35,7 @@ public class InsigniaVidaModel {
 			fin  = contenido.indexOf("INFORMACIÓN DEL ASEGURADO");	
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
-			
+			System.out.println(newcontenido);
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:")) {
@@ -47,7 +47,11 @@ public class InsigniaVidaModel {
 						) {
 					modelo.setPlan(newcontenido.toString().split("\n")[i].trim().split("###")[3]);
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1].trim()));
-					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
+					String textoMoneda = newcontenido.toString().split("\n")[i+1];
+					if(textoMoneda.contains("MXN")) {
+						textoMoneda = "PESO MEXICANO";
+					}
+					modelo.setMoneda(fn.buscaMonedaEnTexto(textoMoneda));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i+1].contains("RFC")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("RFC")[0].replace("###", "").trim());
@@ -143,12 +147,16 @@ public class InsigniaVidaModel {
 					
 			
 					newcontenido.append(fn.extracted(inicio, fin, contenido));
-					
+					System.err.println(newcontenido);
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 						if (newcontenido.toString().split("\n")[i].contains("Prima total")) {
+							System.err.println(newcontenido.toString().split("\n")[i]);
+
 							int sp = newcontenido.toString().split("\n")[i + 1].split("###").length;
+							System.err.println(newcontenido.toString().split("\n")[i + 1]);
 							if (sp ==  5) {
 						
+								
 								modelo.setPrimaneta(fn
 										.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i + 1].split("###")[0])));								
 								modelo.setDerecho(fn
