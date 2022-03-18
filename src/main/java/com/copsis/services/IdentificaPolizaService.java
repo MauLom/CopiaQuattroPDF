@@ -173,19 +173,6 @@ public class IdentificaPolizaService {
 					}
 				}
 			}
-			
-			// ENTRADA PARA HDI
-			if (encontro == false) {
-		
-				if (contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
-						|| contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
-						|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > 0
-						|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
-					HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
-					modelo = datosHdi.procesar();
-					encontro = true;
-				}
-			}
 
 			// ENTRADA PARA BANORTE
 			if (!encontro && contenido.contains("Banorte") && !contenido.contains("Servicios Integrales de Salud Nova")
@@ -222,9 +209,8 @@ public class IdentificaPolizaService {
 				encontro = true;
 
 			}
-		
 			// ENTRADA PARA METLIFE
-			if (!encontro && contenido.split("@@@")[1].contains("MetLife México S.A.")
+			if (!encontro && contenido.contains("MetLife México S.A.")
 					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México")) {
 				MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
 				modelo = datosMetlife.procesar();
@@ -280,8 +266,8 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA HDI
-			if (!encontro && contenido.split("@@@")[1].contains("HDI Seguros, S.A. de C.V.")
-					|| contenido.split("@@@")[2].contains("HDI Seguros, S.A. de C.V.")
+			if (!encontro && contenido.contains("HDI Seguros, S.A. de C.V.")
+					|| contenido.contains("HDI Seguros, S.A. de C.V.")
 					|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > -1
 					|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
 				HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
@@ -290,9 +276,8 @@ public class IdentificaPolizaService {
 			}
 
 
-		            
 			// ENTRADA PARA SURA
-			if (!encontro && contenido.split("@@@")[3].contains("Seguros SURA S.A.")
+			if (!encontro && contenido.contains("Seguros SURA S.A.")
 					|| contenido.contains("Royal & SunAlliance Seguros")
 					|| contenido.contains("Seguros SURA S.A. de C.V.")
 					|| contenido.contains("Seguros SURA")
@@ -321,7 +306,7 @@ public class IdentificaPolizaService {
 			if (!encontro && (contenido.contains("ANA COMPAÑÍA DE SEGUROS") && contenido.contains(URL_ANASEGUROS))
 					|| (contenido.contains("A.N.A. COMPAÑÍA") && contenido.contains(URL_ANASEGUROS))
 					|| (contenido.contains("A.N.A. Compañía de Seguros") && contenido.contains(URL_ANASEGUROS))
-					|| (contenido.split("@@@")[2].contains("ANA COMPAÑÍA DE SEGUROS"))) {
+					|| (contenido.contains("ANA COMPAÑÍA DE SEGUROS"))) {
 				AnaModel datosAna = new AnaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAna.procesar();
 				encontro = true;
@@ -349,10 +334,10 @@ public class IdentificaPolizaService {
             }
            
             // ENTRADA PARA ALLIANZ
-            if (!encontro && (contenido.split("@@@")[1].contains("Allianz México")
+            if (!encontro && (contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
-                        || (contenido.split("@@@")[1].contains("En cumplimiento a lo dispuesto") && contenido.split("@@@")[5].contains("Nombre del Asegurado"))
+                        || (contenido.contains("En cumplimiento a lo dispuesto") && contenido.split("@@@")[5].contains("Nombre del Asegurado"))
                         || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS") && contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")))) {
                 	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();

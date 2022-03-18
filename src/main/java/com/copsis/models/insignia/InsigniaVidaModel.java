@@ -35,7 +35,6 @@ public class InsigniaVidaModel {
 			fin  = contenido.indexOf("INFORMACIÓN DEL ASEGURADO");	
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
-			System.out.println(newcontenido);
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:")) {
@@ -147,13 +146,10 @@ public class InsigniaVidaModel {
 					
 			
 					newcontenido.append(fn.extracted(inicio, fin, contenido));
-					System.err.println(newcontenido);
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 						if (newcontenido.toString().split("\n")[i].contains("Prima total")) {
-							System.err.println(newcontenido.toString().split("\n")[i]);
 
 							int sp = newcontenido.toString().split("\n")[i + 1].split("###").length;
-							System.err.println(newcontenido.toString().split("\n")[i + 1]);
 							if (sp ==  5) {
 						
 								
