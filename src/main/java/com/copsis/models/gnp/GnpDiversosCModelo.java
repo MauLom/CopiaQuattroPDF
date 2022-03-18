@@ -35,6 +35,7 @@ public class GnpDiversosCModelo {
 				fin = contenido.indexOf("INFORMACIÓN ADICIONAL");
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+				
 					if(newcontenido.toString().split("\n")[i].contains("Cliente") && newcontenido.toString().split("\n")[i].contains("Nombre")) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
 					}
@@ -42,9 +43,16 @@ public class GnpDiversosCModelo {
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
-					
 					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 6).trim());
+					}
+					
+					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("del") ) {
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
+					
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("del") ) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
 					}
 					
 					if(newcontenido.toString().split("\n")[i].contains("Prima###Neta") ) {	
@@ -67,7 +75,15 @@ public class GnpDiversosCModelo {
 
 				}
 				
+				if(modelo.getVigenciaDe().length() > 0) {
+					modelo.setFechaEmision(modelo.getVigenciaDe());
+				}
 				
+				
+				
+				if (contenido.split("RESUMEN###DE###LA###PÓLIZA")[0].length() > 0) {
+					modelo.setPoliza(contenido.split("RESUMEN###DE###LA###PÓLIZA")[0].split("\n")[0].replace("@@@","").replace("\r", ""));
+				}
 				
 				inicio = contenido.indexOf("INFORMACIÓN ADICIONAL");
 				fin = contenido.indexOf("ste documento no");
@@ -81,6 +97,19 @@ public class GnpDiversosCModelo {
 						modelo.setFormaPago(fn.formaPagoSring((newcontenido.toString().split("\n")[i+1])));
 					}
 				}
+				
+
+				inicio = contenido.indexOf("Clave###Agente");
+				fin = contenido.lastIndexOf("RESUMEN###DE###LA###PÓLIZA");
+				
+				newcontenido = new StringBuilder();									
+				newcontenido.append(fn.extracted(inicio, fin, contenido));
+
+				if(newcontenido.length() > 50) {
+					modelo.setAgente(newcontenido.toString().split("\n")[1].split("###")[0].replace("###", "").trim());
+					modelo.setCveAgente(newcontenido.toString().split("\n")[1].split("###")[1].replace("###", "").trim());
+				}
+			
 				
 				
 				inicio = contenido.indexOf("DESGLOSE###DE###COBERTURAS");
@@ -101,14 +130,20 @@ public class GnpDiversosCModelo {
 					&& !newcontenido.toString().split("\n")[i].contains("Ver Cláusulas")					
 					&& newcontenido.toString().split("\n")[i].length() > 3
 					){
-						System.out.println(newcontenido.toString().split("\n")[i] +" " + newcontenido.toString().split("\n")[i].split("###").length);
+						
 					
 						switch (newcontenido.toString().split("\n")[i].split("###").length) {
 						case 2:
-							
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+							coberturas.add(cobertura);
 							break;
 						case 4:
-							
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+							cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[2]);
+							cobertura.setCoaseguro(newcontenido.toString().split("\n")[i].split("###")[3]);
+							coberturas.add(cobertura);
 							break;	
 
 						default:
@@ -118,6 +153,7 @@ public class GnpDiversosCModelo {
 						
 					}
 				}
+				modelo.setCoberturas(coberturas);
 			
 			 
 			 return modelo;
