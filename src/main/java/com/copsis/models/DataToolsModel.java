@@ -19,7 +19,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.constants.ConstantsValue;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataToolsModel {
 	DateTimeFormatter formatter;
@@ -1248,7 +1247,7 @@ public class DataToolsModel {
 		
 		public String extracted(int inicio, int fin, String contenido) {
 			String texto = "";
-			if(inicio > 0 && fin > 0 && inicio < fin ) {			   	
+			if(inicio > 0 && fin > 0 && inicio < fin ) {
 				texto = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim();
 			}			
 		  return texto;	
@@ -1262,5 +1261,9 @@ public class DataToolsModel {
 			}
 			return resultado;
 		}
+		
+		
+		
+		
 
 }
