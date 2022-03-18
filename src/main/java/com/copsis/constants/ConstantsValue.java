@@ -220,7 +220,6 @@ public final class ConstantsValue {
 	public static final String HASH = "### ###";
 	public static final String HASH2 = "######";
 	
-	
 
 	private ConstantsValue() {
 
