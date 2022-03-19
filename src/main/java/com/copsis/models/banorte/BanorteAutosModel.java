@@ -46,7 +46,17 @@ public class BanorteAutosModel {
 					.replace("13:13hrs", "")
 					.replace("habitual:", "Habitual:")
 					.replace("Prima total:", "Prima Total:")
-					.replace("DATOS DEFLI AVNEHZAÍCSULO", "DATOS DEL VEHÍCULO");
+					.replace("DATOS DEFLI AVNEHZAÍCSULO", "DATOS DEL VEHÍCULO")
+					.replace("_", "")
+					.replace("R . F . C :", "R.F.C:")
+					.replace("N o m b r e y d o m i c il i o d e l A s e g u r a d o ", "Nombre y domicilio del Asegurado")
+					.replace("C a l l e y N ú m e r o :", "Calle y No:")
+					.replace(" C o l o n i a :", "Colonia:")
+					.replace("P o b l a c i ó n - M u n i c i p i o :", "Población-Municipio:")
+					.replace("C . P :", "C.P:")
+					.replace("C o n d u c t o r H a b it u a l:", "Conductor Habitual:")
+					.replace("E s t a d o :", "Estado:")
+					.replace("T e l :", "Teléfono:");
 			this.recibosText =  fn.remplazarMultiple(this.recibosText,fn.remplazosGenerales());
 			try {
 				
@@ -70,8 +80,10 @@ public class BanorteAutosModel {
 								modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1]);
 							}else {
 								modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[0]);	
-							}							
-							modelo.setInciso(fn.castInteger(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i].split("###").length -1]));						
+							}
+							if((i+1)<newcontenido.split("\n").length) {
+								modelo.setInciso(fn.castInteger(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1]));
+							}
 						}
 						
 						if(newcontenido.split("\n")[i].contains("Contratante:") && newcontenido.split("\n")[i].contains("R.F.C:")){							
@@ -87,6 +99,7 @@ public class BanorteAutosModel {
 								+"  "+	newcontenido.split("\n")[i].split("Municipio:")[1]).replace("###", "");
 							
 						modelo.setCteDireccion( (resultado.replace("_", "").replace("  ", "").replace("y número:", "") +"  " +newcontenido.split("\n")[i+1].split("Estado:")[1].split("Teléfono:")[0].replace("###", "").replace("_", "").replace("  ", "")).trim());
+						modelo.setCteDireccion(fn.eliminaSpacios(modelo.getCteDireccion()));
 						modelo.setCp(newcontenido.split("\n")[i+1].split("C.P:")[1].split("Estado")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
 						
 						}						
@@ -136,6 +149,9 @@ public class BanorteAutosModel {
 							 texto = texto.split("###")[0];
 							 
 							 String cveAgente = texto.split(" ")[0];
+							 if(cveAgente.contains("-")){
+								 cveAgente = cveAgente.split("-")[0];
+							 }
 							 modelo.setCveAgente(cveAgente);
 							 modelo.setAgente(texto.split(cveAgente)[1].trim());
 						}
@@ -180,7 +196,7 @@ public class BanorteAutosModel {
 	            fin = contenido.indexOf("No. Pedimento:");
 
 	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
-	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "");
+	            	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").replace("_", "");
 	            	for (int i = 0; i < newcontenido.split("\n").length; i++) {	
 	            		if(newcontenido.split("\n")[i].contains("Descripción:")) {
 	            			modelo.setDescripcion(newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
@@ -369,7 +385,7 @@ public class BanorteAutosModel {
 			String texto = arrTexto[i];
 			if(texto.contains("RESPONSABILIDAD CIVIL POR DAÑOS POR LA")) {
 				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS POR LA", "CARGA");
-				if(texto.contains("MISMO QUE") && texto.contains("###") && (i+1)< arrTexto.length) {
+				if(texto.contains("MISMO QUE") &&texto.split("###").length > 1 && (i+1)< arrTexto.length) {
 					if(!texto.split("###")[2].contains("MISMO QUE RESPONSABILIDAD CIVIL") && arrTexto[i+1].contains("RESPONSABILIDAD")) {
 						texto = texto.replace("MISMO QUE", "MISMO QUE RESPONSABILIDAD CIVIL");
 						arrTexto[i+1] = arrTexto[i+1].replace("RESPONSABILIDAD", "").replace("###RESPONSABILIDAD", "");
@@ -377,6 +393,16 @@ public class BanorteAutosModel {
 				}
 			}else if(texto.contains("Protección En Estados Unidos###AMPARADA SEGÚN")) {
 				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "Protección En Estados Unidos###AMPARADA SEGÚN", "CERTIFICADO###NO APLICA###");
+			}else if(texto.contains("EXTENSIÓN DE RESPONSABILIDAD CIVIL POR")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "EXTENSIÓN DE RESPONSABILIDAD CIVIL POR", "DAÑOS A TERCEROS");
+				if(texto.contains("MISMO QUE") && texto.split("###").length > 1 && (i+1)< arrTexto.length) {
+					if(!texto.split("###")[2].contains("MISMO QUE RESPONSABILIDAD CIVIL") && arrTexto[i+1].contains("RESPONSABILIDAD")) {
+						texto = texto.replace("MISMO QUE", "MISMO QUE RESPONSABILIDAD CIVIL");
+						arrTexto[i+1] = arrTexto[i+1].replace("RESPONSABILIDAD", "").replace("###RESPONSABILIDAD", "");
+					}
+				}
+			}else if(texto.contains("RESPONSABILIDAD CIVIL POR DAÑOS A")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "RESPONSABILIDAD CIVIL POR DAÑOS A", "OCUPANTES EN SUS PERSONAS");
 			}
 			
 			return texto;
