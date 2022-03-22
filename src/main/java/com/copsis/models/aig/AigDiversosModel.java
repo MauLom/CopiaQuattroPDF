@@ -59,6 +59,12 @@ public class AigDiversosModel {
 					if (newcontenido.split("\n")[i].contains("NOMBRE:")
 							&& newcontenido.split("\n")[i].contains("R.F.C:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("NOMBRE:")[1].split("R.F.C:")[0].replace("###", "").trim());
+					}else if(newcontenido.split("\n")[i].trim().split("NOMBRE:").length>1){
+						modelo.setCteNombre(fn.elimgatos(newcontenido.split("\n")[i].trim().split("NOMBRE:")[1].trim()).split("###")[0]);
+					}
+					
+					if(modelo.getRfc().length() == 0 && newcontenido.split("\n")[i].split(ConstantsValue.RFC).length >1) {
+						modelo.setRfc(fn.elimgatos(newcontenido.split("\n")[i].trim().split(ConstantsValue.RFC)[1].trim()).split("###")[0]);
 					}
 					if (newcontenido.split("\n")[i].contains("DIRECCIÓN:")) {
 						newresultado = newcontenido.split("\n")[i].split("DIRECCIÓN:")[1] + " "
@@ -140,11 +146,20 @@ public class AigDiversosModel {
 					cbo = true;
 				}
 			}
+
 			if(!contenido.contains(ConstantsValue.SECCIONES_COBERTURAS) && contenido.contains("RIESGOS CUBIERTOS")) {
 				String textoCoberturas = contenido.split("RIESGOS CUBIERTOS")[1];
+				
 				if(textoCoberturas.contains("En cumplimiento")) {
 					textoCoberturas = textoCoberturas.split("En cumplimiento")[0].replace("@@@", "").replace("\r", "");
 					newcoberturas = new StringBuilder();
+				}else if(textoCoberturas.contains("Página")) {
+					textoCoberturas = textoCoberturas.split("Página")[0].replace("@@@", "").replace("\r", "");
+					newcoberturas = new StringBuilder();
+				}
+				
+				
+				if(newcoberturas.length() == 0) {
 					String[] arrContenido = textoCoberturas.split("\n");
 					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
