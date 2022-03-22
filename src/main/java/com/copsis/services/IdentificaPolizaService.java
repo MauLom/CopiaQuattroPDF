@@ -32,6 +32,7 @@ import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.planSeguro.PlanSeguroModel;
 import com.copsis.models.potosi.PotosiModel;
 import com.copsis.models.primero.PrimeroModel;
+import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
@@ -359,15 +360,21 @@ public class IdentificaPolizaService {
             
             }
 
-            // ENTRADA PARA PLAN SEGURO
-            
-   
-                if (!encontro && contenido.contains("Plan Seguro")) {
+            // ENTRADA PARA PLAN SEGURO            
+               if (!encontro && contenido.contains("Plan Seguro")) {
             
                 	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
                     modelo = datosPlan.procesar();
                     encontro = true;
-                }
+               }
+               
+             
+               //ENTRADA PARA PRUDENTIAL
+               if(!encontro && contenido.contains("Prudential Seguros")) {
+            	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosPlan.procesar();
+                   encontro = true;  
+               }
             
 
 

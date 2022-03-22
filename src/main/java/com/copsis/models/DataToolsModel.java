@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -546,6 +547,7 @@ public class DataToolsModel {
 		case "HIJO":
 		case "MLO":
 		case "MASC.":
+		case "MAS":
 		case "M":
 			result = true;
 			break;
@@ -1260,6 +1262,16 @@ public class DataToolsModel {
 				resultado.add(m.group());
 			}
 			return resultado;
+		}
+		
+		public String sumar(Date fecha,int meses) {
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(fecha);
+			calendar.add(Calendar.MONTH,meses);
+			
+			 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
+			return formato.format( calendar.getTime());
 		}
 		
 		
