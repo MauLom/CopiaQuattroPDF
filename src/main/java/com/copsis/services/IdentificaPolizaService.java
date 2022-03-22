@@ -106,18 +106,15 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
-				
+			
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
-						|| contenido.contains("COLECTIVO EMPRESARIAL")) {
-
+						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")) {				
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
 				} else {
-					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);
-					
-
+					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);					
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
 							|| contenidoAux.contains("@@@Seguros a\n" + MONTERREY)
@@ -296,7 +293,7 @@ public class IdentificaPolizaService {
 			}
 
 			// ARGOS
-			if (!encontro && contenido.contains("Seguros Argos, S.A. de C.V.")) {
+			if (!encontro && (contenido.contains("Seguros Argos, S.A. de C.V.") )) {
 				ArgosModel datosArgos = new ArgosModel(pdfStripper, pdDoc, contenido);
 				modelo = datosArgos.procesar();
 				encontro = true;
@@ -319,14 +316,15 @@ public class IdentificaPolizaService {
                 	modelo = datospotosi.procesar();
                     encontro = true;                
             }
-		    
+		  
 
 			// ENTRADA PARA VEXMAS
             if (! encontro &&( contenido.contains("Seguros Ve Por")
                         || contenido.contains("Seguros Ve por Más, S.A.")
                         || contenido.contains("Seguros Ve por Más, S. A.")
                         || contenido.contains("Seguros Ve Por Más")
-                        || contenido.contains("www.vepormas.com"))) {//Ve por Más 
+                        || contenido.contains("www.vepormas.com")
+                      )) {//Ve por Más 
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;

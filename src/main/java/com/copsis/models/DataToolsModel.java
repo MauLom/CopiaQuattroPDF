@@ -1261,6 +1261,13 @@ public class DataToolsModel {
 			}
 			return resultado;
 		}
+	
+		
+		public String obtenerMes(String texto) {
+			Pattern pattern = Pattern.compile(ConstantsValue.REGFEHCA_MES);
+			Matcher matcher = pattern.matcher(texto);
+			return matcher.find() ? matcher.group() : "";
+		}
 		
 		
 		

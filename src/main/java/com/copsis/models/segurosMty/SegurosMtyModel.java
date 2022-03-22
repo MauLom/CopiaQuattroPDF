@@ -26,10 +26,15 @@ public class SegurosMtyModel {
 	
 	public EstructuraJsonModel procesa() {
 		try {
+			
 			switch (fn.tipoPoliza(contenido)) {
 			case 2:// Salud
 				modelo  = new SegurosMtySalud(fn.caratula(1, 4, stripper, doc)).procesar();				
 				break;
+			case 5:// Vida
+				modelo  = new SegurosMtyVida(fn.caratula(1, 4, stripper, doc)).procesar();				
+				break;	
+				
 			}
 			return modelo;
 		} catch (Exception ex) {
