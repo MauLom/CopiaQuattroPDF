@@ -37,7 +37,7 @@ public class ChubbDiversosModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("PÓLIZA DE SEGURO", "POLIZA DE SEGURO")
 				.replace("Póliza###", "Póliza:###")
-				.replace("Expedición", "expedición")
+				.replace("Expedición", ConstantsValue.EXPEDICION)
 				.replace("Fraccionado", "fraccionado")
 				.replace("I.V.A:", "I.V.A.:");
 		recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
@@ -71,27 +71,27 @@ public class ChubbDiversosModel {
 										.split(ConstantsValue.HORAS)[0].replace("###", "").replace("12:00", "")
 												.replace("al", "").trim()));
 					}
-					if (newcontenido.split("\n")[i].contains("Asegurado:")
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.ASEGURADO)
 							&& newcontenido.split("\n")[i].contains("C.P:")) {
-						modelo.setCteNombre((newcontenido.split("\n")[i].split("Asegurado:")[1].split("C.P:")[0]
+						modelo.setCteNombre((newcontenido.split("\n")[i].split(ConstantsValue.ASEGURADO)[1].split("C.P:")[0]
 								.replace("###", " ")).trim());
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("\r", "").replace("###", ""));
 					}
-					if (newcontenido.split("\n")[i].contains("Domicilio:")
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.DOMICILIO )
 							&& newcontenido.split("\n")[i].contains("Teléfono")) {
-						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio:")[1].split("Teléfono")[0]
+						modelo.setCteDireccion((newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO )[1].split("Teléfono")[0]
 								+ " " + newcontenido.split("\n")[i + 1].split("RFC:")[0]).replace("###", " ")
 										.replace("\r", "").trim());
-					}else if(newcontenido.split("\n")[i].trim().split("Domicilio:").length>1&& (i+1) < newcontenido.split("\n")[i].length() && !newcontenido.split("\n")[i].contains(ConstantsValue.RFC) && !newcontenido.split("\n")[i].contains("Teléfono")) {
-						String direccion = newcontenido.split("\n")[i].split("Domicilio:")[1].trim();
+					}else if(newcontenido.split("\n")[i].trim().split(ConstantsValue.DOMICILIO ).length>1&& (i+1) < newcontenido.split("\n")[i].length() && !newcontenido.split("\n")[i].contains(ConstantsValue.RFC) && !newcontenido.split("\n")[i].contains("Teléfono")) {
+						String direccion = newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO )[1].trim();
 						direccion +=  " " +newcontenido.split("\n")[i+1];
 						direccion = fn.eliminaSpacios(direccion.replace("###", " ").replace("@@@", "").split("C/P")[0].trim());
 						modelo.setCteDireccion(direccion);
 					}
 					
 					if (modelo.getCteNombre().length() == 0	&& newcontenido.split("\n")[i].contains("propietario") && (i+1)<newcontenido.split("\n").length) {
-						if(newcontenido.split("\n")[i+1].split("Asegurado:").length > 1) {
-							modelo.setCteNombre(fn.elimgatos(newcontenido.split("\n")[i+1].split("Asegurado:")[1].trim()).split("###")[0]);
+						if(newcontenido.split("\n")[i+1].split(ConstantsValue.ASEGURADO).length > 1) {
+							modelo.setCteNombre(fn.elimgatos(newcontenido.split("\n")[i+1].split(ConstantsValue.ASEGURADO)[1].trim()).split("###")[0]);
 						}						
 					}
 					
@@ -167,13 +167,13 @@ public class ChubbDiversosModel {
 					}
 				
 					if (newcontenido.split("\n")[i].contains("Financiamiento")
-							&& newcontenido.split("\n")[i].contains("expedición")) {
+							&& newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION)) {
 						
 						modelo.setRecargo(fn.castBigDecimal(
 								fn.castDouble(newcontenido.split("\n")[i].split("fraccionado")[1].split("Gastos")[0]
 										.replace("###", "").replace("\r", "").replace(":", "").trim())));
 						modelo.setDerecho(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
+								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1]
 										.replace("###", "").replace("\r", "").replace(":", "").trim())));
 					}
 					
@@ -183,9 +183,9 @@ public class ChubbDiversosModel {
 										.replace("###", "").replace("\r", "").replace(":", "").trim())));
 					}
 					
-					if(modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains("expedición") ) {
+					if(modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION) ) {
 						modelo.setDerecho(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("expedición")[1]
+								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1]
 										.replace("###", "").replace("\r", "").replace(":", "").trim())));
 					}
 					
@@ -278,13 +278,11 @@ public class ChubbDiversosModel {
 		    fin = contenido.indexOf("Prima Neta");
 		    
 
-	System.err.println("inicio "+inicio+" fin:"+fin);
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("###Prima", "").trim();
-				System.err.println(newcontenido);
 				boolean existeTituloCoaseguro = newcontenido.toUpperCase().contains("COASEGURO");
 				int index = 0;
 				StringBuilder coberturasNombreIncompleto = new StringBuilder();
@@ -301,9 +299,7 @@ public class ChubbDiversosModel {
 				}
 				
 				if(arrNewContenido.length < 4 && newcontenido.contains("PERDIDAS O DAÑOS PARCIALES")) {
-					newcontenido = newcontenido.replace("\r", "");
-					arrNewContenido = newcontenido.split("\n");
-					
+					arrNewContenido = resultado.toString().split("\n");
 					String seccion = "";
 					for (int i = 0; i < arrNewContenido.length; i++) {
 						String[] valores = arrNewContenido[i].trim().split("###");
@@ -476,6 +472,9 @@ public class ChubbDiversosModel {
 			texto =texto.replace("Según condición Fenómenos", "Según condición Fenómenos Hidrometeorológicos");
 		}else
 		if(texto.contains("###") && (i-1)>-1) {
+			if(texto.split("###")[0].trim().length() <2) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "PERDIDAS O DAÑOS PARCIALES", "AVERIA PART");
+			}
 			switch (texto.split("###")[0]) {
 			case "sublimite":
 				texto = completaTextoActualConLineaSuperior(arrTexto, i,coberturasNombreIncompleto, "sublimite","Robo de bienes y Valores de Empleados y Clientes");
@@ -533,9 +532,6 @@ public class ChubbDiversosModel {
 				break;
 			case "labour":
 				texto = completaTextoActualConLineaSuperior(arrTexto, i, coberturasNombreIncompleto, "labour", "Gastos de salvamento, remolque o auxilio, sue &");
-				break;
-			case "PERDIDAS O DAÑOS PARCIALES":
-				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "PERDIDAS O DAÑOS PARCIALES", "AVERIA PART");
 				break;
 			default:
 				break;
