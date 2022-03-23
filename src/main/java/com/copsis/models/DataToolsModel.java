@@ -5,11 +5,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1267,6 +1269,20 @@ public class DataToolsModel {
 			Pattern pattern = Pattern.compile(ConstantsValue.REGFEHCA_MES);
 			Matcher matcher = pattern.matcher(texto);
 			return matcher.find() ? matcher.group() : "";
+		}
+		
+		public String calcvigenciaA(String fecha, int meses) {
+
+			try {
+				SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");		
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(formato.parse(fecha));
+				calendar.add(Calendar.MONTH, meses);
+				return formato.format(calendar.getTime());
+			} catch (Exception e) {
+			  return e.getMessage();
+			}
+
 		}
 		
 		
