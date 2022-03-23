@@ -63,7 +63,7 @@ public class GnpVIdaModel2 {
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
 			if (inicio > -1 || fin > -1 || inicio < fin) {
 				newcontenido = new StringBuilder();
-				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("−", "-"));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
 					if (newcontenido.toString().split("\n")[i].contains("Póliza No.")) {
@@ -506,7 +506,7 @@ public class GnpVIdaModel2 {
 				
 					if (inicio > 0 && fin > 0 && inicio < fin) {
 						newcontenido = new StringBuilder();
-						newcontenido.append(contenido.substring(inicio,fin));
+						newcontenido.append(contenido.substring(inicio,fin).replace("−", "-"));
 						 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
 							if(newcontenido.toString().split("\n")[i].contains("Importe Total") 
