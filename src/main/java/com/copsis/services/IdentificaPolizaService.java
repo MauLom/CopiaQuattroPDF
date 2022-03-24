@@ -62,6 +62,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
+		
 	      
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
@@ -314,7 +315,7 @@ public class IdentificaPolizaService {
 			
 			
 		
-		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		                
+		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx"))){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                
