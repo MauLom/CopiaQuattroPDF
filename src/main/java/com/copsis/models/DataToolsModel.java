@@ -548,6 +548,7 @@ public class DataToolsModel {
 		case "HIJO":
 		case "MLO":
 		case "MASC.":
+		case "MAS":
 		case "M":
 			result = true;
 			break;
@@ -1283,6 +1284,16 @@ public class DataToolsModel {
 			  return e.getMessage();
 			}
 
+		}
+		
+		public String sumar(Date fecha,int meses) {
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(fecha);
+			calendar.add(Calendar.MONTH,meses);
+			
+			 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
+			return formato.format( calendar.getTime());
 		}
 		
 		
