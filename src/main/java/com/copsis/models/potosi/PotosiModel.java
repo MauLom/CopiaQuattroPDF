@@ -26,11 +26,17 @@ public class PotosiModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-		
-			if(fn.tipoPoliza(contenido) == 1) {			
+
+		      switch (fn.tipoPoliza(contenido)) {
+			case 1:
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				break;
+			case 4:
+				modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				break;	
+			default:
+				break;
 			}
-			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(PotosiModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());

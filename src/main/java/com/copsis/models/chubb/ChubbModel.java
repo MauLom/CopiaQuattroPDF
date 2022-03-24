@@ -46,6 +46,10 @@ public class ChubbModel {
 						if (pagFin == 0) {
 							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo 25");
 						}
+						
+						if (pagFin == 0) {
+							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "ART. 25");
+						}
 
 						if (pagFin > 0) {
 							contenido = "";
@@ -58,7 +62,11 @@ public class ChubbModel {
 							encontro = true;
 							break;
 						}
-						
+
+						if(tipo.equals("EMBARCACIONES")) {
+							encontro = true;
+							break;
+						}
 						
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":

@@ -49,6 +49,8 @@ public class BanorteModel {
 				 if(pagIni == 0) pagIni = fn.pagFinRango(stripper, doc, "DE SEGURO DE AUTOMÓVILES");
 				pagFin = fn.pagFinRango(stripper, doc, "DETALLES DE COBERTURAS");
 				  if(pagFin == 0)   pagFin = fn.pagFinRango(stripper, doc, "DETALLE COBERTURAS");
+				  pagFin = pagFin == 0? fn.pagFinRango(stripper, doc, "DETALLE DE COBERTURAS") : pagFin;
+				  
 					if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 						modelo  = new BanorteAutosModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
 					}					   

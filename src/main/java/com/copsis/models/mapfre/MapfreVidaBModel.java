@@ -230,8 +230,11 @@ public class MapfreVidaBModel {
 					.replace("###MUERTE###ACCIDENTAL", "MUERTE ACCIDENTAL")
 					.replace("###SERVICIOS###FUNERARIOS", "SERVICIOS FUNERARIOS")
                     .replace("EXENCIÓN###DE###PAGO###DE###PRIMAS###POR###INVALIDEZ###TOTAL###Y###PERMANENTE", "EXENCIÓN DE PAGO DE PRIMAS POR INVALIDEZ TOTAL Y PERMANENTE")
-                    .replace("PAGO###ADICIONAL###DE###SUMA###ASEGURADA###POR###INVALIDEZ###TOTAL###Y###PERMANENTE","PAGO ADICIONAL DE SUMA ASEGURADA POR INVALIDEZ TOTAL Y PERMANENTE");
-    
+                    .replace("PAGO###ADICIONAL###DE###SUMA###ASEGURADA###POR###INVALIDEZ###TOTAL###Y###PERMANENTE","PAGO ADICIONAL DE SUMA ASEGURADA POR INVALIDEZ TOTAL Y PERMANENTE")
+                    .replace("ENFERMEDADES###GRAVES", "ENFERMEDADES GRAVES")
+                    .replace("MUERTE###ACCIDENTAL###Y###PÉRDIDAS###ORGÁNICAS###COLECTIVA", "MUERTE ACCIDENTAL Y PÉRDIDAS ORGÁNICAS COLECTIVA")
+                    .replace("SERVICIOS###FUNERARIOS","SERVICIOS FUNERARIOS");
+
 			arrNewContenido = newcontenido.split("\n");
 			for (int i = 0; i < arrNewContenido.length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();

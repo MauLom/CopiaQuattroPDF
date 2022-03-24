@@ -40,7 +40,7 @@ public class BexmasSaludBModel {
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("12:00 HORAS", ""));
 				
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-				
+					
 					if(newcont.toString().split("\n")[i].contains("Contratante") && newcont.toString().split("\n")[i].contains("Póliza")) {
 						modelo.setCteNombre(newcont.toString().split("\n")[i+1].split("###")[0]);
 						modelo.setPoliza(newcont.toString().split("\n")[i].split("###")[newcont.toString().split("\n")[i].split("###").length-1].replace("Póliza:", "").trim());

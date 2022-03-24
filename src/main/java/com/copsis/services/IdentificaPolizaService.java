@@ -32,6 +32,7 @@ import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.planSeguro.PlanSeguroModel;
 import com.copsis.models.potosi.PotosiModel;
 import com.copsis.models.primero.PrimeroModel;
+import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
@@ -62,6 +63,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
+		
 	      
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
@@ -106,18 +108,15 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
-				
+			
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
-						|| contenido.contains("COLECTIVO EMPRESARIAL")) {
-
+						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")) {				
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
 				} else {
-					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);
-					
-
+					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);					
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
 							|| contenidoAux.contains("@@@Seguros a\n" + MONTERREY)
@@ -178,7 +177,8 @@ public class IdentificaPolizaService {
 			if (!encontro && contenido.contains("Banorte") && !contenido.contains("Servicios Integrales de Salud Nova")
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
-								&& contenido.contains("ASEGURADOS"))) {
+								&& contenido.contains("ASEGURADOS"))
+						|| (contenido.contains("SEGUROS BANORTE") || contenido.contains("BANORTE"))){
 					if (contenido.contains("Estimado(a)") ) {
 							BanorteModel datosBanort;						
 							if(caratula(3, 4, pdfStripper, pdDoc).contains("AVISO DE COBRO")){						
@@ -296,7 +296,7 @@ public class IdentificaPolizaService {
 			}
 
 			// ARGOS
-			if (!encontro && contenido.contains("Seguros Argos, S.A. de C.V.")) {
+			if (!encontro && (contenido.contains("Seguros Argos, S.A. de C.V.") )) {
 				ArgosModel datosArgos = new ArgosModel(pdfStripper, pdDoc, contenido);
 				modelo = datosArgos.procesar();
 				encontro = true;
@@ -314,19 +314,20 @@ public class IdentificaPolizaService {
 			
 			
 		
-		    if (!encontro && contenido.contains("Seguros el Potosí S.A.")){		    			    		                
+		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx"))){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                
             }
-		    
+		  
 
 			// ENTRADA PARA VEXMAS
             if (! encontro &&( contenido.contains("Seguros Ve Por")
                         || contenido.contains("Seguros Ve por Más, S.A.")
                         || contenido.contains("Seguros Ve por Más, S. A.")
                         || contenido.contains("Seguros Ve Por Más")
-                        || contenido.contains("www.vepormas.com"))) {//Ve por Más 
+                        || contenido.contains("www.vepormas.com")
+                      )) {//Ve por Más 
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;
@@ -359,15 +360,21 @@ public class IdentificaPolizaService {
             
             }
 
-            // ENTRADA PARA PLAN SEGURO
-            
-   
-                if (!encontro && contenido.contains("Plan Seguro")) {
+            // ENTRADA PARA PLAN SEGURO            
+               if (!encontro && contenido.contains("Plan Seguro")) {
             
                 	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
                     modelo = datosPlan.procesar();
                     encontro = true;
-                }
+               }
+               
+             
+               //ENTRADA PARA PRUDENTIAL
+               if(!encontro && contenido.contains("Prudential Seguros")) {
+            	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosPlan.procesar();
+                   encontro = true;  
+               }
             
 
 
