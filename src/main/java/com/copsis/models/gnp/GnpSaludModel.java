@@ -341,7 +341,9 @@ public class GnpSaludModel {
 							}
 							break;
 						case 4:
-							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split(ConstantsValue.IVA)[1]).replace("###", "").trim()));
+							
+
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split(ConstantsValue.IVA)[1]).replace("16%", "").replace("###", "").trim()));
 						
 							 break;
 						default:
