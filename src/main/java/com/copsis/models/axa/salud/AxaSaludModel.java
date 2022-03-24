@@ -2,6 +2,8 @@ package com.copsis.models.axa.salud;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -59,7 +61,8 @@ public class AxaSaludModel {
 				.replace("A###gente:", ConstantsValue.AGENTE).replace("U###tilidad:", "Utilidad:")
 				.replace("N O R T E T R E S", "NORTE TRES")
 				.replace(" N U E V O P A R Q U E I N D U S T", "NUEVO PARQUE INDUSTRIAL")
-				.replace("Endosos contenidos en la Póliza", ConstantsValue.ENDOSO_CONTENIDOS_POLIZA);
+				.replace("Endosos contenidos en la Póliza", ConstantsValue.ENDOSO_CONTENIDOS_POLIZA)
+				.replace("TI T U L A R", "TITULAR");
 
 		try {
 			modelo.setTipo(3);
@@ -144,6 +147,9 @@ public class AxaSaludModel {
 
 			inicio = contenido.indexOf(ConstantsValue.DATOS_POLIZA );
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS);
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Plan de la");
+			}
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -256,6 +262,10 @@ public class AxaSaludModel {
 
 						modelo.setSa(newcontenido.split("\n")[i].split("Suma Asegurada:")[1].replace("###", ""));
 						
+						if(modelo.getSa().contains("Coaseguro") && modelo.getSa().contains("%")) {
+							modelo.setSa(modelo.getSa().split("Coaseguro")[0]);
+						}
+						
 					}
 
 					if (newcontenido.split("\n")[i].contains("Deducible:") && newcontenido.split("\n")[i].contains(ConstantsValue.COASASEGURO2)) {
@@ -286,23 +296,36 @@ public class AxaSaludModel {
 			
 			inicio = contenido.indexOf("Familia Asegurada");
 			fin = contenido.indexOf("Prima Total Asegurados:");
+			System.err.println(inicio +" fin: "+fin);
 			int index = -1;
 			String texto;
 		
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###").replace("SOCORROTITULAR", "SOCORRRO TITULAR");
+				System.out.println(newcontenido);
+				String[] arrContenido = newcontenido.split("\n");
+				for (int i = 0; i < arrContenido.length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-				  if(newcontenido.split("\n")[i].contains("-")) {	
-			  switch (newcontenido.split("\n")[i].split("###").length) {						 		
+				  if(arrContenido[i].contains("-")) {	
+					  if(arrContenido[i].split("###").length >2 && arrContenido[i].split("###").length<7) {
+						  String[] valores = newcontenido.split("\n")[i].split("###");
+						  if(valores[0].split("-").length == 3) {
+							  String diaNac = obtenerNumEntero(valores[0].split("-")[0]);
+							  valores[0] = valores[0].replace(diaNac, "###"+valores[0].split("-")[0]);
+							  System.err.println("DNAc "+diaNac);
+							  System.err.println(valores[0]);
+						  }
+						  
+					  }
+			  switch (arrContenido[i].split("###").length) {						 		
 			        case 7: case 8:	
-						asegurado.setNombre((newcontenido.split("\n")[i].split("###")[0].split(",")[1] +" " + newcontenido.split("\n")[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
-						int parentesco = fn.parentesco(newcontenido.split("\n")[i].split("###")[1]);
+						asegurado.setNombre((arrContenido[i].split("###")[0].split(",")[1] +" " + arrContenido[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
+						int parentesco = fn.parentesco(arrContenido[i].split("###")[1]);
 			        	if(parentesco == 1 &&  !esValidoParentescoTitular(newcontenido.split("\n")[i].split("###")[1]) ) {
 			        		//Se extrae la ultima palabra de la sección del nombre de asegurado, para validar si es un valor de parentesco
-			        		String[] aux = newcontenido.split("\n")[i].split("###")[0].split(" ");
+			        		String[] aux = arrContenido[i].split("###")[0].split(" ");
 			        		String nombreParentesco = aux[aux.length-1];
 			        		parentesco = fn.parentesco(nombreParentesco);
 			        		if((parentesco == 1 && esValidoParentescoTitular(nombreParentesco)) || parentesco > 1) {
@@ -418,5 +441,14 @@ public class AxaSaludModel {
 		return (valor.equalsIgnoreCase("TITULAR") || valor.equalsIgnoreCase("TIT") || valor.equalsIgnoreCase("ASEGURADO PRINCIPAL"));
 	}
 
+	private String obtenerNumEntero(String cadena) {
+		String resultado = "";
+		Matcher m = Pattern.compile("\\d{1,2}?").matcher(cadena);
+		while (m.find()) {
+			resultado = m.group();
+		}
+		return resultado;
+	
+	}
 
 }
