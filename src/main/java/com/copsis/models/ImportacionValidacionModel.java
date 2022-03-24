@@ -78,6 +78,15 @@ public class ImportacionValidacionModel {
 				}
 			}
 			
+			if(poliza.getTipo() == 5) {
+				  respuesta +="Solo revisar,hay casos donde solo se tiene la prima total\n";
+				  respuesta +="Alerta solo revisar si trae *Benficiarios la poliza\n";	
+			}
+			
+			if(poliza.getTipo() == 5) {
+				
+			}
+			
 			
 			
 			
