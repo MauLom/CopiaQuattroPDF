@@ -1,9 +1,11 @@
 package com.copsis.models.axa.salud;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -296,7 +298,6 @@ public class AxaSaludModel {
 			
 			inicio = contenido.indexOf("Familia Asegurada");
 			fin = contenido.indexOf("Prima Total Asegurados:");
-			System.err.println(inicio +" fin: "+fin);
 			int index = -1;
 			String texto;
 		
@@ -304,26 +305,43 @@ public class AxaSaludModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###").replace("SOCORROTITULAR", "SOCORRRO TITULAR");
-				System.out.println(newcontenido);
 				String[] arrContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrContenido.length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				  if(arrContenido[i].contains("-")) {	
 					  if(arrContenido[i].split("###").length >2 && arrContenido[i].split("###").length<7) {
-						  String[] valores = newcontenido.split("\n")[i].split("###");
+						  String[] valores = arrContenido[i].split("###");
 						  if(valores[0].split("-").length == 3) {
-							  String diaNac = obtenerNumEntero(valores[0].split("-")[0]);
-							  valores[0] = valores[0].replace(diaNac, "###"+valores[0].split("-")[0]);
-							  System.err.println("DNAc "+diaNac);
-							  System.err.println(valores[0]);
+							  String aux = valores[0].split("-")[0];
+							  String diaNac = obtenerNumEntero(aux);
+							  
+							  if(diaNac.length() > 0) {
+								  diaNac = diaNac.length() == 1 ? "0"+diaNac : diaNac;
+								  aux = aux.replace(obtenerNumEntero(aux), "###"+diaNac);
+								  valores[0] = aux + "-"+ valores[0].split("-")[1] +"-"+  valores[0].split("-")[2];
+								  aux = arrContenido[i].split("###")[0];
+								  arrContenido[i] = arrContenido[i].replace(aux,valores[0]);
+								  valores = arrContenido[i].split("###");
+								  String[] arrAux = valores[0].trim().split(" ");
+								  String genero = arrAux[arrAux.length-1];
+								 
+								  if(genero.equalsIgnoreCase("F") || genero.equalsIgnoreCase("M")) {
+									  arrAux[arrAux.length-1] = "###"+genero;
+									  arrAux[arrAux.length-2] = "###"+arrAux[arrAux.length-2];
+									  valores[0] = Arrays.asList(arrAux).stream().collect(Collectors.joining(" "));
+									  aux = arrContenido[i].split("###")[0];
+									  arrContenido[i] = arrContenido[i].replace(aux,valores[0]);
+
+								  }
+							  }
 						  }
 						  
 					  }
 			  switch (arrContenido[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((arrContenido[i].split("###")[0].split(",")[1] +" " + arrContenido[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
-						int parentesco = fn.parentesco(arrContenido[i].split("###")[1]);
-			        	if(parentesco == 1 &&  !esValidoParentescoTitular(newcontenido.split("\n")[i].split("###")[1]) ) {
+						int parentesco = fn.parentesco(arrContenido[i].split("###")[1].trim());
+			        	if(parentesco == 1 &&  !esValidoParentescoTitular(arrContenido[i].split("###")[1].trim()) ) {
 			        		//Se extrae la ultima palabra de la sección del nombre de asegurado, para validar si es un valor de parentesco
 			        		String[] aux = arrContenido[i].split("###")[0].split(" ");
 			        		String nombreParentesco = aux[aux.length-1];
@@ -336,31 +354,33 @@ public class AxaSaludModel {
 			        		}
 			        	}
 			        	asegurado.setParentesco(parentesco);
-						asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
+						asegurado.setSexo(fn.sexo(arrContenido[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
 
 						String fechaNacimiento = "";
-						if(newcontenido.split("\n")[i].split("###")[3].replace(" ", "").split("-").length == 3) {
-							fechaNacimiento = newcontenido.split("\n")[i].split("###")[3].replace(" ", "");
-						}else if(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").split("-").length == 3) {
-							fechaNacimiento = newcontenido.split("\n")[i].split("###")[2].replace(" ", "");
-							String siguienteSeccion = newcontenido.split("\n")[i].split("###")[3].trim();
+						if(arrContenido[i].split("###")[3].replace(" ", "").split("-").length == 3) {
+							fechaNacimiento = arrContenido[i].split("###")[3].replace(" ", "");
+						}else if(arrContenido[i].split("###")[2].replace(" ", "").split("-").length == 3) {
+							fechaNacimiento = arrContenido[i].split("###")[2].replace(" ", "");
+							String siguienteSeccion = arrContenido[i].split("###")[3].trim();
 							if(fechaNacimiento.split("-")[2].length() == 1  && fn.eliminaSpacios(siguienteSeccion).length() == 3) {
 								fechaNacimiento += siguienteSeccion;					
 							}
 						}
-						asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento));
-						asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) != null  ? fn.castInteger(newcontenido.split("\n")[i].split("###")[4].trim()) : 0 );
+						if(fechaNacimiento.split("-").length == 3) {
+							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento));
+						}
+						asegurado.setEdad(fn.castInteger(arrContenido[i].split("###")[4].trim()) != null  ? fn.castInteger(arrContenido[i].split("###")[4].trim()) : 0 );
 
-						if(newcontenido.split("\n")[i].split("###").length == 7 && asegurado.getNacimiento().split("-")[0].length()>4) {							
+						if(arrContenido[i].split("###").length == 7 && asegurado.getNacimiento().split("-")[0].length()>4) {							
 							texto = asegurado.getNacimiento().substring(4,6);//  se extrae los digitos que no corresponden al año 195863-03-17 = 63
 							asegurado.setEdad(fn.castInteger(texto));
 							asegurado.setNacimiento(asegurado.getNacimiento().replace(texto, ""));
 						}
-						index = fn.castDouble(newcontenido.split("\n")[i].split("###")[5]) != null ? 5 : 4;
-						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[index])));
+						index = fn.castDouble(arrContenido[i].split("###")[5]) != null ? 5 : 4;
+						asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(arrContenido[i].split("###")[index])));
 						
-						index = newcontenido.split("\n")[i].split("###")[6].contains("-") ? 6 : 5;
-						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[index].replace(" ", "").replace("\r", "")));
+						index = arrContenido[i].split("###")[6].contains("-") ? 6 : 5;
+						asegurado.setAntiguedad(fn.formatDateMonthCadena(arrContenido[i].split("###")[index].replace(" ", "").replace("\r", "")));
 						asegurados.add(asegurado);
 						break;
 
