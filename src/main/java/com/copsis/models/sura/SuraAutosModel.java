@@ -40,10 +40,15 @@ public class SuraAutosModel {
 				inicio = contenido.indexOf("Seguro de Movilidad");
 			}
 			
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Seguro de Auto");
+			}
+			
 			fin = contenido.indexOf("Coberturas contratadas");
-
+			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				boolean cpEncontrado = false;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza no.")) {
 						if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
@@ -51,8 +56,9 @@ public class SuraAutosModel {
 							modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
 									.replace(" ", "").trim());
 						}
-						if (newcontenido.split("\n")[i + 1].contains("C.P.")) {
+						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
 							modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
+							cpEncontrado = true;
 						}
 					}
 					if (newcontenido.split("\n")[i].contains("Moneda")
@@ -95,6 +101,21 @@ public class SuraAutosModel {
 						String direccion = newcontenido.split("\n")[i + 2] + " "
 								+ newcontenido.split("\n")[i + 3].split("C.P.")[0].split("Hasta")[0].replace("###", "").trim();
 						modelo.setCteDireccion(direccion);
+						
+						if(newcontenido.split("\n")[i + 4].contains("C.P.")) {
+							direccion = modelo.getCteDireccion() +" "+newcontenido.split("\n")[i + 4].replace("C.P.", "C/P");
+							modelo.setCteDireccion(direccion.split("C/P")[0].trim());
+						}
+					}
+					if(!cpEncontrado && newcontenido.split("\n")[i].contains("C.P")) {
+						String texto = newcontenido.split("\n")[i].replace("C.P","C/P").trim();
+						if(texto.split("C/P").length>1) {
+							texto = fn.elimgatos(texto.split("C/P")[1].trim()).split("###")[0].replace(".", "").replace(":", "").trim();
+							if(fn.isNumeric(texto)) {
+								modelo.setCp(texto);
+								cpEncontrado = true;
+							}
+						}
 					}
 					if (newcontenido.split("\n")[i].contains("Descripción")
 							&& newcontenido.split("\n")[i].contains("Modelo")) {
@@ -116,6 +137,10 @@ public class SuraAutosModel {
 						modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());
 					}
 				}
+			}
+			
+			if(modelo.getCp().length() == 4) {
+				modelo.setCp("0"+modelo.getCp());
 			}
 			
 			inicio = contenido.indexOf("Prima neta###Descuento");
