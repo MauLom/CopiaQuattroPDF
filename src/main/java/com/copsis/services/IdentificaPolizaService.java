@@ -177,7 +177,8 @@ public class IdentificaPolizaService {
 			if (!encontro && contenido.contains("Banorte") && !contenido.contains("Servicios Integrales de Salud Nova")
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
-								&& contenido.contains("ASEGURADOS"))) {
+								&& contenido.contains("ASEGURADOS"))
+						|| (contenido.contains("SEGUROS BANORTE") || contenido.contains("BANORTE"))){
 					if (contenido.contains("Estimado(a)") ) {
 							BanorteModel datosBanort;						
 							if(caratula(3, 4, pdfStripper, pdDoc).contains("AVISO DE COBRO")){						
