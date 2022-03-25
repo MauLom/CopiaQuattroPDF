@@ -23,7 +23,7 @@ public class HdiModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			System.out.println("TIPO DE POLIZA ===> " + fn.tipoPoliza(contenido));
+	
 			
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:
