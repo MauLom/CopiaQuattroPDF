@@ -32,7 +32,12 @@ public class SuraModel {
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			case 1://Autos
-					modelo  = new SuraAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
+					
+					if(pagFin == 0) {
+						pagFin = 3;
+					}
+					modelo  = new SuraAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();					
 				break;
 			case 2://Salud
 				 if(fn.caratula(1, 1, stripper, doc).contains("Desde las")) {
