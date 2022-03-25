@@ -192,9 +192,9 @@ public class SuraAutosModel {
 			
 			obtenerDatosAgente(contenido, modelo);
 			return modelo;
-		} catch (Exception ex) {
-			modelo.setError(SuraAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
-					+ ex.getCause());
+		} catch (Exception e) {
+			modelo.setError(SuraAutosModel.this.getClass().getTypeName() + " | " + e.getMessage() + " | "
+					+ e.getCause());
 			return modelo;
 		}
 	}
@@ -220,7 +220,7 @@ public class SuraAutosModel {
 				agente = arrContenido[2].split("###")[0].trim();
 				
 				if(agente.contains("Y DE FIANZAS, S.") && (arrContenido[3].contains("A. DE C.V.") || arrContenido[4].contains("A. DE C.V."))) {
-					modelo.setAgente(agente + " A. DE C.V.");
+					model.setAgente(agente + " A. DE C.V.");
 				}
 				
 			}
