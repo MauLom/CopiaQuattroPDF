@@ -34,6 +34,7 @@ public class primeroAutosModel {
 			//Fecha de Emisión
 			inicio = contenido.indexOf("Fecha de Emisión");
 			fin = contenido.indexOf("Datos generales");
+			System.out.println(inicio+" fin:"+fin);
 			if(inicio>-1 && fin>-1 && inicio<fin) {
 				 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				 modelo.setFechaEmision(fn.formatDate(fn.obtenerFecha(newcontenido),"dd-MM-yy"));
@@ -42,9 +43,10 @@ public class primeroAutosModel {
 			fin = contenido.indexOf("Coberturas Amparadas");
 			
 			
+			
 		      if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "");
-
+	                System.out.println(newcontenido);
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains("Cp.")) {
 	                        modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
@@ -73,7 +75,9 @@ public class primeroAutosModel {
 	                            modelo.setFechaEmision( ( modelo.getVigenciaDe().trim().length() >  0  ? modelo.getVigenciaDe():""));
 	                        } else {
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].trim()));
-	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[4].trim()));
+	                            //ultimo valor del renglón
+	                            String texto = newcontenido.split("\n")[i + 1].split("###")[newcontenido.split("\n")[i + 1].split("###").length-1];
+	                            modelo.setVigenciaA(fn.formatDateMonthCadena(texto.trim()));
 	                            modelo.setFechaEmision(modelo.getFechaEmision().length()  >  0 ? modelo.getVigenciaDe():"");
 	                        }
 	                    }
@@ -109,7 +113,7 @@ public class primeroAutosModel {
 		      
 		       inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA");
 	            fin = contenido.indexOf("Fecha de Emisión");
-	            
+	            System.err.println(inicio+" fin;"+fin);
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                  for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -218,7 +222,8 @@ public class primeroAutosModel {
 
 
 			return modelo;
-		} catch (Exception e) {		
+		} catch (Exception e) {	
+			modelo.setError(primeroAutosModel.this.getClass().getTypeName()+" - catch:"+e.getMessage()+" | "+ e.getCause());
 			return modelo;
 		}
 	}
