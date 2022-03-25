@@ -133,12 +133,12 @@ public class InbursaAutosModel {
 					// primas
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)
 							&& newcontenido.split("\n")[i].contains("AGRUPACIÓN")) {
-						if(newcontenido.split("\n")[i].contains("NOMBRE")) {
+						if(newcontenido.split("\n")[i].contains("NOMBRE") && newcontenido.split("\n")[i + 2].trim().split("###").length>1) {
 							modelo.setPrimaneta(
-									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1])));
+									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1].trim())));
 						}else {
 							modelo.setPrimaneta(
-									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1])));
+									fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[newcontenido.split("\n")[i + 1].split("###").length-1].trim())));
 						}
 
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA_MAYUS)) {
@@ -150,10 +150,10 @@ public class InbursaAutosModel {
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
 						if(!fn.extraerNumeros(newcontenido.split("\n")[i+1]).isEmpty()) {
 							modelo.setRecargo(fn.castBigDecimal(
-									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[1].replace("###", ""))));
+									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[newcontenido.split("\n")[i + 1].split("###").length-1].replace("###", ""))));
 						}else {
 							modelo.setRecargo(fn.castBigDecimal(
-									fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[1].replace("###", ""))));
+									fn.castDouble(newcontenido.split("\n")[i + 2].split("###")[newcontenido.split("\n")[i + 2].split("###").length-1].replace("###", ""))));
 						}
 
 					} else if (newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO_MAYUS)) {
