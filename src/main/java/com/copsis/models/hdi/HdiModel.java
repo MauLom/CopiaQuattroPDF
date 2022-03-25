@@ -23,9 +23,21 @@ public class HdiModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			if (fn.tipoPoliza(contenido) == 1) {
+	
+			
+			switch (fn.tipoPoliza(contenido)) {
+			case 1:
 				modelo = new HdiAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;
+				
+			case 4:
+				modelo = new HdiDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;	
+
+			default:
+				break;
 			}
+		
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(HdiModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
