@@ -389,7 +389,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,11,  impresionForm.getPlazo().toString(), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 			
 			baseRow = communsPdf.setRow(table, 15);
-			communsPdf.setCell(baseRow,18, "Garantia Extendida/Accsorios:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,18, "Garantia Extendida/Accesorios:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,16,  formatoDinero(impresionForm.getGarantiaExtendida()), black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,19, "Financiamiento del Seguro:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,14,  impresionForm.getMontoSeguroFinacimiento(), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
