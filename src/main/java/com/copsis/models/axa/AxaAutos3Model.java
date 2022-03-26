@@ -35,6 +35,7 @@ public class AxaAutos3Model {
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 					if (newcontenido.split("\n")[i].contains("Moneda:")
@@ -48,11 +49,24 @@ public class AxaAutos3Model {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("Nombre:")[1].split("Edad:")[0]
 								.replace("###", "").strip());
 						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").strip());
+					}else if(newcontenido.split("\n")[i].split("Nombre:").length>1) {
+						modelo.setCteNombre(fn.elimgatos(newcontenido.split("\n")[i].split("Nombre:")[1].trim()).split("###")[0].strip());
 					}
 					if (newcontenido.split("\n")[i].contains("Domicilio:")) {
-						modelo.setCteDireccion(
-								newcontenido.split("\n")[i].split("Domicilio:")[1].replace("###", "").strip() + " "
-										+ newcontenido.split("\n")[i + 1].replace("###", "").strip());
+						String direccion = newcontenido.split("\n")[i].split("Domicilio:")[1].replace("###", "").strip() + " "
+								+ newcontenido.split("\n")[i + 1].replace("###", "").strip();
+						if(!newcontenido.split("\n")[i + 2].contains("R.Tel") &&  !newcontenido.split("\n")[i + 2].contains("Datos")) {
+							direccion+= " "+newcontenido.split("\n")[i + 2];
+						}
+						direccion = fn.eliminaSpacios(direccion.replace("I.D:", "").replace("U.A:", "").replace("###", "")).strip();
+						modelo.setCteDireccion(direccion);
+						//.replace("I.D:", "").replace("U.A:", "")
+						direccion = direccion.replace(" C P:", "C/P:").replace("C.P", "C/P");
+						String cp = direccion.split("C/P")[1].replace(":", "").trim().split(" ")[0];
+						if(fn.isNumeric(cp)) {
+							modelo.setCp(cp);
+						}
+						
 					}
 				}
 			}
@@ -186,7 +200,9 @@ public class AxaAutos3Model {
 			}
 
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			modelo.setError(
+					AxaAutos3Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 	}
