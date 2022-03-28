@@ -158,11 +158,11 @@ public class AxaAutos3Model {
 								newcontenido.split("\n")[i].split("Prima Neta:")[1].split("###")[1].trim())));
 					}
 					if (newcontenido.split("\n")[i].contains("Financiamiento")) {
-						modelo.setDerecho(fn.castBigDecimal(fn.cleanString(
+						modelo.setRecargo(fn.castBigDecimal(fn.cleanString(
 								newcontenido.split("\n")[i].split("Financiamiento")[1].split("###")[1].trim())));
 					}
 					if (newcontenido.split("\n")[i].contains("Expedición")) {
-						modelo.setRecargo(fn.castBigDecimal(fn.cleanString(
+						modelo.setDerecho(fn.castBigDecimal(fn.cleanString(
 								newcontenido.split("\n")[i].split("Expedición:")[1].split("###")[1].trim())));
 					}
 					if (newcontenido.split("\n")[i].contains("I.V.A:")) {
@@ -187,11 +187,15 @@ public class AxaAutos3Model {
 					if (!newcontenido.split("\n")[i].contains("Deducible")) {
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						if(sp == 4) {
-							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
-							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
 							if (newcontenido.split("\n")[i].split("###")[2].contains("%")) {
-								cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2]);
+								cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
 							}
+							coberturas.add(cobertura);
+						}else if(sp==3) {
+							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
 							coberturas.add(cobertura);
 						}
 						
