@@ -13,9 +13,7 @@ public class SuraAutosModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido;
-	private String newcontenido;
-	private int inicio;
-	private int fin;
+
 
 	public SuraAutosModel(String contenidox) {
 		this.contenido = contenidox;
@@ -23,6 +21,9 @@ public class SuraAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
+			String newcontenido;
+			int inicio;
+			int fin;
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC);
 			modelo.setTipo(1);
@@ -189,11 +190,42 @@ public class SuraAutosModel {
 				modelo.setCoberturas(coberturas);
 			}
 			
-			
+			obtenerDatosAgente(contenido, modelo);
 			return modelo;
 		} catch (Exception e) {
+			modelo.setError(SuraAutosModel.this.getClass().getTypeName() + " | " + e.getMessage() + " | "
+					+ e.getCause());
 			return modelo;
 		}
+	}
+	
+	private void obtenerDatosAgente(String texto, EstructuraJsonModel model) {
+		
+		if(texto.split("Agente:").length > 1) {
+			model.setCveAgente(texto.split("Agente:")[1].split("\n")[0].trim());
+		}
+		
+		int inicioIndex = texto.indexOf("Nombre Agente");
+		int finIndex = texto.indexOf("Datos del Asegurado");
+		String newContenido = fn.extracted(inicioIndex, finIndex, texto);
+		if(newContenido.length() > 0 && model.getCveAgente().length() > 0) {
+			String[] arrContenido = newContenido.split("\n");
+			String agente = "";
+			
+			if(arrContenido[1].split("###")[0].contains(model.getCveAgente())) {
+				agente = arrContenido[1].split(model.getCveAgente())[1];
+				agente = fn.elimgatos(agente.trim()).split("###")[0];
+				model.setAgente(agente.trim());
+			}else if(arrContenido[1].contains("Agente###") && arrContenido.length>3) {
+				agente = arrContenido[2].split("###")[0].trim();
+				
+				if(agente.contains("Y DE FIANZAS, S.") && (arrContenido[3].contains("A. DE C.V.") || arrContenido[4].contains("A. DE C.V."))) {
+					model.setAgente(agente + " A. DE C.V.");
+				}
+				
+			}
+		}
+				
 	}
 
 }
