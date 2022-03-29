@@ -203,59 +203,62 @@ public class PrimeroDiversosModel {
 		if(inicio > -1  && inicio < fin) {
 			String[] arrContenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r","").split("\n");
 			StringBuilder texto = new StringBuilder();
-			String textoEnOtroRenglon = "";
-
+			StringBuilder mercancia = new StringBuilder();
+			String factura = "";
+			String empaque = "";
+			StringBuilder trayecto = new StringBuilder();
+			StringBuilder descripcion = new StringBuilder();
 			for(int i=0;i<arrContenido.length;i++) {
-					switch (arrContenido[i].split("###").length) {
-					case 1:
-						if(!arrContenido[i].isBlank()) {
-							texto.append(arrContenido[i]);
+				if(arrContenido[i].split("Mercancía###").length>1 && (i+1)<arrContenido.length){
+					texto.append("Datos del Embarque,");
+					mercancia.append("Mercancía:");
+					mercancia.append(fn.elimgatos(arrContenido[i].split("Mercancía###")[1].trim()).split("###")[0]);
+					texto.append(mercancia);
+					if(arrContenido[i+1].contains("Factura###")) {
+						texto.append(" ");
+						texto.append(arrContenido[i+1].split("Factura###")[0].replace("###",""));
+						texto.append(",");
+						if(arrContenido[i+1].split("Factura###").length>1) {
+							factura ="Factura:"+ arrContenido[i+1].split("Factura")[1].replace("###", "").trim();
+							texto.append(factura).append(",");
 						}
-						break;
-					case 2:
-						texto.append(arrContenido[i].split("###")[0]);
-						texto.append(":");
-						texto.append(arrContenido[i].split("###")[1]);
-						break;
-					case 3:
-						texto.append(arrContenido[i].split("###")[0]);
-						texto.append(":");
-						texto.append(arrContenido[i].split("###")[1]);
-						if(arrContenido[i].split("###")[2].contains("Descripción") && arrContenido[i+1].contains("###")) {
-							texto.append(",Descripción: ");
-							textoEnOtroRenglon = arrContenido[i+1].split("###")[arrContenido[i+1].split("###").length-1];
-							texto.append(textoEnOtroRenglon);
+					}
+				}
+				
+				if(arrContenido[i].split("Tipo de Mercancía###").length>1) {
+					texto.append("Tipo de Mercancía:").append(arrContenido[i].split("###")[arrContenido[i].split("###").length-1]);
+					texto.append(",");
+				}
+				
+				if(arrContenido[i].split("Empaque###").length > 1) {
+					empaque = fn.elimgatos(arrContenido[i].split("Empaque###")[1].trim()).split("###")[0];
+					texto.append("Empaque:").append(empaque).append(",");
+				}
+				
+				if(arrContenido[i].contains("Descripción") && (i+1)<arrContenido.length) {
+					descripcion.append(arrContenido[i+1].split("###")[arrContenido[i+1].split("###").length-1]);
+					if((i+2)<arrContenido.length) {
+						if(!arrContenido[i+2].contains("Destin")) {
+							descripcion.append(" ").append(arrContenido[i+2].split("###")[0].trim());
 						}
-						break;
-					
-					case 4:
-						if(arrContenido[i].split("###")[0].contains("Trayecto")) {
-							texto.append("Trayecto: Origen:");
-							texto.append(arrContenido[i].split("###")[2]);
-							texto.append(",Destino:");
-							textoEnOtroRenglon = arrContenido[i+1].split("###")[1].trim();
-							texto.append(textoEnOtroRenglon);
-							arrContenido[i+1] = arrContenido[i+1].replace("Destin###"+textoEnOtroRenglon,"");
-						}else {
-							texto.append(arrContenido[i].split("###")[0]);
-							texto.append(":");
-							texto.append(arrContenido[i].split("###")[1].trim());
-							texto.append(",");
-							texto.append(arrContenido[i].split("###")[2]);
-							texto.append(":");
-							texto.append(arrContenido[i].split("###")[3].trim());
-						}
-						
-						break;
+					}
+					texto.append("Descripción:").append(descripcion).append(",");
 
-					default:
-						break;
-					}
-					if(!arrContenido[i].isBlank()) {
-					    texto.append(",");
-					}
-		
+				}
+				
+				if(arrContenido[i].split("Trayecto###Origen###").length>1 && (i+1)<arrContenido.length && arrContenido[i].contains("###")) {
+					trayecto.append("Trayecto:Origen:");
+					trayecto.append(fn.elimgatos(arrContenido[i].split("Trayecto###Origen###")[1].trim()).split("###")[0]);
+					trayecto.append(",");
+				}
+				
+				if(arrContenido[i].contains("Destin###")) {
+					trayecto.append("Destino: ");
+					trayecto.append(fn.elimgatos(arrContenido[i].split("Destin###")[1].trim()).split("###")[0]);
+					texto.append(trayecto).append(",");
+				}
 			}
+			
 			modelo.setTextoDiversos(texto.toString().substring(0,texto.length()-1));
 		}
 		
