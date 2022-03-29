@@ -103,8 +103,8 @@ public class BanorteAutosModel {
 						modelo.setCp(newcontenido.split("\n")[i+1].split("C.P:")[1].split("Estado")[0].replace("###", "").replace("_", "").replace("  ", "").trim());
 						
 						}						
-						if(newcontenido.split("\n")[i].contains("Conductor")){
-							modelo.setConductor( newcontenido.split("\n")[i].split("Habitual:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
+						if(newcontenido.split("\n")[i].contains("Conductor") && newcontenido.split("\n")[i].split("Habitual").length>1){
+							modelo.setConductor(newcontenido.split("\n")[i].split("Habitual:")[1].replace("###", "").replace("_", "").replace("  ", "").trim());
 						}
 						//
 						//primas
