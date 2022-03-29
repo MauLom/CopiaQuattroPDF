@@ -335,7 +335,7 @@ public class ChubbDiversosModel {
 					String coaseguro = "";
 					String auxiliar = "";
 					String[] arrResultado = resultado.toString().split("\r\n");
-					List<String> nombresCoberturas = Arrays.asList("Bienes a la Intemperie Edificio,".split(","));
+					List<String> nombresCoberturas = Arrays.asList("BIENES A LA INTEMPERIE EDIFICIO,".split(","));
 					for (int i = 0; i < arrResultado.length; i++) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						String a = "";
@@ -388,7 +388,7 @@ public class ChubbDiversosModel {
 										|| deducible.toString().contains("de reposición")
 										|| deducible.toString().contains("de reposicion")
 										|| deducible.toString().contains("suma asegurada")) {
-									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION) && nombresCoberturas.indexOf(b.split("###")[0].trim()) ==-1) {
+									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION) && nombresCoberturas.indexOf(b.split("###")[0].trim().toUpperCase()) ==-1) {
 										if( b.split("###").length == 2){
 											deducible.append(" ").append(b.split("###")[0]);
 										}else {
@@ -415,7 +415,8 @@ public class ChubbDiversosModel {
 								coberturas.add(cobertura);
 
 							}else if(a.split("###").length == 2  && i+1<arrResultado.length ) {
-								if( fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")) {
+								if( fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")
+										&& nombresCoberturas.indexOf(a.split("###")[0].trim().toUpperCase()) > -1) {
 									cobertura.setSeccion(seccion.replace("SECCION", "").trim());
 									cobertura.setNombre(a.split("###")[0].trim());
 									cobertura.setSa(a.split("###")[1]+" "+arrResultado[i+1].split("###")[0].trim());
