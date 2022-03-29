@@ -298,7 +298,6 @@ public class ChubbDiversosModel {
 					}
 					index++;
 				}
-				System.err.println(resultado);
 				
 				if(arrNewContenido.length < 4 && newcontenido.contains("PERDIDAS O DAÑOS PARCIALES")) {
 					arrNewContenido = resultado.toString().split("\n");
@@ -416,10 +415,13 @@ public class ChubbDiversosModel {
 								coberturas.add(cobertura);
 
 							}else if(a.split("###").length == 2  && i+1<arrResultado.length ) {
-								if(arrResultado[i].split("###")[0].contains("$") && a.trim().endsWith("Sublímite")) {
+								if( fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")) {
 									cobertura.setSeccion(seccion.replace("SECCION", "").trim());
-									cobertura.setNombre(nombre);
-									cobertura.setSa(sumaAsegurada.toString().trim());
+									cobertura.setNombre(a.split("###")[0].trim());
+									cobertura.setSa(a.split("###")[1]+" "+arrResultado[i+1].split("###")[0].trim());
+									if(arrResultado[i+1].split("###").length>1) {
+										cobertura.setDeducible(arrResultado[i+1].split("###")[1].contains("%") ? arrResultado[i+1].split("###")[1].trim():"");
+									}
 									coberturas.add(cobertura);
 									deducible = new StringBuilder();
 								}
