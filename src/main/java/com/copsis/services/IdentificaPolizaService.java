@@ -12,6 +12,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
+import com.copsis.models.aguila.AguilaModel;
 import com.copsis.models.aig.AigModel;
 import com.copsis.models.allians.AlliansModel;
 import com.copsis.models.ana.AnaModel;
@@ -378,6 +379,13 @@ public class IdentificaPolizaService {
             
 
 
+               //ENTRADA PARA AGUILA
+               if(!encontro && contenido.contains("Aguila Compañía de Seguros")) {
+            	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosAguila.procesar();
+                   encontro = true;  
+               }
+            
 
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
