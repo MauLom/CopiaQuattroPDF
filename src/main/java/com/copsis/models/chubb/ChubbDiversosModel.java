@@ -214,12 +214,30 @@ public class ChubbDiversosModel {
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
 			if (inicio > -1 && fin > inicio) {
-				newcontenido = contenido.substring(inicio, fin);
+				newcontenido = contenido.substring(inicio, fin).replace("\r", "");
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Dirección:")) {
 						ubicacion.setCalle(newcontenido.split("\n")[i].split("Dirección:")[1].replace("###", "")
-								.replace("\r", ""));
+								.replace("\r", "").trim());
+						if((i+2)<newcontenido.split("\n").length) {
+							if(!newcontenido.split("\n")[i+1].contains("###") &&  fn.numTx(newcontenido.split("\n")[i+1].trim()).length()>0) {
+								String cp = fn.numTx(newcontenido.split("\n")[i+1].trim());
+								if(cp.length() == 4) {
+									ubicacion.setCp("0"+cp);
+								}else if(cp.length() == 5) {
+									ubicacion.setCp(cp);
+								}
+							}
+						}
+						
+						String noExterno = fn.numTx(ubicacion.getCalle());
+						if(noExterno.length()> 0) {
+							String calle = ubicacion.getCalle();
+							noExterno = calle.substring(calle.indexOf(noExterno),calle.length()-1);
+							noExterno = noExterno.split(" ")[0];
+							ubicacion.setNoExterno(noExterno);
+						}
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHO)) {
 						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "").trim()));
