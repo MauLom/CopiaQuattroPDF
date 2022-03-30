@@ -94,8 +94,8 @@ public class PrimeroDiversosModel {
 
 	                }
 	            }
-	            obtenerAgente();
-	            obtenerTextoDiversos();
+	            obtenerAgente(contenido,modelo);
+	            obtenerTextoDiversos(contenido,modelo);
 			
 	            inicio = contenido.indexOf("Datos del Riesgo");
 				fin = contenido.indexOf("Coberturas");
@@ -184,30 +184,32 @@ public class PrimeroDiversosModel {
 		}
 	}
 	
-	private void obtenerAgente() {
-        int inicio = contenido.indexOf("AVISO DE PRIVACIDAD");
-        int fin = contenido.indexOf("Nombre del Agente");
+	private void obtenerAgente(String texto,EstructuraJsonModel model) {
+        int inicio = texto.indexOf("AVISO DE PRIVACIDAD");
+        int fin = texto.indexOf("Nombre del Agente");
         String newContenido = "";
         if (inicio > 0 && fin > 0 && inicio < fin) {
-        	newContenido = contenido.substring(inicio,fin).replace("@@@", "");
+        	newContenido = texto.substring(inicio,fin).replace("@@@", "");
         	if(newContenido.split("\n").length>1) {
-        		modelo.setAgente(newContenido.split("\n")[newContenido.split("\n").length-1].replace("\r", ""));
+        		model.setAgente(newContenido.split("\n")[newContenido.split("\n").length-1].replace("\r", ""));
         	}
         }
 	}
 	
-	private void obtenerTextoDiversos() {
+	private void obtenerTextoDiversos(String contenidoTexto, EstructuraJsonModel model) {
 		int inicio = contenido.indexOf("Datos del Embarque");
 		int fin = contenido.indexOf("Coberturas Amparadas");
 		
 		if(inicio > -1  && inicio < fin) {
-			String[] arrContenido = contenido.substring(inicio,fin).replace("@@@", "").replace("\r","").split("\n");
+			String[] arrContenido = contenidoTexto.substring(inicio,fin).replace("@@@", "").replace("\r","").replace("DPeasncerl iRpacdióiandor","Descripción\n ###Panel Radiador").split("\n");
 			StringBuilder texto = new StringBuilder();
 			StringBuilder mercancia = new StringBuilder();
 			String factura = "";
 			String empaque = "";
 			StringBuilder trayecto = new StringBuilder();
 			StringBuilder descripcion = new StringBuilder();
+			int renglonDescripcion = -1;
+
 			for(int i=0;i<arrContenido.length;i++) {
 				if(arrContenido[i].split("Mercancía###").length>1 && (i+1)<arrContenido.length){
 					texto.append("Datos del Embarque,");
@@ -237,14 +239,14 @@ public class PrimeroDiversosModel {
 				
 				if(arrContenido[i].contains("Descripción") && (i+1)<arrContenido.length) {
 					descripcion.append(arrContenido[i+1].split("###")[arrContenido[i+1].split("###").length-1]);
-					if((i+2)<arrContenido.length) {
-						if(!arrContenido[i+2].contains("Destin")) {
-							descripcion.append(" ").append(arrContenido[i+2].split("###")[0].trim());
-						}
-					}
-					texto.append("Descripción:").append(descripcion).append(",");
-
+					renglonDescripcion = i+1;
 				}
+
+				if(descripcion.length()>0 && renglonDescripcion < i  && (arrContenido[i].split("###").length == 1 || arrContenido[i].split("###").length >2)) {
+					descripcion.append(" ");
+					descripcion.append(arrContenido[i].split("###")[arrContenido[i].split("###").length-1]);
+				}
+				
 				
 				if(arrContenido[i].split("Trayecto###Origen###").length>1 && (i+1)<arrContenido.length && arrContenido[i].contains("###")) {
 					trayecto.append("Trayecto:Origen:");
@@ -258,8 +260,9 @@ public class PrimeroDiversosModel {
 					texto.append(trayecto).append(",");
 				}
 			}
-			
-			modelo.setTextoDiversos(texto.toString().substring(0,texto.length()-1));
+
+			texto.append("Descripción:").append(descripcion).append(",");
+			model.setTextoDiversos(texto.toString().substring(0,texto.length()-1));
 		}
 		
 	}
