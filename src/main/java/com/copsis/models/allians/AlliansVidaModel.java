@@ -47,7 +47,9 @@ public class AlliansVidaModel {
 						 if(fn.isNumeric( newcont.toString().split("\n")[i+3].substring(0,5))) {
 							 modelo.setCp(newcont.toString().split("\n")[i+3].substring(0,5));
 						 }
-						
+						if(newcont.toString().split("\n")[i+1].split("###").length>1) {
+							modelo.setPlan(newcont.toString().split("\n")[i+1].split("###")[newcont.toString().split("\n")[i+1].split("###").length-1].trim());
+						}
 					 }
 					 if(newcont.toString().split("\n")[i].contains("RFC")) {
 						modelo.setRfc(newcont.toString().split("\n")[i].split("###")[1].trim()); 
@@ -63,6 +65,9 @@ public class AlliansVidaModel {
 					 }
 					 if(newcont.toString().split("\n")[i].contains("Asegurado") && newcont.toString().split("\n")[i].contains("Fumador")) {
 						asegurado.setNombre(newcont.toString().split("\n")[i+1].split("###")[0]);
+						if((i+2)< newcont.toString().split("\n").length) {
+							asegurado.setNombre( !newcont.toString().split("\n")[i+2].contains("###") ? asegurado.getNombre() + " "+ newcont.toString().split("\n")[i+2].trim(): asegurado.getNombre());
+						}
                         asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1]));
                         asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[2]));
                         asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i+1].split("###")[2] )? 1:0 );
@@ -101,10 +106,13 @@ public class AlliansVidaModel {
 			 
 			 if (inicio > -1 && fin > -1 && inicio < fin) {				
 				 newcont  = new StringBuilder();
-				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				 String newContenido = fn.extracted(inicio, fin, contenido);
+				 newContenido = newContenido.replace("Prima Neta Anual###Derecho de Póliza###Recargo por Pago###Prima Total Anual###Importe Primer###Importe Recibos\n"
+				 		+ "Fraccionado###Recibo###Subsecuentes","Prima Neta Anual###Derecho de Póliza###Recargo por Pago Fraccionado###Prima Total Anual###Importe Primer Recibo###Importe Recibos Subsecuentes");
+				 newcont.append(newContenido);
 				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
 					 if(newcont.toString().split("\n")[i].contains("Fraccionado")) {
-							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(
 									newcont.toString().split("\n")[i+1].split("###")[0].replace("###", ""))));
 							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(
 									newcont.toString().split("\n")[i+1].split("###")[1].replace("###", ""))));
@@ -151,8 +159,11 @@ public class AlliansVidaModel {
 					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 					 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
 						 if(newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i+1].contains("Tarjeta de Crédito")) {
-                            modelo.setAgente(newcont.toString().split("\n")[i+2].split("###")[1]);
-                            modelo.setCveAgente(newcont.toString().split("\n")[i+2].split("###")[0]);
+                            modelo.setAgente(newcont.toString().split("\n")[i+2].split("###")[1].trim());
+                            modelo.setCveAgente(newcont.toString().split("\n")[i+2].split("###")[0].trim());
+						 }else if(newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i+1].split("###").length>1) {
+							 modelo.setAgente(newcont.toString().split("\n")[i+1].split("###")[1].trim());
+	                         modelo.setCveAgente(newcont.toString().split("\n")[i+1].split("###")[0].trim());
 						 }
 					 }					 
 				 }							 
@@ -160,7 +171,9 @@ public class AlliansVidaModel {
 			 
 			
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
+					+ ex.getCause());
 			return modelo;
 		}
 		
