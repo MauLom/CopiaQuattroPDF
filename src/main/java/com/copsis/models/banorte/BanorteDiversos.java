@@ -71,6 +71,8 @@ public class BanorteDiversos {
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("A las 12 hrs desde:", "").replace("Hasta las 12 hrs:", "");
+				newcontenido = newcontenido.replace("pago fraccionado###Gastos de Expedición###I.V.A###Prima Total###Prima primer###Prima pagos\npago###sucesivos", "pago fraccionado###Gastos de Expedición###I.V.A###Prima Total###Prima primer pago###Prima pagos sucesivos");
+
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 					if (newcontenido.split("\n")[i].contains("PÓLIZA")
