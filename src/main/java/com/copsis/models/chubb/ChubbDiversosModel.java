@@ -1,6 +1,7 @@
 package com.copsis.models.chubb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
@@ -107,7 +108,7 @@ public class ChubbDiversosModel {
 							&& newcontenido.split("\n")[i].contains("pago")) {
 						modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split("Moneda:")[1].split("Forma")[0]
 								.replace("###", "").trim()));
-						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("pago:")[1].replace("\r", "")
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("pago:")[1].replace("\r", "")
 								.replace("###", "").trim()));
 					}
 					if (newcontenido.split("\n")[i].contains("emisión:")
@@ -291,7 +292,7 @@ public class ChubbDiversosModel {
 			
 				for (String x : arrNewContenido) {
 					if (!x.contains("Tipo Vivienda") && !x.contains("Coberturas###Suma") && !x.contains("página#") && !x.contains("No. Sótanos") && !x.contains("Tipo Techo")
-							&& !x.contains("Cobertura amparada")) {
+							&& !x.contains("Cobertura amparada") && !x.contains("No. Niveles:")) {
 						x = completaTextoCoberturas(arrNewContenido,index,coberturasNombreIncompleto);
 						resultado.append(x.trim()).append("\r\n");
 					}
@@ -334,6 +335,7 @@ public class ChubbDiversosModel {
 					String coaseguro = "";
 					String auxiliar = "";
 					String[] arrResultado = resultado.toString().split("\r\n");
+					List<String> nombresCoberturas = Arrays.asList("BIENES A LA INTEMPERIE EDIFICIO,".split(","));
 					for (int i = 0; i < arrResultado.length; i++) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						String a = "";
@@ -386,7 +388,7 @@ public class ChubbDiversosModel {
 										|| deducible.toString().contains("de reposición")
 										|| deducible.toString().contains("de reposicion")
 										|| deducible.toString().contains("suma asegurada")) {
-									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION)) {
+									if ((b.split("###").length == 1 || b.split("###").length == 2)&& !b.contains(ConstantsValue.SECCION) && nombresCoberturas.indexOf(b.split("###")[0].trim().toUpperCase()) ==-1) {
 										if( b.split("###").length == 2){
 											deducible.append(" ").append(b.split("###")[0]);
 										}else {
@@ -412,6 +414,18 @@ public class ChubbDiversosModel {
 								deducible = new StringBuilder();
 								coberturas.add(cobertura);
 
+							}else if(a.split("###").length == 2  && i+1<arrResultado.length ) {
+								if( fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")
+										&& nombresCoberturas.indexOf(a.split("###")[0].trim().toUpperCase()) > -1) {
+									cobertura.setSeccion(seccion.replace("SECCION", "").trim());
+									cobertura.setNombre(a.split("###")[0].trim());
+									cobertura.setSa(a.split("###")[1]+" "+arrResultado[i+1].split("###")[0].trim());
+									if(arrResultado[i+1].split("###").length>1) {
+										cobertura.setDeducible(arrResultado[i+1].split("###")[1].contains("%") ? arrResultado[i+1].split("###")[1].trim():"");
+									}
+									coberturas.add(cobertura);
+									deducible = new StringBuilder();
+								}
 							}
 
 						}
