@@ -38,7 +38,8 @@ public class AnaAutosModelRoja {
 				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", "Forma de pago")
                 .replace("Forma de Pago:", "Forma de pago:")
 				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
-				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL );
+				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL )
+				.replace("###8T0e0l", "Tel 800");
 
 		try {
 			modelo.setTipo(1);
@@ -245,6 +246,8 @@ public class AnaAutosModelRoja {
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				newcontenido = newcontenido.replace("Responsabilidad Civil Catastrófica por Muerte a Terceras Daños\n a Terceros en sus Personas", "Responsabilidad Civil Catastrófica por Muerte a Terceras Daños a Terceros en sus Personas")
+						.replace("Responsabilidad Civil Motociclista, Ciclista y-o Conductor\n Carrito de Golf", "Responsabilidad Civil Motociclista, Ciclista y-o Conductor Carrito de Golf");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
@@ -258,14 +261,14 @@ public class AnaAutosModelRoja {
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						switch (sp) {
 						case 2:case 3:
-							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]));
-							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
+							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]).trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
 							coberturas.add(cobertura);
 							break;
 						case 4:
-							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]));
+							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]).trim());
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[1].trim());
-							cobertura.setSa(newcontenido.split("\n")[i].split("###")[2]);
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());
 							coberturas.add(cobertura);
 							break;
 						default:
@@ -278,7 +281,9 @@ public class AnaAutosModelRoja {
 			}
 
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			modelo.setError(
+					AnaAutosModelRoja.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 
