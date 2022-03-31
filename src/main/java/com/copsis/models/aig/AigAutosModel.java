@@ -106,12 +106,13 @@ public class AigAutosModel {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("Código Postal:")[1].trim());
 					}else if(newcontenido.toString().split("\n")[i].contains("C/P") && newcontenido.toString().split("\n")[i].contains("###")) {
 						String cp = newcontenido.toString().split("\n")[i].split("C/P")[1].split("###")[0].replace(":", "").replace(".","").trim();
-						if(fn.isvalidCp(cp)) {
+						if(fn.isNumeric(cp)) {
 							modelo.setCp(cp);
 						}
 					}
 					
 					if(newcontenido.toString().split("\n")[i].contains("Calle:")) {
+						resultado = new StringBuilder();
 						resultado.append(newcontenido.toString().split("\n")[i].split("Calle:")[1]);
 					}
 					
@@ -170,7 +171,9 @@ public class AigAutosModel {
 					if(modelo.getPlacas().length() == 0 && newcontenido.toString().split("\n")[i].contains("Placas") && newcontenido.toString().split("\n")[i].contains("Clave")) {
 						modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placas")[1].split("Clave")[0].replace("###","").replace(":","").trim());
 					}
-					
+					if(newcontenido.toString().split("\n")[i].split("Descripción:").length> 1) {
+						modelo.setDescripcion(fn.eliminaSpacios(newcontenido.toString().split("\n")[i].split("Descripción:")[1].trim()).split("####")[0]);
+					}
 				}				
 			}
 			
@@ -280,9 +283,9 @@ public class AigAutosModel {
 							&& !newCobertura.toString().split("\n")[i].contains("C.R: Centro-reparto")) {
 						int sp = newCobertura.toString().split("\n")[i].split("###").length;
 						if(sp > 2) {
-							cobertura.setNombre(newCobertura.toString().split("\n")[i].split("###")[0]);
-							cobertura.setSa(newCobertura.toString().split("\n")[i].split("###")[1]);
-							cobertura.setDeducible(newCobertura.toString().split("\n")[i].split("###")[2]);
+							cobertura.setNombre(newCobertura.toString().split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(newCobertura.toString().split("\n")[i].split("###")[1].trim());
+							cobertura.setDeducible(newCobertura.toString().split("\n")[i].split("###")[2].trim());
 							coberturas.add(cobertura);
 						}
 					}
@@ -294,7 +297,6 @@ public class AigAutosModel {
 			newCobertura = null;
 			newcontenido = null;
 			resultado = null;
-
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
