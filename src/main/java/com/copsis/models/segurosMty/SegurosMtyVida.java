@@ -72,26 +72,35 @@ public class SegurosMtyVida {
 				inicio = contenido.indexOf("CARÁTULA DE LA PÓLIZA");
 				fin = contenido.indexOf("BENEFICIOS");
 				newcontenido = new StringBuilder();
-				newcontenido.append( fn.extracted(inicio, fin, contenido));
+				newcontenido.append( fn.extracted(inicio, fin, contenido).replace("FECHA ###DE EMISIÓN", "FECHA DE EMISIÓN"));
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				EstructuraAseguradosModel asegurado2 = new EstructuraAseguradosModel();
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {									
 					if(newcontenido.toString().split("\n")[i].contains("ASEGURADO") && newcontenido.toString().split("\n")[i].contains("ASEGURADO")) {
-                        asegurado.setNombre(newcontenido.toString().split("\n")[i].split("ASEGURADO")[1].split("EMISIÓN")[0].replace("DE", "").replace("FECHA", "").replace("###", "").trim());
-                        asegurado2.setNombre(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
+                        asegurado.setNombre(newcontenido.toString().split("\n")[i].split("ASEGURADO")[1].replace("###", "").trim());
+                        if(asegurado.getNombre().contains("FECHA DE EMISIÓN")) {
+                        	asegurado.setNombre(asegurado.getNombre().split("FECHA DE EMISIÓN")[0].trim());
+                        }
+                        if(newcontenido.toString().split("\n")[i+1].contains("###") && newcontenido.toString().split("\n")[i+1].trim().length()>1) {
+                            asegurado2.setNombre(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
+                        }
 					}
 					if(newcontenido.toString().split("\n")[i].contains("SEXO") && newcontenido.toString().split("\n")[i].contains("EDAD")  && newcontenido.toString().split("\n")[i].contains("MONEDA")) {
 						asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenerMes(newcontenido.toString().split("\n")[i])));
 					    asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i].split("SEXO")[1].split("MONEDA")[0].replace("###", "").trim()).booleanValue() ? 1: 0);
 					    asegurado.setEdad(Integer.parseInt(newcontenido.toString().split("\n")[i].split("EDAD")[1].split("SEXO")[0].replace("###", "").trim()));					    
 						asegurado2.setSexo((newcontenido.toString().split("\n")[i+1].contains("MASCULINO") ? 1: 0));
-						asegurado2.setNacimiento(fn.formatDateMonthCadena(fn.obtenerMes(newcontenido.toString().split("\n")[i+1])));
+						if(newcontenido.toString().split("\n")[i+1].split("-").length == 3){
+						    asegurado2.setNacimiento(fn.formatDateMonthCadena(fn.obtenerMes(newcontenido.toString().split("\n")[i+1])));
+						}
 						
 					}
 				}
 				asegurados.add(asegurado);
-				asegurados.add(asegurado2);
+				if(asegurado2.getNombre().length() > 0) {
+					asegurados.add(asegurado2);
+				}
 				modelo.setAsegurados(asegurados);
 				
 				
@@ -99,8 +108,11 @@ public class SegurosMtyVida {
 				
 				inicio = contenido.indexOf("SUMA ASEGURADA");
 				fin = contenido.indexOf("MANCOMUNADO");
+				if(fin == -1) {
+					fin = contenido.indexOf("DESIGNACIÓN ###DE BENEFICIARIOS");
+				}
 				newcontenido = new StringBuilder();
-				newcontenido.append(fn.extracted(inicio, fin, contenido));
+				newcontenido.append(fn.extracted(inicio, fin, contenido).replace("NO FUMADOR ###C ###","NO FUMADOR C###"));
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();	
 				  Double suma = 0.00;
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
@@ -118,8 +130,11 @@ public class SegurosMtyVida {
 							   modelo.setPrimaTotal(modelo.getPrimaneta());
 							}
 							
-							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-							cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[2]);
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
+							if(!newcontenido.toString().split("\n")[i].split("###")[1].contains("---")) {
+								cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1].trim());
+							}
+							
 							coberturas.add(cobertura);	
 						}
 					}
