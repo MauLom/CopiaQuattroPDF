@@ -1,5 +1,6 @@
 package com.copsis.clients.projections;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,13 +17,13 @@ public class BeneficiarioProjection {
 	private String nombres;
 	private String fecNacimiento;
 	private String parentesco;
-	private int porcentaje;
+	private BigDecimal porcentaje;
 	public BeneficiarioProjection() {
 
 	}
 	
 	public BeneficiarioProjection( String nombres,
-			Date fecNacimiento, String parentesco, int porcentaje) {
+			Date fecNacimiento, String parentesco, BigDecimal porcentaje) {
 		super();
 		this.nombres = nombres;
 		this.fecNacimiento = fecNacimiento.toString();
