@@ -298,6 +298,10 @@ public class ChubbAutosModel {
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
+					if(modelo.getVigenciaDe().length() >  15) {
+						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido).get(0)));
+					}
 				}
 			}
 
@@ -441,7 +445,14 @@ public class ChubbAutosModel {
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
 					newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
-					modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
+					if(newcontenido.contains("-")) {
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));	
+					}
+					if(modelo.getVigenciaDe().length() > 0) {
+						modelo.setFechaEmision(modelo.getVigenciaDe());
+					}
+					
+					
 				}
 			}
 
@@ -617,6 +628,7 @@ public class ChubbAutosModel {
 										? newcontenido.split(separador)[1]
 										: "";
 								recibo.setVigenciaDe(fn.formatDate(newcontenido, "dd-mm-yyyy"));
+								
 							}
 						}
 
