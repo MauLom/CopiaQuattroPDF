@@ -142,7 +142,6 @@ public class GmxDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
-
 			modelo.setError(GmxDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
