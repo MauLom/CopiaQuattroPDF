@@ -146,7 +146,11 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Endoso:###")) {
 					inicio = inicio + 10;
 					newcontenido = contenido.substring(inicio, (inicio + 100));
-					modelo.setEndoso(newcontenido.split(separador)[0].trim());
+				
+					if(newcontenido.length() < 10) {
+						modelo.setEndoso(newcontenido.split(separador)[0].trim());
+					}
+					
 
 				}
 			}
@@ -254,9 +258,11 @@ public class ChubbAutosModel {
 					inicio = inicio + 6;
 					fin = (inicio + 100) < contenido.length() ? (inicio + 100) : (inicio + 20);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin));
-					if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
-						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
-					}
+					
+						if (NumberUtils.isParsable(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim()))) {
+							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split(saltolinea)[0].trim())));
+						}
+					
 				}
 			}
 
@@ -268,11 +274,22 @@ public class ChubbAutosModel {
 					inicio = inicio + 25;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 30);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin));
-					modelo.setCveAgente(newcontenido.contains("-")
-							? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
-							: "");
+                    if(newcontenido.length() < 15) {
+                    	modelo.setCveAgente(newcontenido.contains("-")
+    							? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
+    							: "");
+                    }					
 				}
 			}
+			
+			
+			if(modelo.getCveAgente().length() == 0) {
+				inicio = contenido.indexOf(ConstantsValue.CLAVE_INTERNA_AGENTE);
+				if(inicio  >  -1) {
+					modelo.setCveAgente(contenido.split(ConstantsValue.CLAVE_INTERNA_AGENTE)[1].split("\n")[0].replace("###", "").trim());
+				}
+			}
+			
 
 			// Agente
 			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);
@@ -298,6 +315,10 @@ public class ChubbAutosModel {
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
+					if(modelo.getVigenciaDe().length() >  15) {
+						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido).get(0)));
+					}
 				}
 			}
 
@@ -441,7 +462,14 @@ public class ChubbAutosModel {
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
 					newcontenido = newcontenido.split(separador)[0].trim().replace(" DE ", "-");
-					modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));
+					if(newcontenido.contains("-")) {
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));	
+					}
+					if(modelo.getVigenciaDe().length() > 0) {
+						modelo.setFechaEmision(modelo.getVigenciaDe());
+					}
+					
+					
 				}
 			}
 
@@ -463,7 +491,10 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Asegurado:###")) {
 					inicio = inicio + 13;
 					newcontenido = contenido.substring(inicio, (inicio + 150));
-					modelo.setIdCliente(newcontenido.split(separador)[0].trim());
+					if(newcontenido.length() < 10) {
+						modelo.setIdCliente(newcontenido.split(separador)[0].trim());
+					}
+					
 				}
 			}
 
@@ -481,13 +512,19 @@ public class ChubbAutosModel {
 					}
 				}
 			}
+			
+
 
 			// coberturas
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima");
+			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima","Suma asegurada###Deducible###Coaseguro");
 			conceptosFin = Arrays.asList("@@@Prima Neta###");
 			inicio = contenido.indexOf(conceptos.get(0));
+			if(inicio == -1) {
+				inicio = contenido.indexOf(conceptos.get(1));
+			}
 			fin = contenido.indexOf(conceptosFin.get(0));
+	
 			if (inicio > -1 && fin > -1) {
 				inicio = inicio + 34;
 				newcontenido = contenido.substring(inicio, fin).replace("VALO###R C###OME###R###C###IAL", "VALOR COMERCIAL")
@@ -514,7 +551,7 @@ public class ChubbAutosModel {
 					if (dato.split("###").length >= 3) {
 						// Clases
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-						cobertura.setNombre(dato.split("###")[0].trim());
+						cobertura.setNombre(dato.split("###")[0].trim().replace("@@@", ""));
 						cobertura.setDeducible(dato.split("###")[2].trim());
 						cobertura.setSa(dato.split("###")[1].trim());
 						i++;
@@ -526,13 +563,9 @@ public class ChubbAutosModel {
 			}
 			modelo.setCoberturas(coberturas);
 
-			// recibos
-			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
-	
 
-//			if (!recibos.equals("")) {
-//				recibosList = recibosExtract();
-//			}
+			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
+
 
 			switch (modelo.getFormaPago()) {
 			case 1:
@@ -617,6 +650,7 @@ public class ChubbAutosModel {
 										? newcontenido.split(separador)[1]
 										: "";
 								recibo.setVigenciaDe(fn.formatDate(newcontenido, "dd-mm-yyyy"));
+								
 							}
 						}
 

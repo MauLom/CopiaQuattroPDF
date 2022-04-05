@@ -67,8 +67,19 @@ public class GmxDiversosModel {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
 					}
 					
+					
+					if(modelo.getVigenciaDe().length() == 0 && newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i+1].contains("horas de la")) {
+		
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
+					}
+					
 					if (newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("horas de la ")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
+
+					}
+					
+					if (modelo.getVigenciaA().length() == 0 && newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i+1].contains("horas de la ")) {
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
 
 					}
 					if (newcontenido.split("\n")[i].contains("Domicilio") && newcontenido.split("\n")[i].contains("Fecha de Nacimiento") && modelo.getCteDireccion().length() == 0 ) {
@@ -99,9 +110,12 @@ public class GmxDiversosModel {
 			
 			modelo.setFechaEmision(modelo.getVigenciaDe());
 
-			
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("En cumplimiento ");
+			if(fin == -1) {
+				fin = contenido.indexOf("Artículo. ###25");
+			}
+			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = "";
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
