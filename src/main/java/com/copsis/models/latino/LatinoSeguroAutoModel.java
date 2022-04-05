@@ -117,7 +117,7 @@ public class LatinoSeguroAutoModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				System.out.println(newcontenido.toString().split("\n")[i]);
+
 				if(newcontenido.toString().split("\n")[i].contains("Fecha de emisión:") && newcontenido.toString().split("\n")[i].contains("Prima Neta:")
 					&& newcontenido.toString().split("\n")[i].contains("I.V.A:")	) {					
 					modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
