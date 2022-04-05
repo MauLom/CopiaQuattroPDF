@@ -12,7 +12,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
-import com.copsis.models.aguila.AguilaModel;
+
 import com.copsis.models.aig.AigModel;
 import com.copsis.models.allians.AlliansModel;
 import com.copsis.models.ana.AnaModel;
@@ -27,6 +27,7 @@ import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.hdi.HdiModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.insignia.InsigniaModel;
+import com.copsis.models.latino.LatinoSeguroModel;
 import com.copsis.models.mapfre.MapfreModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
@@ -336,56 +337,30 @@ public class IdentificaPolizaService {
             }
            
             // ENTRADA PARA ALLIANZ
-            if (!encontro && (contenido.contains("Allianz México")
+            if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
-                        || (contenido.contains("En cumplimiento a lo dispuesto") && contenido.contains("Nombre del Asegurado"))
-                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS") && contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")))) {
+                        || contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")
+                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
+                        ))) {
                 	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();
                     encontro = true;
                 
             }
             
+
+
+            
             
 
-            //ENTRADA PARA INSIGNIA
-            if(!encontro && (rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.insignialife.com") 
-            || rangoSimple(1, 4, pdfStripper, pdDoc).contains("Insignia Life"))) {
-            
-            	contenido =rangoSimple(1, 4, pdfStripper, pdDoc);
-            	
-            	InsigniaModel insigniaModel = new InsigniaModel(pdfStripper, pdDoc, contenido);
-            	modelo = insigniaModel.procesar();
-                encontro = true;
-            
-            }
-
-            // ENTRADA PARA PLAN SEGURO            
-               if (!encontro && contenido.contains("Plan Seguro")) {
-            
-                	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
-                    modelo = datosPlan.procesar();
-                    encontro = true;
-               }
+               //ENTRADA PARA Latinoamericana
+             if(!encontro &&  contenido.contains("Latinoamericana")) {
+            	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
+                 modelo = datosLatino.procesar();
+                 encontro = true;  
+             }
                
-             
-               //ENTRADA PARA PRUDENTIAL
-               if(!encontro && contenido.contains("Prudential Seguros")) {
-            	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
-                   modelo = datosPlan.procesar();
-                   encontro = true;  
-               }
-            
-
-
-               //ENTRADA PARA AGUILA
-               if(!encontro && contenido.contains("Aguila Compañía de Seguros")) {
-            	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
-                   modelo = datosAguila.procesar();
-                   encontro = true;  
-               }
-            
 
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
