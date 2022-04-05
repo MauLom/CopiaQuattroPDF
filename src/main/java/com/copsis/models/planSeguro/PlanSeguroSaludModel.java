@@ -29,7 +29,11 @@ public class PlanSeguroSaludModel {
 			modelo.setCia(25);
 			
 			inicio = contenido.indexOf("PÓLIZA DE SALUD");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("SALUD INDIVIDUAL");
+			}
 			fin = contenido.indexOf("Asegurados");
+	
 			
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
@@ -78,14 +82,22 @@ public class PlanSeguroSaludModel {
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+				
 				if(newcontenido.toString().split("\n")[i].contains("Deducible") && newcontenido.toString().split("\n")[i].contains("Coaseguro")
 						
-						&& newcontenido.toString().split("\n")[i].contains("Plan Avanzado")		) {
+						&& newcontenido.toString().split("\n")[i].contains("Plan Avanzado") && newcontenido.toString().split("\n")[i+1].split("###").length > 7		) {
 					
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
 					modelo.setPlan(newcontenido.toString().split("\n")[i+1].split("###")[7]);
 				}
+				if(newcontenido.toString().split("\n")[i].contains("Plan Avanzado") && newcontenido.toString().split("\n")[i].contains("Moneda") && newcontenido.toString().split("\n")[i].contains("Forma de Pago") 
+						&& newcontenido.toString().split("\n")[i+2].split("###").length > 6) {			
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+2]));
+					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+2]));
+					modelo.setPlan(newcontenido.toString().split("\n")[i+1]);
+				}
+				
 			}
 			
 			inicio = contenido.indexOf("Asegurados");
@@ -161,10 +173,12 @@ public class PlanSeguroSaludModel {
 					if(newcontenido.toString().split("\n")[i].contains("COBERTURA BASICA")) {
 						cobertura.setNombre("COBERTURA BASICA");
 						coberturas.add(cobertura);
-					}else {						
+					}else {
+						if(newcontenido.toString().split("\n")[i].split("###").length == 2) {
 						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
 						coberturas.add(cobertura);
+						}
 					}
 					
 				}				
