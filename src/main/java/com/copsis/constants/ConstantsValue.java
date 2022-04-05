@@ -219,7 +219,7 @@ public final class ConstantsValue {
 	public static final String ENDOSO_CONTENIDOS_POLIZA = "Endosos###contenidos###en###la###Póliza";
 	public static final String HASH = "### ###";
 	public static final String HASH2 = "######";
-	public static final String REGFEHCA_MES ="([0-2][0-9]|3[0-1])(\\/|-)(ENE|FEB|MAR|ABR|MAY|JUN|JUL|AGO|SEP|OCT|NOV|DEC)(\\/|-)(\\d{4})";
+	public static final String REGFEHCA_MES ="([0-2][0-9]|3[0-1])(\\/|-)(ENE|FEB|MAR|ABR|MAY|JUN|JUL|AGO|SEP|OCT|NOV|DIC)(\\/|-)(\\d{4})";
 	
 
 	private ConstantsValue() {
