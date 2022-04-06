@@ -27,6 +27,11 @@ public class AigModel {
 			if(tipo == 0 && contenido.contains("TRA- TRANSPORTE COMBINADO")) {
 				tipo = 4;
 			}
+			
+			if(tipo == 5 && contenido.contains("NÚMERO DE UBICACIÓN")) {
+				tipo = 4;
+			}
+			
 			switch (tipo) {
 			case 1:// Autos
 				modelo  = new AigAutosModel(fn.caratula(1, 4, stripper, doc)).procesar();	

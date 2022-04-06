@@ -7,6 +7,7 @@ import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraUbicacionesModel;
 
 public class AigDiversosModel {
 
@@ -174,15 +175,20 @@ public class AigDiversosModel {
 					modelo.setCoberturas(coberturas);
 				}
 			}
-			
+			if(contenido.split(ConstantsValue.SECCIONES_COBERTURAS).length == 2 && modelo.getCoberturas().isEmpty() && contenido.contains("DESGLOSE DE RIESGOS")) {
+				newcoberturas = new StringBuilder(); 
+				newcoberturas.append(contenido.split(ConstantsValue.SECCIONES_COBERTURAS)[1].split("DESGLOSE DE RIESGOS")[0]);
+			}
 			if (newcoberturas.length() > 0) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				String auxStr = newcoberturas.toString();
 				newcoberturas = new StringBuilder();
-				newcoberturas.append(auxStr.replace("@@@", "").replace("\r", "").trim());
+				newcoberturas.append(auxStr.replace("@@@", "").replace("\r", "").replace("RESPONSABILIDAD CIVIL### PROFESIONAL###", "RESPONSABILIDAD CIVIL PROFESIONAL###").trim());
 				for (int i = 0; i < newcoberturas.toString().split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if (newcoberturas.toString().split("\n")[i].split("###").length > 1) {
+					if (newcoberturas.toString().split("\n")[i].split("###").length > 1 &&
+						!newcoberturas.toString().split("\n")[i].contains("COBERTURA###SUMA ASEGURADA###SUMA ASEGURADA")
+						&& newcoberturas.toString().split("\n")[i].split("###")[0].trim().length()>1) {
 						cobertura.setNombre(newcoberturas.toString().split("\n")[i].split("###")[0].trim());
 						cobertura.setSa(newcoberturas.toString().split("\n")[i].split("###")[1].trim());
 						coberturas.add(cobertura);
@@ -192,7 +198,7 @@ public class AigDiversosModel {
 			}
 			
 			obtenerDatosAgente(contenido,modelo);
-
+			obtenerDatosUbicacion(contenido,modelo);
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(AigDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
@@ -217,6 +223,33 @@ public class AigDiversosModel {
 				if(agente.length()>0) {
 					model.setAgente(agente.replace("\r", "").trim());
 				}
+			}
+		}
+	}
+	
+	private void obtenerDatosUbicacion(String texto,EstructuraJsonModel model) {
+		int inicio = texto.indexOf("DESGLOSE DE RIESGOS");
+		int fin = texto.lastIndexOf("En cumplimiento");
+		String newContenido = fn.extracted(inicio, fin, texto);
+		
+		if(newContenido.length() > 0) {
+			newContenido = newContenido.contains("SECCION")? newContenido.split("SECCION")[0] : newContenido;
+			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
+			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+			if(newContenido.split("CALLE###:").length>1) {
+				ubicacion.setCalle(newContenido.split("CALLE###:")[1].split("\n")[0].trim());
+			}
+			
+			if(newContenido.split("COLONIA###:").length>1) {
+				ubicacion.setColonia(newContenido.split("COLONIA###:")[1].split("\n")[0].trim());
+			}
+			if(newContenido.split("CÓDIGO POSTAL###:").length>1) {
+				ubicacion.setCp(newContenido.split("CÓDIGO POSTAL###:")[1].split("\n")[0].trim());
+			}
+			
+			if(ubicacion.getCalle().length()>0) {
+				ubicaciones.add(ubicacion);
+				model.setUbicaciones(ubicaciones);
 			}
 		}
 	}
