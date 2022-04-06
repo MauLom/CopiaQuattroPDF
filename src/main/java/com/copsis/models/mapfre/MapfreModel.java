@@ -30,17 +30,25 @@ public class MapfreModel {
 
 		try {
 			tipo =fn.tipoPoliza(contenido);
+
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
 			
+
+			if(tipo == 0 &&  contenido.contains("ACCIDENTES PERSONALES") && fn.caratula(1, 3, stripper, doc).contains("SEGURVIAJE")) {
+				tipo =5;
+			}
+	
 			if(tipo == 0 &&  contenido.contains("Dental PLATA")) {
 				tipo =2;
 			}
+			
 
 			if((tipo == 5 && contenido.contains(" DENTAL ") && !contenido.contains("SEGURO DE VIDA")) || (tipo == 0 && contenido.contains("SEGURVIAJE"))) {
 				tipo = 2;
 			}
+
 
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {

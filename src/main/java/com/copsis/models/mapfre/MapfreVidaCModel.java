@@ -51,10 +51,18 @@ public class MapfreVidaCModel {
 				fin = contenido.indexOf("PAQUETE");				
 			}
 				
+			if(inicio  == -1 ) {
+				inicio = contenido.indexOf("Tipo de Documento:");
+			}
+	
+				
+			
+
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
 					if(newcontenido.split("\n")[i].contains("Póliza Número:")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").trim());
 					}
@@ -70,6 +78,13 @@ public class MapfreVidaCModel {
 						modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim());
 						modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim());
 					}
+					
+					if(modelo.getVigenciaDe().length() == 0 && newcontenido.split("\n")[i].contains("Vigencia de:") && newcontenido.split("\n")[i].contains("Clave de Agente:")) {						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+						modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim());
+						modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim());
+					}
+					
 					if(newcontenido.split("\n")[i].contains("Hasta") ) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
 					}
@@ -77,12 +92,16 @@ public class MapfreVidaCModel {
 						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").replace(" ", "")).trim() );					
 						modelo.setFormaPago(fn.formaPago( newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim()));
 						if(modelo.getFormaPago() == 0) {
-							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim()));
+							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].replace("###", "").trim()));
 						}
+						
+						
 						modelo.setMoneda(1);
 						
 					}
-					if(newcontenido.split("\n")[i].contains("Prima Neta:") && newcontenido.split("\n")[i].contains("Expedición") && newcontenido.split("\n")[i].contains("Prima Total:")  && newcontenido.split("\n")[i+1].split("###").length == 7) {
+					if(newcontenido.split("\n")[i].contains("Prima Neta:") && newcontenido.split("\n")[i].contains("Expedición") && 
+					 newcontenido.split("\n")[i].contains("Prima Total:")  && newcontenido.split("\n")[i+1].split("###").length == 7) {
+						
 						modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[2])));
 						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[3])));
@@ -119,7 +138,9 @@ public class MapfreVidaCModel {
 				inicio = contenido.indexOf("COBERTURAS BÁSICAS");
 				fin = contenido.indexOf("LISTA DE ASEGURADOS");				
 			}
-				
+			if(fin == -1) {
+				fin = contenido.indexOf("CONSULTA TUS CONDICIONES");
+			}
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -134,7 +155,7 @@ public class MapfreVidaCModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
-					if(newcontenido.split("\n")[i].contains("DEDUCIBLE")) {						
+					if(newcontenido.split("\n")[i].contains("DEDUCIBLE")  || newcontenido.split("\n")[i].contains("PLAN:") || newcontenido.split("\n")[i].contains("PASAPORTE:")) {						
 					}else {
 						int sp =newcontenido.split("\n")[i].split("###").length;
 						switch (sp) {
