@@ -23,11 +23,15 @@ public class MapfreVidaCModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Póliza Número :", "Póliza Número:")
+				.replace("Poliza Numero :",  "Póliza Número:")
 				.replace("las 12:00 hrs. de:", "")
 				.replace("SIN LIMITE", "###SIN LIMITE###")
 				.replace("AYUDA DE MATERNIDAD", "AYUDA DE MATERNIDAD###")
 				.replace("AMPARADA", "###AMPARADA###")
-				.replace("BÁSICO", "###BÁSICO###");
+				.replace("BÁSICO", "###BÁSICO###")
+				.replace("Fecha de Emision", "Fecha de Emisión")
+				.replace("Expedicion", "Expedición");
+		        
 		String newcontenido = "";
 		int inicio = 0;
 		int fin = 0;
@@ -45,12 +49,12 @@ public class MapfreVidaCModel {
 				fin = contenido.indexOf("Plan de Seguro:");
 				
 			}
-	
+		
 			if(inicio  == -1  && fin == -1  ) {
 				inicio = contenido.indexOf("Tipo de Documento:");
 				fin = contenido.indexOf("PAQUETE");				
 			}
-				
+			
 			if(inicio  == -1 ) {
 				inicio = contenido.indexOf("Tipo de Documento:");
 			}
