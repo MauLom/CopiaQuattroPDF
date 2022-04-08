@@ -12,7 +12,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
-
+import com.copsis.models.aguila.AguilaModel;
 import com.copsis.models.aig.AigModel;
 import com.copsis.models.allians.AlliansModel;
 import com.copsis.models.ana.AnaModel;
@@ -335,6 +335,8 @@ public class IdentificaPolizaService {
                     encontro = true;
                 
             }
+            //////
+            
            
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
@@ -350,8 +352,37 @@ public class IdentificaPolizaService {
             }
             
 
-
+            //ENTRADA PARA INSIGNIA
+            if(!encontro && (rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.insignialife.com") 
+            || rangoSimple(1, 4, pdfStripper, pdDoc).contains("Insignia Life"))) {
             
+            	contenido =rangoSimple(1, 4, pdfStripper, pdDoc);
+            	
+            	InsigniaModel insigniaModel = new InsigniaModel(pdfStripper, pdDoc, contenido);
+            	modelo = insigniaModel.procesar();
+                encontro = true;
+            
+            }
+
+            // ENTRADA PARA PLAN SEGURO            
+               if (!encontro && contenido.contains("Plan Seguro")) {
+            
+                	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
+                    modelo = datosPlan.procesar();
+                    encontro = true;
+               }
+               
+             
+               //ENTRADA PARA PRUDENTIAL
+               if(!encontro && contenido.contains("Prudential Seguros")) {
+            	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosPlan.procesar();
+                   encontro = true;  
+               }
+               if(!encontro && contenido.contains("Aguila Compañía de Seguros")) {
+            	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosAguila.procesar();
+               }
             
 
                //ENTRADA PARA Latinoamericana
