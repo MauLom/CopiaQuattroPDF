@@ -57,7 +57,14 @@ public class HdiDiversosModel {
 			}
 		
 			inicio = contenido.indexOf("El asegurado es:");
-			fin = contenido.indexOf("Detalle de Cobertura:");			
+			fin = contenido.indexOf("Detalle de Cobertura:");
+			System.out.println(contenido);
+			if(fin == -1) {
+				fin = contenido.indexOf("SUMA ASEGURADA");
+			}
+			
+			System.out.println(inicio +"--->"+ fin);
+			
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {								
