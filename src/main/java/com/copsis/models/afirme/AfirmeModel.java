@@ -14,6 +14,8 @@ public class AfirmeModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
+	private int tipo  = 0;
+	private int tipoV  = 0;
 
 	public AfirmeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
@@ -22,22 +24,41 @@ public class AfirmeModel {
 	}
 	public EstructuraJsonModel procesar() {	
 		try {
+			tipo =fn.tipoPoliza(contenido);
 			Integer pagIni = 0;
-			
-			if(fn.tipoPoliza(contenido) == 1) { // autos
-				if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO")) {
-					pagIni = fn.pagFinRango(stripper, doc, "CARATULA");
-					modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
-				}else {
-					pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
-					modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
+
+				if( tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("SEGURO TRANSPORTES CARGA")){
+					tipo=4;
+					tipoV =1;
 				}
-			}
 			
-			if(fn.tipoPoliza(contenido) == 4) {
-				modelo  = new AfirmeDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-			}
-			
+				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
+				case 1:
+					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO")) {
+						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");
+						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
+					}else {
+						pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+						modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
+					}
+		
+					break;
+		
+				case 4:
+					if(tipoV == 0) {
+						modelo  = new AfirmeDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+					}else {
+						modelo  = new AfirmeDiversosBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+					}
+		
+					break;
+		
+				default:
+					break;
+				}
+
+		
+
 			
 			return modelo;
 		} catch (Exception ex) {
