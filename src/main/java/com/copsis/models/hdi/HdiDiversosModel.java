@@ -24,7 +24,7 @@ public class HdiDiversosModel {
 
 		try {
 			
-			modelo.setTipo(1);
+			modelo.setTipo(7);
 			modelo.setCia(14);
 
 			
@@ -57,7 +57,13 @@ public class HdiDiversosModel {
 			}
 		
 			inicio = contenido.indexOf("El asegurado es:");
-			fin = contenido.indexOf("Detalle de Cobertura:");			
+			fin = contenido.indexOf("Detalle de Cobertura:");
+
+			if(fin == -1) {
+				fin = contenido.indexOf("SUMA ASEGURADA");
+			}
+			
+
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {								
@@ -75,10 +81,16 @@ public class HdiDiversosModel {
 				}
 			}
 			
+		
+			
 			inicio = contenido.indexOf("Detalle de Cobertura:");
 			fin = contenido.indexOf("Prima Neta");			
 			newcontenido = new StringBuilder();
+			
+			
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
+	
+			
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
@@ -91,6 +103,32 @@ public class HdiDiversosModel {
 			}
 			coberturas.add(cobertura);
 			modelo.setCoberturas(coberturas);
+			
+			if(modelo.getCoberturas().size()  == 1) {
+
+				modelo.getCoberturas().clear();
+				
+			    inicio = contenido.indexOf("SUMA ASEGURADA");
+			    fin = contenido.indexOf("Atención a siniestros");			
+
+				newcontenido = new StringBuilder();
+				newcontenido.append( fn.extracted(inicio, fin, contenido));
+		
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {						
+					EstructuraCoberturasModel cobertu = new EstructuraCoberturasModel();
+					if(!newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA") && !newcontenido.toString().split("\n")[i].contains("Unidad Especializada")
+						|| newcontenido.toString().split("\n")[i].split("###").length == 2	) {						
+							cobertu.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							cobertu.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+							coberturas.add(cobertu);
+						
+						
+					}
+					
+				}
+			
+				modelo.setCoberturas(coberturas);
+			}
 			
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Desglose de Pagos:");			
