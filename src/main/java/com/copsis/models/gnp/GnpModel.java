@@ -7,6 +7,7 @@ import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.gnp.autos.GnpAutos2Model;
+import com.copsis.models.gnp.autos.GnpAutos3Model;
 import com.copsis.models.gnp.autos.GnpAutosModel;
 
 public class GnpModel {
@@ -30,13 +31,17 @@ public class GnpModel {
 
 		try {
 
-			if (contenido.contains("Motor") && contenido.contains("Placas")) {
+			if (contenido.contains("Motor") && contenido.contains("Placas") || fn.caratula(1, 1, stripper, doc).contains("#MOTOR INSURANCE") && contenido.contains("License Plate")) {
+		
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
 					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
 					if (pagFin > 0) {
 						modelo = new GnpAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}
-				} else {// AUTOS AZUL
+				}else if( fn.caratula(1, 1, stripper, doc).contains("MOTOR INSURANCE") && contenido.contains("License Plate")) {//Caractula en Ingles
+					modelo = new GnpAutos3Model(fn.caratula(1, 4, stripper, doc)).procesar();
+				}				
+				else {// AUTOS AZUL
 
 					pagFin = fn.pagFinRango(stripper, doc, ConstantsValue.CLAVE2);
 					if (pagFin > 0) {
