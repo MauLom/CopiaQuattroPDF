@@ -345,7 +345,11 @@ public class SegurosMtySalud {
              				cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());	 
              			 }else {
              				 if(newcontenido.split("\n")[i].split("###").length == 3 ) {
-             					cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());
+             					 if(newcontenido.split("\n")[i].split("###")[2].trim().contains(",")) {
+             						cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].split(",")[0].trim());
+             					 }else {
+             						cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim()); 
+             					 }             		
              				 }
              				 if(newcontenido.split("\n")[i].split("###").length == 4 ) {
              					 if(newcontenido.split("\n")[i].split("###")[3].trim().length() > 7){
