@@ -63,6 +63,18 @@ public class LatinoSeguroAutoModel {
 				}
 				
 			}
+			inicio = contenido.indexOf("DESCRIPCIÓN VEHÍCULO");
+			fin = contenido.indexOf("PRIMA DEL SEGURO");			
+			newcontenido = new StringBuilder();
+			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
+				
+					if(newcontenido.toString().split("\n")[i].contains("COBERTURA")) {
+						System.out.println(newcontenido.toString().split("\n")[i]);
+						modelo.setPlan(newcontenido.toString().split("\n")[i].split("COBERTURA")[1].replace("\r", "").trim());
+					}
+					
+			}
 
 			
 			inicio = contenido.indexOf("DESCRIPCIÓN VEHÍCULO");
