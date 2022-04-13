@@ -36,6 +36,9 @@ public class AlliansModel {
 			case 5:
 				modelo = new AlliansVidaModel(fn.caratula(0, 2, stripper, doc)).procesar();
 				break;
+			case 4:
+				modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
+				break;	
 			default:
 				break;
 			}
