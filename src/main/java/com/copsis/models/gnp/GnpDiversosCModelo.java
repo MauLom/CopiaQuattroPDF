@@ -150,6 +150,7 @@ public class GnpDiversosCModelo {
 					&& !newcontenido.toString().split("\n")[i].contains("Ver Cláusulas")
 					&& !newcontenido.toString().split("\n")[i].contains("SECCIONES")
 					&& !newcontenido.toString().split("\n")[i].contains("Especificación")
+					&& !newcontenido.toString().split("\n")[i].contains("LC TRC")
 					
 					&& newcontenido.toString().split("\n")[i].length() > 3
 					){
