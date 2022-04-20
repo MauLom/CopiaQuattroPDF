@@ -124,6 +124,7 @@ public class MapfreVidaCModel {
 			fin = contenido.indexOf("Asegurados que");
 
 			
+			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {                     
@@ -132,6 +133,25 @@ public class MapfreVidaCModel {
                        }
 				}
 			}
+			
+
+			if(modelo.getPlan().length()  == 0) {
+			
+			inicio = contenido.indexOf("PLAN:");
+			fin = contenido.indexOf("ORIGEN");
+ 
+			
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {                     
+                       if(newcontenido.split("\n")[i].contains("PLAN:")) {
+                    	   modelo.setPlan(newcontenido.split("\n")[i].split("PLAN:")[1].split("ORIGEN:")[0].replace("###", "").trim());
+                       }
+				}
+			}
+			}
+			
+			
 
 			
 			inicio = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
@@ -154,14 +174,19 @@ public class MapfreVidaCModel {
 						.replace("30%", "###30%###")
 						.replace("VISIÓN", "VISIÓN###")
 						.replace("MUERTE ACCIDENTAL", "MUERTE ACCIDENTAL###")
+						.replace("MUERTE ACCIDENTAL### *", "MUERTE ACCIDENTAL *###")
+						.replace("MUERTE ACCIDENTAL### TRANS. **", "MUERTE ACCIDENTAL TRANS. **###")
 						.replace("PERDIDAS ORGANICAS", "PERDIDAS ORGANICAS###")
-						.replace("REEMBOLSO DE GASTOS MEDICOS", "REEMBOLSO DE GASTOS MEDICOS###");
+						.replace("REEMBOLSO DE GASTOS MEDICOS", "REEMBOLSO DE GASTOS MEDICOS###")
+						.replace("RESPONSABILIDAD CIVIL EN VIAJE", "RESPONSABILIDAD CIVIL EN VIAJE###")
+						;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
 					if(newcontenido.split("\n")[i].contains("DEDUCIBLE")  || newcontenido.split("\n")[i].contains("PLAN:") || newcontenido.split("\n")[i].contains("PASAPORTE:")) {						
 					}else {
 						int sp =newcontenido.split("\n")[i].split("###").length;
+					
 						switch (sp) {
 						case  2:  case  3:
 							   cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
