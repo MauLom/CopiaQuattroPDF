@@ -54,6 +54,9 @@ public class MapfreSaludBModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("SEGURVIAJE");
 			}
+			if(inicio == -1) {
+				inicio = contenido.indexOf("PROTECCIÓN SEGURA");
+			}
 			if( fin == -1) {
 				fin = contenido.indexOf("Plan de Seguro:");
 			}
@@ -63,34 +66,34 @@ public class MapfreSaludBModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(newcontenido.split("\n")[i].contains("Póliza Número:")) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").strip());
+						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza Número:")[1].replace("###", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Endoso Número")) {
-						modelo.setEndoso(newcontenido.split("\n")[i].split("Endoso Número")[1].replace("###", "").replace(":", "").strip());
+						modelo.setEndoso(newcontenido.split("\n")[i].split("Endoso Número")[1].replace("###", "").replace(":", "").trim());
 					}					
 					if(newcontenido.split("\n")[i].contains("Contratante:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
-						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0].replace("C.U.R.P:", "").replace("###", "").strip());
-						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").strip());
+						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("R.F.C:")[0].replace("C.U.R.P:", "").replace("###", "").trim());
+						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Domicilio:") && newcontenido.split("\n")[i].contains("Tel:")) {
-						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].split("Tel:")[0].replace("###", "").strip());
+						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].split("Tel:")[0].replace("###", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Clave de Agente:")) {
 						if(newcontenido.split("\n")[i].contains("Desde")) {
-							modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0].replace("###", "").strip()));
+							modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Desde")[1].split("Clave de Agente:")[0].replace("###", "").trim()));
 						}else if(newcontenido.split("\n")[i].contains("Vigencia de:")) {
-							modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Vigencia de:")[1].split("Clave de Agente:")[0].replace("###", "").strip()));
+							modelo.setVigenciaDe(fn.formatDateMonthCadena( newcontenido.split("\n")[i].split("Vigencia de:")[1].split("Clave de Agente:")[0].replace("###", "").trim()));
 						}
 						if(newcontenido.split("\n")[i+1].split("###").length > 2) {
-							modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").strip());
-							modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").strip());
+							modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim());
+							modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim());
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("Hasta") ) {
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").strip()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("###")[1].replace("###", "").trim()));
 					}
 					if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i].contains("Forma de Pago:") && newcontenido.split("\n")[i].contains("Moneda") ) {
-						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").replace(" ", "")).strip() );					
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].replace("###", "").replace(" ", "")).trim() );					
 						modelo.setFormaPago(fn.formaPago( newcontenido.split("\n")[i+1].split("###")[2].replace("###", "").trim()));
 
 						if(modelo.getFormaPago() == 0) {
@@ -171,10 +174,10 @@ public class MapfreSaludBModel {
 					if(!newcontenido.split("\n")[i].contains("DEDUCIBLE") && !newcontenido.split("\n")[i].contains("COBERTURAS OPCIONALES")) {						
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						coberturaTexto = newcontenido.split("\n")[i];
-						String nombre = coberturaTexto.split("###")[0].strip();
+						String nombre = coberturaTexto.split("###")[0].trim();
 						coberturaTexto = agregaSeparadorSumaAsegurada(nombre, coberturaTexto, true);
 						if (sp > 1) {
-							coberturaTexto = agregaSeparadorSumaAsegurada(coberturaTexto.split("###")[1].strip(),
+							coberturaTexto = agregaSeparadorSumaAsegurada(coberturaTexto.split("###")[1].trim(),
 									coberturaTexto, false);
 						}
 						coberturaTexto = coberturaTexto.replace("### ###", "###");
@@ -182,23 +185,23 @@ public class MapfreSaludBModel {
 
 						switch (sp) {
 						case 2: 
-							if(esValidoNombreCobertura(coberturaTexto.split("###")[0].strip())) {
-								cobertura.setNombre(coberturaTexto.split("###")[0].strip());
-								cobertura.setSa(coberturaTexto.split("###")[1].strip());
+							if(esValidoNombreCobertura(coberturaTexto.split("###")[0].trim())) {
+								cobertura.setNombre(coberturaTexto.split("###")[0].trim());
+								cobertura.setSa(coberturaTexto.split("###")[1].trim());
 								coberturas.add(cobertura);
 							}
 							break;
 						case  3:
-							   cobertura.setNombre(coberturaTexto.split("###")[0].strip());
-	                              cobertura.setSa(coberturaTexto.split("###")[1].strip());	                           
+							   cobertura.setNombre(coberturaTexto.split("###")[0].trim());
+	                              cobertura.setSa(coberturaTexto.split("###")[1].trim());	                           
 	                              coberturas.add(cobertura);
 							break;
 						case  4: 	case  5:
-							  cobertura.setNombre(coberturaTexto.split("###")[0].strip());
-                              cobertura.setSa(coberturaTexto.split("###")[1].strip());
-                              cobertura.setDeducible(coberturaTexto.split("###")[2].strip());
+							  cobertura.setNombre(coberturaTexto.split("###")[0].trim());
+                              cobertura.setSa(coberturaTexto.split("###")[1].trim());
+                              cobertura.setDeducible(coberturaTexto.split("###")[2].trim());
                               if(tieneTituloCoaseguro) {
-                            	  cobertura.setCoaseguro(coberturaTexto.split("###")[3].strip());
+                            	  cobertura.setCoaseguro(coberturaTexto.split("###")[3].trim());
                               }
                               coberturas.add(cobertura);
 							break;
@@ -272,14 +275,14 @@ public class MapfreSaludBModel {
 						
 							switch (newcontenido.split("\n")[i].split("###").length) {
 							case  5:
-								asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].split(newcontenido.split("\n")[i].split("###")[0].split(" ")[1])[1].strip());
+								asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].split(newcontenido.split("\n")[i].split("###")[0].split(" ")[1])[1].trim());
 								asegurado.setSexo(fn.sexo(newcontenido.split("\n")[i].split("###")[1]) ? 1 : 0);
-								asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].strip()));
-								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3].strip()));
-								if(newcontenido.split("\n")[i].split("###")[4].strip().split(" ")[0].split("-").length == 3) {
-									asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].strip().split(" ")[0]));
+								asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[2].trim()));
+								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[3].trim()));
+								if(newcontenido.split("\n")[i].split("###")[4].trim().split(" ")[0].split("-").length == 3) {
+									asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].trim().split(" ")[0]));
 								}
-								asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].strip().split(" ")[1]));
+								asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[4].trim().split(" ")[1]));
 								asegurados.add(asegurado);
 								break;
 					
@@ -305,7 +308,7 @@ public class MapfreSaludBModel {
 						for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						if(!newcontenido.split("\n")[i].contains("Asegurados") ||  newcontenido.split("\n")[i].split("###").length == 2) {	
-								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[1].strip()));
+								asegurado.setParentesco(fn.parentesco(newcontenido.split("\n")[i].split("###")[1].trim()));
 								asegurado.setEdad(Integer.parseInt(newcontenido.split("\n")[i].split("###")[0].split(" ")[newcontenido.split("\n")[i].split("###")[0].split(" ").length-1]));
 								asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[0].split(" ")[newcontenido.split("\n")[i].split("###")[0].split(" ").length-2]));
 								asegurado.setNombre(newcontenido.split("\n")[i].split(newcontenido.split("\n")[i].split("###")[0].split(" ")[newcontenido.split("\n")[i].split("###")[0].split(" ").length-2])[0].trim());
@@ -372,7 +375,7 @@ public class MapfreSaludBModel {
 			resultado = resultado.replace( valoresPorSeparar, sumaAseguradaAux);
 		}else if(fn.numTx(valoresPorSeparar).length() > 0) {
 			List<String> listNumTx = fn.obtenerListNumeros(valoresPorSeparar);
-			sumaAseguradaAux = valoresPorSeparar.strip();
+			sumaAseguradaAux = valoresPorSeparar.trim();
 			if(listNumTx.size() < 2 && esUbicacionNombreCob) {
 				sumaAseguradaAux = valoresPorSeparar.replace(fn.numTx(valoresPorSeparar), "###"+fn.numTx(valoresPorSeparar));
 				resultado = resultado.replace(valoresPorSeparar, sumaAseguradaAux);
@@ -403,6 +406,6 @@ public class MapfreSaludBModel {
 		return resultado;
 	}
 	private boolean esValidoNombreCobertura(String nombre) {
-		return listNombresCobertura.contains(nombre.toUpperCase().strip());
+		return listNombresCobertura.contains(nombre.toUpperCase().trim());
 	}
 }
