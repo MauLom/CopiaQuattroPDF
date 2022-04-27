@@ -48,7 +48,10 @@ public class MapfreModel {
 			if((tipo == 5 && contenido.contains(" DENTAL ") && !contenido.contains("SEGURO DE VIDA")) || (tipo == 0 && contenido.contains("SEGURVIAJE"))) {
 				tipo = 2;
 			}
-
+			
+			if((tipo == 5 && contenido.contains("ACCIDENTES PERSONALES INDIVIDUAL")) || (tipo == 0 && contenido.contains("SEGURVIAJE"))) {
+				tipo = 2;
+			}
 
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
