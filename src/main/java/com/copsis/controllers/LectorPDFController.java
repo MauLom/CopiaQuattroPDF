@@ -20,6 +20,7 @@ import com.copsis.models.CopsisResponse;
 import com.copsis.models.ImportacionValidacionModel;
 import com.copsis.services.IdentificaCertificadoService;
 import com.copsis.services.IdentificaPolizaService;
+import com.copsis.services.IndentificaConstanciaService;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,7 @@ public class LectorPDFController   {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 	}
-
+	
 	@PostMapping(value = "/lectorConstancia", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> lectorConstanciapdf (@Valid @RequestBody PdfForm pdfForm, BindingResult bindingResult){
 		try {
