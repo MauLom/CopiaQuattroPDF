@@ -20,6 +20,7 @@ import com.copsis.models.CopsisResponse;
 import com.copsis.models.ImportacionValidacionModel;
 import com.copsis.services.IdentificaCertificadoService;
 import com.copsis.services.IdentificaPolizaService;
+import com.copsis.services.IndentificaConstanciaService;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class LectorPDFController   {
 	
 	private final IdentificaPolizaService identificaPolizaService;
 	private final IdentificaCertificadoService identificaCertificadoService;
+	private final IndentificaConstanciaService  indentificaConstanciaService;
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> lectorpdf (@Valid @RequestBody PdfForm pdfForm ,BindingResult bindingResult){
@@ -73,6 +75,21 @@ public class LectorPDFController   {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(identificaCertificadoService.queIndentificaCertificado(pdfForm)).build();
+		}catch(ValidationServiceException e) {
+			throw e;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+	
+	@PostMapping(value = "/lectorConstancia", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CopsisResponse> lectorConstanciapdf (@Valid @RequestBody PdfForm pdfForm, BindingResult bindingResult){
+		try {
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(indentificaConstanciaService.indentificaConstancia(pdfForm)).build();
 		}catch(ValidationServiceException e) {
 			throw e;
 		}catch(Exception ex) {
