@@ -38,12 +38,7 @@ public class MapfreSaludRojoModel {
 		int inicio = 0;
 		int fin = 0;
 		try {
-			   String aed = "";
-	            if (contenido.contains("Endoso Número")) {
-	                aed = "Endoso Número";
-	            } else {
-	                aed = "Endoso";
-	            }
+		
 			
 			modelo.setTipo(3);
 			modelo.setCia(22);
@@ -102,6 +97,9 @@ public class MapfreSaludRojoModel {
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split("DOMICILIO:")[1] +" "+newcontenido.split("\n")[i+1]).replace("###", "").trim());
 						if(!newcontenido.split("\n")[i+2].contains("RFC")){
 							modelo.setCteDireccion(modelo.getCteDireccion()+ " "+  newcontenido.split("\n")[i+2].replace("###", "").trim());
+						}
+						if(newcontenido.split("\n")[i+1].contains("R.F.C:")){
+							modelo.setCteDireccion(modelo.getCteDireccion().split("R.F.C:")[0]);
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("R.F.C:")){
