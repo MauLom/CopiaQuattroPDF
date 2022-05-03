@@ -58,6 +58,7 @@ public class SuraModel {
 			break;
 			
 			case 4://Diversos
+				modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 				break;
 			default:
 				break;
