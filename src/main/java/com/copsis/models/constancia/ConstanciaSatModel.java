@@ -3,13 +3,13 @@ package com.copsis.models.constancia;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
 
-public class constanciaSatModel {
+public class ConstanciaSatModel {
 
-	private DataToolsModel fn = new DataToolsModel();
+	private DataToolsModel dataToolsModel = new DataToolsModel();
 	private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
 	private String contenido = "";
 
-	public constanciaSatModel(String contenido) {
+	public ConstanciaSatModel(String contenido) {
 		this.contenido = contenido;
 	}
 
@@ -19,14 +19,14 @@ public class constanciaSatModel {
 		boolean nombre =false;
 		StringBuilder newcontenido = new StringBuilder();
 		
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = dataToolsModel.remplazarMultiple(contenido, dataToolsModel.remplazosGenerales());
 		
 
 		try {
 			
 			inicio = contenido.indexOf("Identificación del Contribuyente");
 			fin = contenido.indexOf("Datos del domicilio registrado");
-			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			newcontenido.append( dataToolsModel.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
@@ -78,7 +78,7 @@ public class constanciaSatModel {
 			inicio = contenido.indexOf("Datos del domicilio registrado");
 			fin = contenido.indexOf("Actividad Económica");
 			newcontenido = new StringBuilder();
-			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			newcontenido.append( dataToolsModel.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
@@ -151,7 +151,7 @@ public class constanciaSatModel {
 			return constancia;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			constancia.setError(constanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
+			constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
 					+ ex.getCause());
 			return constancia;
 		}

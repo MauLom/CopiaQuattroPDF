@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraConstanciaSatModel;
-import com.copsis.models.constancia.constanciaModel;
+import com.copsis.models.constancia.ConstanciaModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,8 +36,8 @@ public class IndentificaConstanciaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			
 			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {
-				constanciaModel datosSat = new constanciaModel(pdfStripper, pdDoc, contenido);
-				constancia = datosSat.procesar();
+				ConstanciaModel constanciaModel = new ConstanciaModel(pdfStripper, pdDoc, contenido);
+				constancia = constanciaModel.procesar();
 				
 				documentToBeParsed.close();
 				cosDoc.close();
