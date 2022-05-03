@@ -58,6 +58,7 @@ public class MapfreDiversosModel {
 				.replace(" C O P S E ,  A G E NTE", "COPSE AGENTE").replace("Cliente MAPFRE   :", "Cliente MAPFRE:")
 				.replace("Cliente Mapfre###:", "Cliente Mapfre:").replace("Cobro:", "cobro:")// Cobro:
 				.replace("Map fre Tepeyac", "Mapfre Tepeyac")
+				.replace("Map fre México S.A. denominada", "Mapfre México S.A. denominada")
 				.replaceFirst("R . F . C", "R.F.C")
 				.replaceFirst("Con tratante:","Contratante:")
 				.replace("C . P . ","C.P.")
@@ -300,6 +301,10 @@ public class MapfreDiversosModel {
 			inicio = contenido.indexOf("Prima neta:");
 			fin = contenido.indexOf("Mapfre Tepeyac");
 			
+			if(fin == -1) {
+				fin = contenido.indexOf("Mapfre México S.A. denominada");
+			}
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
 				if (newcontenido.contains("otal:")) {
@@ -683,6 +688,8 @@ public class MapfreDiversosModel {
 				break;
 			}
 			modelo.setRecibos(recibosList);
+			
+			/**/
 
 			return modelo;
 		} catch (Exception ex) {
