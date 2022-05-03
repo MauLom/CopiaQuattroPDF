@@ -20,5 +20,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CatalogoReformaFiscalProps {
-	private List<Object> regimenes;
+	private List<String> regimenes;
 }

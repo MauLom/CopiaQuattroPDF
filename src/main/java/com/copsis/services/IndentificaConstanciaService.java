@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class IndentificaConstanciaService {
-
+	private final ConstanciaModel constanciaModel;
 	
 	
 	public EstructuraConstanciaSatModel indentificaConstancia (PdfForm pdfForm) throws IOException {
@@ -35,9 +35,8 @@ public class IndentificaConstanciaService {
 
 			String contenido = pdfStripper.getText(pdDoc);
 			
-			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {
-				ConstanciaModel constanciaModel = new ConstanciaModel(pdfStripper, pdDoc, contenido);
-				constancia = constanciaModel.procesar();
+			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {				
+				constancia = constanciaModel.procesar(pdfStripper, pdDoc, contenido);
 				
 				documentToBeParsed.close();
 				cosDoc.close();
