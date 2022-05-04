@@ -38,6 +38,7 @@ public class MapfreDiversosModel {
 	private BigDecimal restoAjusteUno = BigDecimal.ZERO;
 	private BigDecimal restoAjusteDos = BigDecimal.ZERO;
 	private BigDecimal restoCargoExtra = BigDecimal.ZERO;
+	private String cp, calle, muro, techo, piso = "";
 
 	// constructor
 	public MapfreDiversosModel(String contenido, String recibos, String Ubicaiones) {
@@ -47,6 +48,7 @@ public class MapfreDiversosModel {
 	}
 
 	public EstructuraJsonModel procesar() {
+		StringBuilder ubicacionest = new StringBuilder();
 		boolean isVersionMayusculas = false;
 		inicontenido = fn.fixContenido(contenido);
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
@@ -58,15 +60,11 @@ public class MapfreDiversosModel {
 				.replace(" C O P S E ,  A G E NTE", "COPSE AGENTE").replace("Cliente MAPFRE   :", "Cliente MAPFRE:")
 				.replace("Cliente Mapfre###:", "Cliente Mapfre:").replace("Cobro:", "cobro:")// Cobro:
 				.replace("Map fre Tepeyac", "Mapfre Tepeyac")
-				.replaceFirst("R . F . C", "R.F.C")
-				.replaceFirst("Con tratante:","Contratante:")
-				.replace("C . P . ","C.P.")
-				.replace("T e l :", "Tel:")
-				.replace("VIGENCIA","Vigencia")
-				.replace("HASTA###LAS###12:00", "hasta las 12:00")
-				.replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
-				.replace("FORMA###DE###PAGO", "FORMA DE PAGO")
-				.replace("óliza número ###:", "óliza número:");
+				.replace("Map fre México S.A. denominada", "Mapfre México S.A. denominada")
+				.replaceFirst("R . F . C", "R.F.C").replaceFirst("Con tratante:", "Contratante:")
+				.replace("C . P . ", "C.P.").replace("T e l :", "Tel:").replace("VIGENCIA", "Vigencia")
+				.replace("HASTA###LAS###12:00", "hasta las 12:00").replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
+				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:");
 
 		try {
 
@@ -83,32 +81,30 @@ public class MapfreDiversosModel {
 					inicio = contenido.indexOf("Póliza número");
 				}
 			}
-			
-	
 
 			if (inicio > -1) {
 				modelo.setPoliza(contenido.substring(inicio + 14, inicio + 60).split("\r\n")[0].replace(":", "")
 						.replace(" ", "").trim().replace("###", ""));
 			}
-			
-	
-			if(modelo.getPoliza().length() == 0 ) {
+
+			if (modelo.getPoliza().length() == 0) {
 				inicio = contenido.indexOf("PÓLIZA-ENDOSO");
 				fin = contenido.indexOf("FECHA DE EMISIÓN");
-				
-				if((inicio>-1 && inicio < fin) ) {
-					String newcontenido = contenido.split("PÓLIZA-ENDOSO")[1].split("FECHA DE EMISIÓN")[0].replace("@@@", "").trim();
+
+				if ((inicio > -1 && inicio < fin)) {
+					String newcontenido = contenido.split("PÓLIZA-ENDOSO")[1].split("FECHA DE EMISIÓN")[0]
+							.replace("@@@", "").trim();
 					isVersionMayusculas = true;
-					if(newcontenido.contains("###") && newcontenido.contains("-")) {
+					if (newcontenido.contains("###") && newcontenido.contains("-")) {
 						newcontenido = newcontenido.split("###")[1];
 						modelo.setPoliza(newcontenido.split("-")[0].trim().replace("###", ""));
 						modelo.setEndoso(newcontenido.split("-")[1].trim().replace("###", ""));
-					}					
+					}
 				}
 			}
-			
-			if(modelo.getPoliza().length() == 0) {
-				modelo.setPoliza(fn.obtenerPolizaRegex(contenido,13).replace("###", ""));
+
+			if (modelo.getPoliza().length() == 0) {
+				modelo.setPoliza(fn.obtenerPolizaRegex(contenido, 13).replace("###", ""));
 			}
 
 			// endoso
@@ -123,7 +119,7 @@ public class MapfreDiversosModel {
 
 			// cte_nombre
 			inicio = contenido.indexOf("Contratante:");
-			if(inicio == -1) {
+			if (inicio == -1) {
 				inicio = contenido.indexOf("CONTRATANTE:");
 			}
 
@@ -133,10 +129,10 @@ public class MapfreDiversosModel {
 				if (newcontenido.contains("R.F.C")) {
 					modelo.setCteNombre(fn.gatos(
 							contenido.substring(inicio + 12, inicio + 150).split("\r\n")[0].split("R.F.C")[0].trim()));
-				}else if(newcontenido.contains("DOMICILIO")) {
-					modelo.setCteNombre(newcontenido.split("DOMICILIO")[0].replace("###","").replace(":", "").trim());
+				} else if (newcontenido.contains("DOMICILIO")) {
+					modelo.setCteNombre(newcontenido.split("DOMICILIO")[0].replace("###", "").replace(":", "").trim());
 				}
-				
+
 			} else {
 				inicio = contenido.indexOf("R.F.C");
 				if (inicio > -1) {
@@ -161,39 +157,39 @@ public class MapfreDiversosModel {
 					modelo.setRfc(resultado);
 				}
 			}
-			
-			if(modelo.getRfc().length() == 0) {
+
+			if (modelo.getRfc().length() == 0) {
 				inicio = contenido.indexOf("R.F.C");
 				fin = contenido.indexOf("C.P");
-				
-				if(inicio> -1 && inicio < fin) {
-					String texto = contenido.substring(inicio,fin).replace("C.P", "C/P");
+
+				if (inicio > -1 && inicio < fin) {
+					String texto = contenido.substring(inicio, fin).replace("C.P", "C/P");
 					modelo.setRfc(texto.split("R.F.C")[1].split("C/P")[0].replace("###", "").replace(":", "").trim());
 				}
 			}
 
 			// cp
 			modelo.setCp(fn.obtenerCPRegex(contenido));
-			if(modelo.getCp().length() == 0) {
+			if (modelo.getCp().length() == 0) {
 				inicio = contenido.indexOf("C.P");
 				String texto = contenido.substring(inicio).replace("C.P", "C/P");
 				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace("###", "").trim();
-				
-				if(fn.isvalidCp(texto)) {
+
+				if (fn.isvalidCp(texto)) {
 					modelo.setCp(texto);
 				}
 			}
 
 			// cte_direccion
 			inicio = contenido.indexOf("icilio:");
-			if(inicio == -1) {
-				inicio =  contenido.indexOf("ICILIO:");
+			if (inicio == -1) {
+				inicio = contenido.indexOf("ICILIO:");
 			}
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 7, inicio + 150);
 				if (newcontenido.contains("Tel")) {
 					modelo.setCteDireccion(fn.gatos(newcontenido.split("Tel")[0].replace(".", "").trim()));
-				}else if(newcontenido.contains("R.F.C")) {
+				} else if (newcontenido.contains("R.F.C")) {
 					modelo.setCteDireccion(fn.eliminaSpacios(fn.gatos(
 							newcontenido.split("R.F.C")[0].replace("\r", " ").replace("\n", "").replace("@@@", ""))));
 				}
@@ -214,7 +210,7 @@ public class MapfreDiversosModel {
 				inicio = contenido.indexOf("hasta las 12:00");
 			}
 			fin = contenido.indexOf("Fecha de emisión");
-			if(fin == -1) {
+			if (fin == -1) {
 				fin = contenido.indexOf("CLIENTE MAPFRE");
 			}
 
@@ -228,16 +224,16 @@ public class MapfreDiversosModel {
 						modelo.setCveAgente(newcontenido.split("###")[1].trim());
 						modelo.setAgente(newcontenido.split("###")[2].trim());
 					}
-				}else if(newcontenido.contains("DEL:")){
+				} else if (newcontenido.contains("DEL:")) {
 					newcontenido = newcontenido.split("DEL:")[1].replace("###", "");
-					if(newcontenido.split("-").length == 3) {
+					if (newcontenido.split("-").length == 3) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido.trim())));
 					}
 				}
 			}
 
-			if(modelo.getAgente().length() == 0 && modelo.getCveAgente().length() == 0) {
-				if(contenido.contains("AGENTE:") && contenido.contains("CLAVE DE AGENTE:")) {
+			if (modelo.getAgente().length() == 0 && modelo.getCveAgente().length() == 0) {
+				if (contenido.contains("AGENTE:") && contenido.contains("CLAVE DE AGENTE:")) {
 					modelo.setAgente(contenido.split("AGENTE:")[1].split("\n")[0].trim());
 					modelo.setCveAgente(contenido.split("CLAVE DE AGENTE:")[1].split("\n")[0].trim());
 				}
@@ -254,34 +250,34 @@ public class MapfreDiversosModel {
 						.remplazaGrupoSpace(
 								contenido.substring(inicio + 6, fin).replace("@@@", "").trim().split("\r\n")[0])
 						.replace("#", "");
-				
+
 				if (newcontenido.split(" ").length == 5) {
 					modelo.setFormaPago(fn.formaPago(newcontenido.split(" ")[1].trim()));
 					modelo.setMoneda(fn.moneda(newcontenido.split(" ")[2].replace("$", "").trim()));
 				}
 
 			}
-			
-			if(modelo.getFormaPago() == 0 && contenido.contains("FORMA DE PAGO:")) {
-					String aux = fn.gatos(contenido.split("FORMA DE PAGO:")[1].split("\n")[0]);
-					if(aux.contains("###")) {
-						aux = aux.split("###")[0];
-						modelo.setFormaPago(fn.formaPago(aux));
-					}
+
+			if (modelo.getFormaPago() == 0 && contenido.contains("FORMA DE PAGO:")) {
+				String aux = fn.gatos(contenido.split("FORMA DE PAGO:")[1].split("\n")[0]);
+				if (aux.contains("###")) {
+					aux = aux.split("###")[0];
+					modelo.setFormaPago(fn.formaPago(aux));
+				}
 			}
-			
-			if(modelo.getMoneda() == 0 && contenido.contains("MONEDA:")) {
-					String aux = fn.gatos(contenido.split("MONEDA:")[1].split("\n")[0]);
-					if(aux.contains("###")) {
-						aux = aux.split("###")[0];
-						modelo.setMoneda(fn.moneda(aux.trim()));
-					}
-				
+
+			if (modelo.getMoneda() == 0 && contenido.contains("MONEDA:")) {
+				String aux = fn.gatos(contenido.split("MONEDA:")[1].split("\n")[0]);
+				if (aux.contains("###")) {
+					aux = aux.split("###")[0];
+					modelo.setMoneda(fn.moneda(aux.trim()));
+				}
+
 			}
 
 			// fecha_emision
 			inicio = contenido.indexOf("Gestor de cobro:");
-			if(inicio == -1) {
+			if (inicio == -1) {
 				inicio = contenido.indexOf("FECHA DE EMISIÓN");
 			}
 			if (inicio > -1) {
@@ -299,12 +295,16 @@ public class MapfreDiversosModel {
 			// prima_total
 			inicio = contenido.indexOf("Prima neta:");
 			fin = contenido.indexOf("Mapfre Tepeyac");
-			
+
+			if (fin == -1) {
+				fin = contenido.indexOf("Mapfre México S.A. denominada");
+			}
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
 				if (newcontenido.contains("otal:")) {
 					List<String> listValores = fn.obtenerListNumeros(newcontenido);
-	
+
 					if (listValores.size() == 6) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(listValores.get(0).trim())));
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(listValores.get(2).trim())));
@@ -315,8 +315,8 @@ public class MapfreDiversosModel {
 
 				}
 			}
-			if(isVersionMayusculas) {
-				obtenerPrimas(contenido,modelo);
+			if (isVersionMayusculas) {
+				obtenerPrimas(contenido, modelo);
 			}
 
 			// plan
@@ -339,15 +339,16 @@ public class MapfreDiversosModel {
 					if (newcontenido.split("\r\n").length == 2
 							&& newcontenido.split("\r\n")[1].split("###").length == 2) {
 
-						modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "").replace("@@@", "").trim());
+						modelo.setPlan(newcontenido.split("\r\n")[1].split("###")[0].replace("\"", "")
+								.replace("@@@", "").trim());
 
 					}
 				}
 			}
-			
-			if(modelo.getPlan().length() == 0 && contenido.contains("PÓLIZA-ENDOSO") ) {
+
+			if (modelo.getPlan().length() == 0 && contenido.contains("PÓLIZA-ENDOSO")) {
 				String texto = contenido.split("PÓLIZA-ENDOSO")[0].replace("@@@", "").trim();
-				if(texto.length()>0) {
+				if (texto.length() > 0) {
 					modelo.setPlan(texto);
 				}
 			}
@@ -404,13 +405,13 @@ public class MapfreDiversosModel {
 				}
 
 				if (inicio > -1 && fin > inicio) {
-					newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();					
-					if(newcontenido.contains("DE CONFORMIDAD CON LOS ARTÍCULOS")) {
+					newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
+					if (newcontenido.contains("DE CONFORMIDAD CON LOS ARTÍCULOS")) {
 						newcontenido = newcontenido.split("DE CONFORMIDAD CON LOS ARTÍCULOS")[0];
 					} else if (newcontenido.contains(ConstantsValue.RENOVACION_AUTOM)) {
 						newcontenido = newcontenido.split(ConstantsValue.RENOVACION_AUTOM)[0];
 					}
-					
+
 					resultado = "";
 					for (String x : newcontenido.split("\r\n")) {
 						if (!x.contains("SUMA ASEGURADA") && !x.contains("---")) {
@@ -478,8 +479,8 @@ public class MapfreDiversosModel {
 									break;
 								}
 								break;
-								default:
-									break;
+							default:
+								break;
 							}
 						}
 					}
@@ -577,8 +578,8 @@ public class MapfreDiversosModel {
 			}
 
 			modelo.setUbicaciones(ubicaciones);
-			
-			if(modelo.getUbicaciones().isEmpty()) {
+
+			if (modelo.getUbicaciones().isEmpty()) {
 				obtenerUbicacionVersionMayusculas(contenido, modelo);
 			}
 
@@ -683,6 +684,43 @@ public class MapfreDiversosModel {
 				break;
 			}
 			modelo.setRecibos(recibosList);
+
+			if (ubicaciones.isEmpty()) {
+
+				for (int i = 0; i < contenido.split("ESPECIFICACION DE BIENES CUBIERTOS").length; i++) {
+					if (i > 0) {
+
+						ubicacionest.append(contenido.split("ESPECIFICACION DE BIENES CUBIERTOS")[i]
+								.split("BIENES Y RIESGOS CUBIERTOS SUMA ASEGURADA")[0]);
+					}
+				}
+
+
+				for (int i = 0; i < ubicacionest.toString().split("\n").length; i++) {
+					EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+
+
+					if (ubicacionest.toString().split("\n")[i].contains("C.P.") && ubicacionest.toString().split("\n")[i].split("C.")[1].length() > 8) {
+						cp = (ubicacionest.toString().split("\n")[i].split("C.P.")[1].trim().substring(0, 5));											
+					}
+					if (ubicacionest.toString().split("\n")[i].contains("UBICACION") ) {
+						calle = (ubicacionest.toString().split("\n")[i].substring(0,50));											
+					}
+					if (ubicacionest.toString().split("\n")[i].contains("MUROS") && ubicacionest.toString().split("\n")[i].split("TEC.")[1].length() > 8) {
+						muro = (ubicacionest.toString().split("\n")[i].split("MUROS")[1].split("TECHO.")[0]);											
+					}
+
+				   if(cp !=null && calle  !=null && muro !=null) {
+					 ubicacion.setCp(cp);
+					 ubicacion.setCalle(calle);
+					 ubicacion.setMuros(fn.material(muro));
+					 ubicaciones.add(ubicacion);
+				   }
+
+				}
+				modelo.setUbicaciones(ubicaciones);
+
+			}
 
 			return modelo;
 		} catch (Exception ex) {
@@ -797,47 +835,49 @@ public class MapfreDiversosModel {
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
 		}
 	}
-	
+
 	private void obtenerIdCte() {
 		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_IDCLIENTE_MAPFRE);
 		Matcher matcher = pattern.matcher(contenido);
 		modelo.setIdCliente(matcher.find() ? matcher.group(3).replace("###", "") : "");
 	}
-	
+
 	private void obtenerPrimas(String contenido, EstructuraJsonModel model) {
 		int indexInicio = contenido.indexOf("CONCEPTOS###ECONÓMICOS");
 		int indexFin = contenido.indexOf("MAPFRE###MÉXICO");
 
-		if(indexInicio > -1 && indexInicio < indexFin) {
+		if (indexInicio > -1 && indexInicio < indexFin) {
 			String newContenido = contenido.substring(indexInicio + 20, indexFin).replace("@@@", "")
 					.replace("PRIMA###NETA", "PRIMA NETA").replace("PRIMA###TOTAL", "PRIMA TOTAL").replace("\r", "");
 
 			String[] arrContenido = newContenido.split("\n");
-			for(int i=0;i<arrContenido.length;i++ ) {
-				if(arrContenido[i].contains("PRIMA NETA")) {
-					String aux = arrContenido[i].split("PRIMA NETA")[1].replace("###","").replace(":", "").trim();
+			for (int i = 0; i < arrContenido.length; i++) {
+				if (arrContenido[i].contains("PRIMA NETA")) {
+					String aux = arrContenido[i].split("PRIMA NETA")[1].replace("###", "").replace(":", "").trim();
 					model.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(aux)));
-				}else if(arrContenido[i].contains("EXPEDICIÓN")) {
-					String aux = arrContenido[i].split("EXPEDICIÓN")[1].replace("###","").replace(":", "").trim();
+				} else if (arrContenido[i].contains("EXPEDICIÓN")) {
+					String aux = arrContenido[i].split("EXPEDICIÓN")[1].replace("###", "").replace(":", "").trim();
 					model.setDerecho(fn.castBigDecimal(fn.preparaPrimas(aux)));
-				}else if(arrContenido[i].contains("I.V.A") && arrContenido[i].contains("FRACCIONADO")) {
-					String aux = arrContenido[i].split("I.V.A")[1].replace("###","").replace(":", "").trim();
+				} else if (arrContenido[i].contains("I.V.A") && arrContenido[i].contains("FRACCIONADO")) {
+					String aux = arrContenido[i].split("I.V.A")[1].replace("###", "").replace(":", "").trim();
 					model.setIva(fn.castBigDecimal(fn.preparaPrimas(aux)));
-				}else if(arrContenido[i].contains("FRACCIONADO") && arrContenido[i].contains("PRIMA TOTAL") ) {
-					String aux = arrContenido[i].split("FRACCIONADO")[1].split("PRIMA TOTAL")[0].replace("###","").replace(":", "").trim();
+				} else if (arrContenido[i].contains("FRACCIONADO") && arrContenido[i].contains("PRIMA TOTAL")) {
+					String aux = arrContenido[i].split("FRACCIONADO")[1].split("PRIMA TOTAL")[0].replace("###", "")
+							.replace(":", "").trim();
 					model.setRecargo(fn.castBigDecimal(fn.preparaPrimas(aux)));
-					aux = arrContenido[i].split("PRIMA TOTAL")[1].replace("###","").replace(":", "").trim();
+					aux = arrContenido[i].split("PRIMA TOTAL")[1].replace("###", "").replace(":", "").trim();
 					model.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(aux)));
 				}
 			}
 		}
 	}
-	
+
 	private void obtenerUbicacionVersionMayusculas(String texto, EstructuraJsonModel model) {
 		texto = contenido.replace("CARACTERÍSTICAS###DEL###OBJETO###ASEGURADO", "CARACTERÍSTICAS DEL OBJETO ASEGURADO");
-		
-		if(texto.contains("CARACTERÍSTICAS DEL OBJETO ASEGURADO") && contenido.contains("Página")) {
-			String textoUbicaciones = texto.split("CARACTERÍSTICAS DEL OBJETO ASEGURADO")[1].split("Página")[0].replace("@@@", "");
+
+		if (texto.contains("CARACTERÍSTICAS DEL OBJETO ASEGURADO") && contenido.contains("Página")) {
+			String textoUbicaciones = texto.split("CARACTERÍSTICAS DEL OBJETO ASEGURADO")[1].split("Página")[0]
+					.replace("@@@", "");
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 			String[] arrContenido = textoUbicaciones.split(",");
@@ -847,15 +887,15 @@ public class MapfreDiversosModel {
 			if (textoUbicaciones.contains(", C.P.")) {
 				ubicacion.setCp(textoUbicaciones.split(", C.P.")[1].replace(".", "").split("\r\n")[0].trim());
 			}
-			//domicilio calle,colonia, numero interno y externo
-			for(int i=0;i<arrContenido.length;i++) {
-				if(arrContenido[i].contains("UBICACIÓN:")) {
+			// domicilio calle,colonia, numero interno y externo
+			for (int i = 0; i < arrContenido.length; i++) {
+				if (arrContenido[i].contains("UBICACIÓN:")) {
 					ubicacion.setCalle(arrContenido[i].split("UBICACIÓN:")[1].replace("###", "").trim());
 				}
-				if (ubicacion.getColonia().length() == 0 &&arrContenido[i].contains("Col.")) {
+				if (ubicacion.getColonia().length() == 0 && arrContenido[i].contains("Col.")) {
 					ubicacion.setColonia(arrContenido[i].trim());
 				}
-				if (ubicacion.getNoExterno().length() == 0 &&  arrContenido[i].contains("No.")) {
+				if (ubicacion.getNoExterno().length() == 0 && arrContenido[i].contains("No.")) {
 					ubicacion.setNoExterno(arrContenido[i].trim());
 				}
 				if (ubicacion.getNoInterno().length() == 0 && arrContenido[i].contains("Int.")) {
@@ -863,54 +903,54 @@ public class MapfreDiversosModel {
 				}
 				index++;
 			}
-			//Muros
-			if(textoUbicaciones.contains("MUROS:")) {
+			// Muros
+			if (textoUbicaciones.contains("MUROS:")) {
 				aux = textoUbicaciones.split("MUROS:")[1].split("\n")[0];
-				if(aux.contains("###")) {
+				if (aux.contains("###")) {
 					aux = aux.split("###")[1].replace("MUROS", "").trim();
 					ubicacion.setMuros(fn.material(aux));
 				}
 			}
-			//Techos
-			if(textoUbicaciones.contains("TECHOS:")) {
+			// Techos
+			if (textoUbicaciones.contains("TECHOS:")) {
 				aux = textoUbicaciones.split("TECHOS:")[1].split("\n")[0];
-				if(aux.split("###").length>1) {
+				if (aux.split("###").length > 1) {
 					aux = aux.split("###")[1].replace("TECHO", "").trim();
 					ubicacion.setTechos(fn.material(aux));
 				}
 			}
-			//Niveles
-			if(textoUbicaciones.contains("PISOS:")) {
+			// Niveles
+			if (textoUbicaciones.contains("PISOS:")) {
 				aux = textoUbicaciones.split("PISOS:")[1].split("\n")[0];
-				if(aux.split("###").length>1) {
+				if (aux.split("###").length > 1) {
 					aux = aux.split("###")[1].trim();
 					ubicacion.setNiveles(fn.castInteger(aux));
 				}
 			}
-			//giro , nombre
-			if(textoUbicaciones.contains("GIRO")) {
+			// giro , nombre
+			if (textoUbicaciones.contains("GIRO")) {
 				aux = textoUbicaciones.split("GIRO")[1].split("\n")[0];
-				if(aux.split("###").length>1) {
+				if (aux.split("###").length > 1) {
 					aux = aux.replace("###ASEGURADO", "").split("###")[1].trim();
 					ubicacion.setGiro(aux);
 					ubicacion.setNombre(ubicacion.getGiro());
 				}
 			}
-			//sótanos
-			if(textoUbicaciones.contains("SÓTANOS")) {
+			// sótanos
+			if (textoUbicaciones.contains("SÓTANOS")) {
 				aux = textoUbicaciones.split("SÓTANOS")[1].split("\n")[0];
-				if(aux.split("###").length>1) {
+				if (aux.split("###").length > 1) {
 					aux = aux.split("###")[1].trim();
 					ubicacion.setSotanos(fn.castInteger(aux));
 				}
 			}
-			if(ubicacion.getCalle().length() > 0) {
+			if (ubicacion.getCalle().length() > 0) {
 				ubicaciones.add(ubicacion);
-				ubicacion.setNiveles(ubicacion.getNiveles() == 0 ? 1:ubicacion.getNiveles());
+				ubicacion.setNiveles(ubicacion.getNiveles() == 0 ? 1 : ubicacion.getNiveles());
 				model.setUbicaciones(ubicaciones);
 			}
 		}
-		
+
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.copsis.models.chubb.autos;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -273,12 +272,10 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
 					inicio = inicio + 25;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 30);
-					newcontenido = fn.gatos(contenido.substring(inicio, fin));
-                    if(newcontenido.length() < 15) {
-                    	modelo.setCveAgente(newcontenido.contains("-")
-    							? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
+						newcontenido = fn.gatos(contenido.substring(inicio, fin)); 
+                    	modelo.setCveAgente(newcontenido.contains("-")  ? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###", "").trim()
     							: "");
-                    }					
+                    				
 				}
 			}
 			
