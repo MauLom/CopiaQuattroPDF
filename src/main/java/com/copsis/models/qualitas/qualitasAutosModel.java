@@ -20,6 +20,7 @@ public class qualitasAutosModel {
 	public qualitasAutosModel(String contenido,String coberturas) {
 		this.contenido = contenido;
 		this.cbo = coberturas;
+		
 	}
 
 
@@ -35,6 +36,10 @@ public class qualitasAutosModel {
 		 String subtxt = "";
 		 String newcontenido = "";
 		 String[] arrNewContenido;
+	
+		 StringBuilder datosvehiculo = new StringBuilder();
+		 
+		
 	
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
@@ -623,8 +628,10 @@ public class qualitasAutosModel {
 				if (newcontenido.contains("Servicio")) {
 					newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
 	
+	
 					if (newcontenido.split("###").length == 2 ||( newcontenido.split("###").length == 1 && newcontenido.contains("-") )) {
 						newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), ConstantsValue.FORMATO_FECHA);
+			
 						if (newcontenido.length() == 10) {
 							modelo.setVigenciaDe(newcontenido);
 						}
@@ -633,11 +640,13 @@ public class qualitasAutosModel {
 					if (newcontenido.contains("Hasta las")) {
 						newcontenido = newcontenido.split("Hasta las")[0].split("del")[1].replace("###", "").trim();
 						modelo.setVigenciaDe(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
+						
 						if (modelo.getVigenciaA().length() > 0) {
 						} else {
 
 							newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
 									.replace("del:", "del").replace("Servic  i o  :", "Servicio:");
+					
 							modelo.setVigenciaA(
 									fn.formatDate(newcontenido.split("\r\n")[0].split("Hasta las")[1].split("del")[1]
 											.replace("###", "").trim(), ConstantsValue.FORMATO_FECHA));
@@ -835,6 +844,26 @@ public class qualitasAutosModel {
 				}
 				
 			}
+			if(cbo.length() >  0) {
+				// System.out.println(cbo.toString());
+				for (int i = 0; i < cbo.split("VEHÍCULO ASEGURADO").length; i++) {
+					if(i >  0 ) {
+						if( cbo.split("VEHÍCULO ASEGURADO")[i].contains("Modelo") && cbo.split("VEHÍCULO ASEGURADO")[i].contains("Placas")) {
+						
+							datosvehiculo.append(cbo.split("VEHÍCULO ASEGURADO")[i].split("COBERTURAS CONTRATADA")[0]);
+							
+						}					
+					}
+				}
+				if(datosvehiculo.toString().length() >  0) {
+					for (int i = 0; i < datosvehiculo.toString().split("\n").length; i++) {						
+						if(datosvehiculo.toString().split("\n")[i].contains("Desde") && fn.obtenVigePoliza2( datosvehiculo.toString().split("\n")[i]).size() == 2) {
+							modelo.setFechaVence(fn.formatDateMonthCadena(fn.obtenVigePoliza2( datosvehiculo.toString().split("\n")[i]).get(1).trim().replace("/","-")));
+						}
+					}
+				}
+			}
+			
 			
 			
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();

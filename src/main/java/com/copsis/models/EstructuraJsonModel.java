@@ -81,5 +81,6 @@ public class EstructuraJsonModel {
     private String subramo ="";
     private String error ="";
     private String textoDiversos = "";
+    private String fechaVence = "";
 
 }
