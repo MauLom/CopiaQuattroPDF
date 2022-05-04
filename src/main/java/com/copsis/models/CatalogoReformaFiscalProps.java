@@ -4,6 +4,7 @@
 package com.copsis.models;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -20,5 +21,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CatalogoReformaFiscalProps {
-	private List<String> regimenes;
+	private List<Map<String, String>> regimenes;
 }

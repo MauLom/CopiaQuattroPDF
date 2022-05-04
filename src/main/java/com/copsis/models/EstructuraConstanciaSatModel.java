@@ -1,5 +1,7 @@
 package com.copsis.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -39,7 +41,8 @@ public class EstructuraConstanciaSatModel {
 	 private  String estadoDomicilio="";
 	 private  String estadoContribuyente="";
 	 private  String error="";
-	 private String regimenFiscal = "";
+	 private List<String> regimenFiscal;
 	 private String regimenDeCapital;
+	 private String tipoPersona;
 }
 	
