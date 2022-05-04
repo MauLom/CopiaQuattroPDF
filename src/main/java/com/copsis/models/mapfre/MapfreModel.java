@@ -31,6 +31,7 @@ public class MapfreModel {
 		try {
 			tipo =fn.tipoPoliza(contenido);
 
+
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
@@ -52,7 +53,12 @@ public class MapfreModel {
 			if((tipo == 5 && contenido.contains("ACCIDENTES PERSONALES INDIVIDUAL")) || (tipo == 0 && contenido.contains("SEGURVIAJE"))) {
 				tipo = 2;
 			}
+			
+			if(tipo == 5 &&  contenido.contains("MULTIPLE EMPRESARIAL")) {
+				tipo =4;
+			}
 
+			
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
@@ -82,7 +88,7 @@ public class MapfreModel {
 				
 				break;
 			case 4://Diversos
-				modelo = new MapfreDiversosModel(fn.caratula(1, 37, stripper, doc),"","").procesar();
+				modelo = new MapfreDiversosModel(fn.caratula(1, 39, stripper, doc),"","").procesar();
 				break;
 			case 5://vida
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
