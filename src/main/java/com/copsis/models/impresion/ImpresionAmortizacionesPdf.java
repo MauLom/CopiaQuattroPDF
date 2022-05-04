@@ -356,7 +356,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,15, "Seguros de daños del bien:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,18,  formatoDinero(impresionForm.getMontoSegurosDanos()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,20, "Seguro de Vida", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,20, "Seguro de Vida con Desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getMontoSeguroVida()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 			
 			baseRow = communsPdf.setRow(table, 20);
@@ -365,8 +365,8 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,18, "Importe Enganche:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMontoSeguroEngache()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,20, "Seguro Desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,11,  formatoDinero(impresionForm.getMontoSeguroDesempleo()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
+//			communsPdf.setCell(baseRow,20, "Seguro Desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+//			communsPdf.setCell(baseRow,11,  formatoDinero(impresionForm.getMontoSeguroDesempleo()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 		
 			baseRow = communsPdf.setRow(table, 20);
 			communsPdf.setCell(baseRow,15, "Importe Financiar", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
