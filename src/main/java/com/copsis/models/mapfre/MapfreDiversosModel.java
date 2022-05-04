@@ -724,7 +724,6 @@ public class MapfreDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(MapfreDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
