@@ -30,12 +30,11 @@ public class AxaModel {
 
 
 			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description") || contenido.contains("DATOS DEL VEHÍCULO")) { // AUTOS
-				AxaAutosModel datosAxaAutos = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),
-						fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false));
-				modelo = datosAxaAutos.procesar();
+				modelo  = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false)).procesar();
+			
 			}else if( contenido.contains("Datos del Vehículo") && contenido.contains("AUTOMÓVILES/AUTO  COLECTIVA")  && !contenido.contains(" Vehicle description")) {
-				AxaAutos3Model datosAxaAutos = new AxaAutos3Model(fn.caratula(1, 4, stripper, doc));
-				modelo = datosAxaAutos.procesar();
+				modelo = new AxaAutos3Model(fn.caratula(1, 4, stripper, doc)).procesar();
+			
 			}
 			else if (contenido.indexOf("Recibo provisional para pago de primas") > -1) {
 				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
