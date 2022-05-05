@@ -41,6 +41,7 @@ public class AxaAutosModel {
 		StringBuilder resultado = new StringBuilder();
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C:", "R.F.C.:")
+				.replace("R.F.C###:","R.F.C.:")
 				.replace("DATOS DEL ASEGURADO", ConstantsValue.DATOS_ASEGURADO)
 				.replace("Nombre: ", ConstantsValue.NOMBRE_HASH)
 				.replace("PRIMA NETA",ConstantsValue.PRIMA_NETA2)
@@ -53,6 +54,7 @@ public class AxaAutosModel {
 				.replace("DATOS ADICIONALES", ConstantsValue.DATOS_ADICIONALES)
 				.replace("COBERTURAS AMPARADAS", "Coberturas amparadas")
 				.replace("COBERTURAS", "Coberturas");
+
 		
 		try {
 			// tipo
@@ -623,7 +625,7 @@ public class AxaAutosModel {
 			}
 			
 			//RFC
-			if(modelo.getRfc().length() == 0 && contenido.contains("R.F.C")) {
+			if(modelo.getRfc().length() == 0 && contenido.contains("R.F.C.:")) {
 				String texto = fn.gatos(contenido.split("R.F.C.:")[1].split("\n")[0].trim());
 				if(texto.split("###")[0].trim().length() == 12 || texto.split("###")[0].trim().length() == 13) {
 					modelo.setRfc(texto.split("###")[0].trim());
