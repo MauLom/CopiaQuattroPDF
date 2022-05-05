@@ -7,6 +7,65 @@ management:
         - bus-refresh
         - beans
         - env
+catalogo-reforma-fiscal:
+  regimenes:
+    - 
+      regimenFiscal: "601 - General de Ley Personas Morales"
+      tipo: "Física" 
+    - 
+      regimenFiscal: "603 - Personas Morales con Fines no Lucrativos"
+      tipo: "Física"
+    - 
+      regimenFiscal: "605 - Sueldos y Salarios e Ingresos Asimilados a Salarios"
+      tipo: "Física"
+    - 
+      regimenFiscal: "606 - Arrendamiento"
+      tipo: "Física"
+    - 
+      regimenFiscal: "607 - Régimen de Enajenación o Adquisición de Bienes"
+      tipo: "Física"
+    - 
+      regimenFiscal: "608 - Demás ingresos"
+      tipo: "Física"
+    - 
+      regimenFiscal: "610 - Residentes en el Extranjero sin Establecimiento Permanente en México"
+      tipo: "Física"
+    - 
+      regimenFiscal: "611 - Ingresos por Dividendos (socios y accionistas)"
+      tipo: "Física"
+    - 
+      regimenFiscal: "612 - Personas Físicas con Actividades Empresariales y Profesionales"
+      tipo: "Física"
+    - 
+      regimenFiscal: "614 - Ingresos por intereses"
+      tipo: "Física"
+    - 
+      regimenFiscal: "615 - Régimen de los ingresos por obtención de premios"
+      tipo: "Física"
+    - 
+      regimenFiscal: "616 - Sin obligaciones fiscales"
+      tipo: "Física"
+    - 
+      regimenFiscal: "620 - Sociedades Cooperativas de Producción que optan por diferir sus ingresos"
+      tipo: "Física"
+    - 
+      regimenFiscal: "621 - Incorporación Fiscal"
+      tipo: "Moral"
+    - 
+      regimenFiscal: "622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras"
+      tipo: "Moral"
+    - 
+      regimenFiscal: "623 - Opcional para Grupos de Sociedades"
+      tipo: "Moral"
+    - 
+      regimenFiscal: "624 - Coordinados"
+      tipo: "Moral"
+    - 
+      regimenFiscal: "625 - Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas"
+      tipo: "Moral"
+    - 
+      regimenFiscal: "626 - Régimen Simplificado de Confianza"
+      tipo: "Moral"
 spring:
   cloud:
     gcp:

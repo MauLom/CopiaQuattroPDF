@@ -1,37 +1,57 @@
 package com.copsis.models.constancia;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
+import com.copsis.models.RegimenFiscalAndTipoPersona;
+import com.copsis.services.RegimenFiscalService;
 
-public class ConstanciaSatModel {
+import lombok.extern.slf4j.Slf4j;
 
+@Component
+@Slf4j
+public class ConstanciaSatModel {	
+	@Autowired
+	private RegimenFiscalService regimenFiscalService;
+	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
 	private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
-	private String contenido = "";
+	/*private String contenido = "";
 
 	public ConstanciaSatModel(String contenido) {
 		this.contenido = contenido;
-	}
+	}*/
 
-	public EstructuraConstanciaSatModel procesar() {
-		int inicio = 0;
-		int fin = 0;
+	public EstructuraConstanciaSatModel procesar(String contenido) {
+		int beginIndex = 0;
+		int endIndex = 0;
 		boolean nombre =false;
 		StringBuilder newcontenido = new StringBuilder();
 		
-		contenido = dataToolsModel.remplazarMultiple(contenido, dataToolsModel.remplazosGenerales());
+		contenido = dataToolsModel.remplazarMultiple(contenido, dataToolsModel.remplazosGeneralesV2());
 		
 
 		try {
 			
-			inicio = contenido.indexOf("Identificación del Contribuyente");
-			fin = contenido.indexOf("Datos del domicilio registrado");
-			newcontenido.append( dataToolsModel.extracted(inicio, fin, contenido));
+			beginIndex = contenido.indexOf("Identificación del Contribuyente");
+			endIndex = contenido.indexOf("Datos del domicilio registrado");
+			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
+			
+			constancia.setRegimenDeCapital("NO APLICA");
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
 				if(newcontenido.toString().split("\n")[i].contains("RFC:")) {
 					constancia.setRfc(newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim());
+				}
+				
+				if(newcontenido.toString().split("\n")[i].contains("Régimen") && newcontenido.toString().split("\n")[i].contains("Capital:")) {
+					constancia.setRegimenDeCapital(newcontenido.toString().split("\n")[i].split("Capital:")[1].replace("###", " ").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("CURP:")) {
@@ -75,10 +95,10 @@ public class ConstanciaSatModel {
 			}
 
 			
-			inicio = contenido.indexOf("Datos del domicilio registrado");
-			fin = contenido.indexOf("Actividad Económica");
+			beginIndex = contenido.indexOf("Datos del domicilio registrado");
+			endIndex = contenido.indexOf("Actividad Económica");
 			newcontenido = new StringBuilder();
-			newcontenido.append( dataToolsModel.extracted(inicio, fin, contenido));
+			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
@@ -140,13 +160,39 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i+1].contains("contribuyente")  ) {
 					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i+1].split("Estado")[0].replace("###", " ").trim());
 					constancia.setEstadoContribuyente(newcontenido.toString().split("\n")[i+2].replace("###", " ").trim());
-				}
-				
-				
-				
-				
+				}													
 			}
 			
+			beginIndex = contenido.indexOf("Regímenes:");
+			//endIndex = contenido.length();
+			endIndex = contenido.indexOf("Obligaciones:");
+			if(endIndex == -1) {
+				endIndex = contenido.indexOf("Sus datos personales son incorporados y protegidos en los sistemas del SAT".replace(" ", "###"));
+			}
+			
+			String regimenes = dataToolsModel.extracted(beginIndex, endIndex, contenido);
+			List<String> regimenesList = new ArrayList<>();
+			
+			for (int i = 0; i < regimenes.split("\n").length; i++) {
+				if(!regimenes.split("\n")[i].contains("Regímenes:") 
+						&& !regimenes.split("\n")[i].contains("Fecha")
+						&& !regimenes.split("\n")[i].contains("Inicio")
+						&& !regimenes.split("\n")[i].contains("Fin")) {
+					String row = regimenes.split("\n")[i];
+					String strRegimen = row.split(dataToolsModel.obtenVigePoliza(row).get(0))[0].replace("###", "").trim();					
+					RegimenFiscalAndTipoPersona regimen = regimenFiscalService.get(strRegimen);
+					//log.info("regimen: {}", regimen);	
+					if(!regimen.getRegimenFiscal().equals("")) { 
+						regimenesList.add(regimen.getRegimenFiscal());
+						// se sobreescribe el último tip ode persona
+						constancia.setTipoPersona(regimen.getTipo());
+					}
+				}				
+			}
+			
+			if(!regimenesList.isEmpty()) {
+				constancia.setRegimenFiscal(regimenesList);
+			}
 			
 			return constancia;
 		} catch (Exception ex) {

@@ -24,11 +24,20 @@ public class SuraModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
+		 
+			if(contenido.contains("RECORDATORIO DE PAGO")) {
+				contenido = fn.caratula(2, 3, stripper, doc);
+			}
+			
 			int tipo = fn.tipoPoliza(contenido);
+			
+		
 		
 			if(tipo == 1 &&  contenido.contains("MEDIC ")) {
 				tipo =2;
 			}
+			
+
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			case 1://Autos
@@ -47,6 +56,10 @@ public class SuraModel {
 				 }
 							
 			break;
+			
+			case 4://Diversos
+				modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
+				break;
 			default:
 				break;
 
