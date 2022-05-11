@@ -13,9 +13,11 @@ import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.constancia.ConstanciaModel;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;
 	
@@ -23,32 +25,39 @@ public class IndentificaConstanciaService {
 	public EstructuraConstanciaSatModel indentificaConstancia (PdfForm pdfForm) throws IOException {
 		
 		EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
+		PDDocument documentToBeParsed = null;
+		COSDocument cosDoc = null;
+		PDDocument pdDoc = null;
+		
 		try {
 			
 			final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
-			final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
+			documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
 			PDFTextStripper pdfStripper = new PDFTextStripper();
-			COSDocument cosDoc = documentToBeParsed.getDocument();
-			PDDocument pdDoc = new PDDocument(cosDoc);
+			cosDoc = documentToBeParsed.getDocument();
+			pdDoc = new PDDocument(cosDoc);
 			pdfStripper.setStartPage(1);
 			pdfStripper.setEndPage(1);
-
 			String contenido = pdfStripper.getText(pdDoc);
-			
 			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {				
 				constancia = constanciaModel.procesar(pdfStripper, pdDoc, contenido);
-				
-				documentToBeParsed.close();
-				cosDoc.close();
-				pdDoc.close();
 			}
 
 			return constancia;
 			
+		} catch(IOException e) {
+			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + e.getMessage() + " | "
+					+ e.getCause());
+			return constancia;
 		} catch (Exception ex) {
 			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
 					+ ex.getCause());
 			return constancia;
+		} finally {
+			if(documentToBeParsed != null) documentToBeParsed.close();
+			if(cosDoc != null) cosDoc.close();	
+			if(pdDoc != null) pdDoc.close();
+			
 		}
 		
 	}

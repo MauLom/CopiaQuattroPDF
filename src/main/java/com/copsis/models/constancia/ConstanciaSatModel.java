@@ -20,7 +20,7 @@ public class ConstanciaSatModel {
 	private RegimenFiscalService regimenFiscalService;
 	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
-	private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
+	//private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
 	/*private String contenido = "";
 
 	public ConstanciaSatModel(String contenido) {
@@ -28,6 +28,7 @@ public class ConstanciaSatModel {
 	}*/
 
 	public EstructuraConstanciaSatModel procesar(String contenido) {
+		EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
 		int beginIndex = 0;
 		int endIndex = 0;
 		boolean nombre =false;
@@ -58,8 +59,15 @@ public class ConstanciaSatModel {
 					constancia.setCurp(newcontenido.toString().split("\n")[i].split("CURP:")[1].replace("###", "").trim());
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Nombre") && nombre == false) {
-					constancia.setNombre(newcontenido.toString().split("\n")[i].split("Nombre")[1].replace("###", " ").replace("s:", "").trim());
+				if(newcontenido.toString().split("\n")[i].contains("Nombre:") && nombre == false) {
+					constancia.setNombre(newcontenido.toString().split("\n")[i].split("Nombre:")[1].replace("###", " ").replace("s:", "").trim());
+					nombre = true;
+				} else if(newcontenido.toString().split("\n")[i].contains("Nombre (s):") && nombre == false) {
+					constancia.setNombre(newcontenido.toString().split("\n")[i].split("Nombre \\(s\\):")[1].replace("###", " ").trim());
+					nombre = true;
+				} else if(newcontenido.toString().split("\n")[i].contains("Nombre###(s):") && nombre == false) {					
+					String[] arrNombre = newcontenido.toString().split("\n")[i].split("Nombre###\\(s\\):");					
+					constancia.setNombre(arrNombre[1].replace("###", " ").trim());
 					nombre = true;
 				}
 				
@@ -101,7 +109,7 @@ public class ConstanciaSatModel {
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+				//log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Código") && newcontenido.toString().split("\n")[i].contains("Postal:") &&
 						newcontenido.toString().split("\n")[i].contains("Tipo") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
 					constancia.setCp(newcontenido.toString().split("\n")[i].split("Postal:")[1].split("Tipo")[0].replace("###", "").trim());
@@ -110,19 +118,19 @@ public class ConstanciaSatModel {
 				
 				if(newcontenido.toString().split("\n")[i].contains("Número") && newcontenido.toString().split("\n")[i].contains("Exterior:") &&
 						newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
-					constancia.setNombreVialidad(newcontenido.toString().split("\n")[i].split("Vialidad:")[1].split("Número")[0].replace("###", "").trim());
+					constancia.setNombreVialidad(newcontenido.toString().split("\n")[i].split("Vialidad:")[1].split("Número")[0].replace("###", " ").trim());
 					constancia.setNumeroExterior(newcontenido.toString().split("\n")[i].split("Exterior:")[1].replace("###", " ").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Número") && newcontenido.toString().split("\n")[i].contains("Interior:") &&
-						newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Colonia:")		) {
-					constancia.setNumeroInterior(newcontenido.toString().split("\n")[i].split("Interior:")[1].split("Nombre")[0].replace("###", "").trim());
+						newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Colonia:")		) {					
+					constancia.setNumeroInterior(newcontenido.toString().split("\n")[i].split("Interior:")[1].split("Nombre")[0].replace("###", " ").trim());
 					constancia.setColonia(newcontenido.toString().split("\n")[i].split("Colonia:")[1].replace("###", " ").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Localidad:") &&
-						newcontenido.toString().split("\n")[i].contains("Nombre###del") && newcontenido.toString().split("\n")[i].contains("Territorial:")		) {
-					constancia.setNumeroInterior(newcontenido.toString().split("\n")[i].split("Localidad:")[1].split("Nombre###del")[0].replace("###", "").trim());
+						newcontenido.toString().split("\n")[i].contains("Nombre###del") && newcontenido.toString().split("\n")[i].contains("Territorial:")		) {					
+					constancia.setLocalidad(newcontenido.toString().split("\n")[i].split("Localidad:")[1].split("Nombre###del")[0].replace("###", "").trim());
 					constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
 				}
 				
@@ -134,7 +142,7 @@ public class ConstanciaSatModel {
 				
 				if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
 						newcontenido.toString().split("\n")[i].contains("Entre") && newcontenido.toString().split("\n")[i].contains("Calle:")		) {
-					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Calle")[0].replace("###", "").trim());
+					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Entre###Calle")[0].replace("###", " ").trim());
 					constancia.setEntreCalle(newcontenido.toString().split("\n")[i].split("Calle:")[1].replace("###", " ").trim());
 				}
 				
@@ -157,9 +165,9 @@ public class ConstanciaSatModel {
 				}
 				
 				
-				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i+1].contains("contribuyente")  ) {
-					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i+1].split("Estado")[0].replace("###", " ").trim());
-					constancia.setEstadoContribuyente(newcontenido.toString().split("\n")[i+2].replace("###", " ").trim());
+				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i].contains("contribuyente")  ) {
+					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("Estado")[0].replace("###", " ").trim());
+					constancia.setEstadoContribuyente(newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("domicilio:")[1].replace("###", " ").trim());
 				}													
 			}
 			
