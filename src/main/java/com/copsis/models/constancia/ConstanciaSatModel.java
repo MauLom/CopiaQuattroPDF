@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
-import com.copsis.models.RegimenFiscalAndTipoPersona;
+import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.services.RegimenFiscalService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -179,7 +179,7 @@ public class ConstanciaSatModel {
 			}
 			
 			String regimenes = dataToolsModel.extracted(beginIndex, endIndex, contenido);
-			List<String> regimenesList = new ArrayList<>();
+			List<RegimenFiscalPropsDto> regimenesList = new ArrayList<>();
 			
 			for (int i = 0; i < regimenes.split("\n").length; i++) {
 				if(!regimenes.split("\n")[i].contains("Regímenes:") 
@@ -188,10 +188,13 @@ public class ConstanciaSatModel {
 						&& !regimenes.split("\n")[i].contains("Fin")) {
 					String row = regimenes.split("\n")[i];
 					String strRegimen = row.split(dataToolsModel.obtenVigePoliza(row).get(0))[0].replace("###", "").trim();					
-					RegimenFiscalAndTipoPersona regimen = regimenFiscalService.get(strRegimen);
+					RegimenFiscalPropsDto regimen = regimenFiscalService.get(strRegimen);
 					//log.info("regimen: {}", regimen);	
-					if(!regimen.getRegimenFiscal().equals("")) { 
-						regimenesList.add(regimen.getRegimenFiscal());
+					if(!regimen.getDescripcion().equals("")) { 
+						RegimenFiscalPropsDto regimenDto = new RegimenFiscalPropsDto();
+						regimenDto.setClave(regimen.getClave());
+						regimenDto.setDescripcion(regimen.getDescripcion());
+						regimenesList.add(regimenDto);
 						// se sobreescribe el último tip ode persona
 						constancia.setTipoPersona(regimen.getTipo());
 					}

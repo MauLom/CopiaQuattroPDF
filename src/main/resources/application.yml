@@ -10,61 +10,80 @@ management:
 catalogo-reforma-fiscal:
   regimenes:
     - 
-      regimenFiscal: "601 - General de Ley Personas Morales"
+      clave: "601"
+      regimenFiscal: "General de Ley Personas Morales"
       tipo: "Física" 
     - 
-      regimenFiscal: "603 - Personas Morales con Fines no Lucrativos"
+      clave: "603"
+      regimenFiscal: "Personas Morales con Fines no Lucrativos"
       tipo: "Física"
     - 
-      regimenFiscal: "605 - Sueldos y Salarios e Ingresos Asimilados a Salarios"
+      clave: "605"
+      regimenFiscal: "Sueldos y Salarios e Ingresos Asimilados a Salarios"
       tipo: "Física"
     - 
-      regimenFiscal: "606 - Arrendamiento"
+      clave: "606"
+      regimenFiscal: "Arrendamiento"
       tipo: "Física"
     - 
-      regimenFiscal: "607 - Régimen de Enajenación o Adquisición de Bienes"
+      clave: "607"
+      regimenFiscal: "Régimen de Enajenación o Adquisición de Bienes"
       tipo: "Física"
     - 
-      regimenFiscal: "608 - Demás ingresos"
+      clave: "608"
+      regimenFiscal: "Demás ingresos"
       tipo: "Física"
     - 
-      regimenFiscal: "610 - Residentes en el Extranjero sin Establecimiento Permanente en México"
+      clave: "610"
+      regimenFiscal: "Residentes en el Extranjero sin Establecimiento Permanente en México"
       tipo: "Física"
     - 
-      regimenFiscal: "611 - Ingresos por Dividendos (socios y accionistas)"
+      clave: "611"
+      regimenFiscal: "Ingresos por Dividendos (socios y accionistas)"
       tipo: "Física"
     - 
-      regimenFiscal: "612 - Personas Físicas con Actividades Empresariales y Profesionales"
+      clave: "612"
+      regimenFiscal: "Personas Físicas con Actividades Empresariales y Profesionales"
       tipo: "Física"
     - 
-      regimenFiscal: "614 - Ingresos por intereses"
+      clave: "614"
+      regimenFiscal: "Ingresos por intereses"
       tipo: "Física"
     - 
-      regimenFiscal: "615 - Régimen de los ingresos por obtención de premios"
+      clave: "615"
+      regimenFiscal: "Régimen de los ingresos por obtención de premios"
       tipo: "Física"
     - 
-      regimenFiscal: "616 - Sin obligaciones fiscales"
+      clave: "616"
+      regimenFiscal: "Sin obligaciones fiscales"
       tipo: "Física"
     - 
-      regimenFiscal: "620 - Sociedades Cooperativas de Producción que optan por diferir sus ingresos"
+      clave: "620"
+      regimenFiscal: "Sociedades Cooperativas de Producción que optan por diferir sus ingresos"
       tipo: "Física"
     - 
-      regimenFiscal: "621 - Incorporación Fiscal"
+      clave: "621"
+      regimenFiscal: "Incorporación Fiscal"
       tipo: "Moral"
     - 
-      regimenFiscal: "622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras"
+      clave: "622"
+      regimenFiscal: "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras"
       tipo: "Moral"
     - 
-      regimenFiscal: "623 - Opcional para Grupos de Sociedades"
+      clave: "623"
+      regimenFiscal: "Opcional para Grupos de Sociedades"
       tipo: "Moral"
     - 
-      regimenFiscal: "624 - Coordinados"
+      clave: "624"
+      regimenFiscal: "Coordinados"
       tipo: "Moral"
     - 
-      regimenFiscal: "625 - Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas"
+      clave: "625"
+      regimenFiscal: "Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas"
       tipo: "Moral"
     - 
-      regimenFiscal: "626 - Régimen Simplificado de Confianza"
+      clave: "626"
+      regimenFiscal: "Régimen Simplificado de Confianza"
       tipo: "Moral"
 spring:
   cloud:
