@@ -127,11 +127,7 @@ public class ImpresionAmortizacionesPdf {
 						// PRODUCTO
 						getEncabezadoPdf(document, page , impresionForm);
 						// ENCABEZADO TABLA//
-					
 						yStart =	getEncabezadoTabla(document, page);
-						
-						
-						
 						
 						Integer x = 0;
 						boolean acomula = false;
@@ -309,7 +305,7 @@ public class ImpresionAmortizacionesPdf {
 			
 			table.draw();
 			
-			yStart -= table.getHeaderAndDataHeight()+15;
+			yStart -= table.getHeaderAndDataHeight()+25;
 			
 			return yStart;
 			
