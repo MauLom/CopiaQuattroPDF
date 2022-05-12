@@ -131,7 +131,20 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Localidad:") &&
 						newcontenido.toString().split("\n")[i].contains("Nombre###del") && newcontenido.toString().split("\n")[i].contains("Territorial:")		) {					
 					constancia.setLocalidad(newcontenido.toString().split("\n")[i].split("Localidad:")[1].split("Nombre###del")[0].replace("###", "").trim());
-					constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+					//constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+					if(constancia.getLocalidad().length()  ==  0 && newcontenido.toString().split("\n")[i+1].length() >  0 ) {
+						StringBuilder municipio = new StringBuilder();
+						municipio.append(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio
+						if(!newcontenido.toString().split("\n")[i + 1].contains("Entidad") && !newcontenido.toString().split("\n")[i + 1].contains("Federativa:") &&
+						!newcontenido.toString().split("\n")[i + 1].contains("Entre") && !newcontenido.toString().split("\n")[i + 1].contains("Calle:")) {
+							municipio.append(" ");
+							municipio.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
+						}
+                        constancia.setMunicipio(municipio.toString());                                                
+                    }else {
+                        constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+                    }
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
