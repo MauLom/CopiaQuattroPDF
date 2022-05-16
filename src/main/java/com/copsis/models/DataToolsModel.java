@@ -1049,7 +1049,7 @@ public class DataToolsModel {
 				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
 				"TRIMESTRAL12MESES", "TRIM.S/REC","TRIM.S-REC","TRIM.C-REC","TRIM.C/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
 				"MENSUALSR", "MENSUALS/R", "MENSUALS/R", "MEN.DER.PRORRATEA", "MENSUALVITRO", "MENSUALS/RDERP",
-				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO", "SEMA", SEMANAL, "SEMANALVITRO","" };
+				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO","QUINCENAL DXN", "SEMA", SEMANAL, "SEMANALVITRO","" };
 		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
@@ -1105,6 +1105,7 @@ public class DataToolsModel {
 				case "QUIN":
 				case "QUICENAL":
 				case "QUINCENAL DXN VITRO":
+				case "QUINCENAL DXN":
 					dato = 5;
 					break;
 				case "SEMA":

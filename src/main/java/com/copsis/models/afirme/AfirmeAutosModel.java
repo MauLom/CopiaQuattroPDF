@@ -141,6 +141,9 @@ public class AfirmeAutosModel {
 					if (newcontenido.split("\n")[i].contains("Forma de pago")) {
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("Forma de pago")[1].split("###")[1] ));
 					}
+					if(newcontenido.split("\n")[i].contains("Forma de pago") && modelo.getFormaPago() == 0) {					
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("Forma de pago")[1].split("###")[1] ));
+					}
 				}
             }
             
