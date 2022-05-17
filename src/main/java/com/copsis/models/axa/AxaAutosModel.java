@@ -339,7 +339,7 @@ public class AxaAutosModel {
 			if(modelo.getPoliza().length() == 0 && contenido.indexOf("No. de Póliza") > -1 && contenido.indexOf("de fecha") > -1) {
 				modelo.setPoliza(contenido.split("No. de Póliza")[1].split("de fecha")[0].replace("###", "").trim());
 			}
-			//System.out.println(contenido);
+		
 			
 			// cp
 			// cte_direccion
