@@ -279,7 +279,10 @@ public class GnpSaludModel {
 								modelo.setMoneda(fn.moneda(dato.split("###")[5].trim()));
 
 							}
-							if(dato.contains("I.V.A.")) {
+							if(dato.contains("I.V.A.") && dato.contains("%")) {
+							
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.toString().split("I.V.A.")[1].split("%")[1].replace("###", "").trim())));
+							}else  if(dato.contains("I.V.A.")) {
 								
 								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.toString().split("I.V.A.")[1].replace("###", "").trim())));
 							}
