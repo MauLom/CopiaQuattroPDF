@@ -324,8 +324,10 @@ public class AxaAutosModel {
 			// cte_nombre
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.DATOS_ASEGURADO);
+		
 			if (donde > 0 && (modelo.getCteNombre().length() == 0 || modelo.getPoliza().length() == 0)) {
 				for (String dato : contenido.split("@@@")[donde].split("\n")) {
+				
 					if (dato.contains("Nombre:###")) {
 						modelo.setCteNombre(dato.split("Nombre:###")[1].replace("###", " ").trim());
 					} else if (!dato.contains("Vigencia") && dato.contains(ConstantsValue.DOMICILIO2) && modelo.getPoliza().split(" ").length > 1) {
@@ -334,6 +336,10 @@ public class AxaAutosModel {
 					}
 				}
 			}
+			if(modelo.getPoliza().length() == 0 && contenido.indexOf("No. de Póliza") > -1 && contenido.indexOf("de fecha") > -1) {
+				modelo.setPoliza(contenido.split("No. de Póliza")[1].split("de fecha")[0].replace("###", "").trim());
+			}
+		
 			
 			// cp
 			// cte_direccion
