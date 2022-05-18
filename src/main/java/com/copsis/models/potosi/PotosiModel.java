@@ -32,7 +32,12 @@ public class PotosiModel {
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				break;
 			case 4:
-				modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				if(fn.caratula(1, 2, stripper, doc).contains("Número de Póliza")) {
+					modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				}else {
+					modelo = new PotosiDiversosBModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				}
+				
 				break;	
 			default:
 				break;
