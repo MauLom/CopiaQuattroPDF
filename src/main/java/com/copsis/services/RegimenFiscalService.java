@@ -4,6 +4,8 @@
 package com.copsis.services;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,23 +25,30 @@ public class RegimenFiscalService {
 	@Autowired
 	private CatalogoReformaFiscalProps catalogoReformaFiscalProps;
 	
+	private static final String CLAVE_KEY = "clave";
+	private static final String REGIMEN_FISCAL_KEY = "regimenFiscal";
+	private static final String TIPO_KEY = "tipo";
+	
 	public RegimenFiscalPropsDto get(String strRegimen) {
-		//log.info("STEP0");
 		RegimenFiscalPropsDto response = new RegimenFiscalPropsDto();
 		String claveFound = "";
 		String regimenFound = "";
 		String tipoFound = "";
 		for(Map<String, String> regimenObject : catalogoReformaFiscalProps.getRegimenes()) {
-			//log.info("regimenObject: {}", regimenObject);
-			if(regimenObject.get("regimenFiscal").contains(strRegimen)) {
-				claveFound = regimenObject.get("clave");
-				regimenFound = regimenObject.get("regimenFiscal");
-				tipoFound = regimenObject.get("tipo");
-			}			
-			if(strRegimen.contains(regimenObject.get("regimenFiscal"))) {
-				claveFound = regimenObject.get("clave");
-				regimenFound = regimenObject.get("regimenFiscal");
-				tipoFound = regimenObject.get("tipo");
+			Pattern pattern1 = Pattern.compile(regimenObject.get(REGIMEN_FISCAL_KEY).replace("(", "\\(").replace(")", "\\)"), Pattern.CASE_INSENSITIVE);
+			Matcher matcher1 = pattern1.matcher(strRegimen);
+			if(matcher1.find()) {
+				claveFound = regimenObject.get(CLAVE_KEY);
+				regimenFound = regimenObject.get(REGIMEN_FISCAL_KEY);
+				tipoFound = regimenObject.get(TIPO_KEY);
+			}
+			
+			Pattern pattern2 = Pattern.compile(strRegimen.replace("(", "\\(").replace(")", "\\)"), Pattern.CASE_INSENSITIVE);
+			Matcher matcher2 = pattern2.matcher(regimenObject.get(REGIMEN_FISCAL_KEY));
+			if(matcher2.find()) {
+				claveFound = regimenObject.get(CLAVE_KEY);
+				regimenFound = regimenObject.get(REGIMEN_FISCAL_KEY);
+				tipoFound = regimenObject.get(TIPO_KEY);
 			}
 		}
 		if(!regimenFound.equals("")) {
@@ -48,7 +57,7 @@ public class RegimenFiscalService {
 			response.setTipo(tipoFound);
 		}
 		//log.info("regimenFound: {}", regimenFound);
-		//log.info("STEP1");
+		
 		return response;
 	}
 }

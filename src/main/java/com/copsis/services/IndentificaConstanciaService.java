@@ -19,8 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class IndentificaConstanciaService {
-	private final ConstanciaModel constanciaModel;
-	
+	private final ConstanciaModel constanciaModel;	
 	
 	public EstructuraConstanciaSatModel indentificaConstancia (PdfForm pdfForm) throws IOException {
 		

@@ -12,26 +12,12 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class ConstanciaModel {
-	private final ConstanciaSatModel constanciaSatModel;
-	
+	private final ConstanciaSatModel constanciaSatModel;	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
 	private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
-
-	// Variables
-	/*private PDFTextStripper pdfstripper;
-	private PDDocument pdDoc;
-	private String contenido;
-
-	public ConstanciaModel(PDFTextStripper pdfstripper, PDDocument pdDoc, String contenido) {
-		super();
-		this.pdfstripper = pdfstripper;
-		this.pdDoc = pdDoc;
-		this.contenido = contenido;
-	}*/
 	
 	public   EstructuraConstanciaSatModel procesar(PDFTextStripper pdfstripper, PDDocument pdDoc, String contenido) {
-		try {
-			
+		try {			
 			constancia = constanciaSatModel.procesar(dataToolsModel.caratula(1, 4, pdfstripper, pdDoc));
 			
 			return constancia;			

@@ -40,7 +40,7 @@ public class EstructuraConstanciaSatModel {
 	 private  String telefonoMovil="";
 	 private  String estadoDomicilio="";
 	 private  String estadoContribuyente="";
-	 private  String error="";
+	 private  String error;
 	 private List<RegimenFiscalPropsDto> regimenFiscal;
 	 private String regimenDeCapital;
 	 private String tipoPersona;

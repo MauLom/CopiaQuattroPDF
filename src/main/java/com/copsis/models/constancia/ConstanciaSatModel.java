@@ -20,12 +20,6 @@ public class ConstanciaSatModel {
 	private RegimenFiscalService regimenFiscalService;
 	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
-	//private EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
-	/*private String contenido = "";
-
-	public ConstanciaSatModel(String contenido) {
-		this.contenido = contenido;
-	}*/
 
 	public EstructuraConstanciaSatModel procesar(String contenido) {
 		EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
@@ -48,7 +42,9 @@ public class ConstanciaSatModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
 				if(newcontenido.toString().split("\n")[i].contains("RFC:")) {
-					constancia.setRfc(newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim());
+					String rfc = newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim();
+					constancia.setRfc(rfc);					
+					constancia.setTipoPersona(rfc.length() == 12 ? "Moral" : "Física");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Régimen") && newcontenido.toString().split("\n")[i].contains("Capital:")) {
@@ -113,19 +109,22 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("Código") && newcontenido.toString().split("\n")[i].contains("Postal:") &&
 						newcontenido.toString().split("\n")[i].contains("Tipo") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
 					constancia.setCp(newcontenido.toString().split("\n")[i].split("Postal:")[1].split("Tipo")[0].replace("###", "").trim());
-					constancia.setTipoVialidad(newcontenido.toString().split("\n")[i].split("Vialidad:")[1].replace("###", " ").trim());
+					String[] vialidadArr = newcontenido.toString().split("\n")[i].split("Vialidad:");
+					constancia.setTipoVialidad(vialidadArr.length > 1 ? vialidadArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Número") && newcontenido.toString().split("\n")[i].contains("Exterior:") &&
 						newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
 					constancia.setNombreVialidad(newcontenido.toString().split("\n")[i].split("Vialidad:")[1].split("Número")[0].replace("###", " ").trim());
-					constancia.setNumeroExterior(newcontenido.toString().split("\n")[i].split("Exterior:")[1].replace("###", " ").trim());
+					String[] noExteriorArr = newcontenido.toString().split("\n")[i].split("Exterior:");
+					constancia.setNumeroExterior(noExteriorArr.length > 1 ? noExteriorArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Número") && newcontenido.toString().split("\n")[i].contains("Interior:") &&
 						newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Colonia:")		) {					
 					constancia.setNumeroInterior(newcontenido.toString().split("\n")[i].split("Interior:")[1].split("Nombre")[0].replace("###", " ").trim());
-					constancia.setColonia(newcontenido.toString().split("\n")[i].split("Colonia:")[1].replace("###", " ").trim());
+					String[] nombreColoniaArr = newcontenido.toString().split("\n")[i].split("Colonia:");
+					constancia.setColonia(nombreColoniaArr.length > 1 ? nombreColoniaArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Localidad:") &&
@@ -150,37 +149,42 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
 						newcontenido.toString().split("\n")[i].contains("Entre") && newcontenido.toString().split("\n")[i].contains("Calle:")		) {
 					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Calle")[0].replace("###", "").trim());
-					constancia.setEntreCalle(newcontenido.toString().split("\n")[i].split("Calle:")[1].replace("###", " ").trim());
+					String[] entreCalleArr = newcontenido.toString().split("\n")[i].split("Calle:");
+					constancia.setEntreCalle(entreCalleArr.length > 1 ? entreCalleArr[1].replace("###", " ").trim() : "");
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
+				/*if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
 						newcontenido.toString().split("\n")[i].contains("Entre") && newcontenido.toString().split("\n")[i].contains("Calle:")		) {
 					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Entre###Calle")[0].replace("###", " ").trim());
 					constancia.setEntreCalle(newcontenido.toString().split("\n")[i].split("Calle:")[1].replace("###", " ").trim());
-				}
+				}*/
 				
 				if(newcontenido.toString().split("\n")[i].contains("Correo") && newcontenido.toString().split("\n")[i].contains("Electrónico:") &&
 						newcontenido.toString().split("\n")[i].contains("Calle")		) {
 					constancia.setYCalle(newcontenido.toString().split("\n")[i].split("Calle:")[1].split("Correo")[0].replace("###", " ").trim());
-					constancia.setCorreo(newcontenido.toString().split("\n")[i].split("Electrónico:")[1].replace("###", " ").trim());
+					String[] correoArr = newcontenido.toString().split("\n")[i].split("Electrónico:");
+					constancia.setCorreo(correoArr.length > 1 ? correoArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Fijo") && newcontenido.toString().split("\n")[i].contains("Lada:") &&
 						newcontenido.toString().split("\n")[i].contains("Número:") ) {
 					constancia.setTelefonoLada(newcontenido.toString().split("\n")[i].split("Lada:")[1].split("Número:")[0].replace("###", "").trim());
-					constancia.setTelefonoFijo(newcontenido.toString().split("\n")[i].split("Número:")[1].replace("###", " ").trim());
+					String[] telefonoArr = newcontenido.toString().split("\n")[i].split("Número:");
+					constancia.setTelefonoFijo(telefonoArr.length > 1 ? telefonoArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Móvil") && newcontenido.toString().split("\n")[i].contains("Lada:") &&
 						newcontenido.toString().split("\n")[i].contains("Número:") ) {
 					constancia.setMovilLada(newcontenido.toString().split("\n")[i].split("Lada:")[1].split("Número:")[0].replace("###", "").trim());
-					constancia.setTelefonoMovil(newcontenido.toString().split("\n")[i].split("Número:")[1].replace("###", " ").trim());
+					String[] telefonoMovilArr = newcontenido.toString().split("\n")[i].split("Número:");
+					constancia.setTelefonoMovil(telefonoMovilArr.length > 1 ? telefonoMovilArr[1].replace("###", " ").trim() : "");
 				}
 				
 				
 				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i].contains("contribuyente")  ) {
 					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("Estado")[0].replace("###", " ").trim());
-					constancia.setEstadoContribuyente(newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("domicilio:")[1].replace("###", " ").trim());
+					String[] estadoContribuyenteArr = newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("domicilio:");
+					constancia.setEstadoContribuyente(estadoContribuyenteArr.length > 1 ? estadoContribuyenteArr[1].replace("###", " ").trim() : "");
 				}													
 			}
 			
@@ -203,13 +207,11 @@ public class ConstanciaSatModel {
 					String strRegimen = row.split(dataToolsModel.obtenVigePoliza(row).get(0))[0].replace("###", "").trim();					
 					RegimenFiscalPropsDto regimen = regimenFiscalService.get(strRegimen);
 					//log.info("regimen: {}", regimen);	
-					if(!regimen.getDescripcion().equals("")) { 
+					if(regimen.getDescripcion() != null && !regimen.getDescripcion().equals("")) { 
 						RegimenFiscalPropsDto regimenDto = new RegimenFiscalPropsDto();
 						regimenDto.setClave(regimen.getClave());
 						regimenDto.setDescripcion(regimen.getDescripcion());
-						regimenesList.add(regimenDto);
-						// se sobreescribe el último tip ode persona
-						constancia.setTipoPersona(regimen.getTipo());
+						regimenesList.add(regimenDto);						
 					}
 				}				
 			}
