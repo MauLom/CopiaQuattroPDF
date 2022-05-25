@@ -40,8 +40,10 @@ public class IndentificaConstanciaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {				
 				constancia = constanciaModel.procesar(pdfStripper, pdDoc, contenido);
+				return constancia;
 			}
 
+			constancia.setError("Documento de tipo no reconocido.");
 			return constancia;
 			
 		} catch(IOException e) {
