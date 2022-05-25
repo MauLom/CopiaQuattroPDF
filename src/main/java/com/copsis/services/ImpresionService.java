@@ -17,6 +17,7 @@ import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
+import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.utils.ErrorCode;
 
@@ -103,6 +104,20 @@ public class ImpresionService {
 		}
 	}
 
+	
+	public byte[] impresionFiscal(String folio) {
+		try {
+			ImpresionFiscalPdf impresionFiscalPdf = new ImpresionFiscalPdf();
+					
+			return impresionFiscalPdf.buildPDF( folio);
+			
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+		
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
 
 	
 	
