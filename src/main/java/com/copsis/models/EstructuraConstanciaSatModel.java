@@ -14,6 +14,7 @@ import lombok.Setter;
 public class EstructuraConstanciaSatModel {
 
 	 private  String rfc="";
+	 private String razonSocial = "";
 	 private  String curp="";
 	 private  String nombre="";
 	 private  String apellidoP="";

@@ -47,6 +47,10 @@ public class ConstanciaSatModel {
 					constancia.setTipoPersona(rfc.length() == 12 ? "Moral" : "Física");
 				}
 				
+				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:")) {
+					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", "").trim());
+				}
+				
 				if(newcontenido.toString().split("\n")[i].contains("Régimen") && newcontenido.toString().split("\n")[i].contains("Capital:")) {
 					constancia.setRegimenDeCapital(newcontenido.toString().split("\n")[i].split("Capital:")[1].replace("###", " ").trim());
 				}
