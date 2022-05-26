@@ -57,6 +57,7 @@ public class ImpresionForm {
 	private String estadoExt;
 	private String paisExt;
 	private String telefonoExt;
+	private boolean errorPDF;
 	
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;
