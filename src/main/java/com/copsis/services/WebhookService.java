@@ -71,7 +71,7 @@ public class WebhookService {
         JSONObject text = new JSONObject();
         StringBuilder sbText = new StringBuilder();
         //log.info("cardSettings.getFileUrl(): {}", cardSettings.getFileUrl());
-        sbText.append("<font color=\"#a5a5a5\">File URL</font><br>");
+        sbText.append("<font color=\"#a5a5a5\">PDF</font><br>");
         sbText.append("<a href=" + cardSettings.getFileUrl() + ">Open in browser</a>");
         
         sbText.append("<br><br><font color=\"#a5a5a5\">Source class</font><br>");
