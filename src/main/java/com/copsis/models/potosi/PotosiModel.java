@@ -26,6 +26,8 @@ public class PotosiModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
+			
+			System.out.println(fn.caratula(1, 2, stripper, doc));
 
 		      switch (fn.tipoPoliza(contenido)) {
 			case 1:
@@ -34,7 +36,8 @@ public class PotosiModel {
 			case 4:
 				if(fn.caratula(1, 2, stripper, doc).contains("Número de Póliza")) {
 					modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
-				}else {
+				}
+				else {
 					modelo = new PotosiDiversosBModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				}
 				

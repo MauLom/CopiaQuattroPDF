@@ -223,13 +223,37 @@ public class ImpresionConsetimientoPdf {
 			ByteArrayOutputStream output;
 			try (PDDocument document = new PDDocument()) {
 				try {
-					output = new ByteArrayOutputStream();
-					PDPage page = new PDPage();
+			
+					
+					if(impresionForm.isErrorPDF()) {
+						output = new ByteArrayOutputStream();
+						PDPage page = new PDPage();
+						document.addPage(page);
+						BaseTable table;
+						Row<PDPage> baseRow;	
+						
+						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
+						baseRow = communsPdf.setRow(table, 15);
+						communsPdf.setCell(baseRow, 100, "Se detectó un error en la creación del consentimiento, favor de contactar a AXA Seguros.", Color.black, false, "C", 12, lineBoders1, "", padding2,bgColorA);
+						table.draw();
+						
+						
+						
+
+						output = new ByteArrayOutputStream();
+						document.save(output);
+												
+						return output.toByteArray();
+						
+					}else {
+						
+						output = new ByteArrayOutputStream();
+						PDPage page = new PDPage();
+					
+					
 					document.addPage(page);
 					BaseTable table;
 					Row<PDPage> baseRow;
-
-
 					setEncabezado(impresionForm, document, page);
 					Date fecha = new Date();
 					
@@ -646,12 +670,16 @@ public class ImpresionConsetimientoPdf {
 							communsPdf.drawText(content, false, 500, 754, "VI-557• ENER0 2019", azul, true);
 						}
 					}
+					
+					
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
-
+			
 					conte =null;								
 					return output.toByteArray();
+					
+					}
 					
 				} finally {
 					document.close();
