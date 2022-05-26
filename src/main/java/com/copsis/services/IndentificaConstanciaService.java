@@ -9,6 +9,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
+import com.copsis.models.CardSettings;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.constancia.ConstanciaModel;
 
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;	
+	private final WebhookService webhookService;
 	
 	public EstructuraConstanciaSatModel indentificaConstancia (PdfForm pdfForm) throws IOException {
 		
@@ -43,7 +45,19 @@ public class IndentificaConstanciaService {
 				return constancia;
 			}
 
-			constancia.setError("Documento de tipo no reconocido.");
+			String errorMessage = "Documento de tipo no reconocido.";
+			
+			try  {
+				CardSettings cardSettings = CardSettings.builder()
+						.fileUrl(pdfForm.getUrl())
+						.sourceClass(IndentificaConstanciaService.class.getName())
+						.exception(new Exception(errorMessage))
+						.build();
+				webhookService.send(cardSettings);
+			} catch(Exception e) {
+				// do nothing
+			}
+			constancia.setError(errorMessage);
 			return constancia;
 			
 		} catch(IOException e) {
