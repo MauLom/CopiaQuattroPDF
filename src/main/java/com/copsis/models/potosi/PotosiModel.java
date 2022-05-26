@@ -36,8 +36,6 @@ public class PotosiModel {
 			case 4:
 				if(fn.caratula(1, 2, stripper, doc).contains("Número de Póliza")) {
 					modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
-				}else if(fn.caratula(1, 2, stripper, doc).contains("Número de Póliza")) {
-					
 				}
 				else {
 					modelo = new PotosiDiversosBModel(fn.caratula(1, 2, stripper, doc)).procesar();
