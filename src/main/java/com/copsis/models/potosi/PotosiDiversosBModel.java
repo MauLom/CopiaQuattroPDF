@@ -26,9 +26,10 @@ public class PotosiDiversosBModel {
 			modelo.setTipo(7);
 			modelo.setCia(37);
 			
-           //System.out.println(contenido);
+   
 			inicio = contenido.indexOf("POLIZA DE SEGURO DE R ESPONSABILIDAD ");
-			fin = contenido.indexOf("DETALLE DEL MOVIMIENTO");			
+			fin = contenido.indexOf("DETALLE DEL MOVIMIENTO");
+
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
