@@ -39,7 +39,7 @@ public class IndentificaConstanciaService {
 			pdfStripper.setEndPage(1);
 			String contenido = pdfStripper.getText(pdDoc);
 			if (contenido.contains("CONSTANCIA DE SITUACIÓN FISCAL") || contenido.contains("CÉDULA DE IDENTIFICACIÓN FISCAL ")) {				
-				constancia = constanciaModel.procesar(pdfStripper, pdDoc, contenido);
+				constancia = constanciaModel.procesar(pdfStripper, pdDoc, contenido, pdfForm);
 				return constancia;
 			}
 

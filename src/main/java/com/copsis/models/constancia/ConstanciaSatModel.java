@@ -6,10 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.copsis.controllers.forms.PdfForm;
+import com.copsis.models.CardSettings;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.services.RegimenFiscalService;
+import com.copsis.services.WebhookService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,9 +22,12 @@ public class ConstanciaSatModel {
 	@Autowired
 	private RegimenFiscalService regimenFiscalService;
 	
+	@Autowired
+	private WebhookService webhookService;
+	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
 
-	public EstructuraConstanciaSatModel procesar(String contenido) {
+	public EstructuraConstanciaSatModel procesar(String contenido, PdfForm pdfForm) {
 		EstructuraConstanciaSatModel constancia = new EstructuraConstanciaSatModel();
 		int beginIndex = 0;
 		int endIndex = 0;
@@ -226,9 +232,17 @@ public class ConstanciaSatModel {
 			
 			return constancia;
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
-					+ ex.getCause());
+			try  {
+				CardSettings cardSettings = CardSettings.builder()
+						.fileUrl(pdfForm.getUrl())
+						.sourceClass(ConstanciaSatModel.class.getName())
+						.exception(ex)
+						.build();
+				webhookService.send(cardSettings);
+			} catch(Exception e) {
+				// do nothing
+			}
+			constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
 		}
 	}

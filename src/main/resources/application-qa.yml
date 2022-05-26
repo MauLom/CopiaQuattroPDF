@@ -1,6 +1,9 @@
+webhook-id: 43
 serviceUrl:
   quattro-upload:
     baseURL: https://quattro-upload-afa5eqprsa-uc.a.run.app
+  quattro-crm:
+    baseURL: "https://quattro-crm-afa5eqprsa-uc.a.run.app"
 userlogin:
   autorization:
     username: 5fw1y-q0477-r0gKx-8CcGh-vTJdh
