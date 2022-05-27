@@ -27,13 +27,13 @@ public class WebhookServiceClient {
 	@Value("${serviceUrl.quattro-crm.baseURL}")
 	private String serviceURL;
 	
-	public JSONObject send(JSONObject obj, WebhookType type) throws SException {
+	public JSONObject send(String strObj, WebhookType type) throws SException {
         try {
             OkHttpClient client = new OkHttpClient();
             String url = serviceURL.concat("/crm/webhooks/send/".concat(type.value));
             
             RequestBody body = null;
-            if (obj != null) body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
+            if (strObj != null) body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), strObj);
             Request request = new Request.Builder()
                     .url(url)
                     .post(body)
