@@ -40,9 +40,7 @@ public class WebhookService {
 	
 	public void send(CardSettings cardSettings) {
 		try {			
-			JSONObject jsonObj = getCardConfig(cardSettings);
-			//log.info("jsonObj: {}", jsonObj.toString());
-			webhookServiceClient.send(jsonObj.toString(), WebhookType.CARD);            
+			webhookServiceClient.send(getCardConfig(cardSettings), WebhookType.CARD);            
 		} catch(Exception e) {
 			// do nothing
 			log.info("WebhookService.catch: {}", e.getMessage());
