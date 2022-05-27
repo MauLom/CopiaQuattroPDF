@@ -47,26 +47,18 @@ public class IndentificaConstanciaService {
 
 			String errorMessage = "Documento de tipo no reconocido.";
 			
-			try  {
-				CardSettings cardSettings = CardSettings.builder()
-						.fileUrl(pdfForm.getUrl())
-						.sourceClass(IndentificaConstanciaService.class.getName())
-						.exceptionMessage(errorMessage)
-						.build();
-				webhookService.send(cardSettings);
-			} catch(Exception e) {
-				// do nothing
-			}
+			sendWebhookMessage(pdfForm, errorMessage);
+			
 			constancia.setError(errorMessage);
 			return constancia;
 			
 		} catch(IOException e) {
-			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + e.getMessage() + " | "
-					+ e.getCause());
+			sendWebhookMessage(pdfForm, e.getMessage());
+			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + e.getMessage() + " | " + e.getCause());
 			return constancia;
 		} catch (Exception ex) {
-			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
-					+ ex.getCause());
+			sendWebhookMessage(pdfForm, ex.getMessage());
+			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
 		} finally {
 			if(documentToBeParsed != null) documentToBeParsed.close();
@@ -77,4 +69,16 @@ public class IndentificaConstanciaService {
 		
 	}
 	
+	private void sendWebhookMessage(PdfForm pdfForm, String errorMessage) {
+		try  {
+			CardSettings cardSettings = CardSettings.builder()
+					.fileUrl(pdfForm.getUrl())
+					.sourceClass(IndentificaConstanciaService.class.getName())
+					.exceptionMessage(errorMessage)
+					.build();
+			webhookService.send(cardSettings);
+		} catch(Exception e) {
+			// do nothing
+		}
+	}
 }
