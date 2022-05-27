@@ -31,18 +31,19 @@ public class WebhookServiceClient {
         try {
             OkHttpClient client = new OkHttpClient();
             String url = serviceURL.concat("/crm/webhooks/send/".concat(type.value));
-            
+            log.info("URL: {}", url);
             RequestBody body = null;
             if (strObj != null) body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), strObj);
+            log.info("body: {}", body);
             Request request = new Request.Builder()
                     .url(url)
                     .post(body)
                     .addHeader("Cache-Control", "no-cache")
                     .build();
-
+            log.info("request: {}", request);
             Response responseOK = client.newCall(request).execute();
             String strResponse = responseOK.body().string();            
-            
+            log.info("strResponse: {}", strResponse);
             return new JSONObject(strResponse);
             
         } catch(Exception e) {
