@@ -40,6 +40,7 @@ public class WebhookService {
 	
 	public void send(CardSettings cardSettings) {
 		try {
+			log.info("JSON: {}", getCardConfig(cardSettings));
 			webhookServiceClient.send(getCardConfig(cardSettings), WebhookType.CARD);            
 		} catch(Exception e) {
 			// do nothing
@@ -78,7 +79,7 @@ public class WebhookService {
         sbText.append(cardSettings.getSourceClass());
         
         sbText.append("<br><br><font color=\"#a5a5a5\">Exception message</font><br>");
-        String exceptionMessage = cardSettings.getException().getMessage().length() > 500 ? cardSettings.getException().getMessage().substring(0, 500) + "..." : cardSettings.getException().getMessage();
+        String exceptionMessage = cardSettings.getExceptionMessage().length() > 500 ? cardSettings.getExceptionMessage().substring(0, 500) + "..." : cardSettings.getExceptionMessage();
         sbText.append(exceptionMessage);        
         
         text.put(TEXT, sbText.toString());

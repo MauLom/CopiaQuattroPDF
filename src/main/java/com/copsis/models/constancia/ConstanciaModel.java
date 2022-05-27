@@ -31,7 +31,7 @@ public class ConstanciaModel {
 				CardSettings cardSettings = CardSettings.builder()
 						.fileUrl(pdfForm.getUrl())
 						.sourceClass(ConstanciaModel.class.getName())
-						.exception(ex)
+						.exceptionMessage(ex.getMessage())
 						.build();
 				webhookService.send(cardSettings);
 			} catch(Exception e) {

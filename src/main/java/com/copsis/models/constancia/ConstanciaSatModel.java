@@ -236,7 +236,7 @@ public class ConstanciaSatModel {
 				CardSettings cardSettings = CardSettings.builder()
 						.fileUrl(pdfForm.getUrl())
 						.sourceClass(ConstanciaSatModel.class.getName())
-						.exception(ex)
+						.exceptionMessage(ex.getMessage())
 						.build();
 				webhookService.send(cardSettings);
 			} catch(Exception e) {

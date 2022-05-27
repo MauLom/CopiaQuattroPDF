@@ -18,5 +18,5 @@ public class CardSettings {
 	private Integer logID;
 	private String fileUrl;
 	private String sourceClass;
-	private Exception exception;
+	private String exceptionMessage;
 }

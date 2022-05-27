@@ -51,7 +51,7 @@ public class IndentificaConstanciaService {
 				CardSettings cardSettings = CardSettings.builder()
 						.fileUrl(pdfForm.getUrl())
 						.sourceClass(IndentificaConstanciaService.class.getName())
-						.exception(new Exception(errorMessage))
+						.exceptionMessage(errorMessage)
 						.build();
 				webhookService.send(cardSettings);
 			} catch(Exception e) {
