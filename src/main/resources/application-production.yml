@@ -1,4 +1,5 @@
 webhook-id: 62
+gateway-url: "https://api.quattrocrm.mx"
 serviceUrl:
   quattro-upload:
     baseURL: https://quattro-upload-d4f4hpx6ga-uc.a.run.app

@@ -1,6 +1,7 @@
 server:
   port: 8087
 webhook-id: 43
+gateway-url: "http://localhost:443"
 serviceUrl:
   quattro-upload:
     baseURL: http://127.0.0.1:8080
