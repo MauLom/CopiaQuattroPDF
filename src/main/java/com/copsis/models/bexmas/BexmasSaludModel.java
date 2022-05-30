@@ -36,9 +36,12 @@ public class BexmasSaludModel {
 			modelo.setTipo(3);
 			// cia
 			modelo.setCia(98);
-			
+
 	
 			inicio = contenido.indexOf("Nombre del Contratante:");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Nombre del");
+			}
 			fin = contenido.indexOf("Datos de los Asegurados");
 			
 			if(inicio >  -1 && fin > -1  &&  inicio < fin) {
@@ -53,8 +56,15 @@ public class BexmasSaludModel {
 					if(modelo.getPoliza().length() == 0  && newcont.toString().split("\n")[i].contains("Póliza Inicial:")) {
 						modelo.setPoliza(newcont.toString().split("\n")[i].split("Póliza Inicial:")[1].replace("###", "").trim());
 					}
-					if(modelo.getCteNombre().length() == 0 && newcont.toString().split("\n")[i].contains("Contratante") ){
-						modelo.setCteNombre(newcont.toString().split("\n")[i+1].replace("###", "").trim());
+					if(modelo.getCteNombre().length() == 0 && newcont.toString().split("\n")[i].contains("Contratante") ) {
+						if(!newcont.toString().split("\n")[i+1].contains("R.F.C:")) {
+							modelo.setCteNombre(newcont.toString().split("\n")[i+1].replace("###", "").trim());
+						}
+					
+					}
+					if(modelo.getCteNombre().length() == 0 && newcont.toString().split("\n")[i].contains("Nombre del") && newcont.toString().split("\n")[i].contains("Póliza Inicial")  ) {
+						modelo.setCteNombre(newcont.toString().split("\n")[i+1].split("###")[0].replace("###", "").trim());
+						modelo.setPoliza(newcont.toString().split("\n")[i+1].split("###")[newcont.toString().split("\n")[i+1].split("###").length-1]);
 					}
 					
 					if(newcont.toString().split("\n")[i].contains("Moneda") && newcont.toString().split("\n")[i].contains("Forma de Pago")  && newcont.toString().split("\n")[i+1].contains("Dirección") && cp) {						
@@ -76,7 +86,7 @@ public class BexmasSaludModel {
 					}
 					if(newcont.toString().split("\n")[i].contains("Desde") && newcont.toString().split("\n")[i].contains("Hasta") && newcont.toString().split("\n")[i+1].contains("-")) {											
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[0].trim()));
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].trim()));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].replace("12:00", "").trim()));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 					if(newcont.toString().split("\n")[i].contains("C.P:")) {
