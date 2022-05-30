@@ -50,7 +50,7 @@ public class GnpDiversosCModelo {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
 					
-					System.out.println(newcontenido.toString().split("\n")[i]);								
+							
 					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P")[1].length() > 4 ) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 6).trim());
 					}
