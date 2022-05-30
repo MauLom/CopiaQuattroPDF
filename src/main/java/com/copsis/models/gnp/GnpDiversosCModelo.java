@@ -49,8 +49,9 @@ public class GnpDiversosCModelo {
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
-													
-					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {
+					
+					System.out.println(newcontenido.toString().split("\n")[i]);								
+					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P")[1].length() > 4 ) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 6).trim());
 					}
 					
@@ -117,8 +118,8 @@ public class GnpDiversosCModelo {
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 
 				if(newcontenido.length() > 50) {
-					modelo.setAgente(newcontenido.toString().split("\n")[1].split("###")[0].replace("###", "").trim());
-					modelo.setCveAgente(newcontenido.toString().split("\n")[1].split("###")[1].replace("###", "").trim());
+					modelo.setCveAgente(newcontenido.toString().split("\n")[1].split("###")[0].replace("###", "").trim());
+					modelo.setAgente(newcontenido.toString().split("\n")[1].split("###")[1].replace("###", "").trim());
 				}
 			
 				
@@ -207,6 +208,7 @@ public class GnpDiversosCModelo {
 	
 			 return modelo;
 		} catch (Exception e) {
+	
 			modelo.setError(GnpDiversosCModelo.this.getClass().getTypeName()+ " | "+e.getMessage()+" | "+e.getCause());
 			return modelo; 
 		}
