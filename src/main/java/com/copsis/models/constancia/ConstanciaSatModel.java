@@ -112,7 +112,7 @@ public class ConstanciaSatModel {
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Comercial:") && newcontenido.toString().split("\n")[i].split("Comercial")[1].length() > 4) {
-					constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", "").trim());
+					constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", " ").trim());
 				}				
 			}
 			
@@ -149,7 +149,7 @@ public class ConstanciaSatModel {
 				
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Localidad:") &&
 						newcontenido.toString().split("\n")[i].contains("Nombre###del") && newcontenido.toString().split("\n")[i].contains("Territorial:")		) {					
-					constancia.setLocalidad(newcontenido.toString().split("\n")[i].split("Localidad:")[1].split("Nombre###del")[0].replace("###", "").trim());
+					constancia.setLocalidad(newcontenido.toString().split("\n")[i].split("Localidad:")[1].split("Nombre###del")[0].replace("###", " ").trim());
 					//constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
 					if(constancia.getLocalidad().length()  ==  0 && newcontenido.toString().split("\n")[i+1].length() >  0 ) {
 						StringBuilder municipio = new StringBuilder();
@@ -209,12 +209,20 @@ public class ConstanciaSatModel {
 					constancia.setTelefonoMovil(telefonoMovilArr.length > 1 ? telefonoMovilArr[1].replace("###", " ").trim() : "");
 				}
 				
-				//log.info("row: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i].contains("contribuyente")  ) {
 					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i].split("###del###domicilio:")[1].split("Estado")[0].replace("###", " ").trim());
+					
 					String[] estadoContribuyenteArr = newcontenido.toString().split("\n")[i].split("###del###domicilio:")[1].split("domicilio:");
-					constancia.setEstadoContribuyente(estadoContribuyenteArr.length > 1 ? estadoContribuyenteArr[1].replace("###", " ").trim() : "");
-				}													
+					StringBuilder estadoContribuyente = new StringBuilder();
+					estadoContribuyente.append(estadoContribuyenteArr.length > 1 ? estadoContribuyenteArr[1].replace("###", " ").trim() : "");
+					// validar si la siguiente línea no es actividades económicas, entonces se considerará parte del estado del contribuyente
+					if(!newcontenido.toString().split("\n")[i+1].contains("Actividades") && !newcontenido.toString().split("\n")[i+1].contains("Económicas")) {
+						estadoContribuyente.append(" ");
+						estadoContribuyente.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
+					}
+					constancia.setEstadoContribuyente(estadoContribuyente.toString());
+				}
+				//log.info("row: {}", newcontenido.toString().split("\n")[i]);
 			}
 			
 			if(constancia.getRfc().equals("")) {
