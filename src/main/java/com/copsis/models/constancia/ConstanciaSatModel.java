@@ -38,9 +38,17 @@ public class ConstanciaSatModel {
 		
 
 		try {
+			String identificacionDelContribuyente = "Identificación del Contribuyente";
+			String datosDelDomicilioRegistrado = "Datos del domicilio registrado";
+			String datosDeUbiacion = "Datos de Ubicación";
+			String personaMoral = "Moral";
+			String personaFisica = "Física";
 			
-			beginIndex = contenido.indexOf("Identificación del Contribuyente");
-			endIndex = contenido.indexOf("Datos del domicilio registrado");
+			beginIndex = contenido.indexOf(identificacionDelContribuyente);
+			endIndex = contenido.indexOf(datosDelDomicilioRegistrado);
+			if(endIndex == -1) {
+				endIndex = contenido.indexOf(datosDeUbiacion);
+			}
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			constancia.setRegimenDeCapital("NO APLICA");
@@ -50,7 +58,7 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("RFC:")) {
 					String rfc = newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim();
 					constancia.setRfc(rfc);					
-					constancia.setTipoPersona(rfc.length() == 12 ? "Moral" : "Física");
+					constancia.setTipoPersona(rfc.length() == 12 ? personaMoral : personaFisica);
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:")) {
@@ -107,9 +115,11 @@ public class ConstanciaSatModel {
 					constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", "").trim());
 				}				
 			}
-
 			
-			beginIndex = contenido.indexOf("Datos del domicilio registrado");
+			beginIndex = contenido.indexOf(datosDelDomicilioRegistrado);
+			if(beginIndex == -1) {
+				beginIndex = contenido.indexOf(datosDeUbiacion);
+			}
 			endIndex = contenido.indexOf("Actividad Económica");
 			newcontenido = new StringBuilder();
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
@@ -144,7 +154,7 @@ public class ConstanciaSatModel {
 					if(constancia.getLocalidad().length()  ==  0 && newcontenido.toString().split("\n")[i+1].length() >  0 ) {
 						StringBuilder municipio = new StringBuilder();
 						municipio.append(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
-						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio
+						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio						
 						if(!newcontenido.toString().split("\n")[i + 1].contains("Entidad") && !newcontenido.toString().split("\n")[i + 1].contains("Federativa:") &&
 						!newcontenido.toString().split("\n")[i + 1].contains("Entre") && !newcontenido.toString().split("\n")[i + 1].contains("Calle:")) {
 							municipio.append(" ");
@@ -152,13 +162,22 @@ public class ConstanciaSatModel {
 						}
                         constancia.setMunicipio(municipio.toString());                                                
                     }else {
-                        constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+                        //constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+                        StringBuilder municipio = new StringBuilder();
+						municipio.append(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio						
+						if(!newcontenido.toString().split("\n")[i + 1].contains("Entidad") && !newcontenido.toString().split("\n")[i + 1].contains("Federativa:") &&
+						!newcontenido.toString().split("\n")[i + 1].contains("Entre") && !newcontenido.toString().split("\n")[i + 1].contains("Calle:")) {
+							municipio.append(" ");
+							municipio.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
+						}
+                        constancia.setMunicipio(municipio.toString());
                     }
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Entidad") && newcontenido.toString().split("\n")[i].contains("Federativa:") &&
 						newcontenido.toString().split("\n")[i].contains("Entre") && newcontenido.toString().split("\n")[i].contains("Calle:")		) {
-					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Calle")[0].replace("###", "").trim());
+					constancia.setEstado(newcontenido.toString().split("\n")[i].split("Federativa:")[1].split("Entre###Calle")[0].replace("###", " ").trim());
 					String[] entreCalleArr = newcontenido.toString().split("\n")[i].split("Calle:");
 					constancia.setEntreCalle(entreCalleArr.length > 1 ? entreCalleArr[1].replace("###", " ").trim() : "");
 				}
@@ -190,13 +209,40 @@ public class ConstanciaSatModel {
 					constancia.setTelefonoMovil(telefonoMovilArr.length > 1 ? telefonoMovilArr[1].replace("###", " ").trim() : "");
 				}
 				
-				
+				//log.info("row: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Estado###del###domicilio:")  && newcontenido.toString().split("\n")[i].contains("contribuyente")  ) {
-					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("Estado")[0].replace("###", " ").trim());
-					String[] estadoContribuyenteArr = newcontenido.toString().split("\n")[i].split("Estado###del###domicilio:")[1].split("domicilio:");
+					constancia.setEstadoDomicilio(newcontenido.toString().split("\n")[i].split("###del###domicilio:")[1].split("Estado")[0].replace("###", " ").trim());
+					String[] estadoContribuyenteArr = newcontenido.toString().split("\n")[i].split("###del###domicilio:")[1].split("domicilio:");
 					constancia.setEstadoContribuyente(estadoContribuyenteArr.length > 1 ? estadoContribuyenteArr[1].replace("###", " ").trim() : "");
 				}													
 			}
+			
+			if(constancia.getRfc().equals("")) {
+				String publicErrorMessage = "No se encontraron datos en el rango de búsqueda";
+				String privateErrorMessage = String.format(publicErrorMessage.concat(": '%s' y '%s'"), identificacionDelContribuyente, datosDelDomicilioRegistrado);
+				sendWebhookMessage(pdfForm, privateErrorMessage);
+				constancia.setError(publicErrorMessage);
+				return constancia;
+			}
+
+			if(constancia.getTipoPersona().equals(personaFisica)) {
+				// validaciones persona física
+				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getApellidoM().equals("")) {
+					String publicErrorMessage = "No fué posible leer los datos: nombre(s), apellído paterno, apellído materno";
+					sendWebhookMessage(pdfForm, publicErrorMessage);
+					constancia.setError(publicErrorMessage);
+					return constancia;
+				}
+			} else {
+				// validaciones persona moral
+				if(constancia.getRazonSocial().equals("") || constancia.getRegimenDeCapital().equals("") || constancia.getCp().equals("")) {
+					String publicErrorMessage = "No fué posible leer los datos: Razón Social, Régimen Capital, Código postal";
+					sendWebhookMessage(pdfForm, publicErrorMessage);
+					constancia.setError(publicErrorMessage);
+					return constancia;
+				}
+			}
+			
 			
 			beginIndex = contenido.indexOf("Regímenes:");
 			//endIndex = contenido.length();
@@ -232,19 +278,22 @@ public class ConstanciaSatModel {
 			
 			return constancia;
 		} catch (Exception ex) {
-			try  {
-				CardSettings cardSettings = CardSettings.builder()
-						.fileUrl(pdfForm.getUrl())
-						.sourceClass(ConstanciaSatModel.class.getName())
-						.exceptionMessage(ex.getMessage())
-						.build();
-				webhookService.send(cardSettings);
-			} catch(Exception e) {
-				// do nothing
-			}
+			sendWebhookMessage(pdfForm, ex.getMessage());
 			constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
 		}
 	}
 
+	private void sendWebhookMessage(PdfForm pdfForm, String errorMessage) {
+		try  {
+			CardSettings cardSettings = CardSettings.builder()
+					.fileUrl(pdfForm.getUrl())
+					.sourceClass(ConstanciaSatModel.class.getName())
+					.exceptionMessage(errorMessage)
+					.build();
+			webhookService.send(cardSettings);
+		} catch(Exception e) {
+			// do nothing
+		}
+	}
 }
