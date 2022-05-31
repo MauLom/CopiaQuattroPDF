@@ -23,6 +23,8 @@ public class AfirmeAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
+			int splitxt = 0;
+			StringBuilder newcontenidotx= new StringBuilder();
 			StringBuilder newdireccion = new StringBuilder();
 			String newcontenido = "";
 			int inicio = 0;
@@ -105,6 +107,25 @@ public class AfirmeAutosModel {
 						
 					}
 				}
+            	
+            }
+            
+            
+        
+            if(contenido.contains("INFORMACIÓN GENERAL DE LA PÓLIZA") && contenido.contains("DESGLOSE DE COBERTURAS") ) {
+                inicio = contenido.indexOf("INFORMACIÓN GENERAL DE LA PÓLIZA");
+                fin = contenido.indexOf("ESGLOSE DE COBERTURAS");                
+                newcontenidotx.append(fn.extracted(inicio, fin, contenido));
+    			for(int i =0; i < newcontenidotx.toString().split("\n").length ; i++) {    			
+    				if(newcontenidotx.toString().split("\n")[i].contains("Y-O")){    				
+    					String x = newcontenidotx.toString().split("\n")[i].replace(" ", "###");
+                        modelo.setNomina(x.split("###")[2]);                       
+                        modelo.setCteNombre( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());                                                
+                    }
+    				if(newcontenidotx.toString().split("\n")[i].contains("Placas")){
+    					modelo.setPlacas(newcontenidotx.toString().split("\n")[i].split("Placas")[1].replace("###", ""));
+    				}    				
+    			}
             	
             }
             
