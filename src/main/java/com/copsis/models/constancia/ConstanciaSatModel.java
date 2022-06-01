@@ -266,7 +266,9 @@ public class ConstanciaSatModel {
 				if(!regimenes.split("\n")[i].contains("Regímenes:") 
 						&& !regimenes.split("\n")[i].contains("Fecha")
 						&& !regimenes.split("\n")[i].contains("Inicio")
-						&& !regimenes.split("\n")[i].contains("Fin")) {
+						&& !regimenes.split("\n")[i].contains("Fin")
+						&& !regimenes.split("\n")[i].contains("Página [")
+						) {
 					String row = regimenes.split("\n")[i];
 					String strRegimen = row.split(dataToolsModel.obtenVigePoliza(row).get(0))[0].replace("###", "").trim();					
 					RegimenFiscalPropsDto regimen = regimenFiscalService.get(strRegimen);
