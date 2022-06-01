@@ -10,6 +10,7 @@ import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
+import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
@@ -105,11 +106,11 @@ public class ImpresionService {
 	}
 
 	
-	public byte[] impresionFiscal(String folio) {
+	public byte[] impresionFiscal(ImpresionFiscalForm  impresionFiscalForm) {
 		try {
 			ImpresionFiscalPdf impresionFiscalPdf = new ImpresionFiscalPdf();
 					
-			return impresionFiscalPdf.buildPDF( folio);
+			return impresionFiscalPdf.buildPDF( impresionFiscalForm);
 			
 		} catch(ValidationServiceException e) {
 			throw e;

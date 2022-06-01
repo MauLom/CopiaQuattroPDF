@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
-import com.copsis.controllers.forms.Folio;
+import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -98,14 +98,14 @@ public class ImpresionePDFController {
 		}		  
 	}
 	@PostMapping(value = "constaciaFiscal")
-	public ResponseEntity<CopsisResponse> impresionFiscal ( @Valid @RequestBody Folio folio, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionFiscal ( @Valid @RequestBody ImpresionFiscalForm  impresionFiscalForm, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionFiscal(folio.getFolio())).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionFiscal(impresionFiscalForm)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
