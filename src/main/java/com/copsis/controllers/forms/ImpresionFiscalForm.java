@@ -16,5 +16,7 @@ public class ImpresionFiscalForm {
 	private	String apellidoM;
 	private	String cp;	
 	private	String tipo;
+	private	String razonSocial;	
+	private	String regimenDeCapital;
 	private List<ProductosModel> productos;
 }

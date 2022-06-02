@@ -14,6 +14,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -35,6 +38,7 @@ public class ImpresionFiscalPdf {
 	private final Color bgColor = new Color(255, 255, 255, 0);
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 	private float fullWidth = 542;
+	private float y = 0;
 	private float margin = 40;
 	private boolean acumula;
 	public byte[] buildPDF(ImpresionFiscalForm  impresionFiscalForm ) {
@@ -59,6 +63,7 @@ public class ImpresionFiscalPdf {
 					
 					BaseTable table;
 					Row<PDPage> baseRow;
+					
 					BaseTable table2;
 					Row<PDPage> baseRow2;
 					
@@ -85,70 +90,135 @@ public class ImpresionFiscalPdf {
 //					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 300, 140, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 35);
-					communsPdf.setCell(baseRow, 100, "¡Gracias!", green,true, "C", 25, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 100, "¡Gracias!", green,true, "C", 29, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 					table.setRemBordes(true);
 					table.draw();
 					yStart -=table.getHeaderAndDataHeight()+10;
 					
-					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 300, 140, document, page, false,true);
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 400, 100, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 100, "Tu número de folio es: ",gray2,true, "C", 12, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 100, "Tu número de folio es: ",gray2,true, "C", 17, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 100, impresionFiscalForm.getFolio(), black,true, "C", 12, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 100, impresionFiscalForm.getFolio(), black,true, "C", 17, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 					table.setRemBordes(true);
 					table.draw();
 					
 					yStart -=table.getHeaderAndDataHeight()+20;
+					
+					table2 = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, true,true);
+					
+					y =yStart;
+					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 100, "Datos de identificación del Contribuyente:",Color.white,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul);
-					baseRow = communsPdf.setRow(table, 25);
+					communsPdf.setCell(baseRow, 100, "Datos de identificación del Contribuyente:",Color.white,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul).setValign(VerticalAlignment.MIDDLE);;
+					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 30,"RFC", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					communsPdf.setCell(baseRow, 70,impresionFiscalForm.getRfc(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-				System.err.println(impresionFiscalForm.getTipo().toUpperCase());
+				
 					if(impresionFiscalForm.getTipo().toUpperCase().equals("MORAL")) {
-						baseRow = communsPdf.setRow(table, 25);
+						baseRow = communsPdf.setRow(table, 20);
 						communsPdf.setCell(baseRow, 30,"Razón Social", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getNombre(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						baseRow = communsPdf.setRow(table, 25);
-						communsPdf.setCell(baseRow, 30,"Regimen Capital", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getApellidoP(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						baseRow = communsPdf.setRow(table, 25);
+						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getRazonSocial(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						baseRow = communsPdf.setRow(table, 20);
+						communsPdf.setCell(baseRow, 30,"Régimen Capital", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getRegimenDeCapital(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						baseRow = communsPdf.setRow(table, 20);
 						communsPdf.setCell(baseRow, 30,"Código postal:", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getCp(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 			
 					}else {									
-					baseRow = communsPdf.setRow(table, 25);
+					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 30,"Nombre (s):", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					communsPdf.setCell(baseRow, 70,impresionFiscalForm.getNombre(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					baseRow = communsPdf.setRow(table, 25);
+					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 30,"Primer apellido:", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					communsPdf.setCell(baseRow, 70,impresionFiscalForm.getApellidoP(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					baseRow = communsPdf.setRow(table, 25);
+					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 30,"Segundo apellido:", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					communsPdf.setCell(baseRow, 70,impresionFiscalForm.getApellidoM(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					baseRow = communsPdf.setRow(table, 25);
+					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 30,"Código postal:", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					communsPdf.setCell(baseRow, 70,impresionFiscalForm.getCp(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 					}
-					table.draw();
-					if(impresionFiscalForm.getTipo().toUpperCase().equals("MORAL")) {
-						yStart -=table.getHeaderAndDataHeight();
-						table = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, true,true);
-						baseRow = communsPdf.setRow(table, 20);
-						communsPdf.setCell(baseRow, 100, "Regímenes:",Color.white,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul);
-						baseRow = communsPdf.setRow(table, 20);
-						communsPdf.setCell(baseRow, 30,"Régiminen", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 70,impresionFiscalForm.getCp(), black,false, "L", 12, communsPdf.setLineStyle(Color.white,gray,gray,gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);				
-						table.draw();
 					
+
+				
+					baseRow2= communsPdf.setRow(table2, (y -(yStart -=table.getHeaderAndDataHeight())));
+					communsPdf.setCell(baseRow2, 100,"", black,false, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+					table2.draw();
+					table.draw();
+					yStart -=(table.getHeaderAndDataHeight()-80);
+		
+					
+					JSONArray datosfinal =  new JSONArray();
+					if(impresionFiscalForm.getProductos().size() > 0) {
+						
+						
+						JSONObject iniciox = new JSONObject();
+						iniciox.put("nombre", "");
+						iniciox.put("regimenNombre", "Régimen Fiscal");
+						iniciox.put("claveNombre", "Clave de uso");
+						
+						datosfinal.put(iniciox);
 					}
+					
+				
+					
+				
+					for (int i = 0; i < impresionFiscalForm.getProductos().size(); i++) {
+						JSONObject inicio = new JSONObject();
+						inicio.put("nombre",impresionFiscalForm.getProductos().get(i).getNombre());
+						inicio.put("regimenNombre", impresionFiscalForm.getProductos().get(i).getRegimenNombre());
+						inicio.put("claveNombre", impresionFiscalForm.getProductos().get(i).getClaveNombre());
+						datosfinal.put(inicio);
+						
+					}
+					
+		
+					
+			
+					
+				int margin = (datosfinal.length() > 4  ? 10 :0);
+				int with = 20;
+			
+			
+									
+
+			
+				
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 530, (70 -margin), document, page, false,true);
+					baseRow = communsPdf.setRow(table, 20);
+					for (int i = 0; i < datosfinal.length(); i++) {		
+						 with = getwith(datosfinal, with, i);
+						communsPdf.setCell(baseRow, with,datosfinal.getJSONObject(i).getString("nombre") ,Color.black,false, "C", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul);
+					}
+					table.draw();
+					
+					yStart -=table.getHeaderAndDataHeight()+5;
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 530, (70 -margin), document, page, false,true);
+					baseRow = communsPdf.setRow(table, 20);
+					for (int i = 0; i <datosfinal.length(); i++) {	
+						 with = getwith(datosfinal, with, i);
+						communsPdf.setCell(baseRow, with,datosfinal.getJSONObject(i).getString("regimenNombre"),Color.black,false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul);
+					}
+					table.draw();
+					
+					yStart -=table.getHeaderAndDataHeight()+10;
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 530, (70 -margin), document, page, false,true);
+					baseRow = communsPdf.setRow(table, 20);
+					for (int i = 0; i < datosfinal.length(); i++) {	
+						 with = getwith(datosfinal, with, i);
+						communsPdf.setCell(baseRow, with,datosfinal.getJSONObject(i).getString("claveNombre") ,Color.black,false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul);
+					}
+					table.draw();
+					
+					
 				
 				
 
-					output = new ByteArrayOutputStream();				
-					document.save(output);
-				document.save(new File("/home/aalbanil/Documentos/axa.pdf"));
+				output = new ByteArrayOutputStream();				
+				document.save(output);
 				
 					return output.toByteArray();
 				}finally {
@@ -162,6 +232,23 @@ public class ImpresionFiscalPdf {
 					"Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 		}
 		
+	}
+
+	private int getwith(JSONArray datosfinal, int with, int i) {
+		if(i == 0) {
+			 with =10;
+		 }else {
+				if(datosfinal.length()  == 7) {
+					with = 90/6;
+				}
+				if(datosfinal.length()  == 4) {
+									
+					with=90/4;			}
+				if(datosfinal.length() < 4) {
+					with=20;
+				}
+		 }
+		return with;
 	}
 	
 	private void getMarcaAgua(PDDocument document, PDPage page) {
