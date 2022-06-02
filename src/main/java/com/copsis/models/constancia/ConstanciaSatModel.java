@@ -49,6 +49,16 @@ public class ConstanciaSatModel {
 			if(endIndex == -1) {
 				endIndex = contenido.indexOf(datosDeUbiacion);
 			}
+			
+			// Extracción regresa ### en lugar de espacios
+			if(beginIndex == -1 || endIndex == -1) {
+				beginIndex = contenido.indexOf(identificacionDelContribuyente.replace(" ", "###"));
+				endIndex = contenido.indexOf(datosDelDomicilioRegistrado.replace(" ", "###"));
+				if(endIndex == -1) {
+					endIndex = contenido.indexOf(datosDeUbiacion.replace(" ", "###"));
+				}
+			}			
+			
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			constancia.setRegimenDeCapital("NO APLICA");
@@ -121,6 +131,16 @@ public class ConstanciaSatModel {
 				beginIndex = contenido.indexOf(datosDeUbiacion);
 			}
 			endIndex = contenido.indexOf("Actividad Económica");
+			
+			// Extracción regresa ### en lugar de espacios
+			if(beginIndex == -1 || endIndex == -1) {
+				beginIndex = contenido.indexOf(datosDelDomicilioRegistrado.replace(" ", "###"));
+				if(beginIndex == -1) {
+					beginIndex = contenido.indexOf(datosDeUbiacion.replace(" ", "###"));
+				}
+				endIndex = contenido.indexOf("Actividad Económica".replace(" ", "###"));
+			}			
+			
 			newcontenido = new StringBuilder();
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
@@ -266,10 +286,16 @@ public class ConstanciaSatModel {
 				if(!regimenes.split("\n")[i].contains("Regímenes:") 
 						&& !regimenes.split("\n")[i].contains("Fecha")
 						&& !regimenes.split("\n")[i].contains("Inicio")
-						&& !regimenes.split("\n")[i].contains("Fin")) {
+						&& !regimenes.split("\n")[i].contains("Fin")
+						&& !regimenes.split("\n")[i].contains("Página [")
+						) {
 					String row = regimenes.split("\n")[i];
-					String strRegimen = row.split(dataToolsModel.obtenVigePoliza(row).get(0))[0].replace("###", "").trim();					
-					RegimenFiscalPropsDto regimen = regimenFiscalService.get(strRegimen);
+					String[] resultPattern = row.split("[0-9]{2,2}-[0-9]{2,2}-[0-9]{4,4}");
+					String searchTerm = "";
+					if(resultPattern.length > 0) {
+						searchTerm = resultPattern[0].replace("###", " ").trim();
+					}					
+					RegimenFiscalPropsDto regimen = regimenFiscalService.get(searchTerm);
 					//log.info("regimen: {}", regimen);	
 					if(regimen.getDescripcion() != null && !regimen.getDescripcion().equals("")) { 
 						RegimenFiscalPropsDto regimenDto = new RegimenFiscalPropsDto();
@@ -280,7 +306,11 @@ public class ConstanciaSatModel {
 				}				
 			}
 			
-			if(!regimenesList.isEmpty()) {
+			if(regimenesList.isEmpty()) {
+				sendWebhookMessage(pdfForm, "No se logro extraer informacion de los regímenes");
+				constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + "No se logro extraer informacion de los regímenes" + " | ");
+				return constancia;
+			} else {
 				constancia.setRegimenFiscal(regimenesList);
 			}
 			

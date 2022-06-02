@@ -28,6 +28,7 @@ public class SisnovaSaludModel {
 	}
 	
 	public EstructuraJsonModel procesar() {
+		StringBuilder newcontenidotxt = new StringBuilder();
 		 String newcontenido = "";
 		 boolean direccion = true;
 		 boolean calle = true;
@@ -149,6 +150,7 @@ public class SisnovaSaludModel {
             			.replace("las###12###Hrs.###del###día###", "").replace("::", ":").replace("Tope###Coaseguro","Tope Coaseguro");
             	        //El caracter unicode
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
+            
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
             			if(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim().split("-")[0].length() == 4) {
             				modelo.setVigenciaDe(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim());
@@ -233,6 +235,7 @@ public class SisnovaSaludModel {
                 		}
                  }else if(inicio == -1) {
                 	 inicio = contenido.indexOf("Prima ###EXTRA ###Prima ###Prima Neta ###GASTOS DE ");
+                 if(inicio >  -1) {
                 	 newcontenido = contenido.substring(inicio,fin).replace("### ###", "###").trim().replace("\r", "").replace("@@@", "").replaceAll("\\u00A0{2,}", " ");
                 	 String[] arrContenido = newcontenido.split("\n");
 
@@ -258,7 +261,35 @@ public class SisnovaSaludModel {
                 		 }
                 	 }
                  }
+                }
                  
+            }
+            
+            if(modelo.getPrimaneta() == BigDecimal.ZERO && modelo.getRecargo() == BigDecimal.ZERO && modelo.getDerecho() == BigDecimal.ZERO) {
+	           	 inicio = contenido.indexOf("prima###opcional");
+	             fin = contenido.indexOf("Moneda");	       
+	             newcontenidotxt.append(fn.extracted(inicio, fin, contenido).replace("### ###", "###"));
+	             for(int i =0; i < newcontenidotxt.toString().split("\n").length ; i++) {	
+                  
+                    if(newcontenidotxt.toString().split("\n")[i].length() > 5) {
+                    	 if(newcontenidotxt.toString().split("\n")[i].contains("prima###opcional") ) {
+                    		  
+                    			 List<String> valores = fn.obtenerListNumeros(newcontenidotxt.toString().split("\n")[i+1]);
+                    			 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    		 
+                         }
+                    	 if(newcontenidotxt.toString().split("\n")[i].split("###").length ==  8) {
+                    		
+                    		 List<String> valores = fn.obtenerListNumeros(newcontenidotxt.toString().split("\n")[i]);
+                    		  modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+             				 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+             				 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+                    		  System.out.println(valores);
+                    	 }
+                    	 
+                    }
+                   
+	             }
             }
 
             if(modelo.getFormaPago() == 0) {
