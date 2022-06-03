@@ -199,7 +199,41 @@ public class Sio4CommunsPdf {
 	}
 
 
- 
+    public Cell<PDPage> setCell(Row<PDPage> row, int width, String content, Color black, boolean bold, String aligconte,
+			int fontsize2, List<LineStyle> line, String aligconte2, List<Float> padding,Color bgColor2,Boolean colorfon) {
+		  Cell<PDPage> cell = row.createCell(width, content);
+	        if (bold) {
+	            cell.setFont(PDType1Font.HELVETICA_BOLD);
+	        } else {
+	            cell.setFont(PDType1Font.HELVETICA);
+	        }
+	        
+	        cell.setLeftBorderStyle(line.get(0));
+	        cell.setRightBorderStyle(line.get(1));
+	        cell.setBottomBorderStyle(line.get(2));
+	        cell.setTopBorderStyle(line.get(3));
+	        
+	        cell.setLeftPadding(padding.get(0));
+	        cell.setRightPadding(padding.get(1));
+	        cell.setTopPadding(padding.get(2));
+	        cell.setBottomPadding(padding.get(3));
+	
+	        
+	        cell.setTextColor(black);
+	        if(colorfon) {
+	        	
+	        	 cell.setFillColor(bgColor2);
+	        }else {
+	       	 //cell.setFillColor(Color.ORANGE);
+	        }
+	       
+	        cell.setFontSize(fontsize2);
+	     
+	       this.setAligment(cell, aligconte);
+	    
+	        return cell;
+				
+	} 
 
 
  
