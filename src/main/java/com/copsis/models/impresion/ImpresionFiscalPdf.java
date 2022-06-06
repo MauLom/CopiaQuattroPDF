@@ -255,7 +255,7 @@ public class ImpresionFiscalPdf {
 	private void getMarcaAgua(PDDocument document, PDPage page) {
 		try (PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND,true,true )) {
 
-			URL marcaAgua = new URL("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2206/Polizas/2206/2Ow0kGUtV0qNONDhCJi5GW4nZgNJYWys7HYKAs1WmhzvS8SQvnDIdIVuxQg85/bg_carta.png");
+			URL marcaAgua = new URL("https://storage.googleapis.com/biibiic-axa/bg_carta_02.png");
 			BufferedImage imgMar = ImageIO.read(marcaAgua);
 			PDImageXObject pdImage2 = LosslessFactory.createFromImage(document, imgMar);
 			
