@@ -7,6 +7,7 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraUbicacionesModel;
 
 public class PotosiDiversosCModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -95,6 +96,53 @@ public class PotosiDiversosCModel {
 				}
 			}
 			modelo.setCoberturas(coberturas);
+			
+			
+			
+			inicio = contenido.indexOf("DOMICILIO DE RIESGO");
+			fin = contenido.indexOf("Clave del Agente");
+			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
+			newcontenido = new StringBuilder();
+			newcontenido.append(fn.extracted(inicio, fin, contenido));
+			modelo.setUbicaciones(ubicaciones);
+			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+			for(int i =0; i < newcontenido.toString().split("\n").length ; i++) {
+			
+				 
+				 if(newcontenido.toString().split("\n")[i].contains("DIRECCIÓN:") && newcontenido.toString().split("\n")[i].contains("CP")) {
+					ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("DIRECCIÓN:")[1].split("CP")[0]);
+				 }
+				 
+				 if(newcontenido.toString().split("\n")[i].contains("Material de los Muros") 
+						 &&   newcontenido.toString().split("\n")[i].contains("Material de los Techos:")
+						 &&   newcontenido.toString().split("\n")[i].contains("Número de Niveles")
+						 &&   newcontenido.toString().split("\n")[i].contains("Zona TEV")
+						 
+						 ) {
+				  ubicacion.setMuros(fn.material(newcontenido.toString().split("\n")[i].split("Material de los Muros")[1].split("Material de los Techos:")[0])); 
+				  ubicacion.setTechos(fn.material(newcontenido.toString().split("\n")[i].split("Material de los Techos")[1].split("Número de Niveles")[0]));				
+				  ubicacion.setNiveles(fn.castInteger(newcontenido.toString().split("\n")[i].split("Número de Niveles")[1].split("Zona TEV")[0].replace("###", "").trim()));
+				 }
+			}
+			
+			ubicaciones.add(ubicacion);
+			modelo.setUbicaciones(ubicaciones);
+			
+			
+		
+			inicio = contenido.indexOf("Clave del Agente");
+			fin = contenido.indexOf("Registro:");
+		
+			newcontenido = new StringBuilder();
+			newcontenido.append(fn.extracted(inicio, fin, contenido));
+			for(int i =0; i < newcontenido.toString().split("\n").length ; i++) {
+				if(newcontenido.toString().split("\n")[i].contains("Clave del Agente")) {
+					modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);
+				}
+			}
+	
+			
 			
 			return modelo;
 		} catch (Exception ex) {
