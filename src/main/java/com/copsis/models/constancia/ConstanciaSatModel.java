@@ -131,6 +131,9 @@ public class ConstanciaSatModel {
 				beginIndex = contenido.indexOf(datosDeUbiacion);
 			}
 			endIndex = contenido.indexOf("Actividad Económica");
+			if(endIndex == -1) {
+				endIndex = contenido.indexOf("Regímenes:");
+			}
 			
 			// Extracción regresa ### en lugar de espacios
 			if(beginIndex == -1 || endIndex == -1) {
@@ -139,6 +142,9 @@ public class ConstanciaSatModel {
 					beginIndex = contenido.indexOf(datosDeUbiacion.replace(" ", "###"));
 				}
 				endIndex = contenido.indexOf("Actividad Económica".replace(" ", "###"));
+				if(endIndex == -1) {
+					endIndex = contenido.indexOf("Regímenes:");
+				}
 			}			
 			
 			newcontenido = new StringBuilder();
@@ -236,10 +242,13 @@ public class ConstanciaSatModel {
 					StringBuilder estadoContribuyente = new StringBuilder();
 					estadoContribuyente.append(estadoContribuyenteArr.length > 1 ? estadoContribuyenteArr[1].replace("###", " ").trim() : "");
 					// validar si la siguiente línea no es actividades económicas, entonces se considerará parte del estado del contribuyente
-					if(!newcontenido.toString().split("\n")[i+1].contains("Actividades") && !newcontenido.toString().split("\n")[i+1].contains("Económicas")) {
-						estadoContribuyente.append(" ");
-						estadoContribuyente.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
-					}
+					if( (newcontenido.toString().split("\n").length - 1) > i ) {
+						if(!newcontenido.toString().split("\n")[i+1].contains("Actividades") && !newcontenido.toString().split("\n")[i+1].contains("Económicas")
+								&& !newcontenido.toString().split("\n")[i+1].contains("Regímenes:")) {
+							estadoContribuyente.append(" ");
+							estadoContribuyente.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
+						}
+					}					
 					constancia.setEstadoContribuyente(estadoContribuyente.toString());
 				}
 				//log.info("row: {}", newcontenido.toString().split("\n")[i]);
