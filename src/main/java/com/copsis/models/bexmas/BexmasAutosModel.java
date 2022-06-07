@@ -106,8 +106,8 @@ public class BexmasAutosModel {
 					}
 					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains("12 Hrs.") && fn.obtenVigePoliza(newcont.toString().split("\n")[i]).size() ==2) {
 					
-						modelo.setVigenciaDe(fn.obtenVigePoliza(newcont.toString().split("\n")[i]).get(0));
-						modelo.setVigenciaA(fn.obtenVigePoliza(newcont.toString().split("\n")[i]).get(1));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcont.toString().split("\n")[i]).get(0)));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcont.toString().split("\n")[i]).get(1)));
 						
 						if (modelo.getVigenciaDe().length() > 0) {
 							modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -133,9 +133,7 @@ public class BexmasAutosModel {
 							modelo.setClave(newcont.toString().split("\n")[i].split("Marca:")[1].split("Zona")[0].trim()
 									.replace("###", "").split(" ")[0]);
 						}
-
 					}
-
 					if (newcont.toString().split("\n")[i].contains("Descripción:")) {
 						modelo.setDescripcion(
 								newcont.toString().split("\n")[i].split("Descripción:")[1].replace("###", "").trim());
@@ -227,13 +225,13 @@ public class BexmasAutosModel {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if (!newcont.toString().split("\n")[i].contains("COBERTURAS")
 							&& !newcont.toString().split("\n")[i].contains("Responsabilidad")
 							&& !newcont.toString().split("\n")[i].contains("Observaciones")
 							&& !newcont.toString().split("\n")[i].contains("Coberturas Amparada")) {
-
 						switch (newcont.toString().split("\n")[i].split("###").length) {
 						case 2:
 							cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
@@ -246,7 +244,8 @@ public class BexmasAutosModel {
 							if(newcont.toString().split("\n")[i].split("###")[2].contains("%")) {
 								cobertura.setDeducible(newcont.toString().split("\n")[i].split("###")[2]);
 							}			
-							coberturas.add(cobertura);										
+							coberturas.add(cobertura);
+							
 							break;						
 						default:
 							break;
