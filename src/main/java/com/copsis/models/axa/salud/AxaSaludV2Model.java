@@ -544,7 +544,10 @@ public class AxaSaludV2Model {
 						.replace("######", "###").replace("###1 ###0 % ", "###10 %")
 						.replace("M ###aternidad", "Maternidad")
 						.replace("P ###reexistencias","Preexistencias")
+						.replace("M ###edicamentos fuera del hospital Básica", "Medicamentos fuera del hospital Básica")
+						.replace("Complicaciones de GMM no cubiertos De acuerdo a Condiciones Generales", "Complicaciones de GMM no cubiertos###De acuerdo a Condiciones Generales")
 						.replace("### ###","###");
+				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if (!newcontenido.split("\n")[i].contains("Coberturas-Servicios")
