@@ -25,6 +25,7 @@ public class MapfreSaludBModel {
 		this.contenido = contenido;
 	}
 	public EstructuraJsonModel procesar() {
+		StringBuilder newcontenidotxt = new StringBuilder();
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Póliza Número :", "Póliza Número:")
 				.replace("las 12:00 hrs. de:", "")
@@ -215,6 +216,8 @@ public class MapfreSaludBModel {
 				modelo.setCoberturas(coberturas);
 			}
 		
+			
+		
 			if(modelo.getCoberturas().isEmpty() && contenido.contains("COBERTURAS SUMA ASEGURADA") && contenido.contains("cobertura Segurviaje Suma Asegurada")) {
 				StringBuilder contenidoCoberturas = new StringBuilder();
 				contenidoCoberturas.append(contenido.split("COBERTURAS SUMA ASEGURADA")[1].split("PLAN")[0].replace("@@@", ""));
@@ -252,14 +255,37 @@ public class MapfreSaludBModel {
 				}
 				
 			}
+				//System.out.println("COBERTURAS==> " +modelo.getCoberturas().size() +"\n" + contenido);
+			if(modelo.getCoberturas().isEmpty() && contenido.contains("COBERTURAS SUMA ASEGURADA") && contenido.contains("PLAN:" )) {
+				
+				inicio = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
+				fin = contenido.indexOf("PLAN:");	
+				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+				newcontenidotxt = new StringBuilder();
+				newcontenidotxt.append( fn.extracted(inicio, fin, contenido).replace("MUERTE ACCIDENTAL TRANS.", " MUERTE ACCIDENTAL TRANS.###")
+				.replace("MUERTE ACCIDENTAL", "MUERTE ACCIDENTAL###")
+				.replace("MUERTE ACCIDENTAL### TRANS.### ", " MUERTE ACCIDENTAL TRANS.### ")
+				.replace("RESPONSABILIDAD CIVIL EN VIAJE", "RESPONSABILIDAD CIVIL EN VIAJE ###")
+				);
+				
+
+				for (int i = 0; i < newcontenidotxt.toString().split("\n").length; i++) {		
+				  EstructuraCoberturasModel cobertura =  new EstructuraCoberturasModel();
+				  if(newcontenidotxt.toString().split("\n")[i].split("###").length > 1) {					   
+						cobertura.setNombre(newcontenidotxt.toString().split("\n")[i].split("###")[0].trim());
+						cobertura.setSa(newcontenidotxt.toString().split("\n")[i].split("###")[1].trim());
+						coberturas.add(cobertura);
+				  }
+				}
+				modelo.setCoberturas(coberturas);
+				
+			}
+			
+		
 				
 				inicio = contenido.indexOf("LISTA DE ASEGURADOS:");
 				fin = contenido.indexOf("FECHAS DE ANTIGÜEDAD: ");	
 
-				
-			
-		
-				
 				if (inicio > -1 && fin > -1 && inicio < fin) {
 				       List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 					newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
