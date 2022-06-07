@@ -264,8 +264,8 @@ public class ConstanciaSatModel {
 
 			if(constancia.getTipoPersona().equals(personaFisica)) {
 				// validaciones persona física
-				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getApellidoM().equals("")) {
-					String publicErrorMessage = "No fué posible leer los datos: nombre(s), apellído paterno, apellído materno";
+				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getApellidoM().equals("") || constancia.getCp().equals("")) {
+					String publicErrorMessage = "No fué posible leer alguno de los datos: nombre(s), apellído paterno, apellído materno, Código postal";
 					sendWebhookMessage(pdfForm, publicErrorMessage);
 					constancia.setError(publicErrorMessage);
 					return constancia;
@@ -273,7 +273,7 @@ public class ConstanciaSatModel {
 			} else {
 				// validaciones persona moral
 				if(constancia.getRazonSocial().equals("") || constancia.getRegimenDeCapital().equals("") || constancia.getCp().equals("")) {
-					String publicErrorMessage = "No fué posible leer los datos: Razón Social, Régimen Capital, Código postal";
+					String publicErrorMessage = "No fué posible leer alguno de los datos: Razón Social, Régimen Capital, Código postal";
 					sendWebhookMessage(pdfForm, publicErrorMessage);
 					constancia.setError(publicErrorMessage);
 					return constancia;
