@@ -80,7 +80,8 @@ public class ConstanciaSatModel {
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("CURP:")) {
-					constancia.setCurp(newcontenido.toString().split("\n")[i].split("CURP:")[1].replace("###", "").trim());
+					String[] curpArr = newcontenido.toString().split("\n")[i].split("CURP:");
+					constancia.setCurp(curpArr.length > 1 ? curpArr[1].replace("###", "").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Nombre:") && nombre == false) {
@@ -97,10 +98,14 @@ public class ConstanciaSatModel {
 				
 				if(newcontenido.toString().split("\n")[i].contains("Primer") && newcontenido.toString().split("\n")[i].contains("Apellido:")) {
 					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", "").trim());
+				} else if(newcontenido.toString().split("\n")[i].contains("Apellido") && newcontenido.toString().split("\n")[i].contains("Paterno:")) {
+					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Paterno:")[1].replace("###", "").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Segundo") && newcontenido.toString().split("\n")[i].contains("Apellido:")) {
 					constancia.setApellidoM(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", "").trim());
+				} else if(newcontenido.toString().split("\n")[i].contains("Apellido") && newcontenido.toString().split("\n")[i].contains("Materno:")) {
+					constancia.setApellidoM(newcontenido.toString().split("\n")[i].split("Materno:")[1].replace("###", "").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Fecha") && newcontenido.toString().split("\n")[i].contains("operaciones:")) {
@@ -151,12 +156,17 @@ public class ConstanciaSatModel {
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				//log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
+				log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Código") && newcontenido.toString().split("\n")[i].contains("Postal:") &&
 						newcontenido.toString().split("\n")[i].contains("Tipo") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
 					constancia.setCp(newcontenido.toString().split("\n")[i].split("Postal:")[1].split("Tipo")[0].replace("###", "").trim());
 					String[] vialidadArr = newcontenido.toString().split("\n")[i].split("Vialidad:");
 					constancia.setTipoVialidad(vialidadArr.length > 1 ? vialidadArr[1].replace("###", " ").trim() : "");
+				}
+				
+				if(newcontenido.toString().split("\n")[i].contains("C.P:")) {
+					log.info("STEP0 {}", newcontenido.toString().split("\n")[i].split(".P:")[1]);
+					constancia.setCp(newcontenido.toString().split("\n")[i].split(".P:")[1].replace("###", "").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Número") && newcontenido.toString().split("\n")[i].contains("Exterior:") &&
