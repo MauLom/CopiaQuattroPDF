@@ -64,7 +64,7 @@ public class ConstanciaSatModel {
 			constancia.setRegimenDeCapital("NO APLICA");
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+				//log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("RFC:")) {
 					String rfc = newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim();
 					constancia.setRfc(rfc);					
@@ -97,26 +97,22 @@ public class ConstanciaSatModel {
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Primer") && newcontenido.toString().split("\n")[i].contains("Apellido:")) {
-					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", "").trim());
+					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", " ").trim());
 				} else if(newcontenido.toString().split("\n")[i].contains("Apellido") && newcontenido.toString().split("\n")[i].contains("Paterno:")) {
-					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Paterno:")[1].replace("###", "").trim());
+					constancia.setApellidoP(newcontenido.toString().split("\n")[i].split("Paterno:")[1].replace("###", " ").trim());
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Segundo") && newcontenido.toString().split("\n")[i].contains("Apellido:")) {
-					constancia.setApellidoM(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", "").trim());
+					String[] segundoApellidoArr = newcontenido.toString().split("\n")[i].split("Apellido:");
+					constancia.setApellidoM(segundoApellidoArr.length > 1 ? segundoApellidoArr[1].replace("###", " ").trim() : "");
 				} else if(newcontenido.toString().split("\n")[i].contains("Apellido") && newcontenido.toString().split("\n")[i].contains("Materno:")) {
-					constancia.setApellidoM(newcontenido.toString().split("\n")[i].split("Materno:")[1].replace("###", "").trim());
+					String[] apellidoMaternoArr = newcontenido.toString().split("\n")[i].split("Materno:");
+					constancia.setApellidoM(apellidoMaternoArr.length > 1 ? apellidoMaternoArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Fecha") && newcontenido.toString().split("\n")[i].contains("operaciones:")) {
 					constancia.setFechaOperaciones(newcontenido.toString().split("\n")[i].split("operaciones:")[1].replace("###", " ").trim());
 				}
-				
-				
-				if(newcontenido.toString().split("\n")[i].contains("Segundo") && newcontenido.toString().split("\n")[i].contains("Apellido:")) {
-					constancia.setApellidoM(newcontenido.toString().split("\n")[i].split("Apellido:")[1].replace("###", "").trim());
-				}
-				
 				
 				if(newcontenido.toString().split("\n")[i].contains("Estatus") && newcontenido.toString().split("\n")[i].contains("padrón:")) {
 					constancia.setStatusPadron(newcontenido.toString().split("\n")[i].split("padrón:")[1].replace("###", "").trim());
@@ -156,16 +152,13 @@ public class ConstanciaSatModel {
 			newcontenido.append( dataToolsModel.extracted(beginIndex, endIndex, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
+				//log.info("LINEA: {}", newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("Código") && newcontenido.toString().split("\n")[i].contains("Postal:") &&
 						newcontenido.toString().split("\n")[i].contains("Tipo") && newcontenido.toString().split("\n")[i].contains("Vialidad:")		) {
 					constancia.setCp(newcontenido.toString().split("\n")[i].split("Postal:")[1].split("Tipo")[0].replace("###", "").trim());
 					String[] vialidadArr = newcontenido.toString().split("\n")[i].split("Vialidad:");
 					constancia.setTipoVialidad(vialidadArr.length > 1 ? vialidadArr[1].replace("###", " ").trim() : "");
-				}
-				
-				if(newcontenido.toString().split("\n")[i].contains("C.P:")) {
-					log.info("STEP0 {}", newcontenido.toString().split("\n")[i].split(".P:")[1]);
+				} else if(newcontenido.toString().split("\n")[i].contains("C.P:")) {
 					constancia.setCp(newcontenido.toString().split("\n")[i].split(".P:")[1].replace("###", "").trim());
 				}
 				
@@ -274,8 +267,8 @@ public class ConstanciaSatModel {
 
 			if(constancia.getTipoPersona().equals(personaFisica)) {
 				// validaciones persona física
-				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getApellidoM().equals("") || constancia.getCp().equals("")) {
-					String publicErrorMessage = "No fué posible leer alguno de los datos: nombre(s), apellído paterno, apellído materno, Código postal";
+				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getCp().equals("")) {
+					String publicErrorMessage = "No fué posible leer alguno de los datos: nombre(s), apellído paterno, Código postal";
 					sendWebhookMessage(pdfForm, publicErrorMessage);
 					constancia.setError(publicErrorMessage);
 					return constancia;
