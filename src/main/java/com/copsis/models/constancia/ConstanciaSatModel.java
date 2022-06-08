@@ -135,6 +135,9 @@ public class ConstanciaSatModel {
 			if(endIndex == -1) {
 				endIndex = contenido.indexOf("Regímenes:");
 			}
+			if(endIndex == -1) {
+				endIndex = contenido.indexOf("Sus datos personales son incorporados y protegidos en los sistemas del SAT".replace(" ", "###"));
+			}
 			
 			// Extracción regresa ### en lugar de espacios
 			if(beginIndex == -1 || endIndex == -1) {
