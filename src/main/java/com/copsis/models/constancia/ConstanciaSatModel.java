@@ -292,13 +292,11 @@ public class ConstanciaSatModel {
 			List<RegimenFiscalPropsDto> regimenesList = new ArrayList<>();
 			
 			for (int i = 0; i < regimenes.split("\n").length; i++) {
-				if(!regimenes.split("\n")[i].contains("Regímenes:") 
-						&& !regimenes.split("\n")[i].contains("Fecha")
-						&& !regimenes.split("\n")[i].contains("Inicio")
-						&& !regimenes.split("\n")[i].contains("Fin")
-						&& !regimenes.split("\n")[i].contains("Página [")
-						) {
-					String row = regimenes.split("\n")[i];
+				String row = regimenes.split("\n")[i];
+				if(!row.contains("Regímenes:") 
+						&& ! (row.contains("Fecha Inicio") || row.contains("Fecha###Inicio"))						
+						&& !row.contains("Página [")
+						) {				
 					String[] resultPattern = row.split("[0-9]{2,2}-[0-9]{2,2}-[0-9]{4,4}");
 					String searchTerm = "";
 					if(resultPattern.length > 0) {
