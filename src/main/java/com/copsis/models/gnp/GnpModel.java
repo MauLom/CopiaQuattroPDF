@@ -58,13 +58,14 @@ public class GnpModel {
 				}
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
-		
+
+			 if (!contenido.contains("Póliza de Seguro de Daños") || !contenido.contains("Daños")) {
 				if(contenido.contains("Seguro de Vida")) {
 					modelo = new GnpVIdaModel2(fn.caratula(1, 5, stripper, doc)).procesar();	
 				}else {
 					modelo = new GnpVidaModel3(fn.caratula(1, 5, stripper, doc)).procesar();
 				}
-				
+			 }
 			} // termina el codigo de vida
 			else if (contenido.contains("Coberturas Amparadas") && contenido.contains("Ubicación de los bienes asegurados") || contenido.contains("Secciones Contratadas") && contenido.contains("Póliza de Seguro de Daños ")
 					|| contenido.contains("secciones contratadas") && contenido.contains("Daños")) {
@@ -97,6 +98,7 @@ public class GnpModel {
 			
 			return modelo;
 		} catch (Exception ex) {
+		
 			modelo.setError(
 					GnpModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

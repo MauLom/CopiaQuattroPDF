@@ -321,8 +321,17 @@ public class GnpDiversosModel {
 			// recargo
 			inicio = contenido.indexOf("Pago Fraccionado");
 			if (inicio > -1) {
-				modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(
-						fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim()))));
+
+		
+				String valor = fn.preparaPrimas(fn.gatos(contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0].trim())).replace("−", "-");
+				
+				if(valor.contains("-")) {
+					modelo.setRecargo(fn.castBigDecimal(  Double.parseDouble(valor ) ) );
+				}else {
+					modelo.setRecargo(fn.castBigDecimal( valor ) );	
+				}
+				
+				
 			}
 
 			// derecho
