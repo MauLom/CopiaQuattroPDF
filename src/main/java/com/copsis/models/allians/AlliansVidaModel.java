@@ -176,14 +176,10 @@ public class AlliansVidaModel {
 						 }
 					 }					 
 				 }							 
-			 
-			 
-			
+			 			 		
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
-					+ ex.getCause());
+		} catch (Exception ex) {	
+			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());
 			return modelo;
 		}
 		
