@@ -24,7 +24,8 @@ public class AlliansModel {
 		try {
 		
 			int op = fn.tipoPoliza(contenido);
-			if(contenido.contains("TEMPORAL 1 AÑO RENOV")){
+			
+			if(contenido.contains("TEMPORAL 1 AÑO RENOV") || contenido.contains("TEMPORAL 25")){
 				op =5;
 			}
 			
