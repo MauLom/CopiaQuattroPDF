@@ -140,11 +140,20 @@ public class AlliansVidaModel {
 					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("Principal", "###Principal"));
 					 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
 							EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-						 if(newcont.toString().split("\n")[i].contains("Beneficiarios")) {											
-							 beneficiario.setNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
-							 beneficiario.setParentesco(fn.parentesco(newcont.toString().split("\n")[i+1].split("###")[2].trim()));					
-							 beneficiario.setPorcentaje(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[3].replace("%", "").trim()));
-							 beneficiarios.add(beneficiario);
+						 if(newcont.toString().split("\n")[i].contains("Beneficiarios")) {					
+							 int sp = newcont.toString().split("\n")[i+1].split("###").length;
+							 if(sp == 3 ) {
+								 beneficiario.setNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
+								 beneficiario.setParentesco(fn.parentesco(newcont.toString().split("\n")[i+1].split("###")[1].trim()));										
+								 beneficiario.setPorcentaje(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[2].replace("%", "").trim()));
+								 beneficiarios.add(beneficiario);
+							 }else {
+								 beneficiario.setNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
+								 beneficiario.setParentesco(fn.parentesco(newcont.toString().split("\n")[i+1].split("###")[2].trim()));										
+								 beneficiario.setPorcentaje(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[3].replace("%", "").trim()));
+								 beneficiarios.add(beneficiario);
+							 }
+						
 						 }
 					 }
 					 modelo.setBeneficiarios(beneficiarios);
@@ -167,13 +176,10 @@ public class AlliansVidaModel {
 						 }
 					 }					 
 				 }							 
-			 
-			 
-			
+			 			 		
 			return modelo;
-		} catch (Exception ex) {
-			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
-					+ ex.getCause());
+		} catch (Exception ex) {	
+			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());
 			return modelo;
 		}
 		
