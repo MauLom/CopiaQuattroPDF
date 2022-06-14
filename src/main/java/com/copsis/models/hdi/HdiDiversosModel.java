@@ -42,16 +42,16 @@ public class HdiDiversosModel {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Inciso")[0].trim());
 				}
 				if (newcontenido.toString().split("\n")[i].contains("emisión:")) {
-					modelo.setFechaEmision(fn.formatDateMonthCadena((newcontenido.toString().split("\n")[i].split("emisión:")[1])));
+					modelo.setFechaEmision(fn.formatDateMonthCadena((newcontenido.toString().split("\n")[i].split("emisión:")[1].trim())));
 				}
 				if (newcontenido.toString().split("\n")[i].contains("Vigencia:")
 						&& newcontenido.toString().split("\n")[i].contains("Desde")
 						&& newcontenido.toString().split("\n")[i].contains("Hasta")
 						&& fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i]).size() == 2) {
 					modelo.setVigenciaDe(fn
-							.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i]).get(0)));
+							.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i]).get(0).trim()));
 					modelo.setVigenciaA(fn
-							.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i]).get(1)));
+							.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i]).get(1).trim()));
 				}
 				if (newcontenido.toString().split("\n")[i].contains("Pago:")
 						&& newcontenido.toString().split("\n")[i].contains("Moneda:")) {
