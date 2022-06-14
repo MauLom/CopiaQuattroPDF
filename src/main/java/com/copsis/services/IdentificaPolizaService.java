@@ -22,6 +22,7 @@ import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.chubb.ChubbModel;
+import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.hdi.HdiModel;
@@ -394,6 +395,14 @@ public class IdentificaPolizaService {
                  encontro = true;  
              }
                
+
+
+             //ENTRADA PARA General Salud
+           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx."))) {        	   
+               modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
+               encontro = true;  
+           }
+             
 
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
