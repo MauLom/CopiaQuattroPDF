@@ -66,7 +66,6 @@ public class IdentificaPolizaService {
 			String contenidoAux = "";		
 			boolean encontro = false;
 		
-	      
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
 				ChubbModel datosChubb = new ChubbModel();
@@ -253,9 +252,11 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
+		
 			// ENTRADA PARA GMX
-			if (!encontro && contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")) {
-				GmxModel datosGmx = new GmxModel(pdfStripper, pdDoc, contenido);
+
+			if (!encontro && contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")  || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") ) {			
+				GmxModel datosGmx = new GmxModel(pdfStripper, pdDoc, contenido);	
 				modelo = datosGmx.procesar();
 				encontro = true;
 			}

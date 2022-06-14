@@ -5,10 +5,8 @@ import com.copsis.models.EstructuraJsonModel;
 
 public class GmxDiversosModel {
 
-	// Clases
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	// Variables
 	private String contenido = "";
 
 	public GmxDiversosModel(String contenido) {

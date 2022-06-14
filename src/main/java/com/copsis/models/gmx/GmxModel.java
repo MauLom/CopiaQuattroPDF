@@ -24,7 +24,17 @@ public class GmxModel {
 	public EstructuraJsonModel procesar() {
 		try {
 
-			modelo = new GmxDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+			switch (fn.tipoPoliza(contenido)) {
+			case 1:
+				modelo = new GmxAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;
+			case 4:
+				modelo = new GmxDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;
+			default:
+				modelo = new GmxDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				break;
+			}
 
 			return modelo;
 		} catch (Exception ex) {
