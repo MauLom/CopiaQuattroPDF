@@ -19,6 +19,7 @@ public class HdiDiversosModel {
 	public EstructuraJsonModel procesar() {
 		int inicio = 0;
 		int fin = 0;
+		String tipopolizatxt="";
 		StringBuilder newcontenido = new StringBuilder();
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("pago", "Pago:").replace("agente",
 				"Agente:");
@@ -68,6 +69,10 @@ public class HdiDiversosModel {
 					modelo.setCveAgente(newcontenido.toString().split("\n")[i].split("Clave:")[1].split("Oficina")[0]
 							.replace("###", "").trim());
 				}
+				if (newcontenido.toString().split("\n")[i].contains("Tipo de Póliza:")){
+					tipopolizatxt = newcontenido.toString().split("\n")[i].split("Tipo de Póliza:")[1];
+				}
+				
 			}
 
 			inicio = contenido.indexOf("El asegurado es:");
@@ -110,15 +115,24 @@ public class HdiDiversosModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				if (newcontenido.toString().split("\n")[i].contains("Suma asegurada:")) {
-					cobertura.setSa(newcontenido.toString().split("\n")[i].split("Suma asegurada:")[1]);
+				if(tipopolizatxt.contains("RESPONSABILIDAD CIVIL PROFESIONAL AGENTES")) {
+					if (newcontenido.toString().split("\n")[i].contains("Suma asegurada:")) {
+						cobertura.setNombre("Responsabilidad Civil");
+						cobertura.setSa(newcontenido.toString().split("\n")[i].split("Suma asegurada:")[1]);
+					}
+					
+				}else {
+					if (newcontenido.toString().split("\n")[i].contains("Suma asegurada:")) {
+						cobertura.setSa(newcontenido.toString().split("\n")[i].split("Suma asegurada:")[1]);
+					}
+					if (newcontenido.toString().split("\n")[i].contains("deducibles:")) {
+						cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("deducibles:")[1]);
+					}
 				}
-				if (newcontenido.toString().split("\n")[i].contains("deducibles:")) {
-					cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("deducibles:")[1]);
-				}
+				
 			}
 
-			if (cobertura.getSa().length() > 0 && cobertura.getDeducible().length() > 0) {
+			if (cobertura.getSa().length()> 0) {
 				coberturas.add(cobertura);
 				modelo.setCoberturas(coberturas);
 			}
