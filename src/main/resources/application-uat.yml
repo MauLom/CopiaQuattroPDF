@@ -7,6 +7,10 @@ serviceUrl:
     baseURL: https://quattro-poliza-jazkd5ckiq-uc.a.run.app
   quattro-crm:
     baseURL: "https://quattro-crm-afa5eqprsa-uc.a.run.app"
+  quattro-utilerias-api:
+    baseURL: https://quattro-utilerias-api-jazkd5ckiq-uc.a.run.app
+  quattro-external-api:  
+    baseURL: https://quattro-external-api-jazkd5ckiq-uc.a.run.app
 userlogin:
   autorization:
     username: 5fw1y-q0477-r0gKx-8CcGh-vTJdh
