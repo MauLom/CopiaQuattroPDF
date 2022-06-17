@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.copsis.controllers.forms.PdfForm;
-import com.copsis.models.CardSettings;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.services.RegimenFiscalService;
-import com.copsis.services.WebhookService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,9 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ConstanciaSatModel {	
 	@Autowired
 	private RegimenFiscalService regimenFiscalService;
-	
-	@Autowired
-	private WebhookService webhookService;
 	
 	private DataToolsModel dataToolsModel = new DataToolsModel();
 
@@ -260,33 +255,6 @@ public class ConstanciaSatModel {
 				//log.info("row: {}", newcontenido.toString().split("\n")[i]);
 			}
 			
-			if(constancia.getRfc().equals("")) {
-				String publicErrorMessage = "No se encontraron datos en el rango de búsqueda";
-				String privateErrorMessage = String.format(publicErrorMessage.concat(": '%s' y '%s'"), identificacionDelContribuyente, datosDelDomicilioRegistrado);
-				sendWebhookMessage(pdfForm, privateErrorMessage);
-				constancia.setError(publicErrorMessage);
-				return constancia;
-			}
-
-			if(constancia.getTipoPersona().equals(personaFisica)) {
-				// validaciones persona física
-				if(constancia.getNombre().equals("") || constancia.getApellidoP().equals("") || constancia.getCp().equals("")) {
-					String publicErrorMessage = "No fué posible leer alguno de los datos: nombre(s), apellído paterno, Código postal";
-					sendWebhookMessage(pdfForm, publicErrorMessage);
-					constancia.setError(publicErrorMessage);
-					return constancia;
-				}
-			} else {
-				// validaciones persona moral
-				if(constancia.getRazonSocial().equals("") || constancia.getRegimenDeCapital().equals("") || constancia.getCp().equals("")) {
-					String publicErrorMessage = "No fué posible leer alguno de los datos: Razón Social, Régimen Capital, Código postal";
-					sendWebhookMessage(pdfForm, publicErrorMessage);
-					constancia.setError(publicErrorMessage);
-					return constancia;
-				}
-			}
-			
-			
 			beginIndex = contenido.indexOf("Regímenes:");
 			//endIndex = contenido.length();
 			endIndex = contenido.indexOf("Obligaciones:");
@@ -314,37 +282,15 @@ public class ConstanciaSatModel {
 						RegimenFiscalPropsDto regimenDto = new RegimenFiscalPropsDto();
 						regimenDto.setClave(regimen.getClave());
 						regimenDto.setDescripcion(regimen.getDescripcion());
-						regimenesList.add(regimenDto);						
+						regimenesList.add(regimenDto);
 					}
 				}				
 			}
-			
-			if(regimenesList.isEmpty()) {
-				sendWebhookMessage(pdfForm, "No se logro extraer informacion de los regímenes");
-				constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + "No se logro extraer informacion de los regímenes" + " | ");
-				return constancia;
-			} else {
-				constancia.setRegimenFiscal(regimenesList);
-			}
+			constancia.setRegimenFiscal(regimenesList);
 			
 			return constancia;
 		} catch (Exception ex) {
-			sendWebhookMessage(pdfForm, ex.getMessage());
-			constancia.setError(ConstanciaSatModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
-		}
-	}
-
-	private void sendWebhookMessage(PdfForm pdfForm, String errorMessage) {
-		try  {
-			CardSettings cardSettings = CardSettings.builder()
-					.fileUrl(pdfForm.getUrl())
-					.sourceClass(ConstanciaSatModel.class.getName())
-					.exceptionMessage(errorMessage)
-					.build();
-			webhookService.send(cardSettings);
-		} catch(Exception e) {
-			// do nothing
 		}
 	}
 }
