@@ -19,10 +19,13 @@ import com.copsis.clients.projections.QuattroUtileriasApiQrProjection;
 import com.copsis.controllers.forms.DatosSatForm;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.controllers.forms.PdfNegocioForm;
+import com.copsis.exceptions.GeneralServiceException;
+import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CardSettings;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.models.constancia.ConstanciaModel;
+import com.copsis.utils.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;
 	private final WebhookService webhookService;
-	private String errores = "";
 
 	@Autowired
 	private QuattroUtileriasApiClient quattroUtileriasApiClient;
@@ -117,9 +119,10 @@ public class IndentificaConstanciaService {
 					DatosSatForm datosSatForm = new DatosSatForm();
 					datosSatForm.setUrl(pdfNegocioForm.getUrl());
 					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
+					
+					// extrae url de QR que esta en la constancia
 					try {
-						// extrae url de QR que esta en la constancia
-						quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
 					} catch (Exception ex) {
 						throw ex;
 					}
@@ -135,26 +138,23 @@ public class IndentificaConstanciaService {
 						throw ex;
 					}
 					
-					//compara con el catalogo AXA
+					//compara con el catalogo AXA de regimenes
 					estructuraConstanciaSatModel = quattroExternalApiEstructuraFiscalesProjection.getResult();
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
 					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(), true); 
-					if (estructuraConstanciaSatModel.getError() != null) {
-						PdfForm pdfForm = new PdfForm();
-						pdfForm.setUrl(pdfNegocioForm.getUrl());
-						sendWebhookMessage(pdfForm, estructuraConstanciaSatModel.getError());
-					}
 					
 					// retornamos
-					return estructuraConstanciaSatModel;
+					//return estructuraConstanciaSatModel;
 				}
 
 			default:
 				break;
 			}
+			
 			return estructuraConstanciaSatModel;
+			
 		} catch (Exception ex) {
 			PdfForm pdfForm = new PdfForm();
 			pdfForm.setUrl(pdfNegocioForm.getUrl());
