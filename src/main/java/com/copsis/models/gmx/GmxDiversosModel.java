@@ -1,7 +1,13 @@
 package com.copsis.models.gmx;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class GmxDiversosModel {
 
@@ -17,6 +23,7 @@ public class GmxDiversosModel {
 		String newcontenido = "";
 		int inicio = 0;
 		int fin = 0;
+		int  fechavenci =0;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
 			// tipo
@@ -24,7 +31,6 @@ public class GmxDiversosModel {
 
 			// cia
 			modelo.setCia(17);
-
 
 			inicio = contenido.indexOf("POLIZA NUEVA");
 			fin = contenido.indexOf("Descripción de Bienes");
@@ -44,7 +50,7 @@ public class GmxDiversosModel {
 					}
 					
 					if (newcontenido.split("\n")[i].contains("Contratante") && modelo.getCteNombre().length() == 0) {
-						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante")[1].replace("###", " "));
+						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante")[1].replace("###", " ").trim());
 					}
 
 					if (newcontenido.split("\n")[i].contains("Domicilio") && newcontenido.split("\n")[i].contains("Fecha de Nacimiento")) {
@@ -61,6 +67,7 @@ public class GmxDiversosModel {
 					
 					}
 					
+					
 					if (newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("horas de la ")) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
 					}
@@ -70,7 +77,7 @@ public class GmxDiversosModel {
 		
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
 					}
-					
+		
 					if (newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].contains("horas de la ")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].split("horas")[0].replace("12:00 ", "").replace("###", "").trim().replace(" " , "-")));
 
@@ -81,8 +88,8 @@ public class GmxDiversosModel {
 
 					}
 					if (newcontenido.split("\n")[i].contains("Domicilio") && newcontenido.split("\n")[i].contains("Fecha de Nacimiento") && modelo.getCteDireccion().length() == 0 ) {
-						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio")[1].split("Fecha de Nacimiento")[0].replace("###", "").trim()
-								+"  " + newcontenido.split("\n")[i+1]	
+						modelo.setCteDireccion((newcontenido.split("\n")[i].split("Domicilio")[1].split("Fecha de Nacimiento")[0].replace("###", "").trim()
+								+"  " + newcontenido.split("\n")[i+1]).trim()	
 								);
 					}
 
@@ -92,6 +99,12 @@ public class GmxDiversosModel {
 						modelo.setAgente(newcontenido.split("\n")[i].split("Agente")[1].split("-")[1].replace("###", "").trim());
 					}
 
+					if (newcontenido.split("\n")[i].contains("Fecha Emisión") && newcontenido.split("\n")[i].contains("Vigencia") &&  newcontenido.split("\n")[i].contains("Días")){
+						 modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("###", "").trim().replace(" " , "-")));
+
+						 fechavenci =fn.castInteger(newcontenido.split("\n")[i].split("Vigencia")[1].split("Fecha Emisión ")[0].replace("###", "").replace("Días", "").trim());
+						}
+						
 
 					if (newcontenido.split("\n")[i].contains("Moneda") ) {
 						modelo.setMoneda(fn.buscaMonedaEnTexto((newcontenido.split("\n")[i]))); 
@@ -105,8 +118,13 @@ public class GmxDiversosModel {
 				}
 
 			}
-			
-			modelo.setFechaEmision(modelo.getVigenciaDe());
+			if(modelo.getFechaEmision().length() == 0) {
+				modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
+//			if(modelo.getVigenciaDe().length() >  0  && modelo.getVigenciaDe().length() >  0  ){
+//				modelo.setFechaVence(fn.calcfechavence(modelo.getVigenciaDe(), fechavenci));
+//			}
+//			
 
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("En cumplimiento ");
@@ -137,6 +155,58 @@ public class GmxDiversosModel {
 					}
 				}
 			}
+			
+		
+			if(modelo.getFormaPago() == 1 &&  fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) <30) {
+				List<EstructuraRecibosModel> recibos = new ArrayList<>();
+				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+				recibo.setReciboId("");
+				recibo.setSerie("1/1");
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+				recibo.setVigenciaA(modelo.getVigenciaA());				
+			    recibo.setVencimiento(modelo.getVigenciaDe());				
+				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
+				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+
+				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
+				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
+				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
+				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibos.add(recibo);
+				modelo.setRecibos(recibos);
+			}
+			
+			
+
+			
+			inicio = contenido.indexOf("Riesgos Cubiertos ");
+			fin = contenido.indexOf("Para Mercancías usada");
+			
+
+			if (inicio > 0 && fin > 0 && inicio < fin) {
+				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").replace("","").replace("", "").trim();
+				for (String x : newcontenido.split("\n")) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+				  if(x.length() > 4 && x.split("###").length > 1 && !x.contains("Riesgos Cubiertos")  && !x.contains("Riesgos Ordinarios")
+						  && !x.contains("Embarques terrestres") && !x.contains("Colisión o volcadura del")
+						  && !x.contains("puentes o hundimiento ")
+						  && !x.contains("tránsito terrestre")
+						  && !x.contains("ESPECIFICACIÓN")
+						  && !x.contains("Averías particulares")
+						  && !x.contains("Para mercancías nuevas")
+						  ) {
+					  cobertura.setNombre(x.replace("###", ""));
+					  coberturas.add(cobertura);
+					  System.out.println("----> " + x);
+				  }	
+				}
+				
+				modelo.setCoberturas(coberturas);
+			}
+			
 
 			return modelo;
 		} catch (Exception ex) {

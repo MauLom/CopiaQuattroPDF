@@ -1338,6 +1338,21 @@ public class DataToolsModel {
 
 		}
 		
+		public String calcfechavence(String fecha, int dias) {
+
+			try {
+				SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");		
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(formato.parse(fecha));
+				calendar.add(Calendar.DAY_OF_MONTH, dias);
+				return formato.format(calendar.getTime());
+			} catch (Exception e) {
+			  return e.getMessage();
+			}
+
+		}
+		
+		
 		public String sumar(Date fecha,int meses) {
 
 			Calendar calendar = Calendar.getInstance();
@@ -1346,6 +1361,25 @@ public class DataToolsModel {
 			
 			 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
 			return formato.format( calendar.getTime());
+		}
+		
+		public int diferenciaDias(String vigD,String vigA ) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			 
+			Date fechaInicial = null;
+			Date fechaFinal = null;
+			int dias=0;
+			try {
+				fechaInicial = dateFormat.parse(vigD);
+				fechaFinal=dateFormat.parse(vigA);
+				
+				dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000);
+				return dias;
+			} catch (ParseException e) {
+				return dias;
+
+			}
+
 		}
 		
 		
