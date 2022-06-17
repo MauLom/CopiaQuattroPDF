@@ -2,23 +2,28 @@ package com.copsis.services;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
 import com.copsis.clients.QuattroUtileriasApiClient;
+import com.copsis.clients.projections.QuattroExternalApiEstructuraFiscalesProjection;
+import com.copsis.clients.projections.QuattroUtileriasApiQrProjection;
 import com.copsis.controllers.forms.DatosSatForm;
-import com.copsis.controllers.forms.PdfNegocioForm;
 import com.copsis.controllers.forms.PdfForm;
+import com.copsis.controllers.forms.PdfNegocioForm;
 import com.copsis.models.CardSettings;
-import com.copsis.models.CopsisResponse;
 import com.copsis.models.EstructuraConstanciaSatModel;
+import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.models.constancia.ConstanciaModel;
-import com.copsis.models.constancia.ConstanciaSatModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +40,8 @@ public class IndentificaConstanciaService {
 	private QuattroUtileriasApiClient quattroUtileriasApiClient;
 	@Autowired
 	private QuattroExternalApiClient quattroExternalApiClient;
+	@Autowired
+	private RegimenFiscalService regimenFiscalService;
 
 	public EstructuraConstanciaSatModel indentificaConstancia(PdfForm pdfForm) throws IOException {
 
@@ -95,51 +102,53 @@ public class IndentificaConstanciaService {
 		}
 	}
 
-	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm) {
+	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm) throws Exception {
 		
 		EstructuraConstanciaSatModel estructuraConstanciaSatModel = pdfNegocioForm.getEstructuraConstanciaSatModel();
 		try {
-
 			switch (pdfNegocioForm.getTipoValidacion()) {
-			case 1: // Valida datos CFDI[Constancia Situacion Fiscal]
-				if (!validaciones(estructuraConstanciaSatModel).equals("")) {
-					// intentamos con convertir PDF a imagen JPG, leemos QR, leemos pagina del SAT,
-					// llenamos modelo y validamos información nuevamente
-					errores = "";
+			case 1: // Valida datos CFDI
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, false);
+				if (estructuraConstanciaSatModel.getError() != null) {
+					
+					// intentamos por leer pagina del SAT
+
 					//Llenamos Form
 					DatosSatForm datosSatForm = new DatosSatForm();
 					datosSatForm.setUrl(pdfNegocioForm.getUrl());
-					CopsisResponse copsisResponse;
+					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
 					try {
 						// extrae url de QR que esta en la constancia
-						copsisResponse = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+						quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
 					} catch (Exception ex) {
 						throw ex;
 					}
 					
 					//Llenamos Form con la nueva info[URL SAT]
-					datosSatForm.setUrl((String) copsisResponse.getResult());
-					CopsisResponse copsisResponseExternal;
-					
+					datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
+					QuattroExternalApiEstructuraFiscalesProjection quattroExternalApiEstructuraFiscalesProjection;
+
 					try {
 						// Va a formar estructura con datos de pagina
-						copsisResponseExternal = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
+						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);	
 					} catch (Exception ex) {
 						throw ex;
 					}
-					estructuraConstanciaSatModel = (EstructuraConstanciaSatModel) copsisResponseExternal.getResult();
+					
+					//compara con el catalogo AXA
+					estructuraConstanciaSatModel = quattroExternalApiEstructuraFiscalesProjection.getResult();
+					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
-					if (validaciones(estructuraConstanciaSatModel).equals("")) {
-						// retornamos
-						return estructuraConstanciaSatModel;
-					} else {
+					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(), true); 
+					if (estructuraConstanciaSatModel.getError() != null) {
 						PdfForm pdfForm = new PdfForm();
 						pdfForm.setUrl(pdfNegocioForm.getUrl());
-						estructuraConstanciaSatModel.setError(errores);
-						sendWebhookMessage(pdfForm, errores);
-						return estructuraConstanciaSatModel;
+						sendWebhookMessage(pdfForm, estructuraConstanciaSatModel.getError());
 					}
+					
+					// retornamos
+					return estructuraConstanciaSatModel;
 				}
 
 			default:
@@ -154,63 +163,76 @@ public class IndentificaConstanciaService {
 		}
 	}
 
-	private String validaciones(EstructuraConstanciaSatModel estructuraConstanciaSatModel) {
+	private EstructuraConstanciaSatModel validaciones(EstructuraConstanciaSatModel estructuraConstanciaSatModel, boolean webhookMessage) {
+		PdfForm pdfForm = new PdfForm();
 		try {
-			String respuesta = "";
-			if (estructuraConstanciaSatModel.getTipoPersona().equals("")) {
-				errores = "Tipo persona";
+			if(estructuraConstanciaSatModel.getRfc().equals("")) {
+				String publicErrorMessage = "No se encontraron datos en el rango de búsqueda";
+				estructuraConstanciaSatModel.setError(publicErrorMessage);
+				if(webhookMessage) {
+					String privateErrorMessage = String.format(publicErrorMessage.concat(": '%s' y '%s'"), "Identificación del Contribuyente", "Datos del domicilio registrado");
+					sendWebhookMessage(pdfForm, privateErrorMessage);	
+				}
+				return estructuraConstanciaSatModel;
+			}
+			
+			if(estructuraConstanciaSatModel.getTipoPersona().equals("Física")) {
+				// validaciones persona física
+				if(estructuraConstanciaSatModel.getNombre().equals("") || estructuraConstanciaSatModel.getApellidoP().equals("") || estructuraConstanciaSatModel.getCp().equals("")) {
+					String publicErrorMessage = "No fué posible leer alguno de los datos: nombre(s), apellído paterno, Código postal";
+					if(webhookMessage) {
+						sendWebhookMessage(pdfForm, publicErrorMessage);	
+					}
+					estructuraConstanciaSatModel.setError(publicErrorMessage);
+					return estructuraConstanciaSatModel;
+				}
 			} else {
-				if (estructuraConstanciaSatModel.getTipoPersona().equals("Física")) {
-					validacionPersonaFisica(estructuraConstanciaSatModel);
+				// validaciones persona moral
+				if(estructuraConstanciaSatModel.getRazonSocial().equals("") || estructuraConstanciaSatModel.getRegimenDeCapital().equals("") || estructuraConstanciaSatModel.getCp().equals("")) {
+					String publicErrorMessage = "No fué posible leer alguno de los datos: Razón Social, Régimen Capital, Código postal";
+					if(webhookMessage) {
+						sendWebhookMessage(pdfForm, publicErrorMessage);
+					}
+					estructuraConstanciaSatModel.setError(publicErrorMessage);
+					return estructuraConstanciaSatModel;
 				}
-
-				if (estructuraConstanciaSatModel.getTipoPersona().equals("Moral")) {
-					validacionPersonaMoral(estructuraConstanciaSatModel);
-				}
 			}
-			// datos adicionales
-			if (estructuraConstanciaSatModel.getCp().equals("")) {
-				capturaErrores("Código postal");
+			
+			if(estructuraConstanciaSatModel.getRegimenFiscal().isEmpty()) {
+				String errorRegimenes = "No se logro extraer informacion de los regímenes";
+				estructuraConstanciaSatModel.setError(errorRegimenes);
+				 if(webhookMessage) {
+					sendWebhookMessage(pdfForm, errorRegimenes); 
+				 }	
 			}
-			if (estructuraConstanciaSatModel.getRfc().equals("")) {
-				capturaErrores("Rfc");
+			
+			return estructuraConstanciaSatModel;
+		} catch (Exception ex) {
+			if(webhookMessage) {
+				sendWebhookMessage(pdfForm, ex.getMessage());	
 			}
-			if (!errores.equals("")) {
-				respuesta = "No fué posible leer alguno de los datos:".concat(errores);
-			}
-			return respuesta;
-		} catch (Exception e) {
-			throw e;
+			estructuraConstanciaSatModel.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+			return estructuraConstanciaSatModel;
 		}
 	}
-
-	private void validacionPersonaFisica(EstructuraConstanciaSatModel estructuraConstanciaSatModel) {
-		if (estructuraConstanciaSatModel.getNombre().equals("")) {
-			capturaErrores("nombre(s)");
-		}
-		if (estructuraConstanciaSatModel.getApellidoP().equals("")) {
-			capturaErrores("apellído paterno");
-		}
-	}
-
-	private void validacionPersonaMoral(EstructuraConstanciaSatModel estructuraConstanciaSatModel) {
+	
+	private List<RegimenFiscalPropsDto> regimenesAxa(List<RegimenFiscalPropsDto> listado){
+		List<RegimenFiscalPropsDto> regimenes = new ArrayList<>() ;
 		try {
-			if (estructuraConstanciaSatModel.getRazonSocial().equals("")) {
-				capturaErrores("Razón Social");
-			}
-			if (estructuraConstanciaSatModel.getRegimenDeCapital().equals("")) {
-				capturaErrores("Régimen Capital");
-			}
+			listado
+			.stream()
+			.forEach(itemRegimen ->{
+				RegimenFiscalPropsDto regimen = regimenFiscalService.get(itemRegimen.getDescripcion());
+				if(regimen.getDescripcion() != null && !regimen.getDescripcion().equals("")) { 
+					RegimenFiscalPropsDto regimenDto = new RegimenFiscalPropsDto();
+					regimenDto.setClave(regimen.getClave());
+					regimenDto.setDescripcion(regimen.getDescripcion());
+					regimenes.add(regimenDto);	
+				}
+			});
+			return regimenes;
 		} catch (Exception e) {
-			throw e;
-		}
-	}
-
-	private void capturaErrores(String error) {
-		if (errores.equals("")) {
-			errores.concat(error);
-		} else {
-			errores.concat(", ").concat(error);
+			return regimenes;
 		}
 	}
 }

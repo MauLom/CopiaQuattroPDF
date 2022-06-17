@@ -10,9 +10,9 @@ serviceUrl:
   quattro-crm:
     baseURL: "http://localhost:8093"
   quattro-utilerias-api:
-    baseURL: http://localhost:8088/utilerias
+    baseURL: http://localhost:8088
   quattro-external-api:  
-    baseURL: http://localhost:8085/external
+    baseURL: http://localhost:8085
 userlogin:
   autorization:
     username: 5fw1y-q0477-r0gKx-8CcGh-vTJdh
