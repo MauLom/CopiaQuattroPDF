@@ -200,7 +200,7 @@ public class GmxDiversosModel {
 						  ) {
 					  cobertura.setNombre(x.replace("###", ""));
 					  coberturas.add(cobertura);
-					  System.out.println("----> " + x);
+					  
 				  }	
 				}
 				
