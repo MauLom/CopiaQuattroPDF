@@ -112,12 +112,11 @@ public class IndentificaConstanciaService {
 					//Llenamos Form
 					DatosSatForm datosSatForm = new DatosSatForm();
 					datosSatForm.setUrl(pdfNegocioForm.getUrl());
-					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection = new QuattroUtileriasApiQrProjection();
+					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
 					
 					// extrae url de QR que esta en la constancia
 					try {
 					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
-					
 					} catch (Exception ex) {
 						log.error("quattroUtileriasApiClient.extraerUrl", ex.getMessage());
 						throw ex;
