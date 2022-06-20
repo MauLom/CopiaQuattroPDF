@@ -36,7 +36,9 @@ public class SuraModel {
 			if(tipo == 1 &&  contenido.contains("MEDIC ")) {
 				tipo =2;
 			}
-			
+			if(tipo == 2 && contenido.contains("Hogar Máster Total")) {
+				tipo =4;
+			}
 
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
@@ -58,7 +60,12 @@ public class SuraModel {
 			break;
 			
 			case 4://Diversos
-				modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
+				if( contenido.contains("Hogar Máster Total")) {
+					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				}else {
+					modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
+				}
+			
 				break;
 			default:
 				break;

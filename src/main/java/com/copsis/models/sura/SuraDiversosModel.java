@@ -50,14 +50,14 @@ public class SuraDiversosModel {
 				if (newcontenido.toString().split("\n")[i].contains("Forma de pago")
 						&& newcontenido.toString().split("\n")[i].contains("Fecha de emisión")) {
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
-					modelo.setFechaEmision(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 1]).get(0));
+					modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 1]).get(0)));
 				}
 
 				if (newcontenido.toString().split("\n")[i].contains("Vigencia desde")) {
-					modelo.setVigenciaDe(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0));
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
 				if (newcontenido.toString().split("\n")[i].contains("Hasta las")) {
-					modelo.setVigenciaA(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0));
+					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
 				if (newcontenido.toString().split("\n")[i].contains("R.F.C.")) {
 					modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].trim());
