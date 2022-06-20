@@ -208,7 +208,7 @@ public class IndentificaConstanciaService {
 				sendWebhookMessage(pdfForm, ex.getMessage());	
 			}
 			estructuraConstanciaSatModel.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-			
+			log.error("IndentificaConstanciaService.validaciones.{}", ex.getMessage());
 			return estructuraConstanciaSatModel;
 		}
 	}
