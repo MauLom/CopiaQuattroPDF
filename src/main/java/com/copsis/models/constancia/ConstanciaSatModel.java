@@ -106,7 +106,8 @@ public class ConstanciaSatModel {
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Fecha") && newcontenido.toString().split("\n")[i].contains("operaciones:")) {
-					constancia.setFechaOperaciones(newcontenido.toString().split("\n")[i].split("operaciones:")[1].replace("###", " ").trim());
+					String[] fechaOperacionesArr = newcontenido.toString().split("\n")[i].split("operaciones:");
+					constancia.setFechaOperaciones(fechaOperacionesArr.length > 1 ? fechaOperacionesArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Estatus") && newcontenido.toString().split("\n")[i].contains("padrón:")) {
@@ -267,7 +268,7 @@ public class ConstanciaSatModel {
 			
 			for (int i = 0; i < regimenes.split("\n").length; i++) {
 				String row = regimenes.split("\n")[i];
-				if(!row.contains("Regímenes:") 
+				if(!row.equals("") && !row.contains("Regímenes:") 
 						&& ! (row.contains("Fecha Inicio") || row.contains("Fecha###Inicio"))						
 						&& !row.contains("Página [")
 						) {				
