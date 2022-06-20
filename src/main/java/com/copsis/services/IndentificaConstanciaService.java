@@ -9,7 +9,6 @@ import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
@@ -19,14 +18,10 @@ import com.copsis.clients.projections.QuattroUtileriasApiQrProjection;
 import com.copsis.controllers.forms.DatosSatForm;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.controllers.forms.PdfNegocioForm;
-import com.copsis.exceptions.GeneralServiceException;
-import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CardSettings;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.models.constancia.ConstanciaModel;
-import com.copsis.utils.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -122,8 +117,7 @@ public class IndentificaConstanciaService {
 					// extrae url de QR que esta en la constancia
 					try {
 					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
-					} catch (ValidationServiceException ex) {
-						throw ex;
+					
 					} catch (Exception ex) {
 						log.error("quattroUtileriasApiClient.extraerUrl", ex.getMessage());
 						throw ex;
