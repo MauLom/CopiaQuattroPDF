@@ -118,7 +118,6 @@ public class IndentificaConstanciaService {
 					try {
 					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
 					} catch (Exception ex) {
-						log.error("quattroUtileriasApiClient.extraerUrl", ex.getMessage());
 						throw ex;
 					}
 					
@@ -130,7 +129,6 @@ public class IndentificaConstanciaService {
 						// Va a formar estructura con datos de pagina
 						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
 					} catch (Exception ex) {
-						log.error("quattroExternalApiClient.extraeDatosPaginaSat", ex.getMessage());
 						throw ex;
 					}
 					
@@ -153,8 +151,6 @@ public class IndentificaConstanciaService {
 			PdfForm pdfForm = new PdfForm();
 			pdfForm.setUrl(pdfNegocioForm.getUrl());
 			sendWebhookMessage(pdfForm, ex.getMessage());
-			
-			log.error("IndentificaConstanciaService.negocioValidaDatosFiscales.{}", ex.getMessage());
 			throw ex;
 		}
 	}
@@ -208,7 +204,6 @@ public class IndentificaConstanciaService {
 				sendWebhookMessage(pdfForm, ex.getMessage());	
 			}
 			estructuraConstanciaSatModel.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-			log.error("IndentificaConstanciaService.validaciones.{}", ex.getMessage());
 			return estructuraConstanciaSatModel;
 		}
 	}
@@ -229,7 +224,6 @@ public class IndentificaConstanciaService {
 			});
 			return regimenes;
 		} catch (Exception ex) {
-			log.error("IndentificaConstanciaService.regimenesAxa.{}", ex.getMessage());
 			return regimenes;
 		}
 	}
