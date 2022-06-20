@@ -112,18 +112,20 @@ public class IndentificaConstanciaService {
 			case 1: // Valida datos CFDI
 				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, false);
 				if (estructuraConstanciaSatModel.getError() != null) {
-					
 					// intentamos por leer pagina del SAT
 
 					//Llenamos Form
 					DatosSatForm datosSatForm = new DatosSatForm();
 					datosSatForm.setUrl(pdfNegocioForm.getUrl());
-					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
+					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection = new QuattroUtileriasApiQrProjection();
 					
 					// extrae url de QR que esta en la constancia
 					try {
 					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+					} catch (ValidationServiceException ex) {
+						throw ex;
 					} catch (Exception ex) {
+						log.error("quattroUtileriasApiClient.extraerUrl", ex.getMessage());
 						throw ex;
 					}
 					
@@ -133,8 +135,9 @@ public class IndentificaConstanciaService {
 
 					try {
 						// Va a formar estructura con datos de pagina
-						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);	
+						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
 					} catch (Exception ex) {
+						log.error("quattroExternalApiClient.extraeDatosPaginaSat", ex.getMessage());
 						throw ex;
 					}
 					
@@ -145,8 +148,6 @@ public class IndentificaConstanciaService {
 					// Valida estructura
 					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(), true); 
 					
-					// retornamos
-					//return estructuraConstanciaSatModel;
 				}
 
 			default:
@@ -159,6 +160,8 @@ public class IndentificaConstanciaService {
 			PdfForm pdfForm = new PdfForm();
 			pdfForm.setUrl(pdfNegocioForm.getUrl());
 			sendWebhookMessage(pdfForm, ex.getMessage());
+			
+			log.error("IndentificaConstanciaService.negocioValidaDatosFiscales.{}", ex.getMessage());
 			throw ex;
 		}
 	}
@@ -212,6 +215,7 @@ public class IndentificaConstanciaService {
 				sendWebhookMessage(pdfForm, ex.getMessage());	
 			}
 			estructuraConstanciaSatModel.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+			
 			return estructuraConstanciaSatModel;
 		}
 	}
@@ -231,7 +235,8 @@ public class IndentificaConstanciaService {
 				}
 			});
 			return regimenes;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			log.error("IndentificaConstanciaService.regimenesAxa.{}", ex.getMessage());
 			return regimenes;
 		}
 	}
