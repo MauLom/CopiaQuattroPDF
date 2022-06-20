@@ -9,7 +9,6 @@ import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
@@ -23,7 +22,6 @@ import com.copsis.models.CardSettings;
 import com.copsis.models.EstructuraConstanciaSatModel;
 import com.copsis.models.RegimenFiscalPropsDto;
 import com.copsis.models.constancia.ConstanciaModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;
 	private final WebhookService webhookService;
-	private String errores = "";
 
 	@Autowired
 	private QuattroUtileriasApiClient quattroUtileriasApiClient;
@@ -110,17 +107,18 @@ public class IndentificaConstanciaService {
 			case 1: // Valida datos CFDI
 				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, false);
 				if (estructuraConstanciaSatModel.getError() != null) {
-					
 					// intentamos por leer pagina del SAT
 
 					//Llenamos Form
 					DatosSatForm datosSatForm = new DatosSatForm();
 					datosSatForm.setUrl(pdfNegocioForm.getUrl());
 					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
+					
+					// extrae url de QR que esta en la constancia
 					try {
-						// extrae url de QR que esta en la constancia
-						quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
 					} catch (Exception ex) {
+						log.error("quattroUtileriasApiClient.extraerUrl", ex.getMessage());
 						throw ex;
 					}
 					
@@ -130,35 +128,33 @@ public class IndentificaConstanciaService {
 
 					try {
 						// Va a formar estructura con datos de pagina
-						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);	
+						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
 					} catch (Exception ex) {
+						log.error("quattroExternalApiClient.extraeDatosPaginaSat", ex.getMessage());
 						throw ex;
 					}
 					
-					//compara con el catalogo AXA
+					//compara con el catalogo AXA de regimenes
 					estructuraConstanciaSatModel = quattroExternalApiEstructuraFiscalesProjection.getResult();
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
 					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(), true); 
-					if (estructuraConstanciaSatModel.getError() != null) {
-						PdfForm pdfForm = new PdfForm();
-						pdfForm.setUrl(pdfNegocioForm.getUrl());
-						sendWebhookMessage(pdfForm, estructuraConstanciaSatModel.getError());
-					}
 					
-					// retornamos
-					return estructuraConstanciaSatModel;
 				}
 
 			default:
 				break;
 			}
+			
 			return estructuraConstanciaSatModel;
+			
 		} catch (Exception ex) {
 			PdfForm pdfForm = new PdfForm();
 			pdfForm.setUrl(pdfNegocioForm.getUrl());
 			sendWebhookMessage(pdfForm, ex.getMessage());
+			
+			log.error("IndentificaConstanciaService.negocioValidaDatosFiscales.{}", ex.getMessage());
 			throw ex;
 		}
 	}
@@ -212,6 +208,7 @@ public class IndentificaConstanciaService {
 				sendWebhookMessage(pdfForm, ex.getMessage());	
 			}
 			estructuraConstanciaSatModel.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+			log.error("IndentificaConstanciaService.validaciones.{}", ex.getMessage());
 			return estructuraConstanciaSatModel;
 		}
 	}
@@ -231,7 +228,8 @@ public class IndentificaConstanciaService {
 				}
 			});
 			return regimenes;
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			log.error("IndentificaConstanciaService.regimenesAxa.{}", ex.getMessage());
 			return regimenes;
 		}
 	}

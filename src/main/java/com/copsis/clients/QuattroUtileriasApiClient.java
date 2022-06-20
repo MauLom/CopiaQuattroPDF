@@ -20,14 +20,16 @@ public class QuattroUtileriasApiClient {
 
 	public QuattroUtileriasApiQrProjection getExtraeUrl(DatosSatForm datosSatForm) {
 		try {
+			
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders httpHeaders = new HttpHeaders();
 			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm,httpHeaders);			
 			String url = quattroUtileriasApiProxy.concat("/utilerias-api/lecturaQR");
 
 			return restTemplate.exchange(url, HttpMethod.POST, httpEntity, QuattroUtileriasApiQrProjection.class).getBody();
+			
 		} catch (Exception e) {
-			throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00002 + " | " + e.getMessage());
+			throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00002, e.getMessage());
 		}
 	}
 }

@@ -111,7 +111,7 @@ public class LectorPDFController   {
 		}catch(ValidationServiceException e) {
 			throw e;
 		}catch(Exception ex) {
-			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00003, ex.getMessage());
 		}
 	}
 }
