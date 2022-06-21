@@ -39,6 +39,8 @@ public class qualitasAutosModel {
 	
 		 StringBuilder datosvehiculo = new StringBuilder();
 		 
+			StringBuilder  newcontenidotxt = new StringBuilder();
+		 
 		
 	
 
@@ -901,6 +903,20 @@ public class qualitasAutosModel {
 
 			}
 			modelo.setRecibos(recibos);
+			
+
+			inicio = contenido.indexOf("MONEDA");
+			fin = contenido.indexOf("IMPORTE TOTAL");
+			
+			newcontenidotxt = new StringBuilder();
+			newcontenidotxt.append( fn.extracted(inicio, fin, contenido));
+			for (int i = 0; i < newcontenidotxt.toString().split("\n").length; i++) {
+				if(newcontenidotxt.toString().split("\n")[i].contains("DESCUENTOS")) {
+					modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(newcontenidotxt.toString().split("\n")[i].split("DESCUENTOS")[1].replace("###", ""))));		
+				}
+			}
+	
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
