@@ -904,7 +904,7 @@ public class qualitasAutosModel {
 			}
 			modelo.setRecibos(recibos);
 			
-		//	System.out.println(contenido);
+
 			inicio = contenido.indexOf("MONEDA");
 			fin = contenido.indexOf("IMPORTE TOTAL");
 			
