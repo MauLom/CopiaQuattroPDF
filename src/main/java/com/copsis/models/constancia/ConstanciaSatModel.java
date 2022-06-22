@@ -66,7 +66,8 @@ public class ConstanciaSatModel {
 					constancia.setTipoPersona(rfc.length() == 12 ? personaMoral : personaFisica);
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:")) {
+				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:") 
+						|| newcontenido.toString().split("\n")[i].contains("Denominación-Razón Social:")) {
 					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim());
 				}
 				
