@@ -66,7 +66,8 @@ public class ConstanciaSatModel {
 					constancia.setTipoPersona(rfc.length() == 12 ? personaMoral : personaFisica);
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:")) {
+				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:") 
+						|| newcontenido.toString().split("\n")[i].contains("Denominación-Razón Social:")) {
 					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim());
 				}
 				
@@ -106,7 +107,8 @@ public class ConstanciaSatModel {
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Fecha") && newcontenido.toString().split("\n")[i].contains("operaciones:")) {
-					constancia.setFechaOperaciones(newcontenido.toString().split("\n")[i].split("operaciones:")[1].replace("###", " ").trim());
+					String[] fechaOperacionesArr = newcontenido.toString().split("\n")[i].split("operaciones:");
+					constancia.setFechaOperaciones(fechaOperacionesArr.length > 1 ? fechaOperacionesArr[1].replace("###", " ").trim() : "");
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Estatus") && newcontenido.toString().split("\n")[i].contains("padrón:")) {
@@ -180,25 +182,27 @@ public class ConstanciaSatModel {
 					//constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
 					if(constancia.getLocalidad().length()  ==  0 && newcontenido.toString().split("\n")[i+1].length() >  0 ) {
 						StringBuilder municipio = new StringBuilder();
-						municipio.append(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+						String[] municipioArr = newcontenido.toString().split("\n")[i].split("Territorial:");
+						municipio.append(municipioArr.length > 1 ? municipioArr[1].replace("###", " ").trim() : "");
 						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio						
 						if(!newcontenido.toString().split("\n")[i + 1].contains("Entidad") && !newcontenido.toString().split("\n")[i + 1].contains("Federativa:") &&
 						!newcontenido.toString().split("\n")[i + 1].contains("Entre") && !newcontenido.toString().split("\n")[i + 1].contains("Calle:")) {
 							municipio.append(" ");
 							municipio.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
 						}
-                        constancia.setMunicipio(municipio.toString());                                                
+                        constancia.setMunicipio(municipio.toString().trim());                                                
                     }else {
                         //constancia.setMunicipio(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
                         StringBuilder municipio = new StringBuilder();
-						municipio.append(newcontenido.toString().split("\n")[i].split("Territorial:")[1].replace("###", " ").trim());
+                        String[] municipioArr = newcontenido.toString().split("\n")[i].split("Territorial:");
+						municipio.append(municipioArr.length > 1 ? municipioArr[1].replace("###", " ").trim() : "");
 						// validar que la siguiente línea no sea entidad federativa, entonces se considerará parte del municipio						
 						if(!newcontenido.toString().split("\n")[i + 1].contains("Entidad") && !newcontenido.toString().split("\n")[i + 1].contains("Federativa:") &&
 						!newcontenido.toString().split("\n")[i + 1].contains("Entre") && !newcontenido.toString().split("\n")[i + 1].contains("Calle:")) {
 							municipio.append(" ");
 							municipio.append(newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
 						}
-                        constancia.setMunicipio(municipio.toString());
+                        constancia.setMunicipio(municipio.toString().trim());
                     }
 				}
 				
@@ -267,7 +271,7 @@ public class ConstanciaSatModel {
 			
 			for (int i = 0; i < regimenes.split("\n").length; i++) {
 				String row = regimenes.split("\n")[i];
-				if(!row.contains("Regímenes:") 
+				if(!row.equals("") && !row.contains("Regímenes:") 
 						&& ! (row.contains("Fecha Inicio") || row.contains("Fecha###Inicio"))						
 						&& !row.contains("Página [")
 						) {				
