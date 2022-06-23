@@ -42,19 +42,33 @@ public class GnpDiversosCModelo {
 					}
 					if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+						if(modelo.getRfc().contains("Teléfono")) {
+							modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+						}
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
 					
 					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+						if(modelo.getRfc().contains("Teléfono")) {
+							modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+						}
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
 					
-							
+						
 					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P")[1].length() > 4 ) {
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 6).trim());
+					modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 6).trim());
+						if(modelo.getCp().contains("###")) {
+							modelo.setCp("");
+						}
+					
 					}
 					
+					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i+1].length() < 6 ) {
+					modelo.setCp(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
+					
+					}
 					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("del") ) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
 					
@@ -126,10 +140,15 @@ public class GnpDiversosCModelo {
 
 				inicio = contenido.indexOf("DESGLOSE###DE###COBERTURAS");
 				fin = contenido.indexOf("El###monto###de#");
+
 				
 				if(inicio == -1 && fin == -1) {
 					inicio = contenido.indexOf("SECCIONES###CONTRATADAS");
 					fin = contenido.indexOf("Este documento no acredita");
+				}
+				
+				if(fin == -1) {
+					fin = contenido.indexOf("Fecha convencional");
 				}
 
 				newcontenido = new StringBuilder();
@@ -164,7 +183,14 @@ public class GnpDiversosCModelo {
 							coberturas.add(cobertura);
 							break;
 						case 3:
-							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);							
+							if(newcontenido.toString().split("\n")[i].contains("%")) {
+								cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+								cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+								cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[2]);
+							}else {
+								cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);	
+							}
+														
 							coberturas.add(cobertura);
 							break;	
 						case 4:
@@ -184,12 +210,14 @@ public class GnpDiversosCModelo {
 				}
 				modelo.setCoberturas(coberturas);
 				inicio = contenido.indexOf("CARACTERÍSTICAS###DEL###RIESGO");
-				fin = contenido.indexOf("indemnización");				
+				fin = contenido.indexOf("indemnización");	
+
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+			
 					if(newcontenido.toString().split("\n")[i].contains("Giro")) {
 						ubicacion.setGiro(newcontenido.toString().split("\n")[i +1].replace("###", ""));
 					}
@@ -200,11 +228,22 @@ public class GnpDiversosCModelo {
 						ubicacion.setMuros(1);
 					}
 				}
-				ubicaciones.add(ubicacion);
-				modelo.setUbicaciones(ubicaciones);
+				if(newcontenido.length() > 0) {
+					ubicaciones.add(ubicacion);					
+					modelo.setUbicaciones(ubicaciones);					
+				}
+			
 				
-				ubicaciones.add(ubicacion);
-				modelo.setUbicaciones(ubicaciones);
+			
+				
+				inicio = contenido.indexOf("DESGLOSE###DE###COBERTURAS");
+				fin = contenido.indexOf("El###monto###de#");
+				
+				if(inicio == -1 && fin == -1) {
+					inicio = contenido.indexOf("SECCIONES###CONTRATADAS");
+					fin = contenido.indexOf("Este documento no acredita");
+				}
+
 	
 			 return modelo;
 		} catch (Exception e) {
