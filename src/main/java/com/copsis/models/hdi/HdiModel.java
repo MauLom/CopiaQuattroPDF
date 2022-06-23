@@ -27,7 +27,13 @@ public class HdiModel {
 			
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:
-				modelo = new HdiAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+			
+				if(contenido.contains("AUTOS TURISTAS")) {
+				    modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
+
+				}else {
+					modelo = new HdiAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+				}				
 				break;
 				
 			case 4:
