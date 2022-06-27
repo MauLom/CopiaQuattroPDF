@@ -114,8 +114,12 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
-						vigencias = fn.gatos(newcontenido.split("\n")[i + 1].replace("###", "").replace("D", "###")
-								.replace("M", "###").replace("A", "###"));
+						if(newcontenido.split("\n")[i + 1].length() > 50) {
+							vigencias = fn.gatos(newcontenido.split("\n")[i + 1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+						}else {
+							vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+						}
+						
 
 						int to = 0;
 						int sp = vigencias.split("###").length;
