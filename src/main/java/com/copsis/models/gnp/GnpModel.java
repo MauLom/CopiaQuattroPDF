@@ -95,6 +95,10 @@ public class GnpModel {
 			
 			}
 			
+			if(modelo.getTipo() == 0 && fn.caratula(1, 2, stripper, doc).contains("ESPECIFICACIÓN###DEL###GIRO")) {
+				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();
+			}
+			
 			
 			return modelo;
 		} catch (Exception ex) {
