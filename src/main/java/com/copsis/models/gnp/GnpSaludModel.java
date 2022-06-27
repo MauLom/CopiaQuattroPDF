@@ -534,6 +534,7 @@ public class GnpSaludModel {
 					}
 					if (A.contains(ConstantsValue.NACIONAL) || (A.contains(ConstantsValue.NACIONAL))) {
 						int n = A.split("###").length;
+			
 						if (n == 4) {
 							modelo.setSa(A.split("###")[1].trim());
 							modelo.setDeducible(A.split("###")[2].replace("\r", "").trim());
@@ -558,8 +559,8 @@ public class GnpSaludModel {
 							}
 						} else if (n == 10) {
 							modelo.setSa(A.split("###")[1].trim());
-							modelo.setDeducible(A.split("###")[3].replace("\r", "").trim());
-							modelo.setCoaseguro(A.split("###")[5].replace("\r", "").trim());
+							modelo.setDeducible((A.split("###")[3].trim().length() > 10 ? A.split("###")[1].trim() :  A.split("###")[4].replace("\r", "").trim()));													
+							modelo.setCoaseguro((A.split("###")[5].trim().length() > 10 ? A.split("###")[1].trim() :  A.split("###")[7].replace("\r", "").trim()));			
 						} else if (n == 7 || n == 9 || n == 8) {
 							modelo.setSa(A.split("###")[1].trim());
 							A = A.replace("###pesos", "pesos");

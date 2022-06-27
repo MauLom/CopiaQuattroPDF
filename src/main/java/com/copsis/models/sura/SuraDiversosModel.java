@@ -3,6 +3,7 @@ package com.copsis.models.sura;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -31,24 +32,34 @@ public class SuraDiversosModel {
 
 			inicio = contenido.indexOf("Seguro Múltiple Familiar");
 			fin = contenido.indexOf("Ubicación de los bienes asegurados");
+			if(inicio == -1) {
+				inicio = contenido.indexOf("Múltiple Empresarial Riesgos");
+			}
+		
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {             
 				if (newcontenido.toString().split("\n")[i].contains("Datos del asegurado")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
 				}
 				if (newcontenido.toString().split("\n")[i].contains("Moneda")) {
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i + 1]));
 				}
-				if (newcontenido.toString().split("\n")[i].contains("Póliza no.")) {
-					modelo.setPoliza(newcontenido.toString().split("\n")[i + 2]
-							.split("###")[newcontenido.toString().split("\n")[i + 2].split("###").length - 1]);
+				if (newcontenido.toString().split("\n")[i].contains("Póliza no.") && newcontenido.toString().split("\n")[i + 1].contains("C.P")) {
+					modelo.setPoliza(newcontenido.toString().split("\n")[i + 1].split("###")[newcontenido.toString().split("\n")[i + 1].split("###").length - 1]);
+					modelo.setCp(newcontenido.toString().split("\n")[i + 1].split("C.P.")[1].trim().substring(0, 5));
+				}				
+				if (modelo.getPoliza().length() == 0 && newcontenido.toString().split("\n")[i].contains("Póliza no.")) {
+					modelo.setPoliza(newcontenido.toString().split("\n")[i + 2].split("###")[newcontenido.toString().split("\n")[i + 2].split("###").length - 1]);
 					modelo.setCp(newcontenido.toString().split("\n")[i + 2].split("C.P.")[1].trim().substring(0, 5));
 				}
 
 				if (newcontenido.toString().split("\n")[i].contains("Forma de pago")
 						&& newcontenido.toString().split("\n")[i].contains("Fecha de emisión")) {
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
+					modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 1]).get(0)));
+				}
+				if(modelo.getFormaPago() == 0 && newcontenido.toString().split("\n")[i].contains("Forma de pago") &&  newcontenido.toString().split("\n")[i].contains("Expedición")) {
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
 					modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 1]).get(0)));
 				}
@@ -66,6 +77,10 @@ public class SuraDiversosModel {
 
 			inicio = contenido.indexOf("Ubicación de los bienes asegurados");
 			fin = contenido.indexOf("Secciones contratadas");
+			if(fin == -1 ) {
+				fin = contenido.indexOf("Coberturas contratadas");
+			}
+
 
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
@@ -73,6 +88,7 @@ public class SuraDiversosModel {
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+			
 				if (newcontenido.toString().split("\n")[i].contains("Ubicación de los bienes")) {
 					ubicacion.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
 				}
@@ -95,14 +111,21 @@ public class SuraDiversosModel {
 			
 			
 			inicio = contenido.indexOf("Suma asegurada");
+			if(inicio == -1 ) {
+				inicio = contenido.indexOf("Coberturas contratadas");
+			}
+			
 			fin = contenido.indexOf("Prima neta");
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if (!newcontenido.toString().split("\n")[i].contains("Suma asegurada")
 						&& !newcontenido.toString().split("\n")[i].contains("SECCIÓN")
-						&& !newcontenido.toString().split("\n")[i].contains("EXCLUIDA")) {
+						&& !newcontenido.toString().split("\n")[i].contains("excluida")
+						&& !newcontenido.toString().split("\n")[i].contains("asegurada")
+						) {
+	
 					switch (newcontenido.toString().split("\n")[i].split("###").length) {
 					case 2:
 						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
@@ -110,7 +133,11 @@ public class SuraDiversosModel {
 						coberturas.add(cobertura);						
 						break;
 					case 3:
-						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						if(newcontenido.toString().split("\n")[i].split("###")[0].length() < 5) {
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);	
+						}else {
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						}
 						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[2]);
 						coberturas.add(cobertura);
 						break;
@@ -128,15 +155,12 @@ public class SuraDiversosModel {
 			}
 			modelo.setCoberturas(coberturas);
 			
-			
-	
+		
 			inicio = contenido.indexOf("Prima neta");
 			fin = contenido.indexOf("Pág. 2");
 			newcontenido = new StringBuilder();
-			newcontenido.append(fn.extracted(inicio, fin, contenido));
-			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+			newcontenido.append(fn.extracted(inicio, fin, contenido));			
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
 				if(newcontenido.toString().split("\n")[i].contains("Prima neta")) {
 					modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(
 							newcontenido.toString().split("\n")[i+1].split("###")[0].trim())));
@@ -147,21 +171,19 @@ public class SuraDiversosModel {
 					modelo.setIva(fn.castBigDecimal(fn.cleanString(
 							newcontenido.toString().split("\n")[i+1].split("###")[4].trim())));							
 					modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[5].trim())));
-					
-				}
-				
+							newcontenido.toString().split("\n")[i+1].split("###")[5].trim())));					
+				}				
 			}
 			
 			
 			
 
-			inicio = contenido.indexOf("Agente:");
+			inicio = contenido.indexOf(ConstantsValue.AGENTE);			
 			fin = contenido.indexOf("En cumplimiento ");
+			
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
 				if(newcontenido.toString().split("\n")[i].contains("Agente:")){
 					modelo.setCveAgente(newcontenido.toString().split("\n")[i].split("Agente:")[1].trim().split(" ")[0]);
 					modelo.setAgente(newcontenido.toString().split("\n")[i].split(modelo.getCveAgente())[1].trim());

@@ -1207,6 +1207,15 @@ public class DataToolsModel {
 		}
 		return resultado;
 	}
+	public List<String> obtenerListNumeros2(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile("[0-9]+(\\.[0-9][0-9]?)?").matcher(cadena);
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
+	
 	
 	  public String formatDate(String formatear) {
 	        {

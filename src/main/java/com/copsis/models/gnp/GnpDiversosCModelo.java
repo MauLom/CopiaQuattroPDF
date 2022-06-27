@@ -47,7 +47,7 @@ public class GnpDiversosCModelo {
 						}
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
-					
+				
 					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 						if(modelo.getRfc().contains("Teléfono")) {
@@ -65,10 +65,17 @@ public class GnpDiversosCModelo {
 					
 					}
 					
+
 					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i+1].length() < 6 ) {
 					modelo.setCp(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
 					
 					}
+
+					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i+1].contains("Descripción") ) {
+						modelo.setCp(newcontenido.toString().split("\n")[i+1].split("Descripción")[0].replace("###", "").trim());
+					}
+					
+
 					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("del") ) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
 					

@@ -463,6 +463,10 @@ public class AxaAutosModel {
 							modelo.setFormaPago(fn.formaPago(dato.split("###")[1].replace("", "").trim()));
 						}
 					}
+					
+					if(modelo.getFormaPago() == 0) {
+						modelo.setFormaPago(fn.formaPagoSring(dato));
+					}
 				}
 			}
 

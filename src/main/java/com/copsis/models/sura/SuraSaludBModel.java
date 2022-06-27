@@ -33,6 +33,7 @@ public class SuraSaludBModel {
 		
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
+
 			if(inicio > -1 && fin > -1   && inicio  < fin ) {
 				newCont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
 				modelo.setFormaPago(fn.formaPagoSring(newCont.toString()));
@@ -121,9 +122,7 @@ public class SuraSaludBModel {
 			if(inicio > -1 && fin > -1   && inicio  < fin ) {
 				newCont = new StringBuilder();
 				newCont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
-				for (int i = 0; i < newCont.toString().split("\n").length; i++) {
-					
-					
+				for (int i = 0; i < newCont.toString().split("\n").length; i++) {								
 					if(!newCont.toString().split("\n")[i].contains("expedición") || newCont.toString().split("\n")[i].split("###").length == 6) {
 					    modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[0])));
                         modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newCont.toString().split("\n")[i ].split("###")[1])));

@@ -58,8 +58,12 @@ public class SegurosMtyVida {
 					if(newcontenido.toString().split("\n")[i].contains("MONEDA")) {
 						modelo.setMoneda( fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
 					}
-					if(newcontenido.toString().split("\n")[i].contains("C.P.") && +newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().length() == 5) {
+					if(newcontenido.toString().split("\n")[i].contains("C.P.") &&  newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().length() == 5) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim());
+					}
+					
+					if(modelo.getCp().length() == 0 && newcontenido.toString().split("\n")[i].contains("C.P.")  && newcontenido.toString().split("\n")[i].split("###").length == 5 ) {						
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("###")[1]);
 					}
 					if(newcontenido.toString().split("\n")[i].contains("RESIDENCIA")) {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("RESIDENCIA")[1].split("FECHA")[0].replace("###","").trim());
@@ -104,15 +108,28 @@ public class SegurosMtyVida {
 				modelo.setAsegurados(asegurados);
 				
 				
-
-				
 				inicio = contenido.indexOf("SUMA ASEGURADA");
 				fin = contenido.indexOf("MANCOMUNADO");
 				if(fin == -1) {
 					fin = contenido.indexOf("DESIGNACIÓN ###DE BENEFICIARIOS");
 				}
+		
+
 				newcontenido = new StringBuilder();
-				newcontenido.append(fn.extracted(inicio, fin, contenido).replace("NO FUMADOR ###C ###","NO FUMADOR C###"));
+				
+				
+				if( fin < inicio) {
+					String contenidoxt = contenido.split("BENEFICIOS ###ASEGURADA")[1];
+					fin = contenidoxt.indexOf("ASEGURADO");
+					if(fin  > -1) {
+						newcontenido.append(contenidoxt.substring(0, fin).replace("NO FUMADOR ###C ###","NO FUMADOR C###").replace("@@@", ""));	
+					}					
+				}
+				else {
+					newcontenido.append(fn.extracted(inicio, fin, contenido).replace("NO FUMADOR ###C ###","NO FUMADOR C###"));
+				}
+			
+		
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();	
 				  Double suma = 0.00;
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
