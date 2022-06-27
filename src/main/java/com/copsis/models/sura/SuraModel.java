@@ -25,20 +25,23 @@ public class SuraModel {
 	public EstructuraJsonModel procesar() {
 		try {
 		 
-			if(contenido.contains("RECORDATORIO DE PAGO")) {
-				contenido = fn.caratula(2, 3, stripper, doc);
-			}
+				if(contenido.contains("RECORDATORIO DE PAGO")) {
+					contenido = fn.caratula(2, 3, stripper, doc);
+				}
+				
+				int tipo = fn.tipoPoliza(contenido);
+				
 			
-			int tipo = fn.tipoPoliza(contenido);
 			
-		
-		
-			if(tipo == 1 &&  contenido.contains("MEDIC ")) {
-				tipo =2;
-			}
-			if(tipo == 2 && contenido.contains("Hogar Máster Total")) {
-				tipo =4;
-			}
+				if(tipo == 1 &&  contenido.contains("MEDIC ")) {
+					tipo =2;
+				}
+				if(tipo == 2 && contenido.contains("Hogar Máster Total")) {
+					tipo =4;
+				}
+				if(tipo == 2 && contenido.contains("Múltiple Empresarial Riesgos")) {
+					tipo =4;
+				}
 
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
@@ -62,7 +65,10 @@ public class SuraModel {
 			case 4://Diversos
 				if( contenido.contains("Hogar Máster Total")) {
 					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				}else {
+				}else 	if( contenido.contains("Múltiple Empresarial Riesgos")) {
+					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				}
+				else {
 					modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 				}
 			

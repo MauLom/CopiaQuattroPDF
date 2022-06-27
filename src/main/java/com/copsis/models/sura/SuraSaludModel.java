@@ -29,6 +29,7 @@ public class SuraSaludModel {
 
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
+	
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("12hrs. de", "").replace("|", "-");
