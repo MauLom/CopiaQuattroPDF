@@ -30,7 +30,7 @@ public class GmxModel {
 	          }
 			switch (fn.tipoPoliza(contenido) ==  0 ? fn.tipoPoliza(contenido) : tipo ) {
 			case 1:
-				modelo = new GmxAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				
 				break;
 			case 4:
 				modelo = new GmxDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();

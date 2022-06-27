@@ -14,8 +14,17 @@ public class GeneralModel {
 	private String contenido;
 	
 	public EstructuraJsonModel procesar(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
-		try {			
-			modelo = new GeneralSaludModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));			
+		try {	
+			System.out.println(fn.tipoPoliza(contenido));
+			 switch (fn.tipoPoliza(contenido)) {
+			 case 1:
+				 modelo = new GeneralAutosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				 break;
+			 case 2:
+				 modelo = new GeneralSaludModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				 break;
+			 }
+					
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(GeneralModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
