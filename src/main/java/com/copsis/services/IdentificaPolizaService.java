@@ -229,14 +229,11 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA SISNOVA
-			if (!encontro) {
-				contenido = rangoSimple(1, 3, pdfStripper, pdDoc);
-				if (contenido.contains("Servicios Integrales de Salud Nova")
-						|| contenido.contains("www.sisnova.com.mx")) {
+			if (!encontro &&  rangoSimple(1, 3, pdfStripper, pdDoc).contains("Servicios Integrales de Salud Nova")
+				&& rangoSimple(1, 3, pdfStripper, pdDoc).contains("www.sisnova.com.mx")) {			
 					SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSisnova.procesar();
 					encontro = true;
-				}
 			}
 
 			// ENTRADA PARA MULTIVA
@@ -256,7 +253,8 @@ public class IdentificaPolizaService {
 		
 			// ENTRADA PARA GMX
 
-			if (!encontro && contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")  || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") ) {			
+			if (!encontro && contenido.contains("Grupo Mexicano de Seguros") || contenido.contains("GMX SEGUROS")  
+					 ) {			
 				GmxModel datosGmx = new GmxModel(pdfStripper, pdDoc, contenido);	
 				modelo = datosGmx.procesar();
 				encontro = true;
@@ -375,7 +373,7 @@ public class IdentificaPolizaService {
                     encontro = true;
                }
                
-             
+//             
                //ENTRADA PARA PRUDENTIAL
                if(!encontro && contenido.contains("Prudential Seguros")) {
             	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
@@ -398,7 +396,7 @@ public class IdentificaPolizaService {
 
 
              //ENTRADA PARA General Salud
-           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx."))) {        	   
+           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx.")  || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") )) {        	   
                modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
