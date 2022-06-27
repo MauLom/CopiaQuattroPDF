@@ -126,7 +126,6 @@ public class GeneralAutosModel {
 					newcontenido = new StringBuilder();
 					newcontenido.append(fn.extracted(inicio, fin, contenido));	
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					System.out.println(newcontenido.toString().split("\n")[i]);
 						if(newcontenido.toString().split("\n")[i].contains("Fraccionado") && newcontenido.toString().split("\n")[i].contains("I.V.A.")) {
 							 List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
 							 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
