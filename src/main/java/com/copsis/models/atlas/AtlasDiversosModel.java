@@ -42,7 +42,7 @@ public class AtlasDiversosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza")) {
-						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
+						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", "").replace(":", "").trim());
 						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "")
 								.replace("-", "").replace(" ", ""));
 					}
@@ -121,18 +121,21 @@ public class AtlasDiversosModel {
 			 */
 			inicio = contenido.indexOf(ConstantsValue.SECCIONES);
 			fin = contenido.indexOf("Idaseg");
+	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin);
+				
 
-				for (String txt : newcontenido.split("\r\n")) {
+				for (String txt : newcontenido.split("\r\n")) {			
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					int sp = txt.split("###").length;
-					if (txt.contains(ConstantsValue.SECCIONES) && sp == 2) {
-						cobertura.setNombre(txt.split("###")[0].replace("@@@", ""));
-						cobertura.setSa(txt.split("###")[1]);
-						coberturas.add(cobertura);
-
+					if (!txt.contains(ConstantsValue.SECCIONES)) {	
+						if(sp ==2 || sp == 3) {
+							cobertura.setNombre(txt.split("###")[0].replace("@@@", ""));
+							cobertura.setSa(txt.split("###")[1]);
+							coberturas.add(cobertura);
+						}
 					}
 				}
 				modelo.setCoberturas(coberturas);
