@@ -69,6 +69,7 @@ public class AtlasDiversosModel {
 							&& newcontenido.split("\n")[i].contains("Orden:")) {
 
 						modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].replace("###", ""));
+						modelo.setPlan(newcontenido.split("\n")[i].split("Producto:")[1].split("Orden:")[0].replace("###", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("Moneda:")
 							&& newcontenido.split("\n")[i].contains("Prima Neta:")) {
