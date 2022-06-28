@@ -105,7 +105,10 @@ public class IndentificaConstanciaService {
 		try {
 			switch (pdfNegocioForm.getTipoValidacion()) {
 			case 1: // Valida datos CFDI
-				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, false);
+				PdfForm pdfForm = new PdfForm();
+				pdfForm.setUrl(pdfNegocioForm.getUrl());
+				
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, pdfForm, false);
 				if (estructuraConstanciaSatModel.getError() != null) {
 					// intentamos por leer pagina del SAT
 
@@ -137,7 +140,7 @@ public class IndentificaConstanciaService {
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
-					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(), true); 
+					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(),pdfForm, true); 
 					
 				}
 
@@ -155,8 +158,7 @@ public class IndentificaConstanciaService {
 		}
 	}
 
-	private EstructuraConstanciaSatModel validaciones(EstructuraConstanciaSatModel estructuraConstanciaSatModel, boolean webhookMessage) {
-		PdfForm pdfForm = new PdfForm();
+	private EstructuraConstanciaSatModel validaciones(EstructuraConstanciaSatModel estructuraConstanciaSatModel, PdfForm pdfForm, boolean webhookMessage) {
 		try {
 			if(estructuraConstanciaSatModel.getRfc().equals("")) {
 				String publicErrorMessage = "No se encontraron datos en el rango de búsqueda";
