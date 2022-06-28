@@ -97,7 +97,7 @@ public class SisnovaSaludModel {
 					if(newcontenido.split("\n")[i].contains("Calle:") && calle) {
 						resultado = newcontenido.split("\n")[i].split("Calle:")[1].split("###")[0];
 						calle = false;
-						modelo.setRfc(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].replace("\u00A0","").trim());
+						modelo.setRfc(newcontenido.split("\n")[i].split("###")[newcontenido.split("\n")[i].split("###").length-1].replace("\u00A0","").replace("-", "").trim());
 					}
 	                if(newcontenido.split("\n")[i].contains("Colonia:") && direccion) {
 	                	resultado = resultado.replaceAll("\\u0020", " ").replaceAll("\u00A0"," ");;
@@ -123,9 +123,14 @@ public class SisnovaSaludModel {
 						.replaceAll("### ###", "###").replaceAll("  +", "").replaceAll("\\u00A0{2,}", " ");
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-					if(newcontenido.split("\n")[i].split("-").length > 4) {	
-						asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());
+					if(newcontenido.split("\n")[i].split("-").length > 4) {							
+						if(newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ").length() <30) {
+							asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i-1].replace("###", "").replaceAll("\\u00A0", " ") +" "+ newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());
+						}else {
+							asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());	
+						}						
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].replace(" ", "").trim()));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[3].trim()));
 						asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
@@ -146,8 +151,11 @@ public class SisnovaSaludModel {
             if (inicio > -1 && fin > -1 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("\r", "").replaceAll("@@@", "").replaceAll("### ###", "###")
             		    .trim().replaceAll("\u00A0", " ")	.replaceAll(" +", "###").replaceAll("######", "###").replace("######", "###")
-            			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "").replace("Hasta", "Hasta:")
-            			.replace("las###12###Hrs.###del###día###", "").replace("::", ":").replace("Tope###Coaseguro","Tope Coaseguro");
+            			.replace("00:00", "").replace("hrs.", "").replace("#########", "###").replace("Desde", "Desde:").replace("las###12###Hrs###del###día", "")
+            			.replace("Hasta", "Hasta:").replace("las###12###Hrs.###del###día###", "").replace("::", ":").replace("Tope###Coaseguro","Tope Coaseguro")
+            			.replace("12:00 hrs.", "").replace("######", "###").replace("12:00###", "");
+            	
+     
             	        //El caracter unicode
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
             
@@ -283,8 +291,7 @@ public class SisnovaSaludModel {
                     		 List<String> valores = fn.obtenerListNumeros(newcontenidotxt.toString().split("\n")[i]);
                     		  modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(3))));
              				 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(4))));
-             				 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(5))));
-                    		  System.out.println(valores);
+             				 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(5))));                  
                     	 }
                     	 
                     }
