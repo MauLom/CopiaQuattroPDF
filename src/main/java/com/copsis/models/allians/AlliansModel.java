@@ -28,8 +28,7 @@ public class AlliansModel {
 			if(contenido.contains("TEMPORAL 1 AÑO RENOV") || contenido.contains("TEMPORAL 25")){
 				op =5;
 			}
-			
-			
+	
 			switch (op) {
 			case 2:
 				modelo = new AlliansSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
@@ -38,7 +37,13 @@ public class AlliansModel {
 				modelo = new AlliansVidaModel(fn.caratula(0, 2, stripper, doc)).procesar();
 				break;
 			case 4:
-				modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
+				
+				if(fn.caratula(0, 4, stripper, doc).contains("Datos del Contratante")) {
+					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 4, stripper, doc));
+				}else {
+					modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
+				}
+			
 				break;	
 			default:
 				break;
