@@ -10,6 +10,7 @@ import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
+import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -20,6 +21,7 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
+import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -111,6 +113,20 @@ public class ImpresionService {
 			ImpresionFiscalPdf impresionFiscalPdf = new ImpresionFiscalPdf();
 					
 			return impresionFiscalPdf.buildPDF( impresionFiscalForm);
+			
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+		
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+	
+	public byte[] impresionAxa(ImpresionAxaForm  impresionAxa) {
+		try {
+			ImpresionCredencialPdf credencial = new ImpresionCredencialPdf();
+					
+			return credencial.buildPDF( impresionAxa);
 			
 		} catch(ValidationServiceException e) {
 			throw e;
