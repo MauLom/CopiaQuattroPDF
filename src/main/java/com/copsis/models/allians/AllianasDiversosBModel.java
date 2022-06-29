@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraUbicacionesModel;
 
@@ -68,7 +69,20 @@ public class AllianasDiversosBModel {
 			modelo.setCteDireccion(direccion.toString());
 			
 			
-//			 System.out.println(contenido);
+	
+			//Coberturas
+			inicio = contenido.indexOf("Sumas Aseguradas y Sublímites");
+			fin = contenido.indexOf("Otros");
+			newcontenido = new StringBuilder();
+			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			System.out.println(newcontenido.toString());
+			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+			}
+			
+			
+
 			inicio = contenido.indexOf("Datos de la ubicación Asegurada");
 			fin = contenido.indexOf("Año Construcción");
 			newcontenido = new StringBuilder();
@@ -76,16 +90,46 @@ public class AllianasDiversosBModel {
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				System.out.println(newcontenido.toString().split("\n")[i]);
-				if(newcontenido.toString().split("\n")[i].contains("calle")) {
-				ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("calle")[1].replace("###", "").trim());	
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
+				if(newcontenido.toString().split("\n")[i].contains("Calle:")) {
+					ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("Calle:")[1].replace("###", "").trim());	
+				}				
+				if(newcontenido.toString().split("\n")[i].contains("Tipo Muros:") &&  newcontenido.toString().split("\n")[i].contains("Tipo Muros:")) {			
+					ubicacion.setTechos(fn.material(newcontenido.toString().split("\n")[i].split("Tipo Techo:")[1].replace("###", "")));					
+					ubicacion.setMuros(fn.material(newcontenido.toString().split("\n")[i].split("Muros:")[1].split("Tipo Techo:")[0].replace("###", "")));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Nivel del Suelo:")) {
+					if(newcontenido.toString().split("\n")[i].contains("5")) {
+						ubicacion.setNiveles(5);
+					}
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Tipo Muros:") &&  newcontenido.toString().split("\n")[i].contains("Tipo Muros:")) {
-					System.out.println("casasa==========>" +fn.material(newcontenido.toString().split("\n")[i].split("Muros:")[1].split("Tipo Techo:")[0].replace("###", "")));
-				}
 			}
+			
+			ubicaciones.add(ubicacion);
+			modelo.setUbicaciones(ubicaciones);
+			
+			
+			
+			
+			inicio = contenido.indexOf("Prima Neta");
+			fin = contenido.indexOf("En caso de que");
+			newcontenido = new StringBuilder();
+			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+				if(newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
+					 List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
+					  modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+		       		  modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+		       		  modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+		       		  modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));		       		  
+		       		  modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));   
+				}				
+			}
+			
+			System.out.println(newcontenido);
+			
+			
 		
 			return modelo;
 		} catch (Exception ex) {

@@ -39,7 +39,7 @@ public class AlliansModel {
 			case 4:
 				
 				if(fn.caratula(0, 4, stripper, doc).contains("Datos del Contratante")) {
-					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 4, stripper, doc));
+					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 7, stripper, doc));
 				}else {
 					modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
 				}
