@@ -21,6 +21,7 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
+import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.utils.ErrorCode;
 
@@ -124,9 +125,24 @@ public class ImpresionService {
 	
 	public byte[] impresionAxa(ImpresionAxaForm  impresionAxa) {
 		try {
-			ImpresionCredencialPdf credencial = new ImpresionCredencialPdf();
-					
-			return credencial.buildPDF( impresionAxa);
+			byte[] byteArrayPDF = null;
+			
+			
+			switch (impresionAxa.getTipoImpresion()) {
+			case 107 :
+				byteArrayPDF =  new ImpresionCredencialPdf().buildPDF(impresionAxa);
+				break;
+			case 108 :
+				byteArrayPDF =  new ImpresionCertificadoPdf().buildPDF(impresionAxa);
+				break;	
+
+			default:
+				break;
+			}
+		
+
+       return byteArrayPDF;
+			
 			
 		} catch(ValidationServiceException e) {
 			throw e;
