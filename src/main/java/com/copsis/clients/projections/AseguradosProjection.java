@@ -11,4 +11,9 @@ import lombok.Getter;
 public class AseguradosProjection {
 	private	String  nombre;
 	private	String  vigencia;
+	private String fechNacimiento;
+	private String fechAntigueda;
+	private String  parentesco;
+	private String edad;
+	
 }

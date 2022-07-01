@@ -18,6 +18,7 @@ public class CoberturaProjection {
 	private String deducible;
 	private String topeCoaseguro;
 	private String copago;
+	private String valExtranjero;
 	
 	
 	public CoberturaProjection() {

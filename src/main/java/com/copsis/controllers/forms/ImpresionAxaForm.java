@@ -35,6 +35,8 @@ public class ImpresionAxaForm {
 	private	String fecNacAseg;
 	private String edadAseg;
 	private	String fecAltAseg;
+	private	String fecInicioAseg;
+	private String cteDireccion;
 	
 	
 	
