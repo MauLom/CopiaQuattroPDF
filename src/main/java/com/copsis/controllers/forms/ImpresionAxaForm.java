@@ -36,7 +36,11 @@ public class ImpresionAxaForm {
 	private String edadAseg;
 	private	String fecAltAseg;
 	private	String fecInicioAseg;
-	private String cteDireccion;
+	private String cteDireccion;	
+	private String formaPago;
+	private String moneda;
+	private String endosoId;
+	private String dias;
 	
 	
 	

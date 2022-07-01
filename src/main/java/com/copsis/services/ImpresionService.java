@@ -23,6 +23,7 @@ import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
+import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -135,6 +136,10 @@ public class ImpresionService {
 			case 108 :
 				byteArrayPDF =  new ImpresionCertificadoPdf().buildPDF(impresionAxa);
 				break;	
+			case 109 :
+				byteArrayPDF =  new ImpresionEndosoPdf().buildPDF(impresionAxa);
+				break;	
+
 
 			default:
 				break;

@@ -208,8 +208,7 @@ public class ImpresionCertificadoPdf {
 	                    }
 					
 	                    output = new ByteArrayOutputStream();
-						document.save(output);
-						document.save(new File("/home/aalbanil/Documentos/AXA-SPRING-PF/certificado.pdf"));
+						document.save(output);			
 						return output.toByteArray();
 				} finally {
 					document.close();
