@@ -41,7 +41,6 @@ public class ImpresionAxaForm {
 	private String moneda;
 	private String endosoId;
 	private String dias;
-	
-	
-	
+	private int tipoEndoso;
+    private String txtMovimiento;
 }
