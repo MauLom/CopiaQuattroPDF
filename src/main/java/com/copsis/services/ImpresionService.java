@@ -22,6 +22,7 @@ import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
+import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.utils.ErrorCode;
@@ -139,7 +140,9 @@ public class ImpresionService {
 			case 109 :
 				byteArrayPDF =  new ImpresionEndosoPdf().buildPDF(impresionAxa);
 				break;	
-
+			case 110 :
+				byteArrayPDF =  new ImpresionConstanciaAntiguedad().buildPDF(impresionAxa);
+				break;	
 
 			default:
 				break;

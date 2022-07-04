@@ -1,0 +1,121 @@
+package com.copsis.models.impresionAxa;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
+import com.copsis.controllers.forms.ImpresionAxaForm;
+import com.copsis.exceptions.GeneralServiceException;
+import com.copsis.models.Tabla.BaseTable;
+import com.copsis.models.Tabla.ImageUtils;
+import com.copsis.models.Tabla.Row;
+import com.copsis.models.Tabla.Sio4CommunsPdf;
+
+public class ImpresionConstanciaAntiguedad {
+	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
+	private final Color bgColor = new Color(255, 255, 255, 0);
+	private float margin = 10, yStartNewPage = 780, yStart = 780, bottomMargin = 130;
+	private float fullWidth = 590;
+	private Boolean acumula;
+
+	public byte[] buildPDF(ImpresionAxaForm impresionAxa) {
+		ByteArrayOutputStream output;
+		try {
+			try (PDDocument document = new PDDocument()) {
+				try {
+
+					PDPage page = new PDPage();
+					document.addPage(page);
+					BaseTable table;
+					Row<PDPage> baseRow;
+
+					setEncabezado(impresionAxa, document, page);
+
+					output = new ByteArrayOutputStream();
+					document.save(output);
+					document.save(new File("/home/aalbanil/Documentos/AXA-SPRING-PF/constanciaAntigueda.pdf"));
+					return output.toByteArray();
+				} finally {
+					document.close();
+				}
+
+			}
+
+		} catch (Exception ex) {
+			throw new GeneralServiceException("00001",
+					"Ocurrio un error en el servicio ImpresionConstanciaAntiguedad: " + ex.getMessage());
+		}
+
+	}
+
+	private void setEncabezado(ImpresionAxaForm impresionAxa, PDDocument document, PDPage page) {
+		try (PDPageContentStream content = new PDPageContentStream(document, page)) {
+			BaseTable table;
+			Row<PDPage> baseRow;
+
+			table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
+			baseRow = communsPdf.setRow(table, 12);
+			communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));
+			table.draw();
+			yStart -= (table.getHeaderAndDataHeight() + 10);
+
+			table = new BaseTable(290, 130, 9, fullWidth, margin, document, page, false, true);
+			baseRow = communsPdf.setRow(table);
+	        communsPdf.setCell(baseRow, 80,"Encontrándose el asegurado vigente a la fecha.",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	    	baseRow = communsPdf.setRow(table);
+	        communsPdf.setCell(baseRow, 80,"Se extiende la presente para los fines que se estimen convenientes.",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	        baseRow = communsPdf.setRow(table,50);
+	        baseRow = communsPdf.setRow(table,50);
+	        communsPdf.setCell(baseRow, 70,"* Este documento es informativo y no forma parte del contrato del seguro, el cual se regirá por disposiciones contractuales y legales aplicables.",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	        table.draw();
+	        
+	        
+	        table = new BaseTable(90, 90, 9, fullWidth, margin, document, page, false, true);
+            baseRow = communsPdf.setRow(table, 10);
+            communsPdf.setCell(baseRow,100, "México D.F. a " + impresionAxa.getFecInicioAseg(),Color.BLACK,false, "C",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            baseRow = communsPdf.setRow(table, 9);
+            communsPdf.setCell(baseRow,22,"Félix Cuevas #366, Piso 3",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            baseRow = communsPdf.setRow(table, 9);
+            communsPdf.setCell(baseRow,22, "Col. Tlacoquemécatl",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            baseRow = communsPdf.setRow(table, 9);
+            communsPdf.setCell(baseRow,100, "Alcaldía Benito Juárez, C.P. 03200",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            baseRow = communsPdf.setRow(table, 9);
+            communsPdf.setCell(baseRow,22, "Ciudad de México",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);		             
+            table.draw();
+            
+            
+            table = new BaseTable(90, 90, 9, 150, 450, document, page, false, true);
+            baseRow = communsPdf.setRow(table, 9);	          
+            communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2207/Polizas/2207/4Avwv9KqPKZ31lIeYtlac4IcQfxQb9bn7ywY43F1ufipY7UgiHHJe4Y6TI4OL/firmaApoderado.jpg").scale(80, 80),  communsPdf.setLineStyle(Color.white), communsPdf.setPadding(0f,40f,-20f,40f), "L", "");
+            baseRow = communsPdf.setRow(table, 9);	        
+            communsPdf.setCell(baseRow,90, "Apoderado" ,Color.BLACK,false, "C",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            table.draw();
+
+       
+            PDImageXObject pdImage2 = LosslessFactory.createFromImage(document, ImageIO.read(new URL ("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2207/Polizas/2207/4Avwv9KqPKZ31lIeYtlacxDUsyamerpi7ccyYDus88M3evIUZ2DWQYhyx9VfvnRx/marcaxa.png")));
+            content.drawImage(pdImage2, 20, 30, 612, 792);
+
+		} catch (Exception ex) {
+			throw new GeneralServiceException("00001",
+					"Ocurrio un error en el servicio ImpresionConstanciaAntiguedad: setEncabezado " + ex.getMessage());
+		}
+
+	}
+
+	private boolean isEndOfPage(BaseTable table) {
+
+		float currentY = yStart - table.getHeaderAndDataHeight();
+		boolean isEndOfPage = currentY <= bottomMargin;
+		return isEndOfPage;
+	}
+}

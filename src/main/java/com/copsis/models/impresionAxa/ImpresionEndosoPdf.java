@@ -262,7 +262,6 @@ public class ImpresionEndosoPdf {
 	}
 	
     private boolean isEndOfPage(BaseTable table) {
-
         float currentY = yStart - table.getHeaderAndDataHeight();
         boolean isEndOfPage = currentY <= bottomMargin;
         return isEndOfPage;
