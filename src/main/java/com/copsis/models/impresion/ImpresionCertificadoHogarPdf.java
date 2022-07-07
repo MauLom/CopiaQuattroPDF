@@ -84,7 +84,7 @@ public class ImpresionCertificadoHogarPdf {
 						contenido = new StringBuilder();
 						contenido.append("AL \tRECIBIR  \tESTA \tCARÁTULA \tDE  \tLA \tPÓLIZA \tSE \tENTREGAN \tTAMBIÉN LAS\n"
 							+ "CONDICIONES GENERALES, ESPECIALES Y PARTICULARES QUE INTEGRAN SU\n"
-							+ "CONTRACTO \tDE \tSEGURO.LAS \tCONDICIONES GENERALES PUEDEN TAMBIÉN\n"
+							+ "CONTRATO \tDE \tSEGURO.LAS \tCONDICIONES GENERALES PUEDEN TAMBIÉN\n"
 							+ "SER CONSULTADAS EN LA PAGINA <b>www.segurossura.com.mx");
 					communsPdf.setCell(baseRow, 100,communsPdf.eliminaHtmlTags(contenido.toString()) , black, false, "L", 9, communsPdf.setLineStyle(black), "", communsPdf.setPadding(1f),bgColor);
 
@@ -132,14 +132,14 @@ public class ImpresionCertificadoHogarPdf {
 						communsPdf.setCell(baseRow, 82,Sio4CommunsPdf.eliminaHtmlTags3( direccion.toString()), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
 						baseRow = communsPdf.setRow(table, 15);						
-						communsPdf.setCell(baseRow, 18, "Telefono:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 18, "Teléfono:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 82, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
 						baseRow = communsPdf.setRow(table, 15);						
 						communsPdf.setCell(baseRow, 18, "RFC:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 32,(suraImpresionEmsionDTO.getContratanteColonia() != null ?  suraImpresionEmsionDTO.getContratanteRFC() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 					   
-						communsPdf.setCell(baseRow, 18, "Contracto:", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 18, "Contrato:", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 32, (suraImpresionEmsionDTO.getContratoNo() != null ?  suraImpresionEmsionDTO.getContratoNo() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.black,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						
 						table.draw();
@@ -148,7 +148,7 @@ public class ImpresionCertificadoHogarPdf {
 						
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, 217, 365, document, page, true,true);
 						baseRow = communsPdf.setRow(table, 15);
-						communsPdf.setCell(baseRow, 100, "DATOS GENERALES DEL PÓLIZA", black, true, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);						
+						communsPdf.setCell(baseRow, 100, "DATOS GENERALES DE LA PÓLIZA", black, true, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);						
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 20, "Agente:", black, false, "L", 10, communsPdf.setLineStyle(Color.black,Color.white,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 80, (suraImpresionEmsionDTO.getClaveAgente() != null ?  suraImpresionEmsionDTO.getClaveAgente() :""), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.black), "", communsPdf.setPadding(2f),bgColor);
@@ -177,7 +177,7 @@ public class ImpresionCertificadoHogarPdf {
 						yStart -= table.getHeaderAndDataHeight();
 	                    contenido = new StringBuilder();
 	                    contenido.append("Seguro SURA, S.A de C.V (Antes Seguros Royal & SunAlliance Seguros(México), S.A de C.V.) (Que en lo sucesivo se denominará la \"Compañía\"), asegurada a favor de la persona de arriba citada (que  en lo sucesivo se"
-	                    		+ "denominará el \"Asegurado\"), los bienes y riesgos más adelante  detallados, de acuerdo a las condiciones generales  y particulares de la póliza durante la vigencia establecida");
+	                    		+ " denominará el \"Asegurado\"), los bienes y riesgos más adelante  detallados, de acuerdo a las condiciones generales  y particulares de la póliza durante la vigencia establecida");
 	                    table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true,true);					
 					    baseRow = communsPdf.setRow(table, 20);
 						communsPdf.setCell(baseRow, 100, communsPdf.eliminaHtmlTags(contenido.toString()), black, false, "L", 6, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
