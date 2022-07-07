@@ -270,7 +270,7 @@ public class ImpresionCertificadoHogarPdf {
 					
 						 
 						 baseRow = communsPdf.setRow(table, 30);
-						 communsPdf.setCell(baseRow, 31, "Ubicacion:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						 communsPdf.setCell(baseRow, 31, "Ubicación:", black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						 communsPdf.setCell(baseRow, 69,Sio4CommunsPdf.eliminaHtmlTags3( ubicacion), black, false, "L", 9, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						 
 						
@@ -310,7 +310,7 @@ public class ImpresionCertificadoHogarPdf {
 						yStart -= table.getHeaderAndDataHeight()+5;
 						
 						contenido = new StringBuilder();
-						contenido.append("En cumplimiento a lo dispuesto en el artiuculo 202 de la Ley de Instituciones de  Seguros y de Fianzas,la documentacion contractual ");
+						contenido.append("En cumplimiento a lo dispuesto en el artiuculo 202 de la Ley de Instituciones de  Seguros y de Fianzas,la documentación contractual ");
 						contenido.append("y a la nota  tecnica que integran este producto de seguro,quedaron registradas  ante la Comision Nacional de Seguros y Fianzas, a ");
 						contenido.append("partir del dia 29 de noviembre de 2005,con el numero CNSF-S0010-0535-2005");
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin,fullWidth, margin, document, page, false,true);					
