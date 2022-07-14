@@ -2,7 +2,11 @@ package com.copsis.models.impresionAxa;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -30,7 +34,8 @@ public class ImpresionCertificadoPdf {
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 
 	public byte[] buildPDF(ImpresionAxaForm impresionAxa) {
-	    	boolean acumula;
+
+	     boolean acumula;
 		 boolean acumula2;
 		 boolean drawLines = true;
 		ByteArrayOutputStream output;
@@ -225,6 +230,10 @@ public class ImpresionCertificadoPdf {
 
 	private void setEncabezado(ImpresionAxaForm impresionAxa, PDDocument document, PDPage page,Boolean conAsegurados, Boolean conCoberturas) {
 		try (PDPageContentStream content = new PDPageContentStream(document, page)) {
+			DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+			sym.setMonths(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto","Septiembre", "Octubre", "Noviembre", "Diciembre" });
+			sym.setAmPmStrings(new String[] { "AM", "PM" });
+			SimpleDateFormat formatter = new SimpleDateFormat("dd 'de' MMMM 'del' yyyy", sym);
 	          yStart = 780;
 	            BaseTable table;
 	            Row<PDPage> baseRow;
@@ -314,7 +323,7 @@ public class ImpresionCertificadoPdf {
 	            
 	            table.draw();
 	            
-	            
+	            DecimalFormat formateador = new DecimalFormat("#,##0.00");
 	            yStart -= (table.getHeaderAndDataHeight() + 10);
 	            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 	            baseRow = communsPdf.setRow(table, 12);
@@ -322,10 +331,10 @@ public class ImpresionCertificadoPdf {
 	            baseRow = communsPdf.setRow(table, 12);
 	            communsPdf.setCell(baseRow, 10,"Certificado",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
 	            communsPdf.setCell(baseRow, 47,impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	   
-	            if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() >  0) {
+	            if(impresionAxa.getPrimas() !=null) {
 
 	             communsPdf.setCell(baseRow, 10,"Prima Neta",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-	  	         communsPdf.setCell(baseRow, 29,impresionAxa.getPrimas().get(0).getPrima(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	  	         communsPdf.setCell(baseRow, 29,formateador.format(impresionAxa.getPrimas().getPrima()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 	            }
 	            
@@ -333,7 +342,7 @@ public class ImpresionCertificadoPdf {
 	            communsPdf.setCell(baseRow, 10,"Nombre",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
 	            communsPdf.setCell(baseRow, 47,Sio4CommunsPdf.eliminaHtmlTags3( impresionAxa.getAsegurado()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	   
 	            
-	            if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() >  0) {
+	            if(impresionAxa.getPrimas() !=null ) {
 	             communsPdf.setCell(baseRow,29, "R.A. ó Cesión de Comisión",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	         communsPdf.setCell(baseRow,10,"0.00",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
@@ -349,9 +358,9 @@ public class ImpresionCertificadoPdf {
 	            		communsPdf.setCell(baseRow, 10,"Subgrupo",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            		communsPdf.setCell(baseRow, 47, impresionAxa.getSubGrupo(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            	}
-	                if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() >  0) {
+	                if(impresionAxa.getPrimas() !=null ) {
 	   	             communsPdf.setCell(baseRow,29, "Recargo por Pago Fraccionado",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-	   	  	         communsPdf.setCell(baseRow,10,impresionAxa.getPrimas().get(0).getRecargo(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	   	  	         communsPdf.setCell(baseRow,10,formateador.format(impresionAxa.getPrimas().getRecargo()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	   	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 	   	            }
 	            }
@@ -362,9 +371,9 @@ public class ImpresionCertificadoPdf {
 	  	        communsPdf.setCell(baseRow, 7,"Edad",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 	  	        communsPdf.setCell(baseRow, 4,impresionAxa.getEdadAseg(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	        
-	  	        if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() > 0) {
+	  	        if(impresionAxa.getPrimas() !=null) {
 	   	             communsPdf.setCell(baseRow,29, "Derecho de Póliza",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-	   	  	         communsPdf.setCell(baseRow,10,impresionAxa.getPrimas().get(0).getDerecho(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	   	  	         communsPdf.setCell(baseRow,10,formateador.format(impresionAxa.getPrimas().getDerecho()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	   	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 	   	         } 
 	  	        
@@ -372,9 +381,9 @@ public class ImpresionCertificadoPdf {
 	            communsPdf.setCell(baseRow,30, "Fecha de Ingreso a la Póliza",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	        communsPdf.setCell(baseRow,27,impresionAxa.getFecAltAseg(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	  	      	  	        
-	  	        if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() > 0) {
+	  	        if(impresionAxa.getPrimas() !=null) {
 	   	             communsPdf.setCell(baseRow,29, "I.V.A.",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-	   	  	         communsPdf.setCell(baseRow,10,impresionAxa.getPrimas().get(0).getIva(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	   	  	         communsPdf.setCell(baseRow,10,formateador.format(impresionAxa.getPrimas().getIva()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	   	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 	   	         } 
 	  	        
@@ -385,9 +394,9 @@ public class ImpresionCertificadoPdf {
 		  	        communsPdf.setCell(baseRow,30, "Fecha de Vencimiento",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		  	        communsPdf.setCell(baseRow,27,impresionAxa.getVigenciaA(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		  	      	  	    	    	  	        
-		  	        if(impresionAxa.getPrimas() !=null && impresionAxa.getPrimas().size() > 0) {
+		  	        if(impresionAxa.getPrimas() !=null) {
 		   	             communsPdf.setCell(baseRow,29, "Prima Total",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		   	  	         communsPdf.setCell(baseRow,10,impresionAxa.getPrimas().get(0).getPrima(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		   	  	         communsPdf.setCell(baseRow,10,formateador.format(impresionAxa.getPrimas().getPrima()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		   	  	         communsPdf.setCell(baseRow, 4,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor); 
 		   	         } 
 		  	      }	            	           
@@ -456,7 +465,7 @@ public class ImpresionCertificadoPdf {
 	                communsPdf.setCell(baseRow,85, "* G.U.A.: Hasta el gasto usual y acostumbrado en el lugar donde reciban los servicios. ** Ver Condiciones. *** Endoso. AXA Seguros, S.A. de C.V. cubre al asegurado por los beneficios contratados en los términos y condiciones de la póliza citada y en los endosos que formen parte de ella." ,Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3.5f,5f),bgColor);
 	                baseRow = communsPdf.setRow(table);
 	                baseRow = communsPdf.setRow(table,15);
-	                communsPdf.setCell(baseRow,100,"México D.F. a " +  impresionAxa.getFecInicioAseg()  ,Color.BLACK,false, "C",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                communsPdf.setCell(baseRow,100,"México D.F. a " +  formatter.format(new Date()) ,Color.BLACK,false, "C",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                baseRow = communsPdf.setRow(table,9);
 	                communsPdf.setCell(baseRow,22, "Félix Cuevas #366, Piso 3" ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                baseRow = communsPdf.setRow(table,9);

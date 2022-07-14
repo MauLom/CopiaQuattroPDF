@@ -10,10 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(Include.NON_NULL)
-public class PrimasProjection {
-	private String prima;
-	private String derecho;
-	private String recargo;
-	private String iva;
-	private String total;
+public class PrimasAxaProjection {
+	private double prima;
+	private double derecho;
+	private double recargo;
+	private double iva;
+	private double total;
 }

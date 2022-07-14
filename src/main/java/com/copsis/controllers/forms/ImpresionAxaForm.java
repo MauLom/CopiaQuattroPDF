@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.copsis.clients.projections.AseguradosProjection;
 import com.copsis.clients.projections.CoberturaProjection;
-import com.copsis.clients.projections.PrimasProjection;
+import com.copsis.clients.projections.PrimasAxaProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -30,7 +30,7 @@ public class ImpresionAxaForm {
 	private String vigenciaDe;
 	private String vigenciaA;
 	private String fechaEmision;
-	private List<PrimasProjection> primas;
+	private PrimasAxaProjection primas;
 	private	String asegurado;
 	private	String fecNacAseg;
 	private String edadAseg;
