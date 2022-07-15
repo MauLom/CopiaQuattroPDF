@@ -166,6 +166,12 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>axa</id>
+			<properties>
+				<activatedProperties>axa</activatedProperties>
+			</properties>
+		</profile>
+		<profile>
 			<id>production</id>
 			<properties>
 				<activatedProperties>production</activatedProperties>
