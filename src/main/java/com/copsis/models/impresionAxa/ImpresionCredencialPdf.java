@@ -126,7 +126,7 @@ public class ImpresionCredencialPdf {
 			Row<PDPage> baseRow;
 			yStart = 160;
 
-			if (impresionAxa.getLogoCredencial().length() > 0) {
+			if ( impresionAxa.getLogoCredencial() !=null &&impresionAxa.getLogoCredencial().length() > 0) {
 				URL urllogo = new URL(impresionAxa.getLogoCredencial());
 				BufferedImage imgbarra = ImageIO.read(urllogo);
 				PDImageXObject pdImage2 = LosslessFactory.createFromImage(document, imgbarra);
@@ -137,7 +137,7 @@ public class ImpresionCredencialPdf {
 						
 		     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 	         baseRow = communsPdf.setRow(table, 12);	          
-	         if (impresionAxa.getLogoBarraAxa().length() > 0) {
+	         if (impresionAxa.getLogoBarraAxa() !=null &&  impresionAxa.getLogoBarraAxa().length() > 0) {
 	        	 communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoBarraAxa()));
 	         }
 	         baseRow = communsPdf.setRow(table, 5);	          
@@ -169,7 +169,7 @@ public class ImpresionCredencialPdf {
 						case 1:
 						   baseRow = communsPdf.setRow(table, 6);
 						   communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
-						   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getCoaseguro(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
+						   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
 
 						   if (i == 0) {
 							   communsPdf.setCell(baseRow, 12, "Certificado:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
@@ -186,7 +186,7 @@ public class ImpresionCredencialPdf {
 						case 2:
 							   baseRow = communsPdf.setRow(table, 6);
 							   communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
-							   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getCoaseguro(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
+							   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
 
 							   if (i == 0) {
 								   communsPdf.setCell(baseRow, 12, "Certificado:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
@@ -205,7 +205,7 @@ public class ImpresionCredencialPdf {
 						case 4:
 							   baseRow = communsPdf.setRow(table, 6);
 							   communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
-							   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getCoaseguro(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
+							   communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
 
 							   if (i == 0) {
 								   communsPdf.setCell(baseRow, 12, "Certificado:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
@@ -266,7 +266,7 @@ public class ImpresionCredencialPdf {
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 12);
 
-			if (impresionAxa.getLogoBarraAxa().length() > 0) {
+			if (impresionAxa.getLogoBarraAxa() !=null && impresionAxa.getLogoBarraAxa().length() > 0) {
 				communsPdf.setCell(baseRow, 100, ImageUtils.readImage((impresionAxa.getLogoBarraAxa())));
 			}
 

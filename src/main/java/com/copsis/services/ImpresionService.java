@@ -132,10 +132,10 @@ public class ImpresionService {
 			
 			switch (impresionAxa.getTipoImpresion()) {
 			case 107 :
-				byteArrayPDF =  new ImpresionCredencialPdf().buildPDF(impresionAxa);
+				byteArrayPDF =  new ImpresionCertificadoPdf().buildPDF(impresionAxa);
 				break;
 			case 108 :
-				byteArrayPDF =  new ImpresionCertificadoPdf().buildPDF(impresionAxa);
+				byteArrayPDF =  new ImpresionCredencialPdf().buildPDF(impresionAxa);
 				break;	
 			case 109 :
 				byteArrayPDF =  new ImpresionEndosoPdf().buildPDF(impresionAxa);

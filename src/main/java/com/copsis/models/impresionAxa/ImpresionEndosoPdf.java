@@ -147,6 +147,7 @@ public class ImpresionEndosoPdf {
 			}
 
 		} catch (Exception ex) {
+
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionEndosoPdf: " + ex.getMessage());
 		}
@@ -194,7 +195,7 @@ public class ImpresionEndosoPdf {
             communsPdf.setCell(baseRow, 80,impresionAxa.getVigenciaDe(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
             baseRow = communsPdf.setRow(table);
             communsPdf.setCell(baseRow, 20,"Duracion dias:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
-            communsPdf.setCell(baseRow, 80,impresionAxa.getDias(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
+            communsPdf.setCell(baseRow, 80,"360",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
             baseRow = communsPdf.setRow(table);
             communsPdf.setCell(baseRow, 20,"Forma de Pago:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
             communsPdf.setCell(baseRow, 80,impresionAxa.getFormaPago(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
@@ -256,6 +257,7 @@ public class ImpresionEndosoPdf {
             
 		
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionEndosoPdf: " + ex.getMessage());
 		}
