@@ -50,7 +50,6 @@ public class qualitasAutosMotosModel {
 
 			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin  = contenido.indexOf("COBERTURAS CONTRATADAS");
-			
 			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -64,8 +63,14 @@ public class qualitasAutosMotosModel {
 						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").replace("-", "").trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Domicilio")) {
-						newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ").replace("### ", "")
-								.replace(modelo.getRfc(), "");
+						if(newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ").replace("### ", "").contains("R.F.C")) {
+							newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ").replace("### ", "")
+									.split("R.F.C")[0].replace(modelo.getRfc(), "");
+						}else {
+							newDireccion =  newcontenido.split("\n")[i].split("Domicilio")[1].replace(":", " ").replace("### ", "")
+									.replace(modelo.getRfc(), "");
+						}
+					
 					}
 					
 					if(newcontenido.split("\n")[i].contains("C.P.")) {
