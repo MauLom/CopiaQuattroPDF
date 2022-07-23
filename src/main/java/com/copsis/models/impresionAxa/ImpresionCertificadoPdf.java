@@ -340,7 +340,10 @@ public class ImpresionCertificadoPdf {
 	            
 	            baseRow = communsPdf.setRow(table, 12);
 	            communsPdf.setCell(baseRow, 10,"Nombre",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
-	            communsPdf.setCell(baseRow, 47,Sio4CommunsPdf.eliminaHtmlTags3( impresionAxa.getAsegurado()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	   
+	           if(impresionAxa.getAsegurado() !=null && impresionAxa.getAsegurado().length() > 0 ) {
+	        	   communsPdf.setCell(baseRow, 47,Sio4CommunsPdf.eliminaHtmlTags3( impresionAxa.getAsegurado()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	           }
+	           	   
 	            
 	            if(impresionAxa.getPrimas() !=null ) {
 	             communsPdf.setCell(baseRow,29, "R.A. ó Cesión de Comisión",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
