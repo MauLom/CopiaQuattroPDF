@@ -24,7 +24,12 @@ public class SisnovaModel {
 			
 			public EstructuraJsonModel procesar() {
 				try {		
-					switch (fn.tipoPoliza(contenido)) {				
+					
+					int tipo =fn.tipoPoliza(contenido);
+					if(contenido.contains("GASTOS MÉDICOS MAYORES ")) {
+						tipo =2;
+					}
+					switch (tipo) {				
 					case 2:// Salud
 						modelo  = new SisnovaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();					
 						break;

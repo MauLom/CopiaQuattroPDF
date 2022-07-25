@@ -228,9 +228,10 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
+
 			// ENTRADA PARA SISNOVA
-			if (!encontro &&  rangoSimple(1, 3, pdfStripper, pdDoc).contains("Servicios Integrales de Salud Nova")
-				&& rangoSimple(1, 3, pdfStripper, pdDoc).contains("www.sisnova.com.mx")) {			
+			if (!encontro &&  (rangoSimple(1, 3, pdfStripper, pdDoc).contains("Servicios Integrales de Salud Nova")
+				|| rangoSimple(1, 3, pdfStripper, pdDoc).contains("www.sisnova.com.mx"))) {				
 					SisnovaModel datosSisnova = new SisnovaModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSisnova.procesar();
 					encontro = true;

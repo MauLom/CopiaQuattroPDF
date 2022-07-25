@@ -10,6 +10,7 @@ import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
+import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -20,6 +21,10 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
+import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
+import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
+import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
+import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -111,6 +116,41 @@ public class ImpresionService {
 			ImpresionFiscalPdf impresionFiscalPdf = new ImpresionFiscalPdf();
 					
 			return impresionFiscalPdf.buildPDF( impresionFiscalForm);
+			
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+		
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+	
+	public byte[] impresionAxa(ImpresionAxaForm  impresionAxa) {
+		try {
+			byte[] byteArrayPDF = null;
+			
+			
+			switch (impresionAxa.getTipoImpresion()) {
+			case 107 :
+				byteArrayPDF =  new ImpresionCertificadoPdf().buildPDF(impresionAxa);
+				break;
+			case 108 :
+				byteArrayPDF =  new ImpresionCredencialPdf().buildPDF(impresionAxa);
+				break;	
+			case 109 :
+				byteArrayPDF =  new ImpresionEndosoPdf().buildPDF(impresionAxa);
+				break;	
+			case 110 :
+				byteArrayPDF =  new ImpresionConstanciaAntiguedad().buildPDF(impresionAxa);
+				break;	
+
+			default:
+				break;
+			}
+		
+
+       return byteArrayPDF;
+			
 			
 		} catch(ValidationServiceException e) {
 			throw e;

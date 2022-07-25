@@ -6,6 +6,7 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraUbicacionesModel;
 
 public class HdiDiversosModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -21,6 +22,7 @@ public class HdiDiversosModel {
 		int fin = 0;
 		String tipopolizatxt="";
 		StringBuilder newcontenido = new StringBuilder();
+		Boolean cpvalid = false;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("pago", "Pago:").replace("agente",
 				"Agente:");
 
@@ -102,8 +104,9 @@ public class HdiDiversosModel {
 					modelo.setCteDireccion(
 							newcontenido.toString().split("\n")[i].split("Fiscal:")[1].replace("###", "").trim());
 				}
-				if (newcontenido.toString().split("\n")[i].contains("C.P.")) {
-					modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].substring(0, 5).trim());
+				if (newcontenido.toString().split("\n")[i].contains("C.P.") && cpvalid == false) {
+					modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().substring(0, 5));
+					cpvalid = true;
 				}
 			}
 
@@ -150,10 +153,13 @@ public class HdiDiversosModel {
 					if (newcontenido.toString().split("\n")[i].length() > 0) {
 						if (!newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA")
 								&& !newcontenido.toString().split("\n")[i].contains("Unidad Especializada")
-								|| newcontenido.toString().split("\n")[i].split("###").length == 2) {
-							cobertu.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-							cobertu.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
-							coberturas.add(cobertu);
+								&& newcontenido.toString().split("\n")[i].split("###").length == 2) {
+							
+							    cobertu.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);				
+								cobertu.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);	
+								coberturas.add(cobertu);
+														
+							
 
 						}
 					}
@@ -212,7 +218,36 @@ public class HdiDiversosModel {
 							.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i + 1].split("###")[8])));
 				}
 			}
+			
 
+		
+			inicio = contenido.indexOf("Domicilio de la Casa:");
+			fin = contenido.indexOf("SECCIÓN");
+			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
+			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+			newcontenido = new StringBuilder();
+			newcontenido.append(fn.extracted(inicio, fin, contenido));
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+
+				if(newcontenido.toString().split("\n")[i].contains("Domicilio") && newcontenido.toString().split("\n")[i].contains("Casa:")) {
+					ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("Casa")[1].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Techos") && newcontenido.toString().split("\n")[i].contains("Porcentaje")) {
+					ubicacion.setTechos(fn.material(newcontenido.toString().split("\n")[i].split("Techos")[1].split("Porcentaje")[0].replace("###", "").trim()));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Muros") && newcontenido.toString().split("\n")[i].contains("Entrepisos")) {
+				  ubicacion.setMuros(fn.material( newcontenido.toString().split("\n")[i].split("Muros")[1].split("Entrepisos")[0].replace("###", "").trim()));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Pisos:")) {
+					ubicacion.setNiveles(0);
+				}
+			}
+			if(newcontenido.length() > 100) {
+				ubicaciones.add(ubicacion);
+				modelo.setUbicaciones(ubicaciones);	
+			}
+			
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
