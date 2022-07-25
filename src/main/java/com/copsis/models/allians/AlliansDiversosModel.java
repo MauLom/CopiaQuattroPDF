@@ -29,7 +29,6 @@ public class AlliansDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO");
 			fin = contenido.indexOf("Coberturas Aseguradas");
-
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
@@ -122,7 +121,7 @@ public class AlliansDiversosModel {
 				}
 			}
 			
-
+System.out.println(contenido);
 			
 			
 			return modelo;

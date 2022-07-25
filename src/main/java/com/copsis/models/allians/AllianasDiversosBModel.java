@@ -1,6 +1,7 @@
 package com.copsis.models.allians;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -16,6 +17,7 @@ public class AllianasDiversosBModel {
 	public  EstructuraJsonModel procesar(String contenido) {
 		StringBuilder direccion = new StringBuilder();
 		StringBuilder newcontenido = new StringBuilder();
+		StringBuilder newcbo = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
@@ -75,11 +77,27 @@ public class AllianasDiversosBModel {
 			fin = contenido.indexOf("Otros");
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
-			System.out.println(newcontenido.toString());
+		   for (int i = 0; i < newcontenido.toString().split("Cobertura###Suma Asegurada").length; i++) {
+			   if(i > 0 ) {
+				   if(i == 1) {
+					   newcbo.append(newcontenido.toString().split("Cobertura###Suma Asegurada")[i]);
+				   }
+			   }
+			
+		}
+		
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+			for (int i = 0; i < newcbo.toString().split("\n").length; i++) {	
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+				
+				if(!newcbo.toString().split("\n")[i].contains("Cobertura") &&
+				   !newcbo.toString().split("\n")[i].contains("Daño Físico") &&  newcbo.toString().split("\n")[i].split("###").length > 1) {
+					cobertura.setNombre(newcbo.toString().split("\n")[i].split("###")[0]);
+					cobertura.setSa(newcbo.toString().split("\n")[i].split("###")[1]);
+					coberturas.add(cobertura);
+				}
 			}
+			modelo.setCoberturas(coberturas);
 			
 			
 
@@ -127,7 +145,7 @@ public class AllianasDiversosBModel {
 				}				
 			}
 			
-			System.out.println(newcontenido);
+
 			
 			
 		
