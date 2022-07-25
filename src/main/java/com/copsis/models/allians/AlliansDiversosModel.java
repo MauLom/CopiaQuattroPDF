@@ -120,9 +120,7 @@ public class AlliansDiversosModel {
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i].replace("###", "")));
 				}
 			}
-			
-System.out.println(contenido);
-			
+
 			
 			return modelo;
 		} catch (Exception ex) {
