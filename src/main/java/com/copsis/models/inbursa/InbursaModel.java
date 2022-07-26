@@ -23,7 +23,16 @@ public class InbursaModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			switch (fn.tipoPoliza(contenido)) {
+			
+			Boolean tipof5 =false;
+			int tipo =  fn.tipoPoliza(contenido);
+			if(tipo == 0 &&  fn.caratula(1, 3, stripper, doc).contains("ENDOSO DE BENEFICIARIOS") ) {
+				tipo =5;
+				tipof5 = true;
+			}
+
+			
+			switch (tipo) {
 			case 1:// Autos
 				int fin = doc.getNumberOfPages() == 5 ? 4 : 2;
 				modelo = new InbursaAutosModel(fn.caratula(1, fin, stripper, doc),
@@ -32,9 +41,16 @@ public class InbursaModel {
 			case 2:// Salud
 				modelo = new InbursaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				break;
-			case 4:// Vida
+			case 4:// Diversos
 				modelo = new inbursaDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				break;
+			case 5:// Vida
+				if(tipof5) {
+					modelo = new InbursaVidaBModel().procesar(fn.caratula(1, 5, stripper, doc));
+				}else {
+				modelo = new InbursaVidaModel().procesar(fn.caratula(1, 5, stripper, doc));
+				}
+				break;	
 			default:
 				break;
 			}
