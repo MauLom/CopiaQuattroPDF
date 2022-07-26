@@ -66,7 +66,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-		
+
 			// CHUBB
 			if (!encontro && contenido.contains("Chubb")) {
 				ChubbModel datosChubb = new ChubbModel();
@@ -206,7 +206,8 @@ public class IdentificaPolizaService {
 			}
 		
 			// ENTRADA PARA INBURSA
-			if (!encontro && contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
+			if (!encontro && contenido.contains("Inbursa") || contenido.contains("INBURSA") || contenido.contains("www.inbursa.com")) {
+			
 				InbursaModel datosInbursa = new InbursaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosInbursa.procesar();
 				encontro = true;
