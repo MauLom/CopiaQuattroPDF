@@ -628,6 +628,7 @@ public class DataToolsModel {
 		case "HIJO-A":
 		case "HIJO M":
 		case "HIJA F":
+		case "MENOR":
 			dato = 3;
 			break;
 		case "PADRE":
