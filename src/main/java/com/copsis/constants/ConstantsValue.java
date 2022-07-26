@@ -177,6 +177,7 @@ public final class ConstantsValue {
 	public static final String REGEX_IDCLIENTE_MAPFRE = "(Cliente (Mapfre|MAPFRE)\\s*:\\s*(\\S*\\w+))";
 	public static final String REGEX_POLIZA = "((Póliza Número|POLIZA NUMERO|PÓLIZA NÚMERO|Póliza número|Número de Póliza|NUMERO DE POLIZA|NÚMERO DE PÓLIZA|Número de póliza)\\s*\\S*:(\\s*\\d+)\\w*)";
 	public static final String REGEX_CP = "((C.P.)\\s*\\S*:\\s*(\\S*\\d{5}))";
+	public static final String REGEX_CP2 = "[0-9]{5}|[0-9]{4}";
 	public static final String RENOVACION_AUTOM = "RENOVACIÓN AUTOMÁTICA";
 	
 	public static final String TELEFONO = "Teléfono:";

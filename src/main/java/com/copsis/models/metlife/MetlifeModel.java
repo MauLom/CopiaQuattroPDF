@@ -25,18 +25,23 @@ public class MetlifeModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-
-			switch (fn.tipoPoliza(contenido)) {
+			
+			int tipo =fn.tipoPoliza(contenido);
+			if(contenido.contains("METALIFE RETIRO")) {
+				tipo =5;
+			}
+			switch (tipo) {
 			case 2:// Salud
 				modelo  = new MetlifeSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				
 				break;
 			case 5:// Vida
-				modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();
-
-			}
-
-			
+				if(contenido.contains("METALIFE RETIRO")) {
+					modelo  = new MetlifeVIdaBModel().procesar(fn.caratula(1, 6, stripper, doc));							
+				}else {
+					modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();
+				}				
+			}			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(

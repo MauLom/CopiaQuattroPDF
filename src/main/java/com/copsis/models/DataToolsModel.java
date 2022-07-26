@@ -1199,6 +1199,12 @@ public class DataToolsModel {
 		}
 		return result;
 	}
+	public String obtenerCPRegex2(String texto) {
+		Pattern pattern = Pattern.compile(ConstantsValue.REGEX_CP2);
+		Matcher matcher = pattern.matcher(texto);
+		return matcher.find() ? matcher.group() : "";
+	}
+	
 	
 	public List<String> obtenerListNumeros(String cadena) {
 		List<String> resultado = new ArrayList<>();
