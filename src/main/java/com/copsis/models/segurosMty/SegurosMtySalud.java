@@ -200,7 +200,7 @@ public class SegurosMtySalud {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replace("### ###", "###");
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	        		
-	        			if(newcontenido.split("\n")[i].contains("CANAL DE VENTA") && newcontenido.split("\n")[i+1].split("###").length > 2) {	 
+	        			if(newcontenido.split("\n")[i].contains("CANAL DE VENTA") && newcontenido.split("\n")[i+1].split("###").length > 2) {	 	
 	        					if(newcontenido.split("\n")[i+1].split("###")[1].split(" ").length>1) {
 		        					modelo.setAgente(newcontenido.split("\n")[i+1].split("###")[1].trim());
 		        					modelo.setCveAgente(newcontenido.split("\n")[i+1].split("###")[2].trim());	
@@ -226,7 +226,10 @@ public class SegurosMtySalud {
 
 		if(inicio > -1 && fin > -1 && inicio <fin) {
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-			newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").replace("1.","").replace("2.","").replace("3.","").replace("4.","");
+			//[] agrupador
+			//[][] dos agrupadores seguidos
+			//expresion regular remplaza 1.
+			newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").replaceAll("[1-9][.]","");
 			for (int i = 0; i < newcontenido.split("\n").length; i++) {
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel(); 
 				
@@ -234,13 +237,13 @@ public class SegurosMtySalud {
 					
 					if(newcontenido.split("\n")[i].split("###").length == 8) {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim() +" " + newcontenido.split("\n")[i].split("###")[1].trim() +" "+newcontenido.split("\n")[i].split("###")[2].trim());
-						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[3].trim()));					
-						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[4]) ? 1:0);
+						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[3].trim()));
+						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[4].toString()) ? 1:0);
 						
 					}else {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
-						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[1].trim()));					
-						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[2]) ? 1:0);
+						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[1].trim()));	
+						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[2].trim())  ? 1:0);
 					}
 					
 					
