@@ -244,7 +244,7 @@ public class SegurosMtySalud {
 					if(newcontenido.split("\n")[i].split("###").length == 8) {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim() +" " + newcontenido.split("\n")[i].split("###")[1].trim() +" "+newcontenido.split("\n")[i].split("###")[2].trim());
 						asegurado.setParentesco( fn.parentesco( newcontenido.split("\n")[i].split("###")[3].trim()));
-						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[4].toString()) ? 1:0);
+						asegurado.setSexo(fn.sexo( newcontenido.split("\n")[i].split("###")[4].trim()) ? 1:0);
 						
 					}else {
 						asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
