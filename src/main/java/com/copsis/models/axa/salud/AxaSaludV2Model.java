@@ -329,9 +329,9 @@ public class AxaSaludV2Model {
 							if (x == 11) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 								if (nombre.contains(", ")) {
-									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
+									asegurado.setNombre((nombre.split(",")[1] + " " + nombre.split(",")[0]).trim());
 								} else {
-									asegurado.setNombre(nombre);
+									asegurado.setNombre(nombre.trim());
 								}
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
