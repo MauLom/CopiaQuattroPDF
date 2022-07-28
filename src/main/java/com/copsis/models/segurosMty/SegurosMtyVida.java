@@ -28,7 +28,7 @@ public class SegurosMtyVida {
 			
 			try {
 				modelo.setTipo(5);
-				modelo.setCia(25);
+				modelo.setCia(39);
 				
 			
 				inicio = contenido.indexOf("CARÁTULA DE LA PÓLIZA");
