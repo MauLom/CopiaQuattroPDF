@@ -345,7 +345,7 @@ public class IdentificaPolizaService {
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
-                        || contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")
+                        || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
                         || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
                         ))) {
                 	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
