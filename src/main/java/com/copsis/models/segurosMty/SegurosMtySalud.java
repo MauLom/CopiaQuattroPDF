@@ -269,6 +269,13 @@ public class SegurosMtySalud {
 				}
 				
 			}
+			
+			for(EstructuraAseguradosModel xasegurado: asegurados) {
+				if(xasegurado.getAntiguedad().equals("")) {
+					 xasegurado.setAntiguedad(xasegurado.getFechaAlta());
+				} 
+			}
+			
 			modelo.setAsegurados(asegurados);
 		}
 
