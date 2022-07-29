@@ -55,7 +55,7 @@ public class IdentificaPolizaService {
 
 		EstructuraJsonModel modelo = new EstructuraJsonModel();
 		try {
-			final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
+			final URL scalaByExampleUrl = new URL(pdfForm.getUrl().replace(" ", "%20"));
 			final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
 			PDFTextStripper pdfStripper = new PDFTextStripper();
 			COSDocument cosDoc = documentToBeParsed.getDocument();
