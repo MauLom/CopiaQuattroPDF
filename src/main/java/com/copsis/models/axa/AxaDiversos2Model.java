@@ -32,6 +32,14 @@ public class AxaDiversos2Model {
 			modelo.setTipo(7);
 			modelo.setCia(20);
 			
+			if(contenido.contains("Anterior:")) {
+				newcontenido = contenido.substring(contenido.indexOf("Anterior:")+9, contenido.indexOf("Anterior:")+100);
+				if(newcontenido.contains("Desde")) {
+					newcontenido = newcontenido.split("Desde")[0].replace("###", "").replace("\t", "").trim();
+					modelo.setRenovacion(newcontenido);
+				}
+			}
+			
 
 			inicio = contenido.indexOf("Datos de la Póliza");
 			fin = contenido.indexOf("Datos Adicionales");

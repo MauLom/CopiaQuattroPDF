@@ -3,6 +3,8 @@ package com.copsis.models.segurosMty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -48,6 +50,17 @@ public class SegurosMtyVida {
 					if(newcontenido.toString().split("\n")[i].contains("EMISIÓN")) {			
 						modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenerMes(newcontenido.toString().split("\n")[i].toUpperCase())));
 						modelo.setVigenciaDe(modelo.getFechaEmision());
+
+						if(modelo.getVigenciaDe().split("-").length == 3  && fn.isNumeric(modelo.getVigenciaDe().split("-")[2])) {
+							Date date = new Date();
+					        Calendar calendar = Calendar.getInstance();
+					        calendar.setTime(date);
+					        int year = calendar.get(Calendar.YEAR);				        
+							if(Integer.parseInt(modelo.getVigenciaDe().split("-")[2]) < year) {
+								modelo.setVigenciaDe(year + "-" + modelo.getVigenciaDe().split("-")[1] + "-" + modelo.getVigenciaDe().split("-")[2]);
+							}
+						}
+						
 						modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 						
 					}
