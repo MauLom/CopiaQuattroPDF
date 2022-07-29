@@ -33,10 +33,9 @@ public class AxaDiversos2Model {
 			modelo.setCia(20);
 			
 			if(contenido.contains("Anterior:")) {
-				newcontenido = contenido.substring(contenido.indexOf("Anterior:")+9, contenido.indexOf("Anterior:")+100);
+				newcontenido = contenido.substring(contenido.indexOf("Anterior:")+9, contenido.indexOf("Anterior:")+100).trim();
 				if(newcontenido.contains("Desde")) {
-					newcontenido = newcontenido.split("Desde")[0].replace("###", "").replace("\t", "").trim();
-					modelo.setRenovacion(newcontenido);
+					modelo.setRenovacion(newcontenido.split("Desde")[0].replace("###", "").trim().replaceAll("^\\s*",""));
 				}
 			}
 			
@@ -81,6 +80,12 @@ public class AxaDiversos2Model {
 				}
 			}
 			
+			if(contenido.contains("C.P:") && modelo.getCp().isBlank()) {
+				if(contenido.split("C.P:")[1].split("\n")[0].split("Tel:")[0].replace("###", "").trim().matches("\\d{5}")) {
+					modelo.setCp(contenido.split("C.P:")[1].split("\n")[0].split("Tel:")[0].replace("###", "").trim());
+				}
+				
+			}
 
 			inicio = contenido.indexOf("Datos Adicionales");
 			fin = contenido.indexOf("Suma Asegurada Prima Neta");
