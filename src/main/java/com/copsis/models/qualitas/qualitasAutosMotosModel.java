@@ -185,8 +185,7 @@ public class qualitasAutosMotosModel {
 					if(newcontenido.split("\n")[i].contains("Prima Neta")) {		
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta")[1].replace("###", ""))));						
 					}
-					if(newcontenido.split("\n")[i].contains("Financiamiento")) {						
-					  
+					if(newcontenido.split("\n")[i].contains("Financiamiento") && newcontenido.split("\n")[i].split("Financiamient")[1].length() > 5) {						
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Financiamiento")[1].replace("###", ""))));						
 					}
 					if(newcontenido.split("\n")[i].contains("Expedición")) {												 
@@ -283,7 +282,7 @@ public class qualitasAutosMotosModel {
 			}
 			modelo.setRecibos(recibos);
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(
 					qualitasAutosMotosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
