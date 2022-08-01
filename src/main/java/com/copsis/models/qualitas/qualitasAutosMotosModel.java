@@ -116,7 +116,11 @@ public class qualitasAutosMotosModel {
 						}
 						
 					}
-					if(newcontenido.split("\n")[i].contains("Desde las 12:00")) {
+					if(newcontenido.split("\n")[i].contains("Desde las 12:00") && fn.obtenVigePoliza2( newcontenido.split("\n")[i]).size() == 2) {						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza2( newcontenido.split("\n")[i]).get(0)));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza2( newcontenido.split("\n")[i]).get(1)));					    
+					}
+					if(newcontenido.split("\n")[i].contains("Desde las 12:00") && fn.obtenVigePoliza2( newcontenido.split("\n")[i]).size() == 1) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1]));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
