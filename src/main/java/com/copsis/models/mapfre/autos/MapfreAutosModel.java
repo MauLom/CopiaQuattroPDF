@@ -274,7 +274,14 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("@@@AGENTE:") + 11;
 				newcontenido = contenido.substring(inicio, inicio + 90).split("\r\n")[0];
 			}
-			modelo.setAgente(newcontenido.trim());
+			if(newcontenido.contains(",")) {
+				System.out.println(newcontenido);
+				modelo.setAgente(newcontenido.split(",")[1].trim() +" " + newcontenido.split(",")[0].trim());	
+			}else {
+				modelo.setAgente(newcontenido.trim());
+			}
+		
+			
 
 			// cve_agente
 			int inicioagente = contenido.indexOf("CLAVE DE AGENTE: ");
