@@ -24,15 +24,23 @@ public class PlanSeguroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
+			
+			boolean modelo2 = false;
 
 			int tipo = fn.tipoPoliza(contenido);
 			if (tipo == 0 && contenido.contains("Ambulancia")) {
 				tipo = 2;
+				modelo2 =true;
 			}
 
 			switch (tipo) {
 			case 2:
-				modelo = new PlanSeguroSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				if(modelo2) {
+					modelo = new PlanSeguroSaludBModel().procesar(fn.caratula(1, 2, stripper, doc));
+				}else {
+					modelo = new PlanSeguroSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
+				}
+				
 				break;
 
 			default:
