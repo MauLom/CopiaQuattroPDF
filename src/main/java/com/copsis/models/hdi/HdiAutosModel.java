@@ -69,6 +69,12 @@ public class HdiAutosModel {
 					if (newcontenido.split("\n")[i].contains("C.P") && newcontenido.split("\n")[i].contains("Tel:")) {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P")[1].split("Tel:")[0].trim());
 					}
+					
+					if(modelo.getCp().length() == 0 &&  newcontenido.split("\n")[i].contains("C.P") ) {
+						modelo.setCp(fn.obtenerCPRegex2( newcontenido.split("\n")[i+1]));
+						
+					}
+					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA2)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1]
