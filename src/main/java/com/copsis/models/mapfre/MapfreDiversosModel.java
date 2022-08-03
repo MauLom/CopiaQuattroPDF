@@ -299,6 +299,10 @@ public class MapfreDiversosModel {
 			if (fin == -1) {
 				fin = contenido.indexOf("Mapfre México S.A. denominada");
 			}
+			if (fin == -1) {
+				fin = contenido.indexOf("Mapfre México, S. A. denominada");
+			}
+			
 
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);

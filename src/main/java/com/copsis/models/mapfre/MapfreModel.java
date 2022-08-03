@@ -31,7 +31,6 @@ public class MapfreModel {
 		try {
 			tipo =fn.tipoPoliza(contenido);
 
-
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
@@ -57,8 +56,10 @@ public class MapfreModel {
 			if(tipo == 5 &&  contenido.contains("MULTIPLE EMPRESARIAL")) {
 				tipo =4;
 			}
+			if(tipo == 2 &&  contenido.contains("HOGAR BIEN SEGURO")) {
+				tipo =4;
+			}
 
-			
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
