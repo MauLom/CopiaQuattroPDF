@@ -60,7 +60,10 @@ public class MapfreModel {
 				tipo =4;
 			}
 
-
+			if(tipo == 5 &&  contenido.contains("UBICACIÓN DE RIESGOS")) {
+				tipo =4;
+			}
+			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
 	
