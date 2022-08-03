@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1380,8 +1381,7 @@ public class DataToolsModel {
 		}
 		
 		public int diferenciaDias(String vigD,String vigA ) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			 
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");			 
 			Date fechaInicial = null;
 			Date fechaFinal = null;
 			int dias=0;
@@ -1397,9 +1397,17 @@ public class DataToolsModel {
 			}
 
 		}
-		
-		
-		
+
+		public int diferencia(String vigD, String vigA) {
+			int dias = 0;
+			LocalDate localDate1 = LocalDate.parse(vigD, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			LocalDate localDate2 = LocalDate.parse(vigA, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+			Period period = Period.between(localDate1, localDate2);
+			dias = Math.abs(period.getYears());
+			return dias;
+
+		}
 		
 
 }
