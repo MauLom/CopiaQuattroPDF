@@ -275,12 +275,15 @@ public class MapfreAutosModel {
 				newcontenido = contenido.substring(inicio, inicio + 90).split("\r\n")[0];
 			}
 			if(newcontenido.contains(",")) {
-				System.out.println(newcontenido);
+		
 				modelo.setAgente(newcontenido.split(",")[1].trim() +" " + newcontenido.split(",")[0].trim());	
 			}else {
 				modelo.setAgente(newcontenido.trim());
 			}
 		
+			if(modelo.getCteNombre().length() > 0 && modelo.getCteNombre().contains(",")) {
+				modelo.setCteNombre((modelo.getCteNombre().split(",")[1] +" " + modelo.getCteNombre().split(",")[0]).replace(".", "").trim());
+			}
 			
 
 			// cve_agente
