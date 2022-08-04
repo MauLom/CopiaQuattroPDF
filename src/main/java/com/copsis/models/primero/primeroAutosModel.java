@@ -46,7 +46,7 @@ public class primeroAutosModel {
 			
 		      if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "");
-	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	                for (int i = 0; i < newcontenido.split("\n").length; i++) {	               
 	                    if (newcontenido.split("\n")[i].contains("Cp.")) {
 	                        modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
 	                    }
@@ -92,7 +92,10 @@ public class primeroAutosModel {
 	                    }
 	                    
 	                    if(modelo.getModelo() == 0 && newcontenido.split("\n")[i].contains("Modelo") && newcontenido.split("\n")[i].contains("###")) {
+	                    
+	                    	if(newcontenido.split("\n")[i].split("Modelo")[1].split("###").length > 1) {
 	                    	modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo")[1].split("###")[1]));
+	                    	}
 	                    }
 	                    
 	                    if (newcontenido.split("\n")[i].contains("Placas") && newcontenido.split("\n")[i].contains("Serie")) {
