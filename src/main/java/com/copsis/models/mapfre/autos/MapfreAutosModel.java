@@ -293,7 +293,7 @@ public class MapfreAutosModel {
 			} else {
 				inicio = contenido.indexOf("@@@CLAVE DE AGENTE:") + 17;
 			}
-			newcontenido = contenido.substring(inicio, inicio + 10).split("\r\n")[0];
+			newcontenido = contenido.substring(inicio, inicio + 12).split("\r\n")[0];
 			modelo.setCveAgente(newcontenido.replace("E:###", "").trim());
 
 			if (contenido.indexOf("Desde las 12:00 hrs. de:") > 0) {
