@@ -25,7 +25,6 @@ public class AlliansVidaBModel {
 			modelo.setCia(4);
 			modelo.setMoneda(1);
 
-//			System.out.println(contenido);
 			inicio = contenido.indexOf("Asegurado");
 			fin  = contenido.indexOf("BENEFICIARIOS");	
 			newcontenido = new StringBuilder();
@@ -60,7 +59,6 @@ public class AlliansVidaBModel {
 				
 				
 				if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
-					System.out.println(newcontenido.toString().split("\n")[i]);
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
 				}
 			}
@@ -100,8 +98,7 @@ public class AlliansVidaBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 				if(!newcontenido.toString().split("\n")[i].contains("Nombre") && !newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")
-					&&	!newcontenido.toString().split("\n")[i].contains("Fallecimiento") 		) {			
-					System.out.println(newcontenido.toString().split("\n")[i]);
+					&&	!newcontenido.toString().split("\n")[i].contains("Fallecimiento") 		) {						
 					beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 					beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));
 					beneficiario.setPorcentaje(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].replaceFirst("%", "").trim()));
