@@ -26,7 +26,7 @@ public class PlanSeguroModel {
 		try {
 			
 			boolean modelo2 = false;
-			System.out.println(contenido);
+
 
 			int tipo = fn.tipoPoliza(contenido);
 			if (tipo == 0 && contenido.contains("Ambulancia")) {

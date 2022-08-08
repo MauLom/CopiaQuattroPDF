@@ -117,7 +117,6 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerDatosContratante(String renglon,String[] arrNewContenido,int i) {
-		System.out.println(renglon);
 		if (renglon.contains("Contratante:")&& renglon.contains(ConstantsValue.RFC)) {
 			modelo.setCteNombre(renglon.split("Contratante:")[1].split(ConstantsValue.RFC)[0]
 					.replace("###", "").replace("C.U.R.P:", "").trim());
@@ -234,7 +233,6 @@ public class MapfreVidaBModel {
 		String renglon = "";
 		if (inicio > -1 && fin > -1 && inicio < fin) {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			System.out.println(contenido.substring(inicio, fin));
 			newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(" ", "###")
 					.replace("###VIDA###", "VIDA###")
 					.replace("###MUERTE###ACCIDENTAL", "MUERTE ACCIDENTAL")
@@ -248,8 +246,7 @@ public class MapfreVidaBModel {
                     .replace("Muerte###accidental###MA", "Muerte accidental MA");
                     
 			
-			System.out.println(newcontenido);
-
+		
 			arrNewContenido = newcontenido.split("\n");
 			for (int i = 0; i < arrNewContenido.length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
