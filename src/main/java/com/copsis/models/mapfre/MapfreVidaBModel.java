@@ -27,7 +27,12 @@ public class MapfreVidaBModel {
 				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
 				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
 				.replace("Prima Neta:", ConstantsValue.PRIMA_NETA4).replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
-                .replace("DESCRIPCIÓN DE COBERTURAS",ConstantsValue.DESCRIPCION_COBERTURAS);
+                .replace("DESCRIPCIÓN DE COBERTURAS",ConstantsValue.DESCRIPCION_COBERTURAS)
+                .replace("Póliza número :", "Póliza Número:").replace("C.P.", "C.P:")
+                .replace("RFC :", "R.F.C:").replace("Vigencia desde", "Vigencia Desde").replace("Clave de agente:", "Clave de Agente:")
+                .replace("hasta", "Hasta").replace("Fecha de emisión:", "Fecha de Emisiòn:").replace("Forma de pago:", "Forma de Pago:")
+                .replace("Gastos de expedición", "Gastos de Expedición").replace("Prima total:", "Prima Total:")
+                .replace("CURP:", "C.U.R.P:");
 
 		String newcontenido = "";
 		int inicio = 0;
@@ -37,18 +42,20 @@ public class MapfreVidaBModel {
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(22);
-			inicio = contenido.indexOf("SEGURO DE VIDA ");
+			inicio = contenido.indexOf("SEGURO DE VIDA");
 			if(inicio == -1) {
 				inicio = contenido.indexOf("PLAN SERVICIOS");
 			}
 			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");
+			
+			if(fin == -1) {
+				fin = contenido.indexOf("MAPFRE México, S.A.");
+			}
 	
 
 			
-			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
-						.replace("### 00.00", "### 00.00###");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### 00.00", "### 00.00###");
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
 				
@@ -92,11 +99,14 @@ public class MapfreVidaBModel {
 				fin = contenido.lastIndexOf(ConstantsValue.PRIMA_NETA4);
 			}
 			
+			
+			
 		
 			leerCoberturas(inicio,fin);
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
 			buildRecibos();
+
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(MapfreVidaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
@@ -107,8 +117,8 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerDatosContratante(String renglon,String[] arrNewContenido,int i) {
-		if (renglon.contains("Contratante:")
-				&& renglon.contains(ConstantsValue.RFC)) {
+		System.out.println(renglon);
+		if (renglon.contains("Contratante:")&& renglon.contains(ConstantsValue.RFC)) {
 			modelo.setCteNombre(renglon.split("Contratante:")[1].split(ConstantsValue.RFC)[0]
 					.replace("###", "").replace("C.U.R.P:", "").trim());
 			modelo.setRfc(renglon.split(ConstantsValue.RFC)[1].replace("###", "").trim());
@@ -117,8 +127,7 @@ public class MapfreVidaBModel {
 			}
 			
 		}
-		if (renglon.contains("Domicilio:")
-				&& renglon.contains("Tel:")) {
+		if (renglon.contains("Domicilio:")&& renglon.contains("Tel:")) {
 			modelo.setCteDireccion(renglon.split("Domicilio:")[1].split("Tel:")[0]
 					.replace("###", "").trim());
 		}
@@ -164,7 +173,7 @@ public class MapfreVidaBModel {
 					.trim());
 			modelo.setFormaPago(fn
 					.formaPago(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim()));
-			modelo.setMoneda(1);
+			modelo.setMoneda(fn.buscaMonedaEnTexto(arrNewContenido[i + 1]));
 		}
 	}
 	
@@ -225,6 +234,7 @@ public class MapfreVidaBModel {
 		String renglon = "";
 		if (inicio > -1 && fin > -1 && inicio < fin) {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+			System.out.println(contenido.substring(inicio, fin));
 			newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(" ", "###")
 					.replace("###VIDA###", "VIDA###")
 					.replace("###MUERTE###ACCIDENTAL", "MUERTE ACCIDENTAL")
@@ -233,7 +243,12 @@ public class MapfreVidaBModel {
                     .replace("PAGO###ADICIONAL###DE###SUMA###ASEGURADA###POR###INVALIDEZ###TOTAL###Y###PERMANENTE","PAGO ADICIONAL DE SUMA ASEGURADA POR INVALIDEZ TOTAL Y PERMANENTE")
                     .replace("ENFERMEDADES###GRAVES", "ENFERMEDADES GRAVES")
                     .replace("MUERTE###ACCIDENTAL###Y###PÉRDIDAS###ORGÁNICAS###COLECTIVA", "MUERTE ACCIDENTAL Y PÉRDIDAS ORGÁNICAS COLECTIVA")
-                    .replace("SERVICIOS###FUNERARIOS","SERVICIOS FUNERARIOS");
+                    .replace("SERVICIOS###FUNERARIOS","SERVICIOS FUNERARIOS")
+                    .replace("Pago###de###suma###asegurada###por###invalidez###total###y###permanente###BIPA", "Pago de suma asegurada por invalidez total y permanente BIPA")
+                    .replace("Muerte###accidental###MA", "Muerte accidental MA");
+                    
+			
+			System.out.println(newcontenido);
 
 			arrNewContenido = newcontenido.split("\n");
 			for (int i = 0; i < arrNewContenido.length; i++) {
