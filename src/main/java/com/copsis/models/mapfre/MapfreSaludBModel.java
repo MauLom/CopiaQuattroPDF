@@ -255,7 +255,7 @@ public class MapfreSaludBModel {
 				}
 				
 			}
-				//System.out.println("COBERTURAS==> " +modelo.getCoberturas().size() +"\n" + contenido);
+		
 			if(modelo.getCoberturas().isEmpty() && contenido.contains("COBERTURAS SUMA ASEGURADA") && contenido.contains("PLAN:" )) {
 				
 				inicio = contenido.indexOf("COBERTURAS SUMA ASEGURADA");

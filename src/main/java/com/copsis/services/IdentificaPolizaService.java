@@ -368,9 +368,10 @@ public class IdentificaPolizaService {
             
             }
 
+
             // ENTRADA PARA PLAN SEGURO            
-               if (!encontro && contenido.contains("Plan Seguro")) {
-            
+               if (!encontro && (contenido.contains("Plan Seguro") || contenido.contains("Plan Seguro S.A de C.V"))) {
+
                 	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
                     modelo = datosPlan.procesar();
                     encontro = true;
