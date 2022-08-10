@@ -214,10 +214,12 @@ public class IdentificaPolizaService {
 				encontro = true;
 
 			}
+
 			// ENTRADA PARA METLIFE
 			if (!encontro && contenido.contains("MetLife México S.A.")
-					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México")) {
+					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México") || contenido.contains("MetLife México, S.A.")) {
 				MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
+			
 				modelo = datosMetlife.procesar();
 				encontro = true;
 			}

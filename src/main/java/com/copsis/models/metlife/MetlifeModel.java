@@ -27,16 +27,17 @@ public class MetlifeModel {
 		try {
 			
 			int tipo =fn.tipoPoliza(contenido);
-			if(contenido.contains("METALIFE RETIRO")) {
+			if(contenido.contains("METALIFE RETIRO") || contenido.contains("METALIFE TU FUTURO")) {
 				tipo =5;
 			}
+	
 			switch (tipo) {
 			case 2:// Salud
 				modelo  = new MetlifeSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				
 				break;
 			case 5:// Vida
-				if(contenido.contains("METALIFE RETIRO")) {
+				if(contenido.contains("METALIFE RETIRO")  || contenido.contains("METALIFE TU FUTURO")) {
 					modelo  = new MetlifeVIdaBModel().procesar(fn.caratula(1, 6, stripper, doc));							
 				}else {
 					modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();
