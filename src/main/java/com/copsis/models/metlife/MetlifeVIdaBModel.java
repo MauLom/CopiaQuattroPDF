@@ -7,6 +7,7 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class MetlifeVIdaBModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -28,7 +29,7 @@ public class MetlifeVIdaBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				if(newcontenido.toString().split("\n")[i].contains("contratante") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[1]);
-					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("domicilio") && newcontenido.toString().split("\n")[i+1].contains("Día")) {
 					direccion.append(newcontenido.toString().split("\n")[i+2].split("###")[0]);
@@ -92,6 +93,7 @@ public class MetlifeVIdaBModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("@@@", "").toUpperCase()
 					.replace("CÓNYUGE", "###CÓNYUGE###")
 					.replace("HERMANA", "###HERMANA###")
+					.replace("HERMANO", "###HERMANO###")
 					);
 			
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();			
@@ -106,6 +108,32 @@ public class MetlifeVIdaBModel {
 			}
 			
 			modelo.setBeneficiarios(beneficiarios);
+			List<EstructuraRecibosModel> recibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+			switch (modelo.getFormaPago()) {
+			case 1:
+
+				recibo.setReciboId("");
+				recibo.setSerie("1/1");
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+				recibo.setVigenciaA(modelo.getVigenciaA());
+				if (recibo.getVigenciaDe().length() > 0) {
+					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+				}
+				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
+				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+
+				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
+				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
+				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
+				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibos.add(recibo);
+
+			break;
+			}
+			modelo.setRecibos(recibos);
 			
 
 			
