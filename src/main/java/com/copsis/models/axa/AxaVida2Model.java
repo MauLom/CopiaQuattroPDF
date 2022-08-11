@@ -103,7 +103,8 @@ public class AxaVida2Model {
 			resultado  = new StringBuilder();
 			for (int i = 0; i < contenido.split("Beneficiarios Nombre").length; i++) {	
 				if(i> 0) {
-					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "").replace("ESPOSA", "###ESPOSA###")); 
+					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
+							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###")); 
 				}										
 			}
 			
