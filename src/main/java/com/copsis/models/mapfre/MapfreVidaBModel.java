@@ -280,12 +280,13 @@ public class MapfreVidaBModel {
 		if (inicio > -1 ) {
 			newcontenido = newcontenido.replace("@@@", "").replace("\r", "")
 					.replace("CONYUGE", "###CONYUGE###")
-                    .replace("MADRE", "###MADRE###");
+                    .replace("MADRE", "###MADRE###")
+			        .replace("HERMANO-A", "###HERMANO###");
 			arrNewContenido = newcontenido.split("\n"); 
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 			for (int i = 0; i < arrNewContenido.length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-				renglon = arrNewContenido[i];
+				renglon = arrNewContenido[i];			
 				if(!renglon.contains("PARENTESCO")) {
 					int sp =renglon.split("###").length;
 					if(sp == 3) {
