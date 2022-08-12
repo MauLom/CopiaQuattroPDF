@@ -125,9 +125,14 @@ public class SisnovaSaludModel {
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
-					if(newcontenido.split("\n")[i].split("-").length > 4) {							
+					if(newcontenido.split("\n")[i].split("-").length > 4) {						
 						if(newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ").length() <30) {
-							asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i-1].replace("###", "").replaceAll("\\u00A0", " ") +" "+ newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());
+							if(newcontenido.split("\n")[i-1].contains("nacimiento")) {
+								asegurado.setNombre(fn.eliminaSpacios( newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());	
+							}else {
+								asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i-1].replace("###", "").replaceAll("\\u00A0", " ") +" "+ newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());		
+							}
+							
 						}else {
 							asegurado.setNombre(fn.eliminaSpacios(newcontenido.split("\n")[i].split("###")[1].replaceAll("\\u00A0", " ")).trim());	
 						}						
