@@ -16,10 +16,12 @@ public class qualitasAutosModel {
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
 	private String cbo = "";
+	private String cotxtra = "";
 
-	public qualitasAutosModel(String contenido,String coberturas) {
+	public qualitasAutosModel(String contenido,String coberturas,String cotxtra) {
 		this.contenido = contenido;
 		this.cbo = coberturas;
+		this.cotxtra=cotxtra;
 		
 	}
 
@@ -35,11 +37,13 @@ public class qualitasAutosModel {
 		 String texto = "";
 		 String subtxt = "";
 		 String newcontenido = "";
+		 String cboxt = "";
 		 String[] arrNewContenido;
 	
 		 StringBuilder datosvehiculo = new StringBuilder();
 		 
 			StringBuilder  newcontenidotxt = new StringBuilder();
+			StringBuilder  newctx = new StringBuilder();
 		 
 		
 	
@@ -762,9 +766,10 @@ public class qualitasAutosModel {
 				inicio = contenido.indexOf("PRIMA");
 			}
 			fin = contenido.indexOf("MONEDA");
-	
+
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").trim();
+
 		
 				if (newcontenido.contains("La Unidad de Medida")) {
 					newcontenido = newcontenido.split("La Unidad de Medida")[0].trim();
@@ -806,7 +811,7 @@ public class qualitasAutosModel {
 					inicio = cbo.indexOf("PRIMA");
 				}
 				fin = cbo.indexOf("MONEDA");
-		
+				
 			  if(cbo.indexOf("COBERTURAS CONTRATADAS") > -1 && cbo.indexOf("SUMA ASEGURADA") > -1 && cbo.indexOf("DEDUCIBLE") > -1) {
 				 inicio = cbo.lastIndexOf("COBERTURAS CONTRATADAS");
 				 fin = cbo.indexOf("Para RC en el extranjero");				
@@ -846,6 +851,49 @@ public class qualitasAutosModel {
 				}
 				
 			}
+			
+			
+			if(modelo.getCoberturas().isEmpty() && cotxtra.length() >0) {
+				for (int i = 0; i < cotxtra.split("COBERTURAS CONTRATADAS").length; i++) {
+					if(i> 0 ) {
+						newctx.append(cotxtra.split("COBERTURAS CONTRATADAS")[i].split("MONEDA")[0].replace("@@@", ""));						
+					}				
+				}
+				cboxt = fn.remplazarMultiple(newctx.toString(),fn.remplazosGenerales());
+				if(cboxt.length() > 0) {
+					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+					for (int i = 0; i < cboxt.split("\n").length ; i++) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(!cboxt.split("\n")[i].contains("DEDUCIBLE") && !cboxt.split("\n")[i].contains("deducible")
+						&& !cboxt.split("\n")[i].contains("Fronterizos") && !cboxt.split("\n")[i].contains("sistema")
+						&& !cboxt.split("\n")[i].contains("Servicios")) {
+							
+							int sp = cboxt.toString().split("\n")[i].split("###").length;
+			
+							switch (sp) {
+							case 4:
+								cobertura.setNombre(cboxt.toString().split("\n")[i].split("###")[0].trim());
+								cobertura.setSa(fn.eliminaSpacios(cboxt.toString().split("\n")[i].split("###")[1].trim(), ' ', ""));
+								cobertura.setDeducible(cboxt.toString().split("\n")[i].split("###")[2].trim());
+								coberturas.add(cobertura);
+								break;
+							case 3:
+								cobertura.setNombre(cboxt.toString().split("\n")[i].split("###")[0].trim());
+								cobertura.setSa(fn.eliminaSpacios(cboxt.toString().split("\n")[i].split("###")[1].trim(), ' ', ""));
+								coberturas.add(cobertura);
+								break;
+							default:
+								break;
+							}
+							
+						}
+					}
+					modelo.setCoberturas(coberturas);
+				}
+			}
+			
+			
+			
 			if(cbo.length() >  0) {
 				// System.out.println(cbo.toString());
 				for (int i = 0; i < cbo.split("VEHÍCULO ASEGURADO").length; i++) {
