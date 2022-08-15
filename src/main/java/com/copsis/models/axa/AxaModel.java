@@ -51,6 +51,7 @@ public class AxaModel {
 				contenido = contenido.toUpperCase();
 				for (String tipo : tipos) {
 					if (contenido.contains(tipo)) {
+						
 						switch (tipo) {
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
 							if(tipo.equals("VIDA PROTGT") ) {
@@ -80,6 +81,7 @@ public class AxaModel {
 							break;
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
+						
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
 							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
@@ -89,7 +91,9 @@ public class AxaModel {
 						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR
 						   case "PROTECCIÓN A BIENES EMPRESARIALES":
 						   case "RESPONSABILIDAD CIVIL, ERRORES":
+						   case "DAÑOS":	   
 							   int pagFin = doc.getNumberOfPages() > 3 ? 4 :3;
+						
 							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();								
 								break;
