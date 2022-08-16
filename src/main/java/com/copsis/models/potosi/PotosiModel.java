@@ -5,7 +5,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.ana.AnaModel;
 
 public class PotosiModel {
 
@@ -26,7 +25,13 @@ public class PotosiModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-		      switch (fn.tipoPoliza(contenido)) {
+		
+			int tipo =fn.tipoPoliza(contenido);
+			if(tipo == 4 && contenido.contains("SEGURO DE VIDA")) {
+				tipo = 5;
+			}
+		
+		      switch (tipo) {
 			case 1:
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				break;
@@ -42,6 +47,9 @@ public class PotosiModel {
 				}
 				
 				break;	
+			case 5:
+				modelo = new PotosiVidaModel().procesar(fn.caratula(1, 3, stripper, doc));
+				break;
 			default:
 				break;
 			}
