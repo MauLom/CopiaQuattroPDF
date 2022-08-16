@@ -39,6 +39,9 @@ public class BexmasModel {
 			case 4:
 				modelo =  new BexmasDiversosModel().procesar(fn.caratula(0, 3, stripper, doc));
 				break;
+			case 5:
+				modelo = new BexmasVidaModel().procesar(fn.caratula(0, 3, stripper, doc));
+				break;
 			default:
 				break;
 			}
