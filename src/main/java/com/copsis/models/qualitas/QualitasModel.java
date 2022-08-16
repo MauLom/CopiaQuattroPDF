@@ -58,10 +58,10 @@ public class QualitasModel {
 					
 					if (pagIni < pagFin) {
 						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
-								fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc));
+								fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
 						modelo = datosQualitasAutos.procesar();
 					} else {
-						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"");
+						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
 						modelo = datosQualitasAutos.procesar();
 					}
 				}
