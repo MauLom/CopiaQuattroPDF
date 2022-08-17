@@ -188,6 +188,7 @@ public class GnpSaludModel {
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 
+				
 					if (dato.contains(ConstantsValue.PRIMA_NETA)) {
 
 						dato = dato.replace(ConstantsValue.HASH, "###").trim();
@@ -252,10 +253,14 @@ public class GnpSaludModel {
 						default:
 							break;
 						}
-						
+					
 						if(modelo.getFormaPago() == 0) {
 							modelo.setFormaPago(fn.formaPagoSring(dato));
 						}
+						if(modelo.getFormaPago() == 0 && dato.contains("Unica")) {	
+						modelo.setFormaPago(1);
+						}
+						
 					}
 
 					if (dato.contains(ConstantsValue.MONEDA)) {
