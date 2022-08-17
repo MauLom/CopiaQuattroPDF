@@ -684,8 +684,7 @@ public class AxaSaludV2Model {
 			modelo.setRecibos(recibos);
 
 			return modelo;
-		} catch (Exception ex) {	
-			ex.printStackTrace();
+		} catch (Exception ex) {		
 			modelo.setError(
 					AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
