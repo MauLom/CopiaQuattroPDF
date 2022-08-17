@@ -41,6 +41,7 @@ import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sura.SuraModel;
 import com.copsis.models.zurich.ZurichModel;
+import com.copsis.panAmerican.PanAmericanModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -343,6 +344,12 @@ public class IdentificaPolizaService {
             }
             //////
             
+
+            if (!encontro && ( contenido.contains("Pan-American México"))){
+            	PanAmericanModel datosPanAmericanModel = new PanAmericanModel(pdfStripper, pdDoc, contenido);
+            	modelo =datosPanAmericanModel.procesar();
+                encontro = true;
+            }
            
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")

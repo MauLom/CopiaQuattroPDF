@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -26,13 +27,21 @@ public class MetlifeVIdaBModel {
 			fin = contenido.indexOf("COBERTURAS");
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
+			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				if(newcontenido.toString().split("\n")[i].contains("contratante") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[1]);
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim());
+					asegurado.setNombre(modelo.getCteNombre());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("domicilio") && newcontenido.toString().split("\n")[i+1].contains("Día")) {
-					direccion.append(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+					direccion.append(newcontenido.toString().split("\n")[i+2].split("###")[0]);			
+					if(newcontenido.toString().split("\n")[i+2].split("###").length == 5) {
+						String a = newcontenido.toString().split("\n")[i+2].split("###")[1] +"-"+ newcontenido.toString().split("\n")[i+2].split("###")[2] +"-"+ newcontenido.toString().split("\n")[i+2].split("###")[3];
+					   asegurado.setNacimiento( fn.formatDateMonthCadena(a));
+					}
 				} 
 				if(newcontenido.toString().split("\n")[i].contains("Moneda")) {
 					modelo.setMoneda(1);
@@ -50,6 +59,8 @@ public class MetlifeVIdaBModel {
 				modelo.setCp(fn.obtenerCPRegex2(modelo.getCteDireccion()));
 			}
 			
+			asegurados.add(asegurado);
+			modelo.setAsegurados(asegurados);
 		
 			inicio = contenido.indexOf("COBERTURAS");
 			fin = contenido.indexOf("Recargo");
