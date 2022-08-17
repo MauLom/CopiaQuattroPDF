@@ -50,8 +50,7 @@ public class AxaModel {
 						"RESPONSABILIDAD CIVIL, COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
 				for (String tipo : tipos) {
-					if (contenido.contains(tipo)) {
-						System.out.println(tipo);
+					if (contenido.contains(tipo)) {				
 						switch (tipo) {
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
 							if(tipo.equals("VIDA PROTGT") ) {
