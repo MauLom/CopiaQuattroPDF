@@ -88,6 +88,8 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 			
+
+			
 			if (!encontro && !rangoSimple(2, 4, pdfStripper, pdDoc).contains("Seguros el Potosí S.A") && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
 					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") 					
@@ -320,9 +322,10 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 			
-			
 		
-		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx"))){		    			    		                
+
+		
+		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A"))){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                
