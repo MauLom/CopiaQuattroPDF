@@ -1063,6 +1063,7 @@ public class DataToolsModel {
 				case "ANUA":
 				case "ANUAL":
 				case "ÚNICA":
+				case "UNICA":
 				case "ANUALMENTE":
 				case "ANUAL EXTENDIDA":
 					dato = 1;
