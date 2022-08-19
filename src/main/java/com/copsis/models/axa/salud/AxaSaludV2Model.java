@@ -211,6 +211,10 @@ public class AxaSaludV2Model {
 				inicio = contenido.indexOf("Prima Neta");
 			}
 			fin = contenido.indexOf("HOJA 1 ");
+			if (fin == -1) {
+				fin = contenido.indexOf("Este Documento No");
+			}
+	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
