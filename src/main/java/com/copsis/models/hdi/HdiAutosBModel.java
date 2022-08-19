@@ -52,6 +52,7 @@ public class HdiAutosBModel {
 				if(newcontenido.toString().split("\n")[i].contains("RFC:") && newcontenido.toString().split("\n")[i].contains("Fecha de Emisión:")) {	
 					modelo.setRfc(newcontenido.toString().split("\n")[i].split("RFC:")[1].split("Fecha")[0].replace("###", "").trim());
 				}
+			
 				if(newcontenido.toString().split("\n")[i].contains("Serie:") && newcontenido.toString().split("\n")[i].contains("Placas:") && newcontenido.toString().split("\n")[i].contains("Remolque:")) {	
 					modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie:")[1].split("Placas")[0].replace("###", "").trim());	
 					modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placas:")[1].split("Remolque")[0].replace("###", "").trim());	
