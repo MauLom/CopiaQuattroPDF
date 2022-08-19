@@ -215,8 +215,11 @@ public class AnaAutosModelRoja {
 				String textoFormaPago = fn.gatos(contenido.split(ConstantsValue.FORMA_PAGO2)[1].replace(":", "").trim());
 				textoFormaPago = textoFormaPago.split("###")[0].trim();
 			
-				if(diasVigencia>27 && diasVigencia<32 && textoFormaPago.equalsIgnoreCase("Domiciliada")) {
+				if(diasVigencia>27 && diasVigencia<32 && textoFormaPago.equalsIgnoreCase("Domiciliada")) {					
 					modelo.setFormaPago(fn.formaPago("CONTADO"));
+				}
+				if(textoFormaPago.equalsIgnoreCase("Dxn debito")) {
+					modelo.setFormaPago(1);
 				}
 			}
 			
