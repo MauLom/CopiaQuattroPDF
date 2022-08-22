@@ -154,6 +154,19 @@ public class GeneralSaludModel {		    //tipo
 			}
 			modelo.setCoberturas(coberturas);
 			
+
+		     inicio = contenido.indexOf("CLAVE DEL AGENTE");
+	         fin = contenido.lastIndexOf("Las Coberturas amparadas");	          
+	         newcontenido = new StringBuilder();
+	         newcontenido.append( fn.extracted(inicio, fin, contenido).replace("\"", ""));
+	 		for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	 	
+	 			if(newcontenido.toString().split("\n")[i].contains("CLAVE DEL AGENTE")) {
+	 				modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+	 			
+	 				modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);
+	 			}
+	 		}
+			
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(GeneralSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "

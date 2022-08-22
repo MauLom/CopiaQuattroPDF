@@ -15,8 +15,13 @@ public class GeneralModel {
 	
 	public EstructuraJsonModel procesar(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		try {	
-			System.out.println(fn.tipoPoliza(contenido));
-			 switch (fn.tipoPoliza(contenido)) {
+
+			int tipo = fn.tipoPoliza(contenido);
+			if(contenido.contains("PÓLIZA INDIVIDUAL / FAMILIAR")) {
+				tipo =2;
+			}
+			
+			 switch (tipo) {
 			 case 1:
 				 modelo = new GeneralAutosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
 				 break;
