@@ -69,7 +69,7 @@ public class IdentificaPolizaService {
 			boolean encontro = false;
 
 			// CHUBB
-			if (!encontro && contenido.contains("Chubb")) {
+			if (!encontro &&( contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
 				ChubbModel datosChubb = new ChubbModel();
 				datosChubb.setPdfStripper(pdfStripper);
 				datosChubb.setPdDoc(pdDoc);
