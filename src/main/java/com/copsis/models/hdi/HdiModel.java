@@ -32,7 +32,13 @@ public class HdiModel {
 				    modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
 
 				}else {
-					modelo = new HdiAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();					
+					
+					if(fn.caratula(1, 1, stripper, doc).contains("FORMATO DE PAGO")) {
+						modelo = new HdiAutosModel(fn.caratula(2, 3, stripper, doc)).procesar();
+					}else {
+						modelo = new HdiAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+					}
+										
 				}				
 				break;
 				
