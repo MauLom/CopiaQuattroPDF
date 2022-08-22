@@ -412,8 +412,10 @@ public class IdentificaPolizaService {
 
 
              //ENTRADA PARA General Salud
-           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx.")  || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") )) {        	   
-               modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
+           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx.")  || 
+        	rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Salud, Compañía de Seguros, S.A.") )) {        	   
+
+        	   modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
              
