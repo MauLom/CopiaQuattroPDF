@@ -47,9 +47,9 @@ public class AxaModel {
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA","VIDA PROTGT",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
-						"RESPONSABILIDAD CIVIL, COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
+						"RESPONSABILIDAD CIVIL, COMERCIO","PLANPROTEGE / COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
-				for (String tipo : tipos) {
+				for (String tipo : tipos) {				
 					if (contenido.contains(tipo)) {				
 						switch (tipo) {
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
@@ -80,9 +80,11 @@ public class AxaModel {
 							break;
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
+						case "PLANPROTEGE / COMERCIO":
 						
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
+							 
 							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
 							modelo = datosAxaDiversos.procesar();
 							div0 = true;
