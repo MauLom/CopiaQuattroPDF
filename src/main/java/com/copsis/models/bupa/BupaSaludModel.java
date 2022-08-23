@@ -1,0 +1,96 @@
+package com.copsis.models.bupa;
+
+import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraCoberturasModel;
+import com.copsis.models.EstructuraJsonModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BupaSaludModel {
+	private DataToolsModel fn = new DataToolsModel();
+	private EstructuraJsonModel modelo = new EstructuraJsonModel();
+
+	public EstructuraJsonModel procesar(String contenido) {
+		int inicio = 0;
+		int fin = 0;
+		StringBuilder newcontenido = new StringBuilder();
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		try {
+			modelo.setTipo(3);
+			modelo.setCia(87);
+			
+		
+			inicio = contenido.indexOf("Contratante");
+			fin = contenido.indexOf("Advertencia");
+			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("día-mes-año: ", ""));
+			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
+				if(newcontenido.toString().split("\n")[i].contains("Contratante")) {				
+					modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Contratante")[1].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Dirección")) {
+					modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Dirección")[1].replace("###", "").trim());					
+					modelo.setCp(fn.obtenerCPRegex2(newcontenido.toString().split("\n")[i+1]));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Número de Póliza")) {
+					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Vigencia")  && newcontenido.toString().split("\n")[i].contains("Vigencia")) {
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Hasta")) {
+					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Derecho de Póliza")) {
+					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					  modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Fraccionado")) {
+					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					  modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("IVA")) {
+					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					  modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Total")) {
+					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					  modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Asegurado Principal")) {				
+					if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0).length() > 0) {
+					asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1].split( fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0) )[0]);
+					asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0)));
+				    asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i+1] ));
+					}else {
+						asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);
+						asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i+1] ));
+					}									
+				}
+				
+				if(newcontenido.toString().split("\n")[i].contains("Deducibles") && newcontenido.toString().split("\n")[i].contains("Dentro")) {
+					cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("Dentro")[1].replace("###", ""));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Suma Asegurada") ) {
+					cobertura.setSa(newcontenido.toString().split("\n")[i+1].split("###")[0].replace("###", ""));
+				}
+				
+			}
+			asegurados.add(asegurado);
+			modelo.setAsegurados(asegurados);
+			
+			coberturas.add(cobertura);
+			modelo.setCoberturas(coberturas);
+			
+			return modelo;
+		} catch (Exception ex) {
+			modelo.setError(BupaSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+			return modelo;
+		}
+	}
+}
