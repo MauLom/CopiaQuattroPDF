@@ -21,6 +21,7 @@ import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.bexmas.BexmasModel;
+import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
@@ -67,6 +68,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
+	
 
 			// CHUBB
 			if (!encontro &&( contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
@@ -401,13 +403,15 @@ public class IdentificaPolizaService {
                    modelo = datosAguila.procesar();
                }
             
-
                //ENTRADA PARA Latinoamericana
-             if(!encontro &&  contenido.contains("Latinoamericana")) {
-            	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
-                 modelo = datosLatino.procesar();
-                 encontro = true;  
-             }
+               if(!encontro &&  contenido.contains("Latinoamericana")) {
+              	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosLatino.procesar();
+                   encontro = true;  
+               }
+
+
+     
                
 
 
@@ -418,8 +422,14 @@ public class IdentificaPolizaService {
         	   modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
-             
-
+           //ENTRADA PARA Bupa
+           if(!encontro &&  contenido.contains("www.bupasalud.com.mx")) {
+          	 BupaModel bupaModel = new BupaModel(pdfStripper, pdDoc, contenido);
+               modelo = bupaModel.procesar();
+               encontro = true;  
+           }
+           
+         
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
 				modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " | "
