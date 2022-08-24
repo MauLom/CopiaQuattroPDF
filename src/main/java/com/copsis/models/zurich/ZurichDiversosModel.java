@@ -40,8 +40,7 @@ public class ZurichDiversosModel {
 
 			if(inicio  > -1 && fin > -1 && inicio < fin) {
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
-				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-
+				for (int i = 0; i < newcont.toString().split("\n").length; i++) {                    
 					if( newcont.toString().split("\n")[i].contains("Moneda")) {						
 						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i]));
 					}
@@ -87,6 +86,10 @@ public class ZurichDiversosModel {
 						
 						modelo.setCteDireccion(direccion);
 					}
+					if( newcont.toString().split("\n")[i].contains("Producto")) {						
+						modelo.setPlan(newcont.toString().split("\n")[i].split("Producto")[1].replace("###", "").replace(":", "").trim());
+					}	
+					
 				}
 			}
 			inicio = contenido.indexOf("Producto");
