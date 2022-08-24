@@ -30,16 +30,20 @@ public class PotosiModel {
 			if(tipo == 4 && contenido.contains("SEGURO DE VIDA")) {
 				tipo = 5;
 			}
-		
+	
 		      switch (tipo) {
 			case 1:
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				break;
 			case 4:
 				if(fn.caratula(1, 2, stripper, doc).contains("Número de Póliza")) {
-					modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+                 if(fn.caratula(1, 2, stripper, doc).contains("SEGURO DE EMPRESA")) {
+                		modelo = new PotosiDiversosDModel().procesar(fn.caratula(1, 2, stripper, doc));
+                 }else {
+                		modelo = new PotosiDiversosModel(fn.caratula(1, 2, stripper, doc)).procesar();
+                 }									
 				}
-				if(fn.caratula(1, 2, stripper, doc).contains("SEGURO DE CASA")) {
+				else if(fn.caratula(1, 2, stripper, doc).contains("SEGURO DE CASA")) {
 					modelo = new PotosiDiversosCModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				}
 				else {
