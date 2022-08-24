@@ -120,11 +120,15 @@ public class SegurosMtyVida {
 				}
 				modelo.setAsegurados(asegurados);
 				
-				
+
 				inicio = contenido.indexOf("SUMA ASEGURADA");
 				fin = contenido.indexOf("MANCOMUNADO");
 				if(fin == -1) {
 					fin = contenido.indexOf("DESIGNACIÓN ###DE BENEFICIARIOS");
+				}
+				
+				if(fin == -1) {
+					fin = contenido.indexOf("DESIGNACIÓN DE BENEFICIARIOS");
 				}
 		
 
@@ -173,28 +177,35 @@ public class SegurosMtyVida {
 				
 				
 				for (int i = 0; i < contenido.split("DESIGNACIÓN DE BENEFICIARIOS").length; i++) {
-					if(i> 0 && contenido.split("DESIGNACIÓN DE BENEFICIARIOS")[i].contains("LA COMPAÑÍA")) {											
+				
+					if(i> 0 && contenido.split("DESIGNACIÓN DE BENEFICIARIOS")[i].contains("LA COMPAÑÍA")) {	
+						
 					    newcontenido.append(contenido.split("DESIGNACIÓN DE BENEFICIARIOS")[i].split("LA COMPAÑÍA")[0].replace("@@@", ""));						
 					}					
 				}
+
 				
 				if( newcontenido.length() > 0) {
 					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
 						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();						
-						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")) {
+						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") ) {							
+							if(newcontenido.toString().split("\n")[i+1].contains("%")) {
 							if(newcontenido.toString().split("\n")[i+1].contains("ESPOSO")) {
 								beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("ESPOSO")[0].replace("###", "").trim());
 							}else {
 								beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim());
-							}
-							beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[newcontenido.toString().split("\n")[i+1].split("###").length -1].replace("%", "").trim()));
+							}					
+								beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[newcontenido.toString().split("\n")[i+1].split("###").length -1].replace("%", "").trim()));
+												
 							if(newcontenido.toString().split("\n")[i+1].contains("ESPOSO")) {
 								beneficiario.setParentesco(1);
 							}else {
 								beneficiario.setParentesco(2);	
-							}													
+							}
+					
 							beneficiarios.add(beneficiario);
+						}
 						}
 					}
 					modelo.setBeneficiarios(beneficiarios);
