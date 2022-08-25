@@ -27,8 +27,12 @@ public class PlanSeguroSaludBModel {
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					
 					if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Certif")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Certif")[0].replace("###", "").trim());
+					}
+					if(modelo.getPoliza().length() == 0 && newcontenido.toString().split("\n")[i].contains("Póliza:")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].replace("###", ""));
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Nombre:") && newcontenido.toString().split("\n")[i].contains("Inicio")) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Nombre:")[1].split("Inicio")[0].replace("###", "").trim());
@@ -38,7 +42,16 @@ public class PlanSeguroSaludBModel {
 						newdire.append(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 						newdire.append(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 					}
-					if(newcontenido.toString().split("\n")[i].split("-").length > 3) {
+					if( newcontenido.toString().split("\n")[i].contains("Inicio") && newcontenido.toString().split("\n")[i].contains("Fin")		) {
+						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(1)));
+						if(modelo.getVigenciaDe().length() >  0) {
+							modelo.setFechaEmision(modelo.getVigenciaDe());
+						}
+					}
+					
+					if(newcontenido.toString().split("\n")[i].split("-").length > 3 && modelo.getVigenciaDe().length() == 0 &&  modelo.getVigenciaA().length() == 0) {
 		
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
@@ -103,10 +116,13 @@ public class PlanSeguroSaludBModel {
 
 				inicio = contenido.indexOf("Clave de Agente");
 				fin = contenido.indexOf("En###cumplimiento");
+				if(fin == -1) {
+					fin = contenido.indexOf("En cumplimiento");
+				}
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					System.out.println(newcontenido.toString().split("\n")[i]);
+				
 					if(newcontenido.toString().split("\n")[i].contains("Agente")) {
 						modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 						modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1].replace(". .", "").trim());

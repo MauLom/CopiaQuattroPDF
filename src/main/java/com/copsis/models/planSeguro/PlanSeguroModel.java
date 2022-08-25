@@ -24,28 +24,38 @@ public class PlanSeguroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			
-			boolean modelo2 = false;
 
+			int modeloTipo = 0;
 
 			int tipo = fn.tipoPoliza(contenido);
 			if (tipo == 0 && contenido.contains("Ambulancia")) {
 				tipo = 2;
-				modelo2 =true;
+				modeloTipo = 1;
 			}
 			if (tipo == 0 && contenido.contains("PÓLIZA DE SALUD OPTIMA")) {
-				tipo = 2;	
+				tipo = 2;
 			}
-	
+			if (tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SALUD OPTIMA / INDIVIDUAL")) {
+				tipo = 2;
+				modeloTipo = 2;
+			}
+
+
 			switch (tipo) {
 			case 2:
-				if(modelo2) {
-					modelo = new PlanSeguroSaludBModel().procesar(fn.caratula(1, 2, stripper, doc));
-				}else {
+				switch (modeloTipo) {
+				case 0:
 					modelo = new PlanSeguroSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
-					
+					break;
+				case 1:
+					modelo = new PlanSeguroSaludBModel().procesar(fn.caratula(1, 2, stripper, doc));
+					break;
+				case 2:
+					modelo = new PlanSeguroSaludBModel().procesar(fn.caratula(3, 4, stripper, doc));
+					break;	
 				}
 				
+
 				break;
 
 			default:
