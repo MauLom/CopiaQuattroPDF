@@ -86,14 +86,17 @@ public class AlliansVidaModel {
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
 				 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				 newcont  = new StringBuilder();
-				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
+						 .replace("PERMANENTE", "EXENCION DE PAGO DE PRIMAS POR INVALIDEZ TOTAL YPERMANENTE"));
 				
 				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {		
 					 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					 if(!newcont.toString().split("\n")[i].contains("Riesgos") && !newcont.toString().split("\n")[i].contains("Coberturas") ) {						
+					 if(!newcont.toString().split("\n")[i].contains("Riesgos") && !newcont.toString().split("\n")[i].contains("Coberturas") ) {	
+						if(newcont.toString().split("\n")[i].split("###").length > 1) {
 						 cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
 						 cobertura.setSa(newcont.toString().split("\n")[i].split("###")[1]);
 						 coberturas.add(cobertura);
+						}
 					 }
 				 }
 				 modelo.setCoberturas(coberturas);
