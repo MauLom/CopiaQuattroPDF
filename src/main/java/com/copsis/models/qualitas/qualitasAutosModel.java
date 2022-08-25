@@ -464,6 +464,7 @@ public class qualitasAutosModel {
 					}
 				}
 			}
+	
 			// plan
 			inicio = contenido.indexOf("PLAN:");
 			if (inicio > -1) {
@@ -471,11 +472,22 @@ public class qualitasAutosModel {
 						.trim();
 				modelo.setPlan(newcontenido);
 			}
+			
+			if(modelo.getPlan().length() == 0) {
+				inicio = cotxtra.lastIndexOf("PLAN:");			
+				if(inicio > 0 ) {
+					inicio = inicio+5;
+					
+				   modelo.setPlan(cotxtra.substring(inicio, inicio+10).replace("###", "").replace("\n", ""));
+				}
+				
+				
+			}
 
 			// renovacion
 			inicio = contenido.indexOf("RENUEVA A");
 			if (inicio > -1) {
-				newcontenido = contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10))
+				newcontenido = contenido.substring(inicio + 20, contenido.indexOf("\r\n", inicio + 10))
 						.replace("###", "").replace("-", "").replace(":", "").trim();
 				modelo.setRenovacion(newcontenido);
 			}
