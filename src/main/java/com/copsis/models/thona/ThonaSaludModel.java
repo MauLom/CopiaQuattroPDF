@@ -120,7 +120,6 @@ public class ThonaSaludModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();		
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				System.out.println(newcontenido.toString().split("\n")[i]);
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("SUMAS ASEGURADAS ")) {
 					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
