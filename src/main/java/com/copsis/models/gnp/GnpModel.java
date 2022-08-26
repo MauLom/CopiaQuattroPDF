@@ -95,8 +95,8 @@ public class GnpModel {
 			
 			}
 			
-			if(modelo.getTipo() == 0 && fn.caratula(1, 2, stripper, doc).contains("ESPECIFICACIÓN###DEL###GIRO")) {
-				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();
+			if(modelo.getTipo() == 0 && fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA")) {
+				modelo = new GnpVidaModel4().procesar(fn.caratula(1, 12, stripper, doc));
 			}
 			
 			
