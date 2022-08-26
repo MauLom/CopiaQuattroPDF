@@ -428,8 +428,9 @@ public class IdentificaPolizaService {
         	   modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
+    
            //ENTRADA PARA Bupa
-           if(!encontro &&  contenido.contains("www.bupasalud.com.mx")) {
+           if(!encontro && ( contenido.contains("www.bupasalud.com.mx") || rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.bupasalud.com.mx") )) {
           	 BupaModel bupaModel = new BupaModel(pdfStripper, pdDoc, contenido);
                modelo = bupaModel.procesar();
                encontro = true;  
