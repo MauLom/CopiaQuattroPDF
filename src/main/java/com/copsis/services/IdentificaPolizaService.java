@@ -41,6 +41,7 @@ import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sura.SuraModel;
+import com.copsis.models.thona.ThonaModel;
 import com.copsis.models.zurich.ZurichModel;
 import com.copsis.panAmerican.PanAmericanModel;
 
@@ -68,7 +69,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-	
+
 
 			// CHUBB
 			if (!encontro &&( contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
@@ -363,9 +364,14 @@ public class IdentificaPolizaService {
                         || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
                         || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
                         ))) {
-                	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
+            	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
+            		 encontro = false;
+            	}else {
+            		AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();
                     encontro = true;
+            	}
+                
                 
             }
             
@@ -424,12 +430,19 @@ public class IdentificaPolizaService {
         	   modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
+    
            //ENTRADA PARA Bupa
-           if(!encontro &&  contenido.contains("www.bupasalud.com.mx")) {
+           if(!encontro && ( contenido.contains("www.bupasalud.com.mx") || rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.bupasalud.com.mx") )) {
           	 BupaModel bupaModel = new BupaModel(pdfStripper, pdDoc, contenido);
                modelo = bupaModel.procesar();
                encontro = true;  
            }
+           
+           if(!encontro &&  contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
+        	   ThonaModel thonaModel = new ThonaModel(pdfStripper, pdDoc, contenido);
+                 modelo = thonaModel.procesar();
+                 encontro = true;  
+             }
            
          
 			if (!encontro) {

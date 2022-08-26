@@ -12,7 +12,7 @@ public class BupaSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 
-	public EstructuraJsonModel procesar(String contenido) {
+	public EstructuraJsonModel procesar(String contenido,String conteniext) {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
@@ -46,6 +46,11 @@ public class BupaSaludModel {
 				if(newcontenido.toString().split("\n")[i].contains("Hasta")) {
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
+				if( newcontenido.toString().split("\n")[i].contains("Nacimiento") && newcontenido.toString().split("\n")[i].contains("Prima")) {
+					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
+					  modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
 				if(newcontenido.toString().split("\n")[i].contains("Derecho de Póliza")) {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 					  modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
@@ -81,11 +86,40 @@ public class BupaSaludModel {
 				}
 				
 			}
+			
+			if(modelo.getVigenciaDe().length() > 0) {
+				modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
+			
+			
+			
 			asegurados.add(asegurado);
 			modelo.setAsegurados(asegurados);
 			
 			coberturas.add(cobertura);
 			modelo.setCoberturas(coberturas);
+			
+			
+			
+			inicio = conteniext.indexOf("Forma de Pago");
+			fin = conteniext.indexOf("Vigencia###Prima Neta");
+	
+			newcontenido.append( fn.extracted(inicio, fin, conteniext));
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
+				
+				if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
+				  modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i+1] ));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Moneda")) {
+					if(newcontenido.toString().split("\n")[i+1].contains("MXP")) {
+						modelo.setMoneda(1);
+					}
+				}
+					
+			}
+			
+			
+	
 			
 			return modelo;
 		} catch (Exception ex) {
