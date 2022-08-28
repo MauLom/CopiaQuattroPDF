@@ -1,3 +1,11 @@
+spring:
+  datasource:
+    hikari:
+      minimumIdle: 15
+      maximumPoolSize: 80
+      connectionTimeout: 60000
+server:
+  port: 8080  
 webhook-id: 62
 gateway-url: "https://api.quattrocrm.mx"
 serviceUrl:
