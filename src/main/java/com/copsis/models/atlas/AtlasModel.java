@@ -24,7 +24,14 @@ public class AtlasModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			switch (fn.tipoPoliza(contenido)) {
+
+			int tipo = fn.tipoPoliza(contenido);
+			
+			if(tipo == 2 && contenido.contains("SEGURO DE DAÑOS")) {
+				tipo =4;
+			}
+			
+			switch (tipo) {
 			case 1:// Autos
 				modelo = new AtlasAutosModel(fn.caratula(1, 2, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "RECIBO DE PAGO DE SEGURO DE AUTOS", false)).procesar();

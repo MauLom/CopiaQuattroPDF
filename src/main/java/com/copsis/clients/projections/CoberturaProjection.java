@@ -10,10 +10,15 @@ import lombok.Setter;
 @Setter
 @JsonInclude(Include.NON_NULL)
 public class CoberturaProjection {
-	
+	private int index;
 	private String nombres;
 	private String sa;
 	private String prima;
+	private String coaseguro;
+	private String deducible;
+	private String topeCoaseguro;
+	private String copago;
+	private String valExtranjero;
 	
 	
 	public CoberturaProjection() {

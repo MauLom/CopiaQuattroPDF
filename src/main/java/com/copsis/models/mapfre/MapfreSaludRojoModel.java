@@ -286,7 +286,13 @@ public class MapfreSaludRojoModel {
 				 }
 				 inicio = contenido.indexOf("Asistencia que componen la cobertura");
 				 fin = contenido.indexOf("AVISO DE PRIVACIDAD");
-				 newcontenido += contenido.substring(inicio+36,fin); 
+				 
+				 
+	
+				 if(inicio > -1 && inicio < fin) {
+					 newcontenido += contenido.substring(inicio+36,fin);	 
+				 }
+				 
 				 newcontenido = newcontenido.replace("noches por###hasta 150 Euros por \r\r\nnoche" ,"noches por hasta 150 Euros por noche");
 			 }
 			 
@@ -321,17 +327,25 @@ public class MapfreSaludRojoModel {
 	                	
 	                	x = completaTextoCobertura(arrContenido, index);
 	                	int sp = x.split("###").length;
+	                	
 	                    if (sp == 7 || sp == 6 || sp ==5) {
+	                    	
+	                    	if(!x.contains("-") &&  !x.contains("ANTIGÜEDAD") && !x.contains("RECONOCIMIENTO") && !x.contains("ASEGURADOS")) {
 	                        cobertura.setNombre(x.split("###")[0]);
 	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 	                        cobertura.setDeducible(x.split("###")[2]);
 	                        cobertura.setCoaseguro(x.split("###")[3]);
 	                        coberturas.add(cobertura);	
+	                    	}
 	                    }
 	                    if (sp == 3 || sp == 2) {
-	                        cobertura.setNombre(x.split("###")[0]);
-	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
-	                        coberturas.add(cobertura);	
+	                    
+	                    	if(!x.contains("-") && !x.contains("URO")  && !x.contains("ASEGURADOS") && !x.contains("NACIMIENTO") && !x.contains("ANTIGÜEDAD") && !x.contains("ANEXOS")) {
+	                            cobertura.setNombre(x.split("###")[0]);
+		                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
+		                        coberturas.add(cobertura);	
+	                    	}
+	            
 	                    }
 	                }
 	                index++;

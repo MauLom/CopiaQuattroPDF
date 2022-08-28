@@ -116,6 +116,14 @@ public class AtlasDiversosModel {
 					modelo.setAgente(newcontenido.split(ConstantsValue.AGENTE)[1].replace("###", "").trim());
 				}
 			}
+			
+			if(modelo.getFormaPago() == 1 && (fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) <30)) {
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			}
+				
+				
+		
+			
 
 			/**
 			 * Coberturas

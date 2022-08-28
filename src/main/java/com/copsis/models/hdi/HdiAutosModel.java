@@ -43,7 +43,7 @@ public class HdiAutosModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
+	
 					if (newcontenido.split("\n")[i].contains("responsabilidad máxima")) {
 						if (newcontenido.split("\n")[i + 1].trim().contains("Datos Generales de la Póliza")) {
 							modelo.setCteNombre(newcontenido.split("\n")[i + 2].split("###")[0].trim());
@@ -69,6 +69,12 @@ public class HdiAutosModel {
 					if (newcontenido.split("\n")[i].contains("C.P") && newcontenido.split("\n")[i].contains("Tel:")) {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P")[1].split("Tel:")[0].trim());
 					}
+					
+					if(modelo.getCp().length() == 0 &&  newcontenido.split("\n")[i].contains("C.P") ) {
+						modelo.setCp(fn.obtenerCPRegex2( newcontenido.split("\n")[i+1]));
+						
+					}
+					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2)
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.VIGENCIA2)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1]
@@ -179,7 +185,19 @@ public class HdiAutosModel {
 					if (newcontenido.split("\n")[i].contains("SEMESTRAL")) {
 						modelo.setFormaPago(2);
 					}
+
+					if(modelo.getPlacas().length() == 0){
+						if(newcontenido.split("\n")[i].contains("Versión") &&  newcontenido.split("\n")[i].contains("Transmisión") && newcontenido.split("\n")[i].contains("Placas:")) {
+							modelo.setPlacas(  newcontenido.split("\n")[i].split("Placas:")[1].trim());
+						}
+					}
+					if(modelo.getMotor().length() == 0){
+						if(newcontenido.split("\n")[i].contains("Motor:") &&  newcontenido.split("\n")[i].contains("Uso:") && newcontenido.split("\n")[i].contains("Acondicionado")) {
+							modelo.setMotor(  newcontenido.split("\n")[i].split("Motor:")[1].split("Uso:")[0].replace("###", "").trim());
+						}
+					}
 				}
+				
 				if(modelo.getFormaPago() == 0) {
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 				}

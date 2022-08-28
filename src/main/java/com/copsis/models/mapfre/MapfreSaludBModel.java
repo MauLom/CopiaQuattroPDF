@@ -61,7 +61,7 @@ public class MapfreSaludBModel {
 			if( fin == -1) {
 				fin = contenido.indexOf("Plan de Seguro:");
 			}
-			
+
 	
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
@@ -121,6 +121,16 @@ public class MapfreSaludBModel {
 					if(newcontenido.split("\n")[i].contains("C.P:")) {
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").trim());
 					} 
+				}
+			}
+			
+			if(modelo.getPoliza().length() == 0) {
+				inicio = contenido.indexOf("Poliza Numero:");
+				fin = contenido.indexOf("Endoso Número:");
+				if (inicio > -1 && fin > -1 && inicio < fin) {
+					if(contenido.substring(inicio,fin).contains("Poliza Numero:")) {
+						modelo.setPoliza(contenido.substring(inicio,fin).split("Poliza Numero:")[1].split("\n")[0].replace("\r", "").replace("###", ""));
+					}
 				}
 			}
 			
@@ -255,7 +265,7 @@ public class MapfreSaludBModel {
 				}
 				
 			}
-				//System.out.println("COBERTURAS==> " +modelo.getCoberturas().size() +"\n" + contenido);
+		
 			if(modelo.getCoberturas().isEmpty() && contenido.contains("COBERTURAS SUMA ASEGURADA") && contenido.contains("PLAN:" )) {
 				
 				inicio = contenido.indexOf("COBERTURAS SUMA ASEGURADA");

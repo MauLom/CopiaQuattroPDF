@@ -50,6 +50,7 @@ public class InsigniaVidaModel {
 					if(textoMoneda.contains("MXN")) {
 						textoMoneda = "PESO MEXICANO";
 					}
+					
 					modelo.setMoneda(fn.buscaMonedaEnTexto(textoMoneda));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i+1].contains("RFC")) {
@@ -72,6 +73,13 @@ public class InsigniaVidaModel {
                     }                 
                     modelo.setFechaEmision(modelo.getVigenciaDe());					
 				}								
+			}
+			
+			
+			if(modelo.getVigenciaA().length() > 0 && modelo.getVigenciaDe().length()> 0) {			
+				if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 5) {
+					modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				}
 			}
 			
 		

@@ -299,6 +299,10 @@ public class MapfreDiversosModel {
 			if (fin == -1) {
 				fin = contenido.indexOf("Mapfre México S.A. denominada");
 			}
+			if (fin == -1) {
+				fin = contenido.indexOf("Mapfre México, S. A. denominada");
+			}
+			
 
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
@@ -400,9 +404,13 @@ public class MapfreDiversosModel {
 				inicio = inicontenido.indexOf("SECCIÓN   BIENES Y RIESGOS");
 				fin = inicontenido.indexOf("ABREVIATURAS");
 
+				if (inicio == -1) {
+					inicio = inicontenido.indexOf("BIENES Y RIESGOS AMPARADOS");
+				}
 				if (fin == -1) {
 					fin = inicontenido.indexOf("RENOVACION AUTOMATICA");
 				}
+
 
 				if (inicio > -1 && fin > inicio) {
 					newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
@@ -492,6 +500,7 @@ public class MapfreDiversosModel {
 			// UBICACIONES
 			inicio = contenido.indexOf("RIESGOS ASEGURADOS");
 			fin = contenido.indexOf("MEDIDAS DE SEGURIDAD");
+		
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
 			if (inicio > -1 && fin > inicio) {

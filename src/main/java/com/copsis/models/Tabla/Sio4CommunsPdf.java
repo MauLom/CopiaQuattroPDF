@@ -294,6 +294,7 @@ public class Sio4CommunsPdf {
                     cell.setLeftPadding(0);
                     cell.setRightPadding(2);
                     break;
+                    
 
             }
 
@@ -327,9 +328,24 @@ public class Sio4CommunsPdf {
 
 
 
+    public Cell<PDPage> setCell(Row<PDPage> row, float width, Image img, List<LineStyle> line,List<Float> padding,String aligconte ,String valign) {
+    	
+        Cell<PDPage> cell = row.createImageCell(width, img);
+        
+        cell.setLeftBorderStyle(line.get(0));
+        cell.setRightBorderStyle(line.get(1));
+        cell.setBottomBorderStyle(line.get(2));
+        cell.setTopBorderStyle(line.get(3));
 
-
-   
+        cell.setLeftPadding(padding.get(0));
+        cell.setRightPadding(padding.get(1));
+        cell.setTopPadding(padding.get(2));
+        cell.setBottomPadding(padding.get(3));
+        
+        this.setAligment(cell, aligconte);
+        this.setVaAligment(cell, valign);
+        return cell;
+    }
 
 
 
@@ -359,6 +375,29 @@ public class Sio4CommunsPdf {
 
         return cell;
     }
+    
+    public final Cell<PDPage> setVaAligment(Cell<PDPage> cell, String alignment) {
+        switch (alignment) {
+            case "M":
+            case "m":
+                cell.setValign(VerticalAlignment.MIDDLE);
+                break;
+            case "B":
+            case "b":
+                cell.setValign(VerticalAlignment.BOTTOM);
+                break;
+            case "T":
+            case "t":
+                cell.setValign(VerticalAlignment.TOP);
+                break;
+            default:
+                cell.setValign(VerticalAlignment.TOP);
+                break;
+        }
+
+        return cell;
+    }
+    
     public final Cell<PDPage> setVertical(Cell<PDPage> cell, String alignment) {
         switch (alignment) {
             case "vB":

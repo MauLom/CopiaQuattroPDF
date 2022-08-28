@@ -24,9 +24,12 @@ public class ChubbModel {
 			int pagFin = 0;
 			int pagIni = 0;
 			
-
+			if(fn.caratula(1, 1, pdfStripper, pdDoc).contains("CONTENIDO###NUMERACIÓN")) {
+				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
+			}
+			
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES" };
+					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" };
 			 boolean encontro = false;
 			for (String tipo : tipos) {			
 				if (contenido.contains(tipo) && !encontro) {
@@ -41,6 +44,7 @@ public class ChubbModel {
 					case "Sótanos":
 					case "EMBARCACIONES":
 					case "TRANSPORTE DE MERCANCIAS":
+					case "Todo Riesgo Contratistas":	
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
 
 						if (pagFin == 0) {

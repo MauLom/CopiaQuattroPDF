@@ -16,7 +16,7 @@ public class AxaModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-
+	private boolean div0;
 	// Constructor
 	public AxaModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
@@ -47,10 +47,10 @@ public class AxaModel {
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA","VIDA PROTGT",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
-						"RESPONSABILIDAD CIVIL, COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES"};
+						"RESPONSABILIDAD CIVIL, COMERCIO","PLANPROTEGE / COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
-				for (String tipo : tipos) {
-					if (contenido.contains(tipo)) {
+				for (String tipo : tipos) {				
+					if (contenido.contains(tipo)) {				
 						switch (tipo) {
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": // VIDA
 							if(tipo.equals("VIDA PROTGT") ) {
@@ -80,17 +80,26 @@ public class AxaModel {
 							break;
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
+						case "PLANPROTEGE / COMERCIO":
+						
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
+							 
 							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
 							modelo = datosAxaDiversos.procesar();
+							div0 = true;
 						
 							break;
 						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR
 						   case "PROTECCIÓN A BIENES EMPRESARIALES":
+						   case "RESPONSABILIDAD CIVIL, ERRORES":
+						   case "DAÑOS":
+							   if(!div0) {
 							   int pagFin = doc.getNumberOfPages() > 3 ? 4 :3;
+						
 							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
-								modelo = datosAxaDive.procesar();								
+								modelo = datosAxaDive.procesar();
+							   }
 								break;
 							default: 
 								break;

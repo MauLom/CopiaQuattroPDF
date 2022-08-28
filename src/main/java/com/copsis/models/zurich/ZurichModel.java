@@ -35,7 +35,11 @@ public class ZurichModel {
 			if(tipo == 5 && contenido.contains("Incendio")) {
 				tipo = 4;
 			}
+			if(tipo == 5 && contenido.contains("Recolección de Residuos")) {
+				tipo = 4;
+			}
 	
+			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
 				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				

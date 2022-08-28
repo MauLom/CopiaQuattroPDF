@@ -99,12 +99,16 @@ public class AxaSaludV2Model {
 						if (modelo.getCp().length() > 5) {
 							int sp = newcontenido.split("\n")[i].split("C.P.")[1].split("###").length;
 							if (sp > 0) {
+								
 								modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0]);
 							}
 						}
-
+						
 						resultado = newcontenido.split("\n")[i].split("Fecha")[0].replace(modelo.getCp(), "")
 								.replace("C.P", "").replace("###", " ".replace("\r", ""));
+						if(resultado.contains("Ciudad")) {
+							resultado = resultado.split("Ciudad")[0].trim();
+						}
 
 						// vigencias
 						modelo.setVigenciaDe(
@@ -126,7 +130,6 @@ public class AxaSaludV2Model {
 					}
 
 					if (newcontenido.split("\n")[i].contains("C.P.") && !cp) {
-
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("Ciudad")[0].replace("###", "")
 								.trim());
 						if (modelo.getCp().length() > 5) {
@@ -194,6 +197,13 @@ public class AxaSaludV2Model {
 
 				}
 			}
+			
+			//codigo postal en una linea
+			if(modelo.getCp().length() != 5 && newcontenido.contains("Domicilio") && newcontenido.contains("@@@Fecha de fin")) {
+				if(newcontenido.split("Domicilio")[1].split("@@@Fecha de fin")[0].split("\n").length == 4) {
+					modelo.setCp(newcontenido.split("Domicilio")[1].split("@@@Fecha de fin")[0].split("\n")[3].trim());
+				}
+			}
 
 			modelo.setMoneda(1);
 			inicio = contenido.indexOf("Prima###Neta");
@@ -201,6 +211,10 @@ public class AxaSaludV2Model {
 				inicio = contenido.indexOf("Prima Neta");
 			}
 			fin = contenido.indexOf("HOJA 1 ");
+			if (fin == -1) {
+				fin = contenido.indexOf("Este Documento No");
+			}
+	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin);
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -286,30 +300,65 @@ public class AxaSaludV2Model {
 
 				inicio = inicontenido.indexOf("Relación de Asegurados");
 				fin = inicontenido.indexOf("AXA Seguros, S.A. de C.V.");
+
 				
 				if (inicio > 0 && fin > 0 && inicio < fin) {
 					
-					newcontenido = inicontenido.substring(inicio, fin).replaceAll("  +", "###").replace("/", "-")
+					newcontenido = inicontenido.substring(inicio, fin)
+							.replace("M   e  d  i a    Herm 1a4n/a0 6/2005", "###Media Hermana###14/06/2005###")
+							.replaceAll("  +", "###")							
+							.replace("/", "-")
 							.replace("######", "###").replace("######", "###").replace("### ###", "###")
 							.replace("T   it u  l ar", "Titular").replace("T###i t u###l ar", "Titular")
 							.replace("T###it u###l ar", "Titular")
 							.replace("C   ó  n  y  uge", "Conyuge").replace("C###ó###n###y###u ###ge", "Conyuge")
 							.replace("H   i j o", "Hijo").replace("H###i j o", "Hijo").replace("H###i j a", "Hija")
-							.replace("R ###odriguez", "Rodriguez").replace(" ###", "");
-				
+							.replace("R ###odriguez", "Rodriguez")
+							.replace("T###i tular", "Titular###")
+					
+							.replace("H ###ijo", "###Hijo###")
+							.replace(" ###", "")
+							.replace("###0###", "###0")
+							.replace("###-", "-");
+				 	
+					//begin fix parrafo listado de asegurados
+				 	List<String> palabras = this.palabraInicioyFinMayuscula(newcontenido);
+				 	for(String x: palabras) {
+				 		newcontenido = newcontenido.replace(x, x.substring(0, (x.length()-1)) + "###" + x.substring((x.length()-1), x.length()));
+				 	}
+				 	palabras = this.aseguradosEdadDividida(newcontenido);
+				 	for(String x:palabras) {
+				 		newcontenido = newcontenido.replace(x, x.substring(0, 5) + x.substring((x.length()-1), x.length()));
+				 	}
+					//end fix parrafo listado de asegurados
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						int x = newcontenido.split("\n")[i].split("###").length;
 						
 						if (newcontenido.split("\n")[i].split("-").length > 5) {
 						
-						
+					
+					
+			               	if (x == 9) {
+			               		asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);	
+			               		asegurado.setSexo(
+										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
+			               		asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[2]));
+								asegurado.setParentesco(fn.buscaParentesco(newcontenido.split("\n")[i]));								
+								if(fn.obtenVigePoliza(newcontenido.split("\n")[i]).size() == 5){
+									String vi= fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(4);
+								
+									asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+									asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[7].split(vi)[1])));
+								}
+								asegurados.add(asegurado);
+							}
 							if (x == 11) {
 								nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
 								if (nombre.contains(", ")) {
-									asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
+									asegurado.setNombre((nombre.split(",")[1] + " " + nombre.split(",")[0]).trim());
 								} else {
-									asegurado.setNombre(nombre);
+									asegurado.setNombre(nombre.trim());
 								}
 								asegurado.setSexo(
 										fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
@@ -324,7 +373,9 @@ public class AxaSaludV2Model {
 
 								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
 								asegurado.setAntiguedad(
-										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5]));
+										fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5].replace(" ", "")));
+								asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[8]));
+								asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[9])));
 
 								asegurados.add(asegurado);
 							}
@@ -340,13 +391,18 @@ public class AxaSaludV2Model {
 								fechaN = newcontenido.split("\n")[i].split("###")[4] + ""
 										+ newcontenido.split("\n")[i].split("###")[5].replace(" ", "");
 
+
 								fechaN = (fechaN.length() > 10
 										? newcontenido.split("\n")[i].split("###")[5].replace(" ", "")
 										: fechaN);
+								if(fechaN.length() >10) {
 								asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
-
+								}
 								fechaA = newcontenido.split("\n")[i].split("###")[6].replace(" ", "");
-								asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
+                                if(fechaA.length() >10) {
+                                	asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));	
+                                }
+								
 
 								asegurado.setParentesco(fn.buscaParentesco(newcontenido.split("\n")[i]));
 								asegurado.setSexo(
@@ -460,7 +516,7 @@ public class AxaSaludV2Model {
 					.replace("###C###ó###n###y###u ###ge", "###Conyuge")
 					.replace("H###i j o", "Hijo")
 					.replace("R ###odriguez", "Rodriguez");
-						 
+
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 						int x = newcontenido.split("\n")[i].split("###").length;
@@ -540,6 +596,8 @@ public class AxaSaludV2Model {
 			fin = contenido.indexOf("Costo por Servicio");
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
+
+				
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
 						.replace("######", "###").replace("###1 ###0 % ", "###10 %")
 						.replace("M ###aternidad", "Maternidad")
@@ -547,6 +605,21 @@ public class AxaSaludV2Model {
 						.replace("M ###edicamentos fuera del hospital Básica", "Medicamentos fuera del hospital Básica")
 						.replace("Complicaciones de GMM no cubiertos De acuerdo a Condiciones Generales", "Complicaciones de GMM no cubiertos###De acuerdo a Condiciones Generales")
 						.replace("### ###","###");
+				
+
+				//fix coberturas
+				if(!newcontenido.contains("Medicamentos fuera del hospital #")) {
+					newcontenido = newcontenido.replace("Medicamentos fuera del hospital ", "Medicamentos fuera del hospital###");
+				}
+				if(!newcontenido.contains("Complicaciones de GMM no cubiertos #")) {
+					newcontenido = newcontenido.replace("Complicaciones de GMM no cubiertos ", "Complicaciones de GMM no cubiertos###");
+				}
+				if(!newcontenido.contains("Deducible Cero por Accidente #")) {
+					newcontenido = newcontenido.replace("Deducible Cero por Accidente ", "Deducible Cero por Accidente###");
+				}
+				if(!newcontenido.contains("Cobertura Nacional #")) {
+					newcontenido = newcontenido.replace("Cobertura Nacional ", "Cobertura Nacional ###");
+				}
 				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -615,11 +688,47 @@ public class AxaSaludV2Model {
 			modelo.setRecibos(recibos);
 
 			return modelo;
-		} catch (Exception ex) {	
+		} catch (Exception ex) {		
 			modelo.setError(
 					AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 	}
 
+	private List<String> palabraInicioyFinMayuscula(String parrafo) {
+		//metodo para buscar palabras ejemplo
+		//ArturoM### problema
+		//Arturo##M### para posteriomente corregir y quedar
+		List<String> palabras = new ArrayList<>();
+		for(int i= 0; i < parrafo.split("\n").length; i++) {
+			for(int j= 0; j < parrafo.split("\n")[i].split("###").length;j++) {
+				for(int k= 0; k < parrafo.split("\n")[i].split("###")[j].split(" ").length;k++) {
+					if(parrafo.split("\n")[i].split("###")[j].split(" ")[k].matches("^[A-Z][a-z]+[A-Z]")) {
+						palabras.add(parrafo.split("\n")[i].split("###")[j].split(" ")[k]);
+					}
+				}
+			}
+		}
+		return palabras;
+	}
+	
+	private List<String> aseguradosEdadDividida(String parrafo){
+		//Metodo para buscar la edad separada por ### 
+		//SEXO EDAD
+		//F###3###0
+		//para ajustarlos posteriormente a F###30 
+		List<String> ajuntar = new ArrayList<>();
+		String [] posibles = {"M###", "F###"};
+		for(String posible : posibles) {
+		 	for(String x : parrafo.split("\n")) {
+		 		if(x.contains(posible)) {
+		 			String cadena = x.substring(x.indexOf(posible), (x.indexOf(posible)+9));
+		 			if(fn.isNumeric(cadena.substring(8)) && cadena.substring(4, 9).contains("###")) {
+			 			ajuntar.add(x.substring(x.indexOf(posible), (x.indexOf(posible)+9)));		 				
+		 			}
+		 		}
+		 	}
+		}
+		return ajuntar;
+	}
 }

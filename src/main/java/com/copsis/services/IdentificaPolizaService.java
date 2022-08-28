@@ -21,6 +21,7 @@ import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
 import com.copsis.models.bexmas.BexmasModel;
+import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
@@ -40,7 +41,9 @@ import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sura.SuraModel;
+import com.copsis.models.thona.ThonaModel;
 import com.copsis.models.zurich.ZurichModel;
+import com.copsis.panAmerican.PanAmericanModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +58,7 @@ public class IdentificaPolizaService {
 
 		EstructuraJsonModel modelo = new EstructuraJsonModel();
 		try {
-			final URL scalaByExampleUrl = new URL(pdfForm.getUrl());
+			final URL scalaByExampleUrl = new URL(pdfForm.getUrl().replace(" ", "%20"));
 			final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
 			PDFTextStripper pdfStripper = new PDFTextStripper();
 			COSDocument cosDoc = documentToBeParsed.getDocument();
@@ -66,9 +69,10 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-		
+
+
 			// CHUBB
-			if (!encontro && contenido.contains("Chubb")) {
+			if (!encontro &&( contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
 				ChubbModel datosChubb = new ChubbModel();
 				datosChubb.setPdfStripper(pdfStripper);
 				datosChubb.setPdDoc(pdDoc);
@@ -88,6 +92,8 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 			
+
+			
 			if (!encontro && !rangoSimple(2, 4, pdfStripper, pdDoc).contains("Seguros el Potosí S.A") && (contenido.contains("visite gnp.com.mx") || contenido.contains("GNP")
 					|| contenido.contains("Grupo Nacional Provincial S.A.B")
 					|| contenido.contains("Grupo Nacional Provincial")  || rangoSimple(2, 4, pdfStripper, pdDoc).contains("GNP") 					
@@ -100,7 +106,7 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA MAPFRE
 			if (!encontro && contenido.length() > 502 && contenido.indexOf("MAPFRE") > -1
-					|| contenido.contains("Mapfre Tepeyac")) {
+					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A."))  {	
 				contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
 				MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenidoAux);
 				modelo = datosmapfre.procesa();
@@ -133,7 +139,8 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA AXA
 			if (!encontro && contenido.contains("AXA Seguros, S.A. de C.V.")
 					|| contenido.contains("AXA SEGUROS, S.A. DE C.V")
-					|| contenido.contains("AXA Seguros, S.A de C.V.")) {
+					|| contenido.contains("AXA Seguros, S.A de C.V.")
+					|| contenido.contains("AXA Seguros S.A. de C.V.")) {
 				AxaModel datosAxa = new AxaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAxa.procesa();
 				encontro = true;
@@ -206,16 +213,19 @@ public class IdentificaPolizaService {
 			}
 		
 			// ENTRADA PARA INBURSA
-			if (!encontro && contenido.contains("Inbursa") || contenido.contains("INBURSA")) {
+			if (!encontro && contenido.contains("Inbursa") || contenido.contains("INBURSA") || contenido.contains("www.inbursa.com")) {
+			
 				InbursaModel datosInbursa = new InbursaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosInbursa.procesar();
 				encontro = true;
 
 			}
+
 			// ENTRADA PARA METLIFE
 			if (!encontro && contenido.contains("MetLife México S.A.")
-					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México")) {
+					|| contenido.contains("www.metlife.com.mx") || contenido.contains("MetLife México") || contenido.contains("MetLife México, S.A.")) {
 				MetlifeModel datosMetlife = new MetlifeModel(pdfStripper, pdDoc, contenido);
+			
 				modelo = datosMetlife.procesar();
 				encontro = true;
 			}
@@ -316,9 +326,10 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 			
-			
 		
-		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx"))){		    			    		                
+
+		
+		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A"))){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                
@@ -339,17 +350,28 @@ public class IdentificaPolizaService {
             }
             //////
             
+
+            if (!encontro && ( contenido.contains("Pan-American México"))){
+            	PanAmericanModel datosPanAmericanModel = new PanAmericanModel(pdfStripper, pdDoc, contenido);
+            	modelo =datosPanAmericanModel.procesar();
+                encontro = true;
+            }
            
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
-                        || contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad")
+                        || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
                         || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
                         ))) {
-                	AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
+            	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
+            		 encontro = false;
+            	}else {
+            		AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();
                     encontro = true;
+            	}
+                
                 
             }
             
@@ -365,10 +387,13 @@ public class IdentificaPolizaService {
                 encontro = true;
             
             }
+          
 
             // ENTRADA PARA PLAN SEGURO            
-               if (!encontro && contenido.contains("Plan Seguro")) {
-            
+               if (!encontro && (contenido.contains("Plan Seguro") || contenido.contains("Plan Seguro S.A de C.V")
+            		   ||  contenido.contains("https://www.planseguro.com.mx")
+            		   )) {
+
                 	PlanSeguroModel datosPlan = new PlanSeguroModel(pdfStripper, pdDoc, contenido);
                     modelo = datosPlan.procesar();
                     encontro = true;
@@ -386,23 +411,40 @@ public class IdentificaPolizaService {
                    modelo = datosAguila.procesar();
                }
             
-
                //ENTRADA PARA Latinoamericana
-             if(!encontro &&  contenido.contains("Latinoamericana")) {
-            	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
-                 modelo = datosLatino.procesar();
-                 encontro = true;  
-             }
+               if(!encontro &&  contenido.contains("Latinoamericana")) {
+              	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
+                   modelo = datosLatino.procesar();
+                   encontro = true;  
+               }
+
+
+     
                
 
 
              //ENTRADA PARA General Salud
-           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx.")  || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") )) {        	   
-               modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
+           if(!encontro && ( contenido.contains("General de Seguros") || contenido.contains("www.generaldesalud.com.mx.")  || 
+        	rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Seguros") || rangoSimple(1, 4, pdfStripper, pdDoc).contains("General de Salud, Compañía de Seguros, S.A.") )) {        	   
+
+        	   modelo = new  GeneralModel().procesar(pdfStripper, pdDoc, contenido);
                encontro = true;  
            }
-             
-
+    
+           //ENTRADA PARA Bupa
+           if(!encontro && ( contenido.contains("www.bupasalud.com.mx") || rangoSimple(1, 4, pdfStripper, pdDoc).contains("www.bupasalud.com.mx") )) {
+          	 BupaModel bupaModel = new BupaModel(pdfStripper, pdDoc, contenido);
+               modelo = bupaModel.procesar();
+               encontro = true;  
+           }
+           
+           if(!encontro &&  contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
+        	   ThonaModel thonaModel = new ThonaModel(pdfStripper, pdDoc, contenido);
+                 modelo = thonaModel.procesar();
+                 encontro = true;  
+             }
+           
+         
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
 				modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " | "

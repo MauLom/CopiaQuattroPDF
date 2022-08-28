@@ -23,8 +23,7 @@ public class BexmasModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-		
-System.out.println(fn.tipoPoliza(contenido));
+
 			switch (fn.tipoPoliza(contenido)) {
 			case 1:
 				 modelo =  new BexmasAutosModel(fn.caratula(0, 3, stripper, doc)).procesar();
@@ -36,6 +35,12 @@ System.out.println(fn.tipoPoliza(contenido));
 					 modelo =  new BexmasSaludModel(fn.caratula(0, 3, stripper, doc)).procesar();
 				}
 				
+				break;
+			case 4:
+				modelo =  new BexmasDiversosModel().procesar(fn.caratula(0, 3, stripper, doc));
+				break;
+			case 5:
+				modelo = new BexmasVidaModel().procesar(fn.caratula(0, 3, stripper, doc));
 				break;
 			default:
 				break;

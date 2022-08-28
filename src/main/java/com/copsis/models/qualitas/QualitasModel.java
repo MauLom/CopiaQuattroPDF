@@ -39,25 +39,29 @@ public class QualitasModel {
 
 			
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
-					System.out.println(doc.getPages().getCount());
-					if(doc.getPages().getCount() > 3) {
+					if(doc.getPages().getCount() >= 3) {
 						qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
 								fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
 						modelo = datosQualitasMotosAutos.procesar();
-					}else {
-						qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
-								fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
-						modelo = datosQualitasMotosAutos.procesar();
+					}else {						
+						if(fn.caratula(1, 1, stripper, doc).contains("COBERTURAS CONTRATADAS")) {
+							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
+							modelo = datosQualitasMotosAutos.procesar();	
+						}else {
+							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(2, 2, stripper, doc),fn.caratula(2, 2, stripper, doc));
+							modelo = datosQualitasMotosAutos.procesar();
+						}
+						
 					}
 					
 				}else {
 					
 					if (pagIni < pagFin) {
 						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
-								fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc));
+								fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
 						modelo = datosQualitasAutos.procesar();
 					} else {
-						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"");
+						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
 						modelo = datosQualitasAutos.procesar();
 					}
 				}

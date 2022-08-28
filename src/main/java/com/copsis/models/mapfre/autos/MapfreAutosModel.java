@@ -274,7 +274,17 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("@@@AGENTE:") + 11;
 				newcontenido = contenido.substring(inicio, inicio + 90).split("\r\n")[0];
 			}
-			modelo.setAgente(newcontenido.trim());
+			if(newcontenido.contains(",")) {
+		
+				modelo.setAgente(newcontenido.split(",")[1].trim() +" " + newcontenido.split(",")[0].trim());	
+			}else {
+				modelo.setAgente(newcontenido.trim());
+			}
+		
+			if(modelo.getCteNombre().length() > 0 && modelo.getCteNombre().contains(",")) {
+				modelo.setCteNombre((modelo.getCteNombre().split(",")[1] +" " + modelo.getCteNombre().split(",")[0]).replace(".", "").trim());
+			}
+			
 
 			// cve_agente
 			int inicioagente = contenido.indexOf("CLAVE DE AGENTE: ");
@@ -283,7 +293,7 @@ public class MapfreAutosModel {
 			} else {
 				inicio = contenido.indexOf("@@@CLAVE DE AGENTE:") + 17;
 			}
-			newcontenido = contenido.substring(inicio, inicio + 10).split("\r\n")[0];
+			newcontenido = contenido.substring(inicio, inicio + 12).split("\r\n")[0];
 			modelo.setCveAgente(newcontenido.replace("E:###", "").trim());
 
 			if (contenido.indexOf("Desde las 12:00 hrs. de:") > 0) {

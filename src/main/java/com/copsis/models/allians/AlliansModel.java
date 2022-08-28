@@ -22,23 +22,37 @@ public class AlliansModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-		
+		Boolean  vida =false;
 			int op = fn.tipoPoliza(contenido);
 			
-			if(contenido.contains("TEMPORAL 1 AÑO RENOV") || contenido.contains("TEMPORAL 25")){
+			if(contenido.contains("TEMPORAL 1 AÑO RENOV") || contenido.contains("TEMPORAL 25")  ){
 				op =5;
 			}
-			
-			
+			if(contenido.contains("Revaluables Renta Fija Especial")) {
+				op=5;
+				vida=true;
+			}
+	
 			switch (op) {
 			case 2:
 				modelo = new AlliansSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				break;
 			case 5:
-				modelo = new AlliansVidaModel(fn.caratula(0, 2, stripper, doc)).procesar();
+				if(vida ) {
+					modelo = new AlliansVidaBModel().procesar(fn.caratula(0, 2, stripper, doc));
+				}else {
+					modelo = new AlliansVidaModel(fn.caratula(0, 2, stripper, doc)).procesar();	
+				}
+				
 				break;
 			case 4:
-				modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
+				
+				if(fn.caratula(0, 4, stripper, doc).contains("Datos del Contratante")) {
+					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 7, stripper, doc));
+				}else {
+					modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
+				}
+			
 				break;	
 			default:
 				break;

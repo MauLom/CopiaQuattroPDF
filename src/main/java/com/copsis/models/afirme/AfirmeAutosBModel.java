@@ -215,6 +215,9 @@ public class AfirmeAutosBModel {
             }
             
          
+            if(modelo.getMoneda() == 5) {
+            	modelo.setMoneda(1);
+            }
             
 
             

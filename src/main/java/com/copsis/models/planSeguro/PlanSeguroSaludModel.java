@@ -35,10 +35,10 @@ public class PlanSeguroSaludModel {
 			fin = contenido.indexOf("Asegurados");
 	
 			
-			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("Póliza", "Poliza"));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				
+			
 				if(newcontenido.toString().split("\n")[i].contains("Poliza:")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Poliza:")[1].replace("###", "").trim());
 				}

@@ -71,10 +71,11 @@ public class BanorteDiversos {
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("A las 12 hrs desde:", "").replace("Hasta las 12 hrs:", "");
+			
 				newcontenido = newcontenido.replace("pago fraccionado###Gastos de Expedición###I.V.A###Prima Total###Prima primer###Prima pagos\npago###sucesivos", "pago fraccionado###Gastos de Expedición###I.V.A###Prima Total###Prima primer pago###Prima pagos sucesivos");
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
+                     
 					if (newcontenido.split("\n")[i].contains("PÓLIZA")
 							&& newcontenido.split("\n")[i].contains("OFICINA")) {
 						modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[0].replace("-", ""));
@@ -144,19 +145,36 @@ public class BanorteDiversos {
 							&& newcontenido.split("\n")[i + 1].contains("fraccionado")) {
 						
 						String[] conceptos = newcontenido.split("\n")[i].split("###");
-						String x = newcontenido.split("\n")[i + 2];
-	
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castFloat(x.split("###")[0])));
-						modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
-						modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
-						modelo.setIva(fn.castBigDecimal(fn.castFloat(x.split("###")[3])));
-						modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(x.split("###")[4])));
-						
-						if(conceptos[1].contains("financiamiento")) {
-							modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
-							modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
+						String x = newcontenido.split("\n")[i + 2];				
+						if(newcontenido.split("\n")[i + 2].split("###").length > 4) {
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castFloat(x.split("###")[0])));
+							modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
+							modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
+							modelo.setIva(fn.castBigDecimal(fn.castFloat(x.split("###")[3])));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(x.split("###")[4])));
+							
+							if(conceptos[1].contains("financiamiento")) {
+								modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
+								modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
 
+							}
 						}
+						if(newcontenido.split("\n")[i + 3].split("###").length > 6) {
+							 x = newcontenido.split("\n")[i + 3];
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castFloat(x.split("###")[0])));
+							modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
+							modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
+							modelo.setIva(fn.castBigDecimal(fn.castFloat(x.split("###")[3])));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(x.split("###")[4])));
+							
+							if(conceptos[1].contains("financiamiento")) {
+								modelo.setRecargo(fn.castBigDecimal(fn.castFloat(x.split("###")[1])));
+								modelo.setDerecho(fn.castBigDecimal(fn.castFloat(x.split("###")[2])));
+
+							}
+						}
+	
+				
 
 					}
 				}

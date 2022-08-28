@@ -163,6 +163,7 @@ public class AxaDiversosModel {
 					if((newcontenido.split("\n")[i].contains("Número") || newcontenido.split("\n")[i].contains("No."))&& newcontenido.split("\n")[i].contains(ConstantsValue.AGENTE)) {
 						modelo.setCveAgente((newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("No.")[0]).trim().replace("###", "").replace("  ", ""));
 					}
+				
 					if(newcontenido.split("\n")[i].contains("Subramo") && newcontenido.split("\n")[i].contains("pago")) {
 						if(newcontenido.split("\n")[i].contains("Folio:")) {
 							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("Folio:")[1].replace("###", "").replace("\r", "").trim()));
@@ -172,7 +173,7 @@ public class AxaDiversosModel {
 						}
 					}
 					if(newcontenido.split("\n")[i].contains("Uso:") && newcontenido.split("\n")[i].contains("pago")) {
-						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("Régimen:")[1].replace("Vivienda Sola", "").replace("###", "").replace("\r", "").trim()));
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].split("Régimen:")[1].replace("Vivienda Sola", "").replace("###", "").replace("\r", "").trim()));
 					}
 				
 				}
@@ -199,6 +200,10 @@ public class AxaDiversosModel {
 					fin =fin+100;
 				}
 			}
+			if(inicio == -1){
+				inicio = contenido.indexOf("Prima Neta");
+			}
+			
 			
 
 			if(inicio > 0 && fin > 0 && inicio < fin) {

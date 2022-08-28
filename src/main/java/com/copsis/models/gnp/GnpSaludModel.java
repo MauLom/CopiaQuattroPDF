@@ -188,6 +188,7 @@ public class GnpSaludModel {
 			if (donde > 0) {
 				for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
 
+				
 					if (dato.contains(ConstantsValue.PRIMA_NETA)) {
 
 						dato = dato.replace(ConstantsValue.HASH, "###").trim();
@@ -252,10 +253,14 @@ public class GnpSaludModel {
 						default:
 							break;
 						}
-						
+					
 						if(modelo.getFormaPago() == 0) {
 							modelo.setFormaPago(fn.formaPagoSring(dato));
 						}
+						if(modelo.getFormaPago() == 0 && dato.contains("Unica")) {	
+						modelo.setFormaPago(1);
+						}
+						
 					}
 
 					if (dato.contains(ConstantsValue.MONEDA)) {
@@ -693,7 +698,7 @@ public class GnpSaludModel {
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// coberturas{nombre sa deducible coaseguro}
-			String[] coberturasTxt = {"B ###ásica", "E mergencia de gastos médico s", "Emergencia de gastos médico s","E ###mergencia de gastos médico s",
+			String[] coberturasTxt = {"Nacional","B ###ásica", "E mergencia de gastos médico s", "Emergencia de gastos médico s","E ###mergencia de gastos médico s",
 					"Emergencia en el Extranjero","− Extranjero", "E mergencia en el Extranjero", "Catastróficas Nacional",
 					"C atastróficas Nacional", "Enfermedades Catastróficas", "n el Extranjero", "Asistencia en Viajes",
 					"A sistencia en Viajes", "Membresía Médica Móvil", "M embresía Médica Móvil",
@@ -703,12 +708,23 @@ public class GnpSaludModel {
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.COASASEGURO);
 			dondeAux = fn.recorreContenido(contenido, ConstantsValue.AGENTE2);
+			String coberturasext="";
 
 			if (donde > 0 && dondeAux > 0) {
 				inicio = contenido.indexOf(contenido.split("@@@")[donde]);
 				fin = contenido.indexOf(contenido.split("@@@")[dondeAux]);
 				filtrado = contenido.substring(inicio, fin).replace("@@@", "").replace("A ###sistencia", "Asistencia")
 						.replace("E ###mergencia", "Emergencia").trim();
+				coberturasext= filtrado;
+				 filtrado ="";
+				for (int i = 0; i < coberturasext.split("\n").length; i++) {				
+					  if (coberturasext.split("\n")[i].contains("− Nacional")  && coberturasext.split("\n")[i].contains("Desde") ) {					
+					  }
+					  else {
+						 
+						  filtrado += coberturasext.split("\n")[i] +"\n";
+					  }
+					}
 				if (filtrado.contains(ConstantsValue.COASASEGURO) && filtrado.contains("Coberturas")) {
 					newcontenido = new StringBuilder();
 					int inicioCob = 0;
