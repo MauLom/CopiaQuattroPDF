@@ -5,20 +5,20 @@ spring:
       maximumPoolSize: 80
       connectionTimeout: 60000
 server:
-  port: 8080
+  port: 8080  
 webhook-id: 62
-gateway-url: "https://apiuat.quattrocrm.mx"
+gateway-url: "https://api.quattrocrm.mx"
 serviceUrl:
   quattro-upload:
-    baseURL: https://quattro-upload-jazkd5ckiq-uc.a.run.app
+    baseURL: https://quattro-upload-hnwaodlfja-uc.a.run.app
   quattro-poliza:
-    baseURL: https://quattro-poliza-jazkd5ckiq-uc.a.run.app
+    baseURL: https://quattro-poliza-hnwaodlfja-uc.a.run.app
   quattro-crm:
-    baseURL: "https://quattro-crm-afa5eqprsa-uc.a.run.app"
+    baseURL: "https://quattro-crm-hnwaodlfja-uc.a.run.app"  
   quattro-utilerias-api:
-    baseURL: https://quattro-utilerias-api-jazkd5ckiq-uc.a.run.app
+    baseURL: https://quattro-utilerias-api-hnwaodlfja-uc.a.run.app
   quattro-external-api:  
-    baseURL: https://quattro-external-api-jazkd5ckiq-uc.a.run.app
+    baseURL: https://quattro-external-api-hnwaodlfja-uc.a.run.app
 userlogin:
   autorization:
     username: 5fw1y-q0477-r0gKx-8CcGh-vTJdh
@@ -29,11 +29,12 @@ userproxy:
     password: Alh1a18hGbslio0axcRt4kLmMbto0WjdcE36gy5vllf6s5S8EnoaT2ie__m01-cZi
 #Produccion
 tenants:
+  default-instance: "quattrocrm-db7"
+  default-db: "quattro00398"
   datasources:
-    default-instance: "quattro-uat"
-    default-db: "quattro00398"
-    "quattro-uat":
-      jdbcUrl: jdbc:mysql://10.24.176.3:3306/quattro00398?allowPublicKeyRetrieval=true&useSSL=false
+    "quattrocrm-db7":
+      jdbcUrl: jdbc:mysql://10.46.32.3:3306/quattro00398?allowPublicKeyRetrieval=true&useSSL=false
       driverClassName: com.mysql.cj.jdbc.Driver
       username: root
-      password: "Copsis123"
+      password: "vjDT5qrievY70"
+      databaseName: quattro00398
