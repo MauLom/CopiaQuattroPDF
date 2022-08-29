@@ -29,6 +29,8 @@ userproxy:
     password: Alh1a18hGbslio0axcRt4kLmMbto0WjdcE36gy5vllf6s5S8EnoaT2ie__m01-cZi
 #QA y Produccion
 tenants:
+  default-instance: "db-skynet"
+  default-db: "quattro00060"
   datasources:
     "quattro-db1":
       jdbcUrl: jdbc:mysql://127.0.0.1:3309/webDB?allowPublicKeyRetrieval=true&useSSL=false

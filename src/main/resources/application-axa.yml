@@ -29,6 +29,8 @@ userproxy:
     password: Alh1a18hGbslio0axcRt4kLmMbto0WjdcE36gy5vllf6s5S8EnoaT2ie__m01-cZi
 #Produccion
 tenants:
+  default-instance: "quattrocrm-db7"
+  default-db: "quattro00398"
   datasources:
     "quattrocrm-db7":
       jdbcUrl: jdbc:mysql://10.46.32.3:3306/quattro00398?allowPublicKeyRetrieval=true&useSSL=false
