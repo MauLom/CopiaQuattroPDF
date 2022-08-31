@@ -32,6 +32,7 @@ public class AfirmeDiversosModel {
            
             inicio = contenido.indexOf("POLIZA");
             fin =contenido.indexOf("Ubicación");
+  
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
@@ -128,6 +129,14 @@ public class AfirmeDiversosModel {
             	}
             }
             modelo.setCoberturas(coberturas);
+            
+            if(modelo.getCoberturas().isEmpty()) {
+            	System.out.println(contenido);
+            	 inicio = contenido.indexOf("Coberturas###Suma Asegurada");
+                 fin =contenido.indexOf("Concepto###Prima Neta");
+                 newcontenido = new StringBuilder();
+                 newcontenido.append(fn.extracted(inicio, fin, contenido));
+            }
 			
 			return modelo;
 		} catch (Exception ex) {
