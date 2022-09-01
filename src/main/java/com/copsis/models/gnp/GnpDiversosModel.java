@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
@@ -37,6 +38,7 @@ public class GnpDiversosModel {
 		StringBuilder nombre = new StringBuilder();
 		StringBuilder resultado = new StringBuilder();
 		StringBuilder newcontenido = new StringBuilder();
+		StringBuilder newubic = new StringBuilder();
 		String contenidolower = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenidolower = contenido.toLowerCase();
@@ -718,9 +720,10 @@ public class GnpDiversosModel {
 						
 						if(ubicacion.getNombre().length() > 0) {
 							ubicaciones.add(ubicacion);
+							if (!ubicaciones.isEmpty())
+								modelo.setUbicaciones(ubicaciones);
 						}
-						if (!ubicaciones.isEmpty())
-							modelo.setUbicaciones(ubicaciones);
+						
 					}
 
 				}
@@ -749,8 +752,10 @@ public class GnpDiversosModel {
 						}
 									
 					}
+					if(ubicacion.getCalle().length() > 0) {
 					ubicaciones.add(ubicacion);
 					modelo.setUbicaciones(ubicaciones);
+					}
 				}
 								
 				
@@ -861,6 +866,30 @@ public class GnpDiversosModel {
 			}
 
 			modelo.setRecibos(recibos);
+			
+			for (int i = 0; i < newcontenido.toString().split("ubicación de lo bienes asegurados").length; i++) {
+				
+				if(newcontenido.toString().split("ubicación de lo bienes asegurados")[i].contains("Multicláusula")) {
+					newubic.append(newcontenido.toString().split("ubicación de lo bienes asegurados")[i].split("Multicláusula")[0]);
+				}
+			}
+			
+			if(resultado.length() >  0 &&   modelo.getUbicaciones().isEmpty()) {
+				
+				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+				for (int i = 0; i < newubic.toString().split("\n").length; i++) {
+					if(newubic.toString().split("\n")[i].contains("constructivo")) {
+						ubicacion.setNombre(modelo.getCteDireccion());
+						ubicacion.setMuros(fn.material(newubic.toString().split("\n")[i].split("constructivo:")[1].split("Día")[0].replace("###", "")));
+					}
+					
+				}
+	
+				ubicaciones.add(ubicacion);
+				modelo.setUbicaciones(ubicaciones);
+			}
+			
+			
 
 			return modelo;
 		} catch (Exception ex) {
