@@ -102,8 +102,7 @@ public class ChubbAutosBModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-				if(!newcontenido.toString().split("\n")[i].contains("Coberturas") && !newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {
-					System.out.println(newcontenido.toString().split("\n")[i] +"---> " + newcontenido.toString().split("\n")[i].split("###").length);
+				if(!newcontenido.toString().split("\n")[i].contains("Coberturas") && !newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {					
 					int sp = newcontenido.toString().split("\n")[i].split("###").length;
 					switch (sp) {
 					case 3:
