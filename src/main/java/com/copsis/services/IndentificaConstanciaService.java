@@ -103,47 +103,32 @@ public class IndentificaConstanciaService {
 		
 		EstructuraConstanciaSatModel estructuraConstanciaSatModel = pdfNegocioForm.getEstructuraConstanciaSatModel();
 		try {
+			PdfForm pdfForm = new PdfForm();
+			
 			switch (pdfNegocioForm.getTipoValidacion()) {
-			case 1: // Valida datos CFDI
-				PdfForm pdfForm = new PdfForm();
+			case 1: // Valida datos CFDI y retorna si es posible, si hay error Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
 				
 				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, pdfForm, false);
 				if (estructuraConstanciaSatModel.getError() != null) {
 					// intentamos por leer pagina del SAT
-
-					//Llenamos Form
-					DatosSatForm datosSatForm = new DatosSatForm();
-					datosSatForm.setUrl(pdfNegocioForm.getUrl());
-					QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
 					
-					// extrae url de QR que esta en la constancia
-					try {
-					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
-					} catch (Exception ex) {
-						throw ex;
-					}
-					
-					//Llenamos Form con la nueva info[URL SAT]
-					datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
-					QuattroExternalApiEstructuraFiscalesProjection quattroExternalApiEstructuraFiscalesProjection;
-
-					try {
-						// Va a formar estructura con datos de pagina
-						quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
-					} catch (Exception ex) {
-						throw ex;
-					}
-					
-					//compara con el catalogo AXA de regimenes
-					estructuraConstanciaSatModel = quattroExternalApiEstructuraFiscalesProjection.getResult();
+					estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm);
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
-					estructuraConstanciaSatModel = validaciones(quattroExternalApiEstructuraFiscalesProjection.getResult(),pdfForm, true); 
+					estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, true); 
 					
 				}
+			case 2://Lee Qr de imagen, Valida datos CFDI y retorna
+				pdfForm.setUrl(pdfNegocioForm.getUrl());
+				
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm);
+				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
+				// Valida estructura
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, true);
+				break;
 			default:
 				break;
 			}
@@ -227,6 +212,38 @@ public class IndentificaConstanciaService {
 			return regimenes;
 		} catch (Exception ex) {
 			return regimenes;
+		}
+	}
+	
+	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm){
+		try {
+			//Llenamos Form
+			DatosSatForm datosSatForm = new DatosSatForm();
+			datosSatForm.setUrl(pdfNegocioForm.getUrl());
+			QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
+			
+			// extrae url de QR que esta en la constancia
+			try {
+			quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+			} catch (Exception ex) {
+				throw ex;
+			}
+			
+			//Llenamos Form con la nueva info[URL SAT]
+			datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
+			QuattroExternalApiEstructuraFiscalesProjection quattroExternalApiEstructuraFiscalesProjection;
+
+			try {
+				// Va a formar estructura con datos de pagina
+				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
+			} catch (Exception ex) {
+				throw ex;
+			}
+			
+			//compara con el catalogo AXA de regimenes
+			return quattroExternalApiEstructuraFiscalesProjection.getResult();
+		}catch (Exception ex) {
+			throw ex;
 		}
 	}
 }
