@@ -113,17 +113,18 @@ public class IndentificaConstanciaService {
 				if (estructuraConstanciaSatModel.getError() != null) {
 					// intentamos por leer pagina del SAT
 					
-					estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm);
+					estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
 					estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, true); 
 					
 				}
+				break;
 			case 2://Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
 				
-				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm);
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, true);
 				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 				// Valida estructura
@@ -215,7 +216,7 @@ public class IndentificaConstanciaService {
 		}
 	}
 	
-	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm){
+	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm, boolean imagen){
 		try {
 			//Llenamos Form
 			DatosSatForm datosSatForm = new DatosSatForm();
@@ -224,15 +225,18 @@ public class IndentificaConstanciaService {
 			
 			// extrae url de QR que esta en la constancia
 			try {
-			quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+				if(imagen) {
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrlImagenQr(datosSatForm);	
+				}else {
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+				}
 			} catch (Exception ex) {
 				throw ex;
 			}
-			
 			//Llenamos Form con la nueva info[URL SAT]
 			datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
 			QuattroExternalApiEstructuraFiscalesProjection quattroExternalApiEstructuraFiscalesProjection;
-
+			
 			try {
 				// Va a formar estructura con datos de pagina
 				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
