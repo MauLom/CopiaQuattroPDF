@@ -24,6 +24,7 @@ public class ImpresionVidaAxaPdf {
 	private final Color bgColorA = new Color(36, 44, 106, 0);
 	private float margin = 25, yStartNewPage = 780, yStart = 780, bottomMargin = 30;
 	private float fullWidth = 566;
+	private float ypos ;
 	private Boolean acumula;
 
 	public byte[] buildPDF(ImpresionAxaVidaForm  impresionAxaVidaForm) {
@@ -281,27 +282,76 @@ public class ImpresionVidaAxaPdf {
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 15,"Plan solicitado",Color.white,true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f,4f,4f,4f),bgColorA);
 					communsPdf.setCell(baseRow, 85,"(Confirmar características aplicables a cada producto)",Color.white,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(0f,1f,4f,0f),bgColorA);					
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100,"Otros seguros de vida (En Suma Asegurada, indique la moneda)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 25,"Solicitante",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"Aseguradora",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"Suma Asegurada",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"Solicitante",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"Aseguradora",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);					
-					communsPdf.setCell(baseRow, 25,"Suma Aseguradora",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 25,"1231",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"2323",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"234234",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"234234",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"234234",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 25,"2324234",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					
-					
-					table.setCellCallH(true);
+				   table.setCellCallH(true);
 					table.draw();
+					yStart -= table.getHeaderAndDataHeight();
+					ypos = yStart;
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 303, margin, document, page,true , true);	
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 33,"Producto",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 34,"Plazo",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 33,"PlazoPago",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 33,"1231",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 34,"2323",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);					
+					communsPdf.setCell(baseRow, 33,"2324234",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					
+					baseRow = communsPdf.setRow(table, 10);
+					communsPdf.setCell(baseRow, 33,"Moneda",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 34,"Incrementos de Suma Aseguradora",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 33,Sio4CommunsPdf.eliminaHtmlTags3("<b>Riesgos</b>")+"(universales)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding2(2f,0f,2f,0f),bgColor);
+					baseRow = communsPdf.setRow(table, 10);
+					
+					communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3QBhuZYDR0g6znE1Dq9FomfXgA6Ed0EZCv4KwOUBJUbd/1.png").scale(120,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(0f,0f,-5f,0f), "L", "T");										
+					communsPdf.setCellImg(baseRow, 34, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3ZatmmyEsaqEpSIlV68iL5eQOfwRY8is5QC8GKkWsoNK/suma.png").scale(70,20), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(2f,0f,0f,0f), "L", "vB");
+					communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3bt1wfbQm88by32ph67Lb9dDc8cbklj1no6f0moNvAP/Riesgos.png").scale(60,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(2f,0f,0f,0f), "L", "T");									
+				
+					baseRow = communsPdf.setRow(table, 20);
+					communsPdf.setCellImg(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3Y0aEaAvjG4tutl7Q4gqng1HJeNfLOZRVgFgbooAOlLE/pagos.png").scale(120,60), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), communsPdf.setPadding2(0f,0f,0f,0f), "L", "T");
+					communsPdf.setCell(baseRow, 50,Sio4CommunsPdf.eliminaHtmlTags3("Aportación Adicional /\nPrima excedente"),bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);					
+				    table.draw();
+					
+					
+					
+					
+					table = new BaseTable(ypos, ypos, bottomMargin, 263, 328, document, page,true , true);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 100,"Estrategia de Inversión (universales)",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"Fondo",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"Básico",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"Excedente",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 48,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 26,"",bgColorA,true, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+
+					table.draw();
+					
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);									
