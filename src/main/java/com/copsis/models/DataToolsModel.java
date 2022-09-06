@@ -386,6 +386,8 @@ public class DataToolsModel {
 		return result;
 	}
 
+	
+
 	public String formatDate(String fecha, String format) { // RECIBE FORMATO 02/02/2018 RETORNA 2018-02-02
 		String resul = "";
 		try {
@@ -1325,6 +1327,24 @@ public class DataToolsModel {
 			}
 			return resultado;
 		}
+		public List<String> obtenVigePolizaUS(String cadena) {
+
+			List<String> resultado = new ArrayList<>();
+			List<String> resultadof = new ArrayList<>();
+			Matcher m = Pattern.compile(ConstantsValue.REGFECHUS).matcher(cadena);
+			while (m.find()) {
+				resultado.add(m.group());
+			}
+			for (int i = 0; i < resultado.size(); i++) {
+				LocalDate localDate1 = LocalDate.parse(resultado.get(i), DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+				resultadof.add(localDate1.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			}
+			
+		
+			return resultadof;
+
+		}
+		
 		
 		public List<String> obtenVigePoliza2(String cadena) {
 			List<String> resultado = new ArrayList<>();
@@ -1332,6 +1352,7 @@ public class DataToolsModel {
 			while (m.find()) {
 				resultado.add(m.group());
 			}
+			
 			return resultado;
 		}
 	
