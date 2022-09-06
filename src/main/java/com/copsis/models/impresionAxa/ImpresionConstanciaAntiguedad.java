@@ -92,7 +92,7 @@ public class ImpresionConstanciaAntiguedad {
                     	acumula = true;
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
     	                baseRow = communsPdf.setRow(table);
-                    	communsPdf.setCell(baseRow, 15, impresionAxa.getAsegurados().get(x).getCertificado(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                    	communsPdf.setCell(baseRow, 15, impresionAxa.getAsegurados().get(x).getCertificado(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
     	                communsPdf.setCell(baseRow, 35,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(x).getNombre()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
     	                communsPdf.setCell(baseRow, 20,impresionAxa.getAsegurados().get(x).getFechNacimiento(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
     	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getParentesco(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -148,7 +148,7 @@ public class ImpresionConstanciaAntiguedad {
 			if(impresionAxa.getLogoSuperior() != null) {
 				communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));	
 			}else {
-				communsPdf.setCell(baseRow, 80,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+				communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 			}
 			
 			table.draw();
