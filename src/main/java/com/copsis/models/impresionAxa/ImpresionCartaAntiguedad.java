@@ -86,37 +86,37 @@ public class ImpresionCartaAntiguedad {
                     yStart -= (table.getHeaderAndDataHeight());
                     
                     int x=0;
-                    
-                    while(x< impresionAxa.getAsegurados().size()) {     
-                    	acumula = true;
-                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-    	                baseRow = communsPdf.setRow(table);
-                    	communsPdf.setCell(baseRow, 15, impresionAxa.getAsegurados().get(x).getCertificado(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 39,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(x).getNombre()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getVigencia(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getFechAntigueda(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 16,impresionAxa.getAsegurados().get(x).getFechaBaja(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-                    	
-                    	 if (isEndOfPage(table)) {
-                             table.getRows().remove(table.getRows().size() - 1);
-                             table.draw();
-                             page = new PDPage();
-                             document.addPage(page);
-                     		setEncabezado(impresionAxa, document, page);
-                             acumula = false;
-                         } else {
-                             table.draw();
-                             yStart -= table.getHeaderAndDataHeight();
-                         }
-                         if (acumula) {
-                             x++;
-                         }
-                         if (x > 150) {
-                             table.draw();
-                             break;
-                         }
+                    if(impresionAxa.getAsegurados() !=null) {
+	                    while(x< impresionAxa.getAsegurados().size()) {     
+	                    	acumula = true;
+	                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
+	    	                baseRow = communsPdf.setRow(table);
+	                    	communsPdf.setCell(baseRow, 15, impresionAxa.getAsegurados().get(x).getCertificado(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	    	                communsPdf.setCell(baseRow, 39,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(x).getNombre()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getVigencia(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getFechAntigueda(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	    	                communsPdf.setCell(baseRow, 16,impresionAxa.getAsegurados().get(x).getFechaBaja(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                    	
+	                    	 if (isEndOfPage(table)) {
+	                             table.getRows().remove(table.getRows().size() - 1);
+	                             table.draw();
+	                             page = new PDPage();
+	                             document.addPage(page);
+	                     		setEncabezado(impresionAxa, document, page);
+	                             acumula = false;
+	                         } else {
+	                             table.draw();
+	                             yStart -= table.getHeaderAndDataHeight();
+	                         }
+	                         if (acumula) {
+	                             x++;
+	                         }
+	                         if (x > 150) {
+	                             table.draw();
+	                             break;
+	                         }
+	                    }
                     }
-			        
 
 					output = new ByteArrayOutputStream();
 					document.save(output);					
@@ -140,7 +140,12 @@ public class ImpresionCartaAntiguedad {
 
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 12);
-			communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));
+			if(impresionAxa.getLogoSuperior() != null) {
+				communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));	
+			}else {
+				communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			}
+			
 			table.draw();
 			yStart -= (table.getHeaderAndDataHeight() + 10);
 
