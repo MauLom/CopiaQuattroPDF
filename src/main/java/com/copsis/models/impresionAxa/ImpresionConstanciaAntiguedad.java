@@ -72,7 +72,7 @@ public class ImpresionConstanciaAntiguedad {
 			        yStart -= (table.getHeaderAndDataHeight() + 5);
 			       	table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 100,"Por medio de la presente se hace constar que las personas mencionadas a continuación se encuentran amparadas en la póliza arriba indicada",Color.BLACK,false, "L", 01, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			        communsPdf.setCell(baseRow, 100,"Por medio de la presente se hace constar que las personas mencionadas a continuación se encuentran amparadas en la póliza arriba indicada",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 			        table.draw();
 			        
 			        yStart -= (table.getHeaderAndDataHeight() + 5);
@@ -85,7 +85,7 @@ public class ImpresionConstanciaAntiguedad {
 	                communsPdf.setCell(baseRow, 13,"Antigüedad",Color.BLACK,true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
 	                table.draw();
                     yStart -= (table.getHeaderAndDataHeight());
-                    
+                    if(impresionAxa.getAsegurados() !=null) {
                     int x=0;
                     
                     while(x< impresionAxa.getAsegurados().size()) {     
@@ -118,6 +118,7 @@ public class ImpresionConstanciaAntiguedad {
                          }
                     }
 			        
+                    }
 			        
 
 					output = new ByteArrayOutputStream();
@@ -144,7 +145,12 @@ public class ImpresionConstanciaAntiguedad {
 
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 12);
-			communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));
+			if(impresionAxa.getLogoSuperior() != null) {
+				communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));	
+			}else {
+				communsPdf.setCell(baseRow, 80,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			}
+			
 			table.draw();
 			yStart -= (table.getHeaderAndDataHeight() + 10);
 

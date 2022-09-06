@@ -93,9 +93,9 @@ public class ImpresionCartaAntiguedad {
     	                baseRow = communsPdf.setRow(table);
                     	communsPdf.setCell(baseRow, 15, impresionAxa.getAsegurados().get(x).getCertificado(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
     	                communsPdf.setCell(baseRow, 39,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(x).getNombre()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getFechNacimiento(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getParentesco(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-    	                communsPdf.setCell(baseRow, 16,impresionAxa.getAsegurados().get(x).getFechAntigueda(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getVigencia(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+    	                communsPdf.setCell(baseRow, 13,impresionAxa.getAsegurados().get(x).getFechAntigueda(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+    	                communsPdf.setCell(baseRow, 16,impresionAxa.getAsegurados().get(x).getFechaBaja(),Color.BLACK,false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                     	
                     	 if (isEndOfPage(table)) {
                              table.getRows().remove(table.getRows().size() - 1);
