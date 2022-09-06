@@ -21,6 +21,7 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
+import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
 import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
@@ -143,6 +144,9 @@ public class ImpresionService {
 			case 110 :
 				byteArrayPDF =  new ImpresionConstanciaAntiguedad().buildPDF(impresionAxa);
 				break;	
+			case 111 :
+				byteArrayPDF =  new ImpresionCartaAntiguedad().buildPDF(impresionAxa);
+				break;		
 
 			default:
 				break;
