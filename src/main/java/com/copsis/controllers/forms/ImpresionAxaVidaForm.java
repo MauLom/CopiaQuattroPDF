@@ -1,5 +1,8 @@
 package com.copsis.controllers.forms;
 
+import java.util.List;
+
+import com.copsis.clients.projections.BeneficiarioProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -40,6 +43,7 @@ public class ImpresionAxaVidaForm {
 	private String plan;
 	private String palzo;
 	private String plazoPago;
-	private String primaExcendente;
+	private String primaExcendente;	
+	private List<BeneficiarioProjection> benficiarios;
 	
 }
