@@ -980,7 +980,7 @@ public class qualitasAutosModel {
 			newcontenidotxt.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenidotxt.toString().split("\n").length; i++) {
 				if(newcontenidotxt.toString().split("\n")[i].contains("DESCUENTOS")) {
-					System.out.println(newcontenidotxt.toString().split("\n")[i]);
+					
 					if(newcontenidotxt.toString().split("\n")[i].split("DESCUENT")[1].length() > 5) {
 					modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(newcontenidotxt.toString().split("\n")[i].split("DESCUENTOS")[1].replace("###", ""))));
 					}
