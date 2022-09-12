@@ -39,7 +39,9 @@ public class qualitasAutosModel {
 		 String newcontenido = "";
 		 String cboxt = "";
 		 String[] arrNewContenido;
-	
+	     int inxt=0;
+	     int inxty=0;
+		 
 		 StringBuilder datosvehiculo = new StringBuilder();
 		 
 			StringBuilder  newcontenidotxt = new StringBuilder();
@@ -487,9 +489,15 @@ public class qualitasAutosModel {
 			// renovacion
 			inicio = contenido.indexOf("RENUEVA A");
 			if (inicio > -1) {
-				newcontenido = contenido.substring(inicio + 20, contenido.indexOf("\r\n", inicio + 10))
-						.replace("###", "").replace("-", "").replace(":", "").trim();
-				modelo.setRenovacion(newcontenido);
+				
+				inxt = inicio +20;
+				inxty = contenido.indexOf("\r\n", inicio +10) ;
+				if(inxt >  0 && inxty  > 0 && inxt < inxty) {
+					newcontenido = contenido.substring(inxt, contenido.indexOf("\r\n", inxty)).replace("###", "").replace("-", "").replace(":", "").trim();
+					modelo.setRenovacion(newcontenido);
+				}
+				
+			
 			}
 
 			// forma_pago
@@ -972,7 +980,10 @@ public class qualitasAutosModel {
 			newcontenidotxt.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenidotxt.toString().split("\n").length; i++) {
 				if(newcontenidotxt.toString().split("\n")[i].contains("DESCUENTOS")) {
-					modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(newcontenidotxt.toString().split("\n")[i].split("DESCUENTOS")[1].replace("###", ""))));		
+					
+					if(newcontenidotxt.toString().split("\n")[i].split("DESCUENT")[1].length() > 5) {
+					modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(newcontenidotxt.toString().split("\n")[i].split("DESCUENTOS")[1].replace("###", ""))));
+					}
 				}
 			}
 	
