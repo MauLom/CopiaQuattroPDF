@@ -115,11 +115,20 @@ public class BexmasSaludModel {
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					if(newcont.toString().split("\n")[i].split("-").length > 3) {
-
+				
+						
+					if(!newcont.toString().split("\n")[i].contains("Nacimiento")) {
+						
 						if(newcont.toString().split("\n")[i].split("###")[0].length() > 20) {
 							asegurado.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
 						}else {
-							asegurado.setNombre(newcont.toString().split("\n")[i-1]  +" " +newcont.toString().split("\n")[i].split("###")[0]);
+					
+							if(newcont.toString().split("\n")[i-1].contains("Nacimiento")) {
+								asegurado.setNombre( newcont.toString().split("\n")[i].split("###")[0].trim());
+							}else {
+								asegurado.setNombre(newcont.toString().split("\n")[i-1]  +" " +newcont.toString().split("\n")[i].split("###")[0]);
+							}
+						
 						}
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[2]));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[3]));
@@ -127,7 +136,8 @@ public class BexmasSaludModel {
 						asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i].split("###")[5]));
 						asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i].split("###")[6])  ? 1 : 0);
 						asegurados.add(asegurado);
-					}								
+					 }
+				   }								
 				}
 				
 				modelo.setAsegurados(asegurados);
