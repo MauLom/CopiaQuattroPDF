@@ -19,5 +19,6 @@ public class AseguradosProjection {
     private String fechaBaja;
     private String sa;
 	private String prima;
+	private String status;
 	
 }
