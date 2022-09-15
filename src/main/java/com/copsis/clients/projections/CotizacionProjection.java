@@ -23,5 +23,6 @@ public class CotizacionProjection {
 	private String primaMensualex;
 	private String mx;
 	private String email; 
+	private boolean vida;
 
 }

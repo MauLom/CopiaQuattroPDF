@@ -37,8 +37,12 @@ public class ImpresionCotizacionVida {
 					BaseTable table;
 					Row<PDPage> baseRow;
 
-			        
-
+					table = new BaseTable(1170, 1170, bottomMargin, 607, 20, document, page, false, true);		           
+			        baseRow = communsPdf.setRow(table, 18);
+		            communsPdf.setCell(baseRow,60, "12/8/22, 12:13",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	                 		    
+		            communsPdf.setCell(baseRow,30, "Cotizador Vida - AXA",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setLeftPadding(25f);	                 		    				     
+		            table.draw();
+		             
                     PDType0Font lbsef = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("imgInter/sans.ttf").toURI()));
 		
 					table = new BaseTable(1160, 1160, bottomMargin, 120, 100, document, page, false, true);
@@ -52,24 +56,27 @@ public class ImpresionCotizacionVida {
 			         communsPdf.setCell(baseRow, 45, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap30noi64mtwZU5BN487XnlHdLiukVtfh295bEepZm0Kl/barra2.png"));
 			         table.draw();
 			         
-			         table = new BaseTable(yStart, yStart, bottomMargin, 210, 510, document, page, true, true);
+			         table = new BaseTable(yStart, yStart, bottomMargin, 210, 510, document, page, false, true);
+		             
+			         baseRow = communsPdf.setRow(table, 15);
+		             communsPdf.setCell(baseRow,100, "12 de Agosto de 2022 v2022",Color.BLACK,true, "C",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			         baseRow = communsPdf.setRow(table, 18);
+		             communsPdf.setCell(baseRow,17, "ROL:",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,83, "FUNCIONARIO COMERCIAL",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		             baseRow = communsPdf.setRow(table, 18);
-		             communsPdf.setCell(baseRow,15, "ROL:",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,85, "FUNCIONARIO COMERCIAL",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,26, "NOMBRE:",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,74, "",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		             baseRow = communsPdf.setRow(table, 18);
-		             communsPdf.setCell(baseRow,25, "NOMBRE:",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,75, "",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,17, "MX:",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,83, "",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		             baseRow = communsPdf.setRow(table, 18);
-		             communsPdf.setCell(baseRow,15, "MX:",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,85, "",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             baseRow = communsPdf.setRow(table, 18);
-		             communsPdf.setCell(baseRow,19, "EMAIL:",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,81, "Guillermo.Sanchez@axa.com.mx",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);		             
+		             communsPdf.setCell(baseRow,21, "EMAIL:",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,79, "Guillermo.Sanchez@axa.com.mx",Color.BLACK,true, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);		             
 		             table.draw();
 		             
 					
 		             
-		             yStart -= table.getHeaderAndDataHeight()+5;
+		             yStart -= table.getHeaderAndDataHeight()-10;
 		             table = new BaseTable(yStart, yStart, bottomMargin, 150, 119, document, page,  false, true);
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,100, "Vida ProTGT 2022",Color.BLACK,true, "L",13, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -88,28 +95,62 @@ public class ImpresionCotizacionVida {
 		             communsPdf.setCell(baseRow,100, "Datos del Prospecto:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		             table.draw();
 		             
-		             yStart -= table.getHeaderAndDataHeight()+5;
-		             table = new BaseTable(yStart, yStart, bottomMargin, 300, 320, document, page,  true, true);
-		             baseRow = communsPdf.setRow(table, 15);
-		             communsPdf.setCell(baseRow,30, "Nombre:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,70, "Guillermo Sanchez",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             baseRow = communsPdf.setRow(table, 15);
-		             communsPdf.setCell(baseRow,30, "Edad:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,70, "37 años",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		    
-		             baseRow = communsPdf.setRow(table, 15);
-		             communsPdf.setCell(baseRow,30, "Género:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,70, "HOMBRE",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		    
-		             baseRow = communsPdf.setRow(table, 15);
-		             communsPdf.setCell(baseRow,30, "Hábito:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,70, "NO FUMADOR",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		    
-		  
-		             table.draw();
+		             yStart -= table.getHeaderAndDataHeight()-10;
+		            
+		             if(cotizacionProjection.isVida()) {
+		                 
+		            	 table = new BaseTable(yStart, yStart, bottomMargin, 180, 270, document, page,  false, true);
+		                 baseRow = communsPdf.setRow(table, 19);
+			             communsPdf.setCell(baseRow,100, "Titular",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			             
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Nombre:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "Guillermo Sanchez",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Edad:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK),"", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "37 años",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			   
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Género:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "HOMBRE",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			    
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Hábito:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "NO FUMADOR",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             table.draw();
+
+		            	 table = new BaseTable(yStart, yStart, bottomMargin, 180, 450, document, page,  false, true);
+		                 baseRow = communsPdf.setRow(table, 19);
+			             communsPdf.setCell(baseRow,100, "Menor",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			             
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Nombre:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "Guillermo Sanchez",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Edad:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "37 años",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			   
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Género:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "HOMBRE",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);			    
+			             table.draw();
+		             }else {
+		                 table = new BaseTable(yStart, yStart, bottomMargin, 300, 320, document, page,  false, true);
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Nombre:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "Guillermo Sanchez",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Edad:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "37 años",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			    
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Género:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "HOMBRE",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			    
+			             baseRow = communsPdf.setRow(table, 15);
+			             communsPdf.setCell(baseRow,30, "Hábito:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             communsPdf.setCell(baseRow,70, "NO FUMADOR",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			             table.draw();
+		             }
+		       
 		             
 		             
-		             yStart -= table.getHeaderAndDataHeight()+8;
+		             yStart -= table.getHeaderAndDataHeight()+20;
 		             
 		             table = new BaseTable(yStart, yStart, bottomMargin, 607, 116, document, page, true, true);
 		             baseRow = communsPdf.setRow(table, 5);
@@ -123,7 +164,7 @@ public class ImpresionCotizacionVida {
 		             table.draw();
 		             
 		             yStart -= table.getHeaderAndDataHeight()+5;
-		             table = new BaseTable(yStart, yStart, bottomMargin, 400, 320, document, page,  true, true);
+		             table = new BaseTable(yStart, yStart, bottomMargin, 400, 320, document, page,  false, true);
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Plan:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		             communsPdf.setCell(baseRow,60, "Aliados+",Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -174,6 +215,55 @@ public class ImpresionCotizacionVida {
 
 		             yStart -= table.getHeaderAndDataHeight()+15;
 		             
+		             if(cotizacionProjection.isVida()) {
+		            	 ArrayList<TextoAxa> texto  = this.textolist2();		             		         		           
+			             int i=0;		             
+			             for (TextoAxa textoAxa : texto) {
+			         
+			            	  table = new BaseTable(yStart, yStart, bottomMargin, 607, 116, document, page, false, true);
+					             baseRow = communsPdf.setRow(table, 5);
+					             communsPdf.setCell(baseRow,100, "",Color.BLACK,true, "L",10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(5f,5f,5f,5f),bgColorA);
+					             
+					             baseRow = communsPdf.setRow(table, 5);
+					             communsPdf.setCell(baseRow,100, "",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(5f,5f,5f,5f),bgColor);
+					             table.draw();
+					             
+					             yStart -= table.getHeaderAndDataHeight();
+					            
+					             table = new BaseTable(yStart, yStart, bottomMargin, 500, 160, document, page, true, true);
+					             System.out.println(i +"--> " + textoAxa.getNombre());
+					             if(i == 2) {
+					            	  baseRow.setLineSpacing(1.7f);
+					            	 baseRow = communsPdf.setRow(table, 30);					            
+						             communsPdf.setCell(baseRow,15,textoAxa.getNombre(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setTopPadding(0);
+						             communsPdf.setCell(baseRow,85, "",Color.BLACK,true, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,5f,5f),bgColor);
+							       
+					             }else {
+					            	 baseRow = communsPdf.setRow(table, 15);
+					           	 
+						             communsPdf.setCell(baseRow,15,textoAxa.getNombre(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setTopPadding(0);
+						             communsPdf.setCell(baseRow,85, "",Color.BLACK,true, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,5f,5f),bgColor);
+							      
+					             }
+					                 if(i == 2) {
+						        	   baseRow = communsPdf.setRow(table, 50);  
+						        	   baseRow.setLineSpacing(1.5f);
+						           }else {
+						        	   baseRow = communsPdf.setRow(table, 25);
+						           }
+					             
+					             communsPdf.setCell(baseRow,2, "",Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+					             communsPdf.setCellImg(baseRow, 8,  ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(bgColor), communsPdf.setPadding2(0f,0f,0f,0f), "C", "T");						 					            		             
+					             communsPdf.setCell(baseRow,5, "",Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+					             communsPdf.setCell(baseRow,85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()),Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setTopPadding(-10f);		    				             
+					             table.draw();
+					             yStart -= table.getHeaderAndDataHeight();
+					           	 i++;  
+						}
+			             
+		             }
+		                 
+		             else {
 		             ArrayList<TextoAxa> texto  = this.textolist();		             		         		           
 		             int i=0;		             
 		             for (TextoAxa textoAxa : texto) {
@@ -207,6 +297,10 @@ public class ImpresionCotizacionVida {
 				             yStart -= table.getHeaderAndDataHeight();
 				           	 i++;  
 					}
+		          }   
+		             
+		             
+		             
 		             
 		           StringBuilder txtexta = new StringBuilder();
 		           txtexta.append("Esta cotización tiene una validez de 15 días naturales contados a partir de la fecha de su elaboración, por lo que no se garantiza la emisión del seguro. La misma es ilustrativa y de apoyo a"
@@ -281,15 +375,8 @@ public class ImpresionCotizacionVida {
 		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de 25,000 UDI","Fallecimiento del titular",
 				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3v03subQdoyiLTpAC23gTmZtumlkE1aOjuGc7iNrvJu/img_fallecimiento.png"));
 		texto.add(new TextoAxa ("En caso de fallecimiento o invalidez del asegurado titular, el seguro quedará\nexento de pago de primas y continuará vigente hasta el final del plazo.","Exención por fallecimiento o invalidez",
-				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3zwJFQv2sjw371qZzW2eXdgyOPtfOagRqGICP8sP/img_supervivencia.png"));
+				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap30wRrI8t9rObuUQ39uigNZFZ0ZKRud6Q9F3zP8dMWf/img_excencion.png"));
 		
-
-	
-//		texto.add("Al final del plazo recibirás la cantidad de 25,000 UDI.");
-//		texto.add("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de 25,000 UDI.");
-//		texto.add("En caso de fallecimiento o invalidez del asegurado titular, el seguro quedará\nexento de pago de primas y continuará vigente hasta el final del plazo.");
-//		texto.add("Esta cotización tiene una validez de 15 días naturales contados a partir de la fecha de su elaboración, por lo que no se garantiza la emisión del seguro. La misma es ilustrativa y de apoyo a"
-//				+ "");
 		return texto;
 		
 	}
