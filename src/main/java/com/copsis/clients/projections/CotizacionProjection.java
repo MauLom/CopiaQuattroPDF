@@ -13,7 +13,10 @@ public class CotizacionProjection {
 	private String nombre;
 	private String sexo;
 	private String edad;
+	private String habito;
+	private String plan;
 	private String moneda;
+	private String plazodepagos;
 	private String primaAnual;
 	private String aportacion;
 	private String primaMensual;
@@ -23,6 +26,7 @@ public class CotizacionProjection {
 	private String primaMensualex;
 	private String mx;
 	private String email; 
+	private String rol; 
 	private boolean vida;
 
 }
