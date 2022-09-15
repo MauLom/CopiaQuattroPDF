@@ -2,16 +2,15 @@ package com.copsis.models.impresionAxa;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ProspectoProjection;
@@ -23,9 +22,6 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.PDocumenteHW;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImpresionCotizacionVida {
 	private final Color bgColor = new Color(255, 255, 255, 0);
@@ -57,11 +53,11 @@ public class ImpresionCotizacionVida {
 		            communsPdf.setCell(baseRow,30, "Cotizador Vida - AXA",Color.BLACK,false, "L",9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setLeftPadding(25f);	                 		    				     
 		            table.draw();
 		             
-                    PDType0Font lbsef = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("imgInter/sans.ttf").toURI()));
+                  
 		
 					table = new BaseTable(1160, 1160, bottomMargin, 120, 100, document, page, false, true);
 					baseRow = communsPdf.setRow(table, 12);
-					communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2208/Polizas/2208/zeSWdRgKylw7QuyGNMQ9vc8HSPiToM8cVUnQd5e2VOIzWrci1IgN1QLcOhFEfhy/Axalogo.png"));
+					communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKMx8EV7QvJ0rhjgJUTSkhuC1dzj1prD49eGE73D87jH5/Axalogo.png"));
 					table.draw();
 					
 					
@@ -359,7 +355,7 @@ public class ImpresionCotizacionVida {
 		             yStart -= table.getHeaderAndDataHeight();
 		             table = new BaseTable(yStart, yStart, bottomMargin, 600, 130, document, page, true, true);
 		             baseRow = communsPdf.setRow(table, 15);		
-		             communsPdf.setCell(baseRow,100,  Sio4CommunsPdf.eliminaHtmlTags3(txtexta.toString()),Color.BLACK,false, "C",8, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setFont(lbsef);
+		             communsPdf.setCell(baseRow,100,  Sio4CommunsPdf.eliminaHtmlTags3(txtexta.toString()),Color.BLACK,false, "C",8, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor);
 		  
 		             table.draw();
 		           
@@ -390,16 +386,13 @@ public class ImpresionCotizacionVida {
 	public ArrayList<TextoAxa> textolist(String udiLeyenda){
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
-		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de " +udiLeyenda+ " UDI\nen una sola exhibición.","Fallecimiento","https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3v03subQdoyiLTpAC23gTmZtumlkE1aOjuGc7iNrvJu/img_fallecimiento.png"));
+		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de " +udiLeyenda+ " UDI\nen una sola exhibición.","Fallecimiento","https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
 		
 		texto.add(new TextoAxa ("En caso de invalidez total y permanente, tu seguro quedará exento del pago de"
 				+"las primas de la cobertura básica y continuará protegido por fallecimiento, y recibirás la cantidad de: "+udiLeyenda+ " UDI ","Invalidez",
-				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3wYQXtgGX6UUCw3nwJjDgnDVbYwyI0yXefqCa1PljA2/img_invalidez.png"));
-		texto.add(new TextoAxa ("Sin cobertura de desempleo.","Desempleo","https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap35CqK9bSQv9UAHn9peTdR9pG82SEWKl4yrl2K8HGCyz/img_desempleo.png"));
+				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOqd1O9liJdorrWLzgXQg2OgybH2wWtTZB8GTKAjt1/img_invalidez.png"));
+		texto.add(new TextoAxa ("Sin cobertura de desempleo.","Desempleo","https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKGce8Pt8szzzCnS3X8PzdEyUU70DygI1YSX6iQeJM0y/img_desempleo.png"));
 		
-
-	
-
 		return texto;
 		
 	}
@@ -408,12 +401,12 @@ public class ImpresionCotizacionVida {
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
 		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+udiLeyenda+ " UDI.","Supervivencia o fallecimiento del menor",
-				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3ycM3aqESEttRzcUQB4RU6yf28q8Kbuiju0TRNNoqjD/img_supervivencia.png"));
+				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOWa39jvjMQDMhW3XUUVXXY3oR2Ib70UaEoEob3GL5w/img_supervivencia.png"));
 		
 		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de "+udiLeyenda+" UDI","Fallecimiento del titular",
-				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3v03subQdoyiLTpAC23gTmZtumlkE1aOjuGc7iNrvJu/img_fallecimiento.png"));
+				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
 		texto.add(new TextoAxa ("En caso de fallecimiento o invalidez del asegurado titular, el seguro quedará\nexento de pago de primas y continuará vigente hasta el final del plazo.","Exención por fallecimiento o invalidez",
-				"https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap30wRrI8t9rObuUQ39uigNZFZ0ZKRud6Q9F3zP8dMWf/img_excencion.png"));
+				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPuzfyj18mhRXZJSO3QPvIn8TNqsoEiuGboZt0Sdk/img_excencion.png"));
 		
 		return texto;
 		
