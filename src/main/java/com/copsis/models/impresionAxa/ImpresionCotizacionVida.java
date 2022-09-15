@@ -113,7 +113,7 @@ public class ImpresionCotizacionVida {
 		            		
 		            	
 		            	 for (int i = 0; i < propecto.size(); i++) {
-		            		 System.out.println( i);
+		            		
 		            		 if( i%2 == 0) {
 		            			 table = new BaseTable(yStart, yStart, bottomMargin, 180, 270, document, page,  false, true);
 				                 baseRow = communsPdf.setRow(table, 19);
