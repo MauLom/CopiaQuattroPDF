@@ -70,15 +70,16 @@ public class IdentificaPolizaService {
 			String contenidoAux = "";		
 			boolean encontro = false;
 
-
 			// CHUBB
-			if (!encontro &&( contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
+			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
+				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1")) {
 				ChubbModel datosChubb = new ChubbModel();
 				datosChubb.setPdfStripper(pdfStripper);
 				datosChubb.setPdDoc(pdDoc);
 				datosChubb.setContenido(contenido);
 				modelo = datosChubb.procesa();
 				encontro = true;
+				}
 			}
 
 		
