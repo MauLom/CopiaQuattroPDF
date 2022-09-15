@@ -200,7 +200,7 @@ public class ImpresionCotizacionVida {
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Plazo de pagos:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPlazodepagos(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPlazoPagos(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -217,7 +217,7 @@ public class ImpresionCotizacionVida {
 
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Valor de la UDI:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60, cotizacionProjection.getUdi(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60, cotizacionProjection.getValorUdi(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 
 		             
 		             baseRow = communsPdf.setRow(table, 25);
@@ -242,7 +242,7 @@ public class ImpresionCotizacionVida {
 		             yStart -= table.getHeaderAndDataHeight()+15;
 		             
 		             if(cotizacionProjection.isVida()) {
-		            	 ArrayList<TextoAxa> texto  = this.textolist2(cotizacionProjection.getUdiLeyenda());		             		         		           
+		            	 ArrayList<TextoAxa> texto  = this.textolist2(cotizacionProjection.getPrimaUdiTitular(),cotizacionProjection.getPrimaUdiMenor());		             		         		           
 			             int i=0;		             
 			             for (TextoAxa textoAxa : texto) {
 			         
@@ -301,7 +301,7 @@ public class ImpresionCotizacionVida {
 		             }
 		                 
 		             else {
-		             ArrayList<TextoAxa> texto  = this.textolist(cotizacionProjection.getUdiLeyenda());		             		         		           
+		             ArrayList<TextoAxa> texto  = this.textolist(cotizacionProjection.getPrimaUdiTitular(),cotizacionProjection.getPrimaUdiMenor());		             		         		           
 		             int i=0;		             
 		             for (TextoAxa textoAxa : texto) {
 		         
@@ -383,13 +383,13 @@ public class ImpresionCotizacionVida {
 
 	}
 	
-	public ArrayList<TextoAxa> textolist(String udiLeyenda){
+	public ArrayList<TextoAxa> textolist(String primaUdiTitular,String primaUdiMenor){
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
-		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de " +udiLeyenda+ " UDI\nen una sola exhibición.","Fallecimiento","https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
+		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de " +primaUdiTitular+ " UDI\nen una sola exhibición.","Fallecimiento","https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
 		
 		texto.add(new TextoAxa ("En caso de invalidez total y permanente, tu seguro quedará exento del pago de"
-				+"las primas de la cobertura básica y continuará protegido por fallecimiento, y recibirás la cantidad de: "+udiLeyenda+ " UDI ","Invalidez",
+				+"las primas de la cobertura básica y continuará protegido por fallecimiento, y recibirás la cantidad de: "+primaUdiMenor+ " UDI ","Invalidez",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOqd1O9liJdorrWLzgXQg2OgybH2wWtTZB8GTKAjt1/img_invalidez.png"));
 		texto.add(new TextoAxa ("Sin cobertura de desempleo.","Desempleo","https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKGce8Pt8szzzCnS3X8PzdEyUU70DygI1YSX6iQeJM0y/img_desempleo.png"));
 		
@@ -397,13 +397,13 @@ public class ImpresionCotizacionVida {
 		
 	}
 	
-	public ArrayList<TextoAxa> textolist2(String udiLeyenda){
+	public ArrayList<TextoAxa> textolist2(String primaUdiTitular,String primaUdiMenor){
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
-		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+udiLeyenda+ " UDI.","Supervivencia o fallecimiento del menor",
+		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+primaUdiTitular+ " UDI.","Supervivencia o fallecimiento del menor",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOWa39jvjMQDMhW3XUUVXXY3oR2Ib70UaEoEob3GL5w/img_supervivencia.png"));
 		
-		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de "+udiLeyenda+" UDI","Fallecimiento del titular",
+		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de "+primaUdiMenor+" UDI","Fallecimiento del titular",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
 		texto.add(new TextoAxa ("En caso de fallecimiento o invalidez del asegurado titular, el seguro quedará\nexento de pago de primas y continuará vigente hasta el final del plazo.","Exención por fallecimiento o invalidez",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPuzfyj18mhRXZJSO3QPvIn8TNqsoEiuGboZt0Sdk/img_excencion.png"));

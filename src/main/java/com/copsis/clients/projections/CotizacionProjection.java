@@ -16,15 +16,16 @@ public class CotizacionProjection {
 	private List<ProspectoProjection> prospecto;
 	private String plan;
 	private String moneda;
-	private String plazodepagos;
+	private String plazoPagos;
 	private String primaAnual;
 	private String aportacion;
 	private String primaMensual;
-	private String udi;
+	private String valorUdi;
 	private String primaAnualex;
 	private String aportacionex;
 	private String primaMensualex;
-	private String  udiLeyenda;
+	private String  primaUdiTitular;
+	private String  primaUdiMenor;
 	private boolean vida;
 
 }
