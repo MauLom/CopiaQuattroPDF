@@ -1434,31 +1434,6 @@ public class DataToolsModel {
 
 		}
 		
-		public static String formarDate(String dateD, String format) {
-			SimpleDateFormat formatter = null;
-			Date date = null;
-			try {
-				formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-				date = formatter.parse(dateD);
-			} catch (ParseException e) {
-				throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
-			}
 
-			DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
-			sym.setMonths(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-					"Septiembre", "Octubre", "Noviembre", "Diciembre" });
-
-			sym.setShortMonths(
-					new String[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" });
-
-			if (format.equals("")) {
-				formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", sym);
-			} else {
-				formatter = new SimpleDateFormat(format, sym);
-			}
-
-			return formatter.format(date);
-		}
-		
 
 }
