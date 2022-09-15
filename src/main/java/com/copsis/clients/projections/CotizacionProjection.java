@@ -1,5 +1,7 @@
 package com.copsis.clients.projections;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -10,10 +12,8 @@ import lombok.Setter;
 @Setter
 @JsonInclude(Include.NON_NULL)
 public class CotizacionProjection {
-	private String nombre;
-	private String sexo;
-	private String edad;
-	private String habito;
+	private String producto;
+	private List<ProspectoProjection> prospecto;
 	private String plan;
 	private String moneda;
 	private String plazodepagos;
@@ -24,9 +24,7 @@ public class CotizacionProjection {
 	private String primaAnualex;
 	private String aportacionex;
 	private String primaMensualex;
-	private String mx;
-	private String email; 
-	private String rol; 
+	private String  udiLeyenda;
 	private boolean vida;
 
 }
