@@ -37,10 +37,8 @@ public class AfirmeAutosBModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("I.V.A:", "I.V.A.:");
 
-            //tipo
+      
             modelo.setTipo(1);
-
-            //cia
             modelo.setCia(31);
             
             inicio = contenido.indexOf("Póliza");
@@ -84,7 +82,7 @@ public class AfirmeAutosBModel {
                         }else {
                         	newcontenidosp += " " + newcontenido.split("\n")[i + 1];
                         }	                        		                       
-                        modelo.setCteDireccion(newcontenidosp.replaceAll("\r", ""));
+                        modelo.setCteDireccion(newcontenidosp.replaceAll("\r", "").trim());
                         modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replaceAll("\r", "").trim());
                     }
 
