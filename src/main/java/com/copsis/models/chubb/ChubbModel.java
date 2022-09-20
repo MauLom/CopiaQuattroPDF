@@ -6,6 +6,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.chubb.autos.ChubbAutosBModel;
 import com.copsis.models.chubb.autos.ChubbAutosModel;
 
 import lombok.Data;
@@ -80,6 +81,10 @@ public class ChubbModel {
 					case "Placas:":
 						pagIni = fn.pagFinRango(pdfStripper, pdDoc, "CARÁTULA");
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO);
+						
+						if(contenido.contains("AUTOMÓVILES TURISTAS ") && contenido.contains("AUTO SOUTHBOUND")) {
+							modelo = new ChubbAutosBModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+						}else {
 
 						if (pagFin > 0 && pagIni > 0) {
 							ChubbAutosModel chubbAutos = new ChubbAutosModel();
@@ -91,7 +96,9 @@ public class ChubbModel {
 							chubbAutos.setContenido(fn.caratula(0, 3, pdfStripper, pdDoc));
 							modelo = chubbAutos.procesar();
 						}
-						encontro = true;
+					
+					   }
+					encontro = true;
 						break;
 					default:
 						break;

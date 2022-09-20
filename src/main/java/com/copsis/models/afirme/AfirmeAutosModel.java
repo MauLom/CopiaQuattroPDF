@@ -33,9 +33,8 @@ public class AfirmeAutosModel {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("Prima neta", ConstantsValue.PRIMA_NETA )
 					.replace("Póliza:", ConstantsValue.POLIZA);
-			//tipo
+
             modelo.setTipo(1);
-            //cia
             modelo.setCia(31);
 
    
@@ -74,7 +73,7 @@ public class AfirmeAutosModel {
 					}
 					if(newcontenido.split("\n")[i].contains("Motor")){
 						newdireccion.append(newcontenido.split("\n")[i].split("Motor")[0].replace("###", ""));
-						modelo.setCteDireccion(newdireccion.toString());
+						modelo.setCteDireccion(newdireccion.toString().trim());
 					}
 					if(newcontenido.split("\n")[i].contains("Serie:")){
 						modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", "").trim());

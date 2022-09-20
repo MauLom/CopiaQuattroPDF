@@ -7,6 +7,7 @@ import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 
 public class AxaAutos3Model {
 	// Clases
@@ -202,6 +203,32 @@ public class AxaAutos3Model {
 					} 				}
 				modelo.setCoberturas(coberturas);
 			}
+			
+			List<EstructuraRecibosModel> recibos = new ArrayList<>();
+			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+
+			if (modelo.getFormaPago() == 1) {
+				recibo.setReciboId("");
+				recibo.setSerie("1/1");
+				recibo.setVigenciaDe(modelo.getVigenciaDe());
+				recibo.setVigenciaA(modelo.getVigenciaA());
+				if (recibo.getVigenciaDe().length() > 0) {
+					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+				}
+				recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
+				recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
+				recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
+				recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+
+				recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
+				recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
+				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
+				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
+				recibos.add(recibo);
+
+			}
+
+			modelo.setRecibos(recibos);
 
 			return modelo;
 		} catch (Exception ex) {

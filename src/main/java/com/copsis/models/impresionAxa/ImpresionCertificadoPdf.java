@@ -182,12 +182,12 @@ public class ImpresionCertificadoPdf {
 	                            acumula2 = true;
 	                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 	                            baseRow = communsPdf.setRow(table, 11);
-	                            communsPdf.setCell(baseRow, 35, Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(t1).getNombre()), Color.BLACK, false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-	                            communsPdf.setCell(baseRow, 10, impresionAxa.getAsegurados().get(t1).getParentesco(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-	                            communsPdf.setCell(baseRow, 20, impresionAxa.getAsegurados().get(t1).getFechNacimiento(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-	                            communsPdf.setCell(baseRow, 8, impresionAxa.getAsegurados().get(t1).getEdad(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-	                            communsPdf.setCell(baseRow, 8, "", Color.BLACK, true, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-	                            communsPdf.setCell(baseRow, 20, impresionAxa.getAsegurados().get(t1).getFechAntigueda(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 35, Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurados().get(t1).getNombre()), Color.BLACK, false, "L", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 12, impresionAxa.getAsegurados().get(t1).getParentesco(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 19, impresionAxa.getAsegurados().get(t1).getFechNacimiento(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 5, impresionAxa.getAsegurados().get(t1).getEdad(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 12, impresionAxa.getAsegurados().get(t1).getStatus(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	                            communsPdf.setCell(baseRow, 18, impresionAxa.getAsegurados().get(t1).getFechAntigueda(), Color.BLACK, false, "C", 9, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 	                            if (isEndOfPage(table)) {
 	                                table.getRows().remove(table.getRows().size() - 1);
 	                                table.draw();
@@ -213,7 +213,8 @@ public class ImpresionCertificadoPdf {
 	                    }
 					
 	                    output = new ByteArrayOutputStream();
-						document.save(output);			
+						document.save(output);		
+						
 						return output.toByteArray();
 				} finally {
 					document.close();

@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
+import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
@@ -21,8 +22,10 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
+import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCertificadoPdf;
 import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
+import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.utils.ErrorCode;
@@ -143,14 +146,15 @@ public class ImpresionService {
 			case 110 :
 				byteArrayPDF =  new ImpresionConstanciaAntiguedad().buildPDF(impresionAxa);
 				break;	
+			case 111 :
+				byteArrayPDF =  new ImpresionCartaAntiguedad().buildPDF(impresionAxa);
+				break;		
 
 			default:
 				break;
 			}
 		
-
-       return byteArrayPDF;
-			
+       return byteArrayPDF;		
 			
 		} catch(ValidationServiceException e) {
 			throw e;
@@ -159,6 +163,22 @@ public class ImpresionService {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}
 	}
+	
+	
+	public byte[] impresionCotizacion(CotizacionProjection  cotizacionProjection) {
+		try {
+			ImpresionCotizacionVida impresionCotizacionVida = new ImpresionCotizacionVida();
+					
+			return impresionCotizacionVida.buildPDF( cotizacionProjection);
+			
+		} catch(ValidationServiceException e) {
+			throw e;
+		} catch(Exception ex) {
+		
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}
+	}
+	
 
 	
 	
