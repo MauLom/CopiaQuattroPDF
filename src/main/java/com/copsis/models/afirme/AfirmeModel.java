@@ -46,7 +46,7 @@ public class AfirmeModel {
 		
 				case 4:
 					if(tipoV == 0) {
-						modelo  = new AfirmeDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+						modelo  = new AfirmeDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();
 					}else {
 						modelo  = new AfirmeDiversosBModel(fn.caratula(1, 5, stripper, doc)).procesar();
 					}

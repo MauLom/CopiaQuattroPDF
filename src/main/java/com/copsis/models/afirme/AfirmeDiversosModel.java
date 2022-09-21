@@ -32,11 +32,12 @@ public class AfirmeDiversosModel {
            
             inicio = contenido.indexOf("POLIZA");
             fin =contenido.indexOf("Ubicación");
+  
             newcontenido.append(fn.extracted(inicio, fin, contenido));
+         
             
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
-            	
             	if(newcontenido.toString().split("\n")[i].contains("POLIZA:")) {
             		modelo.setPoliza(newcontenido.toString().split("\n")[i].split("POLIZA:")[1].replace("###", "").trim());
             	}
@@ -51,26 +52,54 @@ public class AfirmeDiversosModel {
             	}
             	
             	if(newcontenido.toString().split("\n")[i].contains("Asegurado")) {
+            	
+            		if(newcontenido.toString().split("\n")[i].split("Asegurado")[1].length() < 30) {
             		modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Asegurado")[1].replace("\"", "").replace("###", "").replace(":", "").trim());
+            		}
             	}
             	if(newcontenido.toString().split("\n")[i].contains("Domicilio en:")) {
             		modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Domicilio en:")[1].replace("###", "").trim());
+            		if(modelo.getCteNombre().length() == 0 && newcontenido.toString().split("\n")[i-1].contains("El asegurado")) {
+            			modelo.setCteNombre(newcontenido.toString().split("\n")[i-1].split("asegurado\":")[1].replace("###", ""));
+            		}
             	}
-            	if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {            		
-            		modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim());
+            	if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {   
+            		if(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().length()>  5) {
+            			modelo.setCp("");
+            		}else {
+            			modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim());
+            		}
+            		
             	}
             	
 			}
             if(modelo.getVigenciaDe().length() > 0) {
             	modelo.setFechaEmision(modelo.getVigenciaDe());
             }
+            
+            if(modelo.getCp().length() == 0 && modelo.getCteDireccion().length()> 0) {
+            	modelo.setCp(modelo.getCteDireccion().split("C.P.")[1].trim());
+           
+            }
         
             inicio = contenido.indexOf("Ubicación");
             fin =contenido.indexOf("Coberturas###Suma Asegurada");
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
+            if(! newcontenido.toString().contains("Ubicación") && !newcontenido.toString().contains("Giro Asegurado")) {
+            
+            	newcontenido = new StringBuilder(); 
+            	inicio = contenido.indexOf("ESPECIFICACIÓN UBICACIÓ");
+                fin =contenido.indexOf("Bienes y Riesgos###Suma Asegurada");
+                newcontenido.append(fn.extracted(inicio, fin, contenido));
+       
+            }
+            
         	List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
         	EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+
+    
+        	if(newcontenido.toString().length()> 0) {
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {            
             	if(newcontenido.toString().split("\n")[i].contains("Ubicación")) {
             		ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("Ubicación")[1].replace(":", "").replace("###", "").trim().substring(0,30));	
@@ -78,9 +107,16 @@ public class AfirmeDiversosModel {
                if(newcontenido.toString().split("\n")[i].contains("Giro Asegurado")) {
             		ubicacion.setGiro(newcontenido.toString().split("\n")[i].split("Giro Asegurado")[1].replace(":", "").replace("###", "").trim());
             	}
+               if(newcontenido.toString().split("\n")[i].contains("Giro o Actividad:")) {
+           		ubicacion.setGiro(newcontenido.toString().split("\n")[i].split("Giro o Actividad:")[1].replace(":", "").replace("###", "").trim());
+           	}
+               if(newcontenido.toString().split("\n")[i].contains("Número de pisos:")) {
+           		ubicacion.setNiveles(fn.castInteger(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("Número de pisos:")[1].replace(":", "").replace("###", "").trim()).get(0)));;
+           	}
             }
             ubicaciones.add(ubicacion);
             modelo.setUbicaciones(ubicaciones);
+		}
            
             
             inicio = contenido.indexOf("Prima Neta");
@@ -108,26 +144,75 @@ public class AfirmeDiversosModel {
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
-            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {            
-            		int sp  = newcontenido.toString().split("\n")[i].split("###").length;
-            	   switch (sp) {
-				case 1:
-					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-					coberturas.add(cobertura);
-					break;
-				case 3:
-					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-					cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
-					coberturas.add(cobertura);
-					break;
-				default:
-					break;
-				}
-            	}
+            if( newcontenido.toString().split("\n").length> 5) {            	
+	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+	            	
+	            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+	            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {            
+	            		int sp  = newcontenido.toString().split("\n")[i].split("###").length;
+	            	   switch (sp) {
+					case 1:
+						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						coberturas.add(cobertura);
+						break;
+					case 3:
+						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+						coberturas.add(cobertura);
+						break;
+					default:
+						break;
+					}
+	            	}
+	            }
+	            modelo.setCoberturas(coberturas);
             }
-            modelo.setCoberturas(coberturas);
+            
+            if(modelo.getCoberturas().isEmpty()) {
+            	
+            	 inicio = contenido.indexOf("I###EDIFICIO");
+                 fin =contenido.indexOf("Página 4 de 46");
+                 
+
+                 newcontenido = new StringBuilder();
+                 newcontenido.append(fn.extracted(inicio, fin, contenido));
+                 
+              
+                 if( newcontenido.toString().split("\n").length> 5) {            	
+     	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+     	            	
+     	            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+     	            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") 
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("I###EDIFICIO")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("II###CONTENIDOS")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("III###PÉRDIDAS")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("IV###RESPONSABILIDAD CIVIL")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("VII###ROBO CON VIOLENCIA")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("VIII###DINERO Y VALORES")
+     	            	&& 	!newcontenido.toString().split("\n")[i].contains("S.E.A.")
+     	           	&& 	!newcontenido.toString().split("\n")[i].contains("ProDteecscciróipnc")
+     	            			) {  
+     	            	
+     	            		int sp  = newcontenido.toString().split("\n")[i].split("###").length;
+     	            	   switch (sp) {
+     					case 1:
+     						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+     						coberturas.add(cobertura);
+     						break;
+     						
+     					case 2:	case 3:
+     						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+     						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+     						coberturas.add(cobertura);
+     						break;
+     					default:
+     						break;
+     					}
+     	            	}
+     	            }
+     	            modelo.setCoberturas(coberturas);
+                 }
+            }
 			
 			return modelo;
 		} catch (Exception ex) {
