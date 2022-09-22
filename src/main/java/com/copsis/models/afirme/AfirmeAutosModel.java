@@ -118,8 +118,12 @@ public class AfirmeAutosModel {
     			for(int i =0; i < newcontenidotx.toString().split("\n").length ; i++) {    			
     				if(newcontenidotx.toString().split("\n")[i].contains("Y-O")){    				
     					String x = newcontenidotx.toString().split("\n")[i].replace(" ", "###");
-                        modelo.setNomina(x.split("###")[2]);                       
-                        modelo.setCteNombre( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());                                                
+                        modelo.setNomina(x.split("###")[2]);
+        
+                        if(modelo.getNomina().contains( newcontenidotx.toString().split("\n")[i])) {
+                        	modelo.setCteNombre( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());	
+                        }
+                                                                        
                     }
     				if(newcontenidotx.toString().split("\n")[i].contains("Placas")){
     					modelo.setPlacas(newcontenidotx.toString().split("\n")[i].split("Placas")[1].replace("###", ""));
