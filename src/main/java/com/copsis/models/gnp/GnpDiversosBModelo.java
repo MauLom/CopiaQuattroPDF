@@ -40,12 +40,31 @@ public class GnpDiversosBModelo {
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString()));
 				modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString()));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-		         
+		        
 		            if(newcontenido.toString().split("\n")[i].contains("Clave") && newcontenido.toString().split("\n")[i].contains("Agente") && newcontenido.toString().split("\n")[i].contains("Póliza No."))
 		            {
-		            	modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);
-		            	modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
-		            	modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[2]);		            	
+		            	 int tipo =newcontenido.toString().split("\n")[i+1].split("###").length;
+		            	switch (tipo) {
+						case 1:
+							modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+							break;
+						case 2:
+							modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+			            	modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);
+							break;	
+
+						default:
+							modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+			            	modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);			            	
+			            	modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[2]);	
+							break;
+						}
+		            	
+		            	if(tipo ==1) {
+		            		modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0] +" " + newcontenido.toString().split("\n")[i+3].split("###")[1]);
+			            	modelo.setAgente(newcontenido.toString().split("\n")[i+2].split("###")[1]);
+		            	}
+		            		            	
 		            }
 		            if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Contratante")  && newcontenido.toString().split("\n")[i].contains("Contratante"))
 		            {
@@ -125,6 +144,7 @@ public class GnpDiversosBModelo {
 			
 			return modelo;
 		} catch (Exception e) {
+	
 			modelo.setError(GnpDiversosBModelo.this.getClass().getTypeName()+ " | "+e.getMessage()+" | "+e.getCause());
 			 return modelo; 
 		}
