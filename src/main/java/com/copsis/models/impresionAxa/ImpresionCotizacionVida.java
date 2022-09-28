@@ -200,7 +200,7 @@ public class ImpresionCotizacionVida {
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Plazo de pagos:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60,(cotizacionProjection.getPlazoPagos() !="" ? "Edad alcanzada "+ cotizacionProjection.getPlazoPagos() +"años"  :""),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60,(cotizacionProjection.getPlazoPagos() !="" ? "Edad alcanzada "+ cotizacionProjection.getPlazoPagos() +" años"  :""),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
