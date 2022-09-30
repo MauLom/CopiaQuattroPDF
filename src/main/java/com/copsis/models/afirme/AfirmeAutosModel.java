@@ -37,7 +37,7 @@ public class AfirmeAutosModel {
             modelo.setTipo(1);
             modelo.setCia(31);
 
-   
+
             //Datos Generales
             inicio = contenido.indexOf("PÓLIZA DE SEGURO");
             fin = contenido.indexOf("DESGLOSE DE COBERTURAS");
@@ -60,12 +60,12 @@ public class AfirmeAutosModel {
 						modelo.setClave( fn.numTx(newcontenido.split("\n")[i].split(ConstantsValue.CLAVE)[1]));
 					}
 					if(newcontenido.split("\n")[i].contains("ASEGURADO") && newcontenido.split("\n")[i+2].contains("Y-O")){
-//						modelo.setCteNombre(newcontenido.split("\n")[i+2].split("Y-O")[0].trim());							
+						modelo.setCteNombre(newcontenido.split("\n")[i+2].split("Y-O")[0].trim());							
 					}
 					
 					if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Tipo y Clase:")) {		
 
-//						modelo.setCteNombre( newcontenido.split("\n")[i].split("Tipo y Clase:")[0].replace("###", "").trim());
+						modelo.setCteNombre( newcontenido.split("\n")[i].split("Tipo y Clase:")[0].replace("###", "").trim());
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Modelo")){
@@ -126,13 +126,13 @@ public class AfirmeAutosModel {
     					case 1:
     						   modelo.setNomina(x.split("###")[1]);
       					     if(modelo.getNomina().contains( newcontenidotx.toString().split("\n")[i])) {
-      	                        	modelo.setCteNombre( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());	
+      	                        	modelo.setCteNomina( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());	
       	                        }
     						break;
     					case 2:
     					    modelo.setNomina(x.split("###")[2]);
     					     if(modelo.getNomina().contains( newcontenidotx.toString().split("\n")[i])) {
-    	                        	modelo.setCteNombre( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());	
+    	                        	modelo.setCteNomina( newcontenidotx.toString().split("\n")[i].split(modelo.getNomina())[1].split("###")[0].trim());	
     	                        }
     						break;
     						
@@ -224,8 +224,33 @@ public class AfirmeAutosModel {
 				}
 				modelo.setCoberturas(coberturas);
             }
-            
+            modelo.setCteNomina(modelo.getCteNombre());
+            inicio =     contenido.indexOf("PÓLIZA DE SEGURO PARA");
+            fin = contenido.lastIndexOf("DESGLOSE DE COBERTURAS");
            
+
+            if (inicio > -1 & fin > -1 & inicio < fin) {
+                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+                for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                	
+                	 if (newcontenido.split("\n")[i].contains("PÓLIZA DE SEGURO PARA") & newcontenido.split("\n")[i].contains("Poliza:")) {
+                		
+                		 switch (newcontenido.split("\n")[i].split("Poliza:")[1].split("###").length){
+						case 3:
+							 modelo.setInciso(fn.castInteger(newcontenido.split("\n")[i].split("Poliza:")[1].split("###")[2]));
+							break;
+							  
+							case 4:
+							   modelo.setInciso(fn.castInteger(newcontenido.split("\n")[i].split("Poliza:")[1].split("###")[3]));
+							break;
+
+						default:
+							break;
+						}
+                		
+                	 }
+                }
+            }
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(AfirmeAutosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
