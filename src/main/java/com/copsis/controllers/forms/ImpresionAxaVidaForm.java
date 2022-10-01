@@ -1,49 +1,27 @@
 package com.copsis.controllers.forms;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.copsis.clients.projections.BeneficiarioProjection;
+import com.copsis.models.ClasesAxa.beneficiarios;
+import com.copsis.models.ClasesAxa.contratante;
+import com.copsis.models.ClasesAxa.menor;
+import com.copsis.models.ClasesAxa.ocupacion;
+import com.copsis.models.ClasesAxa.salud;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @JsonInclude(value = Include.NON_NULL)
 public class ImpresionAxaVidaForm {
-	private String contrannte;
-	private String sexo;
-	private String rfc;
-	private String curp;
-	private String serie;
-	private String fechNacimiento;
-	private String direccion;
-	private String nacionalidad;
-	private String calle;
-	private String noInterior;
-	private String noExterior;
-	private String colonia;
-	private String cp;
-	private String municipio;
-	private String ciudad;
-	private String estado;
-	private String regimen;
-	private String clave;
-	private String cpfiscal;
-	private String celular;
-	private String correo;
-	private String actividad;
-	private String ingreso;
-	private String calleExt;
-	private String noInteriorExt;
-	private String noExteriorExt;
-	private String cpExt;
-	private String municipioExt;
-	private String ciudadExt;
-	private String plan;
-	private String palzo;
-	private String plazoPago;
-	private String primaExcendente;	
-	private List<BeneficiarioProjection> benficiarios;
-	
+	private List<contratante> Contratante = new ArrayList<>();
+	private List<menor> menor = new ArrayList<>();
+	private List<ocupacion> ocupacion = new ArrayList<>();
+	private List<salud> salud = new ArrayList<>();
+	private List<beneficiarios> benficiarios = new ArrayList<>();
+
 }
