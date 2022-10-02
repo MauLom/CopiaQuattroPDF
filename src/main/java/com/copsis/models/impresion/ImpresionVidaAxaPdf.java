@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
+import com.copsis.clients.projections.BeneficiariosAxaProjection;
+import com.copsis.clients.projections.ContratanteProjection;
+import com.copsis.clients.projections.MenorProjection;
+import com.copsis.clients.projections.OcupacionProjection;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
@@ -463,20 +468,22 @@ public class ImpresionVidaAxaPdf {
 					table.draw();
 					yStart -=table.getHeaderAndDataHeight();
 
+					
 					if(impresionAxaVidaForm.getBenficiarios() !=null) {
 						int x=0;
 						
-						//while (x < impresionAxaVidaForm.getBenficiarios().size()) {
-						while (x < impresionAxaVidaForm.getBenficiarios().size()) {
+						 List<BeneficiariosAxaProjection> beneficiariosAxaProjection  = impresionAxaVidaForm.getBenficiarios();
+						while (x < beneficiariosAxaProjection.size()) {
 							 acumula = true;
+							 String nombre = (beneficiariosAxaProjection.get(x).getNombres() + " " +beneficiariosAxaProjection.get(x).getApPaterno() +" " + beneficiariosAxaProjection.get(x).getApMaterno());
 							 table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
 								baseRow = communsPdf.setRow(table, 15);
 								communsPdf.setCell(baseRow, 4,"",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 14,impresionAxaVidaForm.getBenficiarios().get(x).getSolicitante(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 41,impresionAxaVidaForm.getBenficiarios().get(x).getNombres(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			
-								communsPdf.setCell(baseRow, 13,impresionAxaVidaForm.getBenficiarios().get(x).getFecNacimiento(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 14,impresionAxaVidaForm.getBenficiarios().get(x).getParentesco(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 14,impresionAxaVidaForm.getBenficiarios().get(x).getPorcentaje().toString(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);																					
+								communsPdf.setCell(baseRow,14, "",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+								communsPdf.setCell(baseRow, 41,nombre,bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			
+								communsPdf.setCell(baseRow, 13,beneficiariosAxaProjection.get(x).getFechaNacimiento(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+								communsPdf.setCell(baseRow, 14,beneficiariosAxaProjection.get(x).getParentesco(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+								communsPdf.setCell(baseRow, 14,beneficiariosAxaProjection.get(x).getPorcentaje(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);																					
 							    if (isEndOfPage(table)) {
 	                                table.getRows().remove(table.getRows().size() - 1);
 	                                table.draw();
@@ -574,7 +581,7 @@ public class ImpresionVidaAxaPdf {
 					ypos = yStart;
 					fullWidthx =0;
 					fullWidthx =278;
-					ocupacion ocupacion  =impresionAxaVidaForm.getOcupacion().get(0);
+					OcupacionProjection ocupacion  =impresionAxaVidaForm.getOcupacion().get(0);
 					
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidthx, margin, document, page,true , true);	
 					baseRow = communsPdf.setRow(table, 65);					
