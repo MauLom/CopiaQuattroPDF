@@ -9,7 +9,7 @@ public class ContratanteProjection {
 	private String rfc = "";
 	private String curp = "";
 	private String noSerieFiel = "";
-	private float estadoCivil;
+	private Float estadoCivil;
 	private String paisDeNacimiento = "";
 	private String estado = "";
 	private String ciudad = "";
@@ -20,5 +20,10 @@ public class ContratanteProjection {
 	private String colonia = "";
 	private boolean domicilioExtranjero;
 	private String telefono = "";
-	private String correo = "";
+	private String nombres = "";
+	private String apPat = "";
+	private String apMat = "";
+	private String fecNacimiento = "";
+	private String sexo = "";
+	
 }

@@ -19,6 +19,6 @@ public class LlenadoSolicitudForm {
 	private List<MenorProjection> menor = new ArrayList<>();
 	private List<OcupacionProjection> ocupacion = new ArrayList<>();
 	private List<SaludProjection> salud = new ArrayList<>();
-	private List<BeneficiariosAxaProjection> benficiarios = new ArrayList<>();
+	private List<BeneficiariosAxaProjection> beneficiarios = new ArrayList<>();
 	private List<SolicitudProjection> solicitud = new ArrayList<>();
 }

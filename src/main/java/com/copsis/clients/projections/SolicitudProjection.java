@@ -15,6 +15,6 @@ public class SolicitudProjection {
 	  private String parrafo2_1;
 	  private String parrafo3;
 	  private String parrafo3_1;
-	  private boolean parrafo4;
+	  private Boolean parrafo4;
 	  private String parrafo5;
 }
