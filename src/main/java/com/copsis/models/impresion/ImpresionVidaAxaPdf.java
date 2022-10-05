@@ -945,7 +945,7 @@ public class ImpresionVidaAxaPdf {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);									
-					document.save(new File("/home/aalbanil/Documentos/AXAImagenes/axapdf/AxaVida.pdf"));
+					//document.save(new File("/home/aalbanil/Documentos/AXAImagenes/axapdf/AxaVida.pdf"));
 					return output.toByteArray();
 					
 				}finally {
