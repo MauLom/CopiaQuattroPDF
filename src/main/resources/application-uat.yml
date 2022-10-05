@@ -31,7 +31,7 @@ userproxy:
 tenants:
   default-instance: "quattro-uat"
   default-db: "quattro00398"
-  datasources:
+  datasources:      
     "quattro-uat":
       jdbcUrl: jdbc:mysql://10.24.176.3:3306/quattro00398?allowPublicKeyRetrieval=true&useSSL=false
       driverClassName: com.mysql.cj.jdbc.Driver
