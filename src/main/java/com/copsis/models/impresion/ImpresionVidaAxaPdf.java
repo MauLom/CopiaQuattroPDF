@@ -781,8 +781,8 @@ public class ImpresionVidaAxaPdf {
 					this.setEncabezado(document, page);
 					
 			
-	                PDType0Font normal = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("imgInter/1.ttf").toURI()));
-	                PDType0Font bold = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("imgInter/2.ttf").toURI()));
+	                PDType0Font normal = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/1.ttf").toURI()));
+	                PDType0Font bold = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/2.ttf").toURI()));
 	                    
 					ArrayList<String>  textonotas =  this.textonotas();
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
