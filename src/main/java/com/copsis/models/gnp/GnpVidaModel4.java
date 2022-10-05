@@ -30,8 +30,7 @@ public class GnpVidaModel4 {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
-		
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {						
 				if(newcontenido.toString().split("\n")[i].contains("Asegurado")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 					asegurado.setNombre(modelo.getCteNombre());
@@ -44,7 +43,10 @@ public class GnpVidaModel4 {
 				if(newcontenido.toString().split("\n")[i].contains("Número de la Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[1]);
 				}
-				if(newcontenido.toString().split("\n")[i].contains("R.F.C.")) {
+				if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains("CURP")) {
+					modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].split("CURP")[0].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("R.F.C.") &&  modelo.getRfc().length() == 0) {
 					modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].trim());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Nacimiento") && newcontenido.toString().split("\n")[i].contains("Plan") && newcontenido.toString().split("\n")[i].contains("Moneda")) {
@@ -60,7 +62,7 @@ public class GnpVidaModel4 {
 				modelo.setCteDireccion(newdire.toString());
 				modelo.setCp(fn.obtenerCPRegex2(modelo.getCteDireccion()));
 			}
-//			System.out.println(contenido);
+
 			inicio = contenido.indexOf("Fallecimiento");
 			fin = contenido.indexOf("Fecha de Inicio");			
 			newcontenido = new  StringBuilder();
@@ -68,7 +70,12 @@ public class GnpVidaModel4 {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+				
 				if(!newcontenido.toString().split("\n")[i].contains("Fallecimiento") && !newcontenido.toString().split("\n")[i].contains("Invalidez") ) {
+					
+					if(newcontenido.toString().split("\n")[i].contains("PAGO ÚNICO")) {
+							modelo.setFormaPago(1);
+						}
 					
 					int sp = newcontenido.toString().split("\n")[i].split("###").length;
 					switch (sp) {
@@ -138,6 +145,17 @@ public class GnpVidaModel4 {
 				recibos.add(recibo);
 			}
 			modelo.setRecibos(recibos);
+			
+			
+			if(modelo.getVigenciaDe().length() > 0 && modelo.getVigenciaA().length() > 0  ) {		
+				int cantida= fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA());
+				if(cantida > 1) {
+					modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				}
+			}
+			
+			
+			
 			
 			return modelo;
 		} catch (Exception ex) {

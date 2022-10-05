@@ -84,7 +84,8 @@ public class BexmasSaludBModel {
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				
-					if(newcont.toString().split("\n")[i].split("-").length > 3) {						
+					if(newcont.toString().split("\n")[i].split("-").length > 3) {	
+						
 					    asegurado.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[1]));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[2]));

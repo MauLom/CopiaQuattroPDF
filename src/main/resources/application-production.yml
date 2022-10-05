@@ -27,9 +27,9 @@ userproxy:
     password: Alh1a18hGbslio0axcRt4kLmMbto0WjdcE36gy5vllf6s5S8EnoaT2ie__m01-cZi
 #Produccion
 tenants:
+  default-instance: "quattrocrm-db1-v1"
+  default-db: "quattro00060"
   datasources:
-    default-instance: "quattrocrm-db1-v1"
-    default-db: "quattro00060"
     "quattrocrm-db1-v1":
       jdbcUrl: jdbc:mysql://10.65.240.40:3306/quattro00001?allowPublicKeyRetrieval=true&useSSL=false
       driverClassName: com.mysql.cj.jdbc.Driver

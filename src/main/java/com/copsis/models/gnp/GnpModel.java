@@ -95,7 +95,9 @@ public class GnpModel {
 			
 			}
 			
-			if(modelo.getTipo() == 0 && fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA")) {
+	
+			
+			if(modelo.getTipo() == 0 && (fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA") || fn.caratula(1, 2, stripper, doc).contains("SEGURIDAD EN VIDA"))) {
 				modelo = new GnpVidaModel4().procesar(fn.caratula(1, 12, stripper, doc));
 			}
 			
