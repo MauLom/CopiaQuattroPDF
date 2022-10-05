@@ -265,23 +265,7 @@ public class Sio4CommunsPdf {
     }
 
 
-    public Cell<PDPage> setCellImg(Row<PDPage> row, float width, Image img,  List<LineStyle> line,List<Float> padding,String aligconte,String valign) {
-        Cell<PDPage> cell = row.createImageCell(width, img);
-        cell.setLeftBorderStyle(line.get(0));
-        cell.setRightBorderStyle(line.get(1));
-        cell.setBottomBorderStyle(line.get(2));
-        cell.setTopBorderStyle(line.get(3));
-        
-        cell.setLeftPadding(padding.get(0));
-        cell.setRightPadding(padding.get(1));
-        cell.setTopPadding(padding.get(2));
-        cell.setBottomPadding(padding.get(3));
-        
-        this.setAligment(cell, aligconte);
-        this.setVaAligment(cell, valign);
-		return cell;
-    
-    }
+
     public Cell<PDPage> setCell(Row<PDPage> row, float width, Image img, int tipo, int cotizacion, Color bgColor) {
         Cell<PDPage> cell = row.createImageCell(width, img);
         if (cotizacion == 37) {
@@ -616,14 +600,6 @@ public class Sio4CommunsPdf {
     	return text;
     }
     
-    public List<Float> setPadding2(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
-        List<Float> pading = new ArrayList<>();
-           //Solo son 4 L,R,T,B
-   	     pading.add(PaddingL);
-   	     pading.add(PaddingR);
-   	     pading.add(PaddingT);
-   	     pading.add(PaddingB);
-   	    return pading;
-       }
+
 	
 }
