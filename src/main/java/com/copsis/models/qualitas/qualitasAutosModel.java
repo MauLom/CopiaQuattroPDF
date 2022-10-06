@@ -1,6 +1,7 @@
 package com.copsis.models.qualitas;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
@@ -716,12 +717,15 @@ public class qualitasAutosModel {
 				}
 			}
 
+			
 			// marca
 			// descripcion
 			inicio = contenido.indexOf("VEHÍCULO ASEGURADO");
 			index = 20;
+
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index));
+			
 				if (newcontenido.contains("(")) {
 					newcontenido = newcontenido.replace(")", "&&&");
 					newcontenido = newcontenido.split("&&&")[1].replace("###", "").trim();
@@ -778,6 +782,39 @@ public class qualitasAutosModel {
 				newcontenido = contenido.substring(inicio + 7, contenido.indexOf("\r\n", inicio + 7)).replace("###", "")
 						.replace("-", "").replace(" ", "").trim();
 				modelo.setPlacas(newcontenido);
+			}
+			
+			if(modelo.getDescripcion().length() ==0 && modelo.getSerie().length() == 0) {
+    		boolean existe= false;
+    		  StringBuilder vehiculoDatos = new StringBuilder();	
+    			for (int i = 0; i < cotxtra.split("VEHÍCULO ASEGURADO").length; i++) {
+                    if(cotxtra.split("VEHÍCULO ASEGURADO")[i].contains("Fecha Vencimiento del pago")) {
+                        if(cotxtra.split("VEHÍCULO ASEGURADO")[i].split("Fecha Vencimiento")[0].contains("Modelo") && !existe) {             
+                             vehiculoDatos.append(cotxtra.split("VEHÍCULO ASEGURADO")[i].split("Fecha Vencimiento")[0].trim());
+                            existe=true;                         
+                        }
+                
+                    }
+                }
+    			
+    			for (int i = 0; i < vehiculoDatos.toString().split("\n").length; i++) {
+                    if(i == 0) {
+                       modelo.setDescripcion(vehiculoDatos.toString().split("\n")[0].split("###")[1]);
+                    }
+                    
+                    if(vehiculoDatos.toString().split("\n")[i].contains("Modelo:") &&  vehiculoDatos.toString().split("\n")[i].contains("Color")) {                    
+                        modelo.setModelo(fn.castInteger(fn.obtenerListNumeros2(vehiculoDatos.toString().split("\n")[i].split("Modelo:")[1]).get(0)));
+                    }
+                    if(vehiculoDatos.toString().split("\n")[i].contains("Serie:") &&  vehiculoDatos.toString().split("\n")[i].contains("Motor")
+                       && vehiculoDatos.toString().split("\n")[i].contains("Placas:")     ) {                    
+                        modelo.setSerie(vehiculoDatos.toString().split("\n")[i].split("Serie:")[1].split("Motor:")[0].trim());
+                        modelo.setMotor(vehiculoDatos.toString().split("\n")[i].split("Motor:")[1].split("Placas:")[0].trim().replace("###", ""));
+                        if(vehiculoDatos.toString().split("\n")[i].split("Moto")[1].length() >6) {
+                            modelo.setPlacas(vehiculoDatos.toString().split("\n")[i].split("Placas:")[1]);
+                        }
+                        
+                    }
+                }
 			}
 
 			// coberturas
