@@ -134,7 +134,6 @@ public class BupaSaludModel {
 			
 			return modelo;
 		} catch (Exception ex) {
-		    ex.printStackTrace();
 			modelo.setError(BupaSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
