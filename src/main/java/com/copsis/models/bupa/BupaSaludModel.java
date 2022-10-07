@@ -67,22 +67,25 @@ public class BupaSaludModel {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 					  modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 				}
-				if(newcontenido.toString().split("\n")[i].contains("Asegurado Principal")) {				
-					if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0).length() > 0) {
-					asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1].split( fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0) )[0]);
+				
+				if(newcontenido.toString().split("\n")[i].contains("Asegurado Principal") || newcontenido.toString().split("\n")[i].contains("Asegurado Titular")) {				
+				    
+				    if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0).length() > 0) {
+					asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1].split( fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0) )[0].trim());
 					asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i].split("###")[1]).get(0)));
 				    asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i+1] ));
 					}else {
 						asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);
 						asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i+1] ));
-					}									
+					}	
+					  
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Deducibles") && newcontenido.toString().split("\n")[i].contains("Dentro")) {
 					cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("Dentro")[1].replace("###", ""));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Suma Asegurada") ) {
-					cobertura.setSa(newcontenido.toString().split("\n")[i+1].split("###")[0].replace("###", ""));
+					cobertura.setSa(newcontenido.toString().split("\n")[i+1].substring(0, 30).split("###")[0].replace("###", ""));
 				}
 				
 			}
@@ -93,7 +96,7 @@ public class BupaSaludModel {
 			
 			
 			
-			asegurados.add(asegurado);
+			 asegurados.add(asegurado);
 			modelo.setAsegurados(asegurados);
 			
 			coberturas.add(cobertura);

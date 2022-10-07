@@ -18,12 +18,12 @@ public class BeneficiarioProjection {
 	private String fecNacimiento;
 	private String parentesco;
 	private BigDecimal porcentaje;
+	private String solicitante;
 	public BeneficiarioProjection() {
 
 	}
 	
-	public BeneficiarioProjection( String nombres,
-			Date fecNacimiento, String parentesco, BigDecimal porcentaje) {
+	public BeneficiarioProjection( String nombres,Date fecNacimiento, String parentesco, BigDecimal porcentaje) {
 		super();
 		this.nombres = nombres;
 		this.fecNacimiento = fecNacimiento.toString();

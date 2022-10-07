@@ -26,6 +26,7 @@ public class Sio4CommunsPdf {
     private LineStyle lineGris = new LineStyle(new Color(196, 196, 196), 0);//para la cotizacion inter 37;
     private LineStyle lineAzul = new LineStyle(new Color(0, 0, 143), 0);//para la cotizacion inter 37;
     private LineStyle lineBlanco = new LineStyle(new Color(255, 255, 255), 0);//para la cotizacion inter 37;
+    private LineStyle lineBlack = new LineStyle(new Color(0, 0, 0), 0);;
  
 
     public Sio4CommunsPdf() {
@@ -245,8 +246,7 @@ public class Sio4CommunsPdf {
         Cell<PDPage> cell = row.createImageCell(width, img);
         return cell;
     }
-
-
+    
     public Cell<PDPage> setCellImg(Row<PDPage> row, float width, Image img,  List<LineStyle> line,List<Float> padding,String aligconte,String valign) {
         Cell<PDPage> cell = row.createImageCell(width, img);
         cell.setLeftBorderStyle(line.get(0));
@@ -262,8 +262,10 @@ public class Sio4CommunsPdf {
         this.setAligment(cell, aligconte);
         this.setVaAligment(cell, valign);
 		return cell;
-    
     }
+
+
+
     public Cell<PDPage> setCell(Row<PDPage> row, float width, Image img, int tipo, int cotizacion, Color bgColor) {
         Cell<PDPage> cell = row.createImageCell(width, img);
         if (cotizacion == 37) {
@@ -331,6 +333,11 @@ public class Sio4CommunsPdf {
                 cell.setRightBorderStyle(lineBlanco);
                 cell.setBottomBorderStyle(lineBlanco);
                 cell.setTopBorderStyle(lineBlanco);
+            case 3:
+            	   cell.setLeftBorderStyle(lineBlack);
+                   cell.setRightBorderStyle(lineBlack);
+                   cell.setBottomBorderStyle(lineBlanco);
+                   cell.setTopBorderStyle(lineBlack); 
          	break;
             	default:
                     cell.setLeftBorderStyle(lineAzul);
@@ -566,6 +573,15 @@ public class Sio4CommunsPdf {
    	    return pading;
        }
 
+    public List<Float> setPadding2(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
+        List<Float> pading = new ArrayList<>();
+           //Solo son 4 L,R,T,B
+   	     pading.add(PaddingL);
+   	     pading.add(PaddingR);
+   	     pading.add(PaddingT);
+   	     pading.add(PaddingB);
+   	    return pading;
+       }
   
     public List<Float> setPadding(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
      List<Float> pading = new ArrayList<>();
@@ -584,14 +600,6 @@ public class Sio4CommunsPdf {
     	return text;
     }
     
-    public List<Float> setPadding2(Float PaddingL ,Float PaddingR,Float PaddingT ,Float PaddingB){
-        List<Float> pading = new ArrayList<>();
-           //Solo son 4 L,R,T,B
-   	     pading.add(PaddingL);
-   	     pading.add(PaddingR);
-   	     pading.add(PaddingT);
-   	     pading.add(PaddingB);
-   	    return pading;
-       }
+
 	
 }
