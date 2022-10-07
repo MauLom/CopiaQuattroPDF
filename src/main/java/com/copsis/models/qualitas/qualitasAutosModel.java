@@ -67,6 +67,7 @@ public class qualitasAutosModel {
 			// ramo
 			modelo.setRamo("Autos");
 
+
 			// fecha_emision
 			inicio = contenido.indexOf("IMPORTE TOTAL");
 			fin = contenido.lastIndexOf("www.qualitas.com.mx");
@@ -529,11 +530,9 @@ public class qualitasAutosModel {
 					}
 
 				} else if (newcontenido.contains("Forma de Pago:")) {
-					inicio = contenido.indexOf("Forma de Pago:");
-					newcontenido = contenido.substring(inicio, inicio + 600).split("\r\n")[1];
-					newcontenido = newcontenido.split("Forma de Pago:")[0].split("###")[0].trim();
+			              
+						modelo.setFormaPago(fn.formaPago(newcontenido));
 
-					modelo.setFormaPago(fn.formaPago(newcontenido));
 				}
 			}
 
@@ -632,10 +631,12 @@ public class qualitasAutosModel {
 			 * ********************************************
 			 */
 
+
 			// vigencia_a
 			inicio = contenido.lastIndexOf("Hasta las");
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio, contenido.indexOf("\r\n", inicio)).replace("del:", "del");
+			
 				if (newcontenido.contains("Plazo")) {
 					newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
 					if (newcontenido.length() == 11) {
