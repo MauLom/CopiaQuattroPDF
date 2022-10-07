@@ -530,7 +530,7 @@ public class qualitasAutosModel {
 					}
 
 				} else if (newcontenido.contains("Forma de Pago:")) {
-			                    System.out.println(newcontenido);
+			              
 						modelo.setFormaPago(fn.formaPago(newcontenido));
 
 				}
@@ -631,7 +631,7 @@ public class qualitasAutosModel {
 			 * ********************************************
 			 */
 
-			System.out.println(contenido);
+
 			// vigencia_a
 			inicio = contenido.lastIndexOf("Hasta las");
 			if (inicio > -1) {
