@@ -365,8 +365,14 @@ public class GnpSaludModel {
 					}
 
 					if (dato.contains("Cesión de Comisión")) {
-						modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(
-								dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", ""))));
+					 if(dato.contains("0.00.")) {
+					     modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(
+	                                dato.split("Cesión de Comisión")[1].replace("0.00.", "00.").replace("−", "").replace("###", ""))));
+					 }else {
+					     modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(
+	                                dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")))); 
+					 }
+						
 					}
 				}
 			}
