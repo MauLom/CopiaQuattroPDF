@@ -133,7 +133,7 @@ public class qualitasAutosMotosModel {
 				}
 				
 			}
-			
+		
 			modelo.setMoneda(1);
 			
 			inicio = agente.indexOf("Agente");
@@ -246,6 +246,12 @@ public class qualitasAutosMotosModel {
 				modelo.setCoberturas(coberturas);
 			}
 
+            
+            if(modelo.getFormaPago() == 1 &&  fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA())> 1) {             
+                modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+            }
+            
+            
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
