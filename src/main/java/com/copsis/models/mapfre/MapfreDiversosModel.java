@@ -370,7 +370,10 @@ public class MapfreDiversosModel {
 			// renovacion
 			inicio = inicontenido.indexOf("SUMA ASEGURADA  DEDUCIBLE");
 			fin = inicontenido.indexOf("ABREVIATURAS");
-
+			if(inicio == -1) {
+			    inicio = inicontenido.indexOf("SUMA ASEGURADA    LIMITE MAXIMO");
+			}
+	
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
