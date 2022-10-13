@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -35,6 +36,8 @@ public class AxaVida2Model {
 			modelo.setCia(20);
 			inicio = contenido.indexOf("CARATULA DE POLIZA");
 			fin = contenido.indexOf("Coberturas Amparadas");
+			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				resultado.append( contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
@@ -96,10 +99,33 @@ public class AxaVida2Model {
 				    if(resultado.toString().split("\n")[i].contains("Prima") && resultado.toString().split("\n")[i].contains("anual") && resultado.toString().split("\n")[i].contains("total")) {				    	
 				    	modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble( resultado.toString().split("\n")[i].split("Prima")[1].split("###")[1])));
 				    }
+			
+				    if( resultado.toString().split("\n")[i].contains("asegurado") && resultado.toString().split("\n")[i].contains("emisión")
+				       &&  resultado.toString().split("\n")[i+1].contains("Nombre:") && resultado.toString().split("\n")[i+1].contains("Moneda")     ) {
+				       String str = resultado.toString().split("\n")[i+1].split("Nombre:")[1].split("Moneda")[0].replace("###", "").trim();
+				       if(str.contains(",")) {
+				           asegurado.setNombre(str.split(",")[1] +" " +str.split(",")[0]);
+				       }else {
+				           asegurado.setNombre(resultado.toString().split("\n")[i+1].split("Nombre:")[1].split("Moneda")[0]);    
+				       }
+				       
+
+				    }
+				    if( resultado.toString().split("\n")[i].contains("Fecha de nacimiento:")) {
+				        String fechacmineto=resultado.toString().split("\n")[i].split("nacimiento:")[1].replace("###", "").trim().replace("DE", "").replace("  ", "-");				      
+
+				       asegurado.setNacimiento(fn.formatDateMonthCadena(fechacmineto));
+				    }
+				    if( resultado.toString().split("\n")[i].contains("Edad:") && resultado.toString().split("\n")[i].contains("Plazo")) {
+				     asegurado.setEdad(fn.castInteger(resultado.toString().split("\n")[i].split("Edad:")[1].split("Plazo")[0].replace("###", "").trim()));
+				    }
 				    		
 				 }
 			}
 
+			asegurados.add(asegurado);
+			modelo.setAsegurados(asegurados);
+			
 			resultado  = new StringBuilder();
 			for (int i = 0; i < contenido.split("Beneficiarios Nombre").length; i++) {	
 				if(i> 0) {
