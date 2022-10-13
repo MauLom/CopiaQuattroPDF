@@ -26,7 +26,7 @@ public class AfirmeModel {
 		try {
 			tipo =fn.tipoPoliza(contenido);
 			Integer pagIni = 0;
-//System.out.println(fn.caratula(1, 2, stripper, doc));
+
 				if( tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("SEGURO TRANSPORTES CARGA")){
 					tipo=4;
 					tipoV =1;
@@ -35,7 +35,7 @@ public class AfirmeModel {
                     tipo=4;
                     tipoV =2;
                 }
-		System.out.println(tipo);
+
 			
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
