@@ -44,7 +44,7 @@ public class AllianasDiversosBModel {
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Agente:")) {					
 					modelo.setCveAgente(fn.numTx(newcontenido.toString().split("\n")[i].split("Agente:")[1].replace("###", "")));
-					modelo.setAgente(newcontenido.toString().split("\n")[i].split("Agente:")[1].split(modelo.getCveAgente())[1].replace("###", ""));
+					modelo.setAgente(newcontenido.toString().split("\n")[i].split("Agente:")[1].split(modelo.getCveAgente())[1].replace("###", "").replace(" . ,", "").trim());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("RFC")) {
 					modelo.setRfc(newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim());
@@ -79,9 +79,9 @@ public class AllianasDiversosBModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 		   for (int i = 0; i < newcontenido.toString().split("Cobertura###Suma Asegurada").length; i++) {
 			   if(i > 0 ) {
-				   if(i == 1) {
+				  
 					   newcbo.append(newcontenido.toString().split("Cobertura###Suma Asegurada")[i]);
-				   }
+				  
 			   }
 			
 		}
@@ -91,7 +91,9 @@ public class AllianasDiversosBModel {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				
 				if(!newcbo.toString().split("\n")[i].contains("Cobertura") &&
-				   !newcbo.toString().split("\n")[i].contains("Daño Físico") &&  newcbo.toString().split("\n")[i].split("###").length > 1) {
+				   !newcbo.toString().split("\n")[i].contains("Daño Físico")
+				  && !newcbo.toString().split("\n")[i].contains("C.P.")
+				   &&  newcbo.toString().split("\n")[i].split("###").length > 1) {
 					cobertura.setNombre(newcbo.toString().split("\n")[i].split("###")[0]);
 					cobertura.setSa(newcbo.toString().split("\n")[i].split("###")[1]);
 					coberturas.add(cobertura);
