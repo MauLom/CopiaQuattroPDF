@@ -120,13 +120,13 @@ public class BexmasSaludModel {
 					if(!newcont.toString().split("\n")[i].contains("Nacimiento")) {
 						
 						if(newcont.toString().split("\n")[i].split("###")[0].length() > 20) {
-							asegurado.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
+							asegurado.setNombre(newcont.toString().split("\n")[i].split("###")[0].trim());
 						}else {
 					
 							if(newcont.toString().split("\n")[i-1].contains("Nacimiento")) {
 								asegurado.setNombre( newcont.toString().split("\n")[i].split("###")[0].trim());
 							}else {
-								asegurado.setNombre(newcont.toString().split("\n")[i-1]  +" " +newcont.toString().split("\n")[i].split("###")[0]);
+								asegurado.setNombre((newcont.toString().split("\n")[i-1]  +" " +newcont.toString().split("\n")[i].split("###")[0]).trim());
 							}
 						
 						}
@@ -176,29 +176,43 @@ public class BexmasSaludModel {
 			fin = contenido.lastIndexOf("En testimonio de");
 			if(inicio >  -1 && fin > -1  &&  inicio < fin) {
 				newcoberturas = new StringBuilder();
-				newcoberturas.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").split("En testimonio de")[0]);
+				newcoberturas.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").split("En testimonio de")[0]
+				        .replace("MEDICAM FUERA DEL HOSPITAL###Deducible y Coaseguro contratado para", 
+				                "MEDICAM FUERA DEL HOSPITAL###Deducible y Coaseguro contratado para la Cobertura Básica###Básica")
+				        .replace("C.TRATAMIENTOS NO AMPARADOS###Deducible y Coaseguro Contratado para", "C.TRATAMIENTOS NO AMPARADOS###Deducible y Coaseguro Contratado para la Cobertura Básica###500,000 M.N.")
+				        .replace("EMERGENCIA MÉDICA EXTRANJERO###Deducible de 100 USD, no aplica", "EMERGENCIA MÉDICA EXTRANJERO###Deducible de 100 USD, no aplica coaseguro###100,000 USD")
+				        .replace("ENFERMEDADES GRAVES###Deducible y Coaseguro contratado para", "ENFERMEDADES GRAVES EXTRANJERO###Deducible y Coaseguro contratado para la Cobertura Básica###Básica")
+				        );
 		
 			}
 			
 			newcob.append(newcont +" "+ newcoberturas);
+
 			
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if(newcob.toString().length() > 50) {
 				for (int i = 0; i < newcob.toString().split("\n").length; i++) {
-				
-					if(!newcob.toString().split("\n")[i].contains("Cobertura Básica") && !newcob.toString().split("\n")[i].contains("Coberturas Adicionales")
-							&& !newcob.toString().split("\n")[i].contains("coaseguro###")
+				  
+					if(
+	                  !newcob.toString().split("\n")[i].contains("Coberturas Adicionales")    
 							) {		
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					
 						switch (newcob.toString().split("\n")[i].split("###").length) {
 						case 2:
-							cobertura.setNombre(newcob.toString().split("\n")[i].split("###")[0]);						
-							coberturas.add(cobertura);
+						    if(!newcob.toString().split("\n")[i].contains("coaseguro") && !newcob.toString().split("\n")[i].contains("la Cobertura Básica")) {
+						        cobertura.setNombre(newcob.toString().split("\n")[i].split("###")[0]);                      
+	                            coberturas.add(cobertura);
+						    }
+						
 							break;
 						case 3:
-							cobertura.setNombre(newcob.toString().split("\n")[i].split("###")[0]);
-							cobertura.setSa(newcob.toString().split("\n")[i].split("###")[2]);		
-							coberturas.add(cobertura);
+						    if(!newcob.toString().split("\n")[i].equals("EXTRANJERO###la Cobertura Básica###Básica")){
+						        cobertura.setNombre(newcob.toString().split("\n")[i].split("###")[0]);
+	                            cobertura.setSa(newcob.toString().split("\n")[i].split("###")[2]);      
+	                            coberturas.add(cobertura);
+						    }
+					
 							break;								
 						default:
 							break;
