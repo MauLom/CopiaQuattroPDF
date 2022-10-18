@@ -187,7 +187,7 @@ public class BexmasSaludModel {
 			}
 			
 			newcob.append(newcont +" "+ newcoberturas);
-//			System.out.println(newcob);
+
 			
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if(newcob.toString().length() > 50) {
