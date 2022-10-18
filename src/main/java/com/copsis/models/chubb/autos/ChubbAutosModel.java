@@ -589,6 +589,7 @@ public class ChubbAutosModel {
 				break;
 			}
 			modelo.setRecibos(recibosList);
+			modelo.setPolizaGuion(modelo.getPoliza());
 
 			return modelo;
 		} catch (Exception ex) {

@@ -143,7 +143,7 @@ public class ChubbAutosBModel {
 				}
 			}
 			
-			
+			modelo.setPolizaGuion(modelo.getPoliza());
 			
 			return modelo;
 		} catch (Exception ex) {
