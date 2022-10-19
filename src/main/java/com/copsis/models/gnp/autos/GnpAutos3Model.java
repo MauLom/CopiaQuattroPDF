@@ -35,7 +35,6 @@ public class GnpAutos3Model {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				
 				if(newcontenido.toString().split("\n")[i].contains("Policy No.")) {
 					modelo.setPoliza( newcontenido.toString().split("\n")[i].split("Policy No.")[1].trim());
 				}
@@ -54,9 +53,19 @@ public class GnpAutos3Model {
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
 				
+				if(newcontenido.toString().split("\n")[i].contains("date") && newcontenido.toString().split("\n")[i].contains("From 14:00")) {
+
+				     modelo.setVigenciaDe(fn.obtenVigePolizaUS(newcontenido.toString().replace("*", "").split("\n")[i].split("date*")[1].trim()).get(0));
+				}
+				
 				if(newcontenido.toString().split("\n")[i].contains("date") && newcontenido.toString().split("\n")[i].contains("To 12:00")) {
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
+				
+			    if(newcontenido.toString().split("\n")[i].contains("date") && newcontenido.toString().split("\n")[i].contains("To 14:00")) {
+
+                    modelo.setVigenciaA(fn.obtenVigePolizaUS(newcontenido.toString().replace("*", "").split("\n")[i].split("date*")[1].trim()).get(0));
+               }
 				
 				if(newcontenido.toString().split("\n")[i].contains("Description") && newcontenido.toString().split("\n")[i].contains("License Plate") && newcontenido.toString().split("\n")[i+1].contains("Net Premium")) {
 					modelo.setDescripcion(newcontenido.toString().split("\n")[i+1].split("###")[0]);
