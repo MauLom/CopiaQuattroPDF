@@ -6,6 +6,7 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.latino.LatinoSeguroAutoModel;
 
@@ -136,7 +137,61 @@ public class PanAmericanSaludModel {
 					modelo.setCveAgente(newcontenido.toString().split("\n")[i].split("CLAVE")[1].replace("###", ""));
 				}
 			}
-			
+
+
+			 inicio = contenido.lastIndexOf("COBERTURA BÁSICA");
+	         fin = contenido.indexOf("El seguro brinda cobertura");
+	         
+	         newcontenido = new StringBuilder(); 
+	         newcontenido.append( fn.extracted(inicio, fin, contenido));
+	         List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+	         EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel(); 
+	         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  	            
+	             if(newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA") && newcontenido.toString().split("\n")[i].contains("POR AÑO PÓLIZA")) {
+	                cobertura.setSa(newcontenido.toString().split("\n")[i].split("PÓLIZA")[1].replace("###", "").trim());
+	             }
+	             if(newcontenido.toString().split("\n")[i].contains("DEDUCIBLE") && newcontenido.toString().split("\n")[i].contains("MXN")) {
+	                 cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("MXN")[1]);
+	             }
+	             if(newcontenido.toString().split("\n")[i].contains("COBERTURA BÁSICA")) {
+                     cobertura.setNombre("COBERTURA BÁSICA");
+                 }	         
+	         }
+	         
+	        coberturas.add(cobertura);
+	      
+	         
+	         inicio = contenido.lastIndexOf("CUADRO DE BENEFICIOS CUBIERTOS");
+             fin = contenido.indexOf("3 de 9");
+             newcontenido = new StringBuilder(); 
+             newcontenido.append( fn.extracted(inicio, fin, contenido)
+             .replace("Hasta MXN 2,000.00 Cobertura", 
+              "Hasta MXN 2,000.00 Cobertura máxima por noche hasta 30 días por Año Póliza por Asegurado")
+             .replace("Trasplante de Órganos Incluye Etapa previa al Trasplante,"
+             , "Trasplante de Órganos Incluye Etapa previa al Trasplante,Etapa del Trasplante y Etapa posterior al Trasplante")
+             .replace("Hasta MXN 9,000,000.00 Suma", "Hasta MXN 9,000,000.00 Suma Asegurada Máxima por Beneficio por Asegurado, de por vida")
+             .replace("Hasta MXN 500,000.00 Esta suma", "Hasta MXN 500,000.00 Esta suma se descontará del valor total de la Suma Asegurada Máxima por el Beneficio de Trasplante de Órganos y está destinada a cubrir los gastos derivados del proceso de Donación")
+             .replace("Hasta 60 días naturales Por Año", "Hasta 60 días naturales Por Año Póliza y dentro de los cuales sólo 30 días de estancia en Unidad de Cuidados Intensivos"));
+             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+                 EstructuraCoberturasModel coberturax = new EstructuraCoberturasModel(); 
+                 if(!newcontenido.toString().split("\n")[i].contains("CUADRO DE BENEFICIOS") 
+                         && !newcontenido.toString().split("\n")[i].contains("HOSPITALIZACIÓN")
+                         && !newcontenido.toString().split("\n")[i].contains("VALOR ASEGURADO")) {
+                     switch (newcontenido.toString().split("\n")[i].split("###").length) {
+                        case 2:
+                            coberturax.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                            coberturax.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                            coberturas.add(coberturax);
+                            break;
+
+                        default:
+                            break;
+                    }
+                     
+                 }
+             }
+	         modelo.setCoberturas(coberturas);
+	         
 
 			return modelo;
 		} catch (Exception ex) {
