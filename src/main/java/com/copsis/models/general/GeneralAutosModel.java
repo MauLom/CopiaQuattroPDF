@@ -20,11 +20,10 @@ public class GeneralAutosModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 	
 	      try {
-			  modelo.setTipo(3);
-	          modelo.setCia(15);
+		
 	          
 	          modelo.setTipo(1);
-				modelo.setCia(17);
+				modelo.setCia(16);
 
 				inicio = contenido.indexOf("DATOS DEL ASEGURADO");
 				fin = contenido.indexOf("COBERTURAS CONTRATADAS");
