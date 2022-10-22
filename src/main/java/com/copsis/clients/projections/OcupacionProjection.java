@@ -11,13 +11,14 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class OcupacionProjection {
 	private String ocupacion;
-	private String ingresoAnual;
-	private String nombres;
 	private String giro;
-	private String actividad;
 	private String lugar;
 	private String material;
+	private String ingresoAnual;
 	private String pregunta1;
+	private String pregunta1R1;
 	private String pregunta2;
+	private String pregunta2R1;
 	private String pregunta3;
+	private String pregunta3R1;
 }
