@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,15 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.pdfbox.contentstream.operator.state.Concatenate;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection;
 import com.copsis.clients.projections.ContratanteProjection;
-import com.copsis.clients.projections.ImpresionReclamacionProjection.Contratante;
+import com.copsis.clients.projections.DomiciliosAxaProjection;
 import com.copsis.clients.projections.MenorProjection;
 import com.copsis.clients.projections.OcupacionProjection;
 import com.copsis.clients.projections.SaludProjection;
@@ -44,6 +41,7 @@ public class ImpresionVidaAxaPdf {
 	private float ypos ;
 	private float ypos2 ;
 	private Boolean acumula;
+	private Boolean acumula2;
 	private boolean domcex;
 
 	public byte[] buildPDF(ImpresionAxaVidaForm  impresionAxaVidaForm) {
@@ -58,7 +56,7 @@ public class ImpresionVidaAxaPdf {
 					Row<PDPage> baseRow;
 					
 		
-					ContratanteProjection contratante  =impresionAxaVidaForm.getLlenadoSolicitud().getContratante().get(0);
+					ContratanteProjection contratante  =impresionAxaVidaForm.getFormularios().getContratante().get(0);
 				
 					this.setEncabezado(document, page);
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page,true , true);	    
@@ -245,7 +243,7 @@ public class ImpresionVidaAxaPdf {
 					
 					baseRow = communsPdf.setRow(table, 18);
 					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap33oR0kg9AJfRRpYLSDYIFODmsPezIRd5weYPe497Nd0/solic.png").scale(630,400), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(0f,0f,0f,0f), "", "T").setFillColor(bgColorex);				
-					MenorProjection menor  = impresionAxaVidaForm.getLlenadoSolicitud().getMenor().get(0);
+					MenorProjection menor  = impresionAxaVidaForm.getFormularios().getMenor().get(0);
 					baseRow = communsPdf.setRow(table, 12);
 					communsPdf.setCell(baseRow, 80,"Nombre(s), apellido paterno, apellido materno",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);				
 					communsPdf.setCell(baseRow, 20,"Género",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);					
@@ -480,13 +478,17 @@ public class ImpresionVidaAxaPdf {
 					table.draw();
 					yStart -=table.getHeaderAndDataHeight();
 					
+					boolean domiciliox=false;
 					
-					if(impresionAxaVidaForm.getLlenadoSolicitud().getBeneficiarios() !=null) {
+					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios() !=null) {
 						int x=0;
 						
-						 List<BeneficiariosAxaProjection> beneficiarios  = impresionAxaVidaForm.getLlenadoSolicitud().getBeneficiarios();
+						 List<BeneficiariosAxaProjection> beneficiarios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios();
 						while (x < beneficiarios.size()) {
 							 acumula = true;
+							 if(beneficiarios.get(x).getPregunta1().toLowerCase().contains("si")) {
+							     domiciliox =true; 
+							 }
 							 String nombre = (beneficiarios.get(x).getNombres() + " " +beneficiarios.get(x).getApPaterno() +" " + (beneficiarios.get(x).getApMaterno() !=null ? beneficiarios.get(x).getApMaterno() :"" ));
 							 table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
 								baseRow = communsPdf.setRow(table, 15);
@@ -525,16 +527,60 @@ public class ImpresionVidaAxaPdf {
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 20,"No. de Beneficiario",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
 					communsPdf.setCell(baseRow, 80,"Domicilio",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	             
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					table.draw();
+					yStart -=table.getHeaderAndDataHeight();
+					
+					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios() !=null && domiciliox == true) {
+					    int t=0;
+					    acumula2 = true;
+                        List<DomiciliosAxaProjection> domicilios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios();
+                       while (t < domicilios.size()) {
+                           table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);            
+                           baseRow = communsPdf.setRow(table, 15);
+                           communsPdf.setCell(baseRow, 20,domicilios.get(t).getNoBeneficiario() +"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+                           communsPdf.setCell(baseRow, 80,domicilios.get(t).getDomicilio(),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+                         
+                           if (isEndOfPage(table)) {
+                               table.getRows().remove(table.getRows().size() - 1);
+                               table.draw();
+                               page = new PDPage();
+                               document.addPage(page);
+                               this.setEncabezado(document, page);
+                               acumula2 = false;
+
+                           } else {
+                               table.draw();
+                               yStart -= table.getHeaderAndDataHeight();
+                           }
+
+                           if (acumula2) {
+                               t++;
+                           }
+                           if (t > 150) {
+                               table.draw();
+                               break;
+                           }
+                       }
+					    
+					}else {
+					    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);                 
+	                    baseRow = communsPdf.setRow(table, 15);
+	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    baseRow = communsPdf.setRow(table, 15);
+	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    baseRow = communsPdf.setRow(table, 15);
+	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+	                    table.draw(); 
+					}
+					
+					
+					
+					
+					yStart -=table.getHeaderAndDataHeight();                    
+                    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true); 
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 100,"Información adicional:",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
 					
@@ -543,7 +589,9 @@ public class ImpresionVidaAxaPdf {
 					page = new PDPage();
 					document.addPage(page);
 					this.setEncabezado(document, page);
-					OcupacionProjection ocupacion  =impresionAxaVidaForm.getLlenadoSolicitud().getOcupacion().get(0);
+					OcupacionProjection ocupacion  =impresionAxaVidaForm.getFormularios().getOcupacion().get(0);
+					
+					SaludProjection salud  =impresionAxaVidaForm.getFormularios().getSalud().get(0);
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3("<b>Cuestionarios.</b>") +"(Si se requiere ampliar la información, agregarla en hoja anexa)",Color.white,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColorA);
@@ -559,11 +607,11 @@ public class ImpresionVidaAxaPdf {
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 17,"Titular",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 17,"Aseguradora",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 17,"Suma Asegurada",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 17,"Solicitante",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 16,"Aseguradora",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 16,"Suma Asegurada",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			  							
+					communsPdf.setCell(baseRow, 17,salud.getPregunta2R1(),bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 17,salud.getPregunta2R2(),bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 17,"",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 16,"",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					communsPdf.setCell(baseRow, 16,"",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			  							
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,"Ocupación (Explicar detalladamente la actividad y lugar de trabajo)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColorAb);
 					baseRow = communsPdf.setRow(table, 15);
@@ -602,7 +650,7 @@ public class ImpresionVidaAxaPdf {
 					
 					
 					yStart = ypos;
-					SaludProjection salud  =impresionAxaVidaForm.getLlenadoSolicitud().getSalud().get(0);
+					
 					table = new BaseTable(yStart, yStart, bottomMargin, 277, 303, document, page,true , true);	
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 36,"¿Quién?",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding2(4f,4f,2f,4f),bgColor);
@@ -677,11 +725,6 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 100,"Indique si padece o ha padecido alguna de las siguientes enfermedad",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding2(4f,4f,2f,4f),bgColor);
 					
 					ArrayList<String>  lisPreg =new ArrayList<>();
-					lisPreg.add(salud.getPregunta1());
-					lisPreg.add(salud.getPregunta2());
-					lisPreg.add(salud.getPregunta3());
-					lisPreg.add(salud.getPregunta4());
-					lisPreg.add(salud.getPregunta5());
 					lisPreg.add(salud.getPregunta6());
 					lisPreg.add(salud.getPregunta7());
 					lisPreg.add(salud.getPregunta8());
@@ -692,8 +735,28 @@ public class ImpresionVidaAxaPdf {
 					lisPreg.add(salud.getPregunta13());
 					lisPreg.add(salud.getPregunta14());
 					lisPreg.add(salud.getPregunta15());
+					lisPreg.add(salud.getPregunta16());
+					lisPreg.add(salud.getPregunta17());
 					
-					ArrayList<String>  preguntas =this.preguntas();
+					
+					lisPreg.add(salud.getPregunta18());
+					lisPreg.add(salud.getPregunta19());
+					
+				boolean mujer=false;
+				int total=0;
+					if(!contratante.getGenero().toUpperCase().contains("HOMBRE")) {
+					       lisPreg.add("");
+					    mujer=true;
+					    total=15;
+					}else {
+					    total=13;
+					}
+					
+		
+					
+					
+					
+					ArrayList<String>  preguntas =this.preguntas(mujer);
 					
 				
 					for (int i = 0; i < 7; i++) {
@@ -711,23 +774,24 @@ public class ImpresionVidaAxaPdf {
 					page = new PDPage();
 					document.addPage(page);
 					this.setEncabezado(document, page);
-					 preguntas =this.preguntas();
+	
 					 table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);
-				
-					for (int i = 7; i < preguntas.size(); i++) {
+					 
 					
+			
+					for (int i = 7; i < total; i++) {
+					if(preguntas.get(i) !="") {
 						baseRow = communsPdf.setRow(table, 25);
 						if(preguntas.get(i).equals("Mujeres:")) {
 							communsPdf.setCell(baseRow, 100,preguntas.get(i),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);							
 						}else {
 							communsPdf.setCell(baseRow, 87,preguntas.get(i),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
-							communsPdf.setCellImg(baseRow, 13, ImageUtils.readImage(this.logoHorizo(lisPreg.get(i))).scale(70,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), communsPdf.setPadding2(4f,0f,4f,0f), "L", "T");	
+							communsPdf.setCellImg(baseRow, 13, ImageUtils.readImage(this.logoHorizo(lisPreg.get(i))).scale(70,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,0f), "L", "T");	
 						}
-						
-					
+					 }					
 					}
 					table.draw();
-					SolicitudProjection solicitud  =impresionAxaVidaForm.getLlenadoSolicitud().getSolicitud().get(0);
+					SolicitudProjection solicitud  =impresionAxaVidaForm.getFormularios().getSolicitud().get(0);
 					
 					yStart -=table.getHeaderAndDataHeight()+5;
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);
@@ -756,7 +820,7 @@ public class ImpresionVidaAxaPdf {
 					baseRow = communsPdf.setRow(table, 20);
 					communsPdf.setCell(baseRow, 87,"¿En alguno de los solicitantes, sus padres biológicos, o alguna hermana o hermano, han sido diagnosticados antes de los 65 años de: cáncer, diabetes, hipertensión arterial, enfermedad cardíaca, accidente "							
 							+ "cerebrovascular, enfermedad mental o cualquier otra afección hereditaria?",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding2(2f,0f,2f,0f),bgColor);
-					communsPdf.setCellImg(baseRow, 13, ImageUtils.readImage(this.logoHorizo(salud.getPregunta15())).scale(70,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,0f), "L", "T");
+					communsPdf.setCellImg(baseRow, 13, ImageUtils.readImage(this.logoHorizo(salud.getPregunta20())).scale(70,30), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,0f), "L", "T");
 					
 					
 					baseRow = communsPdf.setRow(table, 17);
@@ -765,19 +829,28 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 30,"Parentesco",bgColorA,true, "C", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 					communsPdf.setCell(baseRow, 57,"Detallar enfermedad.",bgColorA,true, "C", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 					for (int i = 0; i < 4; i++) {
-						baseRow = communsPdf.setRow(table, 17);
-						communsPdf.setCell(baseRow, 13,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
-						communsPdf.setCell(baseRow, 30,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
-						communsPdf.setCell(baseRow, 57,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+					    baseRow = communsPdf.setRow(table, 17);
+					    if(i == 0) {
+					        communsPdf.setCell(baseRow, 13,salud.getPregunta20R1(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                        communsPdf.setCell(baseRow, 30,salud.getPregunta20R2(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                        communsPdf.setCell(baseRow, 57,salud.getPregunta20R3(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                
+					    }else {
+					        communsPdf.setCell(baseRow, 13,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                        communsPdf.setCell(baseRow, 30,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                        communsPdf.setCell(baseRow, 57,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+	                
+					    }
+					
 					}
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,"Artículo 492. Esta sección deberá ser llenada por el Contratante",Color.white,true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColorA);							
 					baseRow = communsPdf.setRow(table, 55);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt(solicitud.getParrafo1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");
+					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt(solicitud.getPregunta1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");
 					baseRow = communsPdf.setRow(table, 35);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt2(solicitud.getParrafo2())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
+					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt2(solicitud.getPregunta2())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
 					baseRow = communsPdf.setRow(table, 35);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt3(solicitud.getParrafo2_1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
+					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt3(solicitud.getPregunta2R1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
 				
 					table.draw();
 					
@@ -800,7 +873,7 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(2)),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,2f),bgColor);
 					
 					baseRow = communsPdf.setRow(table, 12);
-					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal(solicitud.getParrafo3())).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
+					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal(solicitud.getPregunta3())).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
 					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("Autorizo que AXA trate mis datos personales financieros, patrimoniales y sensibles para los fines referidos. Reconozco"),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
 					baseRow = communsPdf.setRow(table, 12);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3("que este consentimiento se complementa con la firma de la presente solicitud."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,0f,0f),bgColor);
@@ -808,7 +881,7 @@ public class ImpresionVidaAxaPdf {
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3("Autorizo que AXA transfiera mis datos personales relativos a la siniestralidad de mi póliza a mi agente o al bróker."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 					String url="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKLno6Lx5ialJqGhTNXjxYLe1HzPshGxFiRv03PZ46S65/no1.png";
-					if(solicitud.getParrafo4()) {
+					if(solicitud.getPregunta4()) {
 					  url ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKL5uExxTJHnphbwNd9TyV5pZpjWcp0RYNfMdWCbeNtP/si1.png";	
 					}
 					baseRow = communsPdf.setRow(table, 15);
@@ -819,7 +892,7 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal("no")).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
 					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("No acepto."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
 					String  parrafo5Img="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKCEOxi2WQHTB90ftTQsGbM7T0JEnTU2cGc3ilx8NB/parrafoNo5.png";
-					if(solicitud.getParrafo5().toUpperCase().contains("SI")) {
+					if(solicitud.getPregunta5().toUpperCase().contains("SI")) {
 						parrafo5Img ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKGKosp1H9RloZVSYr2MaFirmk2yhx00TLfhpFbUBcSR/parrafoSi5.png";
 					}
 					baseRow = communsPdf.setRow(table, 15);
@@ -948,8 +1021,7 @@ public class ImpresionVidaAxaPdf {
 					table.draw();
 					
 					output = new ByteArrayOutputStream();
-					document.save(output);									
-					document.save(new File("/home/aalbanil/Descargas/PDF/AXA.pdf"));
+					document.save(output);											
 					return output.toByteArray();
 					
 				}finally {
@@ -969,7 +1041,7 @@ public class ImpresionVidaAxaPdf {
 			BaseTable table;
 			Row<PDPage> baseRow;
 			 yStart =770;
-			    PDType0Font normal = PDType0Font.load(document,  new File(getClass().getClassLoader().getResource("imgInter/1.ttf").toURI()));
+			  
 			 table = new BaseTable(770, 770, bottomMargin, 300, 280, document, page, true, true);	    
 			 baseRow = communsPdf.setRow(table, 10);
 			 communsPdf.setCell(baseRow, 100,"Vida y Ahorro",bgColorAb,true, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -1004,7 +1076,7 @@ public class ImpresionVidaAxaPdf {
 		}
 
 	}
-	private  ArrayList<String> preguntas() {
+	private  ArrayList<String> preguntas(boolean mujer) {
 		ArrayList<String>  preguntas = new ArrayList<>();
 		preguntas.add("1. ¿Del corazón, hipertensión arterial o de la circulación?");
 		preguntas.add("2. ¿De las vías respiratorias, de los bronquios o pulmonares?");
@@ -1018,9 +1090,17 @@ public class ImpresionVidaAxaPdf {
 		preguntas.add("10. ¿De los ojos o de los oídos?");
 		preguntas.add("11. ¿Alguna otra enfermedad, afección o lesión distinta a las señaladas anteriormente, o está sujeto a cualquier tratamiento médico, rehabilitación o terapia por alguna enfermedad o lesión?");
 		preguntas.add("12. ¿Le han practicado o tiene pendientes pruebas especiales de laboratorio, radiográficas, ultrasonido, resonancias magnéticas, biopsia, otros, y/o alguna intervención quirúrgica u hospitalización por cualquier otra causa?");
-		preguntas.add("Mujeres:");
-		preguntas.add("13. ¿Ha padecido o padece enfermedades en los ovarios, en la matriz o en los senos?");
-		preguntas.add("14. ¿Está embarazada actualmente, ha tenido abortos, complicaciones en este embarazo o complicaciones en embarazos anteriores?");
+		
+		if(mujer) {
+		    preguntas.add("Mujeres:");
+	        preguntas.add("13. ¿Ha padecido o padece enfermedades en los ovarios, en la matriz o en los senos?");
+	        preguntas.add("14. ¿Está embarazada actualmente, ha tenido abortos, complicaciones en este embarazo o complicaciones en embarazos anteriores?");
+	        preguntas.add("");
+		}else {
+		    preguntas.add("");
+		}
+		
+		
 		
 		return preguntas;
 		
