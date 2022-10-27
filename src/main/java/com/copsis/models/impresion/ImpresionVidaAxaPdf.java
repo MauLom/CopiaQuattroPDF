@@ -791,7 +791,7 @@ public class ImpresionVidaAxaPdf {
 					 }					
 					}
 					table.draw();
-					SolicitudProjection solicitud  =impresionAxaVidaForm.getFormularios().getSolicitud().get(0);
+					SolicitudProjection solicitud  =impresionAxaVidaForm.getFormularios().getLlenado().get(0);
 					
 					yStart -=table.getHeaderAndDataHeight()+5;
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);

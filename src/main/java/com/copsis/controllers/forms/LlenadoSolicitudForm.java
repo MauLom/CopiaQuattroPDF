@@ -20,5 +20,5 @@ public class LlenadoSolicitudForm {
 	private List<OcupacionProjection> ocupacion;
 	private List<SaludProjection> salud;
     private List<DatosBeneficiarios>  beneficiarios ;
-	private List<SolicitudProjection> solicitud ;
+	private List<SolicitudProjection> llenado ;
 }
