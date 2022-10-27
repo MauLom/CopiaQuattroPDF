@@ -189,8 +189,6 @@ public class ImpresionService {
         } catch (ValidationServiceException e) {
             throw e;
         } catch (Exception ex) {
-            //se agrego para revisara fallo de impresion(despues de la prueba se va quitar)
-            System.out.println(ex.getMessage());
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
