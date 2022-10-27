@@ -23,6 +23,7 @@ import com.copsis.clients.projections.SaludProjection;
 import com.copsis.clients.projections.SolicitudProjection;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.exceptions.GeneralServiceException;
+import com.copsis.models.DataToolsModel;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
@@ -31,6 +32,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 public class ImpresionVidaAxaPdf {
 	
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
+   private DataToolsModel fn = new DataToolsModel();
 	private final Color bgColor = new Color(255, 255, 255, 0);
 	private final Color bgColorAb = new Color(203, 193, 230, 0);
 	private final Color bgColorA = new Color(0, 0, 143, 0);
@@ -89,7 +91,13 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 37,"Lugar de nacimiento (ciudad, estado y país)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);				
 					communsPdf.setCell(baseRow, 30,"Nacionalidad(es)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
 					baseRow = communsPdf.setRow(table, 12);
-					communsPdf.setCell(baseRow, 33,this.formarDate(contratante.getFechaNacimiento(), "dd MMM yyyy",""),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+					String fecha ="";
+					if(contratante.getFechaNacimiento()!="") {
+					   fecha = fn.formatDateMonthCadena(contratante.getFechaNacimiento().trim().replace(" ", "-"));
+					   fecha= fecha.split("-")[2] +"-"+ fecha.split("-")[1] +"-"+ fecha.split("-")[0];
+					}
+					
+					communsPdf.setCell(baseRow, 33,fecha ,bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
 					communsPdf.setCell(baseRow,37 ,contratante.getPaisDeNacimiento(),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);							
 					communsPdf.setCell(baseRow,30,contratante.getNacionalidad(),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
 					
