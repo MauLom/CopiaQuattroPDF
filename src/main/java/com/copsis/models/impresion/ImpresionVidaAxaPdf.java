@@ -1005,14 +1005,27 @@ public class ImpresionVidaAxaPdf {
 			        baseRow = communsPdf.setRow(table,20);
 			       
 			        communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap39Guq4eecCgXK66BJ2rALgiev9xEqhX3GhZjC68MscV/ms.png").scale(600,60), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
+			        table.draw();
+			        yStart -=table.getHeaderAndDataHeight()+14;
+			        //\n" +impresionAxaVidaForm.getFirma()
+			        
+                    
+			        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true); 
 			        baseRow = communsPdf.setRow(table, 120);
 					communsPdf.setCell(baseRow, 72,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(10)),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
 					communsPdf.setCell(baseRow, 28,"Firma del agente",bgColorA,true, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
 					baseRow = communsPdf.setRow(table, 70);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(11)),bgColorA,false, "L", 14, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
-					
-			        
 					table.draw();
+					
+					BaseTable table2;
+                    Row<PDPage> baseRow2;
+                    table2 = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,false , true); 
+                    baseRow2 = communsPdf.setRow(table2, 120);
+                    communsPdf.setCell(baseRow2, 72,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
+                    communsPdf.setCell(baseRow2, 28,Sio4CommunsPdf.eliminaHtmlTags3("\n" +impresionAxaVidaForm.getFirma()),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
+                    
+                    table2.draw();
 					
 					
 
@@ -1351,7 +1364,6 @@ public class ImpresionVidaAxaPdf {
 				formatter = new SimpleDateFormat(dateIn);
 				date = formatter.parse(dateD);
 			} catch (ParseException e) {
-			    System.out.println(e.getMessage());
 				throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
 			}
 
