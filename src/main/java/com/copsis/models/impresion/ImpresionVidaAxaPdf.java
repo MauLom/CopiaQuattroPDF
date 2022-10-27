@@ -1031,6 +1031,8 @@ public class ImpresionVidaAxaPdf {
 			}
 			
 		} catch (Exception ex) {
+		    //se agrego para revisara fallo de impresion(despues de la prueba se va quitar)
+		    System.out.println(ex.getMessage());
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionVidaAxaPdf: " + ex.getMessage());
 		}
@@ -1070,6 +1072,8 @@ public class ImpresionVidaAxaPdf {
 			
 			
 		} catch (Exception ex) {
+		    //se agrego para revisara fallo de impresion(despues de la prueba se va quitar)
+            System.out.println(ex.getMessage());
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionConstanciaAntiguedad: setEncabezado " + ex.getMessage());
 		}
