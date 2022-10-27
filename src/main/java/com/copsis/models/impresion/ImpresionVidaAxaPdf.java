@@ -1343,6 +1343,7 @@ public class ImpresionVidaAxaPdf {
 				formatter = new SimpleDateFormat(dateIn);
 				date = formatter.parse(dateD);
 			} catch (ParseException e) {
+			    System.out.println(e.getMessage());
 				throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
 			}
 
