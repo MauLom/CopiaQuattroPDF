@@ -17,4 +17,5 @@ public class SolicitudProjection {
     private String pregunta3R1;
     private Boolean pregunta4;
     private String pregunta5;
+    private Boolean pregunta6;
 }
