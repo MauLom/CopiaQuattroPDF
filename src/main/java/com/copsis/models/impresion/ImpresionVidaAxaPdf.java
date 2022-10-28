@@ -696,6 +696,10 @@ public class ImpresionVidaAxaPdf {
 					
 					baseRow = communsPdf.setRow(table, 15);
 				
+					if(salud.getPregunta3() == null) {
+					    salud.setPregunta3("no");
+					}
+					
 					communsPdf.setCell(baseRow, 13,"Titular",bgColorA,false, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding2(4f,4f,2f,4f),bgColor);
 					communsPdf.setCellImg(baseRow,8, ImageUtils.readImage(this.logo2(salud.getPregunta3())).scale(120,60), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(1f,0f,0f,0f), "L", "M");
 					communsPdf.setCell(baseRow, 22,Sio4CommunsPdf.eliminaHtmlTags3( "Cantidad:" + (	salud.getPregunta3().toUpperCase().contains("SI") ? salud.getPregunta3R1():"" ) +"\n\n" +"Desde-Hasta: "+(	salud.getPregunta3().toUpperCase().contains("SI") ? (this.communsPdf.transformString(salud.getPregunta3R2()) +" " + this.communsPdf.transformString(salud.getPregunta3R3())):"")),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.white), "", communsPdf.setPadding2(4f,4f,2f,4f),bgColor);
