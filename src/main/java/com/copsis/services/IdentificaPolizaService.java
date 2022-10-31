@@ -106,9 +106,11 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
+			
 			// ENTRADA PARA MAPFRE
 			if (!encontro && contenido.length() > 502 && contenido.indexOf("MAPFRE") > -1
-					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A."))  {	
+					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A.")
+					|| contenido.contains("MAPFRE MÉXICO"))  {	
 				contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
 				MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenidoAux);
 				modelo = datosmapfre.procesa();
