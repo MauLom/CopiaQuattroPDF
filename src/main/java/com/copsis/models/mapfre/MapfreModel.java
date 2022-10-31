@@ -63,6 +63,11 @@ public class MapfreModel {
 			if(tipo == 5 &&  contenido.contains("UBICACIÓN DE RIESGOS")) {
 				tipo =4;
 			}
+			if( tipo == 0 &&contenido.contains("Gastos Hospitalarios")) {
+			    tipo =2;
+			}
+			
+			
 			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
