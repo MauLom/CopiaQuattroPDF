@@ -138,7 +138,7 @@ public class ImpresionePDFController {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionAxaVida(impresionAxaVidaForm)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result("hola vida" /*impresionService.impresionAxaVida(impresionAxaVidaForm)*/).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
