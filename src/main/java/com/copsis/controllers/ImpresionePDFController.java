@@ -130,7 +130,7 @@ public class ImpresionePDFController {
 		}		  
 	}
 	
-	@PostMapping(value = "axaVida")
+	@PostMapping(value = "axaVida", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> impresionAxaVida ( @Valid @RequestBody ImpresionAxaVidaForm  impresionAxaVidaForm, BindingResult bindingResult) {
 		try {
 			  
