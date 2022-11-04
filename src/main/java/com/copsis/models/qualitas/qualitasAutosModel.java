@@ -55,7 +55,8 @@ public class qualitasAutosModel {
 		contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
 				.replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición")
 				.replace("Servic i o :", "Servicio:")
-				.replace("Dom i c il i o ", "Domicilio");
+				.replace("Dom i c il i o ", "Domicilio")
+				.replace("MOTOR:", "Motor:");
 
 		try {
 			// cia

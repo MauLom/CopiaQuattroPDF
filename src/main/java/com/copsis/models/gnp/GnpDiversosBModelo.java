@@ -63,6 +63,8 @@ public class GnpDiversosBModelo {
 		            	if(tipo ==1) {
 		            		modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0] +" " + newcontenido.toString().split("\n")[i+3].split("###")[1]);
 			            	modelo.setAgente(newcontenido.toString().split("\n")[i+2].split("###")[1]);
+			            	modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[2]);
+			            
 		            	}
 		            		            	
 		            }

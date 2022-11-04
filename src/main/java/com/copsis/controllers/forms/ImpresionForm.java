@@ -4,12 +4,15 @@ import java.util.List;
 import com.copsis.clients.projections.BeneficiarioProjection;
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.PaqueteCoberturaProjection;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(value = Include.NON_NULL)
 public class ImpresionForm {
 	private Integer tiporespuesta;
 	private Integer tipoImpresion;
@@ -58,6 +61,7 @@ public class ImpresionForm {
 	private String paisExt;
 	private String telefonoExt;
 	private boolean errorPDF;
+	private String notaTecnica;
 	
 	private List<BeneficiarioProjection> Beneficiarios;
 	private List<PaqueteCoberturaProjection> Coberturas;

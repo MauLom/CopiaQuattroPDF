@@ -36,6 +36,9 @@ public class BupaSaludModel {
 				if(newcontenido.toString().split("\n")[i].contains("Dirección")) {
 					modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Dirección")[1].replace("###", "").trim());					
 					modelo.setCp(fn.obtenerCPRegex2(newcontenido.toString().split("\n")[i+1]));
+					if(modelo.getCp().length() == 0) {
+					    modelo.setCp(fn.obtenerCPRegex2(newcontenido.toString().split("\n")[i+2]));
+					}
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Número de Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim());
@@ -57,7 +60,9 @@ public class BupaSaludModel {
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Fraccionado")) {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+				if(valores.size() > 0) {
 					  modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
 				}
 				if(newcontenido.toString().split("\n")[i].contains("IVA")) {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
@@ -103,9 +108,12 @@ public class BupaSaludModel {
 			modelo.setCoberturas(coberturas);
 			
 			
-			
+	
 			inicio = conteniext.indexOf("Forma de Pago");
 			fin = conteniext.indexOf("Vigencia###Prima Neta");
+			if(fin == -1) {
+			    fin = conteniext.indexOf("Hasta###Prima Neta");
+			}
 	
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			

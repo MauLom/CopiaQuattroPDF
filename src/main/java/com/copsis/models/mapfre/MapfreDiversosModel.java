@@ -114,7 +114,7 @@ public class MapfreDiversosModel {
 			}
 			if (inicio > -1) {
 				modelo.setEndoso(
-						contenido.substring(inicio + 13, inicio + 100).split("\r\n")[0].replace(":", "").trim());
+						contenido.substring(inicio + 13, inicio + 100).split("\r\n")[0].replace(":", "").replace("###", "").trim());
 			}
 
 			// cte_nombre
@@ -302,13 +302,16 @@ public class MapfreDiversosModel {
 			if (fin == -1) {
 				fin = contenido.indexOf("Mapfre México, S. A. denominada");
 			}
-			
+			if (fin == -1) {
+                fin = contenido.indexOf("MAPFRE MÉXICO, S.A., denominada");
+            }
+		
 
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin);
+				
 				if (newcontenido.contains("otal:")) {
 					List<String> listValores = fn.obtenerListNumeros(newcontenido);
-
 					if (listValores.size() == 6) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(listValores.get(0).trim())));
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(listValores.get(2).trim())));
@@ -316,8 +319,15 @@ public class MapfreDiversosModel {
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(listValores.get(4).trim())));
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(listValores.get(5).trim())));
 					}
-
+					if (listValores.size() == 5) {
+                        modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(listValores.get(0).trim())));
+                        modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(listValores.get(1).trim())));
+                        modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(listValores.get(2).trim())));
+                        modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(listValores.get(3).trim())));
+                        modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(listValores.get(4).trim())));
+                    }
 				}
+			   
 			}
 			if (isVersionMayusculas) {
 				obtenerPrimas(contenido, modelo);
@@ -360,7 +370,10 @@ public class MapfreDiversosModel {
 			// renovacion
 			inicio = inicontenido.indexOf("SUMA ASEGURADA  DEDUCIBLE");
 			fin = inicontenido.indexOf("ABREVIATURAS");
-
+			if(inicio == -1) {
+			    inicio = inicontenido.indexOf("SUMA ASEGURADA    LIMITE MAXIMO");
+			}
+	
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
@@ -704,16 +717,17 @@ public class MapfreDiversosModel {
 					}
 				}
 
+				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 
 				for (int i = 0; i < ubicacionest.toString().split("\n").length; i++) {
-					EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
-
+				    
+					
 
 					if (ubicacionest.toString().split("\n")[i].contains("C.P.") && ubicacionest.toString().split("\n")[i].split("C.")[1].length() > 8) {
 						cp = (ubicacionest.toString().split("\n")[i].split("C.P.")[1].trim().substring(0, 5));											
 					}
 					if (ubicacionest.toString().split("\n")[i].contains("UBICACION") ) {
-						calle = (ubicacionest.toString().split("\n")[i].substring(0,50));											
+						calle = (ubicacionest.toString().split("\n")[i].substring(0,50)).replace("@@@", "");											
 					}
 					if (ubicacionest.toString().split("\n")[i].contains("MUROS") && ubicacionest.toString().split("\n")[i].split("TEC.")[1].length() > 8) {
 						muro = (ubicacionest.toString().split("\n")[i].split("MUROS")[1].split("TECHO.")[0]);											
@@ -723,10 +737,11 @@ public class MapfreDiversosModel {
 					 ubicacion.setCp(cp);
 					 ubicacion.setCalle(calle);
 					 ubicacion.setMuros(fn.material(muro));
-					 ubicaciones.add(ubicacion);
+					
 				   }
 
 				}
+				 ubicaciones.add(ubicacion);
 				modelo.setUbicaciones(ubicaciones);
 
 			}

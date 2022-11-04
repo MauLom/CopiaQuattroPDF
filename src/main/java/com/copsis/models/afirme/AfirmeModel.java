@@ -31,6 +31,11 @@ public class AfirmeModel {
 					tipo=4;
 					tipoV =1;
 				}
+		        if( tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("UBICACIÓN")){
+                    tipo=4;
+                    tipoV =2;
+                }
+
 			
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
@@ -45,11 +50,21 @@ public class AfirmeModel {
 					break;
 		
 				case 4:
-					if(tipoV == 0) {
-						modelo  = new AfirmeDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();
-					}else {
-						modelo  = new AfirmeDiversosBModel(fn.caratula(1, 5, stripper, doc)).procesar();
-					}
+				    
+				    switch (tipoV) {
+                        case 0:
+                            modelo  = new AfirmeDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();
+                            break;
+                         case 2:
+                             modelo  = new AfirmeDiversosCModel().procesar(fn.caratula(1, 4, stripper, doc));
+                            break;    
+
+                        default:
+                            modelo  = new AfirmeDiversosBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+                            break;
+                    }
+				    
+				
 		
 					break;
 		

@@ -871,8 +871,7 @@ public class ImpresionVidaAxaPdf {
 					document.addPage(page);
 					this.setEncabezado(document, page);
 					
-			
-	                                
+			            
 					ArrayList<String>  textonotas =  this.textonotas();
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
 					baseRow = communsPdf.setRow(table, 15);
@@ -1029,6 +1028,8 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 28,"Firma del agente",bgColorA,true, "C", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
 					baseRow = communsPdf.setRow(table, 70);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(11)),bgColorA,false, "L", 14, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f,4f,4f,4f),bgColor);
+					
+			        
 					table.draw();
 					
 					BaseTable table2;
@@ -1055,7 +1056,7 @@ public class ImpresionVidaAxaPdf {
 					table.draw();
 					
 					output = new ByteArrayOutputStream();
-					document.save(output);											
+					document.save(output);														
 					return output.toByteArray();
 					
 				}finally {
@@ -1075,7 +1076,7 @@ public class ImpresionVidaAxaPdf {
 			BaseTable table;
 			Row<PDPage> baseRow;
 			 yStart =770;
-			  
+			   
 			 table = new BaseTable(770, 770, bottomMargin, 300, 280, document, page, true, true);	    
 			 baseRow = communsPdf.setRow(table, 10);
 			 communsPdf.setCell(baseRow, 100,"Vida y Ahorro",bgColorAb,true, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);

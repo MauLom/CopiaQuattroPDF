@@ -173,12 +173,13 @@ public class primeroAutosModel {
 	            
 	            inicio = contenido.indexOf("Prima Neta");
 	            fin = contenido.indexOf("EN CASO DE SINIESTRO");
-	           
-	            
+	            if(inicio > fin) {
+	                fin = contenido.lastIndexOf("EN CASO DE SINIESTRO");
+	            }
+	       
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {  
-
                       if(newcontenido.split("\n")[i].contains("Prima Neta") && newcontenido.split("\n")[i].contains("Financiamiento")
                     	  && newcontenido.split("\n")[i].contains("Financiamiento")) 
                       {

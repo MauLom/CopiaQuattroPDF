@@ -41,6 +41,7 @@ public class AfirmeAutosModel {
             //Datos Generales
             inicio = contenido.indexOf("PÓLIZA DE SEGURO");
             fin = contenido.indexOf("DESGLOSE DE COBERTURAS");
+
           
             if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");

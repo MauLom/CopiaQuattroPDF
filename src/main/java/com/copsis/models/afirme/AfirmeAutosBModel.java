@@ -35,7 +35,7 @@ public class AfirmeAutosBModel {
 
 		try {
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			contenido = contenido.replace("I.V.A:", "I.V.A.:");
+			contenido = contenido.replace("I.V.A:", "I.V.A.:").replace("DATOS ###DEL ASEGURADO", "DATOS DEL ASEGURADO");
 
       
             modelo.setTipo(1);
@@ -50,16 +50,25 @@ public class AfirmeAutosBModel {
 
                     if (newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains(ConstantsValue.INCISO)) {
                         modelo.setPoliza(newcontenido.split("\n")[i].split("###")[1].split(ConstantsValue.INCISO)[0]);
-                        modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.INCISO)[1].trim()));
+                        modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.INCISO)[1].replace("###", "").trim()));
                     }
                     if (newcontenido.split("\n")[i].contains("desde")) {
+                        modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+                        if(modelo.getVigenciaDe().length() == 0) {
                         modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        }
                     }
                     if (newcontenido.split("\n")[i].contains("Hasta")) {
+                        modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+                        if(modelo.getVigenciaA().length() == 0) {
                         modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        }
                     }
                     if (newcontenido.split("\n")[i].contains("Emisión")) {
+                        modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+                        if(modelo.getFechaEmision().length() == 0) {
                         modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
+                        }
                     }
                 }
             }

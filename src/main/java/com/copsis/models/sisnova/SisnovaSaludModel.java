@@ -42,13 +42,15 @@ public class SisnovaSaludModel {
 				.replace("DESCRIPCIÓN DE LA PÓLIZA", "Descripción de la póliza")	
 				.replace("VIGENCIA", "Vigencia").replace("PLAN", "Plan").replace("PRIMA", "Prima")
 				.replace("MONEDA", "Moneda").replace("TOTAL", "Total").replace("NETA", "Neta")
-				.replace("COBERTURAS AMPARADAS", "coberturas amparadas");
-		
-
+				.replace("COBERTURAS AMPARADAS", "coberturas amparadas")
+				.replace("DESCRIPCIÓN DE LA PÓLIZA", "Descripción de la póliza")
+				.replace("NUEVO L", "NUEVO L###");
+		         
 		try {
 
             modelo.setCia(11);
             modelo.setTipo(3);
+           
 
                							   
             inicio = contenido.indexOf(ConstantsValue.POLIZA_NOM);
@@ -60,7 +62,12 @@ public class SisnovaSaludModel {
             if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.trim().replaceAll(" +", " ").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("   ", " ");
-				modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));
+			
+				if(newcontenido.contains("emisión")) {
+				    modelo.setFechaEmision(fn.obtenerFecha(newcontenido.split("emisión")[0]));
+				}else {
+				    modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));   
+				}				
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA_NOM)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_NOM)[1].trim().replace(" ", ""));
@@ -105,7 +112,7 @@ public class SisnovaSaludModel {
 	                	modelo.setCteDireccion(fn.eliminaSpacios(resultado.trim()));
 	                	direccion = false;
 					}else if(newcontenido.split("\n")[i].contains("domicilio") && direccion) {
-	                		resultado =  newcontenido.split("\n")[i+2] +" " + newcontenido.split("\n")[i+3];
+	                		resultado = ( newcontenido.split("\n")[i+2] +" " + newcontenido.split("\n")[i+3]).split("CP:")[0];
 	                		modelo.setCteDireccion(resultado.replace("LLEEOGNH8109053V9 NOMBRE Y DOMICILIO DEL TITULAR###RAMO", "").trim());
 	               }	                  		               
 				}
@@ -152,6 +159,7 @@ public class SisnovaSaludModel {
             //Primas           
             inicio = contenido.indexOf("Descripción de la póliza");
             fin = contenido.indexOf("Servicios Integrales de Salud");
+
        
             if (inicio > -1 && fin > -1 && inicio < fin) {
             	newcontenido = contenido.substring(inicio, fin).replace("\r", "").replaceAll("@@@", "").replaceAll("### ###", "###")
@@ -163,7 +171,7 @@ public class SisnovaSaludModel {
      
             	        //El caracter unicode
             	for (int i = 0; i < newcontenido.split("\n").length; i++) {   
-            
+
             		if(newcontenido.split("\n")[i].contains("Vigencia") && newcontenido.split("\n")[i].contains("Desde:") && newcontenido.split("\n")[i].contains("Hasta:")) {            		
             			if(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim().split("-")[0].length() == 4) {
             				modelo.setVigenciaDe(newcontenido.split("\n")[i].split("Desde:")[1].split("Hasta:")[0].replace("###", "").replace(" ", "").trim());
@@ -382,8 +390,9 @@ public class SisnovaSaludModel {
 	}
 	
 	private void obtenerCP(String lineaTexto, String newContenido) {
+	    
 		if (lineaTexto.contains("CP:")) {
-			modelo.setCp(lineaTexto.substring(0, 6).trim());
+		    modelo.setCp(lineaTexto.split("CP:")[1].substring(0, 6).trim());
 		} else if (newContenido.toUpperCase().contains("COLONIA")) {
 			int inicio = newContenido.toUpperCase().indexOf("COLONIA");
 			int fin = newContenido.toUpperCase().indexOf("NOMBRE Y DOMICILIO DEL TITULAR");

@@ -36,7 +36,7 @@ public class GeneralSaludModel {		    //tipo
 		
 		try {		
             modelo.setTipo(3);
-            modelo.setCia(15);
+            modelo.setCia(16);
 
             inicio = contenido.indexOf("NOMBRE Y DIRECCIÓN DEL CONTRATANTE");
             fin = contenido.indexOf("COBERTURAS Y LÍMITES");	
