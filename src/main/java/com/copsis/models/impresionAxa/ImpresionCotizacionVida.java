@@ -242,7 +242,7 @@ public class ImpresionCotizacionVida {
 		             yStart -= table.getHeaderAndDataHeight()+15;
 		             
 		             if(cotizacionProjection.isVida()) {
-		            	 ArrayList<TextoAxa> texto  = this.textolist2(cotizacionProjection.getPrimaUdiTitular(),cotizacionProjection.getPrimaUdiMenor());		             		         		           
+		            	 ArrayList<TextoAxa> texto  = this.textolist2(cotizacionProjection.getPrimaUdiMenor(),cotizacionProjection.getPrimaUdiTitular());		             		         		           
 			             int i=0;		             
 			             for (TextoAxa textoAxa : texto) {
 			         
@@ -301,7 +301,7 @@ public class ImpresionCotizacionVida {
 		             }
 		                 
 		             else {
-		             ArrayList<TextoAxa> texto  = this.textolist(cotizacionProjection.getPrimaUdiTitular(),cotizacionProjection.getPrimaUdiMenor());		             		         		           
+		             ArrayList<TextoAxa> texto  = this.textolist(cotizacionProjection.getPrimaUdiMenor(),cotizacionProjection.getPrimaUdiTitular());		             		         		           
 		             int i=0;		             
 		             for (TextoAxa textoAxa : texto) {
 		         

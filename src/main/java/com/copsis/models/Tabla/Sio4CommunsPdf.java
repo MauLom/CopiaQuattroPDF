@@ -3,7 +3,11 @@ package com.copsis.models.Tabla;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -600,6 +604,31 @@ public class Sio4CommunsPdf {
     	return text;
     }
     
-
+    public static String transformString(Object valueObj) {
+        if (valueObj instanceof Integer) {
+            return valueObj.toString();
+        } else if (valueObj instanceof Long) {
+            return ((Long) valueObj).toString();
+        } else if (valueObj instanceof Short) {
+            return ((Short) valueObj).toString();
+        } else if (valueObj instanceof Double) {
+            DecimalFormat df = new DecimalFormat("#");
+            return df.format(valueObj).toString();
+        } else if (valueObj instanceof Float) {
+            return ((Float) valueObj).toString();
+        } else if (valueObj instanceof String) {
+            return (String) valueObj;
+        } else if (valueObj instanceof BigInteger) {
+            return ((BigInteger) valueObj).toString();
+        } else if (valueObj instanceof Number) {
+            return ((Number) valueObj).toString();
+        } else if (valueObj instanceof BigDecimal) {
+            return ((BigDecimal) valueObj).toString();
+        } else if (valueObj instanceof Date) {
+            return ((Date) valueObj).toString();
+        } else {
+            return null;
+        }
+    }
 	
 }
