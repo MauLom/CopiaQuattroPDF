@@ -1066,7 +1066,7 @@ public class ImpresionVidaAxaPdf {
 			}
 			
 		} catch (Exception ex) {
-		    ex.printStackTrace();
+	
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionVidaAxaPdf: " + ex.getMessage());
 		}
