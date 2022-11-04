@@ -747,7 +747,7 @@ public class ImpresionConsetimientoPdf {
 					conte.append( impresionForm.getTextoConsentimiento() );	
 				}else {
 					conte.append( "a partir del\n"
-							+ "día \t12 de 03 de 2019, \tcon el \tnúmero \tCNSF-S0048-0243-2018 / CONDUSEF-003261-01.");
+							+ impresionForm.getNotaTecnica());
 				}
 				
 				
