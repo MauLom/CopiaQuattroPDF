@@ -441,16 +441,11 @@ public class ImpresionConsetimientoPdf {
 							+ "todos los fines del contrato de seguro.\n\n" + "Cruzar casilla que corresponda";
 					baseRow = communsPdf.setRow(table, 115);
 					baseRow.setLineSpacing(1.2f);
-					communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(newcontenido), azul, false, "L",
-							10, lineBoders, "", padding2);
+					
+					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(newcontenido),azul,false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,bgColorA), "", padding2,bgColor);	
+					baseRow = communsPdf.setRow(table, 15);					
+	               communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/SINO.png").scale(70,40), communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,bgColorA), communsPdf.setPadding2(2f,0f,-22f,0f), "L", "T"); 
 
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 15,
-							ImageUtils
-									.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/SINO.png")
-									.scale(70, 40),
-							2, 103, black).setTopPadding(-22);
-					;
 					table.remoBordes(false, 1);
 
 					table.draw();
@@ -638,16 +633,10 @@ public class ImpresionConsetimientoPdf {
 							+ "todos los fines del contrato de seguro.\n\n" + "Cruzar casilla que corresponda";
 					baseRow = communsPdf.setRow(table, 115);
 					baseRow.setLineSpacing(1.2f);
-					communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(newcontenido), azul, false, "L",
-							10, lineBoders, "", padding2);
+				       communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(newcontenido),azul,false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,bgColorA), "", padding2,bgColor);  
+	                    baseRow = communsPdf.setRow(table, 15);                 
+	                   communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/SINO.png").scale(70,40), communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,bgColorA), communsPdf.setPadding2(2f,0f,-22f,0f), "L", "T"); 
 
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 15,
-							ImageUtils
-									.readImage("https://storage.googleapis.com/quattrocrm-copsis/recursos-pdf/SINO.png")
-									.scale(70, 40),
-							2, 103, black).setTopPadding(-22);
-					;
 					table.remoBordes(false, 1);
 
 					table.draw();
@@ -675,6 +664,7 @@ public class ImpresionConsetimientoPdf {
 
 					output = new ByteArrayOutputStream();
 					document.save(output);
+			
 			
 					conte =null;								
 					return output.toByteArray();
@@ -747,7 +737,7 @@ public class ImpresionConsetimientoPdf {
 					conte.append( impresionForm.getTextoConsentimiento() );	
 				}else {
 					conte.append( "a partir del\n"
-							+ "día \t12 de 03 de 2019, \tcon el \tnúmero \tCNSF-S0048-0243-2018 / CONDUSEF-003261-01.");
+							+ impresionForm.getNotaTecnica());
 				}
 				
 				
