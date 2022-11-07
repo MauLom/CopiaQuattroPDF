@@ -28,7 +28,7 @@ public class ChubbModel {
 			if(fn.caratula(1, 1, pdfStripper, pdDoc).contains("CONTENIDO###NUMERACIÓN")) {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
-			
+
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" };
 			 boolean encontro = false;
@@ -54,12 +54,13 @@ public class ChubbModel {
 						if (pagFin == 0) {
 							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo 25");
 						}
-						
+						if (pagFin == 0) {
+                            pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo###25");
+                        }
 						if (pagFin == 0) {
 							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "ART. 25");
 						}
-
-				
+					
 						if (pagFin > 0) {
 							contenido = "";
 							modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),

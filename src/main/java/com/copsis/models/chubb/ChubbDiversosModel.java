@@ -211,6 +211,7 @@ public class ChubbDiversosModel {
 			// UBICACIONES
 			inicio = contenido.indexOf("Características del riesgo");
 			fin = contenido.indexOf("Prima");
+	
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
 			if (inicio > -1 && fin > inicio) {
@@ -239,6 +240,11 @@ public class ChubbDiversosModel {
 							ubicacion.setNoExterno(noExterno);
 						}
 					}
+
+					if(newcontenido.split("\n")[i].contains("Origen:") &&  newcontenido.split("\n")[i].contains("Destino")){
+					    ubicacion.setCalle(newcontenido.split("\n")[i].split("Origen:")[1].split("Destino")[0].replace("###", "").trim());
+					}
+					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.TECHO)) {
 						ubicacion.setTechos(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "").trim()));
 						ubicacion.setMuros(fn.material(newcontenido.split("\n")[i].split(ConstantsValue.TECHO)[1].split("Tipo")[0].toUpperCase().replace("###", "").trim()));
