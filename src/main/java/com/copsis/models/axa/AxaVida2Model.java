@@ -168,9 +168,6 @@ public class AxaVida2Model {
 				}
 				modelo.setCoberturas(coberturas);
 			}
-			
-			
-			
 
 			return modelo;
 		} catch (Exception ex) {
