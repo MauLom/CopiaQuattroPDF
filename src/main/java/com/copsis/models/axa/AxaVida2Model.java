@@ -168,6 +168,12 @@ public class AxaVida2Model {
 				}
 				modelo.setCoberturas(coberturas);
 			}
+			
+			System.out.println(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()));
+			if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {
+			    modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			}
+			
 
 			return modelo;
 		} catch (Exception ex) {
