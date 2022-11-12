@@ -327,11 +327,9 @@ public class MapfreAutosModel {
 				newcontenido = contenido.substring(inicio, inicio + 10);
 				modelo.setVigenciaDe(fn.formatDate(newcontenido, "dd-MM-yy"));
 
-				// vigencia_a
-//				System.out.println(contenido);
+
 				
-				System.out.println();
-				System.out.println(contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###"));
+			
 				if(contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") > 0) {
 				                      
 				inicio = contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") + 39;
