@@ -41,7 +41,8 @@ public class MapfreAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		inicontenido = fn.fixContenido(contenido);
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C.:", "R.F.C:").replace("R.F.C:###", "R.F.C:");
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C.:", "R.F.C:").replace("R.F.C:###", "R.F.C:")
+		        .replace("###HASTA###LAS###12:00###HRS.###DEL:###", "@@@HASTA###LAS###12:00###HRS.###DEL:###");;
 		this.recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
 		try {
 			// tipo
@@ -308,7 +309,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("ta las 12:00 hrs. de:");
 				if (inicio > -1) {
 					txt = fn.gatos(contenido.substring(inicio + 21, inicio + 150).split("\r\n")[0]);
-					modelo.setVigenciaA(fn.formatDate(txt.substring(0, 10), "dd-MM-yy"));
+//					modelo.setVigenciaA(fn.formatDate(txt.substring(0, 10), "dd-MM-yy"));
 				}
 
 				inicio = contenido.indexOf("ta las 12:00 hrs. de:");
@@ -326,10 +327,18 @@ public class MapfreAutosModel {
 				newcontenido = contenido.substring(inicio, inicio + 10);
 				modelo.setVigenciaDe(fn.formatDate(newcontenido, "dd-MM-yy"));
 
-				// vigencia_a
+
+				
+			
+				if(contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") > 0) {
+				                      
 				inicio = contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") + 39;
 				newcontenido = contenido.substring(inicio, inicio + 10);
-				modelo.setVigenciaA(fn.formatDate(newcontenido, "dd-MM-yy"));
+			
+				if(newcontenido.contains("-")) {
+				    modelo.setVigenciaA(fn.formatDate(newcontenido, "dd-MM-yy"));
+				}
+				}
 			}
 
 			// cp
@@ -636,6 +645,7 @@ public class MapfreAutosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+		    ex.printStackTrace();
 			modelo.setError(
 					MapfreAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
