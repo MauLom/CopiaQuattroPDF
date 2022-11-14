@@ -78,7 +78,7 @@ public class MapfreAutosBModel {
                       if(newcontenido.split("\n")[i].contains("Sexo")) {
                           modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0].replace("###", "").trim());
                       }else {
-                    	  modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].trim());
+                          modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
                       }
                     
 					}
