@@ -69,7 +69,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("PÓLIZA NÚMERO:");
 				if (inicio > -1) {
 					newcontenido = fn.gatos(contenido.substring(inicio + 14, inicio + 150).split("\r\n")[0]);
-					modelo.setPoliza(newcontenido);
+					modelo.setPoliza(newcontenido.replace("###", "").replace("#", "").trim());
 				}
 			}
 
@@ -103,7 +103,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("NOMBRE:");
 				if (inicio > -1) {
 					newcontenido = fn.gatos(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0]);
-					modelo.setCteNombre(newcontenido);
+					modelo.setCteNombre(newcontenido.replace("###", "").replace("#", "").trim());
 				}
 			}
 			
@@ -131,7 +131,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("DIRECCIÓN:");
 				if (inicio > -1) {
 					newcontenido = fn.gatos(contenido.substring(inicio + 10, inicio + 150).split("\r\n")[0]);
-					modelo.setCteDireccion(newcontenido);
+					modelo.setCteDireccion(newcontenido.replace("###", "").replace("#", "").trim());
 				}
 			}
 
@@ -157,7 +157,7 @@ public class MapfreAutosModel {
 				// rfc
 				inicio = contenido.indexOf("R.F.C:");
 				if (inicio > -1) {
-					modelo.setRfc(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].trim());
+					modelo.setRfc(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].replace("###", "").replace("#", "").trim());
 				}
 
 
@@ -179,7 +179,7 @@ public class MapfreAutosModel {
 													.split(",")[0].trim());
 								}
 								modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0]
-										.replace("###", "").trim());
+								        .replace("###", "").replace("#", "").trim());
 							}
 
 						}
@@ -201,7 +201,7 @@ public class MapfreAutosModel {
 						fin = txt.indexOf("Tel:");
 						if (inicio > -1 && fin > inicio) {
 							newcontenido = fn.gatos(txt.substring(inicio + 10, fin));
-							modelo.setCteDireccion(newcontenido);
+							modelo.setCteDireccion(newcontenido.replace("###", "").replace("#", "").trim());
 						}
 
 					}
@@ -211,7 +211,7 @@ public class MapfreAutosModel {
 				// rfc
 				if (contenido.indexOf("R.F.C:") > -1) {
 					inicio = contenido.indexOf("R.F.C:") + 6;
-					modelo.setRfc(contenido.substring(inicio, inicio + 14).trim().replace("-", "").replace("###", ""));
+					modelo.setRfc(contenido.substring(inicio, inicio + 14).trim().replace("-", "").replace("###", "").replace("#", ""));
 				} 
      
 				
@@ -278,7 +278,7 @@ public class MapfreAutosModel {
 		
 				modelo.setAgente(newcontenido.split(",")[1].trim() +" " + newcontenido.split(",")[0].trim());	
 			}else {
-				modelo.setAgente(newcontenido.trim());
+				modelo.setAgente(newcontenido.replace("###", "").replace("#", "").trim().trim());
 			}
 		
 			if(modelo.getCteNombre().length() > 0 && modelo.getCteNombre().contains(",")) {
