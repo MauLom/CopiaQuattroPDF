@@ -25,7 +25,8 @@ public class SuraAutosModel {
 			int inicio;
 			int fin;
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC);
+			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC)
+			        .replace("Prima Neta###Descuento", "Prima neta###Descuento");
 			modelo.setTipo(1);
 			modelo.setCia(88);
 		
@@ -44,19 +45,35 @@ public class SuraAutosModel {
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Seguro de Auto");
 			}
+			if(inicio == -1) {
+                inicio = contenido.indexOf("Póliza no.");
+            }
+		
 			
 			fin = contenido.indexOf("Coberturas contratadas");
 			
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+
 				boolean cpEncontrado = false;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza no.")) {
+					    if (newcontenido.split("\n")[i + 1].contains("C.P.")) {
+                            modelo.setPolizaGuion(newcontenido.split("\n")[i + 1].split("###")[3]);
+                            modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[3].replace("-", "")
+                                    .replace(" ", "").trim());
+                        }
+					    
 						if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
 							modelo.setPolizaGuion(newcontenido.split("\n")[i + 2].split("###")[3]);
 							modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
 									.replace(" ", "").trim());
 						}
+						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
+                            modelo.setCp(newcontenido.split("\n")[i + 1].split("C.P.")[1].split("###")[0].substring(0, 5).trim());
+                            cpEncontrado = true;
+                        }
 						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
 							modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
 							cpEncontrado = true;
@@ -96,16 +113,16 @@ public class SuraAutosModel {
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.RFC)) {
 						modelo.setRfc(newcontenido.split("\n")[i].split(ConstantsValue.RFC)[1].split("###")[0]);
 					}
-					if (newcontenido.split("\n")[i].contains("Datos del contratante")) {
+					if (newcontenido.split("\n")[i].contains("Datos del contratante") || newcontenido.split("\n")[i].contains("Datos del asegurado")) {
 
 						modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0].replace("###", "").trim());
 						String direccion = newcontenido.split("\n")[i + 2] + " "
 								+ newcontenido.split("\n")[i + 3].split("C.P.")[0].split("Hasta")[0].replace("###", "").trim();
-						modelo.setCteDireccion(direccion);
+						modelo.setCteDireccion(direccion.replace("###", " ").replace("Fecha Forma de pago", ""));
 						
 						if(newcontenido.split("\n")[i + 4].contains("C.P.")) {
 							direccion = modelo.getCteDireccion() +" "+newcontenido.split("\n")[i + 4].replace("C.P.", "C/P");
-							modelo.setCteDireccion(direccion.split("C/P")[0].trim());
+							modelo.setCteDireccion(direccion.split("C/P")[0].trim().replace("###", " "));
 						}
 					}
 					if(!cpEncontrado && newcontenido.split("\n")[i].contains("C.P")) {
@@ -134,9 +151,13 @@ public class SuraAutosModel {
 							modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[1]);
 						}	
 					}
-					if (newcontenido.split("\n")[i].contains("Cve")) {
+					  if (newcontenido.split("\n")[i].contains("Cve. Vehículo:")) {
+                          modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].trim());
+                      }
+					if (newcontenido.split("\n")[i].contains("Cve") && modelo.getClave().length() == 0 ) {
 						modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());
 					}
+					 
 				}
 			}
 			
@@ -144,8 +165,11 @@ public class SuraAutosModel {
 				modelo.setCp("0"+modelo.getCp());
 			}
 			
+
 			inicio = contenido.indexOf("Prima neta###Descuento");
+
 			fin = contenido.indexOf("Pág. 1");
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
@@ -202,6 +226,7 @@ public class SuraAutosModel {
 	private void obtenerDatosAgente(String texto, EstructuraJsonModel model) {
 		
 		if(texto.split("Agente:").length > 1) {
+		System.out.println(texto);   
 			model.setCveAgente(texto.split("Agente:")[1].split("\n")[0].trim());
 		}
 		
