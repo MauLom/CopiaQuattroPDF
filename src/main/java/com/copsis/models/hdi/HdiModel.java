@@ -24,7 +24,7 @@ public class HdiModel {
 	public EstructuraJsonModel procesar() {
 		try {
 	
-			System.out.println(contenido);
+	
 			int tipo = fn.tipoPoliza(contenido);
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
