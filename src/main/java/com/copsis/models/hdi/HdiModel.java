@@ -24,8 +24,13 @@ public class HdiModel {
 	public EstructuraJsonModel procesar() {
 		try {
 	
+	
+			int tipo = fn.tipoPoliza(contenido);
+			if(contenido.contains("Giro:")) {
+			    tipo=4;
+			}
 			
-			switch (fn.tipoPoliza(contenido)) {
+			switch (tipo) {
 			case 1:
 			
 				if(contenido.contains("AUTOS TURISTAS")) {
