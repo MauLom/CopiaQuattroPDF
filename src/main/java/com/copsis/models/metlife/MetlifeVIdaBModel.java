@@ -64,7 +64,7 @@ public class MetlifeVIdaBModel {
 			String fecha ="";
 			inicio = contenido.indexOf("COBERTURAS");
 			fin = contenido.indexOf("Recargo");
-			System.out.println(inicio +"---> "+ fin);
+		
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();			
@@ -72,14 +72,14 @@ public class MetlifeVIdaBModel {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS") && !newcontenido.toString().split("\n")[i].contains("Asegurada")
 						&& !newcontenido.toString().split("\n")[i].contains("Prima anual")	) {
-				    System.out.println(newcontenido.toString().split("\n")[i]);
+			
 					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 					cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
 					if(i == 3) {
 					    if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size() >1) {
 					    fecha = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1);
 					    }
-					    System.out.println();
+					
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[2]));
 					}
 					coberturas.add(cobertura);
