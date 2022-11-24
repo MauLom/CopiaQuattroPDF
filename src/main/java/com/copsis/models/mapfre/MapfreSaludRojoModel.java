@@ -361,6 +361,12 @@ public class MapfreSaludRojoModel {
 			
 			
 	            buildRecibos(modelo);
+	            
+	            
+	            if(modelo.getFormaPago() == 1 && fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30  ) {
+	                
+	                modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+	            }
 			
 			return modelo;
 		} catch (Exception e) {		 
