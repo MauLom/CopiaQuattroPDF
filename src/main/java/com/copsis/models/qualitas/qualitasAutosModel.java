@@ -552,7 +552,7 @@ public class qualitasAutosModel {
 				index = contenido.substring(fin - 150, fin).split("\r\n").length - 1;
 				newcontenido = contenido.substring(fin - 150, fin).split("\r\n")[index].trim().split(" ")[0]
 						.replace("###", "").replace("@@@", "").trim();
-				System.out.println(newcontenido);
+	
 				modelo.setFormaPago(fn.formaPago(newcontenido));
 			}
 			
