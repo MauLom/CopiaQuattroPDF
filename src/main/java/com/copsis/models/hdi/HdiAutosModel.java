@@ -43,6 +43,7 @@ public class HdiAutosModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				  
 	
 					if (newcontenido.split("\n")[i].contains("responsabilidad máxima")) {
 						if (newcontenido.split("\n")[i + 1].trim().contains("Datos Generales de la Póliza")) {
@@ -148,7 +149,7 @@ public class HdiAutosModel {
 					if (modelo.getModelo() == 0) {
 
 						if (newcontenido.split("\n")[i].contains("Modelo:")) {
-							modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo:")[1].trim()));
+							modelo.setModelo(Integer.parseInt(newcontenido.split("\n")[i].split("Modelo:")[1].replace("###Placas:", "").trim()));
 						}
 						if (newcontenido.split("\n")[i].contains("Condiciones Particulares")) {
 							modelo.setDescripcion(newcontenido.split("\n")[i + 1].split("###")[0]);
