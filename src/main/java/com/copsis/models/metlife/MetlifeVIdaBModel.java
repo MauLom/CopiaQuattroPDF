@@ -61,9 +61,10 @@ public class MetlifeVIdaBModel {
 			
 			asegurados.add(asegurado);
 			modelo.setAsegurados(asegurados);
-		
+			String fecha ="";
 			inicio = contenido.indexOf("COBERTURAS");
 			fin = contenido.indexOf("Recargo");
+		
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();			
@@ -71,18 +72,28 @@ public class MetlifeVIdaBModel {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS") && !newcontenido.toString().split("\n")[i].contains("Asegurada")
 						&& !newcontenido.toString().split("\n")[i].contains("Prima anual")	) {
+			
 					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 					cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
 					if(i == 3) {
+					    if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size() >1) {
+					    fecha = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1);
+					    }
+					
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("###")[2]));
 					}
 					coberturas.add(cobertura);
 				}
 			}
-			if(modelo.getFormaPago() == 1) {
+			if(modelo.getFormaPago() == 1 ) {
 				modelo.setVigenciaA( fn.calcvigenciaA(modelo.getVigenciaDe(),12));
 				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
+			if(modelo.getFormaPago() == 4 && fecha.length() >  0) {
+                modelo.setVigenciaA( fn.calcvigenciaA(modelo.getVigenciaDe(),12));
+                modelo.setFechaEmision(modelo.getVigenciaDe());
+            }
+            
 			
 			modelo.setCoberturas(coberturas);			
 			inicio = contenido.indexOf("Recargo");
