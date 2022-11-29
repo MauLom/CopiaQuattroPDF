@@ -25,8 +25,12 @@ public class SegurosMtyModel {
 	
 	public EstructuraJsonModel procesa() {
 		try {
-			
-			switch (fn.tipoPoliza(contenido)) {
+			System.out.println(fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL FLEX"));
+			int tipo =0;
+			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL FLEX")) {
+			    tipo = 2;
+			}
+			switch (tipo) {
 			case 2:// Salud
 				modelo  = new SegurosMtySalud(fn.caratula(1, 4, stripper, doc)).procesar();				
 				break;
