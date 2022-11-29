@@ -116,8 +116,10 @@ public class MetlifeVIdaBModel {
 					.replace("CÓNYUGE", "###CÓNYUGE###")
 					.replace("HERMANA", "###HERMANA###")
 					.replace("HERMANO", "###HERMANO###")
+					.replace("HIJO", "###HIJO###")
+					.replace("HIJA", "###HIJA###")
 					);
-			
+
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
