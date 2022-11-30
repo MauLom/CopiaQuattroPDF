@@ -24,6 +24,7 @@ public class AfirmeModel {
 	}
 	public EstructuraJsonModel procesar() {	
 		try {
+		
 			tipo =fn.tipoPoliza(contenido);
 			Integer pagIni = 0;
 
@@ -35,7 +36,12 @@ public class AfirmeModel {
                     tipo=4;
                     tipoV =2;
                 }
+		        if( tipo == 4 && fn.caratula(1, 2, stripper, doc).contains("DAÑOS MATERIALES AL INMUEBLE")){
+                    tipo=4;
+                    tipoV =3;  
+		        }
 
+		        System.out.println(tipo +"-- " + tipoV);
 			
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
@@ -57,10 +63,13 @@ public class AfirmeModel {
                             break;
                          case 2:
                              modelo  = new AfirmeDiversosCModel().procesar(fn.caratula(1, 4, stripper, doc));
+                            break;
+                         case 3:
+                             modelo  = new AfirmeDiversosDModel().procesar(fn.caratula(1, 4, stripper, doc));
                             break;    
 
                         default:
-                            modelo  = new AfirmeDiversosBModel(fn.caratula(1, 5, stripper, doc)).procesar();
+                             modelo  = new AfirmeDiversosCModel().procesar(fn.caratula(1, 4, stripper, doc));
                             break;
                     }
 				    
