@@ -1008,7 +1008,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap39Guq4eecCgXK66BJ2rALgiev9xEqhX3GhZjC68MscV/ms.png").scale(600, 60), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(4f, 0f, 2f, 0f), "L", "T");
                         table.draw();
                         yStart -= table.getHeaderAndDataHeight() + 14;
-                        //\n" +impresionAxaVidaForm.getFirma()
+                        
 
                         table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table, 120);
