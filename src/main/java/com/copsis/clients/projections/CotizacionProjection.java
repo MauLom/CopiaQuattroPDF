@@ -25,7 +25,9 @@ public class CotizacionProjection {
 	private String aportacionex;
 	private String primaMensualex;
 	private String  primaUdiTitular;
+	private String  primaPesosTitular;
 	private String  primaUdiMenor;
+	private String  primaPesosMenor;
 	private boolean vida;
 
 }
