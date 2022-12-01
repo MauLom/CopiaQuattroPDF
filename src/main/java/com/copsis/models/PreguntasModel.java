@@ -12,25 +12,7 @@
 
             if (salud.get(0).getPregunta13().contains("si") && mujer) {
 
-                if (salud.get(0).getPregunta13Rd().contains("ambos")) {
-                    Preguntas prg130 = new Preguntas();
-                    prg130.setNumeroP("13");
-                    prg130.setPregunta0Rd(salud.get(0).getPregunta13R1());
-                    prg130.setPregunta0Rd1(salud.get(0).getPregunta13R2());
-                    prg130.setPregunta0Rd2(salud.get(0).getPregunta13R3());
-                    prg130.setPregunta0Rd3(salud.get(0).getPregunta13R4());
-                    prg130.setPregunta0Rd4(salud.get(0).getPregunta13R5());
-
-                    lisPreguntas.add(prg130);
-                    Preguntas prg131 = new Preguntas();
-                    prg131.setNumeroP("13");
-                    prg131.setPregunta0Rd(salud.get(0).getPregunta13R6());
-                    prg131.setPregunta0Rd1(salud.get(0).getPregunta13R7());
-                    prg131.setPregunta0Rd2(salud.get(0).getPregunta13R8());
-                    prg131.setPregunta0Rd3(salud.get(0).getPregunta13R9());
-                    prg131.setPregunta0Rd4(salud.get(0).getPregunta13R10());
-                    lisPreguntas.add(prg131);
-                } else if (salud.get(0).getPregunta13Rd().contains("Titular")) {
+                 if (salud.get(0).getPregunta13Rd().contains("Titular")) {
                     Preguntas prg130 = new Preguntas();
                     prg130.setNumeroP("13");
                     prg130.setPregunta0Rd(salud.get(0).getPregunta13R1());
@@ -53,25 +35,7 @@
             }
 
             if (salud.get(0).getPregunta14().contains("si")&& mujer) {
-                if (salud.get(0).getPregunta14Rd().contains("ambos")) {
-                    Preguntas prg140 = new Preguntas();
-                    prg140.setNumeroP("14");
-                    System.out.println(salud.get(0).getPregunta14R1());
-                    prg140.setPregunta0Rd(salud.get(0).getPregunta14R1());
-                    prg140.setPregunta0Rd1(salud.get(0).getPregunta14R2());
-                    prg140.setPregunta0Rd2(salud.get(0).getPregunta14R3());
-                    prg140.setPregunta0Rd3(salud.get(0).getPregunta14R4());
-                    prg140.setPregunta0Rd4(salud.get(0).getPregunta14R5());
-                    lisPreguntas.add(prg140);
-                    Preguntas prg141 = new Preguntas();
-                    prg141.setNumeroP("14");
-                    prg141.setPregunta0Rd(salud.get(0).getPregunta14R6());
-                    prg141.setPregunta0Rd1(salud.get(0).getPregunta14R7());
-                    prg141.setPregunta0Rd2(salud.get(0).getPregunta14R8());
-                    prg141.setPregunta0Rd3(salud.get(0).getPregunta14R9());
-                    prg141.setPregunta0Rd4(salud.get(0).getPregunta14R10());
-                    lisPreguntas.add(prg141);
-                } else if (salud.get(0).getPregunta14Rd().contains("Titular")) {
+                if (salud.get(0).getPregunta14Rd().contains("Titular")) {
                     Preguntas prg140 = new Preguntas();
                     prg140.setNumeroP("14");
                     prg140.setPregunta0Rd(salud.get(0).getPregunta14R1());
