@@ -1052,7 +1052,6 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                 }
 
             } catch (Exception ex) {
-                ex.printStackTrace();
                 throw new GeneralServiceException("00001",
                         "Ocurrio un error en el servicio ImpresionVidaAxaPdf: " + ex.getMessage());
             }
