@@ -2,32 +2,32 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import com.copsis.clients.projections.BeneficiariosAxaProjection;
 import com.copsis.clients.projections.ContratanteProjection;
-import com.copsis.clients.projections.DomiciliosAxaProjection;
 import com.copsis.clients.projections.MenorProjection;
 import com.copsis.clients.projections.OcupacionProjection;
 import com.copsis.clients.projections.SaludProjection;
-import com.copsis.clients.projections.SolicitudProjection;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.Preguntas;
+import com.copsis.models.PreguntasModel;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ImpresionVidaAxaPdf {
 	
@@ -488,112 +488,112 @@ public class ImpresionVidaAxaPdf {
 					
 					boolean domiciliox=false;
 					
-					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios() !=null) {
-						int x=0;
-						
-						 List<BeneficiariosAxaProjection> beneficiarios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios();
-						while (x < beneficiarios.size()) {
-							 acumula = true;
-							 if(beneficiarios.get(x).getPregunta1().toLowerCase().contains("si")) {
-							     domiciliox =true; 
-							 }
-							 String nombre = (beneficiarios.get(x).getNombres() + " " +beneficiarios.get(x).getApPaterno() +" " + (beneficiarios.get(x).getApMaterno() !=null ? beneficiarios.get(x).getApMaterno() :"" ));
-							 table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
-								baseRow = communsPdf.setRow(table, 15);
-								communsPdf.setCell(baseRow, 4,"",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow,14, "",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 41,nombre,bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			
-								communsPdf.setCell(baseRow, 13,this.formarDate(beneficiarios.get(x).getFechaNacimiento(),"yyyy-MM-dd",""),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 14,beneficiarios.get(x).getParentesco(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-								communsPdf.setCell(baseRow, 14,beneficiarios.get(x).getPorcentaje(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);																					
-							    if (isEndOfPage(table)) {
-	                                table.getRows().remove(table.getRows().size() - 1);
-	                                table.draw();
-	                                page = new PDPage();
-	                                document.addPage(page);
-	                            	this.setEncabezado(document, page);
-	                                acumula = false;
-
-	                            } else {
-	                                table.draw();
-	                                yStart -= table.getHeaderAndDataHeight();
-	                            }
-
-	                            if (acumula) {
-	                                x++;
-	                            }
-	                            if (x > 150) {
-	                                table.draw();
-	                                break;
-	                            }
-						}
-					}
-					
-					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100,"Domicilio de los Beneficiarios (solo en caso de ser distinto al domicilio del Solicitante Titular)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 20,"No. de Beneficiario",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					communsPdf.setCell(baseRow, 80,"Domicilio",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					table.draw();
-					yStart -=table.getHeaderAndDataHeight();
-					
-					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios() !=null && domiciliox == true) {
-					    int t=0;
-					    acumula2 = true;
-                        List<DomiciliosAxaProjection> domicilios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios();
-                       while (t < domicilios.size()) {
-                           table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);            
-                           baseRow = communsPdf.setRow(table, 15);
-                           communsPdf.setCell(baseRow, 20,domicilios.get(t).getNoBeneficiario() +"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-                           communsPdf.setCell(baseRow, 80,domicilios.get(t).getDomicilio(),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-                         
-                           if (isEndOfPage(table)) {
-                               table.getRows().remove(table.getRows().size() - 1);
-                               table.draw();
-                               page = new PDPage();
-                               document.addPage(page);
-                               this.setEncabezado(document, page);
-                               acumula2 = false;
-
-                           } else {
-                               table.draw();
-                               yStart -= table.getHeaderAndDataHeight();
-                           }
-
-                           if (acumula2) {
-                               t++;
-                           }
-                           if (t > 150) {
-                               table.draw();
-                               break;
-                           }
-                       }
-					    
-					}else {
-					    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);                 
-	                    baseRow = communsPdf.setRow(table, 15);
-	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    baseRow = communsPdf.setRow(table, 15);
-	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    baseRow = communsPdf.setRow(table, 15);
-	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-	                    table.draw(); 
-					}
-					
-					
-					
-					
-					yStart -=table.getHeaderAndDataHeight();                    
-                    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true); 
-					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 100,"Información adicional:",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
-					
-					table.draw();
-					
+//					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios() !=null) {
+//						int x=0;
+//						
+//						 List<BeneficiariosAxaProjection> beneficiarios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getBeneficiarios();
+//						while (x < beneficiarios.size()) {
+//							 acumula = true;
+//							 if(beneficiarios.get(x).getPregunta1().toLowerCase().contains("si")) {
+//							     domiciliox =true; 
+//							 }
+//							 String nombre = (beneficiarios.get(x).getNombres() + " " +beneficiarios.get(x).getApPaterno() +" " + (beneficiarios.get(x).getApMaterno() !=null ? beneficiarios.get(x).getApMaterno() :"" ));
+//							 table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
+//								baseRow = communsPdf.setRow(table, 15);
+//								communsPdf.setCell(baseRow, 4,"",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//								communsPdf.setCell(baseRow,14, "",bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//								communsPdf.setCell(baseRow, 41,nombre,bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);			
+//								communsPdf.setCell(baseRow, 13,this.formarDate(beneficiarios.get(x).getFechaNacimiento(),"yyyy-MM-dd",""),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//								communsPdf.setCell(baseRow, 14,beneficiarios.get(x).getParentesco(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//								communsPdf.setCell(baseRow, 14,beneficiarios.get(x).getPorcentaje(),bgColorA,false, "c", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);																					
+//							    if (isEndOfPage(table)) {
+//	                                table.getRows().remove(table.getRows().size() - 1);
+//	                                table.draw();
+//	                                page = new PDPage();
+//	                                document.addPage(page);
+//	                            	this.setEncabezado(document, page);
+//	                                acumula = false;
+//
+//	                            } else {
+//	                                table.draw();
+//	                                yStart -= table.getHeaderAndDataHeight();
+//	                            }
+//
+//	                            if (acumula) {
+//	                                x++;
+//	                            }
+//	                            if (x > 150) {
+//	                                table.draw();
+//	                                break;
+//	                            }
+//						}
+//					}
+//					
+//					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);	
+//					baseRow = communsPdf.setRow(table, 15);
+//					communsPdf.setCell(baseRow, 100,"Domicilio de los Beneficiarios (solo en caso de ser distinto al domicilio del Solicitante Titular)",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//					baseRow = communsPdf.setRow(table, 15);
+//					communsPdf.setCell(baseRow, 20,"No. de Beneficiario",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//					communsPdf.setCell(baseRow, 80,"Domicilio",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//					table.draw();
+//					yStart -=table.getHeaderAndDataHeight();
+//					
+//					if(impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios() !=null && domiciliox == true) {
+//					    int t=0;
+//					    acumula2 = true;
+//                        List<DomiciliosAxaProjection> domicilios  = impresionAxaVidaForm.getFormularios().getBeneficiarios().get(0).getDomicilios();
+//                       while (t < domicilios.size()) {
+//                           table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);            
+//                           baseRow = communsPdf.setRow(table, 15);
+//                           communsPdf.setCell(baseRow, 20,domicilios.get(t).getNoBeneficiario() +"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//                           communsPdf.setCell(baseRow, 80,domicilios.get(t).getDomicilio(),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//                         
+//                           if (isEndOfPage(table)) {
+//                               table.getRows().remove(table.getRows().size() - 1);
+//                               table.draw();
+//                               page = new PDPage();
+//                               document.addPage(page);
+//                               this.setEncabezado(document, page);
+//                               acumula2 = false;
+//
+//                           } else {
+//                               table.draw();
+//                               yStart -= table.getHeaderAndDataHeight();
+//                           }
+//
+//                           if (acumula2) {
+//                               t++;
+//                           }
+//                           if (t > 150) {
+//                               table.draw();
+//                               break;
+//                           }
+//                       }
+//					    
+//					}else {
+//					    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);                 
+//	                    baseRow = communsPdf.setRow(table, 15);
+//	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    baseRow = communsPdf.setRow(table, 15);
+//	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    baseRow = communsPdf.setRow(table, 15);
+//	                    communsPdf.setCell(baseRow, 20,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    communsPdf.setCell(baseRow, 80,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//	                    table.draw(); 
+//					}
+//					
+//					
+//					
+//					
+//					yStart -=table.getHeaderAndDataHeight();                    
+//                    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true); 
+//					baseRow = communsPdf.setRow(table, 20);
+//					communsPdf.setCell(baseRow, 100,"Información adicional:",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColor);
+//					
+//					table.draw();
+//					
 					page = new PDPage();
 					document.addPage(page);
 					this.setEncabezado(document, page);
@@ -803,7 +803,9 @@ public class ImpresionVidaAxaPdf {
 					 }					
 					}
 					table.draw();
-					SolicitudProjection solicitud  =impresionAxaVidaForm.getFormularios().getLlenado().get(0);
+
+                     PreguntasModel preguntasModel =new PreguntasModel();
+
 					
 					yStart -=table.getHeaderAndDataHeight()+5;
 					table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);
@@ -816,6 +818,31 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 13,"No. de veces que las ha sufrido",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 					communsPdf.setCell(baseRow, 14,"Fecha dd-mm-aa (última vez en caso de se varias)",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 					communsPdf.setCell(baseRow, 14,"Estado actual",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+				
+				    ArrayList<Preguntas> lisPreguntas = preguntasModel.setPreguntas(impresionAxaVidaForm.getFormularios().getSalud(),mujer);
+				    int contador=1;
+			if(lisPreguntas.size() >0){
+				    for (int i = 0; i < lisPreguntas.size() ; i++) {
+				       if(contador < 7) {
+                        baseRow = communsPdf.setRow(table, 15);
+                        communsPdf.setCell(baseRow, 10,lisPreguntas.get(i).getNumeroP(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                        communsPdf.setCell(baseRow, 13,lisPreguntas.get(i).getPregunta0Rd(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                        communsPdf.setCell(baseRow, 36,lisPreguntas.get(i).getPregunta0Rd1(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                        
+                        communsPdf.setCell(baseRow, 13,lisPreguntas.get(i).getPregunta0Rd2(),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                     
+                       if(lisPreguntas.get(i).getPregunta0Rd3() !=null && lisPreguntas.get(i).getPregunta0Rd3().length()> 0) {
+                          String  fecha2= lisPreguntas.get(i).getPregunta0Rd3().split("-")[0] +"-"+ lisPreguntas.get(i).getPregunta0Rd3().split("-")[1] +"-"+ lisPreguntas.get(i).getPregunta0Rd3().split("-")[2].substring(0,2);
+                           communsPdf.setCell(baseRow, 14,fecha2 ,bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                       }else {
+                           communsPdf.setCell(baseRow, 14,"" ,bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+                       }
+                        
+                        communsPdf.setCell(baseRow, 14,this.getAbreviatura(lisPreguntas.get(i).getPregunta0Rd4()!=null ? lisPreguntas.get(i).getPregunta0Rd4().trim() :""),bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
+				       }
+                        contador++;
+                    }
+				}else {
 					for (int i = 0; i < 6; i++) {
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 10,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
@@ -826,6 +853,12 @@ public class ImpresionVidaAxaPdf {
 						communsPdf.setCell(baseRow, 14,"",bgColorA,false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
 			
 					}
+					
+				}
+			table.draw();
+			
+			 yStart -=table.getHeaderAndDataHeight()+5;
+             table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page,true , true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,"Historia familiar",bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), "", communsPdf.setPadding(4f,4f,2f,4f),bgColorAb);				
 				
@@ -857,13 +890,13 @@ public class ImpresionVidaAxaPdf {
 					}
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,"Artículo 492. Esta sección deberá ser llenada por el Contratante",Color.white,true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColorA);							
-					baseRow = communsPdf.setRow(table, 55);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt(solicitud.getPregunta1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");
-					baseRow = communsPdf.setRow(table, 35);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt2(solicitud.getPregunta2())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
-					baseRow = communsPdf.setRow(table, 35);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt3(solicitud.getPregunta3())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
-				
+//					baseRow = communsPdf.setRow(table, 55);
+//					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt(solicitud.getPregunta1())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");
+//					baseRow = communsPdf.setRow(table, 35);
+//					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt2(solicitud.getPregunta2())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
+//					baseRow = communsPdf.setRow(table, 35);
+//					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(this.logoHorizoTxt3(solicitud.getPregunta3())).scale(550,250), communsPdf.setLineStyle(Color.black,Color.black,Color.black,Color.black), communsPdf.setPadding2(4f,0f,4f,4f), "L", "T");				
+//				
 					table.draw();
 					
 					
@@ -882,34 +915,35 @@ public class ImpresionVidaAxaPdf {
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(1)),bgColorA,false, "L", 10, communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,2f),bgColor);
 					baseRow = communsPdf.setRow(table, 50);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(2)),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,2f),bgColor);					
-					baseRow = communsPdf.setRow(table, 12);
-				      String logox ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKLno6Lx5ialJqGhTNXjxYLe1HzPshGxFiRv03PZ46S65/no1.png";
-					if(solicitud.getPregunta4()!=null && solicitud.getPregunta4()) {
-					    logox ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKL5uExxTJHnphbwNd9TyV5pZpjWcp0RYNfMdWCbeNtP/si1.png";
-				        }					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(logox).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
-					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("Autorizo que AXA trate mis datos personales financieros, patrimoniales y sensibles para los fines referidos. Reconozco"),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
+//					baseRow = communsPdf.setRow(table, 12);
+//				      String logox ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKLno6Lx5ialJqGhTNXjxYLe1HzPshGxFiRv03PZ46S65/no1.png";
+//					if(solicitud.getPregunta4()!=null && solicitud.getPregunta4()) {
+//					    logox ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKL5uExxTJHnphbwNd9TyV5pZpjWcp0RYNfMdWCbeNtP/si1.png";
+//				        }					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(logox).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
+//					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("Autorizo que AXA trate mis datos personales financieros, patrimoniales y sensibles para los fines referidos. Reconozco"),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
+					
 					baseRow = communsPdf.setRow(table, 12);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3("que este consentimiento se complementa con la firma de la presente solicitud."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,0f,0f),bgColor);
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3("Autorizo que AXA transfiera mis datos personales relativos a la siniestralidad de mi póliza a mi agente o al bróker."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,0f),bgColor);
-					String url="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKLno6Lx5ialJqGhTNXjxYLe1HzPshGxFiRv03PZ46S65/no1.png";
-					if(solicitud.getPregunta5().toLowerCase().contains("si")) {
-					  url ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKL5uExxTJHnphbwNd9TyV5pZpjWcp0RYNfMdWCbeNtP/si1.png";	
-					}
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal(url)).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
-					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("Sí acepto. Reconozco que este consentimiento se complementa con la firma de la presente solicitud."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
+//					String url="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKLno6Lx5ialJqGhTNXjxYLe1HzPshGxFiRv03PZ46S65/no1.png";
+//					if(solicitud.getPregunta5().toLowerCase().contains("si")) {
+//					  url ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKL5uExxTJHnphbwNd9TyV5pZpjWcp0RYNfMdWCbeNtP/si1.png";	
+//					}
+//					baseRow = communsPdf.setRow(table, 15);
+//					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal(url)).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
+//					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("Sí acepto. Reconozco que este consentimiento se complementa con la firma de la presente solicitud."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
 					baseRow = communsPdf.setRow(table, 15);
 					
 					communsPdf.setCellImg(baseRow, 4, ImageUtils.readImage(this.logoHorizoNormal("no")).scale(10,10), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
 					communsPdf.setCell(baseRow, 96,Sio4CommunsPdf.eliminaHtmlTags3("No acepto."),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.white,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(0f,0f,2f,0f),bgColor);
-					String  parrafo5Img="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKCEOxi2WQHTB90ftTQsGbM7T0JEnTU2cGc3ilx8NB/parrafoNo5.png";
-					if(solicitud.getPregunta6()!=null  &&  solicitud.getPregunta6()) {
-						parrafo5Img ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKGKosp1H9RloZVSYr2MaFirmk2yhx00TLfhpFbUBcSR/parrafoSi5.png";
-					}
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(parrafo5Img).scale(600,60), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
+//					String  parrafo5Img="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKCEOxi2WQHTB90ftTQsGbM7T0JEnTU2cGc3ilx8NB/parrafoNo5.png";
+//					if(solicitud.getPregunta6()!=null  &&  solicitud.getPregunta6()) {
+//						parrafo5Img ="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKGKosp1H9RloZVSYr2MaFirmk2yhx00TLfhpFbUBcSR/parrafoSi5.png";
+//					}
+//					baseRow = communsPdf.setRow(table, 15);
+//					communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(parrafo5Img).scale(600,60), communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.black), communsPdf.setPadding2(4f,0f,2f,0f), "L", "T");
 					
 					baseRow = communsPdf.setRow(table, 25);
 					communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(4)),bgColorA,false, "L", 10,communsPdf.setLineStyle(Color.black,Color.black,Color.white,Color.white), "", communsPdf.setPadding2(4f,0f,4f,2f),bgColor);
@@ -1056,7 +1090,8 @@ public class ImpresionVidaAxaPdf {
 					table.draw();
 					
 					output = new ByteArrayOutputStream();
-					document.save(output);														
+					document.save(output);
+				    document.save(new File(	"/home/aalbanil/Vídeos/solicituAxa.pdf"));
 					return output.toByteArray();
 					
 				}finally {
@@ -1066,7 +1101,7 @@ public class ImpresionVidaAxaPdf {
 			}
 			
 		} catch (Exception ex) {
-	
+	ex.printStackTrace();
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionVidaAxaPdf: " + ex.getMessage());
 		}
@@ -1368,24 +1403,55 @@ public class ImpresionVidaAxaPdf {
 	 
 	 
 	 
-		private static String formarDate(String dateD,String dateIn ,String dateOu) {		
-			SimpleDateFormat formatter = null;
-			Date date = null;
-			try {
-				formatter = new SimpleDateFormat(dateIn);
-				date = formatter.parse(dateD);
-			} catch (ParseException e) {
-				throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
-			}
+private static String formarDate(String dateD,String dateIn ,String dateOu) {		
+	SimpleDateFormat formatter = null;
+	Date date = null;
+	try {
+		formatter = new SimpleDateFormat(dateIn);
+		date = formatter.parse(dateD);
+	} catch (ParseException e) {
+		throw new GeneralServiceException("00001", "Fallo en el fomateo de datos.");
+	}
 
-			DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+	DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
 
-			if (dateOu.equals("")) {
-				formatter = new SimpleDateFormat("dd/MM/yyyy", sym);
-			} else {
-				formatter = new SimpleDateFormat(dateOu, sym);
-			}
+	if (dateOu.equals("")) {
+		formatter = new SimpleDateFormat("dd/MM/yyyy", sym);
+	} else {
+		formatter = new SimpleDateFormat(dateOu, sym);
+	}
 
-			return formatter.format(date);
-		}
+	return formatter.format(date);
+}
+
+private static String getAbreviatura(String abreviatura) {
+    String result = "";
+    switch (abreviatura.toLowerCase()) {
+        case "sin tratamiento y/o seguimiento médico":
+            result = "ST y/o SM";
+            break;
+        case "en tratamiento sin seguimiento médico":
+            result = "ET SSM";
+            break;
+
+        case "en tratamiento con control médico":
+            result = "ET CCM";
+            break;
+        case "dado de alta/recuperado":
+            result = "DDA/REC";
+            break;
+
+        default:
+            break;
+
+    }
+    return result;
+}
+
+
+
+
+		
+		
+		
 }
