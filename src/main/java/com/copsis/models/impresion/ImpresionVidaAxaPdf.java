@@ -2,6 +2,7 @@ package com.copsis.models.impresion ;
 
     import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
+import java.io.File;
 import java.text.DateFormatSymbols ;
 import java.text.ParseException ;
 import java.text.SimpleDateFormat ;
@@ -698,9 +699,9 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 17, "Titular", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
                         communsPdf.setCell(baseRow, 17, "Estatura: " + salud.getEstatura() + "  m", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
                         communsPdf.setCell(baseRow, 16, "Peso: " + salud.getPeso() + " k", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
-                        communsPdf.setCell(baseRow, 17, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
-                        communsPdf.setCell(baseRow, 17, "Estatura:", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
-                        communsPdf.setCell(baseRow, 16, "Peso:", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
+                        communsPdf.setCell(baseRow, 17, (salud.getEstaturaMenor().length() > 0 ? "Menor":"" ), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
+                        communsPdf.setCell(baseRow, 17, "Estatura: " + salud.getEstaturaMenor(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
+                        communsPdf.setCell(baseRow, 16, "Peso: " + salud.getPesoMenor(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 100, "Indique si padece o ha padecido alguna de las siguientes enfermedad", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(4f, 4f, 2f, 4f), bgColor);
@@ -1042,7 +1043,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        //  document.save(new File( "/home/aalbanil/Vídeos/solicituAxa.pdf"));
+                        //document.save(new File( "/home/aalbanil/Vídeos/solicituAxa2.pdf"));
                         return output.toByteArray();
 
                     } finally {

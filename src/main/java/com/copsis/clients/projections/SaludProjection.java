@@ -12,6 +12,8 @@ import lombok.Setter;
 public class SaludProjection {
     private String estatura;
     private String peso;
+    private String estaturaMenor;
+    private String pesoMenor;
     private String pregunta1;
     private String pregunta1R1;
     private String pregunta1R2;
