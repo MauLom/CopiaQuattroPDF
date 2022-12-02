@@ -41,7 +41,7 @@ public class AfirmeModel {
                     tipoV =3;  
 		        }
 
-		        System.out.println(tipo +"-- " + tipoV);
+		       
 			
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
