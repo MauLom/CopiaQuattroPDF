@@ -125,7 +125,8 @@ public class IdentificaPolizaService {
 			
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
-						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")) {				
+						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")
+						|| contenido.contains("Seguros Monterrey New York Life")) {
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
