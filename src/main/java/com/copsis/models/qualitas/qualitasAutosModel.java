@@ -509,7 +509,7 @@ public class qualitasAutosModel {
 
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio, inicio + 200).split("\r\n")[1];
-		
+
 
 				if (newcontenido.contains("Gastos por")) {
 					newcontenido = newcontenido.split("Gastos por")[0].replace("###", "").trim();
@@ -538,10 +538,7 @@ public class qualitasAutosModel {
 				}
 			}
 			
-			if(modelo.getFormaPago() == 0) {
-			    modelo.setFormaPago(1); 
-			}
-
+	
 			
 			/**
 			 * **********para cuando trae para primer recibo y subsecuente*************
@@ -1032,7 +1029,10 @@ public class qualitasAutosModel {
 					}
 				}
 			}
-	
+		       if(modelo.getFormaPago() == 0) {
+	                modelo.setFormaPago(1); 
+	            }
+
 			
 			return modelo;
 		} catch (Exception ex) {
