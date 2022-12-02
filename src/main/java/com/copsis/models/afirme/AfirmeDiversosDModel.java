@@ -6,6 +6,7 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.EstructuraRecibosModel;
 import com.copsis.models.EstructuraUbicacionesModel;
 
 public class AfirmeDiversosDModel {
@@ -81,54 +82,101 @@ public class AfirmeDiversosDModel {
             
             modelo.setUbicaciones(ubicaciones);
             
-            String cobertura ="";
+            String coberturaex ="";
             for (int i = 0; i < contenido.split("Suma Asegurada").length; i++) {
                 if(i> 0) {
-//                    System.out.println(contenido.split("Suma Asegurada")[i] +"\n----------------");
+                 
                     if(contenido.split("Suma Asegurada")[i].contains("Advertencia")) {
-                        cobertura = contenido.split("Suma Asegurada")[i].split("Advertencia")[0];
+                        coberturaex = contenido.split("Suma Asegurada")[i].split("Advertencia")[0].replace("@@@", "");
                     }
                     if(contenido.split("Suma Asegurada")[i].contains("Prima Neta")) {
-                        cobertura += contenido.split("Suma Asegurada")[i].split("Prima Neta")[0];
+                        coberturaex += contenido.split("Suma Asegurada")[i].split("Prima Neta")[0].replace("@@@", "");
                     }
                   
                 }
             }
             
-            System.out.println(cobertura);
+     
             
-//            
-//            inicio = contenido.indexOf("Suma Asegurada");
-//            fin =contenido.indexOf("Advertencia");
-//            System.out.println( inicio +"---> "+ fin);
-//            newcontenido = new StringBuilder();
-//            newcontenido.append(fn.extracted(inicio, fin, contenido));
-//            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-//            if( newcontenido.toString().split("\n").length> 5) {                
-//                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
-//                    
-//                    EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-//                    if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {            
-//                        int sp  = newcontenido.toString().split("\n")[i].split("###").length;
-//                       switch (sp) {
-//                    case 1:
-//                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-//                        coberturas.add(cobertura);
-//                        break;
-//                    case 3:
-//                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-//                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
-//                        coberturas.add(cobertura);
-//                        break;
-//                    default:
-//                        break;
-//                    }
-//                    }
-//                }
-//                modelo.setCoberturas(coberturas);
-//            }
+
+   
+            newcontenido = new StringBuilder();
+            newcontenido.append( coberturaex);
+            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+            if( newcontenido.toString().split("\n").length> 5) {                
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+                    
+                    EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+                    if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") && !newcontenido.toString().split("\n")[i].contains("Deducibles") && newcontenido.toString().split("\n")[i].length() > 30) {     
+                       
+                        int sp  = newcontenido.toString().split("\n")[i].split("###").length;
+                    
+                       switch (sp) {
+                    case 1:
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        coberturas.add(cobertura);
+                        break;
+                    case 3:
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                        coberturas.add(cobertura);
+                        break;
+                    case 4:
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                        cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[2]);
+                        cobertura.setCoaseguro(newcontenido.toString().split("\n")[i].split("###")[3].replace("\n", ""));
+                        coberturas.add(cobertura);
+                        break;    
+                    default:
+                        break;
+                    }
+                    }
+                }
+                modelo.setCoberturas(coberturas);
+            }
             
-//            System.out.println(contenido);
+            inicio = contenido.indexOf("Prima Neta");
+            fin = contenido.indexOf("Artículo 25");
+            newcontenido = new StringBuilder();
+            newcontenido.append(fn.extracted(inicio, fin, contenido));            
+            modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString()));
+            
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                if(newcontenido.toString().split("\n")[i].contains("Cantidad")) {
+                    List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+                    modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+                    modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+                    modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));                    
+                    modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+                }
+            }
+            
+            List<EstructuraRecibosModel> recibos = new ArrayList<>();
+            EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+
+            if (modelo.getFormaPago() == 1) {
+                recibo.setReciboId("");
+                recibo.setSerie("1/1");
+                recibo.setVigenciaDe(modelo.getVigenciaDe());
+                recibo.setVigenciaA(modelo.getVigenciaA());
+                if (recibo.getVigenciaDe().length() > 0) {
+                    recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+                }
+                recibo.setPrimaneta(modelo.getPrimaneta());
+                recibo.setDerecho(modelo.getDerecho());
+                recibo.setRecargo(modelo.getRecargo());
+                recibo.setIva(modelo.getDerecho());
+
+                recibo.setPrimaTotal(modelo.getPrimaTotal());
+                recibo.setAjusteUno(modelo.getAjusteUno());
+                recibo.setAjusteDos(modelo.getAjusteDos());
+                recibo.setCargoExtra(modelo.getCargoExtra());
+                recibos.add(recibo);
+            }
+
+            modelo.setRecibos(recibos);
             
             return modelo;
         } catch (Exception ex) {
