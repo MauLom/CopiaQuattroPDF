@@ -2,6 +2,7 @@ package com.copsis.models.impresionAxa;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class ImpresionCotizacionVida {
 					document.addPage(page);
 					BaseTable table;
 					Row<PDPage> baseRow;
+					BaseTable table2;
+                    Row<PDPage> baseRow2;
 
 					table = new BaseTable(1170, 1170, bottomMargin, 607, 20, document, page, false, true);		           
 			        baseRow = communsPdf.setRow(table, 18);
@@ -204,7 +207,7 @@ public class ImpresionCotizacionVida {
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual() +"                        " + (cotizacionProjection.getPrimaAnualex().length() > 0 ? cotizacionProjection.getPrimaAnualex().replace("UDI", "Pesos") :"" ) ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		    
 		  
 		             baseRow = communsPdf.setRow(table, 15);
@@ -227,7 +230,7 @@ public class ImpresionCotizacionVida {
 		             
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima Anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60,cotizacionProjection.getPrimaAnualex() ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60,cotizacionProjection.getPrimaAnualex().replace("UDI", "Pesos") ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Aportación:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
@@ -257,15 +260,17 @@ public class ImpresionCotizacionVida {
 					             yStart -= table.getHeaderAndDataHeight();
 					            
 					             table = new BaseTable(yStart, yStart, bottomMargin, 500, 160, document, page, true, true);
+					             table2 = new BaseTable(yStart, yStart, bottomMargin, 500, 210, document, page, false, true);
 					             
 					             if(i == 2) {
-					            	
+					            
 					            	 baseRow = communsPdf.setRow(table, 40);		
 					            	  baseRow.setLineSpacing(1.6f);
 						             communsPdf.setCell(baseRow,15,textoAxa.getNombre(),Color.BLACK,false, "c",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setTopPadding(0);
 						             communsPdf.setCell(baseRow,85, "",Color.BLACK,true, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,5f,5f),bgColor);
 							       
 					             }else {
+					                
 					            	 baseRow = communsPdf.setRow(table, 15);
 					            	 baseRow.setLineSpacing(1.6f);
 						             communsPdf.setCell(baseRow,15,textoAxa.getNombre(),Color.BLACK,false, "c",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setTopPadding(0);
@@ -273,24 +278,45 @@ public class ImpresionCotizacionVida {
 							      
 					             }
 					                 if(i == 2) {
+					               
 						        	   baseRow = communsPdf.setRow(table, 50);  
 						        	   baseRow.setLineSpacing(1.5f);
 						           }else {
+						              
 						        	   baseRow = communsPdf.setRow(table, 25);
 						           }
 					             
 					             communsPdf.setCell(baseRow,2, "",Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 					             communsPdf.setCellImg(baseRow, 8,  ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(bgColor), communsPdf.setPadding2(0f,0f,0f,0f), "C", "T");						 					            		             
 					             communsPdf.setCell(baseRow,5, "",Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+					            
+					             
 					             if(i == 2) {
 					            	 communsPdf.setCell(baseRow,85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()),Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setTopPadding(-40f);	 
 					             }else {
 					            	 communsPdf.setCell(baseRow,85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()),Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setTopPadding(-20f);
 					             }
+					             if(i== 0) {
+					                 baseRow2 = communsPdf.setRow(table2, 40);
+                                     communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                             
+					                 baseRow2 = communsPdf.setRow(table2, 50);
+					                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+					             }
 					             
-					             		    				             
-					             table.draw();
+					             if(i== 1) {
+                                     baseRow2 = communsPdf.setRow(table2, 40);
+                                     communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                             
+                                     baseRow2 = communsPdf.setRow(table2, 50);
+                                     communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                                 }
+                                
 					            
+					          		             
+					             table.draw();
+					             table2.draw();  
+					                
 					             yStart -= table.getHeaderAndDataHeight();
 					             if(i == 2) {
 					            	 yStart = yStart+20;
@@ -315,6 +341,7 @@ public class ImpresionCotizacionVida {
 				             
 				             yStart -= table.getHeaderAndDataHeight();
 				            
+				             table2 = new BaseTable(yStart, yStart, bottomMargin, 500, 210, document, page, false, true);
 				             table = new BaseTable(yStart, yStart, bottomMargin, 500, 160, document, page, true, true);
 				             baseRow = communsPdf.setRow(table, 10);		
 				             communsPdf.setCell(baseRow,15,textoAxa.getNombre(),Color.BLACK,false, "L",10, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(0f,0f,0f,0f),bgColor).setTopPadding(0);
@@ -330,7 +357,23 @@ public class ImpresionCotizacionVida {
 				             communsPdf.setCellImg(baseRow, 8,  ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(bgColor), communsPdf.setPadding2(0f,0f,0f,0f), "C", "T");						 					            		             
 				             communsPdf.setCell(baseRow,5, "",Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 				             communsPdf.setCell(baseRow,85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()),Color.BLACK,false, "C",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setTopPadding(-10f);		    				             
+				             if(i== 0) {
+                                 baseRow2 = communsPdf.setRow(table2, 20);
+                                 communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                         
+                                 baseRow2 = communsPdf.setRow(table2, 50);
+                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor()+" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                             }
+                             
+                             if(i== 1) {
+                                 baseRow2 = communsPdf.setRow(table2, 40);
+                                 communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                         
+                                 baseRow2 = communsPdf.setRow(table2, 50);
+                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                             }
 				             table.draw();
+				             table2.draw();
 				             yStart -= table.getHeaderAndDataHeight();
 				           	 i++;  
 					}
@@ -365,9 +408,8 @@ public class ImpresionCotizacionVida {
 		           
 					
 					output = new ByteArrayOutputStream();
-					document.save(output);
-			
-
+					document.save(output);			
+//					document.save(new File( "/home/aalbanil/Vídeos/cotizacion3.pdf"));
 					return output.toByteArray();
 				} finally {
 					document.close();
@@ -400,7 +442,7 @@ public class ImpresionCotizacionVida {
 	public ArrayList<TextoAxa> textolist2(String primaUdiTitular,String primaUdiMenor){
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
-		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+primaUdiTitular+ " UDI.","Supervivencia o fallecimiento del menor",
+		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+primaUdiTitular+ " UDI ","Supervivencia o fallecimiento del menor",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOWa39jvjMQDMhW3XUUVXXY3oR2Ib70UaEoEob3GL5w/img_supervivencia.png"));
 		
 		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de "+primaUdiMenor+" UDI","Fallecimiento del titular",
