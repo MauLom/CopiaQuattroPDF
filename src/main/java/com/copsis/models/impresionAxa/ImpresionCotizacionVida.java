@@ -207,7 +207,7 @@ public class ImpresionCotizacionVida {
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual() +"                                  " + (cotizacionProjection.getPrimaPesosMenor().length() > 0 ? cotizacionProjection.getPrimaPesosMenor() +" Pesos":"" ) ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual() +"                        " + (cotizacionProjection.getPrimaAnualex().length() > 0 ? cotizacionProjection.getPrimaAnualex().replace("UDI", "Pesos") :"" ) ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		    
 		  
 		             baseRow = communsPdf.setRow(table, 15);
@@ -409,7 +409,7 @@ public class ImpresionCotizacionVida {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);			
-//					document.save(new File( "/home/aalbanil/Vídeos/cotizacion2.pdf"));
+//					document.save(new File( "/home/aalbanil/Vídeos/cotizacion3.pdf"));
 					return output.toByteArray();
 				} finally {
 					document.close();
