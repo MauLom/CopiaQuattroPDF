@@ -207,7 +207,7 @@ public class ImpresionCotizacionVida {
 		    
 		             baseRow = communsPdf.setRow(table, 15);
 		             communsPdf.setCell(baseRow,40, "Prima anual:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual() +"                                  " + (cotizacionProjection.getPrimaPesosTitular().length() > 0 ? cotizacionProjection.getPrimaPesosTitular() +" Pesos":"" ) ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+		             communsPdf.setCell(baseRow,60, cotizacionProjection.getPrimaAnual() +"                                  " + (cotizacionProjection.getPrimaPesosMenor().length() > 0 ? cotizacionProjection.getPrimaPesosMenor() +" Pesos":"" ) ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 		    
 		  
 		             baseRow = communsPdf.setRow(table, 15);
@@ -301,7 +301,7 @@ public class ImpresionCotizacionVida {
                                      communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                              
 					                 baseRow2 = communsPdf.setRow(table2, 50);
-					                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+					                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 					             }
 					             
 					             if(i== 1) {
@@ -309,7 +309,7 @@ public class ImpresionCotizacionVida {
                                      communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                              
                                      baseRow2 = communsPdf.setRow(table2, 50);
-                                     communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                                     communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                                  }
                                 
 					            
@@ -362,7 +362,7 @@ public class ImpresionCotizacionVida {
                                  communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                          
                                  baseRow2 = communsPdf.setRow(table2, 50);
-                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor()+" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                              }
                              
                              if(i== 1) {
@@ -370,7 +370,7 @@ public class ImpresionCotizacionVida {
                                  communsPdf.setCell(baseRow2,100, "",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                          
                                  baseRow2 = communsPdf.setRow(table2, 50);
-                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                                 communsPdf.setCell(baseRow2,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "R",12, communsPdf.setLineStyle(bgColor), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                              }
 				             table.draw();
 				             table2.draw();
@@ -409,7 +409,7 @@ public class ImpresionCotizacionVida {
 					
 					output = new ByteArrayOutputStream();
 					document.save(output);			
-					//document.save(new File( "/home/aalbanil/Vídeos/cotizacion.pdf"));
+//					document.save(new File( "/home/aalbanil/Vídeos/cotizacion2.pdf"));
 					return output.toByteArray();
 				} finally {
 					document.close();
