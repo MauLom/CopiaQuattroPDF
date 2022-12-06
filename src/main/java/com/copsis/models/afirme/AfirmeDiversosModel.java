@@ -142,14 +142,17 @@ public class AfirmeDiversosModel {
            
             inicio = contenido.indexOf("Coberturas###Suma Asegurada");
             fin =contenido.indexOf("Concepto###Prima Neta");
+           
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
+         
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-            if( newcontenido.toString().split("\n").length> 5) {            	
+            if( newcontenido.toString().split("\n").length> 2) {
 	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
 	            	
 	            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-	            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {            
+	            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")
+	            	        && !newcontenido.toString().split("\n")[i].contains("CONTRATISTA")) {            
 	            		int sp  = newcontenido.toString().split("\n")[i].split("###").length;
 	            	   switch (sp) {
 					case 1:
