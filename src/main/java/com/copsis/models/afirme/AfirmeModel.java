@@ -40,9 +40,12 @@ public class AfirmeModel {
                     tipo=4;
                     tipoV =3;  
 		        }
+		        if( tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("Ubicación")){
+                    tipo=4;
+                    tipoV =0;  
+                }
 
-		       
-			
+		   
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
 					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO")) {
