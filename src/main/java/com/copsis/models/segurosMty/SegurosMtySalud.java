@@ -162,6 +162,7 @@ public class SegurosMtySalud {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replaceAll("### ###", "###");
 	        		boolean encontroRecargo = false;
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	        		 
 	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	
 	        				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("###")[1].trim()));
 	        				modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("###")[3].trim())));	        				
@@ -179,6 +180,7 @@ public class SegurosMtySalud {
 	        				}
 	        				
 	        			}
+	        			
 	        			if(newcontenido.split("\n")[i].contains("DERECHO")) {
 	        				modelo.setDerecho(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("DERECHO DE PÓLIZA")[1].split("###")[1].trim())));
 	        			}
@@ -193,7 +195,11 @@ public class SegurosMtySalud {
 	        			}
 	        			if(newcontenido.split("\n")[i].contains("RECIBOS SUBSECUENTES") && newcontenido.split("\n")[i].contains("IVA")) {
 	        				modelo.setSubPrimatotal(fn.castBigDecimal(fn.cleanString(fn.gatos(newcontenido.split("\n")[i].split("IVA")[0].replaceAll("[A-Z]", "")))));
-	        			}	        			
+	        			}
+	        			if(newcontenido.split("\n")[i].contains("COBERTURAS OPCIONALES")) {
+	        			    List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+	        			    modelo.setCargoExtra((fn.castBigDecimal(fn.castDouble(valores.get(0)))));
+	        			}
 	        			
 	        		}
 	         }
