@@ -130,7 +130,7 @@ public class AxaVida2Model {
 			for (int i = 0; i < contenido.split("Beneficiarios Nombre").length; i++) {	
 				if(i> 0) {
 					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
-							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###")); 
+							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###").replace("CONCUBINA", "###CONCUBINA###")); 
 				}										
 			}
 			
@@ -139,7 +139,7 @@ public class AxaVida2Model {
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();							
 					if(resultado.toString().split("\n")[i].contains("%")) {
-						beneficiario.setNombre(resultado.toString().split("\n")[i].split("###")[0]);
+						beneficiario.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
 						beneficiario.setParentesco(fn.parentesco( resultado.toString().split("\n")[i].split("###")[1]));
 						beneficiarios.add(beneficiario);
 					}
@@ -169,7 +169,7 @@ public class AxaVida2Model {
 				modelo.setCoberturas(coberturas);
 			}
 			
-			System.out.println(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()));
+		
 			if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {
 			    modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
@@ -177,6 +177,7 @@ public class AxaVida2Model {
 
 			return modelo;
 		} catch (Exception ex) {
+		    ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
