@@ -68,12 +68,11 @@ public class MapfreDiversosModel {
 
 		try {
 
-			// tipo
+
 			modelo.setTipo(7);
-			// cia
 			modelo.setCia(22);
 
-			// poliza
+			
 			inicio = contenido.indexOf("Póliza Número:");
 			if (inicio == -1) {
 				inicio = contenido.indexOf("Póliza número:");
@@ -178,6 +177,9 @@ public class MapfreDiversosModel {
 				if (fn.isvalidCp(texto)) {
 					modelo.setCp(texto);
 				}
+			}
+			if(modelo.getCp().length() == 0) {
+			    modelo.setCp(newcontenido.split("C.P:")[1].trim().substring(0,5));
 			}
 
 			// cte_direccion
@@ -513,6 +515,7 @@ public class MapfreDiversosModel {
 			// UBICACIONES
 			inicio = contenido.indexOf("RIESGOS ASEGURADOS");
 			fin = contenido.indexOf("MEDIDAS DE SEGURIDAD");
+			
 		
 			List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
@@ -520,6 +523,7 @@ public class MapfreDiversosModel {
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				newcontenido = contenido.substring(inicio + 18, fin).replace("@@@", "").trim();
 				resultado = newcontenido.split(":")[1].split("CLASIFICACIÓN")[0].trim();
+			
 
 				// cp
 				if (resultado.contains(", C.P.")) {
@@ -531,6 +535,7 @@ public class MapfreDiversosModel {
 				// no_interno
 				index = 0;
 				for (String xx : resultado.split(",")) {
+		
 					if (index == 0) {
 						ubicacion.setCalle(xx.trim());
 					}
@@ -597,9 +602,10 @@ public class MapfreDiversosModel {
 					ubicacion.setNiveles(1);
 				}
 				ubicaciones.add(ubicacion);
+				modelo.setUbicaciones(ubicaciones);
 			}
 
-			modelo.setUbicaciones(ubicaciones);
+			
 
 			if (modelo.getUbicaciones().isEmpty()) {
 				obtenerUbicacionVersionMayusculas(contenido, modelo);
