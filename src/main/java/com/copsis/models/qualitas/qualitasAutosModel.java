@@ -505,10 +505,11 @@ public class qualitasAutosModel {
 
 			// forma_pago
 			inicio = contenido.indexOf("Tasa Financiamiento");
+			
 
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio, inicio + 200).split("\r\n")[1];
-			
+
 
 				if (newcontenido.contains("Gastos por")) {
 					newcontenido = newcontenido.split("Gastos por")[0].replace("###", "").trim();
@@ -530,22 +531,25 @@ public class qualitasAutosModel {
 						modelo.setFormaPago(fn.formaPago(newcontenido));
 					}
 
-				} else if (newcontenido.contains("Forma de Pago:")) {
+				} else if (newcontenido.contains("Forma de Pago")) {
 			              
 						modelo.setFormaPago(fn.formaPago(newcontenido));
 
 				}
 			}
-
+			
+	
 			
 			/**
 			 * **********para cuando trae para primer recibo y subsecuente*************
 			 */
 			fin = contenido.indexOf("Pagos Subsecuentes");
+
 			if (fin > -1 && modelo.getFormaPago() == 0) {
 				index = contenido.substring(fin - 150, fin).split("\r\n").length - 1;
 				newcontenido = contenido.substring(fin - 150, fin).split("\r\n")[index].trim().split(" ")[0]
 						.replace("###", "").replace("@@@", "").trim();
+	
 				modelo.setFormaPago(fn.formaPago(newcontenido));
 			}
 			
@@ -1025,10 +1029,14 @@ public class qualitasAutosModel {
 					}
 				}
 			}
-	
+		       if(modelo.getFormaPago() == 0) {
+	                modelo.setFormaPago(1); 
+	            }
+
 			
 			return modelo;
 		} catch (Exception ex) {
+		    ex.printStackTrace();
 			modelo.setError(
 					qualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

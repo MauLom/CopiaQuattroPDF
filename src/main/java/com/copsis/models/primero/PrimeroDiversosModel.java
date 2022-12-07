@@ -32,10 +32,12 @@ public class PrimeroDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
+
     
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	               
 	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
 	                		if(newcontenido.split("\n")[i].contains("###")) {
 	                			modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].replace("-", "").trim());
@@ -50,9 +52,13 @@ public class PrimeroDiversosModel {
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                		
 	                	}
 	                	
-	                	if(newcontenido.split("\n")[i].contains("Fecha de Emisión")) {
+	                	if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i+1].split(" ")[0].contains("-")) {
+	                	   
 	                		modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split(" ")[0]));
 	                	}
+	                	  if(newcontenido.split("\n")[i].contains("Fecha de Emisión") && modelo.getFechaEmision().length() == 0) {
+	                	      modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[1]));  
+	                	  }
 	                	if(newcontenido.split("\n")[i].contains("Asegurado:")) {
 	                		modelo.setCteNombre(newcontenido.split("\n")[i].split("Asegurado:")[1].replace(":", "").replace("###", ""));
 	                	}
@@ -66,7 +72,7 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("RFC:") || newcontenido.split("\n")[i].contains("Teléfono:")) {
 	                		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].split("Teléfono:")[0].replace("###", ""));
 	                	}
-	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3) {	                	
+	                	if(newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3 && newcontenido.split("\n")[i+1].split("###").length > 4) {	                	
 	                			modelo.setPlan(newcontenido.split("\n")[i+1].split("###")[0]);
 	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].trim()));
 	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].trim()));	                		
@@ -77,8 +83,24 @@ public class PrimeroDiversosModel {
 			   
 	            inicio = contenido.indexOf("Prima Neta");
 	            fin = contenido.indexOf("EN CASO DE SINIESTRO");
+	            
+                String contenidopr ="";
+                for (int i = 0; i < contenido.split("Prima Neta").length; i++) {
+                  if(i > 1 &&  contenido.split("Prima Neta")[i].split("EN CASO DE SINIESTRO")[0] .contains("Moneda")) {
+                      contenidopr = contenido.split("Prima Neta")[i].split("EN CASO DE SINIESTRO")[0];
+                  } 
+                }
+           
+	          
 	            if (inicio > 0 && fin > 0 && inicio < fin) {
-	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+	                if(contenidopr.length()> 0) {
+	                    newcontenido = contenidopr.replace("@@@", "").replace("\r", "")
+	                            .replace("###Financiamiento###Gastos de###Subtotal###IVA###Total","Prima Neta###Financiamiento###Gastos de###Subtotal###IVA###Total" );        
+	                            
+	                }else {
+	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
+	                        .replace("Prima Neta###Financiamiento###Gastos Expedición###Subtotal###IVA###Total","Prima Neta###Financiamiento###Gastos de###Subtotal###IVA###Total" );
+	                }
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {    
 	                    if (newcontenido.split("\n")[i].contains("Prima Neta###Financiamiento###Gastos de###Subtotal###IVA###Total")) {
 	                        modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[0])));
@@ -87,6 +109,7 @@ public class PrimeroDiversosModel {
 	                        modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[4])));
 	                        modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i + 1].split("###")[5])));
 	                    }
+	                    
 	                    if (newcontenido.split("\n")[i].contains("Moneda")) {
 	                        modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i + 1].split("###")[0]));
 	                        modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i + 1].split("###")[1]));
@@ -131,7 +154,11 @@ public class PrimeroDiversosModel {
 				  
 				  inicio = contenido.indexOf("Coberturas");
 				  fin = contenido.indexOf("Prima Neta");
+				  if(fin <  inicio) {
+				      fin =contenido.lastIndexOf("Prima Neta");
+				  }
 
+				
 				  if (inicio > -1 && fin > -1 && inicio < fin) {	
 					  String secciont="";
 					  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

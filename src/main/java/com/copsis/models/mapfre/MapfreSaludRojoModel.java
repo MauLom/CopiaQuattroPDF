@@ -68,9 +68,15 @@ public class MapfreSaludRojoModel {
 					}
 					if(newcontenido.split("\n")[i].contains("FECHA DE EMISIÓN")) {
 						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("FECHA DE EMISIÓN")[1].replace("###", "").trim()));
-						if(newcontenido.split("\n")[i+1].contains("AGENTE:")) {
-							modelo.setAgente(newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim());
-						}
+						
+						if(newcontenido.split("\n")[i+1].contains("AGENTE:")) {						    
+						    if(newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim().contains(",")) {
+						        modelo.setAgente((newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim().split(",")[1] +" " + newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim().split(",")[0]).trim());    
+						    }else {
+						        modelo.setAgente(newcontenido.split("\n")[i+1].split("AGENTE:")[1].replace("###", "").trim());
+						    }
+                            
+                        }
 						if(newcontenido.split("\n")[i+2].contains("CLAVE DE AGENTE:")) {
 							modelo.setCveAgente(newcontenido.split("\n")[i+2].split("AGENTE:")[1].replace("###", "").trim());
 						}
@@ -93,7 +99,8 @@ public class MapfreSaludRojoModel {
 					if(modelo.getCteNombre().isEmpty() && newcontenido.split("\n")[i].contains("CONTRATANTE:") &&  newcontenido.split("\n")[i+3].contains("DOMICILIO:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("CONTRATANTE:")[1].replace("###", "").trim());
 					}
-					if(newcontenido.split("\n")[i].contains("DOMICILIO:")){
+					if(newcontenido.split("\n")[i].contains("DOMICILIO:") &&  newcontenido.split("\n")[i].split("DOMICILI").length >20){
+			
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split("DOMICILIO:")[1] +" "+newcontenido.split("\n")[i+1]).replace("###", "").trim());
 						if(!newcontenido.split("\n")[i+2].contains("RFC")){
 							modelo.setCteDireccion((modelo.getCteDireccion()+ " "+  newcontenido.split("\n")[i+2].replace("###", "").split("R.F.C:")[0]).trim());
@@ -354,9 +361,15 @@ public class MapfreSaludRojoModel {
 			
 			
 	            buildRecibos(modelo);
+	            
+	            
+	            if(modelo.getFormaPago() == 1 && fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30  ) {
+	                
+	                modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+	            }
 			
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception e) {		 
 			modelo.setError(MapfreSaludRojoModel.this.getClass().getTypeName()+ " - catch:"+ e.getMessage() + " | "+e.getCause());
 			return modelo;
 		}

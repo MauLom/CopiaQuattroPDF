@@ -25,9 +25,9 @@ public class MetlifeModel {
 	}
 	public EstructuraJsonModel procesar() {
 		try {
-			
+		
 			int tipo =fn.tipoPoliza(contenido);
-			if(contenido.contains("METALIFE RETIRO") || contenido.contains("METALIFE TU FUTURO")) {
+			if(contenido.contains("METALIFE RETIRO") || contenido.contains("METALIFE TU FUTURO") || contenido.contains("METALIFE EDUCACIÓN")) {
 				tipo =5;
 			}
 	
@@ -37,7 +37,7 @@ public class MetlifeModel {
 				
 				break;
 			case 5:// Vida
-				if(contenido.contains("METALIFE RETIRO")  || contenido.contains("METALIFE TU FUTURO")) {
+				if(contenido.contains("METALIFE RETIRO")  || contenido.contains("METALIFE TU FUTURO") || contenido.contains("METALIFE EDUCACIÓN")) {
 					modelo  = new MetlifeVIdaBModel().procesar(fn.caratula(1, 6, stripper, doc));							
 				}else {
 					modelo  = new MetlifeVidaModel(fn.caratula(1, 6, stripper, doc)).procesar();

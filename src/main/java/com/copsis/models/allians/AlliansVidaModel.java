@@ -179,7 +179,11 @@ public class AlliansVidaModel {
 						 }
 					 }					 
 				 }							 
-			 			 		
+			 	
+				 if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 5) {
+				     modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				 }
+				 
 			return modelo;
 		} catch (Exception ex) {	
 			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());

@@ -70,10 +70,12 @@ public class IdentificaPolizaService {
 			String contenidoAux = "";		
 			boolean encontro = false;
 
-	
+
 			// CHUBB
 			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
-				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")) {		
+				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
+				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")      ) {
+				    
 				ChubbModel datosChubb = new ChubbModel(); 
 				datosChubb.setPdfStripper(pdfStripper);
 				datosChubb.setPdDoc(pdDoc);
@@ -123,7 +125,8 @@ public class IdentificaPolizaService {
 			
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
-						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")) {				
+						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")
+						|| contenido.contains("Seguros Monterrey New York Life")) {
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
@@ -332,9 +335,10 @@ public class IdentificaPolizaService {
 			
 		
 
-		
+	
 		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") ||
-		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A"))){		    			    		                
+		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
+		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")   )){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                

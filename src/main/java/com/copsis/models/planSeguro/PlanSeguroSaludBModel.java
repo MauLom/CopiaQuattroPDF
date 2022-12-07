@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -129,6 +130,29 @@ public class PlanSeguroSaludBModel {
 					}
 				}
 				
+				
+				inicio = contenido.indexOf("NOMBRE###SEXO");
+                fin = contenido.indexOf("Coberturas");
+                newcontenido = new StringBuilder();
+                newcontenido.append( fn.extracted(inicio, fin, contenido));
+                List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                    
+                    EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+                    if(newcontenido.toString().split("\n")[i].split("-").length > 3) {
+                        asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i].split("###")[1]) ? 1: 0);
+                        if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size() > 2) {
+                            asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+                            asegurado.setAntiguedad(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
+                        }
+                       
+                        asegurados.add(asegurado);
+                    }
+                }
+                modelo.setAsegurados(asegurados);
+                
+                
+                
 				return modelo;
 			} catch (Exception ex) {
 				modelo.setError(PlanSeguroSaludBModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
