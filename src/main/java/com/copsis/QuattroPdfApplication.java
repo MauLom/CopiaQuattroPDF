@@ -16,6 +16,6 @@ public class QuattroPdfApplication {
 	
 	@PostConstruct
 	void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("America/Mexico_City"));
 	}
 }
