@@ -165,99 +165,70 @@ public class ImpresionCredencialPdf {
              }
              
              
-             table2 = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
+          
                 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
                 for (int i = 0; i < impresionAxa.getCoberturas().size(); i++) {
                     if(impresionAxa.getCoberturas().get(i).getIndex() > 0) {
                         switch (impresionAxa.getCoberturas().get(i).getIndex()) {
                         case 1:
-                           baseRow2 = communsPdf.setRow(table2, 6);
+                          
                            baseRow = communsPdf.setRow(table, 6);
                            communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
                            communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
                            if (i == 0) {
-                               communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                               communsPdf.setCell(baseRow, 17, "",Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                               communsPdf.setCell(baseRow, 12, "Certificado",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                               communsPdf.setCell(baseRow, 17, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                            }
                            if (i == 1) {
-                               communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                               communsPdf.setCell(baseRow, 17, "",Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                               communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                               communsPdf.setCell(baseRow, 17,  impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                            }
-                           if (i == 0) {
-                               communsPdf.setCell(baseRow2, 86, "Certificado:",Color.BLACK,true, "R", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                               communsPdf.setCell(baseRow2, 14, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                           }
-                           if (i == 1) {
-                               communsPdf.setCell(baseRow2, 80, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                               communsPdf.setCell(baseRow2, 20, impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                           }
+                  
                            
                            
                             break;
                         case 2:
-                            baseRow2 = communsPdf.setRow(table2, 6);
+                            //baseRow2 = communsPdf.setRow(table2, 6);
                                baseRow = communsPdf.setRow(table, 6);
                                communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
                                communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
 
                                if (i == 0) {
-                                   communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, "Certificado",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
                                    communsPdf.setCell(baseRow, 17, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
                                if (i == 1) {
-                                   communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                   communsPdf.setCell(baseRow, 17, "",Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 17, impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
                                
                                
-                                 if (i == 0) {
-                                       communsPdf.setCell(baseRow2, 86, "Certificado:",Color.BLACK,true, "R", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                       communsPdf.setCell(baseRow2, 14, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                                   }
-                                   if (i == 1) {
-                                       communsPdf.setCell(baseRow2, 80, "Plan:",Color.BLACK,true, "R", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                       communsPdf.setCell(baseRow2, 20, impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                                   }
-                                   
+                          
                                
                                
                                 break;
                         case 3:
                         case 4:
-                            baseRow2 = communsPdf.setRow(table2, 6);
+                           
                                baseRow = communsPdf.setRow(table, 6);
                                communsPdf.setCell(baseRow, 35, impresionAxa.getCoberturas().get(i).getNombres(),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,5f),bgColor);
                                communsPdf.setCell(baseRow, 39, impresionAxa.getCoberturas().get(i).getSa(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,5f,5f,5f),bgColor);
 
                                if (i == 0) {
-                                   communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                   communsPdf.setCell(baseRow, 17, "",Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, "Certificado",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 17, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
                                if (i == 1) {
-                                   communsPdf.setCell(baseRow, 12, "",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                   communsPdf.setCell(baseRow, 17, "",Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 17,  impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
-                                if (i == 0) {
-                                    communsPdf.setCell(baseRow2, 86, "Certificado:",Color.BLACK,true, "R", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                    communsPdf.setCell(baseRow2, 14, impresionAxa.getNoCertificado(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                                }
-                                if (i == 1) {
-                                    communsPdf.setCell(baseRow2, 80, "Plan:",Color.BLACK,true, "R", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-                                    communsPdf.setCell(baseRow2, 20, impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
-
-                                }
-                                
+                       
                                
                                
                                 break;
@@ -275,7 +246,7 @@ public class ImpresionCredencialPdf {
                 if (isEndOfPage(table)) {
 
                 } else {
-                    table2.draw();
+           
                     table.draw();
                     yStart -= table.getHeaderAndDataHeight() + 1;
                 }
