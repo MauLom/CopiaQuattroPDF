@@ -181,7 +181,7 @@ public class ImpresionCredencialPdf {
 
                            }
                            if (i == 1) {
-                               communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                               communsPdf.setCell(baseRow, 12,(impresionAxa.getEtiquetaPlan().length() > 0 ? "Plan:" :"" ) ,Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
                                communsPdf.setCell(baseRow, 17,  impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                            }
@@ -201,15 +201,11 @@ public class ImpresionCredencialPdf {
 
                                }
                                if (i == 1) {
-                                   communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, (impresionAxa.getEtiquetaPlan().length() > 0 ? "Plan:" :"" ),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
                                    communsPdf.setCell(baseRow, 17, impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
-                               
-                               
-                          
-                               
-                               
+
                                 break;
                         case 3:
                         case 4:
@@ -224,7 +220,7 @@ public class ImpresionCredencialPdf {
 
                                }
                                if (i == 1) {
-                                   communsPdf.setCell(baseRow, 12, "Plan:",Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
+                                   communsPdf.setCell(baseRow, 12, (impresionAxa.getEtiquetaPlan().length() > 0 ? "Plan:" :"" ),Color.BLACK,true, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
                                    communsPdf.setCell(baseRow, 17,  impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "L", 5, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,5f,0f),bgColor);
 
                                }
