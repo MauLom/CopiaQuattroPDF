@@ -442,7 +442,7 @@ public class ImpresionCotizacionVida {
 	public ArrayList<TextoAxa> textolist2(String primaUdiTitular,String primaUdiMenor){
 		ArrayList<TextoAxa> texto  = new ArrayList<>();
 		
-		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+primaUdiTitular+ " UDI ","Supervivencia o fallecimiento del menor",
+		texto.add(new TextoAxa ("Al final del plazo recibirás la cantidad de "+primaUdiTitular+ " UDI ","Meta de Ahorro",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOWa39jvjMQDMhW3XUUVXXY3oR2Ib70UaEoEob3GL5w/img_supervivencia.png"));
 		
 		texto.add(new TextoAxa ("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de "+primaUdiMenor+" UDI","Fallecimiento del titular",
