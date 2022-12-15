@@ -433,6 +433,7 @@ public class ImpresionCotizacionVida {
 			}
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionCotizacionVida: " + ex.getMessage());
 		}

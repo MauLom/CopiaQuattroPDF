@@ -43,4 +43,8 @@ public class ContratanteProjection {
     private String nombreCompleto;
     private String fechaNacimiento;
     private String genero;
+    private String ciudad;
+    private String estado;
+    private int sumaAseguradaTitula;
+    
 }
