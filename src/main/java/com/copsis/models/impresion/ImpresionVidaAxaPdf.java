@@ -48,6 +48,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
         private Boolean acumula;
         private Boolean acumula2;
         private boolean domcex;
+        private boolean domiciCte;
 
         public byte[] buildPDF(ImpresionAxaVidaForm impresionAxaVidaForm) {
             ByteArrayOutputStream output;
@@ -61,6 +62,8 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         Row<PDPage> baseRow;
 
                         ContratanteProjection contratante = impresionAxaVidaForm.getFormularios().getContratante().get(0);
+                        OcupacionProjection ocupacion = impresionAxaVidaForm.getFormularios().getOcupacion().get(0);
+                        MenorProjection menor = impresionAxaVidaForm.getFormularios().getMenor().get(0);
 
                         this.setEncabezado(document, page);
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
@@ -110,7 +113,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 72, contratante.getCalle(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 14, contratante.getNoExterior(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 14, contratante.getNoExterior(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 14, contratante.getNoInterior(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 22, "Colonia", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
@@ -140,12 +143,12 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 36, "Correo electrónico", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 32, contratante.getTelefonoParticular(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 32, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 36, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 32, contratante.getTelefono(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 36, contratante.getCorreo(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 16);
-                        communsPdf.setCell(baseRow, 23, "Actividad", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 16, "Ingreso Anual", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 23, Sio4CommunsPdf.eliminaHtmlTags3("Actividad\n\n " + ocupacion.getOcupacion()), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 16,Sio4CommunsPdf.eliminaHtmlTags3("Ingreso Anual\n\n" + ocupacion.getIngresoAnual()), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCellImg(baseRow, 25, ImageUtils.readImage(this.logoHorizoNormal2(contratante.isExtranjero())).scale(600, 200), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "", "T").setFillColor(Color.white);
                         communsPdf.setCellImg(baseRow, 36, ImageUtils.readImage(this.logoHorizoNormal3(contratante.isExtranjero())).scale(600, 200), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "", "T").setFillColor(Color.white);
 
@@ -154,6 +157,8 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         if (contratante.isExtranjeroFiscal() || contratante.isExtranjero()) {
                             domcex = true;
                         }
+
+                        
 
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 38, "Domicilio en el extranjero", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
@@ -238,8 +243,12 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 42, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 18);
+
+                        if(menor.isMismosDatos()){
+                            domiciCte  =true;
+                        }
                         communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap33oR0kg9AJfRRpYLSDYIFODmsPezIRd5weYPe497Nd0/solic.png").scale(630, 400), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "", "T").setFillColor(bgColorex);
-                        MenorProjection menor = impresionAxaVidaForm.getFormularios().getMenor().get(0);
+                        
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 80, "Nombre(s), apellido paterno, apellido materno", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 20, "Género", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
@@ -255,7 +264,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 25, "Nacionalidad(es)", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 25, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 25, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 25, menor.getParentesco(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 25, this.formarDate(menor.getFechaNacimiento(), "yyyy-MM-dd", ""), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 25, menor.getNacionalidad(), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
@@ -323,8 +332,9 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 33, Sio4CommunsPdf.eliminaHtmlTags3("<b>Riesgos</b>") + "(universales)", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(2f, 0f, 2f, 0f), bgColor);
                         baseRow = communsPdf.setRow(table, 10);
 
-                        communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3QBhuZYDR0g6znE1Dq9FomfXgA6Ed0EZCv4KwOUBJUbd/1.png").scale(120, 30), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, -5f, 0f), "L", "T");
-                        communsPdf.setCellImg(baseRow, 34, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3ZatmmyEsaqEpSIlV68iL5eQOfwRY8is5QC8GKkWsoNK/suma.png").scale(70, 20), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "vB");
+                        communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2212/1N7rQflDvq65bN1u4E4VKFHKNZZPxpH7sKUYKgOSQthw4nL747RpnfsHsnwpEa/moneda.png").scale(120, 30), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, -5f, 0f), "L", "T");
+                        // communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3QBhuZYDR0g6znE1Dq9FomfXgA6Ed0EZCv4KwOUBJUbd/1.png").scale(120, 30), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, -5f, 0f), "L", "T");
+                        communsPdf.setCellImg(baseRow, 34, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2210/1N7rQflDvq65bN1u4E4VKCJk8672htqIpTwTNcmhguYPGA9bhiXJiuifooWS99L7/horiVertino.png").scale(70, 20), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "vB");
                         communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3bt1wfbQm88by32ph67Lb9dDc8cbklj1no6f0moNvAP/Riesgos.png").scale(60, 30), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "T");
 
                         baseRow = communsPdf.setRow(table, 20);
@@ -333,10 +343,11 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 50, Sio4CommunsPdf.eliminaHtmlTags3("Forma de pago"), bgColorA, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(0f, 0f, 0f, 0f), bgColor);
                         communsPdf.setCell(baseRow, 5, Sio4CommunsPdf.eliminaHtmlTags3("$"), bgColorA, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(2f, 0f, 1f, 0f), bgColor);
-                        communsPdf.setCell(baseRow, 40, Sio4CommunsPdf.eliminaHtmlTags3("60"), bgColorA, false, "C", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(0f, 0f, 0f, 0f), bgColor);
+                        communsPdf.setCell(baseRow, 40, Sio4CommunsPdf.eliminaHtmlTags3("NA"), bgColorA, false, "C", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(0f, 0f, 0f, 0f), bgColor);
                         communsPdf.setCell(baseRow, 5, Sio4CommunsPdf.eliminaHtmlTags3(""), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(0f, 0f, 0f, 0f), bgColor);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCellImg(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3UK2j1k33K4RRepXcAXlMI7C8FbIxrlyZ3PDrSnhRO/fPagos.png").scale(100, 50), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "T");
+                        communsPdf.setCellImg(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2212/1N7rQflDvq65bN1u4E4VKHKiVocMta8zcIvk0SLYurmk2yhx00TLfhpFbUBcSR/cargo.png").scale(100, 50), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "T");
+                        //communsPdf.setCellImg(baseRow, 50, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm/h31fila/2209/Polizas/2209/Q2N4l4ntCvjSrcYxpTNj3UK2j1k33K4RRepXcAXlMI7C8FbIxrlyZ3PDrSnhRO/fPagos.png").scale(100, 50), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), communsPdf.setPadding2(2f, 0f, 0f, 0f), "L", "T");
                         communsPdf.setCell(baseRow, 50, Sio4CommunsPdf.eliminaHtmlTags3("(la frecuencia es igual al pago de prima básica)"), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding2(4f, 4f, 2f, 4f), bgColor);
                         baseRow = communsPdf.setRow(table, 15);
                         table.draw();
@@ -572,7 +583,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         page = new PDPage();
                         document.addPage(page);
                         this.setEncabezado(document, page);
-                        OcupacionProjection ocupacion = impresionAxaVidaForm.getFormularios().getOcupacion().get(0);
+                       
 
                         SaludProjection salud = impresionAxaVidaForm.getFormularios().getSalud().get(0);
                         table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
