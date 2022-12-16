@@ -45,6 +45,10 @@ public class ContratanteProjection {
     private String genero;
     private String ciudad;
     private String estado;
-    private int sumaAseguradaTitula;
+    private int sumaAseguradaTitular;
+    private int sumaAseguradaMenor;
+    private boolean efi;
+    private String formaPago;
+    private String edadAlcanzadaMenor;
     
 }
