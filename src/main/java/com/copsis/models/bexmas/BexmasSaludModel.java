@@ -49,7 +49,6 @@ public class BexmasSaludModel {
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").replace("12:00 HORAS", "").replace("ANUAL", "CONTADO"));
 				
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					
 					if(newcont.toString().split("\n")[i].contains("Contratante") && newcont.toString().split("\n")[i].contains("Póliza Inicial")) {
 						modelo.setCteNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
 						modelo.setPoliza(newcont.toString().split("\n")[i+1].split("###")[newcont.toString().split("\n")[i+1].split("###").length-1]);
@@ -85,7 +84,10 @@ public class BexmasSaludModel {
 					    direccion  +=newcont.toString().split("\n")[i+2].contains("Desde") ? newcont.toString().split("\n")[i+2].split("Desde")[0] : newcont.toString().split("\n")[i+2];
 					    modelo.setCteDireccion( direccion.replace("###", ""));
 					    cdi =false;
+						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i]));
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i]));
                     }
+					
 					
 				
 					if(newcont.toString().split("\n")[i].contains("Dirección") && cdi) {
@@ -99,8 +101,14 @@ public class BexmasSaludModel {
 					        modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].replace("12:00", "").trim()));
 					    }
 					    if(newcont.toString().split("\n")[i+1].split("###")[1].contains("-")) {
-                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].trim()));
-                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[2].replace("12:00", "").trim()));
+						
+							if(newcont.toString().split("\n")[i+1].split("###").length ==2){
+								modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].replace("12:00", "").trim()));
+								modelo.setVigenciaDe(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[0].trim()));
+							}else{
+								modelo.setVigenciaA(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[2].replace("12:00", "").trim()));
+								modelo.setVigenciaDe(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1].trim()));
+							}
                         }
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
@@ -279,9 +287,9 @@ public class BexmasSaludModel {
                     if(newcont.toString().split("\n")[i].contains("Agente")) {
                
                         if( newcont.toString().split("\n")[i].split("###").length >2) {
-                            modelo.setCveAgente( newcont.toString().split("\n")[i].split("###")[1]); 
+                            modelo.setCveAgente( newcont.toString().split("\n")[i].split("###")[1].replace("###", "").trim()); 
                         }else {
-                            modelo.setCveAgente( newcont.toString().split("\n")[i].split("Agente:")[1].trim());    
+                            modelo.setCveAgente( newcont.toString().split("\n")[i].split("Agente:")[1].replace("###", "").trim());    
                         }
 						
 					}
@@ -314,6 +322,7 @@ public class BexmasSaludModel {
 			
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(BexmasSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
