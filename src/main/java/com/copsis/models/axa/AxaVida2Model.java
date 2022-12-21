@@ -30,18 +30,22 @@ public class AxaVida2Model {
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
 				.replace("Carátula de Póliza ", "CARATULA DE POLIZA")
+				.replace("CARÁTULA DE LA PÓLIZA", "CARATULA DE POLIZA")
+				.replace("Contratante", "contratante")
 				.replace("Coberturas amparadas", "Coberturas Amparadas").replace("Beneficiarios nombre", "Beneficiarios Nombre");
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(20);
 			inicio = contenido.indexOf("CARATULA DE POLIZA");
 			fin = contenido.indexOf("Coberturas Amparadas");
+
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				resultado.append( contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				 for (int i = 0; i < resultado.toString().split("\n").length; i++) {	
+
 				    if(resultado.toString().split("\n")[i].contains("contratante") && resultado.toString().split("\n")[i].contains("Póliza") && resultado.toString().split("\n")[i+1].contains(",")) {
 					 		modelo.setCteNombre((resultado.toString().split("\n")[i+1].split("###")[1].split(",")[1] +" "+resultado.toString().split("\n")[i+1].split("###")[1].split(",")[0]).trim());
 					        modelo.setPoliza(resultado.toString().split("\n")[i+1].split("###")[2]); 
@@ -53,6 +57,22 @@ public class AxaVida2Model {
 					        modelo.setPoliza(resultado.toString().split("\n")[i+1].split("###")[2]); 
 				    	}
 				    }
+					if(modelo.getPoliza().length()  == 0 ){
+						if(resultado.toString().split("\n")[i].contains("Póliza")){
+                      		 modelo.setPoliza(resultado.toString().split("\n")[i].split("###")[1]);
+						}
+					}
+					if(modelo.getCteNombre().length()  == 0 ){
+						if(resultado.toString().split("\n")[i].contains("Nombre")){
+							String nombre = resultado.toString().split("\n")[i].split("###")[1];
+							if(nombre.split(",").length > 0){
+								modelo.setCteNombre((nombre.split(",")[1]+" "+ nombre.split(",")[0]).trim());
+							}else{
+								modelo.setCteNombre(nombre);
+							}
+                      	
+						}
+					}
 				    
 				    if(resultado.toString().split("\n")[i].contains("Domicilio:") && resultado.toString().split("\n")[i].contains("Tipo de Plan")) {
 				    	modelo.setPlan(resultado.toString().split("\n")[i+1].split("###")[resultado.toString().split("\n")[i+1].split("###").length -2]);
@@ -62,6 +82,18 @@ public class AxaVida2Model {
 				    	}				    	
 				    	modelo.setCteDireccion(newcontenido.toString().replace("###", ""));
 				    }
+
+					if(modelo.getCteDireccion().length()  == 0 ){
+						if(resultado.toString().split("\n")[i].contains("Domicilio") && resultado.toString().split("\n")[i].contains("C.P.")){
+							StringBuilder direccion = new StringBuilder();
+							direccion.append( resultado.toString().split("\n")[i].split("###")[1]);
+							direccion.append(resultado.toString().split("\n")[i+1].replace("###", ""));
+							direccion.append(resultado.toString().split("\n")[i+2].split("###")[0].replace("###", ""));
+					
+						modelo.setCteDireccion(direccion.toString());
+                      	
+						}
+					}
 				    
 				    if(resultado.toString().split("\n")[i].contains("Moneda")) {
 				    	
@@ -77,15 +109,42 @@ public class AxaVida2Model {
 				    if(resultado.toString().split("\n")[i].contains("Forma de pago") && resultado.toString().split("\n")[i].contains("AGENTE")) {
 				    	modelo.setFormaPago(1);
 				    }
-				    
+					if(modelo.getFormaPago() == 0){
+						modelo.setFormaPago(fn.formaPagoSring(resultado.toString().split("\n")[i+1]));								
+					}
+
 				    if(resultado.toString().split("\n")[i].contains("Fecha de inicio")) {
 				    	modelo.setVigenciaDe(fn.formatDateMonthCadena( resultado.toString().split("\n")[i].split("inicio")[1].replace("###", "").trim()));
+				        modelo.setFechaEmision(modelo.getVigenciaDe());
+				    }
+
+					if(resultado.toString().split("\n")[i].contains("Inicio de Vigencia")) {
+				    	modelo.setVigenciaDe(fn.formatDateMonthCadena( resultado.toString().split("\n")[i].split("Vigencia")[1].replace("###", "").trim()));
 				        modelo.setFechaEmision(modelo.getVigenciaDe());
 				    }
 				    if(resultado.toString().split("\n")[i].contains("Fecha de fin") && resultado.toString().split("\n")[i].contains("R.F.C:") && resultado.toString().split("\n")[i].contains("Teléfono")) {
 				    	modelo.setRfc(resultado.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "") );
 				    	modelo.setVigenciaA(fn.formatDateMonthCadena( resultado.toString().split("\n")[i].split("Fecha de fin")[1].replace("###", "").trim()));
 				    }
+
+
+	
+
+					if(resultado.toString().split("\n")[i].contains("Prima") ) {
+						List<String> valores = fn.obtenerListNumeros(resultado.toString().split("\n")[i]);
+						if(valores.size() > 0){
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							modelo.setPrimaTotal(modelo.getPrimaneta());
+						}
+					
+					}
+					if(resultado.toString().split("\n")[i].contains("C.P") ) {
+					modelo.setCp(resultado.toString().split("\n")[i].split("C.P.")[1].replace("###", "").substring(0,5));
+					}
+					if(resultado.toString().split("\n")[i].contains("R.F.C.") ) {
+						modelo.setRfc(resultado.toString().split("\n")[i].split("R.F.C.")[1].replace("###", ""));
+						}
+					
 				    if(resultado.toString().split("\n")[i].contains("Promotor") && resultado.toString().split("\n")[i].contains("Prima")) {
 				    	modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble( resultado.toString().split("\n")[i].split("Prima")[1].split("###")[1])));
 				    }
@@ -97,6 +156,9 @@ public class AxaVida2Model {
 				    	modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble( resultado.toString().split("\n")[i].split("Prima")[1].split("###")[1])));
 				    }
 				    if(resultado.toString().split("\n")[i].contains("Prima") && resultado.toString().split("\n")[i].contains("anual") && resultado.toString().split("\n")[i].contains("total")) {				    	
+				    	modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble( resultado.toString().split("\n")[i].split("Prima")[1].split("###")[1])));
+				    }
+					if(resultado.toString().split("\n")[i].contains("Prima") && resultado.toString().split("\n")[i].contains("ANUAL") && resultado.toString().split("\n")[i].contains("total")) {				    	
 				    	modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble( resultado.toString().split("\n")[i].split("Prima")[1].split("###")[1])));
 				    }
 			
@@ -133,7 +195,16 @@ public class AxaVida2Model {
 							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###").replace("CONCUBINA", "###CONCUBINA###")); 
 				}										
 			}
+
+			if(resultado.length() == 0){
+				inicio = contenido.indexOf("Beneficiarios");
+				fin = contenido.indexOf("Advertencia");
+				newcontenido.append( fn.extracted(inicio, fin, contenido).replace("MADRE", "###MADRE###")
+				.replace("PADRE", "###PADRE###"));
+				resultado = newcontenido;
+			}
 			
+	
 			if(resultado.length() >  0) {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
@@ -149,7 +220,12 @@ public class AxaVida2Model {
 			
 			
 			inicio = contenido.indexOf("Coberturas Amparadas");
-			fin = contenido.indexOf("AXA Seguros,");
+			fin = contenido.indexOf("Beneficiarios");
+			if(fin == -1){				
+				fin = contenido.indexOf("AXA Seguros,");
+			}
+
+		
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -157,9 +233,15 @@ public class AxaVida2Model {
 				resultado.append( contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					
-					if(!resultado.toString().split("\n")[i].contains("Plazo de seguro")) {
-						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();					
+					if(!resultado.toString().split("\n")[i].contains("Plazo de seguro") && !resultado.toString().split("\n")[i].contains("Coberturas")) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();	
+						
 						if(resultado.toString().split("\n")[i].split("###").length == 5) {
+							cobertura.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(resultado.toString().split("\n")[i].split("###")[2].trim());
+							coberturas.add(cobertura);
+						}
+						if(resultado.toString().split("\n")[i].split("###").length == 6) {
 							cobertura.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
 							cobertura.setSa(resultado.toString().split("\n")[i].split("###")[2].trim());
 							coberturas.add(cobertura);
@@ -169,6 +251,10 @@ public class AxaVida2Model {
 				modelo.setCoberturas(coberturas);
 			}
 			
+			if(modelo.getVigenciaA().length() == 0){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				
+			}
 		
 			if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {
 			    modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
@@ -177,7 +263,6 @@ public class AxaVida2Model {
 
 			return modelo;
 		} catch (Exception ex) {
-		    ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
