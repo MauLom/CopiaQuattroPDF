@@ -99,7 +99,7 @@ public class AxaModel {
 							   if(!div0) {
 							   int pagFin = doc.getNumberOfPages() > 3 ? 4 :3;
 						
-							   AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
+							 AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();
 							   }
 								break;
