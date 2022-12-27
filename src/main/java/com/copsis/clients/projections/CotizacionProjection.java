@@ -28,6 +28,8 @@ public class CotizacionProjection {
 	private String  primaPesosTitular;
 	private String  primaUdiMenor;
 	private String  primaPesosMenor;
+	private String sumaAseguradaTitular;
+	private String sumaAseguradaMenor;
 	private boolean vida;
 
 }

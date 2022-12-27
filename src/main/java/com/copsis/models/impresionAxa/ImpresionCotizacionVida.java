@@ -292,19 +292,19 @@ public class ImpresionCotizacionVida {
 
 
 
-							if (i == 0) {
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaUdiMenor() +"UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-							} else  if(i == 1){
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100,cotizacionProjection.getPrimaUdiTitular() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-						
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-							}
+//							if (i == 0) {
+//								baseRow4 = communsPdf.setRow(table4, 25);
+//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaUdiMenor() +"UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+//					
+//								baseRow4 = communsPdf.setRow(table4, 25);
+//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+//							} else  if(i == 1){
+//								baseRow4 = communsPdf.setRow(table4, 25);
+//								communsPdf.setCell(baseRow4,100,cotizacionProjection.getPrimaUdiTitular() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+//						
+//								baseRow4 = communsPdf.setRow(table4, 25);
+//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+//							}
 
 
 							table2.draw();
