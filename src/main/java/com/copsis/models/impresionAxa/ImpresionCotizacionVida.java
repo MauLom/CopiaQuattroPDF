@@ -106,7 +106,7 @@ public class ImpresionCotizacionVida {
 					yStart -= table.getHeaderAndDataHeight() + 5;
 					table = new BaseTable(yStart, yStart, bottomMargin, 607, 119, document, page, false, true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "Datos del Prospecto:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+					communsPdf.setCell(baseRow, 100, "Datos del prospecto:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() - 10;
@@ -184,7 +184,7 @@ public class ImpresionCotizacionVida {
 					yStart -= table.getHeaderAndDataHeight() + 5;
 					table = new BaseTable(yStart, yStart, bottomMargin, 607, 119, document, page, false, true);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 100, "Características del Plan:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+					communsPdf.setCell(baseRow, 100, "Características del plan:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 5;
@@ -193,7 +193,7 @@ public class ImpresionCotizacionVida {
 					communsPdf.setCell(baseRow, 40, "Plan:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					communsPdf.setCell(baseRow, 60, cotizacionProjection.getPlan(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 40, "Tipo de Moneda:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+					communsPdf.setCell(baseRow, 40, "Tipo de moneda:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					communsPdf.setCell(baseRow, 60, cotizacionProjection.getMoneda(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 
 					baseRow = communsPdf.setRow(table, 15);
@@ -221,7 +221,7 @@ public class ImpresionCotizacionVida {
 					communsPdf.setCell(baseRow, 60, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 
 					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 40, "Prima Anual:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+					communsPdf.setCell(baseRow, 40, "Prima anual:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 					communsPdf.setCell(baseRow, 60, cotizacionProjection.getPrimaAnualex().replace("UDI", "Pesos"), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 
 					baseRow = communsPdf.setRow(table, 15);
