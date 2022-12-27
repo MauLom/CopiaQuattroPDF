@@ -284,10 +284,10 @@ public class ImpresionCotizacionVida {
 
 							if (i == 2) {
 								baseRow3 = communsPdf.setRow(table3, 50);
-								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaMenor()+" Pesos"), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaMenor()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 							} else {
 								baseRow3 = communsPdf.setRow(table3, 25);
-								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaTitular()+" Pesos"), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaTitular()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 							}
 
 
