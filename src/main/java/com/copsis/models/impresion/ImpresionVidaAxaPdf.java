@@ -250,7 +250,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         if(menor.isMismosDatos()){
                             domiciCte  =true;
                         }
-                        communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap33oR0kg9AJfRRpYLSDYIFODmsPezIRd5weYPe497Nd0/solic.png").scale(630, 400), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "", "T").setFillColor(bgColorex);
+                        communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2212/Clientes/2212/2HRNRoSZYtqENyV3zOUdnqEKFDqraFtu5Rr2UiHjp8qKk51L5gg18fLDaHdwh2MM/solic_menor.png").scale(630, 400), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "", "T").setFillColor(bgColorex);
                         
                         baseRow = communsPdf.setRow(table, 12);
                         communsPdf.setCell(baseRow, 80, "Nombre(s), apellido paterno, apellido materno", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
@@ -273,7 +273,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 38, "Lugar de nacimiento (país, estado, municipio)", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 37, "Domicilio", bgColorA, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 37, "Domicilio", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 13, "No. interior", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 12, "No. exterior", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         baseRow = communsPdf.setRow(table, 15);
