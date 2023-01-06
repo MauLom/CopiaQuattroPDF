@@ -2,9 +2,9 @@ package com.copsis.models.impresionAxa ;
 
 import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.Console ;
-import java.io.File ;
+import java.io.File;
 import java.text.DateFormatSymbols ;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat ;
 import java.util.ArrayList ;
 import java.util.Date ;
@@ -235,15 +235,34 @@ public class ImpresionCotizacionVida {
 					table.draw();
 
 					yStart -= table.getHeaderAndDataHeight() + 15;
+					DecimalFormat formateador = new DecimalFormat("#,##0.00");
 		
 					if (cotizacionProjection.isVida()) {
 						ArrayList<TextoAxa> texto = this.textolist2(cotizacionProjection.getPrimaUdiMenor(), cotizacionProjection.getPrimaUdiTitular());
+					
 						int i = 0;
 						for (TextoAxa textoAxa : texto) {
+						
 							table = new BaseTable(yStart, yStart, bottomMargin, 607, 116, document, page, true, true);
-							baseRow = communsPdf.setRow(table, 5);
-							communsPdf.setCell(baseRow, 100, "", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(5f, 5f, 5f, 5f), bgColorA);
-
+							if( i == 3 ){
+								if(cotizacionProjection.isIncluirPAI()  != false ){
+									baseRow = communsPdf.setRow(table, 5);
+									communsPdf.setCell(baseRow, 100, "", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(5f, 5f, 6f, 5f), bgColorA);
+								}
+							}else if( i == 2 ){
+								if(cotizacionProjection.isIncluirEFI() != false ){
+									
+									baseRow = communsPdf.setRow(table, 5);
+									communsPdf.setCell(baseRow, 100, "", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(5f, 5f, 5f, 5f), bgColorA);
+								}else{
+									baseRow = communsPdf.setRow(table, 20);
+								}
+							}else {
+								baseRow = communsPdf.setRow(table, 5);
+								communsPdf.setCell(baseRow, 100, "", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(5f, 5f, 5f, 5f), bgColorA);	
+							}
+							
+					
 							baseRow = communsPdf.setRow(table, 5);
 							communsPdf.setCell(baseRow, 100, "", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.white, Color.white), "", communsPdf.setPadding(5f, 5f, 5f, 5f), bgColor);
 							table.draw();
@@ -253,12 +272,22 @@ public class ImpresionCotizacionVida {
 							table3 = new BaseTable(yStart - 10, yStart, bottomMargin, 510, 250, document, page, false, true);
 							table4 = new BaseTable(yStart , yStart, bottomMargin, 120, 615, document, page, false, true);
 
-							if (i == 2) {
-
+							if (i == 3) {
+								if(cotizacionProjection.isIncluirPAI() ){
+								 baseRow2 = communsPdf.setRow(table2, 15);
+								 baseRow2.setLineSpacing(1.6f);
+								 communsPdf.setCell(baseRow2, 50, textoAxa.getNombre(), Color.BLACK, false, "c", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f, 0f, 0f, 0f), bgColor).setTopPadding(0);
+ 
+								}						
+								 baseRow = communsPdf.setRow(table, 40);
+							 }
+							else if (i == 2) {
+                               if(cotizacionProjection.isIncluirEFI() ){
 								baseRow2 = communsPdf.setRow(table2, 15);
 								baseRow2.setLineSpacing(1.6f);
 								communsPdf.setCell(baseRow2, 50, textoAxa.getNombre(), Color.BLACK, false, "c", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f, 0f, 0f, 0f), bgColor).setTopPadding(0);
 
+							   }						
 								baseRow = communsPdf.setRow(table, 40);
 							} else {
 
@@ -268,44 +297,77 @@ public class ImpresionCotizacionVida {
 
 							}
 
-							if (i == 2) {
-
+							if (i == 3) {
+								
+								if(cotizacionProjection.isIncluirPAI() ){
 								baseRow2 = communsPdf.setRow(table2, 50);
 								baseRow2.setLineSpacing(1.5f);
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								communsPdf.setCellImg(baseRow2, 20, ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "C", "T");
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	
+								}
+							} 
 
+							else if (i == 2) {
+								
+								if(cotizacionProjection.isIncluirEFI() ){
+								baseRow2 = communsPdf.setRow(table2, 50);
+								baseRow2.setLineSpacing(1.5f);
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								communsPdf.setCellImg(baseRow2, 20, ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "C", "T");
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	
+								}
 							} else {
 
 								baseRow2 = communsPdf.setRow(table2, 25);
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								communsPdf.setCellImg(baseRow2, 20, ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "C", "T");
+								communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+	
 
 							}
-							communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-							communsPdf.setCellImg(baseRow2, 20, ImageUtils.readImage(textoAxa.getLogo()), communsPdf.setLineStyle(Color.black), communsPdf.setPadding2(0f, 0f, 0f, 0f), "C", "T");
-							communsPdf.setCell(baseRow2, 15, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-
-							if (i == 2) {
+				
+							if (i == 3) {
+								if(cotizacionProjection.isIncluirPAI() ){
 								baseRow3 = communsPdf.setRow(table3, 50);
-								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaMenor()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
-							} else {
-								baseRow3 = communsPdf.setRow(table3, 25);
 								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaTitular()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								}
+							}
+							else if (i == 2) {
+								if(cotizacionProjection.isIncluirEFI() ){
+								baseRow3 = communsPdf.setRow(table3, 50);
+								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaTitular()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+								}
+							} else  if (i == 1) {
+								baseRow3 = communsPdf.setRow(table3, 25);
+								String resultado = textoAxa.getTexto()+""+cotizacionProjection.getSumaAseguradaMenor()+" M.N.";
+								
+							
+								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(resultado), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
 							}
 
+							else {
+								baseRow3 = communsPdf.setRow(table3, 25);
+								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(textoAxa.getTexto()+" "+cotizacionProjection.getSumaAseguradaMenor()+" M.N."), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
+							}
+							if (i == 0) {
+								baseRow4 = communsPdf.setRow(table4, 25);
+								communsPdf.setCell(baseRow4,100, formateador.format(cotizacionProjection.getSumaAseguradaMenorUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+							} else  if(i == 1){
+								baseRow4 = communsPdf.setRow(table4, 25);
+								communsPdf.setCell(baseRow4,100,formateador.format(cotizacionProjection.getSumaAseguradaMenorUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+						
+						}
 
-
-//							if (i == 0) {
-//								baseRow4 = communsPdf.setRow(table4, 25);
-//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaUdiMenor() +"UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-//					
-//								baseRow4 = communsPdf.setRow(table4, 25);
-//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-//							} else  if(i == 1){
-//								baseRow4 = communsPdf.setRow(table4, 25);
-//								communsPdf.setCell(baseRow4,100,cotizacionProjection.getPrimaUdiTitular() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-//						
-//								baseRow4 = communsPdf.setRow(table4, 25);
-//								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-//							}
-
+							else  if(i == 2){
+								if(cotizacionProjection.isIncluirEFI() ){
+								baseRow4 = communsPdf.setRow(table4, 25);
+								communsPdf.setCell(baseRow4,100,formateador.format(cotizacionProjection.getSumaAseguradaTitularUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								}
+							}
+						
 
 							table2.draw();
 							yStart -= table2.getHeaderAndDataHeight();
@@ -377,17 +439,12 @@ public class ImpresionCotizacionVida {
 
 							if (i == 0) {
 								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaUdiMenor() +"UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-					
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosMenor() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								communsPdf.setCell(baseRow4,100, cotizacionProjection.getSumaAseguradaMenorUdi() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 							} else  if(i == 1){
 								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100,cotizacionProjection.getPrimaUdiTitular() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								communsPdf.setCell(baseRow4,100,cotizacionProjection.getSumaAseguradaTitularUdi() +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						
-								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100, cotizacionProjection.getPrimaPesosTitular() +" Pesos",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
-							}
+														}
 
 
 							table2.draw();
@@ -433,7 +490,6 @@ public class ImpresionCotizacionVida {
 			}
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio ImpresionCotizacionVida: " + ex.getMessage());
 		}
@@ -460,10 +516,14 @@ public class ImpresionCotizacionVida {
 		texto.add(new TextoAxa("Al final del plazo recibirás la cantidad de ", "Meta de Ahorro",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKOWa39jvjMQDMhW3XUUVXXY3oR2Ib70UaEoEob3GL5w/img_supervivencia.png"));
 
-		texto.add(new TextoAxa("En caso de fallecimiento, tus beneficiarios recibirán la cantidad de ", "Fallecimiento del titular",
+		texto.add(new TextoAxa("En caso de fallecimiento, tus beneficiarios recibirán la \ncantidad de ", "Fallecimiento del titular",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPjFgtyzgy7JEIcHrDRLPgxY4xPcw5f7HAcl7VW6w/img_fallecimiento.png"));
-		texto.add(new TextoAxa("En caso de fallecimiento o invalidez del asegurado titular, el seguro quedará\nexento de pago de primas y continuará vigente hasta el final del plazo.", "Exención por fallecimiento o invalidez",
+		texto.add(new TextoAxa("En caso de fallecimiento o invalidez del asegurado titular, el \nseguro quedará exento de pago de primas y continuará vigente hasta \nel final del plazo.", "Exención por fallecimiento o invalidez",
 				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPuzfyj18mhRXZJSO3QPvIn8TNqsoEiuGboZt0Sdk/img_excencion.png"));
+
+	  texto.add(new TextoAxa("", "Exención por fallecimiento o invalidez",
+				"https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2209/1N7rQflDvq65bN1u4E4VKPuzfyj18mhRXZJSO3QPvIn8TNqsoEiuGboZt0Sdk/img_excencion.png"));
+
 
 		return texto;
 

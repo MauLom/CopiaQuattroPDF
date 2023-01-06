@@ -2,7 +2,6 @@ package com.copsis.models.impresion ;
 
     import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.File;
 import java.text.DateFormatSymbols ;
 import java.text.DecimalFormat;
 import java.text.ParseException ;
@@ -15,9 +14,6 @@ import java.util.Locale ;
 import org.apache.pdfbox.pdmodel.PDDocument ;
 import org.apache.pdfbox.pdmodel.PDPage ;
 import org.apache.pdfbox.pdmodel.PDPageContentStream ;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.util.Matrix;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection ;
 import com.copsis.clients.projections.ContratanteProjection ;
@@ -1082,7 +1078,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                       document.save(new File( "/home/aalbanil/Vídeos/solicituAxa2.pdf"));
+                      // document.save(new File( "/home/aalbanil/Vídeos/solicituAxa2.pdf"));
                         return output.toByteArray();
 
                     } finally {
@@ -1092,7 +1088,6 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                 }
 
             } catch (Exception ex) {
-                ex.printStackTrace();
                 throw new GeneralServiceException("00001",
                         "Ocurrio un error en el servicio ImpresionVidaAxaPdf: " + ex.getMessage());
             }
