@@ -365,17 +365,19 @@ public class IdentificaPolizaService {
             	modelo =datosPanAmericanModel.procesar();
                 encontro = true;
             }
-           
+          
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
                         || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
-                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
+                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")
+						
                         ))) {
             	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
             		 encontro = false;
             	}else {
+			
             		AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();
                     encontro = true;
