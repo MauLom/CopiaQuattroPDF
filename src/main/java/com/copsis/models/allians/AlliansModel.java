@@ -32,6 +32,10 @@ public class AlliansModel {
 				op=5;
 				vida=true;
 			}
+			if(contenido.contains("BASICA POR FALLECIMIENTO")) {
+				op=5;
+			
+			}
 	
 			switch (op) {
 			case 2:
