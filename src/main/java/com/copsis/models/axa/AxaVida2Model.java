@@ -8,6 +8,12 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.google.common.base.Function;
+import java.util.Map ;
+import java.util.concurrent.ConcurrentHashMap ;
+
+import java.util.function.Predicate ;
+import java.util.stream.Collectors ;
 
 
 
@@ -254,7 +260,7 @@ public class AxaVida2Model {
 			for (int i = 0; i < contenido.split("Beneficiarios Nombre").length; i++) {	
 				if(i> 0) {
 					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
-							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###").replace("CONCUBINA", "###CONCUBINA###")); 
+							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###").replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###")); 
 				}										
 			}
 
@@ -272,6 +278,7 @@ public class AxaVida2Model {
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();							
 					if(resultado.toString().split("\n")[i].contains("%")) {
+						
 						beneficiario.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
 						beneficiario.setParentesco(fn.parentesco( resultado.toString().split("\n")[i].split("###")[1]));
 						beneficiarios.add(beneficiario);
@@ -280,7 +287,15 @@ public class AxaVida2Model {
 				modelo.setBeneficiarios(beneficiarios);
 			}
 			
-			
+
+			List<EstructuraBeneficiariosModel> p = modelo.getBeneficiarios().
+			stream()
+			.filter(distinctByKey(a -> a.getNombre().toLowerCase()))
+			.collect(Collectors.toList());
+
+			modelo.setBeneficiarios(p );
+
+		
 			inicio = contenido.indexOf("Coberturas Amparadas");
 			fin = contenido.indexOf("Beneficios incluidos ###Suma asegurada");
 		
@@ -367,7 +382,6 @@ public class AxaVida2Model {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
@@ -375,4 +389,9 @@ public class AxaVida2Model {
 		}
 	}
 
+	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+
+		Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+		return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+	}
 }
