@@ -76,7 +76,7 @@ public class SegurosMtyVida {
 					}
 					
 					if(modelo.getCp().length() == 0 && newcontenido.toString().split("\n")[i].contains("C.P.")  && newcontenido.toString().split("\n")[i].split("###").length == 5 ) {						
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("###")[1]);
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("###")[1].trim());
 					}
 					if(newcontenido.toString().split("\n")[i].contains("RESIDENCIA")) {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("RESIDENCIA")[1].split("FECHA")[0].replace("###","").trim());
@@ -93,8 +93,10 @@ public class SegurosMtyVida {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				EstructuraAseguradosModel asegurado2 = new EstructuraAseguradosModel();
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {									
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+												
 					if(newcontenido.toString().split("\n")[i].contains("ASEGURADO") && newcontenido.toString().split("\n")[i].contains("ASEGURADO")) {
+					
                         asegurado.setNombre(newcontenido.toString().split("\n")[i].split("ASEGURADO")[1].replace("###", "").trim());
                         if(asegurado.getNombre().contains("FECHA DE EMISIÓN")) {
                         	asegurado.setNombre(asegurado.getNombre().split("FECHA DE EMISIÓN")[0].trim());
