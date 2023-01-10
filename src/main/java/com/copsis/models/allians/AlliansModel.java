@@ -38,6 +38,12 @@ public class AlliansModel {
 				}
 				
 	
+
+			if(contenido.contains("Muerte Accidental")) {
+				op=5;
+				vida=true;
+			}
+
 			switch (op) {
 			case 2:
 				modelo = new AlliansSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();

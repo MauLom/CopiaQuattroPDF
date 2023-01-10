@@ -122,8 +122,7 @@
 					if(!newcontenido.toString().split("\n")[i].contains("Nombre") && !newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")
 						&&	!newcontenido.toString().split("\n")[i].contains("Fallecimiento") 		) {						
 						beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));
-						beneficiario.setPorcentaje(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].replaceFirst("%", "").trim()));
+						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));						
 						beneficiarios.add(beneficiario);
 					}
 				}
