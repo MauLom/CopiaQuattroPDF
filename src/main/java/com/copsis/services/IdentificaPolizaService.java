@@ -69,7 +69,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-
+;
 
 			// CHUBB
 			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
@@ -119,7 +119,7 @@ public class IdentificaPolizaService {
 				encontro = true;
 
 			}
-
+	
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
 			
@@ -133,11 +133,13 @@ public class IdentificaPolizaService {
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
 				} else {
-					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);					
+					contenidoAux = rangoSimple(2, 4, pdfStripper, pdDoc);	
+				
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
 							|| contenidoAux.contains("@@@Seguros a\n" + MONTERREY)
-							|| contenidoAux.contains("SEGUROS MONTERREY")) {
+							|| contenidoAux.contains("SEGUROS MONTERREY")|| contenidoAux.contains("SEGUROS MONTERREY NEW YORK LIFE")) {
+							
 						SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 						modelo = datosSegurosMty.procesa();
 						encontro = true;
@@ -367,13 +369,14 @@ public class IdentificaPolizaService {
             	modelo =datosPanAmericanModel.procesar();
                 encontro = true;
             }
-           
+           System.out.println(rangoSimple(2, 5, pdfStripper, pdDoc));
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
                         || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
-                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")              
+                        || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")
+						|| rangoSimple(2, 5, pdfStripper, pdDoc).contains("ALLIANZ MEXICO, S.A.")              
                         ))) {
             	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
             		 encontro = false;
