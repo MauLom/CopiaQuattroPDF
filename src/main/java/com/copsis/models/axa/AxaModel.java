@@ -29,6 +29,7 @@ public class AxaModel {
 		try {
 
 
+
 			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description") || contenido.contains("DATOS DEL VEHÍCULO")) { // AUTOS
 				modelo  = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false)).procesar();
 			
@@ -45,15 +46,17 @@ public class AxaModel {
 			else {
 	
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA","VIDA PROTGT","VIDA INDIVIDUAL",
+						"VIDA ACADÉMICO",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO","PLANPROTEGE / COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
+
 				for (String tipo : tipos) {				
 					if (contenido.contains(tipo)) {				
 						switch (tipo) {
-						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": // VIDA
-							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL")) {
+						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": case "VIDA ACADÉMICO": // VIDA
+							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL") || tipo.equals("VIDA ACADÉMICO")) {
 								
 								AxaVida2Model datosAxaVida = new AxaVida2Model(fn.caratula(1, 4, stripper, doc));
 								modelo = datosAxaVida.procesar();
