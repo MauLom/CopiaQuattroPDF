@@ -96,7 +96,7 @@ public class AtlasAutosModel {
 								fn.castDouble(newcontenido.split("\n")[i].split("IVA:")[1].replace("###", ""))));
 					}
 					if (newcontenido.split("\n")[i].contains("CP")) {
-						modelo.setCp(newcontenido.split("\n")[i].split("CP")[1].replace("###", ""));
+						modelo.setCp(newcontenido.split("\n")[i].split("CP")[1].replace(":", "").replace("###", ""));
 					}
 
 					if (newcontenido.split("\n")[i].contains("Total a pagar:")) {
