@@ -31,5 +31,10 @@ public class CotizacionProjection {
 	private String sumaAseguradaTitular;
 	private String sumaAseguradaMenor;
 	private boolean vida;
-
+	private boolean incluirEFI;
+	private boolean incluirPAI;
+	private String primaUdiTitularEfi;
+	private String primaPesosTitularEfi;
+	private double sumaAseguradaTitularUdi;
+	private double sumaAseguradaMenorUdi;
 }

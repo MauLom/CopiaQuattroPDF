@@ -2,8 +2,8 @@ package com.copsis.models.impresion ;
 
     import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.File;
 import java.text.DateFormatSymbols ;
+import java.text.DecimalFormat;
 import java.text.ParseException ;
 import java.text.SimpleDateFormat ;
 import java.util.ArrayList ;
@@ -14,9 +14,6 @@ import java.util.Locale ;
 import org.apache.pdfbox.pdmodel.PDDocument ;
 import org.apache.pdfbox.pdmodel.PDPage ;
 import org.apache.pdfbox.pdmodel.PDPageContentStream ;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.util.Matrix;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection ;
 import com.copsis.clients.projections.ContratanteProjection ;
@@ -416,13 +413,14 @@ import com.copsis.models.Tabla.setCellRow;
                         communsPdf.setCell(baseRow, 25, "Especificar", bgColorA, true, "c", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColorAb);
 
                         baseRow = communsPdf.setRow(table, 15);
+                        DecimalFormat formateador = new DecimalFormat("#,##0.00");
                         communsPdf.setCell(baseRow, 50, "Básica (Titular / Mancomunado)", bgColorA, false, "R", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 25, "$ "+contratante.getSumaAseguradaTitular()+"", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 25, formateador.format( contratante.getSumaAseguradaTitular())+"", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 25, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 50, "Básica (Menor)", bgColorA, false, "R", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 25, "$ "+contratante.getSumaAseguradaMenor()+"", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 25, formateador.format( contratante.getSumaAseguradaMenor())+"", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 25, "", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
                         baseRow = communsPdf.setRow(table, 15);
@@ -474,7 +472,7 @@ import com.copsis.models.Tabla.setCellRow;
                         communsPdf.setCell(baseRow, 100, "Designación de Beneficiarios", Color.white, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColorA);
                         baseRow = communsPdf.setRow(table, 100);
                         communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2209/Polizas/2209/vgXoyBQh6weQnOWoF1ap3z3QE2GQp1F69ww1IRII4QIURJ4OSvxj3a2pFzQhYBWn/benfic.png").scale(620, 100), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(4f, 0f, 0f, 0f), "L", "T");
-                        baseRow = communsPdf.setRow(table, 15);
+                        baseRow = communsPdf.setRow(table, 23);
                         communsPdf.setCell(baseRow, 4, "", bgColorA, false, "c", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 14, "Solicitante", bgColorA, false, "c", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 41, Sio4CommunsPdf.eliminaHtmlTags3("Beneficiarios: Nombre(s), apellido paterno,"), bgColorA, false, "c", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
@@ -1081,6 +1079,7 @@ import com.copsis.models.Tabla.setCellRow;
                         output = new ByteArrayOutputStream();
                         document.save(output);
                         //document.save(new File( "/home/aalbanil/Vídeos/solicituAxa2.pdf"));
+                     
                         return output.toByteArray();
 
                     } finally {
