@@ -51,6 +51,10 @@ public class BanorteSaludModel {
 			// Datos Generales
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf("NOMBRE DEL ASEGURADO");
+			if(fin == -1){
+				fin = contenido.indexOf("CUADRO DE ESPECIFICACIONES");
+			}
+		
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@", "");
@@ -104,16 +108,21 @@ public class BanorteSaludModel {
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
 						if (newcontenido.split("\n")[i].split("C.P.")[1].split("###").length > 1) {
-							modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0]);
+							if(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim().length() > 5){
+								modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim().substring(0,5));
+							}else{
+								modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim());
+							}
+							
 						} else {
-							modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split(",")[0]);
+							modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split(",")[0].trim());
 						}
 
 					}
 					if (newcontenido.split("\n")[i].contains("EMISIÓN") && modelo.getCp().length() == 0
 							&& fn.isvalidCp(newcontenido.split("\n")[i + 1].split("###")[0]).booleanValue()) {
 
-						modelo.setCp(newcontenido.split("\n")[i + 1].split("###")[0]);
+						modelo.setCp(newcontenido.split("\n")[i + 1].split("###")[0].trim());
 					}
 					if (newcontenido.split("\n")[i].contains("PLAN")) {
 
@@ -168,8 +177,9 @@ public class BanorteSaludModel {
 						if (newcontenido.split("\n")[i + 3].contains(ConstantsValue.PESOS_MAYUS)) {
 							resultado.append(" ").append(newcontenido.split("\n")[i + 3].split(ConstantsValue.PESOS_MAYUS)[0].replace("###", ""));
 							modelo.setMoneda(1);
-							modelo.setFormaPago(fn.formaPago(
-									newcontenido.split("\n")[i + 3].split(ConstantsValue.PESOS_MAYUS)[1].split("###")[1]
+					
+							 modelo.setFormaPago(fn.formaPagoSring(
+							 		newcontenido.split("\n")[i + 3].split(ConstantsValue.PESOS_MAYUS)[1]
 											.replace("###", "").trim()));
 						}
 						modelo.setCteDireccion(resultado.toString().replace("###", "").trim());

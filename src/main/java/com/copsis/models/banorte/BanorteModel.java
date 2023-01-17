@@ -42,6 +42,7 @@ public class BanorteModel {
 			if(tipo == 1 && contenido.contains("DATOS DEL BIEN ASEGURADO")) {
 				tipo = 4;
 			}
+			
 			switch (tipo) {
 			case 1://Autos
 
@@ -56,13 +57,15 @@ public class BanorteModel {
 					}					   
 				break;
 			case 2://Salud 
+
 				pagIni = fn.pagFinRango(stripper, doc, "LIZA INDIVIDUAL/FAMILIAR");
 				if(pagIni > 0) pagFin = fn.pagFinRango(stripper, doc, "La legislación citada y las abreviaturas que aparecen");
 				if(pagFin == 0) pagFin = fn.pagFinRango(stripper, doc, "En cumplimiento a lo dispuesto");
+				if(pagFin == 0) pagFin = doc.getNumberOfPages();
 				if(pagFin <= pagIni) {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
 				}
-				
+			
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 					pagFin = pagFin == 1 && doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() : pagFin;
 					
