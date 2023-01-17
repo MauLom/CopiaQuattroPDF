@@ -200,6 +200,7 @@ public class IdentificaPolizaService {
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))
 						|| (contenido.contains("SEGUROS BANORTE") || contenido.contains("BANORTE")))){
+							
 					if (contenido.contains("Estimado(a)") ) {
 							BanorteModel datosBanort;						
 							if(caratula(3, 4, pdfStripper, pdDoc).contains("AVISO DE COBRO")){						
@@ -369,7 +370,7 @@ public class IdentificaPolizaService {
             	modelo =datosPanAmericanModel.procesar();
                 encontro = true;
             }
-           System.out.println(rangoSimple(2, 5, pdfStripper, pdDoc));
+
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
