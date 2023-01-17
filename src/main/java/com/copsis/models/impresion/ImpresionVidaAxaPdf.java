@@ -255,7 +255,7 @@ import com.copsis.models.Tabla.setCellRow;
                         communsPdf.setCell(baseRow, 80, "Nombre(s), apellido paterno, apellido materno", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 20, "Género", bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         baseRow = communsPdf.setRow(table, 12);
-                        String nombrecompleto = menor.getNombres() + " " + menor.getApPaterno() + " " + menor.getApMaterno();
+                        String nombrecompleto = ( menor.getNombres() !=null && menor.getNombres().length() > 0 ?  menor.getNombres() :"") + " " + (menor.getApPaterno() !=null && menor.getApPaterno().length() > 0 ? menor.getApPaterno():"") + " " + ( menor.getApMaterno() !=null   &&  menor.getApMaterno().length()  > 0  ? menor.getApMaterno() :"");
                         communsPdf.setCell(baseRow, 80, nombrecompleto, bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 20, (menor.isSexo() == true ? "Hombre" : "Mujer"), bgColorA, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.white), "", communsPdf.setPadding(4f, 4f, 2f, 4f), bgColor);
 
