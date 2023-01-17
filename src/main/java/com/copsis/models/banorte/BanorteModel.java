@@ -57,7 +57,7 @@ public class BanorteModel {
 					}					   
 				break;
 			case 2://Salud 
-			System.out.println(contenido);
+
 				pagIni = fn.pagFinRango(stripper, doc, "LIZA INDIVIDUAL/FAMILIAR");
 				if(pagIni > 0) pagFin = fn.pagFinRango(stripper, doc, "La legislación citada y las abreviaturas que aparecen");
 				if(pagFin == 0) pagFin = fn.pagFinRango(stripper, doc, "En cumplimiento a lo dispuesto");
@@ -65,7 +65,7 @@ public class BanorteModel {
 				if(pagFin <= pagIni) {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
 				}
-				System.out.println(pagIni + "---> " +pagFin );
+			
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 					pagFin = pagFin == 1 && doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() : pagFin;
 					
