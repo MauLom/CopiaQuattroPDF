@@ -99,8 +99,11 @@
 					&& !newcontenido.toString().split("\n")[i].contains("Suma Asegurada")	) {
 					
 						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
-						if(newcontenido.toString().split("\n")[i].split("###")[0].trim().contains("Fallecimiento")){
-							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);						
+						
+						if(newcontenido.toString().split("\n")[i].split("###")[0].trim().contains("Fallecimiento") || 
+						newcontenido.toString().split("\n")[i].split("###")[0].trim().contains("Accidental")){
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);	
+						
 							modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(valores.get(1))));
 						}
 						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1].trim());
