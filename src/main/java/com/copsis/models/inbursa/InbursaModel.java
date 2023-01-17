@@ -34,7 +34,8 @@ public class InbursaModel {
 			
 			switch (tipo) {
 			case 1:// Autos
-				int fin = doc.getNumberOfPages() == 5 ? 4 : 2;
+				int fin = doc.getNumberOfPages() == 5 ? 4 : 3;
+		
 				modelo = new InbursaAutosModel(fn.caratula(1, fin, stripper, doc),
 						fn.textoBusqueda(stripper, doc, "DETALLE DE RECIBOS", false)).procesar();
 				break;
