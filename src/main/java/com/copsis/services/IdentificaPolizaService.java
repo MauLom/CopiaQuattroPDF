@@ -369,7 +369,7 @@ public class IdentificaPolizaService {
             	modelo =datosPanAmericanModel.procesar();
                 encontro = true;
             }
-           System.out.println(rangoSimple(2, 5, pdfStripper, pdDoc));
+
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
@@ -381,6 +381,7 @@ public class IdentificaPolizaService {
             	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
             		 encontro = false;
             	}else {
+			
             		AlliansModel datosAllianz = new AlliansModel(pdfStripper, pdDoc, contenido);
                 	modelo = datosAllianz.procesar();
                     encontro = true;
