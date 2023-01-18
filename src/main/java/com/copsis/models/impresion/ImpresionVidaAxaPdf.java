@@ -1063,7 +1063,8 @@ import com.copsis.models.Tabla.setCellRow;
                         table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table, 18);
                         communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3("<b>Abreviaturas:</b>"), Color.white, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
-                        baseRow = communsPdf.setRow(table, 120);
+                        baseRow = communsPdf.setRow(table, 140);
+                        baseRow.setLineSpacing(1.2f);
                         communsPdf.setCell(baseRow, 50, Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(12)), bgColorA, false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
                         communsPdf.setCell(baseRow, 50, Sio4CommunsPdf.eliminaHtmlTags3(textonotas.get(13)), bgColorA, false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
                         table.draw();
@@ -1240,17 +1241,22 @@ import com.copsis.models.Tabla.setCellRow;
                     + "permanente"
                     + "\n<b>DI:</b> Cobertura adicional de muerte accidental"
                     + "\n<b>DIPO:</b> Cobertura adicional de muerte accidental y pérdidas "
-                    + "orgánica");
+                    + "orgánica"
+                    + "\n<b>DIPOC:</b> Cobertura adicional de muerte accidental y pérdidas"
+                    +"\norgánicas colectivas"
+                    +"\n<b>FIEL:</b> Firma Electrónica");
 
-            textonotas.add("<b>DIPOC:</b> Cobertura adicional de muerte accidental y pérdidas"
-                    + "\norgánicas colectivas"
-                    + "\n<b>FIEL:</b> Firma Electrónica"
-                    + "\n<b>EFI:</b> Exención de pago de primas por fallecimiento o invalidez"
+            textonotas.add(                                  
+                    "<b>EFI:</b> Exención de pago de primas por fallecimiento o invalidez"
                     + "\n<b>IAC:</b> Indemnización por cáncer"
                     + "\n<b>Part. Com:</b> Porcentaje de participación comisión"
                     + "\n<b>Part. Prod:</b> Porcentaje de participación producción"
                     + "\n<b>PPR:</b> Plan Personal de Retiro"
-                    + "\n<b>VPL:</b> Vida Pagos Limitados");
+                    + "\n<b>VPL:</b> Vida Pagos Limitados"
+                    +"\n<b>(ST y/o SM):</b> Sin tratamiento y/o seguimiento médico"
+                    +"\n<b>(ET SSM):</b> En tratamiento sin seguimiento médico"
+                    +"\n<b>(ET CCM):</b> En tratamiento con control médico"
+                    +"\n<b>(DDA/REC):</b> Dado de alta/recuperado");
             return textonotas;
         }
 
