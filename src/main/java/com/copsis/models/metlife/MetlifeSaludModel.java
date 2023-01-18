@@ -177,7 +177,10 @@ public class MetlifeSaludModel {
 
             inicio = contenido.indexOf(ConstantsValue.COBERTURAS.toUpperCase());
             fin = contenido.indexOf("PLAN");
-        
+			if(fin <= inicio){
+				fin = contenido.indexOf("MetLife México S.A");
+			}
+		
             if(inicio > -1 && fin > -1 && inicio < fin) {
             	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").replace("-", "").replace("M.N.", "M.N.###").trim();
