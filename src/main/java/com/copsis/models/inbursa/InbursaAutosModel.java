@@ -266,7 +266,9 @@ public class InbursaAutosModel {
 			
 			/* Agente y Cve */
 
+
 			inicio = contenido.indexOf("NOMBRE DEL AGENTE");
+
 			int renglonesARetroceder = -1;
 			if (inicio > 0) {
 				newcontenido = contenido.split("NOMBRE DEL AGENTE")[0];
