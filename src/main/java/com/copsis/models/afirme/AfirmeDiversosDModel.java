@@ -26,23 +26,20 @@ public class AfirmeDiversosDModel {
             inicio = contenido.indexOf("Póliza");
             fin =contenido.indexOf("Ubicación:");  
             newcontenido.append(fn.extracted(inicio, fin, contenido));
-            
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-               
+           
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {               
                 if(newcontenido.toString().split("\n")[i].contains("Póliza:")) {
                     modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].replace("###", "").trim());
-                }
+                }                                
                 if(newcontenido.toString().split("\n")[i].contains("Moneda:")) {
                     modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
-                }
-                
+                }                
                 if(newcontenido.toString().split("\n")[i].contains("Vigencia") && newcontenido.toString().split("\n")[i].contains("Desde")
                       &&  newcontenido.toString().split("\n")[i].contains("Hasta")) {
                     modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
                     modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(1)));      
                     modelo.setFechaEmision(modelo.getVigenciaDe());
-                }
-                
+                }                
                 if(newcontenido.toString().split("\n")[i].contains(" domicilio en:") && newcontenido.toString().split("\n")[i].contains("C.P.")) {
                     modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("domicilio en:")[1].trim());
                     modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().replace("###", "").substring(0, 5));
@@ -61,8 +58,7 @@ public class AfirmeDiversosDModel {
 
     
             if(newcontenido.toString().length()> 0) {
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-                
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                
                     if(newcontenido.toString().split("\n")[i].contains("Ubicación")) {
                         ubicacion.setNombre(modelo.getCteNombre());
                         ubicacion.setCalle(newcontenido.toString().split("\n")[i].split("Ubicación")[1].replace(":", "").replace("###", "").trim().substring(0,30));    
@@ -84,15 +80,13 @@ public class AfirmeDiversosDModel {
             
             String coberturaex ="";
             for (int i = 0; i < contenido.split("Suma Asegurada").length; i++) {
-                if(i> 0) {
-                 
+                if(i> 0) {                 
                     if(contenido.split("Suma Asegurada")[i].contains("Advertencia")) {
                         coberturaex = contenido.split("Suma Asegurada")[i].split("Advertencia")[0].replace("@@@", "");
                     }
                     if(contenido.split("Suma Asegurada")[i].contains("Prima Neta")) {
                         coberturaex += contenido.split("Suma Asegurada")[i].split("Prima Neta")[0].replace("@@@", "");
-                    }
-                  
+                    }                  
                 }
             }
             
@@ -104,13 +98,12 @@ public class AfirmeDiversosDModel {
             newcontenido.append( coberturaex);
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             if( newcontenido.toString().split("\n").length> 5) {                
-                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
-                    
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                      
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-                    if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") && !newcontenido.toString().split("\n")[i].contains("Deducibles") && newcontenido.toString().split("\n")[i].length() > 30) {     
-                       
-                        int sp  = newcontenido.toString().split("\n")[i].split("###").length;
-                    
+                    if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") 
+                     && !newcontenido.toString().split("\n")[i].contains("Deducibles") 
+                     && newcontenido.toString().split("\n")[i].length() > 30) {                            
+                        int sp  = newcontenido.toString().split("\n")[i].split("###").length;                    
                        switch (sp) {
                     case 1:
                         cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
@@ -139,7 +132,8 @@ public class AfirmeDiversosDModel {
             inicio = contenido.indexOf("Prima Neta");
             fin = contenido.indexOf("Artículo 25");
             newcontenido = new StringBuilder();
-            newcontenido.append(fn.extracted(inicio, fin, contenido));            
+            newcontenido.append(fn.extracted(inicio, fin, contenido));
+              
             modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString()));
             
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
