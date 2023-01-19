@@ -30,13 +30,11 @@ public class AfirmeDiversosModel {
             modelo.setTipo(7);            
             modelo.setCia(31);
 
-           
             inicio = contenido.indexOf("POLIZA");
             fin =contenido.indexOf("Ubicación");
   
             newcontenido.append(fn.extracted(inicio, fin, contenido));
-         
-            
+                     
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
             	if(newcontenido.toString().split("\n")[i].contains("POLIZA:")) {
@@ -122,6 +120,10 @@ public class AfirmeDiversosModel {
             
             inicio = contenido.indexOf("Prima Neta");
             fin =contenido.indexOf("En testimonio de lo cua");
+			if(fin <=inicio){
+				fin =contenido.lastIndexOf("En testimonio de lo cua");
+			}
+	
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
@@ -139,17 +141,19 @@ public class AfirmeDiversosModel {
             	}
             }
             
-           
+       
             inicio = contenido.indexOf("Coberturas###Suma Asegurada");
+			if(inicio == -1 ){
+				inicio = contenido.indexOf("Bienes y Riesgos###Suma Asegurada#");
+			}
             fin =contenido.indexOf("Concepto###Prima Neta");
-           
+       
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
          
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             if( newcontenido.toString().split("\n").length> 2) {
-	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
-	            	
+	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  	            	
 	            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	            	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")
 	            	        && !newcontenido.toString().split("\n")[i].contains("CONTRATISTA")) {            
@@ -173,16 +177,14 @@ public class AfirmeDiversosModel {
             }
             
             if(modelo.getCoberturas().isEmpty()) {
-            	
+
             	 inicio = contenido.indexOf("I###EDIFICIO");
                  fin =contenido.indexOf("Página 4 de 46");
                  
-
                  newcontenido = new StringBuilder();
                  newcontenido.append(fn.extracted(inicio, fin, contenido));
-                 
-              
-                 if( newcontenido.toString().split("\n").length> 5) {            	
+                               
+                 if(newcontenido.toString().split("\n").length> 5) {            	
      	            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
      	            	
      	            	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
