@@ -37,11 +37,10 @@
             }
 
 
-        
-
             //orden de preguntas de 6 a 12
             if (salud.get(0).getPregunta6().contains("si")) {
-                if (salud.get(0).getPregunta6Rd().contains("ambos")) {
+               
+                if (salud.get(0).getPregunta6Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg6 = new Preguntas();
                     prg6.setNumeroP("1");
                     prg6.setPregunta0Rd(salud.get(0).getPregunta6R1());
@@ -58,7 +57,7 @@
                     prg61.setPregunta0Rd3(salud.get(0).getPregunta6R9());
                     prg61.setPregunta0Rd4(salud.get(0).getPregunta6R10());
                     lisPreguntas.add(prg61);
-                } else if (salud.get(0).getPregunta6Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta6Rd().toLowerCase().contains("titular")) {
                     Preguntas prg6 = new Preguntas();
                     prg6.setNumeroP("1");
                     prg6.setPregunta0Rd(salud.get(0).getPregunta6R1());
@@ -81,7 +80,7 @@
             }
 
             if (salud.get(0).getPregunta7().contains("si")) {
-                if (salud.get(0).getPregunta7Rd().contains("ambos")) {
+                if (salud.get(0).getPregunta7Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg7 = new Preguntas();
                     prg7.setNumeroP("2");
                     prg7.setPregunta0Rd(salud.get(0).getPregunta7R1());
@@ -98,7 +97,7 @@
                     prg71.setPregunta0Rd3(salud.get(0).getPregunta7R9());
                     prg71.setPregunta0Rd4(salud.get(0).getPregunta7R10());
                     lisPreguntas.add(prg71);
-                } else if (salud.get(0).getPregunta7Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta7Rd().toLowerCase().contains("titular")) {
                     Preguntas prg7 = new Preguntas();
                     prg7.setNumeroP("2");
                     prg7.setPregunta0Rd(salud.get(0).getPregunta7R1());
@@ -121,7 +120,7 @@
             }
 
             if (salud.get(0).getPregunta8().contains("si")) {
-                if (salud.get(0).getPregunta8Rd().contains("ambos")) {
+                if (salud.get(0).getPregunta8Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg8 = new Preguntas();
                     prg8.setNumeroP("3");
                     prg8.setPregunta0Rd(salud.get(0).getPregunta8R1());
@@ -138,7 +137,7 @@
                     prg81.setPregunta0Rd3(salud.get(0).getPregunta8R9());
                     prg81.setPregunta0Rd4(salud.get(0).getPregunta8R10());
                     lisPreguntas.add(prg81);
-                } else if (salud.get(0).getPregunta8Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta8Rd().toLowerCase().contains("titular")) {
                     Preguntas prg8 = new Preguntas();
                     prg8.setNumeroP("3");
                     prg8.setPregunta0Rd(salud.get(0).getPregunta8R1());
@@ -161,7 +160,7 @@
             }
 
             if (salud.get(0).getPregunta9().contains("si")) {
-                if (salud.get(0).getPregunta9Rd().contains("ambos")) {
+                if (salud.get(0).getPregunta9Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg9 = new Preguntas();
                     prg9.setNumeroP("4");
                     prg9.setPregunta0Rd(salud.get(0).getPregunta9R1());
@@ -178,7 +177,7 @@
                     prg91.setPregunta0Rd3(salud.get(0).getPregunta9R9());
                     prg91.setPregunta0Rd4(salud.get(0).getPregunta9R10());
                     lisPreguntas.add(prg91);
-                } else if (salud.get(0).getPregunta9Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta9Rd().toLowerCase().contains("titular")) {
                     Preguntas prg9 = new Preguntas();
                     prg9.setNumeroP("4");
                     prg9.setPregunta0Rd(salud.get(0).getPregunta9R1());
@@ -201,7 +200,7 @@
             }
 
             if (salud.get(0).getPregunta10().contains("si")) {
-                if (salud.get(0).getPregunta10Rd().contains("ambos")) {
+                if (salud.get(0).getPregunta10Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg10 = new Preguntas();
                     prg10.setNumeroP("5");
                     prg10.setPregunta0Rd(salud.get(0).getPregunta10R1());
@@ -218,7 +217,7 @@
                     prg101.setPregunta0Rd3(salud.get(0).getPregunta10R9());
                     prg101.setPregunta0Rd4(salud.get(0).getPregunta10R10());
                     lisPreguntas.add(prg101);
-                } else if (salud.get(0).getPregunta10Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta10Rd().toLowerCase().contains("titular")) {
                     Preguntas prg10 = new Preguntas();
                     prg10.setNumeroP("5");
                     prg10.setPregunta0Rd(salud.get(0).getPregunta10R1());
@@ -241,7 +240,7 @@
             }
 
             if (salud.get(0).getPregunta11().contains("si")) {
-                if (salud.get(0).getPregunta11Rd().contains("ambos")) {
+                if (salud.get(0).getPregunta11Rd().toLowerCase().contains("ambos")) {
                     Preguntas prg11 = new Preguntas();
                     prg11.setNumeroP("6");
                     prg11.setPregunta0Rd(salud.get(0).getPregunta11R1());
@@ -258,7 +257,7 @@
                     prg111.setPregunta0Rd3(salud.get(0).getPregunta11R9());
                     prg111.setPregunta0Rd4(salud.get(0).getPregunta11R10());
                     lisPreguntas.add(prg111);
-                } else if (salud.get(0).getPregunta11Rd().contains("Titular")) {
+                } else if (salud.get(0).getPregunta11Rd().toLowerCase().contains("titular")) {
                     Preguntas prg11 = new Preguntas();
                     prg11.setNumeroP("6");
                     prg11.setPregunta0Rd(salud.get(0).getPregunta11R1());
@@ -279,7 +278,7 @@
                 }
 
                 if (salud.get(0).getPregunta12().contains("si")) {
-                    if (salud.get(0).getPregunta12Rd().contains("ambos")) {
+                    if (salud.get(0).getPregunta12Rd().toLowerCase().contains("ambos")) {
                         Preguntas prg12 = new Preguntas();
                         prg12.setNumeroP("7");
                         prg12.setPregunta0Rd(salud.get(0).getPregunta12R1());
@@ -296,7 +295,7 @@
                         prg121.setPregunta0Rd3(salud.get(0).getPregunta12R9());
                         prg121.setPregunta0Rd4(salud.get(0).getPregunta12R10());
                         lisPreguntas.add(prg121);
-                    } else if (salud.get(0).getPregunta12Rd().contains("Titular")) {
+                    } else if (salud.get(0).getPregunta12Rd().toLowerCase().contains("titular")) {
                         Preguntas prg12 = new Preguntas();
                         prg12.setNumeroP("7");
                         prg12.setPregunta0Rd(salud.get(0).getPregunta12R1());
@@ -320,7 +319,7 @@
             }
             
             if(salud.get(0).getPregunta13().contains("si") ) {                     
-                if(salud.get(0).getPregunta13Rd().contains("ambos")){              
+                if(salud.get(0).getPregunta13Rd().toLowerCase().contains("ambos")){              
                     Preguntas prg13 = new Preguntas();              
                     prg13.setNumeroP("8");
                     prg13.setPregunta0Rd(salud.get(0).getPregunta13R1());
@@ -337,7 +336,7 @@
                     prg131.setPregunta0Rd3(salud.get(0).getPregunta13R9());
                     prg131.setPregunta0Rd4(salud.get(0).getPregunta13R10());
                     lisPreguntas.add(prg131);
-                } else   if(salud.get(0).getPregunta13Rd().contains("Titular")){              
+                } else   if(salud.get(0).getPregunta13Rd().toLowerCase().contains("titular")){              
                   Preguntas prg13 = new Preguntas();              
                   prg13.setNumeroP("8");
                   prg13.setPregunta0Rd(salud.get(0).getPregunta13R1());
@@ -361,7 +360,7 @@
             
             
             if(salud.get(0).getPregunta14().contains("si") ) {                     
-                if(salud.get(0).getPregunta14Rd().contains("ambos")){              
+                if(salud.get(0).getPregunta14Rd().toLowerCase().contains("ambos")){              
                     Preguntas prg14 = new Preguntas();              
                     prg14.setNumeroP("9");
                     prg14.setPregunta0Rd(salud.get(0).getPregunta14R1());
@@ -378,7 +377,7 @@
                     prg141.setPregunta0Rd3(salud.get(0).getPregunta14R9());
                     prg141.setPregunta0Rd4(salud.get(0).getPregunta14R10());
                     lisPreguntas.add(prg141);
-                } else   if(salud.get(0).getPregunta14Rd().contains("Titular")){              
+                } else   if(salud.get(0).getPregunta14Rd().toLowerCase().contains("titular")){              
                   Preguntas prg14 = new Preguntas();              
                   prg14.setNumeroP("9");
                   prg14.setPregunta0Rd(salud.get(0).getPregunta14R1());
@@ -403,7 +402,7 @@
             
             
             if(salud.get(0).getPregunta15().contains("si") ) {                     
-                if(salud.get(0).getPregunta15Rd().contains("ambos")){              
+                if(salud.get(0).getPregunta15Rd().toLowerCase().contains("ambos")){              
                     Preguntas prg15 = new Preguntas();              
                     prg15.setNumeroP("10");
                     prg15.setPregunta0Rd(salud.get(0).getPregunta15Rd1());
@@ -420,7 +419,7 @@
                     prg151.setPregunta0Rd3(salud.get(0).getPregunta15Rd9());
                     prg151.setPregunta0Rd4(salud.get(0).getPregunta15Rd10());
                     lisPreguntas.add(prg151);
-                } else   if(salud.get(0).getPregunta15Rd().contains("Titular")){              
+                } else   if(salud.get(0).getPregunta15Rd().toLowerCase().contains("titular")){              
                   Preguntas prg15 = new Preguntas();              
                   prg15.setNumeroP("10");
                   prg15.setPregunta0Rd(salud.get(0).getPregunta15Rd1());
@@ -443,7 +442,7 @@
              }
             
             if(salud.get(0).getPregunta16().contains("si") ) {                     
-                if(salud.get(0).getPregunta16Rd().contains("ambos")){              
+                if(salud.get(0).getPregunta16Rd().toLowerCase().contains("ambos")){              
                     Preguntas prg16 = new Preguntas();              
                     prg16.setNumeroP("11");
                     prg16.setPregunta0Rd(salud.get(0).getPregunta16R1());
@@ -460,7 +459,7 @@
                     prg161.setPregunta0Rd3(salud.get(0).getPregunta16R9());
                     prg161.setPregunta0Rd4(salud.get(0).getPregunta16R10());
                     lisPreguntas.add(prg161);
-                } else   if(salud.get(0).getPregunta16Rd().contains("Titular")){              
+                } else   if(salud.get(0).getPregunta16Rd().toLowerCase().contains("titular")){              
                   Preguntas prg16 = new Preguntas();              
                   prg16.setNumeroP("11");
                   prg16.setPregunta0Rd(salud.get(0).getPregunta16R1());
@@ -483,7 +482,7 @@
              }
             
             if(salud.get(0).getPregunta17().contains("si") ) {                     
-                if(salud.get(0).getPregunta17Rd().contains("ambos")){              
+                if(salud.get(0).getPregunta17Rd().toLowerCase().contains("ambos")){              
                     Preguntas prg17 = new Preguntas();              
                     prg17.setNumeroP("12");
                     prg17.setPregunta0Rd(salud.get(0).getPregunta17Rd1());
@@ -500,7 +499,7 @@
                     prg171.setPregunta0Rd3(salud.get(0).getPregunta17Rd9());
                     prg171.setPregunta0Rd4(salud.get(0).getPregunta17Rd10());
                     lisPreguntas.add(prg171);
-                } else   if(salud.get(0).getPregunta17Rd().contains("Titular")){              
+                } else   if(salud.get(0).getPregunta17Rd().toLowerCase().contains("titular")){              
                   Preguntas prg17 = new Preguntas();              
                   prg17.setNumeroP("12");
                   prg17.setPregunta0Rd(salud.get(0).getPregunta17Rd1());

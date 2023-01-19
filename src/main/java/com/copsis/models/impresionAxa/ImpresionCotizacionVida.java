@@ -342,7 +342,7 @@ public class ImpresionCotizacionVida {
 								}
 							} else  if (i == 1) {
 								baseRow3 = communsPdf.setRow(table3, 25);
-								String resultado = textoAxa.getTexto()+""+cotizacionProjection.getSumaAseguradaMenor()+" M.N.";
+								String resultado = textoAxa.getTexto()+""+cotizacionProjection.getSumaAseguradaTitular()+" M.N.";
 								
 							
 								communsPdf.setCell(baseRow3, 85, Sio4CommunsPdf.eliminaHtmlTags3(resultado), Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
@@ -357,7 +357,7 @@ public class ImpresionCotizacionVida {
 								communsPdf.setCell(baseRow4,100, formateador.format(cotizacionProjection.getSumaAseguradaMenorUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 							} else  if(i == 1){
 								baseRow4 = communsPdf.setRow(table4, 25);
-								communsPdf.setCell(baseRow4,100,formateador.format(cotizacionProjection.getSumaAseguradaMenorUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
+								communsPdf.setCell(baseRow4,100,formateador.format(cotizacionProjection.getSumaAseguradaTitularUdi()) +" UDI",Color.BLACK,false, "C",12, communsPdf.setLineStyle(Color.BLACK), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor).setValign(VerticalAlignment.MIDDLE);
 						
 						}
 
