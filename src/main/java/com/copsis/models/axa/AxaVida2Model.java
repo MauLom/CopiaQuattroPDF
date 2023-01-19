@@ -311,10 +311,10 @@ public class AxaVida2Model {
 
 
 	
-			inicio = contenido.indexOf("Beneficios incluidos");
-			fin = contenido.indexOf("AXA Seguros, S.A. de C.V.");
+	     int inicio2 = contenido.indexOf("Beneficios incluidos");
+		 int	fin2 = contenido.indexOf("AXA Seguros, S.A. de C.V.");
 
-			String contex = fn.extracted(inicio, fin, contenido);
+			String contex = fn.extracted(inicio2, fin2, contenido);
 
 
 			
@@ -328,6 +328,7 @@ public class AxaVida2Model {
 				}
 				resultado  = new StringBuilder();
 				resultado.append(cob);
+			
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();	
 					if(!resultado.toString().split("\n")[i].contains("Plazo de seguro") 
