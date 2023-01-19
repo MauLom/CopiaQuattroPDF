@@ -20,6 +20,9 @@ public class GeneralModel {
 			if(contenido.contains("PÓLIZA INDIVIDUAL / FAMILIAR")) {
 				tipo =2;
 			}
+			if(contenido.contains("MARÍTIMO Y TRANSPORTES-CARGA ESPECÍFICA")) {
+				tipo =4;
+			}
 			
 			 switch (tipo) {
 			 case 1:
@@ -28,6 +31,9 @@ public class GeneralModel {
 			 case 2:
 				 modelo = new GeneralSaludModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
 				 break;
+		     case 4:
+				 modelo = new GeneralDiversosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				 break;	 
 			 }
 					
 			return modelo;
