@@ -104,8 +104,14 @@ public class primeroAutosModel {
 
 	                            modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[1].trim());
 	                        } else {
-	                            modelo.setPlacas(newcontenido.split("\n")[i + 1].split("###")[0].trim());
-	                            modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[2].trim());
+							
+								if(newcontenido.split("\n")[i + 1].split("###")[0].trim().length() > 10){
+									modelo.setMotor(newcontenido.split("\n")[i + 1].split("###")[0].trim());
+								}else{
+									modelo.setPlacas(newcontenido.split("\n")[i + 1].split("###")[0].trim());
+									modelo.setSerie(newcontenido.split("\n")[i + 1].split("###")[2].trim());
+								}
+	                           
 	                        }
 	                        
 	                        if(newcontenido.split("\n")[i].contains("Placas###Motor###Número de Serie###Servicio###Uso") && newcontenido.split("\n")[i + 1].split("###").length > 1) {
@@ -118,7 +124,17 @@ public class primeroAutosModel {
 	                        	String[] valores = textoOtroRenglon.split("###");
 	                        	
 	                        	if(!validaLongitudPlacas(placas) && validaLongitudPlacas(valores[0].trim())) {
-	                        		modelo.setPlacas(valores[0].trim());
+									
+
+
+									if(valores[0].trim().length() > 10){
+										modelo.setMotor(valores[0].trim());
+									}else{
+
+										modelo.setPlacas(valores[0].trim());
+									}
+
+	                        		
 	                        	}else {
 	                        		modelo.setPlacas("");
 	                        	}
