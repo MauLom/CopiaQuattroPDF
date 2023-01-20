@@ -31,7 +31,7 @@ public class GnpDiversosCModelo {
 		 try {
 				modelo.setTipo(7);
 				modelo.setCia(18);
-		
+
 				inicio = contenido.indexOf("CONTRATANTE");
 				fin = contenido.indexOf("INFORMACIÓN ADICIONAL");
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -181,6 +181,7 @@ public class GnpDiversosCModelo {
 					
 					&& newcontenido.toString().split("\n")[i].length() > 3
 					){
+					
 						
 						
 						switch (newcontenido.toString().split("\n")[i].split("###").length) {
@@ -209,16 +210,28 @@ public class GnpDiversosCModelo {
 							break;	
 
 						default:
+							if(newcontenido.toString().split("\n")[i].contains("Responsabilidad Civil")
+							
+							|| newcontenido.toString().split("\n")[i].contains("Robo con Violencia y-o Asalto")
+							|| newcontenido.toString().split("\n")[i].contains("Cristales")
+							|| newcontenido.toString().split("\n")[i].contains("Equipo Electrónico")
+							){
+								cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+						
+							coberturas.add(cobertura);
+							}
 							break;
 						}
 						
+						
+					}else{
 						
 					}
 				}
 				modelo.setCoberturas(coberturas);
 				inicio = contenido.indexOf("CARACTERÍSTICAS###DEL###RIESGO");
 				fin = contenido.indexOf("indemnización");	
-
+				
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
@@ -239,18 +252,47 @@ public class GnpDiversosCModelo {
 					ubicaciones.add(ubicacion);					
 					modelo.setUbicaciones(ubicaciones);					
 				}
-			
 				
-			
 				
-				inicio = contenido.indexOf("DESGLOSE###DE###COBERTURAS");
-				fin = contenido.indexOf("El###monto###de#");
 				
-				if(inicio == -1 && fin == -1) {
-					inicio = contenido.indexOf("SECCIONES###CONTRATADAS");
-					fin = contenido.indexOf("Este documento no acredita");
-				}
+				if(modelo.getUbicaciones().isEmpty()){
+	
+					inicio = contenido.indexOf("Ubicación");
+					fin = contenido.lastIndexOf("INFORMACIÓN ADICIONAL");
 
+					newcontenido = new StringBuilder();
+				newcontenido.append(fn.extracted(inicio, fin, contenido));
+			
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+			
+					if(newcontenido.toString().split("\n")[i].contains("Giro")) {
+						ubicacion.setGiro(newcontenido.toString().split("\n")[i +1].replace("###", ""));
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Número###de###pisos") && newcontenido.toString().split("\n")[i].contains("Techos")
+					  && newcontenido.toString().split("\n")[i].contains("Muros")) {
+						ubicacion.setNiveles(1);
+					
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Número de niveles")){
+                     ubicacion.setNiveles(fn.castInteger( fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]).get(0)));
+					}
+
+					if(newcontenido.toString().split("\n")[i].contains("Muros:")){
+					
+						ubicacion.setMuros(1);
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Techos:")){
+						ubicacion.setTechos(1);
+					}
+				}
+				
+				}
+					if(newcontenido.length() > 0) {
+					ubicaciones.add(ubicacion);					
+					modelo.setUbicaciones(ubicaciones);					
+				}
+				
+		
 	
 			 return modelo;
 		} catch (Exception e) {

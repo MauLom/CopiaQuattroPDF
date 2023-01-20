@@ -90,7 +90,9 @@ public class GnpModel {
 			}
 			
 			//proceso para cuando no se pudo  indentificar ,aplica para pdfs de Gnp SEGURO HOGAR VERSATIL
-			if(modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("CARACTERÍSTICAS###DEL###RIESGO")) {
+			if(modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("CARACTERÍSTICAS###DEL###RIESGO")
+			|| modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("Especificaciones###del###Giro")
+			) {
 				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();
 			
 			}
