@@ -65,23 +65,24 @@ public class AxaDiversos2Model {
                     if (newcontenido.split("\n")[i].contains("Fecha de Emisión") && newcontenido.split("\n")[i].contains("Expediente")) {
                         modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].split("Expediente")[0].replace("###", "").trim()));
                     }
+              
                     if (newcontenido.split("\n")[i].contains("Vigencia")) {
-
                         String x = newcontenido.split("\n")[i + 1].replace("a las 12 Hrs.", "");//			
                         if (x.split("###")[1].trim().contains("-") && x.split("###")[3].trim().contains("-")) {
                             modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[1].trim()));
                             modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[3].trim()));
                         }
-
                         if (x.split("###").length == 5 && x.split("###")[4].trim().contains("-")) {
-
                             modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[4].trim()));
-
                         }
 
                     }
 
-                  
+                    if (modelo.getVigenciaDe().length() ==0 && newcontenido.split("\n")[i].contains("Desde")) {                      
+                        modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Desde")[1].replace("###", "").trim()));
+                       
+                    }
+
                     if (newcontenido.split("\n")[i].contains("Hasta")) {                      
                         modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("###", "").trim()));
                         modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -130,9 +131,12 @@ public class AxaDiversos2Model {
             if (fin == -1) {
                 fin = contenido.indexOf("3### - 6");
             }
-            
+            if (fin == -1) {
+                fin = contenido.indexOf("3### - 8");
+            }
+         
         
-            
+         
 
             if (inicio > -1 && fin > -1 && inicio < fin) {
 
