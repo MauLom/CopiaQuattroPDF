@@ -91,6 +91,7 @@ public class AxaVida2Model {
 				    		newcontenido.append( resultado.toString().split("\n")[i+1].split(modelo.getPlan())[0]);
 				    	}				    	
 				    	modelo.setCteDireccion(newcontenido.toString().replace("###", ""));
+						
 				    }
 
 					if(modelo.getCteDireccion().length()  == 0 ){
@@ -101,6 +102,9 @@ public class AxaVida2Model {
 							direccion.append(resultado.toString().split("\n")[i+2].split("###")[0].replace("###", ""));
 					
 						modelo.setCteDireccion(direccion.toString());
+						if(modelo.getCteDireccion().length() > 50){
+							modelo.setCp(fn.obtenerCPRegex2(direccion.toString()));
+						}
                       	
 						}
 					}
@@ -123,7 +127,7 @@ public class AxaVida2Model {
 				    	modelo.setMoneda(fn.moneda( resultado.toString().split("\n")[i].split("Moneda")[1].replace("###", "").trim()));
 				    }
 				    if(resultado.toString().split("\n")[i].contains("Agente")) {
-				    	modelo.setAgente(resultado.toString().split("\n")[i].split("###")[2]);
+				    	modelo.setAgente(resultado.toString().split("\n")[i].split("###")[2].replace(".", "").trim());
 				    	modelo.setCveAgente(resultado.toString().split("\n")[i].split("###")[1]);
 				    }
 				    if(resultado.toString().split("\n")[i].contains("Forma de pago") && resultado.toString().split("\n")[i].contains("CARGO")) {
@@ -260,7 +264,8 @@ public class AxaVida2Model {
 			for (int i = 0; i < contenido.split("Beneficiarios Nombre").length; i++) {	
 				if(i> 0) {
 					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
-							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###").replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###")); 
+							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###")
+							.replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###").replace("ESPOSO","###ESPOSO###")); 
 				}										
 			}
 
