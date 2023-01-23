@@ -100,8 +100,8 @@ public class AxaModel {
 						   case "RESPONSABILIDAD CIVIL, ERRORES":
 						   case "DAÑOS":
 							   if(!div0) {
-							   int pagFin = doc.getNumberOfPages() > 3 ? 4 :3;
-						
+							   int pagFin = doc.getNumberOfPages() > 3 ? 6 :4;
+			
 							 AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();
 							   }
