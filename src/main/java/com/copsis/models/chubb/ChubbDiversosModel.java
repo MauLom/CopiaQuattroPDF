@@ -63,7 +63,7 @@ public class ChubbDiversosModel {
 					if (newcontenido.split("\n")[i].contains("Póliza:")
 							&& newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Vigencia:")[0]
-								.replace("###", ""));
+								.replace("###", "").trim());
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("Vigencia:")[1].split(ConstantsValue.HORAS)[0]
 										.replace("###", "").replace("12:00", "").replace("Del", "").trim()));
@@ -484,6 +484,10 @@ public class ChubbDiversosModel {
 			}
 
 			modelo.setRecibos(recibosList);
+
+			if(fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			}
 
 			return modelo;
 		} catch (Exception ex) {
