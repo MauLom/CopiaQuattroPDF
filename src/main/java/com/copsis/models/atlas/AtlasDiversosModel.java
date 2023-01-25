@@ -49,10 +49,12 @@ public class AtlasDiversosModel {
 					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
 						modelo.setVigenciaDe(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
-										.replace("###", "").trim()));
+										.replace("###", "").replace("las 00:00 Hrs.del", "").trim()));
+										System.out.println(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
+										.replace("###", "").replace("las 00:00 Hrs.del", "").trim());
 						modelo.setVigenciaA(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0]
-										.replace("###", "").trim()));
+										.replace("###", "").replace("las 24:00 Hrs.del", "").trim()));
 						modelo.setFechaEmision(fn.formatDateMonthCadena(
 								newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
 					}
