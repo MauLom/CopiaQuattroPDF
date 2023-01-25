@@ -39,7 +39,10 @@ public class AnaAutosModelRoja {
                 .replace("Forma de Pago:", "Forma de pago:")
 				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
 				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL )
-				.replace("###8T0e0l", "Tel 800");
+				.replace("###8T0e0l", "Tel 800")
+				.replace("PÓLIZA###DE###SEGURO###AUTOMÓVILES", "PÓLIZA DE SEGURO AUTOMÓVILES")
+				.replace("Prima###Total:", ConstantsValue.PRIMA_TOTAL)
+				.replace("A.N.A.###Compañía###de###Seguros", "A.N.A. Compañía de Seguros");
 
 		try {
 			modelo.setTipo(1);
@@ -78,7 +81,7 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Nombre")
 							&& newcontenido.split("\n")[i].contains("Contratante")
 							&& newcontenido.split("\n")[i].contains("Dirección")) {
-						modelo.setCteNombre(newcontenido.split("\n")[i + 1].replace("###", "").trim());
+						modelo.setCteNombre(newcontenido.split("\n")[i + 1].replace("###", " ").trim());
 
 						if (newcontenido.split("\n")[i + 3].contains("Duración:")) {
 							direccion.append(newcontenido.split("\n")[i + 4]);
@@ -173,11 +176,15 @@ public class AnaAutosModelRoja {
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
 					}
 
+					
 					if (newcontenido.split("\n")[i].contains("Prima Neta:")
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL)) {
+							
 						modelo.setPrimaneta(fn.castBigDecimal(fn
 								.preparaPrimas(newcontenido.split("\n")[i].split("Prima Neta:")[1].split(ConstantsValue.PRIMA_TOTAL)[0]
 										.replace("###", ""))));
+					
+						
 						modelo.setPrimaTotal(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL)[1].replace("###", ""))));
 					}
@@ -250,12 +257,26 @@ public class AnaAutosModelRoja {
 			inicio = contenido.indexOf("Coberturas Amparada");
 			fin = contenido.indexOf("A.N.A. Compañía de Seguros");
 
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				newcontenido = newcontenido.replace("Responsabilidad Civil Catastrófica por Muerte a Terceras Daños\n a Terceros en sus Personas", "Responsabilidad Civil Catastrófica por Muerte a Terceras Daños a Terceros en sus Personas")
-						.replace("Responsabilidad Civil Motociclista, Ciclista y-o Conductor\n Carrito de Golf", "Responsabilidad Civil Motociclista, Ciclista y-o Conductor Carrito de Golf");
+						.replace("Responsabilidad Civil Motociclista, Ciclista y-o Conductor\n Carrito de Golf", "Responsabilidad Civil Motociclista, Ciclista y-o Conductor Carrito de Golf")
+						.replace("1###Daños###Materiales", "Daños Materiales")
+						.replace("2###Robo###Total", "Robo Total")
+						.replace("3###Responsabilidad###Civil###Daños###a###Terceros", "Responsabilidad Civil Daños a Terceros")
+						.replace("4###Gastos###Médicos###al###Conductor", "Gastos Médicos al Conductor")
+						.replace("5###Defensa###Juridica###y###Asistencia###Legal", "Defensa Juridica y Asistencia Legal")
+						.replace("14###ANA###Asistencia", "ANA Asistencia")
+						.replace("16###Responsabilidad###Civil###Viajero", "Responsabilidad Civil Viajero")
+						.replace("27###Desbielamiento###por###Penetración###de###Agua###al###Motor", "Desbielamiento por Penetración de Agua al Motor")
+						.replace("31###Responsabilidad###Civil###Catastrófica###por###Muerte###a###Terceras###Daños ", "Responsabilidad Civil Catastrófica por Muerte a Terceras Daños")
+						.replace("a###Terceros en sus###Personas###", "a Terceros en sus Personas")
+						.replace("", "")
+						;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
 					if (!newcontenido.split("\n")[i].contains("Unidad de Medida") &&
@@ -264,7 +285,7 @@ public class AnaAutosModelRoja {
 						!newcontenido.split("\n")[i].contains("Las sumas aseguradas de RC") && 
 						!newcontenido.split("\n")[i].contains("Aplican condiciones generales") && 
 						!newcontenido.split("\n")[i].contains("Coberturas Amparadas")) {
-						
+
 						int sp = newcontenido.split("\n")[i].split("###").length;
 						switch (sp) {
 						case 2:case 3:
