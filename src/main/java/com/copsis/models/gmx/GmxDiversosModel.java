@@ -33,13 +33,16 @@ public class GmxDiversosModel {
 			modelo.setCia(17);
 
 			inicio = contenido.indexOf("POLIZA NUEVA");
+			if(inicio == -1){
+				inicio = contenido.indexOf("OFICINA");
+			}
 			fin = contenido.indexOf("Descripción de Bienes");
+
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-			
 					if (newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("RENOVACIÓN")) {
 						modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[3].trim());
 					}
@@ -121,10 +124,7 @@ public class GmxDiversosModel {
 			if(modelo.getFechaEmision().length() == 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
-//			if(modelo.getVigenciaDe().length() >  0  && modelo.getVigenciaDe().length() >  0  ){
-//				modelo.setFechaVence(fn.calcfechavence(modelo.getVigenciaDe(), fechavenci));
-//			}
-//			
+
 
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("En cumplimiento ");
@@ -183,6 +183,10 @@ public class GmxDiversosModel {
 			
 			inicio = contenido.indexOf("Riesgos Cubiertos ");
 			fin = contenido.indexOf("Para Mercancías usada");
+			if(inicio ==-1 && fin ==-1){							
+				inicio = contenido.indexOf("Riesgos Cubiertos ");
+				fin = contenido.indexOf("Para Mercancías usada");
+			}
 			
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
