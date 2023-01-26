@@ -284,7 +284,9 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA AIG
-			if (!encontro && contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")) {
+			if (!encontro && contenido.contains("AIG Seguros") || contenido.contains("www.aig.com.mx")
+			|| contenido.contains("AIG Seguros México, S.A. de C.V.")) {
+			
 				// www.AIG.com.mx
 				AigModel datosAig = new AigModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAig.procesar();
