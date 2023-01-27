@@ -40,13 +40,18 @@ public class GnpVIdaModel2 {
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(18);
+		
 			
 			inicio =contenido.indexOf("Vigencia Versión");
 			fin  = contenido.indexOf("Moneda");
+			if(inicio == -1){
+				inicio =contenido.indexOf("Vigencia Póliza");
+			}
 
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 		
-			if (inicio > -1 || fin > -1 || inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+			
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					
 					if(newcontenido.toString().split("\n")[i].contains("Desde el")) {						
@@ -486,7 +491,12 @@ public class GnpVIdaModel2 {
 			}
 			
 			if(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].length() > 100) {
-				modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+				if(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].length()> 50) {
+					modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].substring(0,12).replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+				}else{
+					modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+				}
+				
 			}else {
 				modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].replace("###", "").trim());	
 			}
@@ -690,10 +700,17 @@ public class GnpVIdaModel2 {
 				
 			}
 
+			if(modelo.getFechaEmision().length()> 0 && modelo.getVigenciaDe().length() == 0 && modelo.getVigenciaA().length() == 0){
+             modelo.setVigenciaDe(modelo.getFechaEmision());
+			 modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			}
+
 			return modelo;
 		} catch (Exception ex) {
+
 			modelo.setError(
 					GnpVIdaModel2.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+		
 			return modelo;
 		}
 	}
