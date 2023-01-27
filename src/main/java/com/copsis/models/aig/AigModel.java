@@ -31,10 +31,14 @@ public class AigModel {
 			if(tipo == 5 && contenido.contains("NÚMERO DE UBICACIÓN")) {
 				tipo = 4;
 			}
+			if(tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SEGURO DE AUTOMÓVILES RESIDENTES")) {
+				tipo = 1;
+			}
+
 			
 			switch (tipo) {
 			case 1:// Autos
-				modelo  = new AigAutosModel(fn.caratula(1, 4, stripper, doc)).procesar();	
+				modelo  = new AigAutosModel().procesar(fn.caratula(1, 4, stripper, doc));
 				break;
 			case 2:// salud
 			
