@@ -89,7 +89,7 @@ public class AnaAutosModelRoja {
 							if (newcontenido.split("\n")[i + 5].contains("Fecha de Expedición")) {
 								direccion.append(newcontenido.split("\n")[i + 4].split("Fecha")[0]);
 							}
-							modelo.setCteDireccion(direccion.toString().replace("###", ""));
+							modelo.setCteDireccion(direccion.toString().replace("###", " ").replace("Fecha de Expedición Desde Hasta", "").trim());
 						}
 					} else {
 						if (newcontenido.split("\n")[i].contains("Nombre")
@@ -190,7 +190,7 @@ public class AnaAutosModelRoja {
 					}
 					if (newcontenido.split("\n")[i].contains("Descripción:")) {
 						modelo.setDescripcion(
-								newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", "").trim());
+								newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", " ").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("No.Motor:")
 							&& newcontenido.split("\n")[i].contains("Capacidad:")
