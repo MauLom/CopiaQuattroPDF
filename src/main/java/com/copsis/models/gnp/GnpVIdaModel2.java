@@ -710,7 +710,7 @@ public class GnpVIdaModel2 {
 
 			modelo.setError(
 					GnpVIdaModel2.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-				ex.printStackTrace();
+		
 			return modelo;
 		}
 	}
