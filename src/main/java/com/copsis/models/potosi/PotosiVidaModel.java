@@ -110,6 +110,10 @@ public class PotosiVidaModel {
 			
 			inicio = contenido.indexOf("Suma Asegurada");
 			fin = contenido.indexOf("Las primas de protección");
+			if(fin == -1){
+				 fin = contenido.indexOf("Seguros el Potosí, S.A.");
+			}
+
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("PAGO DE LA SUMA ASEGURADA POR INVALIDEZ", "PAGO DE LA SUMA ASEGURADA POR INVALIDEZ TOTAL Y PERMANENTE")
 			.replace("EXENCIÓN DE PAGO DE PRIMAS POR", "EXENCIÓN DE PAGO DE PRIMAS POR INVALIDEZ TOTAL Y PERMANENTE"));
