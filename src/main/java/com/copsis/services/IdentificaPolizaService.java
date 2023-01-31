@@ -35,6 +35,7 @@ import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.planSeguro.PlanSeguroModel;
 import com.copsis.models.potosi.PotosiModel;
+import com.copsis.models.prevem.PrevemModel;
 import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
@@ -460,7 +461,12 @@ public class IdentificaPolizaService {
         	   ThonaModel thonaModel = new ThonaModel(pdfStripper, pdDoc, contenido);
                  modelo = thonaModel.procesar();
                  encontro = true;  
-             }
+            }
+
+			if(!encontro && contenido.contains("Prevem Seguros, S.A. de C.V.")){
+				modelo   = new PrevemModel().procesar(pdfStripper, pdDoc, contenidoAux);
+				encontro = true;  
+			}
            
          
 			if (!encontro) {
