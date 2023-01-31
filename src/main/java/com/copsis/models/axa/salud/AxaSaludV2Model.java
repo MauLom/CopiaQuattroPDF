@@ -317,6 +317,7 @@ public class AxaSaludV2Model {
                             .replace("R ###odriguez", "Rodriguez")
                             .replace("T###i tular", "Titular###")
                     
+                            .replace("H###e###r m###ano", "Hermano")
                             .replace("H ###ijo", "###Hijo###")
                             .replace(" ###", "")
                             .replace("###0###", "###0")
@@ -377,6 +378,7 @@ public class AxaSaludV2Model {
                                 asegurado.setAntiguedad(
                                         fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[5].replace(" ", "")));
                                 asegurado.setFechaAlta(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[8]));
+                                
                                 asegurado.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("###")[9])));
 
                                 asegurados.add(asegurado);
@@ -490,6 +492,8 @@ public class AxaSaludV2Model {
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
                                         + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
+
+                                     
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
@@ -707,7 +711,6 @@ public class AxaSaludV2Model {
 
             return modelo;
         } catch (Exception ex) {        
-
             modelo.setError(
                     AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
             return modelo;
