@@ -816,7 +816,6 @@ public class qualitasAutosModel {
                         modelo.setSerie(vehiculoDatos.toString().split("\n")[i].split("Serie:")[1].split("Motor:")[0].trim());
                         modelo.setMotor(vehiculoDatos.toString().split("\n")[i].split("Motor:")[1].split("Placas:")[0].trim().replace("###", ""));
                         if(vehiculoDatos.toString().split("\n")[i].split("Moto")[1].length() >6 && vehiculoDatos.toString().split("\n")[i].split("Placa")[1].length() >10) {
-							System.out.println(vehiculoDatos.toString().split("\n")[i]);
                             modelo.setPlacas(vehiculoDatos.toString().split("\n")[i].split("Placas:")[1]);
                         }
                         
