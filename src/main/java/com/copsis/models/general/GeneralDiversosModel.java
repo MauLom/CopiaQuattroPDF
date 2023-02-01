@@ -21,7 +21,7 @@ public class GeneralDiversosModel {
 
         contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
         try {
-            modelo.setTipo(1);
+            modelo.setTipo(7);
             modelo.setCia(16);
 
             inicio = contenido.indexOf("PÓLIZA DEL SEGURO");
