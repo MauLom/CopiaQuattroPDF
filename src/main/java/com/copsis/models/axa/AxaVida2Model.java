@@ -243,13 +243,11 @@ public class AxaVida2Model {
 				
 				    if( resultado.toString().split("\n")[i].contains("Fecha de nacimiento:")) {
 				        String fechacmineto=resultado.toString().split("\n")[i].split("nacimiento:")[1].replace("###", "").trim().replace("DE", "").replace("  ", "-");				      
-System.out.println(fechacmineto);
 				       asegurado.setNacimiento(fn.formatDateMonthCadena(fechacmineto));
 				    }
 
 					if( resultado.toString().split("\n")[i].contains("Fecha de nacimiento:") && resultado.toString().split("\n")[i].contains("Sexo")) {
 				        String fechacmineto=resultado.toString().split("\n")[i].split("nacimiento:")[1].split("Sexo")[0].replace("###", "").trim().replace("DE", "").replace("  ", "-");				      
-System.out.println(fechacmineto);
 				       asegurado.setNacimiento(fn.formatDateMonthCadena(fechacmineto));
 				    }
 
