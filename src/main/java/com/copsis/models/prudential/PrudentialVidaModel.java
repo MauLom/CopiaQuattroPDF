@@ -172,14 +172,11 @@ public class PrudentialVidaModel {
 				}
 			}
 			modelo.setBeneficiarios(beneficiarios);
-		
-			
-			
 
 			return modelo;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return modelo;
+		} catch (Exception ex) {
+			modelo.setError(PrudentialVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
+				return modelo;
 		}
 	}
 
