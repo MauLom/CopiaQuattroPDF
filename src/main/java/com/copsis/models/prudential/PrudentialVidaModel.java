@@ -156,15 +156,13 @@ public class PrudentialVidaModel {
 			inicio = contenido.indexOf("BENEFICIARIO");
 			fin = contenido.indexOf("Advertencia");
 			newcontenido = new StringBuilder();
-			newcontenido.append(fn.extracted(inicio, fin, contenido)
-			.replace("MARIA DEL PILAR GARCIA ###PAEZ", "MARIA DEL PILAR GARCIA PAEZ"));
+			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();				
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 				
 				if(newcontenido.toString().split("\n")[i].length() > 5 && !newcontenido.toString().split("\n")[i].contains("Parentesco") && !newcontenido.toString().split("\n")[i].contains("identificación")
-						) {
-							
+						) {							
 					 beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
 					 beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
 					beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
