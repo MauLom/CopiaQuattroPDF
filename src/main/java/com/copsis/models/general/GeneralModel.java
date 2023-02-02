@@ -23,6 +23,10 @@ public class GeneralModel {
 			if(contenido.contains("MARÍTIMO Y TRANSPORTES-CARGA ESPECÍFICA")) {
 				tipo =4;
 			}
+
+			if(contenido.contains("PAQUETE EMPRESARIAL")) {
+				tipo =4;
+			}
 			
 			 switch (tipo) {
 			 case 1:
@@ -32,7 +36,12 @@ public class GeneralModel {
 				 modelo = new GeneralSaludModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
 				 break;
 		     case 4:
-				 modelo = new GeneralDiversosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				if(contenido.contains("PAQUETE EMPRESARIAL")) {
+					modelo = new GeneralDiversosAModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				}else{
+					modelo = new GeneralDiversosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
+				}
+			
 				 break;	 
 			 }
 					
