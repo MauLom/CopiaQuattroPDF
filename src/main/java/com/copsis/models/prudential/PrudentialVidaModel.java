@@ -11,6 +11,8 @@ import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+import net.bytebuddy.dynamic.loading.PackageDefinitionStrategy.Definition.Undefined;
+
 public class PrudentialVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -35,7 +37,7 @@ public class PrudentialVidaModel {
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				
+
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i].contains("Póliza No.")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
 				modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza No.")[1].replace("###", "").trim());
@@ -63,7 +65,9 @@ public class PrudentialVidaModel {
 			if(contenido.contains("del ASEGURADO")) {
 				for(String linea: contenido.substring((contenido.indexOf("del ASEGURADO")-80),contenido.indexOf("del ASEGURADO")).split("\n")) {
 					for(String palabra: linea.split(" ")) {
-						 palabra =palabra.replace("###", "");
+						 palabra =palabra.replace("domicilio", "")
+						 .replace("Nombre", "").replace("###", "");
+						
 						if(palabra.matches("^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$")) {
 							modelo.setCurp(palabra);	
 						}	
@@ -88,10 +92,15 @@ public class PrudentialVidaModel {
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Edad") && newcontenido.toString().split("\n")[i].contains("Sexo")
 				 && newcontenido.toString().split("\n")[i].contains("nacimiento")) {
-					asegurado.setEdad(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()));
-				
+					
+					if(newcontenido.toString().split("\n")[i+1].contains("Fem")){
+						asegurado.setEdad(Integer.parseInt(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]).get(0)));
+					}else{
+						asegurado.setEdad(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()));
+					}									
 					asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()) ? 1:0);
-					asegurado.setNacimiento(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[4].trim()));
+				
+					asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
 					
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Forma de pago") && newcontenido.toString().split("\n")[i].contains("Moneda")
@@ -155,22 +164,28 @@ public class PrudentialVidaModel {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 				
 				if(newcontenido.toString().split("\n")[i].length() > 5 && !newcontenido.toString().split("\n")[i].contains("Parentesco") && !newcontenido.toString().split("\n")[i].contains("identificación")
-						) {
-					beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
+						) {							
+					 beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
 				
-					beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
-					beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[3].trim()));
-					beneficiarios.add(beneficiario);					
+					if(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].trim()) == null){
+						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
+						beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[3].trim()));
+					}else{
+						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
+
+						beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
+					}
+				
+					 beneficiarios.add(beneficiario);					
 				}
 			}
 			modelo.setBeneficiarios(beneficiarios);
-		
-			
-			
 
 			return modelo;
-		} catch (Exception e) {
-			return modelo;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			modelo.setError(PrudentialVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
+				return modelo;
 		}
 	}
 
