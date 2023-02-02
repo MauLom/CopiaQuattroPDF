@@ -40,7 +40,8 @@ public class AxaVida2Model {
 				.replace("Carátula de póliza ", "CARATULA DE POLIZA")
 				.replace("Contratante", "contratante")
 				.replace("JESU S", "JESUS")
-				.replace("Coberturas amparadas", "Coberturas Amparadas").replace("Beneficiarios nombre", "Beneficiarios Nombre");
+				.replace("Coberturas amparadas", "Coberturas Amparadas").replace("Beneficiarios nombre", "Beneficiarios Nombre")
+				.replace("Fecha de Nacimiento", "Fecha de nacimiento:");
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(20);
@@ -227,11 +228,28 @@ public class AxaVida2Model {
 						asegurado.setNombre(resultado.toString().split("\n")[i+2].split("Nombre:")[1].split("Plazo")[0].replace("###", "").trim());    
 					}
 					
-
 				 }
+				 if(asegurado.getNombre().length() == 0 && resultado.toString().split("\n")[i].contains("Datos del Asegurado")){
+					
+					String str = resultado.toString().split("\n")[i+1].split("Nombre")[1].replace("###", "").trim();
+					
+					if(str.contains(",")) {
+						asegurado.setNombre((str.split(",")[1] +" " +str.split(",")[0]).trim());
+					}else {
+					 asegurado.setNombre(str);
+					}
+					
+				 }
+				
 				    if( resultado.toString().split("\n")[i].contains("Fecha de nacimiento:")) {
 				        String fechacmineto=resultado.toString().split("\n")[i].split("nacimiento:")[1].replace("###", "").trim().replace("DE", "").replace("  ", "-");				      
+System.out.println(fechacmineto);
+				       asegurado.setNacimiento(fn.formatDateMonthCadena(fechacmineto));
+				    }
 
+					if( resultado.toString().split("\n")[i].contains("Fecha de nacimiento:") && resultado.toString().split("\n")[i].contains("Sexo")) {
+				        String fechacmineto=resultado.toString().split("\n")[i].split("nacimiento:")[1].split("Sexo")[0].replace("###", "").trim().replace("DE", "").replace("  ", "-");				      
+System.out.println(fechacmineto);
 				       asegurado.setNacimiento(fn.formatDateMonthCadena(fechacmineto));
 				    }
 
