@@ -11,6 +11,8 @@ import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+import net.bytebuddy.dynamic.loading.PackageDefinitionStrategy.Definition.Undefined;
+
 public class PrudentialVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -164,8 +166,16 @@ public class PrudentialVidaModel {
 				if(newcontenido.toString().split("\n")[i].length() > 5 && !newcontenido.toString().split("\n")[i].contains("Parentesco") && !newcontenido.toString().split("\n")[i].contains("identificación")
 						) {							
 					 beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
-					 beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
-					beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
+				
+					if(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].trim()) == null){
+						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
+						beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[3].trim()));
+					}else{
+						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
+
+						beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
+					}
+				
 					 beneficiarios.add(beneficiario);					
 				}
 			}
@@ -173,6 +183,7 @@ public class PrudentialVidaModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(PrudentialVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
 				return modelo;
 		}
