@@ -110,15 +110,30 @@ public class AlliansSaludModel {
 					}
 			 }
 			 
-
+			 newcont = new StringBuilder();
 			 inicio =  contenido.indexOf("Cobertura Básica");
 			 fin = contenido.indexOf("Beneficios y Coberturas");
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
 				 newcont = new StringBuilder();
 				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 			 }
-			 
-			 
+
+			 for (int i = 0; i < newcont.toString().split("\n").length; i++) {
+				
+				if(newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i].contains("Contratada")){
+								modelo.setCveAgente(fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1]).get(0));
+					if(newcont.toString().split("\n")[i+2].contains("%") && newcont.toString().split("\n")[i+2].split("###").length == 7){
+						modelo.setAgente(
+							(newcont.toString().split("\n")[i+1].split(modelo.getCveAgente())[1] +" "+
+						newcont.toString().split("\n")[i+2].split("###")[4] +" "+
+						newcont.toString().split("\n")[i+2].split("###")[5]).trim()
+						);
+					}
+					
+				}
+			 }
+			
+			 newcont = new StringBuilder();
 			 inicio =  contenido.indexOf("Otras Coberturas");
 			 fin = contenido.indexOf("En caso de contratarse");
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
