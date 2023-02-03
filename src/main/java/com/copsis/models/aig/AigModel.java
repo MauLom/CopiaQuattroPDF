@@ -39,7 +39,7 @@ public class AigModel {
 				tipo = 4;
 			}
 
-			System.out.println(fn.caratula(1, 4, stripper, doc));
+		
 			
 			switch (tipo) {
 			case 1:// Autos
