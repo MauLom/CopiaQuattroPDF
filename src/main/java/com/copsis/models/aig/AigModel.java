@@ -35,6 +35,11 @@ public class AigModel {
 				tipo = 1;
 			}
 
+			if(tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("NÚMERO DE UBICACIÓN")) {
+				tipo = 4;
+			}
+
+		
 			
 			switch (tipo) {
 			case 1:// Autos
