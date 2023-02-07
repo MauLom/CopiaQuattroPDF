@@ -42,8 +42,11 @@ public class SuraModel {
 				if(tipo == 2 && contenido.contains("Múltiple Empresarial Riesgos")) {
 					tipo =4;
 				}
+				if(tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("Múltiple Empresarial Riesgos")) {
+					tipo =4;
+				}
 
-
+         
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			case 1://Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
@@ -54,9 +57,7 @@ public class SuraModel {
 					modelo  = new SuraAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();					
 				break;
 			case 2://Salud
-				 if(fn.caratula(1, 1, stripper, doc).contains("Desde las")) {
-					 
-				 }else {
+				 if(!fn.caratula(1, 1, stripper, doc).contains("Desde las")) {
 						modelo  = new SuraSaludBModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				 }
 							
