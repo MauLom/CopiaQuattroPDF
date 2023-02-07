@@ -98,7 +98,8 @@ public class SuraDiversosModel {
 				if (newcontenido.toString().split("\n")[i].contains("CONSTRUCCIÓN")) {
 					ubicacion.setMuros(1);
 				}
-				if (newcontenido.toString().split("\n")[i].contains("Pisos:")) {
+				if (newcontenido.toString().split("\n")[i].contains("Pisos:") && fn.isNumeric(newcontenido.toString().split("\n")[i].split("Pisos:")[1].split("###")[1])) {
+			
 					ubicacion.setNiveles(
 							fn.castInteger(newcontenido.toString().split("\n")[i].split("Pisos:")[1].split("###")[1]));
 				}
