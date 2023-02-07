@@ -69,8 +69,7 @@ public class primeroAutosModel {
 	                            modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[1].replace("-", ""));
 	                            modelo.setPolizaGuion(newcontenido.split("\n")[i + 1].split("###")[1]);
 	                        }
-	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {
-								System.out.println(fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].split("###")[1]));
+	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {								
 	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].split("###")[1].trim()).get(0)));
 	                            modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].split("###")[3].trim()).get(0)));	                      
 	                            modelo.setFechaEmision( ( modelo.getVigenciaDe().trim().length() >  0  ? modelo.getVigenciaDe():""));
