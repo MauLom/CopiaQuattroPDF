@@ -27,6 +27,7 @@ public class primeroAutosModel {
 		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("12 Hrs", "");
+
 		try {
 
 			modelo.setCia(49);
@@ -68,9 +69,9 @@ public class primeroAutosModel {
 	                            modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[1].replace("-", ""));
 	                            modelo.setPolizaGuion(newcontenido.split("\n")[i + 1].split("###")[1]);
 	                        }
-	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {
-	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[1].trim()));
-	                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[3].trim()));	                      
+	                        if (newcontenido.split("\n")[i + 1].split("###")[1].split("-").length > 2) {								
+	                            modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].split("###")[1].trim()).get(0)));
+	                            modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].split("###")[3].trim()).get(0)));	                      
 	                            modelo.setFechaEmision( ( modelo.getVigenciaDe().trim().length() >  0  ? modelo.getVigenciaDe():""));
 	                        } else {
 	                        	if( newcontenido.split("\n")[i + 1].split("###").length > 2 && newcontenido.split("\n")[i + 1].split("-").length > 3) {
@@ -168,6 +169,10 @@ public class primeroAutosModel {
 	                    }
 	                }
 	            }
+
+				if(modelo.getMotor().equalsIgnoreCase(modelo.getSerie())){
+                modelo.setMotor("");
+				}
 		      
 		      
 		       inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA");
