@@ -83,7 +83,7 @@ public class AxaDiversos2Model {
                        
                     }
 
-                    if (newcontenido.split("\n")[i].contains("Hasta")) {                      
+                    if (newcontenido.split("\n")[i].contains("Hasta") && newcontenido.split("\n")[i].split("Hast")[1].length()> 8) {                                          
                         modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("###", "").trim()));
                         modelo.setFechaEmision(modelo.getVigenciaDe());
                     }
