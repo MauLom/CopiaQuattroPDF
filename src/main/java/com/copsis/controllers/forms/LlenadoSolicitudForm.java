@@ -1,6 +1,5 @@
 package com.copsis.controllers.forms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.clients.projections.ContratanteProjection;
