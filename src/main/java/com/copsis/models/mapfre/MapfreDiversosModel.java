@@ -153,7 +153,7 @@ public class MapfreDiversosModel {
 				if (inicio > -1) {
 					resultado = fn.gatos(newcontenido.substring(inicio + 6, newcontenido.indexOf("\r\n", inicio + 6))
 							.replace(":", "").replace(" ", ""));
-					modelo.setRfc(resultado);
+					modelo.setRfc(resultado.replace("\r\n", ""));
 				}
 			}
 
@@ -163,7 +163,7 @@ public class MapfreDiversosModel {
 
 				if (inicio > -1 && inicio < fin) {
 					String texto = contenido.substring(inicio, fin).replace("C.P", "C/P");
-					modelo.setRfc(texto.split("R.F.C")[1].split("C/P")[0].replace("###", "").replace(":", "").trim());
+					modelo.setRfc(texto.split("R.F.C")[1].split("C/P")[0].replace("###", "").replace(":", "").replace("@@@", "").replace("\r\n", "").trim());
 				}
 			}
 
@@ -343,7 +343,7 @@ public class MapfreDiversosModel {
 				if (newcontenido.split("\r\n").length == 2) {
 					newcontenido = newcontenido.split("\r\n")[1];
 					if (newcontenido.split("###").length == 2) {
-						modelo.setPlan(newcontenido.split("###")[1].replace("\"", "").replace("@@@", "").trim());
+						modelo.setPlan(newcontenido.split("###")[1].replace("\"", "").replace("@@@", "").replace("\r\n", "").trim());
 					}
 				}
 			} else {
@@ -364,8 +364,8 @@ public class MapfreDiversosModel {
 
 			if (modelo.getPlan().length() == 0 && contenido.contains("PÓLIZA-ENDOSO")) {
 				String texto = contenido.split("PÓLIZA-ENDOSO")[0].replace("@@@", "").trim();
-				if (texto.length() > 0) {
-					modelo.setPlan(texto);
+				if (texto.length() > 0 && texto.split("\n").length > 0) {
+					modelo.setPlan(texto.split("\n")[0].replace("\r", ""));
 				}
 			}
 
@@ -375,16 +375,26 @@ public class MapfreDiversosModel {
 			if(inicio == -1) {
 			    inicio = inicontenido.indexOf("SUMA ASEGURADA    LIMITE MAXIMO");
 			}
+			if(inicio == -1) {
+			    inicio = inicontenido.indexOf("SUMA ASEGURADA### DEDUCIBLES");
+			}
+			if(fin == -1) {
+			    fin = inicontenido.indexOf("VALOR PARA SEGURO");
+			}
+		
+		
 	
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
+			
 				resultado = "";
 				for (String x : newcontenido.split("\r\n")) {
 					if (!x.contains("BIENES Y RIESGOS CUBIERTOS") && !x.contains("---") && !x.contains("DEDUCIBLE")) {
 						resultado = fn.gatos(x.replaceAll("  +", "###").trim());
 						resultado = resultado.replace("A.###MIN", "A. MIN").replace("###DSMG", " DSMG")
-								.replace(".###MIN", ". MIN").replace(".###MAX", ". MAX");
+								.replace(".###MIN", ". MIN").replace(".###MAX", ". MAX")
+								.replace("###$###", "###$");
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
 						switch (resultado.split("###").length) {
@@ -404,6 +414,7 @@ public class MapfreDiversosModel {
 							coberturas.add(cobertura);
 							break;
 						case 4:
+						
 							cobertura.setNombre(resultado.split("###")[0].trim());
 							cobertura.setSa(resultado.split("###")[1].trim());
 							cobertura.setDeducible(resultado.split("###")[2].trim());
@@ -754,6 +765,7 @@ public class MapfreDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(MapfreDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
@@ -892,11 +904,11 @@ public class MapfreDiversosModel {
 					String aux = arrContenido[i].split("I.V.A")[1].replace("###", "").replace(":", "").trim();
 					model.setIva(fn.castBigDecimal(fn.preparaPrimas(aux)));
 				} else if (arrContenido[i].contains("FRACCIONADO") && arrContenido[i].contains("PRIMA TOTAL")) {
-					String aux = arrContenido[i].split("FRACCIONADO")[1].split("PRIMA TOTAL")[0].replace("###", "")
-							.replace(":", "").trim();
-					model.setRecargo(fn.castBigDecimal(fn.preparaPrimas(aux)));
-					aux = arrContenido[i].split("PRIMA TOTAL")[1].replace("###", "").replace(":", "").trim();
-					model.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(aux)));
+			
+
+							List<String> valores = fn.obtenerListNumeros( arrContenido[i]);	
+							modelo.setRecargo(fn.castBigDecimal(fn.cleanString(valores.get(0))));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(valores.get(1))));
 				}
 			}
 		}

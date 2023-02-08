@@ -66,12 +66,11 @@ public class MapfreModel {
 			if( tipo == 0 &&contenido.contains("Gastos Hospitalarios")) {
 			    tipo =2;
 			}
-			 if( tipo == 1 &&contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")) {
+			 if( tipo == 1 &&contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")|| contenido.contains("PÓLIZA ESPECIFICA POR VIAJE")) {
 	                tipo =4;
-	            }
-			
+	          }
+			//PÓLIZA ESPECIFICA POR VIAJE
 
-			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
 			
 	
@@ -100,7 +99,7 @@ public class MapfreModel {
 				
 				break;
 			case 4://Diversos
-				modelo = new MapfreDiversosModel(fn.caratula(1, 39, stripper, doc),"","").procesar();
+				modelo = new MapfreDiversosModel(fn.caratula(1, 10, stripper, doc),"","").procesar();
 				break;
 			case 5://vida
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
