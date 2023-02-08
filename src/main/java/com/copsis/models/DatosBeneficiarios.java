@@ -1,6 +1,5 @@
 package com.copsis.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection;

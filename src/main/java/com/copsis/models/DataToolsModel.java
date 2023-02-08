@@ -1230,15 +1230,13 @@ public class DataToolsModel {
 	
 	  public String formatDate(String formatear) {
 	        {
-	            String str_date = formatear.replaceAll("/", "-");
 	            String resul = "";
-	            String rtfecha = "";
-	            String day = "";
+	    
 	            try {
 	                DateFormat formatter;
 	                Date date;
 	                formatter = new SimpleDateFormat("yy-MM-dd");
-	                date = formatter.parse(str_date);
+	                date = formatter.parse(formatear.replaceAll("/", "-"));
 	                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	                resul = simpleDateFormat.format(date).toUpperCase();
 	                return resul.toString();

@@ -3,7 +3,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.copsis.controllers.forms.PdfNegocioForm;
 import com.copsis.controllers.forms.PdfForm;
+import com.copsis.controllers.forms.PdfNegocioForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.CopsisResponse;

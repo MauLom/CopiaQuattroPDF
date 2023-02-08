@@ -1,7 +1,5 @@
 package com.copsis.clients.projections;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
