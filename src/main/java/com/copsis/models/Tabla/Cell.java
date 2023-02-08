@@ -664,12 +664,7 @@ public class Cell <T extends PDPage> {
 	     * copied.
 	     */
 	    public void copyCellStyle(Cell sourceCell) {
-	        // Boolean leftBorder = this.leftBorderStyle == null;
-	        // setBorderStyle(sourceCell.getTopBorder());
-	        // if (leftBorder) {
-	        // this.leftBorderStyle = null;// if left border wasn't set, don't set
-	        // // it now
-	        // }
+	   
 	        this.font = sourceCell.getFont();// otherwise paragraph gets invalidated
 	        this.fontBold = sourceCell.getFontBold();
 	        this.fontSize = sourceCell.getFontSize();
@@ -713,17 +708,7 @@ public class Cell <T extends PDPage> {
 	        return true;
 	    }
 
-//	    public void setWidth(float width) {
-//	        this.width = width;
-//	    }
-//
-//	    public float getLineSpacing() {
-//	        return lineSpacing;
-//	    }
-//
-//	    public void setLineSpacing(float lineSpacing) {
-//	        this.lineSpacing = lineSpacing;
-//	    }
+
 	    
 
 }

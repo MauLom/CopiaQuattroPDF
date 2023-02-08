@@ -1,14 +1,13 @@
 package com.copsis.models.Tabla;
 
 import org.apache.pdfbox.pdmodel.PDPage;
-///import pdftool.image.Image;
 public class ImageCell<T extends PDPage> extends Cell<T> {
 	
 private Image img;
 	
-	private final HorizontalAlignment align;
+	  HorizontalAlignment align;
 	
-	private final VerticalAlignment valign;
+	  VerticalAlignment valign;
 
 	ImageCell(Row<T> row, float width, Image image, boolean isCalculated) {
 		super(row, width, null, isCalculated);
