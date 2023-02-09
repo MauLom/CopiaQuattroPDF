@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.Integral.IntegralSeguroModel;
 import com.copsis.models.aba.AbaModel;
 import com.copsis.models.afirme.AfirmeModel;
 import com.copsis.models.aguila.AguilaModel;
@@ -467,13 +468,18 @@ public class IdentificaPolizaService {
 				modelo   = new PrevemModel().procesar(pdfStripper, pdDoc, contenidoAux);
 				encontro = true;  
 			}
-           
+			if(!encontro && contenido.contains("Integralaccess")){
+				modelo   = new IntegralSeguroModel().procesar(pdfStripper, pdDoc, contenidoAux);
+				encontro = true;  
+			}
+          
          
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
 				modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " | "
 						+ "No se logró identificar el PDF.");
 			}
+
 		
 			pdDoc.close();
 
