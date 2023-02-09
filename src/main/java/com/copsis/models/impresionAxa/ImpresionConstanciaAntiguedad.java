@@ -1,9 +1,7 @@
 package com.copsis.models.impresionAxa;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.net.URL;
 
 import javax.imageio.ImageIO;

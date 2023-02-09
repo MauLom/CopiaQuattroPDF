@@ -341,7 +341,7 @@ public class AxaVida2Model {
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-				List<EstructuraCoberturasModel> coberturas2 = new ArrayList<>();
+			
 			
 		
 				if(cob.length()> 0){

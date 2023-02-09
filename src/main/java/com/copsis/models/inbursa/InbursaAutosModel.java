@@ -18,12 +18,12 @@ public class InbursaAutosModel {
 	// Varaibles
 	private String contenido = "";
 
-	private String recibosText = "";
+	
 	private static final String POLIZA_REGEX = "(PÓLIZA \\s*(\\w{5} \\w{8}))";
 
 	public InbursaAutosModel(String contenido, String recibos) {
 		this.contenido = contenido;
-		this.recibosText = recibos;
+
 	}
 
 	public EstructuraJsonModel procesar() {

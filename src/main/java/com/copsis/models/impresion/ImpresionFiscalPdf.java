@@ -3,7 +3,6 @@ package com.copsis.models.impresion;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -14,15 +13,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.json.JSONObject;
 import org.json.JSONArray;
-
+import org.json.JSONObject;
 
 import com.copsis.controllers.forms.ImpresionFiscalForm;
-import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
-import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 import com.copsis.models.Tabla.VerticalAlignment;
@@ -38,10 +34,7 @@ public class ImpresionFiscalPdf {
 	private Color azul = new Color(41, 67, 191,1);
 	private final Color bgColor = new Color(255, 255, 255, 0);
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
-	private float fullWidth = 542;
-	private float y = 0;
-	private float margin = 40;
-	private boolean acumula;
+
 	public byte[] buildPDF(ImpresionFiscalForm  impresionFiscalForm ) {
 		ByteArrayOutputStream output;
 		try {
@@ -64,13 +57,7 @@ public class ImpresionFiscalPdf {
 					
 					BaseTable table;
 					Row<PDPage> baseRow;
-					
-					BaseTable table2;
-					Row<PDPage> baseRow2;
-					
-					BaseTable table3;
-					Row<PDPage> baseRow3;
-					
+			
 					
 //					table2 = new BaseTable(yStart, yStartNewPage, 0, 630, -10, document, page, true,true);
 //					baseRow2 = communsPdf.setRow(table2, 799);

@@ -2,7 +2,6 @@ package com.copsis.models.impresion ;
 
     import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.File;
 import java.text.DateFormatSymbols ;
 import java.text.DecimalFormat;
 import java.text.ParseException ;
@@ -47,11 +46,11 @@ import com.copsis.models.Tabla.setCellRow;
         private float fullWidth = 556;
         private float fullWidthx = 0;
         private float ypos;
-        private float ypos2 =0;
         private Boolean acumula;
         private Boolean acumula2;
         private boolean domcex;
         private boolean domiciCte;
+        private float ypos2 =0;
 
         public byte[] buildPDF(ImpresionAxaVidaForm impresionAxaVidaForm) {
             ByteArrayOutputStream output;

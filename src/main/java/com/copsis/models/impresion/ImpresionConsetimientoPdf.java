@@ -2,7 +2,6 @@ package com.copsis.models.impresion;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.DateFormatSymbols;
@@ -17,7 +16,6 @@ import java.util.Locale;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 
 import com.copsis.clients.projections.PaqueteCoberturaProjection;
 import com.copsis.controllers.forms.ImpresionForm;
@@ -27,7 +25,6 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ImpresionConsetimientoPdf {
 	private Color black = new Color(0, 0, 0);

@@ -15,8 +15,7 @@ public class InbursaVidaBModel {
 	
 	public EstructuraJsonModel procesar(String contenido) {
 
-		 String resultado = "";
-		boolean iva = false;
+	
 		StringBuilder newcontenido = new StringBuilder();
 		StringBuilder newdire = new StringBuilder();		
 		int inicio = 0;

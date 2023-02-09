@@ -3,8 +3,6 @@ package com.copsis.models.axa;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.Banner.Mode;
-
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;

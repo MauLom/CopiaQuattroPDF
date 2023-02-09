@@ -2,7 +2,6 @@ package com.copsis.models.constancia;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.copsis.controllers.forms.PdfForm;

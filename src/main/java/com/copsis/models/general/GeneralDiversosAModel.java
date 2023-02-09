@@ -16,7 +16,7 @@ public class GeneralDiversosAModel {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
-		StringBuilder newdireccion = new StringBuilder();
+	
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
         try {
             modelo.setTipo(7);
