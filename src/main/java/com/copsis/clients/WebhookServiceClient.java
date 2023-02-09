@@ -31,6 +31,8 @@ public class WebhookServiceClient {
         try {
             OkHttpClient client = new OkHttpClient();
             String url = gatewayURL.concat("/crm/webhooks/send/".concat(type.value));
+            System.out.println("url " + url);
+            System.out.println("obj " + obj.toString());
             
             RequestBody body = null;
             if (obj != null) body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
