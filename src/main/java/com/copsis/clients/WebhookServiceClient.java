@@ -24,15 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class WebhookServiceClient {
-	@Value("${gateway-url}")
+	@Value("${serviceUrl.quattro-crm.baseURL}")
 	private String gatewayURL;
 	
 	public JSONObject send(JSONObject obj, WebhookType type) throws SException {
         try {
             OkHttpClient client = new OkHttpClient();
             String url = gatewayURL.concat("/crm/webhooks/send/".concat(type.value));
-            System.out.println("url " + url);
-            System.out.println("obj " + obj.toString());
             
             RequestBody body = null;
             if (obj != null) body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
