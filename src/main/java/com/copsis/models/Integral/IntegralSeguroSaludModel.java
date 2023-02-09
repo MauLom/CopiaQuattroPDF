@@ -68,7 +68,7 @@ public class IntegralSeguroSaludModel {
 
             inicio = contenido.indexOf("DESCRIPCIÓN DE LA PÓLIZA");
 			fin = contenido.indexOf("COBERTURAS INCLUIDAS");	
-       System.out.println(inicio +" "+ fin );
+
 
             newcontenido = new StringBuilder();		
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
@@ -113,10 +113,10 @@ public class IntegralSeguroSaludModel {
             newcontenido = new StringBuilder();		
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
-            System.out.println(newcontenido.toString().split("\n")[i]);
+            
                 if(newcontenido.toString().split("\n")[i].contains("EXPEDICIÓN")){
                     List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
-                    System.out.println(valores);
+            
                     modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
                     modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(4))));
                      modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
