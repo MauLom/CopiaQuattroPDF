@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class WebhookServiceClient {
-	@Value("${gateway-url}")
+	@Value("${serviceUrl.quattro-crm.baseURL}")
 	private String gatewayURL;
 	
 	public JSONObject send(JSONObject obj, WebhookType type) throws SException {
