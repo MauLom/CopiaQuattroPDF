@@ -23,7 +23,7 @@ public class AfirmeAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			int splitxt = 0;
+
 			StringBuilder newcontenidotx= new StringBuilder();
 			StringBuilder newdireccion = new StringBuilder();
 			String newcontenido = "";

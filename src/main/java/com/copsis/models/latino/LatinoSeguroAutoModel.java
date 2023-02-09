@@ -69,8 +69,7 @@ public class LatinoSeguroAutoModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
 				
-					if(newcontenido.toString().split("\n")[i].contains("COBERTURA")) {
-						System.out.println(newcontenido.toString().split("\n")[i]);
+					if(newcontenido.toString().split("\n")[i].contains("COBERTURA")) {						
 						modelo.setPlan(newcontenido.toString().split("\n")[i].split("COBERTURA")[1].replace("\r", "").trim());
 					}
 					
