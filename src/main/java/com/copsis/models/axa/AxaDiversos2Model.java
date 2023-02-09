@@ -51,7 +51,7 @@ public class AxaDiversos2Model {
             if (inicio > -1 && fin > -1 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
          
-                for (int i = 0; i < newcontenido.split("\n").length; i++) {;
+                for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i+1].contains("Nombre")) {
                         modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1]);
 
