@@ -419,16 +419,18 @@ public class IdentificaPolizaService {
                     encontro = true;
                }
                
-//             
+           
                //ENTRADA PARA PRUDENTIAL
                if(!encontro && contenido.contains("Prudential Seguros")) {
             	   PrudentialModel datosPlan = new PrudentialModel(pdfStripper, pdDoc, contenido);
                    modelo = datosPlan.procesar();
                    encontro = true;  
                }
-               if(!encontro && contenido.contains("Aguila Compañía de Seguros")) {
+               //ENTRADA PARA Aguila
+               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || contenido.contains("Águila, Compañía de Seguros, S.A. de C.V."))) {
             	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
                    modelo = datosAguila.procesar();
+				   encontro = true;  
                }
             
                //ENTRADA PARA Latinoamericana
