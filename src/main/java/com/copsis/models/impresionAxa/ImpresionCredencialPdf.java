@@ -126,8 +126,7 @@ public class ImpresionCredencialPdf {
         try (PDPageContentStream content = new PDPageContentStream(document, page)) {
             BaseTable table;
             Row<PDPage> baseRow;
-             BaseTable table2;
-             Row<PDPage> baseRow2;
+   
             yStart = 160;
 
             if ( impresionAxa.getLogoCredencial() !=null &&impresionAxa.getLogoCredencial().length() > 0) {

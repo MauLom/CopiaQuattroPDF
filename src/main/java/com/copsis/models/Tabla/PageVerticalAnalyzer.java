@@ -229,8 +229,7 @@ public class PageVerticalAnalyzer  extends PDFGraphicsStreamEngine {
 	    }
 
 	    @Override
-	    public void shadingFill(COSName shadingName) throws IOException {
-	        // TODO Auto-generated method stub
+	    public void shadingFill(COSName shadingName) throws IOException {	
 	    }
 
 	    Point2D currentPoint = null;

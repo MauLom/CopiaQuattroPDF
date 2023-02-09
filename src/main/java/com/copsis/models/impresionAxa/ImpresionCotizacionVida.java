@@ -32,7 +32,6 @@ public class ImpresionCotizacionVida {
 	private final Color bgColorgris = new Color(109, 120, 136, 0);
 	private final Color bgColorA = new Color(0, 44, 134, 0);
 	private float margin = 10, yStartNewPage = 1150, yStart = 1150, bottomMargin = 130;
-	private float fullWidth = 590;
 	private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
 	private DataToolsModel fn = new DataToolsModel();
 

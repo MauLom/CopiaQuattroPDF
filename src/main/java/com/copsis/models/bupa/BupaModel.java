@@ -5,7 +5,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.panAmerican.PanAmericanSaludModel;
 
 public class BupaModel {
 

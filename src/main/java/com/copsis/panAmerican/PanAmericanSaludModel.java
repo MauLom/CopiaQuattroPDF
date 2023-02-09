@@ -8,7 +8,6 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.latino.LatinoSeguroAutoModel;
 
 public class PanAmericanSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
@@ -18,7 +17,7 @@ public class PanAmericanSaludModel {
 	   	int inicio = 0;
 			int fin = 0;
 			StringBuilder newcontenido = new StringBuilder();
-			String direccion = "";
+	
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
 			

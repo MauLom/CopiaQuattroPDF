@@ -1,7 +1,6 @@
 package com.copsis.models.allians;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -12,7 +11,7 @@ import com.copsis.models.EstructuraUbicacionesModel;
 public class AllianasDiversosBModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
-	private String contenido = "";
+
 	
 	public  EstructuraJsonModel procesar(String contenido) {
 		StringBuilder direccion = new StringBuilder();

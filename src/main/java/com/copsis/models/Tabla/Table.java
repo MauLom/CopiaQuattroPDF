@@ -18,8 +18,6 @@ import org.apache.pdfbox.util.Matrix;
 
 import lombok.Data;
 
-import org.apache.pdfbox.pdmodel.PDPage;
-
 
 @Data
 public abstract class Table <T extends PDPage>  {
@@ -463,7 +461,7 @@ public abstract class Table <T extends PDPage>  {
                     // calculate the width of this line
                     float freeSpaceWithinLine = cell.getParagraph().getMaxLineWidth()
                             - cell.getParagraph().getLineWidth(entry.getKey());
-                    //TODO: need to implemented rotated text yo!
+      
                     if (cell.isTextRotated()) {
                         cursorY = lineStartY;
                         switch (cell.getAlign()) {
@@ -644,7 +642,6 @@ public abstract class Table <T extends PDPage>  {
 
         float xStart = margin;
 
-        float xEnd = row.xEnd();
 
         Iterator<Cell<T>> cellIterator = row.getCells().iterator();
         while (cellIterator.hasNext()) {
@@ -784,7 +781,7 @@ public abstract class Table <T extends PDPage>  {
     }
 
     private void checkNotNull(T currentPage2, String string) {
-        // TODO Auto-generated method stub
+       
 
     }
 

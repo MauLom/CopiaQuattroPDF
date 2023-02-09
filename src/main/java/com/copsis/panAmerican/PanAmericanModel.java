@@ -5,7 +5,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.bexmas.BexmasModel;
 
 public class PanAmericanModel {
 	private DataToolsModel fn = new DataToolsModel();

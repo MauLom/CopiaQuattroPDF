@@ -16,8 +16,7 @@ public class ZurichModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private Integer pagIni =0;
-	private Integer pagFin =0;
+	
 
 	public ZurichModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
@@ -27,7 +26,6 @@ public class ZurichModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-
 			int tipo = fn.tipoPoliza(contenido);
 			if(tipo == 0 && contenido.contains("Ubicación del riesgo:")) {
 				tipo =4;

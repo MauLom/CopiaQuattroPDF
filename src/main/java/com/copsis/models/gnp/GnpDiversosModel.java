@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
-import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;

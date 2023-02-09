@@ -276,8 +276,7 @@ public class Paragraph {
 	                                    String tabBullet = getAlign().equals(HorizontalAlignment.LEFT) ? indentLevel(DEFAULT_TAB * Math.max(listLevel - 1, 0)) + indentLevel(BULLET_SPACE) : indentLevel(DEFAULT_TAB);
 	                                    textInLine.push(currentFont, fontSize, new Token(TokenType.PADDING,
 	                                            String.valueOf(font.getStringWidth(tabBullet) / 1000 * getFontSize())));
-	                                } catch (IOException e) {
-	                                    // TODO Auto-generated catch block
+	                                } catch (IOException e) {	                                
 	                                    e.printStackTrace();
 	                                }
 	                            }

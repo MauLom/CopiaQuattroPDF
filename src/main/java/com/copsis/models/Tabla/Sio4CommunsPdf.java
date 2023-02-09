@@ -493,8 +493,6 @@ public class Sio4CommunsPdf {
                 .replaceAll("\u0009", " ");
         String pattern = "<([a-z]+)([^<]*)>|</([a-z]+)>";
         Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(value);
-
         return value.replaceAll("&nbsp;", " ");
     }
 
