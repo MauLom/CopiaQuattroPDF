@@ -28,7 +28,13 @@ public class PrimeroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			switch (fn.tipoPoliza(contenido)) {
+			
+			int tipo = fn.tipoPoliza(contenido);
+			if(tipo ==1 && fn.caratula(1, 3, stripper, doc).contains("PRODUCTO EMPRESARIAL")){
+				tipo=4;
+			}
+			switch (tipo
+			) {
 			case 1:// Autos
 	
 				if(contenido.contains("Motor") || contenido.contains("Serie")) {
