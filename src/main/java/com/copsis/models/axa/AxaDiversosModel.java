@@ -26,7 +26,7 @@ public class AxaDiversosModel {
 		String textbusq = "";
 		int inicio = 0;
 		int fin = 0;
-		
+		Boolean txtcon = false;
 		String newcontenido = "";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("D omicilio:", ConstantsValue.DOMICILIO).replace("F RESNOS", "FRESNOS")
@@ -58,7 +58,7 @@ public class AxaDiversosModel {
 					fin  = contenido.indexOf("Paquete contratado:");//se usa para version 2
 				}
 			}
-			
+		
 			
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);

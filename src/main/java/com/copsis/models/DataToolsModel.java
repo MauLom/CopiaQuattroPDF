@@ -1048,7 +1048,7 @@ public class DataToolsModel {
 	
 	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
-		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA",
+		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA","ANNUAL",
 				"ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R", "SEMESTRALS-R",
 				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
 				"TRIMESTRAL12MESES", "TRIM.S/REC","TRIM.S-REC","TRIM.C-REC","TRIM.C/REC", "MENS", "MEN.", MENSUAL, "MENSUALSINRPF", "MENSUALSRDERP",
@@ -1068,6 +1068,7 @@ public class DataToolsModel {
 				case "UNICA":
 				case "ANUALMENTE":
 				case "ANUAL EXTENDIDA":
+				case "ANNUAL":
 					dato = 1;
 					break;
 				case "SEME":

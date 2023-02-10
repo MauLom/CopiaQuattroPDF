@@ -89,11 +89,14 @@ public class AxaModel {
 						
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
-							 
-							AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
-							modelo = datosAxaDiversos.procesar();
-							div0 = true;
-						
+							 if(fn.caratula(1, pagFinal, stripper, doc).contains("Insured's data")){
+								modelo = new AxaDiversos3Model().procesar(fn.caratula(1, pagFinal, stripper, doc));
+								div0 = true;
+							 }else{
+								AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
+								modelo = datosAxaDiversos.procesar();
+								div0 = true;
+							 }
 							break;
 						   case "RESPONSABILIDAD CIVIL, COMERCIO":// HOGAR
 						   case "PROTECCIÓN A BIENES EMPRESARIALES":
