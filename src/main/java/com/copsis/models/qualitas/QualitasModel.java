@@ -63,11 +63,11 @@ public class QualitasModel {
 								modelo = datosQualitasAutos.procesar(fn.caratula(2, 3, stripper, doc));
 						}else{
 							if(fn.caratula(3, 4, stripper, doc).contains("DESCRIPCIÓN DEL VEHÍCULO ASEGURADO")) {
-								qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
+								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
 										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
 								modelo = datosQualitasAutos.procesar();
 							}else {
-								qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
+								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
 										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(5, 6, stripper, doc),fn.caratula(1, 8, stripper, doc));
 								modelo = datosQualitasAutos.procesar();
 							}
@@ -76,7 +76,7 @@ public class QualitasModel {
 						
 						
 					} else {
-						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
+						QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
 						modelo = datosQualitasAutos.procesar();
 					}
 				}

@@ -1,7 +1,6 @@
 package com.copsis.models.qualitas;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.copsis.constants.ConstantsValue;
@@ -10,16 +9,14 @@ import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
 
-
-public class qualitasAutosModel {
-
-	private DataToolsModel fn = new DataToolsModel();
+public class QualitasAutosModel {
+    private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
 	private String cbo = "";
 	private String cotxtra = "";
 
-	public qualitasAutosModel(String contenido,String coberturas,String cotxtra) {
+	public QualitasAutosModel(String contenido,String coberturas,String cotxtra) {
 		this.contenido = contenido;
 		this.cbo = coberturas;
 		this.cotxtra=cotxtra;
@@ -1038,9 +1035,9 @@ public class qualitasAutosModel {
 		} catch (Exception ex) {
 		    ex.printStackTrace();
 			modelo.setError(
-					qualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+					QualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 	}
-
+    
 }
