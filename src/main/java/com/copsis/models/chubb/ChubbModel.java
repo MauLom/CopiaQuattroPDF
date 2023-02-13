@@ -28,7 +28,6 @@ public class ChubbModel {
 			if(fn.caratula(1, 1, pdfStripper, pdDoc).contains("CONTENIDO###NUMERACIÓN")) {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
-			System.out.println(contenido);
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
