@@ -1353,6 +1353,16 @@ public class DataToolsModel {
 			
 			return resultado;
 		}
+		public List<String> vigenciaUsa(String cadena) {
+			List<String> resultado = new ArrayList<>();
+			Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_USA).matcher(cadena);
+			while (m.find()) {
+				resultado.add(m.group());
+			}
+			
+			return resultado;
+		}
+	
 	
 		
 		public String obtenerMes(String texto) {
