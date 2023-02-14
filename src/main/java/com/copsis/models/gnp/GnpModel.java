@@ -74,7 +74,8 @@ public class GnpModel {
 					modelo = new GnpDiversosModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 1).procesar();
 				}
-			} else if (contenido.contains("Póliza de Seguro de Daños") || contenido.contains("Daños")) {
+			} else if (contenido.contains("Póliza de Seguro de Daños") || contenido.contains("Daños")
+			) {
 
 				if(contenido.contains("Póliza Multiple")){
 					modelo = new GnpDiversosBModelo(fn.caratula(1, 12, stripper, doc),
@@ -88,13 +89,13 @@ public class GnpModel {
 				}
 				
 			}
-			
+	
+			//|| contenido.contains("ESPECIFICACIÓN DEL GIRO")
 			//proceso para cuando no se pudo  indentificar ,aplica para pdfs de Gnp SEGURO HOGAR VERSATIL
 			if(modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("CARACTERÍSTICAS###DEL###RIESGO")
 			|| modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("Especificaciones###del###Giro")
-			) {
-				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();
-			
+			|| modelo.getTipo() == 0 && contenido.contains("ESPECIFICACIÓN DEL GIRO")) {	
+				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();			
 			}
 			
 	
