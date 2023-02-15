@@ -194,7 +194,6 @@ public class HdiAutosBModel {
 	
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(HdiAutosBModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			 return modelo;
 		}
