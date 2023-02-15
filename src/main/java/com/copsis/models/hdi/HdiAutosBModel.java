@@ -16,27 +16,45 @@ public class HdiAutosBModel {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+		.replace("Descripción###Límite###de###Responsabilidad", "Descripción###Límite de Responsabilidad")
+		.replace("responsabilidad###máxima", "responsabilidad máxima.")
+		.replace("MESES###SIN###INTERESES", "MESES SIN INTERESES")
+		.replace("Art.###25°###de###la###Ley", "Art.25° de la Ley");
 		
 		try {
 			
 			modelo.setTipo(1);
 			modelo.setCia(14);
-
 			inicio = contenido.indexOf("Ramo:");
 			fin = contenido.indexOf("Descripción###Límite de Responsabilidad");
+	
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
+			
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
-					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1]);
-					modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2]);				
+					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
+					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
+						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+4].replace("###", " "));			
+					}else {
+						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2]);			
+					}
+
 					if(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(1).length()  == 5) {
 						modelo.setCp(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(1));
 					}
 				 }
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Licencia:") && newcontenido.toString().split("\n")[i].contains("expedición de licencia")) {					
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Licencia:")[0].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Vigencia:") ) {					
+					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Vigencia:")[0].replace("###", "").trim());
+					if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size()> 1){
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
+					}
+					
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Agente:") && newcontenido.toString().split("\n")[i].contains("Vigencia")) {			
 					modelo.setCveAgente(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("Agente:")[1].split("Vigencia:")[0].replace("###","").trim()).get(0));
@@ -57,6 +75,11 @@ public class HdiAutosBModel {
 					modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie:")[1].split("Placas")[0].replace("###", "").trim());	
 					modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placas:")[1].split("Remolque")[0].replace("###", "").trim());	
 				}
+				if(newcontenido.toString().split("\n")[i].contains("Serie:") && newcontenido.toString().split("\n")[i].contains("Cilindros") 
+				) {	
+					modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie:")[1].split("Cilindros")[0].replace("###", "").trim());	
+					
+				}
 				if(newcontenido.toString().split("\n")[i].contains("Paquete:")) {
 					modelo.setPlan( newcontenido.toString().split("\n")[i].split("Paquete:")[1].split("###")[0].trim());
 				}
@@ -73,16 +96,31 @@ public class HdiAutosBModel {
 			
 			inicio  = contenido.indexOf("Descripción###Límite de Responsabilidad");
 			fin = contenido.indexOf("Prima Neta");
+			if(fin == -1){
+				fin = contenido.indexOf("MESES SIN INTERESES");
+			}
+
 		
 			newcontenido = new StringBuilder(); 
-			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			newcontenido.append( fn.extracted(inicio, fin, contenido)
+			.replace("Daños###Materiales", "Daños Materiales")
+			.replace("Robo###Total", "Robo Total")
+			.replace("Gastos###Médicos###Ocupantes", "Gastos Médicos Ocupantes (Límite Único Combinado)")
+			.replace("Accidentes###Automovilísticos###al###Conductor", "Accidentes Automovilísticos al Conductor")
+			.replace("Responsabilidad###Civil###Límite###Único###y###Combinado", "Responsabilidad Civil (Límite Único y Combinado)")
+			.replace("Responsabilidad###Civil###Exceso###por###Muerte###de###Terceros", "Responsabilidad Civil Exceso por Muerte de Terceros")
+			.replace("Asistencia###Jurídica", "Asistencia Jurídica")
+			.replace("Responsabilidad###Civil###Familiar", "Responsabilidad Civil Familiar")
+			.replace("Asistencia###en###viajes", "Asistencia en viajes")
+			.replace("Asistencia###Médica", "Asistencia Médica")
+			.replace("Responsabilidad###Civil###por###daños###a###los###Ocupantes", "Responsabilidad Civil por daños a los Ocupantes")
+			.replace("Asistencia###Funeraria", "Asistencia Funeraria"));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-		
-			
+					
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("Descripción")) {
-				
+			
 					int sp =newcontenido.toString().split("\n")[i].split("###").length;
 					switch(sp) {
 					case  2:
@@ -102,12 +140,20 @@ public class HdiAutosBModel {
 			
 			modelo.setCoberturas(coberturas);
 			
+			
 			inicio = contenido.indexOf("Prima Neta");
+			if(inicio == -1){
+				inicio = contenido.indexOf("MESES SIN INTERESES");
+			}
 			fin  = contenido.indexOf("Póliza Extranjera");
-		
+
+			if(fin == -1){
+				fin = contenido.indexOf("Art.25° de la Ley");
+			}
 		
 			newcontenido = new StringBuilder(); 
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
+			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				if(newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
 					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
@@ -115,6 +161,13 @@ public class HdiAutosBModel {
 					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(1))));
 					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(2))));
 					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Total")) {
+					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);				
+            		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
+					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
 				}
 			}
 	
@@ -141,6 +194,7 @@ public class HdiAutosBModel {
 	
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(HdiAutosBModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			 return modelo;
 		}
