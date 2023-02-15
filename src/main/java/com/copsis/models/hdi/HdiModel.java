@@ -24,8 +24,8 @@ public class HdiModel {
 	public EstructuraJsonModel procesar() {
 		try {
 	
-	
-			int tipo = fn.tipoPoliza(contenido);
+
+			int tipo = fn.tipoPoliza(fn.caratula(1, 2, stripper, doc));
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}
@@ -33,8 +33,9 @@ public class HdiModel {
 			switch (tipo) {
 			case 1:
 			
-				if(contenido.contains("AUTOS TURISTAS")) {
-				    modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
+				if(contenido.contains("AUTOS TURISTAS") || contenido.contains("VEHICULOS RESIDENTES GLM PLUS")) {
+				
+				   modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
 
 				}else {
 					
