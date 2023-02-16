@@ -172,28 +172,19 @@ public class BexmasAutosModel {
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					
 					if(newcont.toString().split("\n")[i].contains("Prima neta:")) {
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("neta:")[1].replace("###", "").trim())));
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
-					if(newcont.toString().split("\n")[i].contains("Prima neta")) {
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("neta")[1].replace("###", "").trim())));
-					}
+				
 					if(newcont.toString().split("\n")[i].contains("Recargos:")) {					
-						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Recargos:")[1].replace("###", "").trim())));
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
-					
-					if(newcont.toString().split("\n")[i].contains("Recargos") && modelo.getRecargo().doubleValue() == 0) {					
-						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Recargos")[1].replace("###", "").trim())));
-					}
-					
-					
 					if(newcont.toString().split("\n")[i].contains("Derechos:")){
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Derechos:")[1].replace("###", "").trim())));
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
 					}
-					
-					if(newcont.toString().split("\n")[i].contains("Derechos") && modelo.getDerecho().intValue() == 0){
-						
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Derechos")[1].replace("###", ""))));
-					}
+				
 					
 					if(newcont.toString().split("\n")[i].contains("I.V.A:")){		
 						modelo.setIva(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("I.V.A:")[1].replace("###", "").trim())));
