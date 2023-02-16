@@ -11,8 +11,6 @@ import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
-import net.bytebuddy.dynamic.loading.PackageDefinitionStrategy.Definition.Undefined;
-
 public class PrudentialVidaModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();

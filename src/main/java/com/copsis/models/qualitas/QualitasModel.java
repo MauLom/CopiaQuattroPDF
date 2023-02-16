@@ -33,10 +33,11 @@ public class QualitasModel {
 				contenido = fn.textoBusqueda(stripper, doc, "Placas", false);
 			}
 		
-			if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")) {
+			if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")
+			|| contenido.contains("TOURIST VEHICLE POLICY")) {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
-
+	
 			
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
 					if(doc.getPages().getCount() >= 3) {
@@ -57,20 +58,25 @@ public class QualitasModel {
 				}else {
 					
 					if (pagIni < pagFin) {
-					
-						if(fn.caratula(3, 4, stripper, doc).contains("DESCRIPCIÓN DEL VEHÍCULO ASEGURADO")) {
-							qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
-									fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
-							modelo = datosQualitasAutos.procesar();
-						}else {
-							qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(
-									fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(5, 6, stripper, doc),fn.caratula(1, 8, stripper, doc));
-							modelo = datosQualitasAutos.procesar();
-						}
+						if(fn.caratula(2, 2, stripper, doc).contains("Modelo")){
+							QualitasAutosUsaModel datosQualitasAutos = new 	QualitasAutosUsaModel();
+								modelo = datosQualitasAutos.procesar(fn.caratula(2, 3, stripper, doc));
+						}else{
+							if(fn.caratula(3, 4, stripper, doc).contains("DESCRIPCIÓN DEL VEHÍCULO ASEGURADO")) {
+								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
+										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
+								modelo = datosQualitasAutos.procesar();
+							}else {
+								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
+										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(5, 6, stripper, doc),fn.caratula(1, 8, stripper, doc));
+								modelo = datosQualitasAutos.procesar();
+							}
+							
+						}         
 						
 						
 					} else {
-						qualitasAutosModel datosQualitasAutos = new qualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
+						QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
 						modelo = datosQualitasAutos.procesar();
 					}
 				}
