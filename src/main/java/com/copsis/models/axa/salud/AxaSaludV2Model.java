@@ -482,7 +482,7 @@ public class AxaSaludV2Model {
                             }
 
                             if (x == 15) {
-System.out.println( newcontenido.split("\n")[i]);
+
                                 nombre = newcontenido.split("\n")[i].replace("A ###", "A").split("###")[0]
                                         .replace("@@@", "").trim();
                                 if (nombre.contains(", ")) {
@@ -493,9 +493,7 @@ System.out.println( newcontenido.split("\n")[i]);
 
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
-                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
-
-                                     System.out.println("==>" +fechaN);
+                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");                            
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
