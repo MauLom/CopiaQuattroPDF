@@ -318,8 +318,11 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA PRIMERO SEGUROS
-			if (!encontro && contenido.contains("PRIMERO SEGUROS S.A. de C.V.")
-					|| contenido.contains("Primero Seguros S.A. De C.V.")) {
+			if (!encontro && contenido.contains("PRIMERO SEGUROS S.A. de C.V.") || contenido.contains("PRIMERO SEGUROS S.A. de C.V.")
+					|| contenido.contains("Primero Seguros S.A. De C.V.")
+					) {
+		
+				
 				PrimeroModel datosPrimero = new PrimeroModel(pdfStripper, pdDoc, contenido);
 				modelo = datosPrimero.procesar();
 				encontro = true;
