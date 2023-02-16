@@ -48,6 +48,11 @@ public class GnpDiversosCModelo {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 					}
 				
+					if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains("Desde")) {								
+						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+				     	modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1]);
+					}
+
 					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 						if(modelo.getRfc().contains("Teléfono")) {
@@ -105,6 +110,10 @@ public class GnpDiversosCModelo {
 					if(newcontenido.toString().split("\n")[i].contains("Importe") &&  newcontenido.toString().split("\n")[i].contains("Pagar") ) {	
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Pagar")[1].replace("###", "").trim())));
 					}
+					
+					if(modelo.getCp().length() == 0 & newcontenido.toString().split("\n")[i].contains("C.P.") ) {			
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().substring(0,5).toString());
+					}
 
 				}
 				
@@ -157,6 +166,10 @@ public class GnpDiversosCModelo {
 				if(fin == -1) {
 					fin = contenido.indexOf("Fecha convencional");
 				}
+				if(fin == -1) {
+					fin = contenido.indexOf("Fecha retroactiva");
+				}
+
 
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -295,8 +308,7 @@ public class GnpDiversosCModelo {
 		
 	
 			 return modelo;
-		} catch (Exception e) {
-	
+		} catch (Exception e) {	
 			modelo.setError(GnpDiversosCModelo.this.getClass().getTypeName()+ " | "+e.getMessage()+" | "+e.getCause());
 			return modelo; 
 		}
