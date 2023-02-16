@@ -35,7 +35,6 @@ public class ChubbModel {
 			 boolean encontro = false;
 			for (String tipo : tipos) {			
 				if (contenido.contains(tipo) && !encontro) {
-					System.out.println("" + tipo);
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
 					case "TRANSPORTE DE CARGA":
