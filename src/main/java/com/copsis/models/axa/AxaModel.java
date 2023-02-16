@@ -88,11 +88,11 @@ public class AxaModel {
 						case "PLANPROTEGE / COMERCIO":
 						
 						// HOGAR
-							 int pagFinal = doc.getNumberOfPages() > 4 ? doc.getNumberOfPages() :3;
+							 int pagFinal = doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() :4;
 							 if(fn.caratula(1, pagFinal, stripper, doc).contains("Insured's data")){
 								modelo = new AxaDiversos3Model().procesar(fn.caratula(1, pagFinal, stripper, doc));
 								div0 = true;
-							 }else{
+							 }else{														
 								AxaDiversosModel datosAxaDiversos = new AxaDiversosModel(fn.caratula(1, pagFinal, stripper, doc));
 								modelo = datosAxaDiversos.procesar();
 								div0 = true;
