@@ -39,6 +39,11 @@ public class InbursaSaludModel {
          //Datos del Contratante
         inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
         fin = contenido.indexOf("En caso de siniestro");
+		if(fin == -1){
+			fin = contenido.indexOf("No. de Asegurado:");
+		}
+
+	
         if(inicio > 0 &&  fin >  0 && inicio < fin) {
         	newcontenido = contenido.substring(inicio, fin).replace("\r","").replace("@", "").replace("las 12:00 hrs. del", "");        
         	arrNewContenido = newcontenido.split("\n");
@@ -57,6 +62,11 @@ public class InbursaSaludModel {
         		leerProducto(arrNewContenido, renglon, i);
         	}
         }
+
+		if(modelo.getCp().length() == 0 && modelo.getCteDireccion().length() > 0 &&  modelo.getCteDireccion().contains("C.P.")) {
+			modelo.setCp(modelo.getCteDireccion().split("C.P.")[1].trim().substring(0,5));
+		}
+		
         
         
         inicio = contenido.indexOf("NOMBRE DEL AGENTE");
@@ -66,7 +76,7 @@ public class InbursaSaludModel {
         
         
         return modelo;
-	} catch (Exception ex) {
+	} catch (Exception ex) {	
 		modelo.setError(
 				InbursaSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 		return modelo;
@@ -75,12 +85,13 @@ public class InbursaSaludModel {
 	
 	}
 		
-	private void readPoliza(String[] arrNewContenido, String renglon, int i) {
-		
+	private void readPoliza(String[] arrNewContenido, String renglon, int i) {		
 		if (renglon.contains("Cliente") && renglon.contains("PÓLIZA") && renglon.contains("CIS")) {
 			modelo.setPoliza(arrNewContenido[i - 1].split("###")[0]);
 		}
-
+		if (renglon.contains("Cliente") && renglon.contains("Póliza") && renglon.contains("CIS")) {
+			modelo.setPoliza(arrNewContenido[i].split("Póliza")[1].split("CIS")[0].replace("###", "").trim());
+		}
 	}
 	
 	private void leerNombreCteyPrima(String renglon,String[] arrNewContenido, int i) {
@@ -106,22 +117,40 @@ public class InbursaSaludModel {
 	
 	private void leerRFC(String[] arrNewContenido,String renglon, int i) {
 		if(renglon.contains("R.F.C:")) {
-			modelo.setRfc(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -2]);
+			
+			if(arrNewContenido[i + 1].split("###").length > 1) {
+				modelo.setRfc(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -2]);
+			}
+			
 		}
 	}
 	
 	private void leerDerechoyCP(String[] arrNewContenido,String renglon, int i) {
-		if(renglon.contains("FINANCIAMIENTO")) {
-			modelo.setCp(arrNewContenido[i+1].split("C.P.")[1].split("###")[0].trim());
-			modelo.setDerecho(fn.castBigDecimal(fn.castDouble(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -1])));
+		
+		if(renglon.contains("FINANCIAMIENTO")) {		
+			if(arrNewContenido[i+1].split("###").length > 1) {
+				modelo.setCp(arrNewContenido[i+1].split("C.P.")[1].split("###")[0].trim());
+				modelo.setRecargo(fn.castBigDecimal(fn.castDouble(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -1])));
+			}
+	
+			if(arrNewContenido[i+2].split("###").length > 1) {
+				List<String> valores = fn.obtenerListNumeros(arrNewContenido[i+2]);
+				modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+			}
 		}
 	}
 	
 	private void leerMonedaYRecargo(String[] arrNewContenido,String renglon, int i) {
+		System.out.println(renglon);
 		if(renglon.contains("MONEDA:") && renglon.contains("GASTOS EXPEDICIÓN:")) {
 			modelo.setMoneda(fn.moneda( arrNewContenido[i+1].split("###")[0]));
-			modelo.setRecargo(fn.castBigDecimal(fn.castDouble(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -1])));
+			modelo.setDerecho(fn.castBigDecimal(fn.castDouble(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -1])));
 		}
+
+		// if(arrNewContenido[i+2].split("###").length > 1) {
+		// 	List<String> valores = fn.obtenerListNumeros(arrNewContenido[i+2]);
+		// 	modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+		// }
 	}
 	
 	private void leerFormaPagoIva(String[] arrNewContenido,String renglon, int i) {
