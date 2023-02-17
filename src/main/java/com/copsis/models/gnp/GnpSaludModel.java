@@ -350,10 +350,9 @@ public class GnpSaludModel {
 							break;
 						case 4:
 							
-
-							modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(dato.split(ConstantsValue.IVA)[1]).replace("16%", "").replace("###", "").trim()));
-						
-							 break;
+						List<String> valores = fn.obtenerListNumeros(dato);
+						modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							break;
 						default:
 							break;
 						}
@@ -1144,9 +1143,13 @@ public class GnpSaludModel {
 					}
 				}
 			}
+			
+			if(modelo.getDeducible().contains("Desde")) {
+             modelo.setDeducible("");
+			}
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(
 					GnpSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
