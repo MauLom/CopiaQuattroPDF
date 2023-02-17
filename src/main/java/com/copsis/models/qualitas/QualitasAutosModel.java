@@ -801,8 +801,8 @@ public class QualitasAutosModel {
                 }
     			
     			for (int i = 0; i < vehiculoDatos.toString().split("\n").length; i++) {
-                    if(i == 0) {
-                       modelo.setDescripcion(vehiculoDatos.toString().split("\n")[0].split("###")[1]);
+                    if(i == 0 && vehiculoDatos.toString().split("\n")[0].length() > 2) {						
+                       modelo.setDescripcion(vehiculoDatos.toString().split("\n")[0].replace("()", "###").split("###")[1]);
                     }
                     
                     if(vehiculoDatos.toString().split("\n")[i].contains("Modelo:") &&  vehiculoDatos.toString().split("\n")[i].contains("Color")) {                    
