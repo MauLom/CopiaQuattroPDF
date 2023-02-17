@@ -6,6 +6,7 @@ import java.util.List;
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class InbursaSaludModel {
@@ -73,7 +74,47 @@ public class InbursaSaludModel {
         
         leerInformacionAgente(inicio);           	             
         leerAsegurados();      
-        
+
+		   inicio  = contenido.indexOf("Cobertura básica");
+			fin = contenido.indexOf("COBERTURAS ADICIONALES");
+			StringBuilder	x = new StringBuilder(); 
+			x.append( fn.extracted(inicio, fin, contenido));
+
+		int	ix  = contenido.indexOf("Cobertura adicional");
+		int	f = contenido.indexOf("Página 1 de 4");
+
+		 if(ix > 0 && f > 0 && ix < f) {
+			x.append( fn.extracted(ix, f, contenido));
+		 }
+		 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+		for (int i = 0; i < x.toString().split("\n").length; i++) {		
+			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+
+			if(!x.toString().split("\n")[i].contains("Cobertura básica") 
+			&& ! x.toString().split("\n")[i].contains("Accidente")
+			&& ! x.toString().split("\n")[i].contains("Cubierta")
+
+			){
+
+				switch (newcontenido.toString().split("\n")[i].split("###").length) {
+					case 3:
+						cobertura.setNombre(x.toString().split("\n")[i].split("###")[0]);
+						cobertura.setSa(x.toString().split("\n")[i].split("###")[1]);
+						coberturas.add(cobertura);
+						break;
+					case 5:
+						cobertura.setNombre(x.toString().split("\n")[i].split("###")[0]);
+						cobertura.setSa(x.toString().split("\n")[i].split("###")[1]);
+						cobertura.setDeducible(x.toString().split("\n")[i].split("###")[2]);
+						coberturas.add(cobertura);
+						break;
+					default:
+						break;
+				}
+			}
+
+		}
+		modelo.setCoberturas(coberturas);
         
         return modelo;
 	} catch (Exception ex) {	
@@ -141,16 +182,21 @@ public class InbursaSaludModel {
 	}
 	
 	private void leerMonedaYRecargo(String[] arrNewContenido,String renglon, int i) {
-		System.out.println(renglon);
+
 		if(renglon.contains("MONEDA:") && renglon.contains("GASTOS EXPEDICIÓN:")) {
 			modelo.setMoneda(fn.moneda( arrNewContenido[i+1].split("###")[0]));
 			modelo.setDerecho(fn.castBigDecimal(fn.castDouble(arrNewContenido[i+1].split("###")[arrNewContenido[i+1].split("###").length -1])));
+		
+		
 		}
+		if(renglon.contains("MONEDA:") && renglon.contains("GASTOS DE EXPEDICIÓN:")) {
+			List<String> valores = fn.obtenerListNumeros(arrNewContenido[i+1]);
+			modelo.setMoneda(fn.buscaMonedaEnTexto( arrNewContenido[i+1]));
+			modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+		}
+		
 
-		// if(arrNewContenido[i+2].split("###").length > 1) {
-		// 	List<String> valores = fn.obtenerListNumeros(arrNewContenido[i+2]);
-		// 	modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-		// }
+		
 	}
 	
 	private void leerFormaPagoIva(String[] arrNewContenido,String renglon, int i) {
@@ -167,10 +213,20 @@ public class InbursaSaludModel {
 	}
 	
 	private void leerVigencia(String[] arrNewContenido,String renglon, int i) {
+
 		 if(renglon.contains("Desde") && renglon.contains(ConstantsValue.HASTA2) && renglon.contains("-")) { 
+		
    			modelo.setVigenciaDe(fn.formatDateMonthCadena(arrNewContenido[i].split("Desde")[1].split(ConstantsValue.HASTA2)[0].replace("###", "").trim()));
    			modelo.setVigenciaA(fn.formatDateMonthCadena(arrNewContenido[i].split(ConstantsValue.HASTA2)[1].split("###")[1].replace("###", "").trim()));
    		 }
+
+		if(renglon.contains("Desde") && renglon.contains("hasta") && renglon.contains("-")) { 
+		
+			modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza2(arrNewContenido[i].toUpperCase()).get(0)));
+			modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza2(arrNewContenido[i].toUpperCase()).get(1)));
+			modelo.setFechaEmision(modelo.getVigenciaDe());
+			
+			}
 	}
 	
 	private void leerProducto(String[] arrNewContenido,String renglon, int i) {
