@@ -316,7 +316,7 @@ public class AxaSaludV2Model {
                             .replace("H   i j o", "Hijo").replace("H###i j o", "Hijo").replace("H###i j a", "Hija")
                             .replace("R ###odriguez", "Rodriguez")
                             .replace("T###i tular", "Titular###")
-                    
+                          
                             .replace("H###e###r m###ano", "Hermano")
                             .replace("H ###ijo", "###Hijo###")
                             .replace(" ###", "")
@@ -332,6 +332,8 @@ public class AxaSaludV2Model {
                     for(String x:palabras) {
                         newcontenido = newcontenido.replace(x, x.substring(0, 5) + x.substring((x.length()-1), x.length()));
                     }
+                    newcontenido = newcontenido.replace("S###o###b###r ina", "Sobrina")
+                    .replace("S###o###b###r ino#","Sobrino");
                     //end fix parrafo listado de asegurados
                     for (int i = 0; i < newcontenido.split("\n").length; i++) {
                         EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
@@ -491,9 +493,7 @@ public class AxaSaludV2Model {
 
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
-                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");
-
-                                     
+                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");                            
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
@@ -706,11 +706,10 @@ public class AxaSaludV2Model {
                 recibo.setCargoExtra(modelo.getCargoExtra());
                 recibos.add(recibo);
             }
-
             modelo.setRecibos(recibos);
 
             return modelo;
-        } catch (Exception ex) {        
+        } catch (Exception ex) {     
             modelo.setError(
                     AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
             return modelo;
