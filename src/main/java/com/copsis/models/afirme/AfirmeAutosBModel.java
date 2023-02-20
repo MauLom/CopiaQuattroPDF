@@ -29,6 +29,7 @@ public class AfirmeAutosBModel {
 	public EstructuraJsonModel procesar() {
 		 String newcontenido = "";
 		 String newcontenidosp = "";
+         String nombreCte="";
 		 int inicio = 0;
 		 int fin = 0;
 		 boolean recargo= false;
@@ -96,8 +97,10 @@ public class AfirmeAutosBModel {
                     }
 
                     if (newcontenido.split("\n")[i].contains(ConstantsValue.CONTRATANTE) && newcontenido.split("\n")[i].contains("C.P:")) {
-                        if(newcontenido.split("\n")[i].split(ConstantsValue.CONTRATANTE)[1].split("C.P:")[0].trim().contains(",")) {
-                          	modelo.setCteNombre(
+                        if(newcontenido.split("\n")[i].split(ConstantsValue.CONTRATANTE)[1].split("C.P:")[0].trim().contains(",") &&
+                        newcontenido.split("\n")[i].split("Contratante:")[1].split(",")[1].length() > 20) {
+                 
+                            modelo.setCteNombre(
                           		(	newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[1] +" "
                           			+ newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P:")[0].trim().split(",")[0]).trim()
                           			);
@@ -112,10 +115,21 @@ public class AfirmeAutosBModel {
                         }
                    
                     }
+
+
+                    if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Nombre")) {
+                        nombreCte =  newcontenido.split("\n")[i].split("Nombre:")[1].trim();
+                       
+                    }
+
                 }
 
             }
             
+            if(modelo.getCteNombre().length()   <  10) {
+              modelo.setCteNombre(nombreCte);
+            }
+
             /*poliza*/
             inicio = contenido.indexOf("DATOS DEL VEHÍCULO");
             fin = contenido.indexOf("COBERTURAS ");
