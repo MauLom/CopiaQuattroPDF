@@ -27,7 +27,8 @@ public class AtlasAutosModel {
 		int inicio = 0;
 		int fin = 0;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-		contenido = contenido.replace("las 12:00 Hrs.del", "").replace("POLIZA", "PÓLIZA");
+		contenido = contenido.replace("las 12:00 Hrs.del", "").replace("POLIZA", "PÓLIZA")
+		.replace("Prima###Neta:", "Prima Neta:");
 		try {
 			// tipo
 			modelo.setTipo(1);
@@ -48,14 +49,11 @@ public class AtlasAutosModel {
 								.replace("-", "").replace(" ", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
-						modelo.setVigenciaDe(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
-										.replace("###", "").trim()));
-						modelo.setVigenciaA(
-								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0]
-										.replace("###", "").trim()));
-						modelo.setFechaEmision(fn.formatDateMonthCadena(
-								newcontenido.split("\n")[i].split("expedición:")[1].replace("###", "").trim()));
+						System.out.println(fn.obtenVigePoliza(newcontenido.split("\n")[i]));
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(1)));
+						modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(2)));
+				
 					}
 					if (newcontenido.split("\n")[i].contains("Contratante")
 							&& newcontenido.split("\n")[i].contains("Domicilio")
@@ -76,9 +74,12 @@ public class AtlasAutosModel {
 							&& newcontenido.split("\n")[i].contains("Prima Neta:")) {
 						modelo.setMoneda(fn.moneda(
 								newcontenido.split("\n")[i].split("Moneda:")[1].split("Prima")[0].replace("###", "")));
-						modelo.setPrimaneta(fn.castBigDecimal(
-								fn.castDouble(newcontenido.split("\n")[i].split("Neta:")[1].replace("###", ""))));
+
+								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+								modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+
 					}
+					System.out.println(newcontenido.toString().split("\n")[i]);
 					if (newcontenido.split("\n")[i].contains("Forma Pago:")
 							&& newcontenido.split("\n")[i].contains("Fraccionado")) {
 						modelo.setFormaPago(fn.formaPago(
