@@ -76,7 +76,8 @@ public class IdentificaPolizaService {
 			// CHUBB
 			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
 				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
-				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")      ) {
+				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.")      ) {
 				    
 				ChubbModel datosChubb = new ChubbModel(); 
 				datosChubb.setPdfStripper(pdfStripper);
@@ -381,11 +382,12 @@ public class IdentificaPolizaService {
             // ENTRADA PARA ALLIANZ
             if (!encontro && ( contenido.contains("Allianz México")
                         || contenido.contains("www.allianz.com.mx")
+						|| contenido.contains("Allianz México, S.A.")
                         || contenido.contains("MERCADO MEDIANO") //Plan Daños
                         || (contenido.contains("En el caso de que se desee nombrar beneficiarios a menores de edad") && !contenido.contains("prudential"))
                         || (contenido.contains("COBERTURAS CONTRATADAS") && contenido.contains("APORTACIONES COMPROMETIDAS")
 						|| rangoSimple(2, 5, pdfStripper, pdDoc).contains("ALLIANZ MEXICO, S.A.")              
-                        ))) {
+                        ))) {	
             	if( contenido.contains("THONA SEGUROS, S.A. DE C.V.")) {
             		 encontro = false;
             	}else {
