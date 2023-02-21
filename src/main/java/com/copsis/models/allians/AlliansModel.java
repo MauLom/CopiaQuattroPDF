@@ -49,6 +49,9 @@ public class AlliansModel {
 			}
 
 			switch (op) {
+				case 1:
+                    modelo = new AlliansAutosModel().procesar(fn.caratula(0, 2, stripper, doc));
+                    break;
 			case 2:
 				modelo = new AlliansSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
 				break;
