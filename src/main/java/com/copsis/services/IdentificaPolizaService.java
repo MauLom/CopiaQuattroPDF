@@ -86,6 +86,7 @@ public class IdentificaPolizaService {
 				modelo = datosChubb.procesa();
 				encontro = true;
 				}
+			}
 
 			// ENTRADA PARA QUALITAS
 			if (!encontro && contenido.contains("qualitas")  || 
