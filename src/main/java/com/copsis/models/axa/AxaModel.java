@@ -45,7 +45,8 @@ public class AxaModel {
 
 			else {
 	
-				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA","VIDA PROTGT","VIDA INDIVIDUAL",
+				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
+				"VIDA PROTGT","VIDA INDIVIDUAL",
 						"VIDA ACADÉMICO",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
@@ -53,8 +54,10 @@ public class AxaModel {
 				contenido = contenido.toUpperCase();
 
 				for (String tipo : tipos) {				
-					if (contenido.contains(tipo)) {				
+					if (contenido.contains(tipo)) {	
+								
 						switch (tipo) {
+							
 						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": case "VIDA ACADÉMICO": // VIDA
 							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL") || tipo.equals("VIDA ACADÉMICO")) {
 								
@@ -86,7 +89,7 @@ public class AxaModel {
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
 						case "PLANPROTEGE / COMERCIO":
-						
+				
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() :4;
 							 if(fn.caratula(1, pagFinal, stripper, doc).contains("Insured's data")){
@@ -102,12 +105,14 @@ public class AxaModel {
 						   case "PROTECCIÓN A BIENES EMPRESARIALES":
 						   case "RESPONSABILIDAD CIVIL, ERRORES":
 						   case "DAÑOS":
-							   if(!div0) {
-							   int pagFin = doc.getNumberOfPages() > 3 ? 6 :4;
-			
+						   int pagFin = doc.getNumberOfPages() > 3 ? 6 :4;
+						 
+						   if(!fn.caratula(1, pagFin, stripper, doc).contains("Vehicle description")){
+						   	 if(!div0) {									
 							 AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();
 							   }
+							}
 								break;
 							default: 
 								break;
