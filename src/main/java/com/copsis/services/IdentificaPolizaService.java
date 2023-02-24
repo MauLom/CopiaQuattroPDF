@@ -44,6 +44,7 @@ import com.copsis.models.segurosMty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sura.SuraModel;
 import com.copsis.models.thona.ThonaModel;
+import com.copsis.models.tokio.TokioModel;
 import com.copsis.models.zurich.ZurichModel;
 import com.copsis.panAmerican.PanAmericanModel;
 
@@ -478,6 +479,11 @@ public class IdentificaPolizaService {
 			}
 			if(!encontro && contenido.contains("Integralaccess")){
 				modelo   = new IntegralSeguroModel().procesar(pdfStripper, pdDoc, contenidoAux);
+				encontro = true;  
+			}
+			
+			if(!encontro && contenido.contains("Tokio Marine Compañía")){
+				modelo   = new TokioModel().procesar(pdfStripper, pdDoc, contenidoAux);
 				encontro = true;  
 			}
           
