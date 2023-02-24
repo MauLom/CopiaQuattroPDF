@@ -23,7 +23,9 @@ public class GmxDiversosModel {
 		int inicio = 0;
 		int fin = 0;
 		int  fechavenci =0;
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		String nombre = "";
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+		.replace("DOLAR AMERICANO", "DÓLAR AMERICANO");
 		try {
 			// tipo
 			modelo.setTipo(7);
@@ -53,7 +55,10 @@ public class GmxDiversosModel {
 					
 					if (newcontenido.split("\n")[i].contains("Contratante") && modelo.getCteNombre().length() == 0) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante")[1].replace("###", " ").trim());
+						nombre =newcontenido.split("\n")[i-1];
 					}
+				
+					
 
 					if (newcontenido.split("\n")[i].contains("Domicilio") && newcontenido.split("\n")[i].contains("Fecha de Nacimiento")) {
 						modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio")[1].split("Fecha de Nacimiento")[0].replace("###", "").trim());
@@ -115,13 +120,17 @@ public class GmxDiversosModel {
 					if (newcontenido.split("\n")[i].contains("Forma de Pago") ) {
 						modelo.setFormaPago(fn.formaPagoSring((newcontenido.split("\n")[i]))); 
 					}
-					
+			
 
 				}
 
 			}
+
 			if(modelo.getFechaEmision().length() == 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
+			}
+			if(modelo.getCteDireccion().length() > 0 && modelo.getCteNombre().contains("RFC")) {
+				modelo.setCteNombre(nombre.trim());
 			}
 
 
@@ -135,22 +144,18 @@ public class GmxDiversosModel {
 				newcontenido = "";
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+			
 					if(newcontenido.split("\n")[i].contains("Prima Neta") && newcontenido.split("\n")[i].contains("Derecho") 						
 					&& newcontenido.split("\n")[i+1].length() > 30) {
-						int sp = newcontenido.split("\n")[i].split("###")[1].length();
-		
-						if(sp == 8) {
-							modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(
-									newcontenido.split("\n")[i+1].split("###")[1].trim())));
-							modelo.setRecargo(fn.castBigDecimal(fn.cleanString(
-									newcontenido.split("\n")[i+1].split("###")[2].trim())));														
-							modelo.setDerecho(fn.castBigDecimal(fn.cleanString(
-									newcontenido.split("\n")[i+1].split("###")[3].trim())));												
-							modelo.setIva(fn.castBigDecimal(fn.cleanString(
-									newcontenido.split("\n")[i+1].split("###")[4].trim())));							
-							modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(
-									newcontenido.split("\n")[i+1].split("###")[5].trim())));
-						}
+
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+						modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));                    
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+
+				
 					}
 				}
 			}
