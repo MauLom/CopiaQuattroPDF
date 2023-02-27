@@ -50,7 +50,9 @@ public class GnpDiversosCModelo {
 				
 					if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains("Desde")) {								
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
-				     	modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1]);
+						if(modelo.getCteDireccion().length() == 0) {
+							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1]);
+						}				   
 					}
 
 					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
@@ -303,6 +305,10 @@ public class GnpDiversosCModelo {
 					if(newcontenido.length() > 0) {
 					ubicaciones.add(ubicacion);					
 					modelo.setUbicaciones(ubicaciones);					
+				}
+
+				if( modelo.getRfc().length() < 12){
+                  modelo.setRfc("");
 				}
 				
 		
