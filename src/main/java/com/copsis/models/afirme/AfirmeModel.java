@@ -27,6 +27,12 @@ public class AfirmeModel {
 		
 			tipo =fn.tipoPoliza(contenido);
 			Integer pagIni = 0;
+	
+				if( tipo == 4 && fn.caratula(1, 2, stripper, doc).contains("SEGURO PAQUETE EMPRESARIAL")){
+			
+                    tipo=4;
+                    tipoV =4;  
+                }
 
 				if( tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("SEGURO TRANSPORTES CARGA")){
 					tipo=4;
@@ -40,6 +46,8 @@ public class AfirmeModel {
                     tipo=4;
                     tipoV =3;  
 		        }
+				
+			
 		        if( tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("Ubicación")){
                     tipo=4;
                     tipoV =0;  
@@ -63,13 +71,18 @@ public class AfirmeModel {
 				    switch (tipoV) {
                         case 0:
                             modelo  = new AfirmeDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();
+						 
                             break;
                          case 2:
                              modelo  = new AfirmeDiversosCModel().procesar(fn.caratula(1, 4, stripper, doc));
                             break;
                          case 3:
                              modelo  = new AfirmeDiversosDModel().procesar(fn.caratula(1, 4, stripper, doc));
-                            break;    
+                            break;
+						 case 4:
+						 modelo  = new AfirmeDiversosBModel(fn.caratula(1,4, stripper, doc)).procesar();	
+                           break;    
+	    
 
                         default:
                              modelo  = new AfirmeDiversosCModel().procesar(fn.caratula(1, 4, stripper, doc));
