@@ -17,7 +17,8 @@ public class QualitasAutosUsaModel {
         int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+        .replace("Hasta-To", "Hasta - To");
         try {
             	
 			modelo.setCia(29);			
@@ -55,24 +56,43 @@ public class QualitasAutosUsaModel {
                 if(newcontenido.toString().split("\n")[i].contains("Serie-V.I.N:") && newcontenido.toString().split("\n")[i].contains("Motor:")){
                     modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie-V.I.N:")[1].split("Motor:")[0].replace("###", ""));
                 }
-               
-                if(newcontenido.toString().split("\n")[i].contains("Desde-From") && newcontenido.toString().split("\n")[i].contains("Payment") &&
-                !fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).isEmpty() ){
+              
+                if(newcontenido.toString().split("\n")[i].contains("Desde-From") 
+                 && newcontenido.toString().split("\n")[i].contains("Payment") 
+                 &&(!fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).isEmpty() 
+                 || !fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).isEmpty())
+                 ){                  
+                  if(!fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).isEmpty()){                                 
+                    modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).get(0)));
+                   modelo.setFechaEmision(modelo.getVigenciaDe());
+                  }else{
+
                     String x = fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Desde-From")[1].split("###")[1]).get(0);               
                     modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("-")[1] +"-" + x.split("-")[0] +"-"+ x.split("-")[2]));
                    modelo.setFechaEmision(modelo.getVigenciaDe());
-                }
-                if(newcontenido.toString().split("\n")[i].contains("Hasta - To") && newcontenido.toString().split("\n")[i].contains("Duración") &&
-                !fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).isEmpty() ){
-                    String x = fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).get(0);               
-                    modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("-")[1] +"-" + x.split("-")[0] +"-"+ x.split("-")[2]));
+                  }                   
 
+                }
+             
+                if(newcontenido.toString().split("\n")[i].contains("Hasta - To") && newcontenido.toString().split("\n")[i].contains("Duración") &&
+                (!fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).isEmpty() 
+                || !fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).isEmpty())){                                     
+                    if(!fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).isEmpty()){                       
+                        modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).get(0)));
+                    }else{
+                        String x = fn.vigenciaUsa(newcontenido.toString().split("\n")[i].split("Hasta - To")[1].split("###")[1]).get(0);               
+                        modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("-")[1] +"-" + x.split("-")[0] +"-"+ x.split("-")[2]));
+                    }
                 }
 
             }
 
             inicio = contenido.indexOf("COBERTURAS CONTRATADAS");
 			fin = contenido.indexOf("the Civil Liability");
+            if(fin == -1){
+                fin = contenido.indexOf("Deductible:");
+            }
+
             newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -161,7 +181,7 @@ public class QualitasAutosUsaModel {
 
 
             return modelo;
-        }catch (Exception ex){
+        }catch (Exception ex){          
             modelo.setError(QualitasAutosUsaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
             return modelo;
         }
