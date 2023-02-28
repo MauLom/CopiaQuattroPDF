@@ -15,7 +15,7 @@ public class ChubbAutosBModel {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();	
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("MM-DD-YYYY ", "");
 		
 		try {
 			modelo.setTipo(1);
@@ -32,20 +32,25 @@ public class ChubbAutosBModel {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Policy No.")[1].split("Endoso")[0].replace("###", "").trim());
 		
 				}
-				if(newcontenido.toString().split("\n")[i].contains("Vigencia de la Póliza") && newcontenido.toString().split("\n")[i].contains("Días")) {
-				    modelo.setVigenciaDe(fn.obtenVigePolizaUS(newcontenido.toString().split("\n")[i]).get(0));
+				if(newcontenido.toString().split("\n")[i].contains("Vigencia de la Póliza") && 
+				    newcontenido.toString().split("\n")[i].contains("Días")) {					
+					modelo.setVigenciaDe(fn.obtenVigePolizaUS(newcontenido.toString().split("\n")[i]).get(0));
 				    modelo.setVigenciaA(fn.obtenVigePolizaUS(newcontenido.toString().split("\n")[i]).get(1));
-					
+					modelo.setFechaEmision(modelo.getVigenciaDe());					
 				}
 			}
 			
 			
 			inicio = contenido.indexOf("Datos del asegurado");
 			fin = contenido.indexOf("Descripción del Vehículo");
+			if(fin ==-1){
+				fin = contenido.indexOf("Vehiculo Asegurado");
+			}
+			
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("día-mes-año: ", ""));			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-				
+			
 				if(newcontenido.toString().split("\n")[i].contains("Name:") && newcontenido.toString().split("\n")[i].contains("Fecha")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Name:")[1].split("Fecha")[0].replace("###", "").trim());
 				}
@@ -96,15 +101,31 @@ public class ChubbAutosBModel {
 			
 			
 			inicio = contenido.indexOf("Coberturas");
+			fin = contenido.indexOf("Prima Total");
+			if(fin ==-1){
 			fin = contenido.indexOf("Prima Neta");
+			}
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));	
+
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-				if(!newcontenido.toString().split("\n")[i].contains("Coberturas") && !newcontenido.toString().split("\n")[i].contains("Suma Asegurada")) {					
-					int sp = newcontenido.toString().split("\n")[i].split("###").length;
+				if(!newcontenido.toString().split("\n")[i].contains("Coberturas") 
+				&& !newcontenido.toString().split("\n")[i].contains("Suma Asegurada")
+				&& !newcontenido.toString().split("\n")[i].contains("Prima")
+				&& !newcontenido.toString().split("\n")[i].contains("expedición")
+				&& !newcontenido.toString().split("\n")[i].contains("I.V.A.")
+			
+				) {					
+					int sp = newcontenido.toString().split("\n")[i].split("###").length;					
 					switch (sp) {
+						case 2:
+						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].length() > 50 ? 
+						newcontenido.toString().split("\n")[i].split("###")[0].substring(0,30) :newcontenido.toString().split("\n")[i].split("###")[0] );					
+						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+						coberturas.add(cobertura);
+						break;
 					case 3:
 						cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 						cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[1]);
@@ -127,19 +148,27 @@ public class ChubbAutosBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
 				if(newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
 					valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
-					 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					if(!valores.isEmpty()){
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					}									 
 				}
 				if(newcontenido.toString().split("\n")[i].contains("expedición")) {
 					valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					if(!valores.isEmpty()){
 					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					}
 				}
 				if(newcontenido.toString().split("\n")[i].contains("I.V.A.")) {
 					valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					if(!valores.isEmpty()){
 					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					}
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Prima Total")) {
 					valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					if(!valores.isEmpty()){
 					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					}
 				}
 			}
 			
