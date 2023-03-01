@@ -28,8 +28,9 @@ public class ConstanciaSatModel {
 		int endIndex = 0;
 		boolean nombre =false;
 		StringBuilder newcontenido = new StringBuilder();
-		
+		contenido = contenido.replace("/", "?");	
 		contenido = dataToolsModel.remplazarMultiple(contenido, dataToolsModel.remplazosGeneralesV2());
+
 		
 
 		try {
@@ -66,8 +67,8 @@ public class ConstanciaSatModel {
 					constancia.setTipoPersona(rfc.length() == 12 ? personaMoral : personaFisica);
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Denominación-Razón###Social:") 
-						|| newcontenido.toString().split("\n")[i].contains("Denominación-Razón Social:")) {
+				if(newcontenido.toString().split("\n")[i].contains("Denominación/Razón###Social:") 
+						|| newcontenido.toString().split("\n")[i].contains("Denominación/Razón Social:")) {
 					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim());
 				}
 				
