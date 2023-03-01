@@ -27,6 +27,9 @@ public class MetlifeModel {
 		try {
 		
 			int tipo =fn.tipoPoliza(contenido);
+			if(fn.caratula(2, 2, stripper, doc).contains ("GASTOS MEDICOS MEDICALIFE")){
+				tipo =2;
+			}
 			if(contenido.contains("METALIFE RETIRO") || contenido.contains("METALIFE TU FUTURO") || contenido.contains("METALIFE EDUCACIÓN")) {
 				tipo =5;
 			}
