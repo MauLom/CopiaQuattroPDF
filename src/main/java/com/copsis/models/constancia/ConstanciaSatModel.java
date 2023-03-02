@@ -128,10 +128,15 @@ public class ConstanciaSatModel {
 				if(newcontenido.toString().split("\n")[i].contains("Fecha") && newcontenido.toString().split("\n")[i].contains("estado:")) {
 					constancia.setFechaEstado(newcontenido.toString().split("\n")[i].split("estado:")[1].replace("###", " ").trim());
 				}
-				
+			
 				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Comercial:") && newcontenido.toString().split("\n")[i].split("Comercial")[1].length() > 4) {
-				
-					constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", " ").trim());
+					if(!newcontenido.toString().split("\n")[i+1].contains("Fecha") && !newcontenido.toString().split("\n")[i+1].contains("inicio")){
+						constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", " ").trim()
+						+" " + newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
+					}else{
+						constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", " ").trim());
+					}
+					
 				}				
 			}
 			
