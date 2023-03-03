@@ -196,9 +196,7 @@ public class BexmasAutosModel {
 					
 					if(newcont.toString().split("\n")[i].contains("Prima total:")){		
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Prima total:")[1].replace("###", "").trim())));
-					}
-					
-					if(newcont.toString().split("\n")[i].contains("Prima total")){		
+					}else if(newcont.toString().split("\n")[i].contains("Prima total")){		
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Prima total")[1].replace("###", "").trim())));
 					}
 					
