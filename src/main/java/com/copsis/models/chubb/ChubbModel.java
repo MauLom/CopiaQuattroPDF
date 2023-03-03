@@ -31,7 +31,7 @@ public class ChubbModel {
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" };
+					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {			
 				if (contenido.contains(tipo) && !encontro) {
@@ -103,6 +103,9 @@ public class ChubbModel {
 					   }
 					encontro = true;
 						break;
+					case "Profesional para Médicos":
+					modelo = new ChubbSaludModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+					break;	
 					default:
 						break;
 					}
