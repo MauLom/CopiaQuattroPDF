@@ -29,8 +29,10 @@ public class BupaSaludModel {
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
-				if(newcontenido.toString().split("\n")[i].contains("Contratante")) {				
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+				
+				if(newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Dirección")) {				
+					
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Contratante")[1].replace("###", "").trim());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Dirección")) {
