@@ -12,7 +12,7 @@ public class BupaSaludModel {
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 
-	public EstructuraJsonModel procesar(String contenido,String conteniext) {
+	public EstructuraJsonModel procesar(String contenido,String conteniext,String recibo) {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
@@ -20,7 +20,7 @@ public class BupaSaludModel {
 		try {
 			modelo.setTipo(3);
 			modelo.setCia(87);
-			
+	
 		
 			inicio = contenido.indexOf("Contratante");
 			fin = contenido.indexOf("Advertencia");
@@ -30,7 +30,7 @@ public class BupaSaludModel {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
-				
+			
 				if(newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Dirección")) {				
 					
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Contratante")[1].replace("###", "").trim());
@@ -116,7 +116,8 @@ public class BupaSaludModel {
 			if(fin == -1) {
 			    fin = conteniext.indexOf("Hasta###Prima Neta");
 			}
-	
+		
+
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
 				
@@ -130,7 +131,21 @@ public class BupaSaludModel {
 				}
 					
 			}
-			
+			if(modelo.getFormaPago() == 0) {		
+				inicio = recibo.indexOf("Forma de Pago");
+				fin = recibo.indexOf("Prima Neta");
+				newcontenido.append(fn.extracted(inicio, fin, recibo));
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					if (newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
+					}
+					if (newcontenido.toString().split("\n")[i].contains("Moneda")) {
+						if (newcontenido.toString().split("\n")[i + 1].contains("MXP")) {
+							modelo.setMoneda(1);
+						}
+					}
+				}
+			}
 			
 	
 			
