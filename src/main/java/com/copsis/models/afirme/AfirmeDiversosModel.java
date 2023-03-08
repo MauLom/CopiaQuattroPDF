@@ -180,7 +180,7 @@ public class AfirmeDiversosModel {
 
             	 inicio = contenido.indexOf("I###EDIFICIO");
                  fin =contenido.indexOf("Página 4 de 46");
-				 System.out.println(inicio +"--< "+ fin);
+
                  
                  newcontenido = new StringBuilder();
                  newcontenido.append(fn.extracted(inicio, fin, contenido));
