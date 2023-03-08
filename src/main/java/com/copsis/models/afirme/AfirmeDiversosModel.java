@@ -123,7 +123,7 @@ public class AfirmeDiversosModel {
 			if(fin <=inicio){
 				fin =contenido.lastIndexOf("En testimonio de lo cua");
 			}
-	System.out.println(inicio +" -- " + fin);
+
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
@@ -147,7 +147,7 @@ public class AfirmeDiversosModel {
 				inicio = contenido.indexOf("Bienes y Riesgos###Suma Asegurada#");
 			}
             fin =contenido.indexOf("Concepto###Prima Neta");
-			System.out.println(inicio +"--< "+ fin);
+
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
          
