@@ -247,8 +247,7 @@ public class AfirmeDiversosModel {
             modelo.setRecibos(recibos);
             
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {			
 			modelo.setError(AfirmeDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
