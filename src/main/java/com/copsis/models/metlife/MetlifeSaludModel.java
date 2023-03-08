@@ -100,7 +100,9 @@ public class MetlifeSaludModel {
 
             inicio = contenido.indexOf("Forma de Pago");
             fin = contenido.indexOf("MetLife México, S.A. pagará los beneficios convenidos");
-           
+			if(fin ==-1){
+				fin = contenido.indexOf("MetLife México, S.A. de C.V.");
+			}
 
             if (inicio > -1  && fin > -1 && inicio < fin) {            	
             	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral").replace("TRIM.S-REC", "Trimestral");
