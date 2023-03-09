@@ -62,7 +62,7 @@ public class AfirmeDiversosModel {
             			modelo.setCteNombre(newcontenido.toString().split("\n")[i-1].split("asegurado\":")[1].replace("###", ""));
             		}
             	}
-            	if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {   
+            	if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P")[1].length() > 4 ) {   
             		if(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().length()>  5) {
             			modelo.setCp("");
             		}else {
@@ -76,7 +76,7 @@ public class AfirmeDiversosModel {
             	modelo.setFechaEmision(modelo.getVigenciaDe());
             }
             
-            if(modelo.getCp().length() == 0 && modelo.getCteDireccion().length()> 0) {
+            if(modelo.getCp().length() == 0 && modelo.getCteDireccion().length()> 0 && modelo.getCteDireccion().split("C.P")[1].length() >4) {
             	modelo.setCp(modelo.getCteDireccion().split("C.P.")[1].trim());
            
             }
@@ -123,7 +123,7 @@ public class AfirmeDiversosModel {
 			if(fin <=inicio){
 				fin =contenido.lastIndexOf("En testimonio de lo cua");
 			}
-	
+
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
@@ -147,7 +147,7 @@ public class AfirmeDiversosModel {
 				inicio = contenido.indexOf("Bienes y Riesgos###Suma Asegurada#");
 			}
             fin =contenido.indexOf("Concepto###Prima Neta");
-       
+
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
          
@@ -180,6 +180,7 @@ public class AfirmeDiversosModel {
 
             	 inicio = contenido.indexOf("I###EDIFICIO");
                  fin =contenido.indexOf("Página 4 de 46");
+
                  
                  newcontenido = new StringBuilder();
                  newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -246,7 +247,7 @@ public class AfirmeDiversosModel {
             modelo.setRecibos(recibos);
             
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(AfirmeDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
