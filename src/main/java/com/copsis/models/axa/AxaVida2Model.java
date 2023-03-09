@@ -320,14 +320,14 @@ public class AxaVida2Model {
 			inicio = contenido.indexOf("Coberturas Amparadas");
 			fin = contenido.indexOf("Beneficios incluidos ###Suma asegurada");
 		
-
+			if(fin == -1){				
+				fin = contenido.indexOf("AXA Seguros,");
+			}
 			if(fin == -1){				
 				fin = contenido.indexOf("Beneficiarios");
 			}
 			
-			if(fin == -1){				
-				fin = contenido.indexOf("AXA Seguros,");
-			}
+		
 			String cob = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
 
 
@@ -335,21 +335,21 @@ public class AxaVida2Model {
 	     int inicio2 = contenido.indexOf("Beneficios incluidos");
 		 int	fin2 = contenido.indexOf("AXA Seguros, S.A. de C.V.");
 
+		if(fin2 < inicio2) {
+			fin2 = contenido.indexOf("Beneficiarios Nombre");
+		}
+
 			String contex = fn.extracted(inicio2, fin2, contenido);
 
 
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			
-			
-		
 				if(cob.length()> 0){
 					cob +=contex ;
 				}
 				resultado  = new StringBuilder();
 				resultado.append(cob);
-			
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();	
 					if(!resultado.toString().split("\n")[i].contains("Plazo de seguro") 
@@ -358,9 +358,12 @@ public class AxaVida2Model {
 					&& !resultado.toString().split("\n")[i].contains("Piso")
 					&& !resultado.toString().split("\n")[i].contains("axa")
 					&& !resultado.toString().split("\n")[i].contains("México")
+					&& !resultado.toString().split("\n")[i].contains("ANEXO")
+					&& !resultado.toString().split("\n")[i].contains("PÓLIZA")
+					&& !resultado.toString().split("\n")[i].contains("Apoderado")
+					&& !resultado.toString().split("\n")[i].contains("Apoderado")
 					) {
-						
-						
+						if(resultado.toString().split("\n")[i].length() > 10){												
 						if(resultado.toString().split("\n")[i].split("###").length == 1) {
 							cobertura.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
 							
@@ -382,7 +385,7 @@ public class AxaVida2Model {
 							cobertura.setSa(resultado.toString().split("\n")[i].split("###")[2].trim());
 							coberturas.add(cobertura);
 						}
-
+					}
 					}
 					
 				}
