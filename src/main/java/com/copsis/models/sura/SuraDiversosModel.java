@@ -114,9 +114,13 @@ public class SuraDiversosModel {
 			inicio = contenido.indexOf("Suma asegurada");
 			if(inicio == -1 ) {
 				inicio = contenido.indexOf("Coberturas contratadas");
-			}
-			
+			}			
 			fin = contenido.indexOf("Prima neta");
+
+			if(fin < inicio	){
+				fin = contenido.lastIndexOf("Prima neta");
+			}
+
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {				
@@ -161,18 +165,16 @@ public class SuraDiversosModel {
 			fin = contenido.indexOf("Pág. 2");
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
-				if(newcontenido.toString().split("\n")[i].contains("Prima neta")) {
-					modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[0].trim())));
-					modelo.setRecargo(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[1].trim())));														
-					modelo.setDerecho(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[2].trim())));												
-					modelo.setIva(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[4].trim())));							
-					modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(
-							newcontenido.toString().split("\n")[i+1].split("###")[5].trim())));					
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+				
+				if(newcontenido.toString().split("\n")[i].contains("Prima neta") && newcontenido.toString().split("\n")[i].contains("financiamiento")) {						
+					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);					
+                    modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					   modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+                    modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+                    modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));                    
+                    modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+                				
 				}				
 			}
 			
@@ -193,9 +195,9 @@ public class SuraDiversosModel {
 			
 
 			return modelo;
-		} catch (Exception e) {
+		} catch (Exception ex) {		
 			modelo.setError(
-					SuraDiversosModel.this.getClass().getTypeName() + " | " + e.getMessage() + " | " + e.getCause());
+					SuraDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
 	}
