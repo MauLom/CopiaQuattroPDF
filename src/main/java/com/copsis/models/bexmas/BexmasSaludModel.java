@@ -33,9 +33,8 @@ public class BexmasSaludModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R .F.C:", "R.F.C:");
 		
 		try {
-			// tipo
+		
 			modelo.setTipo(3);
-			// cia
 			modelo.setCia(98);
 
 	
@@ -161,8 +160,8 @@ public class BexmasSaludModel {
 						}
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[2]));
 						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[3]));
-						asegurado.setParentesco(fn.parentesco(newcont.toString().split("\n")[i].split("###")[4]));
-						asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i].split("###")[5]));
+						asegurado.setParentesco(fn.parentesco(newcont.toString().split("\n")[i].split("###")[4]));	
+						asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i].split("###")[5].trim()));
 						asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i].split("###")[6])  ? 1 : 0);
 						asegurados.add(asegurado);
 					 }
