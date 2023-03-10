@@ -110,6 +110,10 @@ public class AxaDiversos2Model {
                         modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].split("Desde")[0].replace("###", "").trim());
                     }
 
+                    if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Datos del Contratante")) {
+                     modelo.setCteNombre(newcontenido.split("\n")[i+1].split("Nombre")[1].split("###")[1].trim());
+                    }
+
 
                 }
             }
@@ -157,7 +161,9 @@ public class AxaDiversos2Model {
 
                     }
                     if (newcontenido.split("\n")[i].contains("Nombre del Agente")) {
-                        modelo.setAgente(newcontenido.split("\n")[i].split("Nombre del Agente")[1].replace("###", "").trim());
+                     
+                        modelo.setAgente(newcontenido.split("\n")[i].split("Nombre del Agente")[1].split("###")[0]
+                        .replace("###", "").replace(":", "").trim());
 
                     }
                     if (newcontenido.split("\n")[i].contains("Número de Agente") && newcontenido.split("\n")[i].contains(ConstantsValue.GASTOS_POR_EXPEDICION)) {
