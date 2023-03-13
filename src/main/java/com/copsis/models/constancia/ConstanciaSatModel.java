@@ -309,8 +309,7 @@ public class ConstanciaSatModel {
 			constancia.setRegimenFiscal(regimenesList);
 			
 			return constancia;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {		
 			return constancia;
 		}
 	}
