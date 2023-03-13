@@ -49,10 +49,9 @@ public class AfirmeDiversosModel {
 					 modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
 					 modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(1)));				 
             	}
-            	
-            	if(newcontenido.toString().split("\n")[i].contains("Asegurado")) {
-            	
-            		if(newcontenido.toString().split("\n")[i].split("Asegurado")[1].length() < 30) {
+           
+            	if(newcontenido.toString().split("\n")[i].contains("Asegurado")) {							
+            		if(newcontenido.toString().split("\n")[i].split("Asegurado")[1].length() < 40) {			
             		modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Asegurado")[1].replace("\"", "").replace("###", "").replace(":", "").trim());
             		}
             	}
