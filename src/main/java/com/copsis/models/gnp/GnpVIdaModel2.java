@@ -363,7 +363,7 @@ public class GnpVIdaModel2 {
 					}else {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					
+				
 						if (newcontenido.toString().split("\n")[i].contains("Asegurado 1")) {
 							asegurado.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
 						}
@@ -388,14 +388,19 @@ public class GnpVIdaModel2 {
 					}
 					
 				}
+
+
+
 				if(newAseguradosi.toString().contains("Asegurado del Ahorro") && newAseguradosi.toString().contains("Supervivencia")) {
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 					for (int i = 0; i < newAseguradosi.toString().split("\n").length; i++) {
 
-						if (newAseguradosi.toString().split("\n")[i].contains("Asegurado del Ahorro")) {
+						if (newAseguradosi.toString().split("\n")[i].contains("Asegurado del Ahorro")
+						&& newAseguradosi.toString().split("\n")[i + 1].split("###")[0].trim().length() >10) {
 							asegurado.setNombre(newAseguradosi.toString().split("\n")[i + 1].split("###")[0].trim());
 						}
-						if (newAseguradosi.toString().split("\n")[i].contains("Nacimiento:")) {
+						if (newAseguradosi.toString().split("\n")[i].contains("Nacimiento:") && 
+						newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1].length() > 10) {
 							StringBuilder fechaNacimiento = new StringBuilder();
 							fechaNacimiento.append(newAseguradosi.toString().split("\n")[i].split("Nacimiento:")[1].split("###")[0].replace("de", "-").replace("###", "").replace(" ", "").trim());
 
@@ -422,10 +427,13 @@ public class GnpVIdaModel2 {
 							
 						}
 					}
+					if(!asegurado.getNombre().isEmpty()){
+						asegurados.add(asegurado);
+					}
 					
-					asegurados.add(asegurado);
+					
 				}
-
+			
 				modelo.setAsegurados(asegurados);
 			}
 
