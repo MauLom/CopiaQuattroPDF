@@ -129,8 +129,8 @@ public class ConstanciaSatModel {
 					constancia.setFechaEstado(newcontenido.toString().split("\n")[i].split("estado:")[1].replace("###", " ").trim());
 				}
 			
-				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Comercial:") && newcontenido.toString().split("\n")[i].split("Comercial")[1].length() > 4) {
-					if(!newcontenido.toString().split("\n")[i+1].contains("Fecha") && !newcontenido.toString().split("\n")[i+1].contains("inicio")){
+				if(newcontenido.toString().split("\n")[i].contains("Nombre") && newcontenido.toString().split("\n")[i].contains("Comercial:") && newcontenido.toString().split("\n")[i].split("Comercial")[1].length() > 4) {					
+					if( newcontenido.toString().split("\n").length != i+1 && newcontenido.toString().split("\n")[i+1].length() > -1 && !newcontenido.toString().split("\n")[i+1].contains("Fecha") && !newcontenido.toString().split("\n")[i+1].contains("inicio")){
 						constancia.setNombreComercial(newcontenido.toString().split("\n")[i].split("Comercial:")[1].replace("###", " ").trim()
 						+" " + newcontenido.toString().split("\n")[i+1].replace("###", " ").trim());
 					}else{
@@ -309,7 +309,7 @@ public class ConstanciaSatModel {
 			constancia.setRegimenFiscal(regimenesList);
 			
 			return constancia;
-		} catch (Exception ex) {
+		} catch (Exception ex) {		
 			return constancia;
 		}
 	}
