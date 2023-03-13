@@ -28,9 +28,8 @@ public class BexmasSaludBModel {
 		StringBuilder newcob = new StringBuilder();
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
-			// tipo
+			
 			modelo.setTipo(3);
-			// cia
 			modelo.setCia(98);
 			
 			inicio = contenido.indexOf("Nombre del Contratante:");
