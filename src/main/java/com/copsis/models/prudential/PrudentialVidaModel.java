@@ -35,16 +35,32 @@ public class PrudentialVidaModel {
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-
+                
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i].contains("Póliza No.")) {
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
 				modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza No.")[1].replace("###", "").trim());
 				}
+
+
+				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") 
+				&& newcontenido.toString().split("\n")[i].contains("PÓLIZA No.")) {	
+							String x=newcontenido.toString().split("\n")[i+2].replace("###", "").trim();
+						modelo.setCteNombre(x.replace("\u00a0","").trim());
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("PÓLIZA No.")[1].replace("###", "").replace("\u00a0","").trim());							
+				}
 				if(newcontenido.toString().split("\n")[i].contains("RFC")) {
-					modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
-					modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("###")[0]
+				
+					if(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim().length() <15){
+						modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
+					}
+					if(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim().length() <15){
+						modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim());
+					}
+					
+					
+					modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("###")[0]
 							+" "+ newcontenido.toString().split("\n")[i+1].split("###")[0]
-									+" "+ newcontenido.toString().split("\n")[i+2].split("###")[0]);
+									+" "+ newcontenido.toString().split("\n")[i+2].split("###")[0]).replace("RFC", "").replace("\u00a0",""));
 				}
 				
 			}
@@ -94,7 +110,10 @@ public class PrudentialVidaModel {
 					if(newcontenido.toString().split("\n")[i+1].contains("Fem")){
 						asegurado.setEdad(Integer.parseInt(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]).get(0)));
 					}else{
-						asegurado.setEdad(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()));
+					  if(fn.obtenerListNumeros2( newcontenido.toString().split("\n")[i+1].split("###")[1]).size() > 0){
+						asegurado.setEdad(Integer.parseInt(fn.obtenerListNumeros2( newcontenido.toString().split("\n")[i+1].split("###")[1]).get(0)));
+					  }
+						
 					}									
 					asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()) ? 1:0);
 				
@@ -104,17 +123,24 @@ public class PrudentialVidaModel {
 				if(newcontenido.toString().split("\n")[i].contains("Forma de pago") && newcontenido.toString().split("\n")[i].contains("Moneda")
 						&& newcontenido.toString().split("\n")[i].contains("vigencia")			
 						){
+						
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
-					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()));
+				 modelo.setFormaPago(fn.formaPagoSring( newcontenido.toString().split("\n")[i+1]));
+					if(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()).size() >1){
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(
+							fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()).get(0)));
+					}
+					if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1].trim()).size() >0){
+					 modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1].trim()).get(0)));
+					}
+					
+					
 				}
 			}
 			asegurados.add(asegurado);
 			modelo.setAsegurados(asegurados);
 			
-			if(contenido.contains("vigencia")) {
-				newcontenido = new StringBuilder().append(contenido.substring(contenido.indexOf("vigencia"), (contenido.indexOf("vigencia")+60)).split("\n")[1]);
-				modelo.setFormaPago(fn.formaPago(fn.gatos(newcontenido.toString().replace("@@@", "").trim()).split("###")[0].trim()));
-			}
+		
 			
 			if(modelo.getVigenciaDe().length() > 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -142,9 +168,10 @@ public class PrudentialVidaModel {
 						coberturas.add(cobertura);
 					}
 
-					if(newcontenido.toString().split("\n")[i].contains("Total") && newcontenido.toString().split("\n")[i].split("###").length == 4) {					
-						modelo.setPrimaTotal(fn.castBigDecimal(
-								fn.castDouble(newcontenido.toString().split("\n")[i].split("Total")[1].replace("###", "").trim())));
+				
+					if(newcontenido.toString().split("\n")[i].contains("Total") ){
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));   
 						modelo.setPrimaneta(modelo.getPrimaTotal());
 					}
 
@@ -161,13 +188,24 @@ public class PrudentialVidaModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 				
-				if(newcontenido.toString().split("\n")[i].length() > 5 && !newcontenido.toString().split("\n")[i].contains("Parentesco") && !newcontenido.toString().split("\n")[i].contains("identificación")
-						) {							
-					 beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
+				if(newcontenido.toString().split("\n")[i].length() > 20 && !newcontenido.toString().split("\n")[i].contains("Parentesco") && !newcontenido.toString().split("\n")[i].contains("identificación")
+						) {		
+						if(newcontenido.toString().split("\n")[i].split("###")[0].trim().length() >10){
+							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
+						}else {
+							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[1].trim());				
+						}				
+					
 				
 					if(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].trim()) == null){
 						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[2].trim()));
-						beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i].split("###")[3].trim()));
+					
+						if(fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]).size() > 0){
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+							beneficiario.setPorcentaje(fn.castDouble(valores.get(0)).intValue());   
+						}
+						
+						
 					}else{
 						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
 
@@ -181,7 +219,6 @@ public class PrudentialVidaModel {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(PrudentialVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
 				return modelo;
 		}
