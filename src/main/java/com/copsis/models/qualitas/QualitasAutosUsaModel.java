@@ -92,6 +92,10 @@ public class QualitasAutosUsaModel {
             if(fin == -1){
                 fin = contenido.indexOf("Deductible:");
             }
+            if(fin == -1){
+                fin = contenido.indexOf("Las adaptaciones");
+            }
+         
 
             newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -151,6 +155,9 @@ public class QualitasAutosUsaModel {
         List<EstructuraRecibosModel> recibos = new ArrayList<>();
 
         EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+        if(fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30){
+         modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+        }
 
         switch (modelo.getFormaPago()) {
         case 1:
