@@ -62,7 +62,8 @@ public class MapfreDiversosModel {
 				.replace("Map fre Tepeyac", "Mapfre Tepeyac")
 				.replace("Map fre México S.A. denominada", "Mapfre México S.A. denominada")
 				.replaceFirst("R . F . C", "R.F.C").replaceFirst("Con tratante:", "Contratante:")
-				.replace("C . P . ", "C.P.").replace("T e l :", "Tel:").replace("VIGENCIA", "Vigencia")
+				.replace("C . P . ", "C.P.").replace("C . P :", "C.P:")
+				.replace("T e l :", "Tel:").replace("VIGENCIA", "Vigencia")
 				.replace("HASTA###LAS###12:00", "hasta las 12:00").replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
 				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:");
 
@@ -146,7 +147,8 @@ public class MapfreDiversosModel {
 			if (fin == -1) {
 				fin = contenido.indexOf("icilio");
 			}
-			if (inicio > -1 && fin > -1) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
+			
 				newcontenido = contenido.substring(inicio, fin);
 				inicio = newcontenido.indexOf("R.F.C");
 
@@ -171,14 +173,18 @@ public class MapfreDiversosModel {
 			modelo.setCp(fn.obtenerCPRegex(contenido));
 			if (modelo.getCp().length() == 0) {
 				inicio = contenido.indexOf("C.P");
+				
 				String texto = contenido.substring(inicio).replace("C.P", "C/P");
-				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace("###", "").trim();
-
+				
+				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace(".", "").replace(",", "").replace("###", "").trim();
+				
 				if (fn.isvalidCp(texto)) {
 					modelo.setCp(texto);
 				}
 			}
-			if(modelo.getCp().length() == 0) {
+
+			if(modelo.getCp().length() == 0 && newcontenido.indexOf("C.P") > -1) {
+			
 			    modelo.setCp(newcontenido.split("C.P:")[1].trim().substring(0,5));
 			}
 
@@ -284,8 +290,11 @@ public class MapfreDiversosModel {
 			}
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + 16, inicio + 150).trim().split("\r\n")[0];
-				fin = newcontenido.lastIndexOf("/");
+			 if(newcontenido.indexOf("-") > -1){
 				modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));
+			 }
+		    
+				
 			}
 
 			// id_cliente
@@ -523,6 +532,31 @@ public class MapfreDiversosModel {
 
 			modelo.setCoberturas(coberturas);
 
+			if(modelo.getCoberturas().isEmpty()){
+				inicio = contenido.indexOf("SUMA ASEGURADA DEDUCIBLES");
+				fin = contenido.indexOf("EXTENSION DE Vigencia:");
+			
+				String cbo = fn.extracted(inicio, fin, contenido)
+				.replace("ORDINARIOS DE TRANSITO 4,500,000.00 3 %", "ORDINARIOS DE TRANSITO### 4,500,000.00###3 %")
+				.replace("AMPARADO", "###AMPARADO###");
+		
+				for (int i = 0; i < cbo.split("\n").length; i++) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					if(cbo.split("\n")[i].contains("%")){
+						
+						if(cbo.split("\n")[i].split("###").length ==3){
+	
+							cobertura.setNombre(cbo.split("\n")[i].split("###")[0].trim());
+							cobertura.setSa(cbo.split("\n")[i].split("###")[1].trim());
+							cobertura.setDeducible(cbo.split("\n")[i].split("###")[2].trim());						
+							coberturas.add(cobertura);
+						}
+					}
+				
+				}
+				modelo.setCoberturas(coberturas);
+			}
+
 			// UBICACIONES
 			inicio = contenido.indexOf("RIESGOS ASEGURADOS");
 			fin = contenido.indexOf("MEDIDAS DE SEGURIDAD");
@@ -612,8 +646,12 @@ public class MapfreDiversosModel {
 				if (ubicacion.getNiveles() == 0) {
 					ubicacion.setNiveles(1);
 				}
-				ubicaciones.add(ubicacion);
-				modelo.setUbicaciones(ubicaciones);
+				if(ubicacion.getNombre().length() > 10){
+					ubicaciones.add(ubicacion);
+					modelo.setUbicaciones(ubicaciones);
+				}
+				
+				
 			}
 
 			
@@ -758,9 +796,15 @@ public class MapfreDiversosModel {
 				   }
 
 				}
-				 ubicaciones.add(ubicacion);
-				modelo.setUbicaciones(ubicaciones);
+				if(ubicacion.getNombre().length() > 0) {
+					ubicaciones.add(ubicacion);
+					modelo.setUbicaciones(ubicaciones);
+				}
+			
 
+			}
+			if(modelo.getFechaEmision().length() == 0){
+				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
 
 			return modelo;
@@ -870,7 +914,7 @@ public class MapfreDiversosModel {
 			}
 			recibosLis.add(recibo);
 			return (ArrayList<EstructuraRecibosModel>) recibosLis;
-		} catch (Exception ex) {
+		} catch (Exception ex) {		
 			modelo.setError(MapfreDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "
 					+ ex.getCause());
 

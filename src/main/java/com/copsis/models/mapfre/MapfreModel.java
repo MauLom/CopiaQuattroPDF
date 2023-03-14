@@ -60,7 +60,7 @@ public class MapfreModel {
 				tipo =4;
 			}
 
-			if(tipo == 5 &&  contenido.contains("UBICACIÓN DE RIESGOS")) {
+			if(tipo == 5 &&  (contenido.contains("UBICACIÓN DE RIESGOS")|| contenido.contains("RIESGOS CUBIERTOS "))) {
 				tipo =4;
 			}
 			if( tipo == 0 &&contenido.contains("Gastos Hospitalarios")) {
@@ -69,6 +69,8 @@ public class MapfreModel {
 			 if( tipo == 1 &&contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")|| contenido.contains("PÓLIZA ESPECIFICA POR VIAJE")) {
 	                tipo =4;
 	          }
+
+			 
 			//PÓLIZA ESPECIFICA POR VIAJE
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
