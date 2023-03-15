@@ -20,7 +20,8 @@ public class HdiAutosBModel {
 		.replace("Descripción###Límite###de###Responsabilidad", "Descripción###Límite de Responsabilidad")
 		.replace("responsabilidad###máxima", "responsabilidad máxima.")
 		.replace("MESES###SIN###INTERESES", "MESES SIN INTERESES")
-		.replace("Art.###25°###de###la###Ley", "Art.25° de la Ley");
+		.replace("Art.###25°###de###la###Ley", "Art.25° de la Ley")
+		.replace("Art. ###25° ###de ###la ###Ley", "Art.25° de la Ley");
 		
 		try {
 			
@@ -32,17 +33,27 @@ public class HdiAutosBModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
 			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {							
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
 					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
-						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+4].replace("###", " "));			
+						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("RFC:")[1].replace("###", " ").trim());
+						if(newcontenido.toString().split("\n")[i+5].contains("C.P")){
+							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+4].replace("###", " ")
+							+" "+ newcontenido.toString().split("\n")[i+5].replace("###", " "));	
+						}else{
+							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+4].replace("###", " "));	
+						}
+								
 					}else {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2]);			
 					}
 
 					if(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(1).length()  == 5) {
 						modelo.setCp(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(1));
+					}
+					if(fn.obtenerListNumeros2(modelo.getCteDireccion()).size()>5 && fn.obtenerListNumeros2(modelo.getCteDireccion()).get(5).length()  == 5) {
+						modelo.setCp(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(5));
 					}
 				 }
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Licencia:") && newcontenido.toString().split("\n")[i].contains("expedición de licencia")) {					
@@ -86,8 +97,6 @@ public class HdiAutosBModel {
 
 			}
 			
-			modelo.setFormaPago(1);
-			modelo.setMoneda(1);
 			
 			if(modelo.getVigenciaDe().length() > 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -120,7 +129,7 @@ public class HdiAutosBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("Descripción")) {
-			
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
 					int sp =newcontenido.toString().split("\n")[i].split("###").length;
 					switch(sp) {
 					case  2:
@@ -150,6 +159,8 @@ public class HdiAutosBModel {
 			if(fin == -1){
 				fin = contenido.indexOf("Art.25° de la Ley");
 			}
+
+
 		
 			newcontenido = new StringBuilder(); 
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
@@ -157,17 +168,32 @@ public class HdiAutosBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				if(newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
 					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
-            		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(1))));
-					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(2))));
-					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+					if(!valores.isEmpty()){
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+						modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+					}
+            	
 				}
+				
 				if(newcontenido.toString().split("\n")[i].contains("Total")) {
-					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);				
+					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);		
+					if(!valores.isEmpty()){	
             		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
 					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
 					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
+					}
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Fraccionado:")) {
+					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);		
+					if(!valores.isEmpty()){	
+            		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
+					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
+					}
 				}
 			}
 	
@@ -191,6 +217,10 @@ public class HdiAutosBModel {
 				recibos.add(recibo);
 				modelo.setRecibos(recibos);
 			}
+			if(modelo.getFormaPago() ==0){			
+				modelo.setFormaPago(1);				
+			}
+			modelo.setMoneda(1);
 	
 			return modelo;
 		} catch (Exception ex) {
