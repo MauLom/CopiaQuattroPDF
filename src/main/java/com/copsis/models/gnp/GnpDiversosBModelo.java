@@ -39,14 +39,15 @@ public class GnpDiversosBModelo {
 				newcontenido.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString()));
 				modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString()));
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-		        
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
 		            if(newcontenido.toString().split("\n")[i].contains("Clave") && newcontenido.toString().split("\n")[i].contains("Agente") && newcontenido.toString().split("\n")[i].contains("Póliza No."))
 		            {
 		            	 int tipo =newcontenido.toString().split("\n")[i+1].split("###").length;
+					
 		            	switch (tipo) {
 						case 1:
-							modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					       String x = newcontenido.toString().split("\n")[i+1].split("###")[0];
+							modelo.setCveAgente(x);
 							break;
 						case 2:
 							modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0]);
@@ -61,8 +62,8 @@ public class GnpDiversosBModelo {
 						}
 		            	
 		            	if(tipo ==1) {
-		            		modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[0] +" " + newcontenido.toString().split("\n")[i+3].split("###")[1]);
-			            	modelo.setAgente(newcontenido.toString().split("\n")[i+2].split("###")[1]);
+		            		modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("###")[0] +" " + newcontenido.toString().split("\n")[i+3].split("###")[1]);
+			            	modelo.setCveAgente(newcontenido.toString().split("\n")[i+2].split("###")[1]);
 			            	modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[2]);
 			            
 		            	}
@@ -127,6 +128,8 @@ public class GnpDiversosBModelo {
 							&& !newcontenido.toString().split("\n")[i].contains("OBLIGACIONES") && !newcontenido.toString().split("\n")[i].contains("COBERTURAS AMPARADAS")
 							&& !newcontenido.toString().split("\n")[i].contains("VALORES TOTALES DECLARADOS") && !newcontenido.toString().split("\n")[i].contains("INCLUIDO EN CONTENIDOS")
 							&& !newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA") && !newcontenido.toString().split("\n")[i].contains("INCLUIDO EN CONTENIDOS")
+							&& !newcontenido.toString().split("\n")[i].contains("CLÁUSULAS Y CONDICIONES")
+							&& !newcontenido.toString().split("\n")[i].contains("Cláusula de Valor") && !newcontenido.toString().split("\n")[i].contains("Las cláusulas anteriores se anexan")
 							) {
 						
 						if (newcontenido.toString().split("\n")[i].length() > 10) {
