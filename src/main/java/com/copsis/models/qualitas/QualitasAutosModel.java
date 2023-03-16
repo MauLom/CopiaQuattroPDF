@@ -786,7 +786,28 @@ public class QualitasAutosModel {
 						.replace("-", "").replace(" ", "").trim();
 				modelo.setPlacas(newcontenido);
 			}
+			if(modelo.getCp().length() < 6){
+             modelo.setCp("");
+			}
 			
+			boolean cp= false;
+
+
+             inicio = cotxtra.indexOf("RESTO DE LA HOJA EN BLANCO");
+			 fin = cotxtra.indexOf("GESTIÓN  PRIMA");
+			 if(inicio > 0 && fin > 0 && inicio < fin){
+
+			 String contenidocp = cotxtra.substring(inicio, fin);
+
+			for (int i = 0; i < contenidocp.split("\n").length; i++) {
+				
+				if(cp == false  &&  contenidocp.split("\n")[i].contains("C.P.:") ){
+					
+					modelo.setCp(contenidocp.split("\n")[i].split("C.P.:")[1].trim().substring(0, 5));
+					 cp= true;
+				}
+			}
+		}
 			if(modelo.getDescripcion().length() ==0 && modelo.getSerie().length() == 0) {
     		boolean existe= false;
     		  StringBuilder vehiculoDatos = new StringBuilder();	
@@ -798,7 +819,9 @@ public class QualitasAutosModel {
                         }
                 
                     }
+				
                 }
+			
     			
     			for (int i = 0; i < vehiculoDatos.toString().split("\n").length; i++) {
                     if(i == 0 && vehiculoDatos.toString().split("\n")[0].length() > 2) {						
@@ -1029,6 +1052,7 @@ public class QualitasAutosModel {
 		       if(modelo.getFormaPago() == 0) {
 	                modelo.setFormaPago(1); 
 	            }
+			
 
 			
 			return modelo;
