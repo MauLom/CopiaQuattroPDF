@@ -113,10 +113,13 @@ public class AlliansSaludModel {
 			 newcont = new StringBuilder();
 			 inicio =  contenido.indexOf("Cobertura Básica");
 			 fin = contenido.indexOf("Beneficios y Coberturas");
+			
+	
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
 				 newcont = new StringBuilder();
 				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 			 }
+			
 
 			 for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 				
@@ -168,6 +171,31 @@ public class AlliansSaludModel {
 				 modelo.setCoberturas(coberturas);
 			 }
 			 
+			 if(modelo.getCoberturas().isEmpty()){
+				inicio =  contenido.indexOf("Cobertura Básica");
+				fin = contenido.indexOf("En cumplimiento a lo dispuesto");
+				 if (inicio > -1 && fin > -1 && inicio < fin) {
+					 newcont = new StringBuilder();
+					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				 }
+				 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						
+						if(!newcont.toString().split("\n")[i].contains("Básica")
+						&& !newcont.toString().split("\n")[i].contains("Coaseguro")
+						&& !newcont.toString().split("\n")[i].contains("AGENTE")
+						&& !newcont.toString().split("\n")[i].contains("Contratada") &&
+						newcont.toString().split("\n")[i].length() >10 ){
+							cobertura.setNombre( "Básica");
+							cobertura.setSa( newcont.toString().split("\n")[i].split("###")[0]);
+							cobertura.setDeducible( newcont.toString().split("\n")[i].split("###")[1]);
+							cobertura.setCoaseguro( newcont.toString().split("\n")[i].split("###")[2]);
+							coberturas.add(cobertura); 
+						}
+				 }
+				 modelo.setCoberturas(coberturas);
+			 }
 			 
 		
 			return modelo;
