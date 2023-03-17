@@ -318,6 +318,7 @@ public class MapfreSaludRojoModel {
 	            	}	                        	
 	            }
 	            
+
 	            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 	            String[] arrContenido = newcontenido.split("\r\n");
 	            int index = 0;
@@ -334,19 +335,20 @@ public class MapfreSaludRojoModel {
 	                	
 	                	x = completaTextoCobertura(arrContenido, index);
 	                	int sp = x.split("###").length;
+						
 	                	
 	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                    	
 	                    	if(!x.contains("-") &&  !x.contains("ANTIGÜEDAD") && !x.contains("RECONOCIMIENTO") && !x.contains("ASEGURADOS")) {
-	                        cobertura.setNombre(x.split("###")[0]);
-	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
-	                        cobertura.setDeducible(x.split("###")[2]);
-	                        cobertura.setCoaseguro(x.split("###")[3]);
-	                        coberturas.add(cobertura);	
+	                        // cobertura.setNombre(x.split("###")[0]);
+	                        // cobertura.setSa(x.split("###")[1].replace("\r", ""));
+	                        // cobertura.setDeducible(x.split("###")[2]);
+	                        // cobertura.setCoaseguro(x.split("###")[3]);
+	                        // coberturas.add(cobertura);	
 	                    	}
 	                    }
-	                    if (sp == 3 || sp == 2) {
-	                    
+	                    if (sp == 3 || sp == 2 ) {
+	                  
 	                    	if(!x.contains("-") && !x.contains("URO")  && !x.contains("ASEGURADOS") && !x.contains("NACIMIENTO") && !x.contains("ANTIGÜEDAD") && !x.contains("ANEXOS")) {
 	                            cobertura.setNombre(x.split("###")[0]);
 		                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
@@ -395,8 +397,18 @@ public class MapfreSaludRojoModel {
 				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "AYUDA DE", "MATERNIDAD");
 			}else if(texto.contains("EMERGENCIA EN EL")) {
 				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "EMERGENCIA EN EL", "EXTRANJERO");
-			}else if(texto.contains("INCREMENTO DE")) {
+			}
+			else if(texto.contains("INCREMENTO DE")) {
 				texto = completaTextoActualConLineaSiguiente(arrTexto, i, "INCREMENTO DE", "HON-QUIRÚRGICOS");
+			}
+			else if(texto.contains("Retorno anticipado del asegurado por fallecimiento")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, 
+				"Retorno anticipado del asegurado por fallecimiento de un familiar", "directo###Incluido");
+			}
+
+			else if(texto.contains("Retorno anticipado del asegurado por hospitalización de un familiar")) {
+				texto = completaTextoActualConLineaSiguiente(arrTexto, i, 
+				"Retorno anticipado del asegurado por hospitalización de un familiar", "directo###Incluido");
 			}
 			
 
