@@ -288,6 +288,9 @@ public class ChubbAutosModel {
 				}
 			}
 			
+			if(modelo.getCveAgente().contains("Conducto") && modelo.getCveAgente().split("Conducto")[0].length()> 3){
+ 				modelo.setCveAgente(modelo.getCveAgente().split("Conducto")[0].trim());
+			}
 
 			// Agente
 			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);

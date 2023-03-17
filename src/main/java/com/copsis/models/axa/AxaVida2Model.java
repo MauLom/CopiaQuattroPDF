@@ -326,9 +326,14 @@ public class AxaVida2Model {
 			if(fin == -1){				
 				fin = contenido.indexOf("Beneficiarios");
 			}
-			
-		
 			String cob = contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
+	
+			if(contenido.substring(inicio,fin).contains("Advertencia:") ){
+				fin = contenido.indexOf("AXA Seguros S.A. de C.V.");
+				cob =  contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "");
+			}
+
+		 	
 
 
 	
