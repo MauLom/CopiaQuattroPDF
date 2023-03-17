@@ -644,6 +644,8 @@ public class AxaSaludV2Model {
                         .replace("E ###nfermedades cubiertas", "Enfermedades cubiertas")
                         .replace("A ###tención en el Extranjero", "Atención en el Extranjero")
                         .replace("###D ###e Acuerdo a Condiciones", "###De Acuerdo a Condiciones")
+                        .replace("M ###edicamentos fuera del hospital B ###ásica", "Medicamentos fuera del hospital###Básica")
+                        .replace("C ###onversión Garantizada B ###ásica", "Conversión Garantizada Básica")
                         .replace("### ###","###");
                 
 
