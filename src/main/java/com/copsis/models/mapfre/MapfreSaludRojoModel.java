@@ -340,11 +340,11 @@ public class MapfreSaludRojoModel {
 	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                    	
 	                    	if(!x.contains("-") &&  !x.contains("ANTIGÜEDAD") && !x.contains("RECONOCIMIENTO") && !x.contains("ASEGURADOS")) {
-	                        // cobertura.setNombre(x.split("###")[0]);
-	                        // cobertura.setSa(x.split("###")[1].replace("\r", ""));
-	                        // cobertura.setDeducible(x.split("###")[2]);
-	                        // cobertura.setCoaseguro(x.split("###")[3]);
-	                        // coberturas.add(cobertura);	
+	                        cobertura.setNombre(x.split("###")[0]);
+	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
+	                        cobertura.setDeducible(x.split("###")[2]);
+	                        cobertura.setCoaseguro(x.split("###")[3]);
+	                        coberturas.add(cobertura);	
 	                    	}
 	                    }
 	                    if (sp == 3 || sp == 2 ) {
