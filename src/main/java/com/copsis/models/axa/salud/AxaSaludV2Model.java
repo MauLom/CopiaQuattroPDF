@@ -277,6 +277,7 @@ public class AxaSaludV2Model {
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin);
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                  
                     EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                     if (newcontenido.split("\n")[i].split("-").length > 5) {
                         String x = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
@@ -334,14 +335,14 @@ public class AxaSaludV2Model {
                     }
                     newcontenido = newcontenido.replace("S###o###b###r ina", "Sobrina")
                     .replace("S###o###b###r ino#","Sobrino");
+
                     //end fix parrafo listado de asegurados
                     for (int i = 0; i < newcontenido.split("\n").length; i++) {
                         EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                         int x = newcontenido.split("\n")[i].split("###").length;
                         
                         if (newcontenido.split("\n")[i].split("-").length > 5) {
-                        
-                           
+                  
                     
                             if (x == 9) {
                                 asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);   
@@ -358,12 +359,20 @@ public class AxaSaludV2Model {
                                 asegurados.add(asegurado);
                             }
                             if (x == 11) {
-                                nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
+                                if(newcontenido.split("\n")[i+1].length() > 5){
+                                    nombre =(newcontenido.split("\n")[i].split("###")[0] +" " +newcontenido.split("\n")[i+1]).replace("@@@", "").replace("###", "").trim();
+                              
+                                }else{
+                                    nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
+                                
+                                }
                                 if (nombre.contains(", ")) {
-                                    asegurado.setNombre((nombre.split(",")[1] + " " + nombre.split(",")[0]).trim());
+                                    asegurado.setNombre((nombre.split(",")[1]  +" "+ nombre.split(",")[0]).trim());
                                 } else {
                                     asegurado.setNombre(nombre.trim());
                                 }
+                       
+                            
                                 asegurado.setSexo(
                                         fn.sexo(newcontenido.split("\n")[i].split("###")[1]).booleanValue() ? 1 : 0);
                                 asegurado.setEdad(fn.castInteger(newcontenido.split("\n")[i].split("###")[2]));
@@ -387,13 +396,19 @@ public class AxaSaludV2Model {
                             }
 
                             if (x == 12) {
-                                nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
+                                if(newcontenido.split("\n")[i+1].length() > 5){
+                                    nombre =(newcontenido.split("\n")[i].split("###")[0] +" " +newcontenido.split("\n")[i+1]).replace("@@@", "").replace("###", "").trim();
+                              
+                                }else{
+                                    nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
                                 
-                                if (nombre.contains(", ")) {
-                                    asegurado.setNombre(nombre.split(",")[1] + " " + nombre.split(",")[0]);
-                                } else {
-                                    asegurado.setNombre(nombre);
                                 }
+                                if (nombre.contains(", ")) {
+                                    asegurado.setNombre((nombre.split(",")[1]  +" "+ nombre.split(",")[0]).trim());
+                                } else {
+                                    asegurado.setNombre(nombre.trim());
+                                }
+                       
 
                                 fechaN = newcontenido.split("\n")[i].split("###")[4] + ""
                                         + newcontenido.split("\n")[i].split("###")[5].replace(" ", "");
@@ -626,6 +641,9 @@ public class AxaSaludV2Model {
                         .replace("P ###reexistencias","Preexistencias")
                         .replace("M ###edicamentos fuera del hospital Básica", "Medicamentos fuera del hospital Básica")
                         .replace("Complicaciones de GMM no cubiertos De acuerdo a Condiciones Generales", "Complicaciones de GMM no cubiertos###De acuerdo a Condiciones Generales")
+                        .replace("E ###nfermedades cubiertas", "Enfermedades cubiertas")
+                        .replace("A ###tención en el Extranjero", "Atención en el Extranjero")
+                        .replace("###D ###e Acuerdo a Condiciones", "###De Acuerdo a Condiciones")
                         .replace("### ###","###");
                 
 
@@ -642,6 +660,7 @@ public class AxaSaludV2Model {
                 if(!newcontenido.contains("Cobertura Nacional #")) {
                     newcontenido = newcontenido.replace("Cobertura Nacional ", "Cobertura Nacional ###");
                 }
+
                 
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
