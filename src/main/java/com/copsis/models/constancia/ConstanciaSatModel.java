@@ -67,18 +67,24 @@ public class ConstanciaSatModel {
 					constancia.setTipoPersona(rfc.length() == 12 ? personaMoral : personaFisica);
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Denominación/Razón###Social:") 
+				if (newcontenido.toString().split("\n")[i].contains("Denominación/Razón###Social:")
 						|| newcontenido.toString().split("\n")[i].contains("Denominación/Razón Social:")) {
 
-				if(!newcontenido.toString().split("\n")[i+1].contains("Régimen") && !newcontenido.toString().split("\n")[i+1].contains("Capital:")) {
-					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim()
-					+" " +newcontenido.toString().split("\n")[i+1].replace("###", " ").trim()
-					);
-				 }else{
-					constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim());
-				 }			
-				
-				
+					if (!newcontenido.toString().split("\n")[i - 1].contains("RFC:") && !newcontenido.toString().split("\n")[i + 1].contains("Régimen") && !newcontenido.toString().split("\n")[i + 1].contains("Capital:")) {
+						constancia.setRazonSocial(newcontenido.toString().split("\n")[i - 1].replace("###", " ").trim() + " "
+								+ newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim()
+								+ " " + newcontenido.toString().split("\n")[i + 1].replace("###", " ").trim()
+						);
+
+					} else if (!newcontenido.toString().split("\n")[i + 1].contains("Régimen") && !newcontenido.toString().split("\n")[i + 1].contains("Capital:")) {
+						constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim()
+								+ " " + newcontenido.toString().split("\n")[i + 1].replace("###", " ").trim()
+						);
+					} else {
+
+						constancia.setRazonSocial(newcontenido.toString().split("\n")[i].split("Social:")[1].replace("###", " ").trim());
+					}
+
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Régimen") && newcontenido.toString().split("\n")[i].contains("Capital:")) {
