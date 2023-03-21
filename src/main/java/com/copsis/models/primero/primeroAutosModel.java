@@ -164,7 +164,8 @@ public class primeroAutosModel {
 								}	                        	
 	                        }
 
-	                    }else if(newcontenido.split("\n")[i].contains("Serie")) {
+	                    }else if(newcontenido.split("\n")[i].contains("Serie") && modelo.getSerie().length() == 0 &&
+						newcontenido.split("\n")[i].split("Serie")[1].split("\n")[0].replace("###", "").trim().length() <= 20) {
 	                    	modelo.setSerie(newcontenido.split("\n")[i].split("Serie")[1].split("\n")[0].replace("###", "").trim());
 	                    }
 	                }
