@@ -151,12 +151,16 @@ public class IdentificaPolizaService {
 					}
 				}
 			}
+			
+
 
 			// ENTRADA PARA AXA
 			if (!encontro && contenido.contains("AXA Seguros, S.A. de C.V.")
 					|| contenido.contains("AXA SEGUROS, S.A. DE C.V")
 					|| contenido.contains("AXA Seguros, S.A de C.V.")
-					|| contenido.contains("AXA Seguros S.A. de C.V.")) {
+					|| contenido.contains("AXA Seguros S.A. de C.V.")
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("axa.com.mx")) {
+					
 				AxaModel datosAxa = new AxaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAxa.procesa();
 				encontro = true;

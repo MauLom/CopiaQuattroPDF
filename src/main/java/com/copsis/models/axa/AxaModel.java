@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.axa.salud.AxaSaludFaModel;
 import com.copsis.models.axa.salud.AxaSaludModel;
 import com.copsis.models.axa.salud.AxaSaludV2Model;
 
@@ -28,7 +29,7 @@ public class AxaModel {
 	public EstructuraJsonModel procesa() {
 		try {
 
-
+System.out.println(contenido.contains("póliza familiar"));
 
 			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description") || contenido.contains("DATOS DEL VEHÍCULO")) { // AUTOS
 				modelo  = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false)).procesar();
@@ -42,6 +43,12 @@ public class AxaModel {
 				modelo = datosAxaSalud.procesar();
 		
 			}
+			else if (contenido.contains("familiar") && contenido.contains("póliza")) {
+
+				modelo = new AxaSaludFaModel().procesar(fn.caratula(1, 3, stripper, doc));
+		
+			}
+
 
 			else {
 	
