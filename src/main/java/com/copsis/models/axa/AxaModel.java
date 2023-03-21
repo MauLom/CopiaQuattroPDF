@@ -29,7 +29,6 @@ public class AxaModel {
 	public EstructuraJsonModel procesa() {
 		try {
 
-System.out.println(contenido.contains("póliza familiar"));
 
 			if ((contenido.contains("Datos del vehículo")) && !contenido.contains(" Vehicle description") || contenido.contains("DATOS DEL VEHÍCULO")) { // AUTOS
 				modelo  = new AxaAutosModel(fn.caratula(1, 2, stripper, doc),fn.textoBusqueda(stripper, doc, "RECIBO PROVISIONAL DE", false)).procesar();
