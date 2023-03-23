@@ -113,7 +113,7 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
-			
+
 			// ENTRADA PARA MAPFRE
 			if (!encontro && contenido.length() > 502 && contenido.indexOf("MAPFRE") > -1
 					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A.")
