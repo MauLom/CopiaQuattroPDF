@@ -29,6 +29,7 @@ public class MapfreModel {
 	public EstructuraJsonModel procesa() {
 
 		try {
+			
 			tipo =fn.tipoPoliza(contenido);
 
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
@@ -69,8 +70,13 @@ public class MapfreModel {
 			 if( tipo == 1 &&contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")|| contenido.contains("PÓLIZA ESPECIFICA POR VIAJE")) {
 	                tipo =4;
 	          }
+              boolean saludFt2=false;
+			  if(tipo ==0 && fn.caratula(1, 1, stripper, doc).contains("RECUPERACION MEDICA")){
+                tipo=2;
+				saludFt2=true;
+			  }
 
-			 
+
 			//PÓLIZA ESPECIFICA POR VIAJE
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
@@ -91,13 +97,18 @@ public class MapfreModel {
 				break;
 				
 			case 2://Salud
-				
+			      if(saludFt2){
+					modelo = new MapfreSaludCModel().procesar(fn.caratula(1, 3, stripper, doc));
+				  }	
+                  else {
 					if(contenido.contains("INFORMACIÓN GENERAL") && (contenido.contains("COBERTURAS Y SERVICIOS") || contenido.contains("ASEGURADO TITULAR") )) {
 						pagFin = contenido.contains("COLECTIVIDAD ASEGURABLE")? 6: 5;
 						modelo = new MapfreSaludRojoModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}else {
 						modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
 					}
+				  }
+				
 				
 				break;
 			case 4://Diversos
