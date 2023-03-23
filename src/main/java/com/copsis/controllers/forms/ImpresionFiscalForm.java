@@ -19,4 +19,5 @@ public class ImpresionFiscalForm {
 	private	String razonSocial;	
 	private	String regimenDeCapital;
 	private List<ProductosModel> productos;
+	private	String fechaRegistro;
 }
