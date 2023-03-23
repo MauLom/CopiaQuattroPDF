@@ -105,7 +105,7 @@ public class ImpresionePDFController {
 		try {
 			boolean texto = false;
 		
-			if( ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString().contains("apiuat.quattrocrm.mx")){
+			if( ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString().contains("quattro-pdf-jazkd5ckiq-uc.a.run.app")){
 				texto=true;
 			}
 			
