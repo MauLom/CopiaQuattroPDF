@@ -41,10 +41,7 @@ public class ImpresionFiscalPdf {
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 
 	public byte[] buildPDF(ImpresionFiscalForm  impresionFiscalForm,boolean texto ) {
-		DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
-		sym.setMonths(new String[] { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto","septiembre", "octubre", "noviembre", "diciembre" });
-		sym.setAmPmStrings(new String[] { "AM", "PM" });
-		SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy hh:mm", sym);
+	
 		ByteArrayOutputStream output;
 		try {
 			try (PDDocument document = new PDDocument()) {
@@ -115,7 +112,7 @@ public class ImpresionFiscalPdf {
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 20);
-					communsPdf.setCell(baseRow, 100, "Fecha de Registro: " + formatter.format( new Date()),Color.black,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul).setValign(VerticalAlignment.MIDDLE);;
+					communsPdf.setCell(baseRow, 100, "Fecha de Registro: " +  impresionFiscalForm.getFechaRegistro() ,Color.black,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul).setValign(VerticalAlignment.MIDDLE);;
 					table.draw();
 					
 					yStart -=table.getHeaderAndDataHeight();
