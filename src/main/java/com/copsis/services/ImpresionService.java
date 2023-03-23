@@ -118,11 +118,11 @@ public class ImpresionService {
         }
     }
 
-    public byte[] impresionFiscal(ImpresionFiscalForm impresionFiscalForm) {
+    public byte[] impresionFiscal(ImpresionFiscalForm impresionFiscalForm,boolean texto) {
         try {
             ImpresionFiscalPdf impresionFiscalPdf = new ImpresionFiscalPdf();
 
-            return impresionFiscalPdf.buildPDF(impresionFiscalForm);
+            return impresionFiscalPdf.buildPDF(impresionFiscalForm, texto);
 
         } catch (ValidationServiceException e) {
             throw e;
