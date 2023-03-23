@@ -3,7 +3,12 @@ package com.copsis.models.impresion;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.URL;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -35,7 +40,11 @@ public class ImpresionFiscalPdf {
 	private final Color bgColor = new Color(255, 255, 255, 0);
 	private float yStartNewPage = 760, yStart = 760, bottomMargin = 26;
 
-	public byte[] buildPDF(ImpresionFiscalForm  impresionFiscalForm ) {
+	public byte[] buildPDF(ImpresionFiscalForm  impresionFiscalForm,boolean texto ) {
+		DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+		sym.setMonths(new String[] { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto","septiembre", "octubre", "noviembre", "diciembre" });
+		sym.setAmPmStrings(new String[] { "AM", "PM" });
+		SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy hh:mm", sym);
 		ByteArrayOutputStream output;
 		try {
 			try (PDDocument document = new PDDocument()) {
@@ -75,6 +84,13 @@ public class ImpresionFiscalPdf {
 //					baseRow3 = communsPdf.setRow(table3, 130);
 //					communsPdf.setCell(baseRow3, 100, "", green,true, "C", 30, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
 //					table3.draw();
+                   if(texto){				
+                   table = new BaseTable(780, 780, bottomMargin, 400, 328, document, page, false,true);
+					baseRow = communsPdf.setRow(table, 35);
+					communsPdf.setCell(baseRow, 100, "Ambiente de Capacitación", Color.red,true, "C", 12, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.white), "", communsPdf.setPadding(2f),bgColor);
+					table.setRemBordes(true);
+					table.draw();
+					}
 //					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 300, 140, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 35);
@@ -96,6 +112,13 @@ public class ImpresionFiscalPdf {
 //					table2 = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, true,true);
 //					
 //					y =yStart;
+					
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, false,true);
+					baseRow = communsPdf.setRow(table, 20);
+					communsPdf.setCell(baseRow, 100, "Fecha de Registro: " + formatter.format( new Date()),Color.black,true, "L", 12, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(2f),azul).setValign(VerticalAlignment.MIDDLE);;
+					table.draw();
+					
+					yStart -=table.getHeaderAndDataHeight();
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 470, 70, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 20);
