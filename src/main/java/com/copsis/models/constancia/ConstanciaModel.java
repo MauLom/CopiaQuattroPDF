@@ -8,6 +8,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.CardSettings;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraConstanciaSatModel;
+import com.copsis.models.Tabla.PDFTableStripper;
 import com.copsis.services.WebhookService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,11 @@ public class ConstanciaModel {
 	public   EstructuraConstanciaSatModel procesar(PDFTextStripper pdfstripper, PDDocument pdDoc, String contenido, PdfForm pdfForm) {
 		try {			
 			constancia = constanciaSatModel.procesar(dataToolsModel.caratula(1, 4, pdfstripper, pdDoc), pdfForm);
+			if(constancia.getTipoPersona().contains("Moral")){
+				PDFTableStripper razon = new PDFTableStripper();
+				constancia.setRazonSocial(razon.getLer(pdfForm.getUrl()).length() > 0 ? razon.getLer(pdfForm.getUrl()):"");
+			}
+		
 			
 			return constancia;			
 		} catch (Exception ex) {
