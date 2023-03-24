@@ -273,6 +273,17 @@ public class AxaVida2Model {
 				 
 			}
 
+			if(modelo.getCp().length() == 0 && modelo.getCteDireccion().length() > 0){
+				List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());	
+				for (int i = 0; i <valores.size(); i++) {
+				 if(valores.get(i).length() >4 && valores.get(i).length() < 6){
+                   modelo.setCp(valores.get(i).toString());
+				 }
+				}	
+				 			
+				
+			}
+
 			asegurados.add(asegurado);
 			modelo.setAsegurados(asegurados);
 			

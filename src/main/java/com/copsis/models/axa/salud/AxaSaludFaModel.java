@@ -22,7 +22,7 @@ public class AxaSaludFaModel {
       
         try {
             modelo.setTipo(3);
-            modelo.setCia(22);
+            modelo.setCia(20);
 
             inicio = contenido.indexOf("Póliza");
             fin = contenido.indexOf("Coberturas");
