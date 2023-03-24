@@ -692,6 +692,7 @@ public class QualitasAutosModel {
 			if (inicio > -1) {
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
 						.replace(".:", "").replace(".", "").replace(":", "");
+						
 				if (newcontenido.contains("Municipio")) {
 					newcontenido = newcontenido.split("Municipio")[0].replace("###", "").trim();
 					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
@@ -702,6 +703,11 @@ public class QualitasAutosModel {
 						modelo.setCp(cp.length() < 5? "0"+cp :cp);					}
 				} else {
 					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
+				}
+			
+				if(modelo.getCp().length() > 0){				
+					List<String> valores = fn.obtenerListNumeros2(newcontenido);				
+					modelo.setCp(valores.get(0).toString().length() < 5? "0"+valores.get(0).toString() :valores.get(0).toString());					
 				}
 			}
 
@@ -786,7 +792,8 @@ public class QualitasAutosModel {
 						.replace("-", "").replace(" ", "").trim();
 				modelo.setPlacas(newcontenido);
 			}
-			if(modelo.getCp().length() < 6){
+		
+			if(modelo.getCp().length() < 5){
              modelo.setCp("");
 			}
 			
