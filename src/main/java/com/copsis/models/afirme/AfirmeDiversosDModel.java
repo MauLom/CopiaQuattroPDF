@@ -95,20 +95,31 @@ public class AfirmeDiversosDModel {
 
    
             newcontenido = new StringBuilder();
-            newcontenido.append( coberturaex);
+            newcontenido.append( coberturaex.replace("\r", "").replace("Responsabilidad Civil por", "Responsabilidad Civil por Gastos Médicos y-o Muerte de Trabajadores Domésticos"));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             if( newcontenido.toString().split("\n").length> 5) {                
                 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                      
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                     if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") 
                      && !newcontenido.toString().split("\n")[i].contains("Deducibles") 
-                     && newcontenido.toString().split("\n")[i].length() > 30) {                            
-                        int sp  = newcontenido.toString().split("\n")[i].split("###").length;                    
+                     && !newcontenido.toString().split("\n")[i].contains("DAÑOS MATERIALES AL INMUEBLE") 
+                     && !newcontenido.toString().split("\n")[i].contains("DAÑOS MATERIALES A CONTENIDOS") 
+                     && !newcontenido.toString().split("\n")[i].contains("ASISTENCIA EN EL HOGAR")
+                     && !newcontenido.toString().split("\n")[i].contains("RESPONSABILIDAD CIVIL") 
+                 
+                   
+                     && newcontenido.toString().split("\n")[i].length() > 20) {         
+                                     
+                        int sp  = newcontenido.toString().split("\n")[i].split("###").length; 
+                    
+                                  
                        switch (sp) {
-                    case 1:
+                    case 2:
                         cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
                         coberturas.add(cobertura);
                         break;
+             
                     case 3:
                         cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
                         cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
