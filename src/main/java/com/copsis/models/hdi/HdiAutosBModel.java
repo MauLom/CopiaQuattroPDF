@@ -33,7 +33,8 @@ public class HdiAutosBModel {
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
 			
-			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {							
+			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
+							
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
 					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
@@ -93,6 +94,14 @@ public class HdiAutosBModel {
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Paquete:")) {
 					modelo.setPlan( newcontenido.toString().split("\n")[i].split("Paquete:")[1].split("###")[0].trim());
+				}
+			
+				if(newcontenido.toString().split("\n")[i].contains("Clave:") && newcontenido.toString().split("\n")[i].contains("Puertas:")) {
+					modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("Clave:")[0].replace("###", "").trim());
+					modelo.setClave(newcontenido.toString().split("\n")[i].split("Clave:")[1].split("Puertas:")[0].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Motor:") && newcontenido.toString().split("\n")[i].contains("Uso:")) {
+					modelo.setMotor(newcontenido.toString().split("\n")[i].split("Motor:")[1].split("Uso:")[0].replace("###", "").trim());
 				}
 
 			}
