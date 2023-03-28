@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-slim
+FROM openjdk:17-alpine
 
 COPY target/quattro-pdf-*.jar /quattro-pdf.jar
 
