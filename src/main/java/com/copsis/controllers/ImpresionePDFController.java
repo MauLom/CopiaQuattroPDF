@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
@@ -100,14 +101,21 @@ public class ImpresionePDFController {
 		}		  
 	}
 	@PostMapping(value = "constaciaFiscal")
-	public ResponseEntity<CopsisResponse> impresionFiscal ( @Valid @RequestBody ImpresionFiscalForm  impresionFiscalForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionFiscal ( @Valid @RequestBody ImpresionFiscalForm  impresionFiscalForm, BindingResult bindingResult,@RequestHeader HttpHeaders headers) {
 		try {
-			  
+			boolean texto = false;
+		
+			if( ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString().contains("quattro-pdf-jazkd5ckiq-uc.a.run.app")){
+				texto=true;
+			}
+			
+			
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionFiscal(impresionFiscalForm)).build();
+			
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionFiscal(impresionFiscalForm,texto)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {

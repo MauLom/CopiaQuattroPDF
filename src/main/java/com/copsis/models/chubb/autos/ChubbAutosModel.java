@@ -288,6 +288,9 @@ public class ChubbAutosModel {
 				}
 			}
 			
+			if(modelo.getCveAgente().contains("Conducto") && modelo.getCveAgente().split("Conducto")[0].length()> 3){
+ 				modelo.setCveAgente(modelo.getCveAgente().split("Conducto")[0].trim());
+			}
 
 			// Agente
 			conceptos = Arrays.asList(ConstantsValue.CLAVE_INTERNA_AGENTE);
@@ -435,7 +438,7 @@ public class ChubbAutosModel {
 					inicio = inicio + 6;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = fn.gatos(contenido.substring(inicio, fin).split(saltolinea)[0]);
-					modelo.setMotor(newcontenido);
+					modelo.setMotor(newcontenido.length() > 20  ? newcontenido.substring(0,19) : newcontenido);
 				}
 			}
 

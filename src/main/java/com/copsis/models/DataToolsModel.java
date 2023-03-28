@@ -1129,7 +1129,7 @@ public class DataToolsModel {
 	
 	public int buscaMonedaEnTexto(String texto) {
 		int resultado = 0;
-		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP", "PESO","DÓLAR" ,"DÓLARES","DOLARES","DÓLAR AMERICANO","DOLARES US","USD","DÓLARES SIN REVALUACIÓN","U.S.DOLLAR","UDIS","UDI","UVACS");
+		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.","MXN", "PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP", "PESO","DÓLAR" ,"DÓLARES","DOLARES","DÓLAR AMERICANO","DOLARES US","USD","DÓLARES SIN REVALUACIÓN","U.S.DOLLAR","UDIS","UDI","UVACS");
 		
 		for(String moneda: listMonedas) {
 			if(texto.toUpperCase().contains(moneda)) {
@@ -1145,6 +1145,7 @@ public class DataToolsModel {
 				case "PRIMA EN MONEDA NACIONAL":
 				case "MXP":
 				case "PESO":
+				case "MXN":
 					resultado = 1;
 					break;
 				case "DÓLAR":	
