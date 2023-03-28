@@ -292,7 +292,7 @@ public class AxaVida2Model {
 				if(i> 0) {
 					resultado.append(contenido.split("Beneficiarios Nombre")[i].split("Advertencia")[0].replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
 							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###")
-							.replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###").replace("ESPOSO","###ESPOSO###")); 
+							.replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###").replace("ESPOSO","###ESPOSO###").replace("HIJA", "###HIJA###")); 
 				}										
 			}
 
@@ -309,8 +309,7 @@ public class AxaVida2Model {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
 					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();							
-					if(resultado.toString().split("\n")[i].contains("%")) {
-						
+					if(resultado.toString().split("\n")[i].contains("%")) {					
 						beneficiario.setNombre(resultado.toString().split("\n")[i].split("###")[0].trim());
 						beneficiario.setParentesco(fn.parentesco( resultado.toString().split("\n")[i].split("###")[1]));
 						beneficiarios.add(beneficiario);
@@ -422,7 +421,7 @@ public class AxaVida2Model {
 			
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
