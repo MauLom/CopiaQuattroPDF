@@ -48,6 +48,7 @@ public class PDFTableStripper extends PDFTextStripper {
         pdDoc = new PDDocument(cosDoc);
         pdfStripper.setStartPage(1);
         pdfStripper.setEndPage(1);
+        
 	
 			final double res = 72; // PDF units are at 72 DPI
 			PDFTableStripper stripper = new PDFTableStripper();
