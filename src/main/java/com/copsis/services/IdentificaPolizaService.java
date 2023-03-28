@@ -312,7 +312,7 @@ public class IdentificaPolizaService {
 				encontro = true;
 			}
 
-
+			
 			// ENTRADA PARA SURA
 			if (!encontro && contenido.contains("Seguros SURA S.A.")
 					|| contenido.contains("Royal & SunAlliance Seguros")

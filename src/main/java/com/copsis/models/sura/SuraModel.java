@@ -42,9 +42,15 @@ public class SuraModel {
 				if(tipo == 2 && contenido.contains("Múltiple Empresarial Riesgos")) {
 					tipo =4;
 				}
+
+				
 				if(tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("Múltiple Empresarial Riesgos")) {
 					tipo =4;
 				}
+				if(tipo == 1 && fn.caratula(2, 3, stripper, doc).contains("Seguro Múltiple Familiar Todo Riesgo Hogar ")) {
+					tipo =4;
+				}
+
 
          
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
