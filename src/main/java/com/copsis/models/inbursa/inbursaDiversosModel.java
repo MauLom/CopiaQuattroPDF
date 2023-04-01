@@ -323,6 +323,7 @@ public class inbursaDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(inbursaDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
@@ -332,10 +333,21 @@ public class inbursaDiversosModel {
 	
 	
 	private void obtenerDatosAgenteYFechaEmision(String textoContenido, EstructuraJsonModel model) {
-		int indexInicio = contenido.indexOf("Término máximo para el pago de segunda fracción");
+		//System.out.println(contenido);
+		int indexInicio = 0;
+		indexInicio= contenido.lastIndexOf("Cliente Inbursa");
+		if(indexInicio == -1){
+			indexInicio= contenido.indexOf("Término máximo para el pago de segunda fracción");
+		}
+		
 		int indexFin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
+
+		if(indexInicio >  -1 && indexFin >  0 &&  indexInicio < indexFin){
+
+		
 		
 		String newcontenido = textoContenido.substring(indexInicio,indexFin);
+		
 		newcontenido = newcontenido.replace("@@@", "").replace("\r", "");	
 		
 		StringBuilder aux = new StringBuilder();
@@ -343,6 +355,7 @@ public class inbursaDiversosModel {
 		String fecha = "";
 		
 		for (int i = 0; i < arrContenido.length; i++) {
+			
 	        if(arrContenido[i].trim().length() > 0 && !arrContenido[i].contains("Término ")) {
 	        	aux.append(arrContenido[i].split("###")[0]).append(" ");
 	        }
@@ -350,13 +363,20 @@ public class inbursaDiversosModel {
 	        	
 	        	fecha = arrContenido[i].split("###")[1].trim();
 	        	if(fecha.split("-").length == 3) {
+					
 	        		model.setFechaEmision(fn.formatDateMonthCadena(fecha));
 	        	}
 	        }
 		}
-		
+	   if(aux.length() > 10 && aux.toString().split(" ").length > 10){
 		model.setCveAgente(aux.toString().split(" ")[0]);
-		model.setAgente(aux.toString().split(model.getCveAgente())[1].trim());
+		if(model.getCveAgente().trim().length() >5){
+			model.setAgente(aux.toString().split(model.getCveAgente())[1].trim());
+		}
+	
+	   }
+	
+	 }
 	}
 
 	private void obtenerCoberturasOtroFormato(String texto, EstructuraJsonModel model) {
