@@ -332,7 +332,7 @@ public class inbursaDiversosModel {
 	
 	
 	private void obtenerDatosAgenteYFechaEmision(String textoContenido, EstructuraJsonModel model) {
-		//System.out.println(contenido);
+		
 		int indexInicio = 0;
 		indexInicio= contenido.lastIndexOf("Cliente Inbursa");
 		if(indexInicio == -1){
@@ -346,17 +346,18 @@ public class inbursaDiversosModel {
 		
 		
 		String newcontenido = textoContenido.substring(indexInicio,indexFin);
+
 		
 		newcontenido = newcontenido.replace("@@@", "").replace("\r", "");	
 		
-		StringBuilder aux = new StringBuilder();
+		String aux = "";
 		String[] arrContenido =  newcontenido.split("\n");
 		String fecha = "";
 		
 		for (int i = 0; i < arrContenido.length; i++) {
 			
 	        if(arrContenido[i].trim().length() > 0 && !arrContenido[i].contains("Término ")) {
-	        	aux.append(arrContenido[i].split("###")[0]).append(" ");
+	        	aux+=arrContenido[i].split("###")[0];
 	        }
 	        if(arrContenido[i].split("-").length == 3 && arrContenido[i].split("-").length > 1 ) {
 	        	
@@ -367,10 +368,17 @@ public class inbursaDiversosModel {
 	        	}
 	        }
 		}
-	   if(aux.length() > 10 && aux.toString().split(" ").length > 10){
-		model.setCveAgente(aux.toString().split(" ")[0]);
+	   if(aux.length() > 10 && aux.split(" ").length > 10){
+
+		if(aux.contains("Definiciones:")){
+			aux = aux.split("Definiciones:")[1];
+		}
+		
+		model.setCveAgente(aux.split(" ")[0]);
 		if(model.getCveAgente().trim().length() >5){
-			model.setAgente(aux.toString().split(model.getCveAgente())[1].trim());
+			fecha = fn.obtenVigePoliza2(aux).size() > 0 ? fn.obtenVigePoliza2(aux).get(0) : "";
+	
+			model.setAgente(aux.split(model.getCveAgente())[1].replace(fecha, " ").trim());
 		}
 	
 	   }
