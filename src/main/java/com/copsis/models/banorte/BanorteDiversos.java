@@ -118,23 +118,24 @@ public class BanorteDiversos {
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.MONEDA2)
 							&& newcontenido.split("\n")[i].contains("Vigencia")) {
 						if(newcontenido.split("\n")[i].split(ConstantsValue.MONEDA2).length>1) {
-							modelo.setMoneda(fn.moneda(newcontenido.split("\n")[i].split(ConstantsValue.MONEDA2)[1].trim()));
+							modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i].split(ConstantsValue.MONEDA2)[1].trim()));
 						}
-
+						
 						String x = fn.gatos(newcontenido.split("\n")[i + 1].replace("  ", "###").replace("######", "###"));
 
 					    modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[0].trim()));
 						modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[1].trim()));
 						if(modelo.getMoneda() == 0 && x.split("###").length > 1) {
-							modelo.setMoneda(fn.moneda(x.split("###")[2].trim()));
+							modelo.setMoneda(fn.buscaMonedaEnTexto(x.split("###")[2].trim()));
 						}
 
 					}
+					
 					if (newcontenido.split("\n")[i].contains("Pago:")) {
 						String texto = newcontenido.split("\n")[i].split("Pago:")[1].replace("###", "").replace("PAGOS","").trim();
 						if(texto.equalsIgnoreCase("PAGO ANUAL")){
 							texto = "ANUAL";
-						}
+						}				
 						modelo.setFormaPago(fn.formaPago(texto));
 
 					}
