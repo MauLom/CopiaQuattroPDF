@@ -36,7 +36,7 @@ public class inbursaDiversosModel {
 			modelo.setTipo(7);
 
 			// cia
-			modelo.setCia(35);
+			modelo.setCia(38);
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
 			fin = contenido.indexOf("COBERTURAS");

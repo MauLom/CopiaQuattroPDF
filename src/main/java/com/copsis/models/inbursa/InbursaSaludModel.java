@@ -34,7 +34,7 @@ public class InbursaSaludModel {
         modelo.setTipo(3);
 
         // cia
-        modelo.setCia(35);
+        modelo.setCia(38);
 
         
          //Datos del Contratante

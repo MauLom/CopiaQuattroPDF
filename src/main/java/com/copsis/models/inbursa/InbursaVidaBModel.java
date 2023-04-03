@@ -26,10 +26,10 @@ public class InbursaVidaBModel {
 				.replace("COBERTURAS CONTRATADAS", "SECCION###COBERTURAS#");
 		try {
 			// tipo
-			modelo.setTipo(7);
+			modelo.setTipo(5);
 
 			// cia
-			modelo.setCia(35);
+			modelo.setCia(38);
 
 	
 			
