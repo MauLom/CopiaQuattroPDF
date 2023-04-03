@@ -42,7 +42,7 @@ public class AxaModel {
 				modelo = datosAxaSalud.procesar();
 		
 			}
-			else if (contenido.contains("familiar") && contenido.contains("póliza")) {
+			else if ( !contenido.contains("Gastos Médicos Mayores Individual") && (contenido.contains("familiar") && contenido.contains("póliza"))) {
 
 				modelo = new AxaSaludFaModel().procesar(fn.caratula(1, 3, stripper, doc));
 		
