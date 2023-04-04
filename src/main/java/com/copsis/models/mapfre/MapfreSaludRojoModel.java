@@ -340,7 +340,7 @@ public class MapfreSaludRojoModel {
 	                    if (sp == 7 || sp == 6 || sp ==5) {
 	                    	
 	                    	if(!x.contains("-") &&  !x.contains("ANTIGÜEDAD") && !x.contains("RECONOCIMIENTO") && !x.contains("ASEGURADOS")) {
-	                        cobertura.setNombre(x.split("###")[0]);
+	                        cobertura.setNombre(x.split("###")[0].trim());
 	                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 	                        cobertura.setDeducible(x.split("###")[2]);
 	                        cobertura.setCoaseguro(x.split("###")[3]);
@@ -350,7 +350,7 @@ public class MapfreSaludRojoModel {
 	                    if (sp == 3 || sp == 2 ) {
 	                  
 	                    	if(!x.contains("-") && !x.contains("URO")  && !x.contains("ASEGURADOS") && !x.contains("NACIMIENTO") && !x.contains("ANTIGÜEDAD") && !x.contains("ANEXOS")) {
-	                            cobertura.setNombre(x.split("###")[0]);
+	                            cobertura.setNombre(x.split("###")[0].trim());
 		                        cobertura.setSa(x.split("###")[1].replace("\r", ""));
 		                        coberturas.add(cobertura);	
 	                    	}
