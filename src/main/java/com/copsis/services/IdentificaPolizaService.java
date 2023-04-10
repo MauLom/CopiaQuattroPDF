@@ -445,7 +445,8 @@ public class IdentificaPolizaService {
                }
             
                //ENTRADA PARA Latinoamericana
-               if(!encontro &&  contenido.contains("Latinoamericana")) {
+
+               if(!encontro &&  (contenido.contains("Latinoamericana") || rangoSimple(4, 6, pdfStripper, pdDoc).contains("latinoseguros.com.mx") )) {
               	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
                    modelo = datosLatino.procesar();
                    encontro = true;  
