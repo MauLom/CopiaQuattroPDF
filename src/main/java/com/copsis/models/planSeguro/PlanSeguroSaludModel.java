@@ -184,6 +184,25 @@ public class PlanSeguroSaludModel {
 				}				
 			}
 			modelo.setCoberturas(coberturas);
+			if(coberturas.isEmpty()){
+				inicio = contenido.indexOf("Coberturas");
+				fin = contenido.indexOf("Primas");
+				newcontenido = new StringBuilder();
+				newcontenido.append( fn.extracted(inicio, fin, contenido));
+			
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+					if(!newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios") && !newcontenido.toString().split("\n")[i].contains("Coberturas") && !newcontenido.toString().split("\n")[i].contains("COBERTURA BASICA") && !newcontenido.toString().split("\n")[i].contains("COBERTURAS ADICIONALES ")) {
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					    int sp = newcontenido.toString().split("\n")[i].split("###").length;
+						if(sp >1) {							
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+							coberturas.add(cobertura);
+						}
+					}
+				}
+				modelo.setCoberturas(coberturas);
+			}
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(PlanSeguroSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
