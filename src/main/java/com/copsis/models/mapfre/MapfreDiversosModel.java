@@ -381,18 +381,27 @@ public class MapfreDiversosModel {
 			// renovacion
 			inicio = inicontenido.indexOf("SUMA ASEGURADA  DEDUCIBLE");
 			fin = inicontenido.indexOf("ABREVIATURAS");
+
 			if(inicio == -1) {
 			    inicio = inicontenido.indexOf("SUMA ASEGURADA    LIMITE MAXIMO");
 			}
 			if(inicio == -1) {
 			    inicio = inicontenido.indexOf("SUMA ASEGURADA### DEDUCIBLES");
 			}
+
+			if(inicio == -1) {
+			    inicio = inicontenido.indexOf("AMPARADAS");
+			}
 			if(fin == -1) {
 			    fin = inicontenido.indexOf("VALOR PARA SEGURO");
 			}
+			
+			if(fin == -1) {
+			    fin = inicontenido.indexOf("Las condiciones generales");
+			}
+			
 		
-		
-	
+
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();

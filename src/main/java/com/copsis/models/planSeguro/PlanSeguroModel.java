@@ -35,7 +35,7 @@ public class PlanSeguroModel {
 			if (tipo == 0 && contenido.contains("PÓLIZA DE SALUD OPTIMA")) {
 				tipo = 2;
 			}
-			if (tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SALUD OPTIMA / INDIVIDUAL")) {
+			if (tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SALUD OPTIMA / INDIVIDUAL") ) {
 				tipo = 2;
 				modeloTipo = 2;
 			}
@@ -44,6 +44,12 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 3;
 			}
+			if (tipo == 0 &&  fn.caratula(1, 4, stripper, doc).contains("PÓLIZA DE GOLDEN SALUD INDIVIDUAL")) {
+				tipo = 2;
+				modeloTipo = 0;
+			}
+	
+
 
 			switch (tipo) {
 				case 2:

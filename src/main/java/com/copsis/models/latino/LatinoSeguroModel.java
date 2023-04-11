@@ -14,31 +14,40 @@ public class LatinoSeguroModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
+
 	public LatinoSeguroModel(PDFTextStripper stripper, PDDocument doc, String contenido) {
 		this.stripper = stripper;
 		this.doc = doc;
 		this.contenido = contenido;
 	}
-	
-	
+
 	public EstructuraJsonModel procesar() {
 		try {
+	
 
-			 switch (fn.tipoPoliza(contenido)) {
-			   case 1:
-				   modelo = new LatinoSeguroAutoModel(fn.caratula(1, 2, stripper, doc)).procesar();
-				break;
-
-			default:
-				break;
+			int tipo = fn.tipoPoliza(contenido);
+			if (tipo == 0 && fn.caratula(4, 5, stripper, doc).contains("GM IND MEDICA")) {
+				tipo = 2;
 			}
-			 return modelo;
+			switch (tipo) {
+				case 1:
+					modelo = new LatinoSeguroAutoModel(fn.caratula(1, 2, stripper, doc)).procesar();
+					break;
+
+				case 2:
+					modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5,7, stripper, doc));
+					break;
+
+				default:
+					break;
+			}
+			return modelo;
 		} catch (Exception ex) {
-			modelo.setError(LatinoSeguroModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+			modelo.setError(
+					LatinoSeguroModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
-	
+
 	}
-	
-	
+
 }

@@ -165,14 +165,16 @@ public class AxaDiversosModel {
 					}
 				
 					if(newcontenido.split("\n")[i].contains("Subramo") && newcontenido.split("\n")[i].contains("pago")) {
+						
 						if(newcontenido.split("\n")[i].contains("Folio:")) {
-							modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("Folio:")[1].replace("###", "").replace("\r", "").trim()));
+							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].split("Folio:")[1].replace("###", "").replace("\r", "").trim()));
 						}else {
-							String[] valores = newcontenido.split("\n")[i+1].split("###");
-							modelo.setFormaPago(fn.formaPago(valores[valores.length-1].replace("\r", "").trim()));
+							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].trim()));
 						}
 					}
+				
 					if(newcontenido.split("\n")[i].contains("Uso:") && newcontenido.split("\n")[i].contains("pago")) {
+						
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].split("Régimen:")[1].replace("Vivienda Sola", "").replace("###", "").replace("\r", "").trim()));
 					}
 				
