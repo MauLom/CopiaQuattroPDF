@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class PlanSeguroSaludCModel {
@@ -94,9 +95,31 @@ public class PlanSeguroSaludCModel {
             fin = contenido.indexOf("Clave de Agente"); 
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
+            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-                  System.out.println(newcontenido.toString().split("\n")[i]);
+                EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+                  if(!newcontenido.toString().split("\n")[i].contains("Cobertura básica")
+                  && !newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios")
+                  && !newcontenido.toString().split("\n")[i].contains("condiciones generales")
+                  && !newcontenido.toString().split("\n")[i].contains("Mensual")  ){                
+                    switch (newcontenido.toString().split("\n")[i].split("###").length ) {
+                        case 2:
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                        coberturas.add(cobertura);
+                            break;                    
+                        default:
+                        if(!newcontenido.toString().split("\n")[i].contains("Coaseguro contratada")){
+                            cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                            coberturas.add(cobertura);
+                        }                       
+                            break;
+                    }
+                  }
             }
+            modelo.setCoberturas(coberturas);
+			
+            
 
 
             return modelo;
