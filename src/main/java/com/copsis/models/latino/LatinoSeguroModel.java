@@ -26,18 +26,29 @@ public class LatinoSeguroModel {
 	
 
 			int tipo = fn.tipoPoliza(contenido);
+			int salud=0;
+			if (tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("GM IND MEDICA")) {
+				tipo = 2;
+				salud=1;
+			}
 			if (tipo == 0 && fn.caratula(4, 5, stripper, doc).contains("GM IND MEDICA")) {
 				tipo = 2;
 			}
+			System.out.println(fn.caratula(2, 3, stripper, doc));
+			
 			switch (tipo) {
 				case 1:
 					modelo = new LatinoSeguroAutoModel(fn.caratula(1, 2, stripper, doc)).procesar();
 					break;
 
 				case 2:
-					modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5,7, stripper, doc));
+				System.out.println(salud);
+				      if(salud==1){
+						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(2,3, stripper, doc));
+					  }else{
+						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5,7, stripper, doc));
+					  }
 					break;
-
 				default:
 					break;
 			}
