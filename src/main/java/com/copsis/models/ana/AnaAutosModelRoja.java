@@ -141,12 +141,12 @@ public class AnaAutosModelRoja {
 						}
 
 						if (sp == 9) {
-							modelo.setVigenciaA(vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
-									+ vigencias.split("###")[6]);
-							modelo.setVigenciaDe(vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
-									+ vigencias.split("###")[3]);
-							modelo.setFechaEmision(vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"
-									+ vigencias.split("###")[0]);
+							modelo.setVigenciaA((vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
+									+ vigencias.split("###")[6]).replace(" ", "").trim());
+							modelo.setVigenciaDe((vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
+									+ vigencias.split("###")[3]).replace(" ", "").trim());
+							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"
+									+ vigencias.split("###")[0]).replace(" ", "").trim());
 						}
 					}
 
