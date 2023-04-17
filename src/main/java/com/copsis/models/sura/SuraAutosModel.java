@@ -48,9 +48,13 @@ public class SuraAutosModel {
 			if(inicio == -1) {
                 inicio = contenido.indexOf("Póliza no.");
             }
-		
-			
 			fin = contenido.indexOf("Coberturas contratadas");
+			if(fin < inicio){
+				inicio = contenido.indexOf("Ramo");
+				fin = contenido.indexOf("Coberturas contratadas");
+		
+			}
+			
 			
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
@@ -167,8 +171,9 @@ public class SuraAutosModel {
 			
 
 			inicio = contenido.indexOf("Prima neta###Descuento");
-
 			fin = contenido.indexOf("Pág. 1");
+
+		
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
@@ -188,12 +193,40 @@ public class SuraAutosModel {
 				
 			}
 
+			if(modelo.getPrimaneta().intValue() == 0){
+			
+					inicio = contenido.lastIndexOf("Prima neta###Descuento");
+				     fin = contenido.lastIndexOf("Pág. 1 de 4");
+					 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+					 for (int i = 0; i < newcontenido.split("\n").length; i++) {				
+						if(newcontenido.split("\n")[i].contains("Prima neta")) {
+							int sp = newcontenido.split("\n")[i+1].split("###").length;
+							if(sp== 6) {
+								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
+								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[2])));
+								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[3])));
+								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[4])));
+								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[5])));
+							}
+						}
+					}
+				
+			}
+
 			
 			inicio = contenido.indexOf("Coberturas contratadas");
 			fin = contenido.indexOf("Prima neta###Descuento");
+
+			int	in = contenido.lastIndexOf("Coberturas contratadas");
+			int fi = contenido.lastIndexOf("Prima neta###Descuento");
+			String xcon = "";
+			if (in > -1 && fi > -1 && in < fi) {
+				xcon=	contenido.substring(in, fi).replace("@@@", "").replace("\r", "");
+			}
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")+"" +xcon;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if(!newcontenido.split("\n")[i].contains("contratadas") || !newcontenido.split("\n")[i].contains("Prima neta")) {
@@ -226,7 +259,7 @@ public class SuraAutosModel {
 	private void obtenerDatosAgente(String texto, EstructuraJsonModel model) {
 		
 		if(texto.split("Agente:").length > 1) {
-		System.out.println(texto);   
+   
 			model.setCveAgente(texto.split("Agente:")[1].split("\n")[0].trim());
 		}
 		
