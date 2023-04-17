@@ -38,18 +38,15 @@ public class qualitasAutosMotosModel {
 				.replace("C.P:", "C.P.");
 		
 		try {
-			// cia
+		
 			modelo.setCia(29);		
-
-			// tipo
 			modelo.setTipo(1);
-
-			// ramo
 			modelo.setRamo("Autos");
 
 
 			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin  = contenido.indexOf("COBERTURAS CONTRATADAS");
+			System.out.println(inicio +"--> "+ fin);
 			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
