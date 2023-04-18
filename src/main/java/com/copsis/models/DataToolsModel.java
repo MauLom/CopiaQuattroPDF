@@ -519,6 +519,9 @@ public class DataToolsModel {
 			case "SEMANAL VITRO":
 				dato = 6;
 				break;
+			case "CUATRIMESTRAL":
+				dato = 4;
+			break;	
 			default:
 				dato = 0;
 				break;
