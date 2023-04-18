@@ -26,7 +26,7 @@ public class ZurichModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-			System.out.println(contenido);
+
 			int tipo = fn.tipoPoliza(contenido);
 			if(tipo == 0 && contenido.contains("Ubicación del riesgo:")) {
 				tipo =4;
@@ -37,10 +37,11 @@ public class ZurichModel {
 			if(tipo == 5 && contenido.contains("Recolección de Residuos")) {
 				tipo = 4;
 			}
-			if(tipo == 0 && contenido.contains("Incendio Todo Riesgo Casa")) {
+			if(tipo == 0 && (contenido.contains("Incendio Todo Riesgo Casa")|| contenido.contains(" Transportes Mercancía:"))) {
 				tipo =4;
 			}
-	
+
+
 			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
