@@ -188,16 +188,18 @@ public class HdiAutosBModel {
 				
 				if(newcontenido.toString().split("\n")[i].contains("Total")) {
 					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);		
-					if(!valores.isEmpty()){	
-            		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
-					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
-					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
+					if(!valores.isEmpty() && valores.size() != 4){												
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+							modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
+						
+            		
 					}
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Fraccionado:")) {
 					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);		
-					if(!valores.isEmpty()){	
+					if(!valores.isEmpty() && valores.size() != 4){	
             		 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
 					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
@@ -226,6 +228,7 @@ public class HdiAutosBModel {
 				recibos.add(recibo);
 				modelo.setRecibos(recibos);
 			}
+			System.out.println(modelo.getFormaPago());
 			if(modelo.getFormaPago() ==0){			
 				modelo.setFormaPago(1);				
 			}
