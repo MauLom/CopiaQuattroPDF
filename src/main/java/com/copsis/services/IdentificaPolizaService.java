@@ -276,7 +276,7 @@ public class IdentificaPolizaService {
 			}
 
 			// ENTRADA PARA ZURICH
-			if (!encontro && contenido.contains("zurich") || contenido.contains("Zurich")) {
+			if (!encontro && contenido.contains("zurich") || contenido.contains("Zurich") || contenido.contains("Zurich   Aseguradora   Mexicana")) {			
 				ZurichModel datosZurich = new ZurichModel(pdfStripper, pdDoc, contenido);
 				modelo = datosZurich.procesar();
 				encontro = true;
