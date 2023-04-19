@@ -19,6 +19,7 @@ public class BeneficiarioProjection {
 	private String parentesco;
 	private BigDecimal porcentaje;
 	private String solicitante;
+	private String nombreEspanol;
 	public BeneficiarioProjection() {
 
 	}
