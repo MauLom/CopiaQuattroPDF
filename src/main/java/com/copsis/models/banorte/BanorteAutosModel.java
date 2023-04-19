@@ -409,8 +409,8 @@ public class BanorteAutosModel {
 		}
 		
 		private String completaTextoActualConLineaSiguiente(String[] arrTexto, int i, String textoActual, String textoSiguiente) {
-			String texto = arrTexto[i];
-			if(!texto.contains(textoSiguiente) && arrTexto[i+1].contains(textoSiguiente)) {
+			String texto = arrTexto[i];	
+			if(!texto.contains(textoSiguiente) &&( arrTexto.length < i+1  &&  arrTexto[i+1].contains(textoSiguiente))) {
 				texto = texto.replace(textoActual, textoActual + " " + textoSiguiente);
 				arrTexto[i+1] = arrTexto[i+1].replace(textoSiguiente, "").replace(textoSiguiente+"###", "");
 			}
