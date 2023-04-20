@@ -57,7 +57,7 @@ public class GnpModel {
 							fn.textoBusqueda(stripper, doc, "Asegurado (s)", true)).procesar();
 				}
 			} // termina el codigo de salud
-			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
+			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
 
 			 if (!contenido.contains("Póliza de Seguro de Daños") || !contenido.contains("Daños")) {
 				if(contenido.contains("Seguro de Vida")) {
