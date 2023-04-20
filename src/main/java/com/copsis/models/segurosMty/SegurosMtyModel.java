@@ -37,6 +37,10 @@ public class SegurosMtyModel {
 			) {
 			    tipo = 2;
 			}
+			if(tipo == 0 && fn.caratula(1, 3, stripper, doc).toUpperCase().contains("ALFA MEDICAL") 
+			&& fn.caratula(1, 3, stripper, doc).toUpperCase().contains("GASTOS MÉDICOS")  ){
+			tipo = 2;
+			}
 			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("VIDA INDIVIDUAL")) {
 			    tipo = 5;
 			}
