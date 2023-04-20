@@ -305,14 +305,20 @@ public class AxaDiversosModel {
 				modelo.setUbicaciones(ubicaciones);
 			}
 
-			
+
 //			/*Proceoso para las  coberturas*/
 			inicio = contenido.indexOf("Paquete contratado");
 			fin = contenido.indexOf("Prima Neta");
+			if(inicio == -1){
+				inicio = contenido.indexOf("Descripción de coberturas");
+				fin = contenido.indexOf("Límite Unico y Combinado.");
+			}
+			
+			
 			if(inicio > fin ) {
 				fin = contenido.lastIndexOf("Prima Neta");
 			}
-
+						
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();				
 				newcontenido = contenido.substring(inicio,fin);				
@@ -321,21 +327,20 @@ public class AxaDiversosModel {
 				    int x = newcontenido.split("\n")[i].split("###").length;
 				    if(newcontenido.split("\n")[i].contains("Suma Asegurada")) {
 				    	
-				    }else {
-
+				    }else {						
 				    	  if(x == 2) {
-						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
 						    	coberturas.add(cobertura);				
 						    }
 						    if(x == 3) {
-						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
 						    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
 						    	coberturas.add(cobertura);
 						    }
 						    if(x == 4) {
-						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						    	cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 						    	cobertura.setSa(newcontenido.split("\n")[i].split("###")[1]);
 						    	cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
 						    	coberturas.add(cobertura);
