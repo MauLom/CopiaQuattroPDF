@@ -134,6 +134,7 @@ public class IdentificaPolizaService {
 						|| contenido.contains("Seguros Monterrey New York Life")
 						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
 						) {
+							
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;

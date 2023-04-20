@@ -33,12 +33,15 @@ public class SegurosMtyModel {
 			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL") 
 			&&( fn.caratula(1, 2, stripper, doc).contains("GASTOS MÉDICOS")  
 			|| fn.caratula(1, 2, stripper, doc).contains( "GASTOS ###MÉDICOS"))
+			|| fn.caratula(3, 3, stripper, doc).contains( "GASTOS MÉDICOS")
 			) {
 			    tipo = 2;
 			}
 			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("VIDA INDIVIDUAL")) {
 			    tipo = 5;
 			}
+			
+			
 	
 			switch (tipo) {
 			case 2:// Salud
