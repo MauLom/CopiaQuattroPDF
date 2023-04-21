@@ -32,7 +32,7 @@ public class MapfreModel {
 			
 			tipo =fn.tipoPoliza(contenido);
 
-			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
+			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES") || 	fn.caratula(2, 2, stripper, doc).contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
 			
