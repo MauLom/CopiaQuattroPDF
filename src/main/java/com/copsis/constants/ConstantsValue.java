@@ -12,6 +12,7 @@ public final class ConstantsValue {
 
 	public static final String BENEFICIOS_CUBIERTOS = "BENEFICIOS CUBIERTOS";
 	public static final String BENEFICIARIOS = "BENEFICIARIOS";
+	public static final String BENEFICIARIOS_NOMBRE = "Beneficiarios Nombre";
 
 	public static final String COBERTURAS = "Coberturas";
 	public static final String COASASEGURO = "Coaseguro";
@@ -31,7 +32,8 @@ public final class ConstantsValue {
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
 	public static final String COBERTURAS_CONTRATADAS2 = "Coberturas contratadas";
-	public static final String COBERTURAS_CONTRATADAS3 = "Coberturas Contratadas";
+	public static final String COBERTURAS_AMPARADAS2= "Coberturas Amparadas";
+	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
 
 	public static final String DOMICILIO_HASH = "Domicilio:###";
@@ -71,6 +73,7 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
+	public static final String FECHA_DE_NACIMIENTO = "Fecha de nacimiento:";
 
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
@@ -153,7 +156,7 @@ public final class ConstantsValue {
 	public static final String PLAZO_EDAD_ALCANZADA = "Plazo: Edad Alcanzada";
 	public static final String PLAZO = "Plazo";
 	public static final String PRODUCTO = "PRODUCTO:";
-	
+	public static final String CARATULA_DE_POLIZA ="CARATULA DE POLIZA";
 	public static final String POLIZA_NUMERO2 = "Póliza Número    :";
 
 	public static final String RFC_HASH = "R.F.C.:###";
@@ -213,8 +216,7 @@ public final class ConstantsValue {
 	public static final String NOMBRE_EDAD_SEXO_HASH = "Nombre:###Edad:###Sexo:";
 	public static final String NIVELES = "Niveles:";
 	public static final String EN_CUMPLUMIENTO = "En###cumplimiento#";
-	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";
-	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
+	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";	
 	public static final String FAMILIA_ASEGURADA = "Familia###Asegurada";
 	public static final String TITULAR_HASH = "###TITULAR###F###";
 	public static final String ENDOSO_CONTENIDOS_POLIZA = "Endosos###contenidos###en###la###Póliza";
