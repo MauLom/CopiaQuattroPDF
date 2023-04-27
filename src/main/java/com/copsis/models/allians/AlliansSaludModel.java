@@ -3,6 +3,7 @@ package com.copsis.models.allians;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -23,8 +24,8 @@ public class AlliansSaludModel {
 		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
-			// modelo.setTipo(3);		
-			// modelo.setCia(4);
+			modelo.setTipo(3);		
+			modelo.setCia(4);
 			
 
 			
@@ -94,7 +95,7 @@ public class AlliansSaludModel {
 			 }
 			
 			 inicio =  contenido.indexOf("Prima Neta");
-			 fin = contenido.indexOf("Cobertura Básica");
+			 fin = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA);
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
 				 newcont = new StringBuilder();
 				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
@@ -111,7 +112,7 @@ public class AlliansSaludModel {
 			 }
 			 
 			 newcont = new StringBuilder();
-			 inicio =  contenido.indexOf("Cobertura Básica");
+			 inicio =  contenido.indexOf(ConstantsValue.COBERTURAS_BASICA);
 			 fin = contenido.indexOf("Beneficios y Coberturas");
 			
 	
