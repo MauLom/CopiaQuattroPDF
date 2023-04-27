@@ -14,8 +14,6 @@ import com.copsis.models.EstructuraBeneficiariosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.google.common.base.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AxaVida2Model {
 
@@ -32,8 +30,6 @@ public class AxaVida2Model {
 		StringBuilder newcontenido = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;
-
-		Logger logger = Logger.getLogger(EstructuraJsonModel.class.getName());
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
 				.replace("Carátula de Póliza ", ConstantsValue.CARATULA_DE_POLIZA)
 				.replace("CARÁTULA DE LA PÓLIZA", ConstantsValue.CARATULA_DE_POLIZA)
