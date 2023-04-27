@@ -23,8 +23,8 @@ public class AlliansSaludModel {
 		
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
-			modelo.setTipo(3);		
-			modelo.setCia(4);
+			// modelo.setTipo(3);		
+			// modelo.setCia(4);
 			
 
 			
@@ -122,9 +122,17 @@ public class AlliansSaludModel {
 			
 
 			 for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-				
+			
 				if(newcont.toString().split("\n")[i].contains("Agente") && newcont.toString().split("\n")[i].contains("Contratada")){
-								modelo.setCveAgente(fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1]).get(0));
+					List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1]);					
+					if(valores.size() ==1){
+						modelo.setCveAgente(valores.get(0));
+					}
+					if(valores.size() ==8){
+						modelo.setCveAgente(valores.get(7));
+						modelo.setAgente(newcont.toString().split("\n")[i+1].split(modelo.getCveAgente())[1]
+						+"" + newcont.toString().split("\n")[i+2].split("###")[0]);
+					}				
 					if(newcont.toString().split("\n")[i+2].contains("%") && newcont.toString().split("\n")[i+2].split("###").length == 7){
 						modelo.setAgente(
 							(newcont.toString().split("\n")[i+1].split(modelo.getCveAgente())[1] +" "+
@@ -139,22 +147,33 @@ public class AlliansSaludModel {
 			 newcont = new StringBuilder();
 			 inicio =  contenido.indexOf("Otras Coberturas");
 			 fin = contenido.indexOf("En caso de contratarse");
+			 fin = fin == -1 ? contenido.indexOf("Cláusulas que se anexan") : fin;
+			
 			 if (inicio > -1 && fin > -1 && inicio < fin) {
 				
-				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")
+				 .replace("ELIMINACION DE DEDUCIBLE", "ELIMINACION DE DEDUCIBLE POR ACCIDENTE")
+				 .replace("Actividades###elExtranjero###", "Actividades elExtranjero###")				 );
 			 }
 			 
 			 if(newcont.toString().length() > -1) {
+				String sa="";
 					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {
+				
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					if(newcont.toString().split("\n")[i].contains("%")  || newcont.toString().split("\n")[i].contains("Amparado")
 					   || (newcont.toString().split("\n")[i].contains("Asegurada") && newcont.toString().split("\n")[i].contains("Maternidad"))
-					) {
+					) {					
 						int sp = newcont.toString().split("\n")[i].split("###").length;
+						
 						  if (sp == 3) {
-							     cobertura.setNombre( newcont.toString().split("\n")[i].split("###")[1]);
-							  cobertura.setSa( newcont.toString().split("\n")[i].split("###")[2] +" "+  newcont.toString().split("\n")[i+1].split("###")[4]);
+							sa = newcont.toString().split("\n")[i].split("###")[2];
+							if(newcont.toString().split("\n")[i+1].length() > 10 && newcont.toString().split("\n")[i+1].split("###").length >4){
+								sa += newcont.toString().split("\n")[i+1].split("###")[4];
+							}
+							 cobertura.setNombre( newcont.toString().split("\n")[i].split("###")[1]);
+							  cobertura.setSa( sa.replace("AmparadoPOR ACCIDENTE", "Amparado") );
 							  coberturas.add(cobertura); 
 						  }
 						  if (sp == 6) {
