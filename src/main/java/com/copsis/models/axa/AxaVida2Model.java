@@ -493,8 +493,7 @@ public class AxaVida2Model {
 			}
 
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {	
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
