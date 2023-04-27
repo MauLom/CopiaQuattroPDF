@@ -22,17 +22,11 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-
-import java.net.URL;
-
-
 public class ImpresionCertificadoChubbPdf {
     private final Color gray = new Color(236, 238, 238, 0);
     private final Color gray2 = new Color(193,197, 199, 0);
-    private float margin = 10, yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590;
+    private float yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590;
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
-    private float marginY = 0;
-    private float marginX = 20;
     public byte[] buildPDF(CertificadoProjection certificadoProjection) {
         ByteArrayOutputStream output;
         try {
@@ -57,6 +51,15 @@ public class ImpresionCertificadoChubbPdf {
 
                     texto = new StringBuilder();
                     texto.append("COBERTURA OTORGADA POR / COVERAGE PROVIDED BY: CHUBB SEGUROS MÉXICO, S.A.");
+                    PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                    communsPdf.drawBox(content01, Color.black, 25, yStart - 13, 449, 1.6f);
+                    content01.close();
+
+
+                    PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                    communsPdf.drawBox(content02, Color.black, 30, yStart - 23, 550,0.2f);
+                    content02.close();
+                    
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 25, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
@@ -71,16 +74,23 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 50,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
                     baseRow = communsPdf.setRow(table);
 			        communsPdf.setCell(baseRow, 28,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 72,"MMM/DD/YYYY 00:00hrs a MMM/DD/YYYY 00:00hrs",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                
+                    communsPdf.setCell(baseRow, 72,"MMM/DD/YYYY 00:00hrs a MMM/DD/YYYY 00:00hrs",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
                     table.draw();
+                    PDPageContentStream content03 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                    communsPdf.drawBox(content03, Color.black, 35, yStart - 15, 548,0.2f);
+                    content03.close();
 
                     yStart -= (table.getHeaderAndDataHeight() );
+
+                    PDPageContentStream content04 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                    communsPdf.drawBox(content04, Color.black, 30, yStart+1, 550,0.2f);
+                    content04.close();
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
 					baseRow = communsPdf.setRow(table,13);
 			        communsPdf.setCell(baseRow, 100,"Datos del Asegurado y datos generales de la póliza / Insured Information & policy general data",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
                     table.draw();
+
                     yStart -= (table.getHeaderAndDataHeight() );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
                     baseRow = communsPdf.setRow(table,11);
@@ -138,8 +148,10 @@ public class ImpresionCertificadoChubbPdf {
                     yStart -= (table.getHeaderAndDataHeight() +10 );
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
-					baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 100,"Coberturas sin deducible / Coverages without deductible Suma Asegurada/Insured Amount",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+					baseRow = communsPdf.setRow(table,12);
+			        communsPdf.setCell(baseRow, 52,"Coberturas sin deducible / Coverages without deductible",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+                    communsPdf.setCell(baseRow, 33,"Suma Asegurada /Insured Amount",Color.BLACK,true, "C", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+                    communsPdf.setCell(baseRow, 15,"Prima / Premium",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +2 );
 
@@ -214,7 +226,7 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);                               
                     table.draw();
                     
-                    Float  tb=462f;
+                    Float  tb=455f;
                     texto = new StringBuilder();
                     texto.append("Cualquier conductor mayor de 18 años con licencia vigente y");
        
@@ -232,7 +244,7 @@ public class ImpresionCertificadoChubbPdf {
                     texto.append("by the insured is covered by this Policy.");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
 
-                    tb =tb+22;
+                    tb =tb+20;
                     texto = new StringBuilder();
                     texto.append("La presente póliza de Auto de Responsabilidad Civil en E.U.A. y Canadá tendrá validez si la póliza de");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
@@ -277,6 +289,9 @@ public class ImpresionCertificadoChubbPdf {
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.3f * 9f), 1f,0.2f);
 
                     tb =tb+65;
+                    PDPageContentStream content05 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                    communsPdf.drawBox(content05, Color.black, 33, 155, 545,0.2f);
+                    content05.close();
                     texto = new StringBuilder();
                     texto.append("En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
                     texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas ");
@@ -313,7 +328,7 @@ public class ImpresionCertificadoChubbPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -343,7 +358,7 @@ public class ImpresionCertificadoChubbPdf {
                     }
                 }
             }
-            System.out.println(charSpacing);
+            
             contentStream.setCharacterSpacing(charSpacing);
             contentStream.showText(line);
             contentStream.newLineAtOffset(0, LEADING);
