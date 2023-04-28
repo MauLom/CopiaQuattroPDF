@@ -134,6 +134,7 @@ public final class ConstantsValue {
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
+	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
 	public static final String PLACAS_MAYUS = "PLACAS:";
@@ -155,6 +156,7 @@ public final class ConstantsValue {
 	public static final String PRODUCTO = "PRODUCTO:";
 	
 	public static final String POLIZA_NUMERO2 = "Póliza Número    :";
+	public static final String POLIZA_NUMERO3 = "Póliza número";
 
 	public static final String RFC_HASH = "R.F.C.:###";
 	public static final String RFC_HASH2 = "###RFC:###";
@@ -215,6 +217,7 @@ public final class ConstantsValue {
 	public static final String EN_CUMPLUMIENTO = "En###cumplimiento#";
 	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";
 	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
+	public static final String COBERTURAS_AMPARADAS2 = "Coberturas Amparadas";
 	public static final String FAMILIA_ASEGURADA = "Familia###Asegurada";
 	public static final String TITULAR_HASH = "###TITULAR###F###";
 	public static final String ENDOSO_CONTENIDOS_POLIZA = "Endosos###contenidos###en###la###Póliza";
