@@ -77,7 +77,7 @@ public class MapfreModel {
 				saludFt2=true;
 			}
 
-System.out.println( contenido);
+
 			//PÓLIZA ESPECIFICA POR VIAJE
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
