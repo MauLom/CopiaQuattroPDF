@@ -69,7 +69,9 @@ public class ZurichAutosModel {
 	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	                    if (newcontenido.split("\n")[i].contains(ConstantsValue.DATOS_ASEGURADO)) {
 	                        modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("###")[0]);
-	                        modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[2].replace(":", "").trim()));
+							List<String> valores = fn.obtenVigePoliza(newcontenido.split("\n")[i + 1].replace(":", "").trim());
+							System.out.println(valores);
+	                        modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
 	                    }
 	                    if (newcontenido.split("\n")[i].contains("Hasta")) {
 	                        modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].replace(":", "").trim()));
