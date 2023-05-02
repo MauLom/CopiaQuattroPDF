@@ -186,7 +186,7 @@ public class Sio4CommunsPdf {
 	        cell.setRightBorderStyle(line.get(1));
 	        cell.setBottomBorderStyle(line.get(2));
 	        cell.setTopBorderStyle(line.get(3));
-	        
+	       
 	        cell.setLeftPadding(padding.get(0));
 	        cell.setRightPadding(padding.get(1));
 	        cell.setTopPadding(padding.get(2));
