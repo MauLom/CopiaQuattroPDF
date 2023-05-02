@@ -79,7 +79,7 @@ public class AtlasAutosModel {
 								modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 
 					}
-					System.out.println(newcontenido.toString().split("\n")[i]);
+			
 					if (newcontenido.split("\n")[i].contains("Forma Pago:")
 							&& newcontenido.split("\n")[i].contains("Fraccionado")) {
 						modelo.setFormaPago(fn.formaPago(
