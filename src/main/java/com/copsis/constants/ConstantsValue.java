@@ -32,6 +32,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
 	public static final String COBERTURAS_CONTRATADAS2 = "Coberturas contratadas";
 	public static final String COBERTURAS_CONTRATADAS3 = "Coberturas Contratadas";
+	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
 
 	public static final String DOMICILIO_HASH = "Domicilio:###";
