@@ -32,8 +32,8 @@ public final class ConstantsValue {
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
 	public static final String COBERTURAS_CONTRATADAS2 = "Coberturas contratadas";
-	public static final String COBERTURAS_AMPARADAS2= "Coberturas Amparadas";
-	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
+	public static final String COBERTURAS_CONTRATADAS3 = "Coberturas Contratadas";
+	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
 
 	public static final String DOMICILIO_HASH = "Domicilio:###";
@@ -137,6 +137,7 @@ public final class ConstantsValue {
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
+	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
 	public static final String PLACAS_MAYUS = "PLACAS:";
@@ -158,6 +159,7 @@ public final class ConstantsValue {
 	public static final String PRODUCTO = "PRODUCTO:";
 	public static final String CARATULA_DE_POLIZA ="CARATULA DE POLIZA";
 	public static final String POLIZA_NUMERO2 = "Póliza Número    :";
+	public static final String POLIZA_NUMERO3 = "Póliza número";
 
 	public static final String RFC_HASH = "R.F.C.:###";
 	public static final String RFC_HASH2 = "###RFC:###";
@@ -216,7 +218,9 @@ public final class ConstantsValue {
 	public static final String NOMBRE_EDAD_SEXO_HASH = "Nombre:###Edad:###Sexo:";
 	public static final String NIVELES = "Niveles:";
 	public static final String EN_CUMPLUMIENTO = "En###cumplimiento#";
-	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";	
+	public static final String DATOS_POLIZA = "Datos###de###la###Póliza";
+	public static final String COBERTURAS_AMPARADAS = "Coberturas###Amparadas";
+	public static final String COBERTURAS_AMPARADAS2 = "Coberturas Amparadas";
 	public static final String FAMILIA_ASEGURADA = "Familia###Asegurada";
 	public static final String TITULAR_HASH = "###TITULAR###F###";
 	public static final String ENDOSO_CONTENIDOS_POLIZA = "Endosos###contenidos###en###la###Póliza";

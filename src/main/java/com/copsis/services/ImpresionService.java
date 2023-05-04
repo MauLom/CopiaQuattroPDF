@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
+import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
@@ -20,6 +21,7 @@ import com.copsis.encryptor.SiO4EncryptorAES;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
+import com.copsis.models.impresion.ImpresionCertificadoChubbPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
@@ -189,6 +191,18 @@ public class ImpresionService {
         } catch (ValidationServiceException e) {
             throw e;
         } catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+    public byte[] ImpresionCertificadoAutos(CertificadoProjection  certificadoProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCertificadoChubbPdf().buildPDF(certificadoProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }

@@ -56,13 +56,9 @@ public class QualitasAutosModel {
 				.replace("MOTOR:", "Motor:");
 
 		try {
-			// cia
-			modelo.setCia(29);
-
-			// tipo
+			
+			modelo.setCia(29);			
 			modelo.setTipo(1);
-
-			// ramo
 			modelo.setRamo("Autos");
 
 
@@ -644,9 +640,12 @@ public class QualitasAutosModel {
 					if (newcontenido.length() == 11) {
 						modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
 					}
-				}else {
-					newcontenido = newcontenido.split("###").length>2 ?newcontenido.split("###")[1] : "";
-					modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
+				}else {					
+				 newcontenido = !fn.obtenVigePoliza2(newcontenido).isEmpty() ? fn.obtenVigePoliza2(newcontenido).get(0):"";
+				 if(newcontenido.length() > 0){
+					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido));
+				 }					
+					
 				}
 			}
 			// vigencia_de

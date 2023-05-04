@@ -440,8 +440,11 @@ public class IdentificaPolizaService {
                    modelo = datosPlan.procesar();
                    encontro = true;  
                }
+			
                //ENTRADA PARA Aguila
-               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || contenido.contains("Águila, Compañía de Seguros, S.A. de C.V."))) {
+               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || 
+			   contenido.contains("Águila, Compañía de Seguros, S.A. de C.V.")) || contenido.contains("El Águila")) {
+			
             	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
                    modelo = datosAguila.procesar();
 				   encontro = true;  
