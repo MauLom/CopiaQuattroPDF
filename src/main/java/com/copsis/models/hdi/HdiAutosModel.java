@@ -231,12 +231,14 @@ public class HdiAutosModel {
 					}
 					if (newcontenido.split("\n")[i].contains("Fraccionado") && newcontenido.split("\n")[i].contains("de Póliza") && newcontenido.split("\n")[i+1].split("###").length ==  8) {
 							primas = false;
-							modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[0])));
-							modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[1])) );
-							modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[5])));
-							modelo.setRecargo( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[3])));
-							modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[6])));
-							modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i+1].split("###")[7])));
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);												
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+							modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+							modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+							modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));                    
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));						
 					}
 				}
 
