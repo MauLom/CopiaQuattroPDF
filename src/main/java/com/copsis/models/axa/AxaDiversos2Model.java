@@ -311,17 +311,18 @@ public class AxaDiversos2Model {
     }
 
     private void obtenerDatosubicacion(String contenido, EstructuraJsonModel modelo) {
-        String texto = contenido.replace("Ubicación  ###Contratante", UBICACION);
+        String texto = contenido.replace("Ubicación  ###Contratante", UBICACION)
+        .replace("Coberturas Contratadas", ConstantsValue.COBERTURAS_CONTRATADAS2);
         int inicio = texto.indexOf(UBICACION);
 
         if (inicio != texto.lastIndexOf(UBICACION)) {
             inicio = texto.lastIndexOf(UBICACION);
         }
 
-        int fin = texto.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS3);
+        int fin = texto.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
 
-        if (fin != texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS3)) {
-            fin = texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS3);
+        if (fin != texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS2)) {
+            fin = texto.lastIndexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
         }
 
         if (inicio > -1 && inicio < fin) {
