@@ -161,8 +161,10 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Moneda:")
 							&& newcontenido.split("\n")[i].contains("Inicial:")
 							&& newcontenido.split("\n")[i].contains("Gastos:")) {
-						modelo.setDerecho(fn.castBigDecimal(
-								fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
+						    modelo.setDerecho(fn.castBigDecimal(
+							fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);								
+						    modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 
 					}
 						
@@ -174,6 +176,10 @@ public class AnaAutosModelRoja {
 										.replace("###", "").replace(".", "").trim()));
 						modelo.setIva(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
+								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+								modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+
+							
 					}
 
 					
