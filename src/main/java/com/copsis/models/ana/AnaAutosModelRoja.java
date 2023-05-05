@@ -109,7 +109,7 @@ public class AnaAutosModelRoja {
 
 					}
 
-					if (newcontenido.split("\n")[i].contains("C.P.")  && cp) {
+					if ( cp && newcontenido.split("\n")[i].contains("C.P.")  ) {
 						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i]);
 						
 						if(valores.size()==4){
@@ -121,7 +121,7 @@ public class AnaAutosModelRoja {
 						
 						cp =false;
 					}
-					if (newcontenido.split("\n")[i].contains("C.P.") && fn.isNumeric(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5).trim()) && cp) {												
+					if ( cp && newcontenido.split("\n")[i].contains("C.P.") && fn.isNumeric(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5).trim()) ) {												
 							modelo.setCp(newcontenido.split("\n")[i].replace("C.P.", "C.P.").split("C.P.")[1].substring(0, 5));		
 							cp =false;
 					}
