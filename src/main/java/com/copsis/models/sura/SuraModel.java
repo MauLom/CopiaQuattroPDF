@@ -30,9 +30,12 @@ public class SuraModel {
 				}
 				
 				int tipo = fn.tipoPoliza(contenido);
+			
+
+				if(tipo == 5 &&  contenido.contains("Grupo Experiencia Global Sin Dividendos")) {
+					tipo =5;
+				}
 				
-			
-			
 				if(tipo == 1 &&  contenido.contains("MEDIC ")) {
 					tipo =2;
 				}
@@ -51,6 +54,7 @@ public class SuraModel {
 					tipo =4;
 				}
 
+			
 
          
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
@@ -79,6 +83,11 @@ public class SuraModel {
 					modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 				}
 			
+				break;
+		
+				
+				case 5:
+				modelo = new SuraVidaModel().procesar(fn.caratula(2, 3, stripper, doc));
 				break;
 			default:
 				break;

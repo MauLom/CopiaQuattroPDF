@@ -323,6 +323,7 @@ public class IdentificaPolizaService {
 					|| contenido.contains("Seguros SURA")
 					|| contenido.contains("@@@Seguros SURA S.A. de C.V.") || contenido.contains("SURA S.A.")) {
 				SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
+		
 				modelo = datosSura.procesar();
 				encontro = true;
 			}
@@ -498,6 +499,7 @@ public class IdentificaPolizaService {
 				encontro = true;  
 			}
           
+
          
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
