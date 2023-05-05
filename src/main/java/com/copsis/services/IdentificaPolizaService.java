@@ -32,6 +32,7 @@ import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.insignia.InsigniaModel;
 import com.copsis.models.latino.LatinoSeguroModel;
 import com.copsis.models.mapfre.MapfreModel;
+import com.copsis.models.mediacces.MediaccesModel;
 import com.copsis.models.metlife.MetlifeModel;
 import com.copsis.models.multiva.MultivaModels;
 import com.copsis.models.planSeguro.PlanSeguroModel;
@@ -495,6 +496,13 @@ public class IdentificaPolizaService {
 			
 			if(!encontro && contenido.contains("Tokio Marine Compañía")){
 				modelo   = new TokioModel().procesar(pdfStripper, pdDoc, contenidoAux);
+				encontro = true;  
+			}
+
+ 			
+			if(!encontro && contenido.contains("@MEDI ACCESS SEGUROS")){
+				
+				modelo   = new MediaccesModel().procesar(pdfStripper, pdDoc, contenido);
 				encontro = true;  
 			}
           
