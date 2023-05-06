@@ -692,6 +692,7 @@ public class QualitasAutosModel {
 				newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
 						.replace(".:", "").replace(".", "").replace(":", "");
 						
+						
 				if (newcontenido.contains("Municipio")) {
 					newcontenido = newcontenido.split("Municipio")[0].replace("###", "").trim();
 					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
@@ -704,9 +705,14 @@ public class QualitasAutosModel {
 					modelo.setCp(newcontenido.length() < 5? "0"+newcontenido :newcontenido);
 				}
 			
-				if(modelo.getCp().length() > 0){				
-					List<String> valores = fn.obtenerListNumeros2(newcontenido);				
-					modelo.setCp(valores.get(0).toString().length() < 5? "0"+valores.get(0).toString() :valores.get(0).toString());					
+				if(modelo.getCp().length() > 0){	
+					
+					List<String> valores = fn.obtenerListNumeros2(newcontenido);	
+					if(valores.size()> 0){
+						modelo.setCp(valores.get(0).toString().length() < 5? "0"+valores.get(0).toString() :valores.get(0).toString());					
+					}
+						
+					
 				}
 			}
 
