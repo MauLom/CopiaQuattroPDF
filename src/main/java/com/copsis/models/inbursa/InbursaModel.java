@@ -31,6 +31,11 @@ public class InbursaModel {
 				tipof5 = true;
 			}
 
+			if(tipo == 0 &&  fn.caratula(1, 3, stripper, doc).contains("ENFERMEDAD CONTAGIOSA") ) {
+				tipo =4;
+				
+			}
+
 			
 			switch (tipo) {
 			case 1:// Autos
