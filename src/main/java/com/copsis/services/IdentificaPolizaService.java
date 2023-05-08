@@ -117,8 +117,9 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA MAPFRE
 			if (!encontro && contenido.length() > 502 && contenido.indexOf("MAPFRE") > -1
 					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A.")
-					|| contenido.contains("MAPFRE MÉXICO"))  {	
+					|| contenido.contains("MAPFRE MÉXICO") || rangoSimple(2, 2, pdfStripper, pdDoc).contains("Mapfre México, S.A."))  {	
 				contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
+			
 				MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenidoAux);
 				modelo = datosmapfre.procesa();
 				encontro = true;
@@ -133,7 +134,9 @@ public class IdentificaPolizaService {
 						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")
 						|| contenido.contains("Seguros Monterrey New York Life")
 						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
+						|| rangoSimple(1, 3, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
 						) {
+							
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 					modelo = datosSegurosMty.procesa();
 					encontro = true;
@@ -437,8 +440,11 @@ public class IdentificaPolizaService {
                    modelo = datosPlan.procesar();
                    encontro = true;  
                }
+			
                //ENTRADA PARA Aguila
-               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || contenido.contains("Águila, Compañía de Seguros, S.A. de C.V."))) {
+               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || 
+			   contenido.contains("Águila, Compañía de Seguros, S.A. de C.V.")) || contenido.contains("El Águila")) {
+			
             	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
                    modelo = datosAguila.procesar();
 				   encontro = true;  

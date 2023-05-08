@@ -23,7 +23,12 @@ public class AguilaModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-
+        
+		
+		if(fn.tipoPoliza(contenido) == 0 || contenido.contains("Incendio de los Contenidos")) {
+			
+			modelo  = new AguilaDiversosModel().procesar(fn.caratula(1, 3, stripper, doc));
+		}
 			if(fn.tipoPoliza(contenido) == 1) {
 				modelo  = new AguilaAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();	
 			}

@@ -521,7 +521,7 @@ public class DataToolsModel {
 				break;
 			case "CUATRIMESTRAL":
 				dato = 4;
-			break;	
+				break;
 			default:
 				dato = 0;
 				break;
@@ -1121,8 +1121,9 @@ public class DataToolsModel {
 
 	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
-		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA","ANNUAL",
-		        "EFECTIVO","ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R", "SEMESTRALS-R",
+		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA", "ANNUAL",
+				"EFECTIVO", "ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R",
+				"SEMESTRALS-R",
 				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
 				"TRIMESTRAL12MESES", "TRIM.S/REC", "TRIM.S-REC", "TRIM.C-REC", "TRIM.C/REC", "MENS", "MEN.", MENSUAL,
 				"MENSUALSINRPF", "MENSUALSRDERP",
@@ -1132,71 +1133,71 @@ public class DataToolsModel {
 		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
-				case "CONT":
-				case CONTADO:
-				case "PRIMA UNICA":
-				case "PAGO ÚNICO":
-				case "PAGO UNICO":
-				case "ANUA":
-				case "ANUAL":
-				case "ÚNICA":
-				case "UNICA":
-				case "ANUALMENTE":
-				case "ANUAL EXTENDIDA":
-				case "ANNUAL":
-				case "EFECTIVO":
-					dato = 1;
-					break;
-				case "SEME":
-				case "SEM.":
-				case SEMESTRAL:
-				case "SEMESTR":
-				case "SEMESTRAL S/R":
-				case "SEMESTRAL S-R":
-					dato = 2;
-					break;
-				case "TRIM":
-				case "TRIMESTR":
-				case TRIMESTRAL:
-				case "Trimestral":
-				case "TRIMESTRAL S/R":
-				case "TRIMESTRAL S-R":
-				case "TRIMESTRAL SR DERP":
-				case "TRIMESTRAL 12 MESES":
-				case "TRIM.S/REC":
-				case "TRIM.S-REC":
-				case "TRIM.C-REC":
-				case "TRIM.C/REC":	
-					dato = 3;
-					break;
-				case "MENS":
-				case "MEN.":
-				case MENSUAL:
-				case "MENSUAL SIN RPF":
-				case "MENSUAL SR DERP":
-				case "MENSUAL SR":
-				case "MENSUAL S/R":
-				case "MENSUALS/R":
-				case "MEN.DER.PRORRATEA":
-				case "MENSUAL VITRO":
-				case "MENSUAL S/R DERP":
-				case "MEN.S/REC.":
-				case "MENSUAL S-R":
-					dato = 4;
-					break;
-				case "QUIN":
-				case "QUICENAL":
-				case "QUINCENAL DXN VITRO":
-				case "QUINCENAL DXN":
-					dato = 5;
-					break;
-				case "SEMA":
-				case SEMANAL:
-				case "SEMANAL VITRO":
-					dato = 6;
-					break;
-				}			
-			}				
+					case "CONT":
+					case CONTADO:
+					case "PRIMA UNICA":
+					case "PAGO ÚNICO":
+					case "PAGO UNICO":
+					case "ANUA":
+					case "ANUAL":
+					case "ÚNICA":
+					case "UNICA":
+					case "ANUALMENTE":
+					case "ANUAL EXTENDIDA":
+					case "ANNUAL":
+					case "EFECTIVO":
+						dato = 1;
+						break;
+					case "SEME":
+					case "SEM.":
+					case SEMESTRAL:
+					case "SEMESTR":
+					case "SEMESTRAL S/R":
+					case "SEMESTRAL S-R":
+						dato = 2;
+						break;
+					case "TRIM":
+					case "TRIMESTR":
+					case TRIMESTRAL:
+					case "Trimestral":
+					case "TRIMESTRAL S/R":
+					case "TRIMESTRAL S-R":
+					case "TRIMESTRAL SR DERP":
+					case "TRIMESTRAL 12 MESES":
+					case "TRIM.S/REC":
+					case "TRIM.S-REC":
+					case "TRIM.C-REC":
+					case "TRIM.C/REC":
+						dato = 3;
+						break;
+					case "MENS":
+					case "MEN.":
+					case MENSUAL:
+					case "MENSUAL SIN RPF":
+					case "MENSUAL SR DERP":
+					case "MENSUAL SR":
+					case "MENSUAL S/R":
+					case "MENSUALS/R":
+					case "MEN.DER.PRORRATEA":
+					case "MENSUAL VITRO":
+					case "MENSUAL S/R DERP":
+					case "MEN.S/REC.":
+					case "MENSUAL S-R":
+						dato = 4;
+						break;
+					case "QUIN":
+					case "QUICENAL":
+					case "QUINCENAL DXN VITRO":
+					case "QUINCENAL DXN":
+						dato = 5;
+						break;
+					case "SEMA":
+					case SEMANAL:
+					case "SEMANAL VITRO":
+						dato = 6;
+						break;
+				}
+			}
 		}
 
 		return dato;

@@ -27,10 +27,13 @@ public class PotosiModel {
 		try {
 		
 			int tipo =fn.tipoPoliza(contenido);
-			if(tipo == 4 && contenido.contains("SEGURO DE VIDA")) {
+		
+			if(tipo == 4 && (contenido.contains("SEGURO DE VIDA"))) {
 				tipo = 5;
 			}
-	
+			if(tipo == 2 && contenido.contains("VIDA INDIVIDUAL")) {
+				tipo = 5;
+			}
 		      switch (tipo) {
 			case 1:
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();

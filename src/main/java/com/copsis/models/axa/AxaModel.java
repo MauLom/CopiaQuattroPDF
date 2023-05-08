@@ -53,24 +53,25 @@ public class AxaModel {
 	
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
 				"VIDA PROTGT","VIDA INDIVIDUAL",
-						"VIDA ACADÉMICO",
+						"VIDA ACADÉMICO","ALIADOS+ KIDS",
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
 						"PLANPROTEGE / COMERCIO",
 						"RESPONSABILIDAD CIVIL, COMERCIO","PLANPROTEGE / COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
 
-				for (String tipo : tipos) {				
+				for (String tipo : tipos) {	
+					
 					if (contenido.contains(tipo)) {	
 								
 						switch (tipo) {
 							
-						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": case "VIDA ACADÉMICO": // VIDA
-							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL") || tipo.equals("VIDA ACADÉMICO")) {
+						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": case "VIDA ACADÉMICO": case "ALIADOS+ KIDS": // VIDA
+							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL") || tipo.equals("VIDA ACADÉMICO") || tipo.equals("ALIADOS+ KIDS")) {
 								
 								AxaVida2Model datosAxaVida = new AxaVida2Model(fn.caratula(1, 4, stripper, doc));
 								modelo = datosAxaVida.procesar();
 							}else {
-
+								
 								AxaVidaModel datosAxaVida = new AxaVidaModel(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxaVida.procesar();	
 							}											

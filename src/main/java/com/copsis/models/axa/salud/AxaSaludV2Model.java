@@ -329,21 +329,26 @@ public class AxaSaludV2Model {
                     for(String x: palabras) {
                         newcontenido = newcontenido.replace(x, x.substring(0, (x.length()-1)) + "###" + x.substring((x.length()-1), x.length()));
                     }
-                    palabras = this.aseguradosEdadDividida(newcontenido);
+   
+                    palabras = this.aseguradosEdadDividida(newcontenido.replace("Ma. De", "Ma. De Las M"));
+                   
                     for(String x:palabras) {
                         newcontenido = newcontenido.replace(x, x.substring(0, 5) + x.substring((x.length()-1), x.length()));
                     }
+                    
                     newcontenido = newcontenido.replace("S###o###b###r ina", "Sobrina")
-                    .replace("S###o###b###r ino#","Sobrino");
+                    .replace("S###o###b###r ino#","Sobrino")
+                    .replace("H###e###r m###ana", "Hermana")
+                    .replace("50 Titular", "50###Titular");
 
                     //end fix parrafo listado de asegurados
                     for (int i = 0; i < newcontenido.split("\n").length; i++) {
                         EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                         int x = newcontenido.split("\n")[i].split("###").length;
-                        
+                     
                         if (newcontenido.split("\n")[i].split("-").length > 5) {
-                  
-                    
+                          
+                           
                             if (x == 9) {
                                 asegurado.setNombre(newcontenido.split("\n")[i].split("###")[0]);   
                                 asegurado.setSexo(
@@ -404,7 +409,7 @@ public class AxaSaludV2Model {
                                 
                                 }
                                 if (nombre.contains(", ")) {
-                                    asegurado.setNombre((nombre.split(",")[1]  +" "+ nombre.split(",")[0]).trim());
+                                    asegurado.setNombre(((nombre.split(",")[1]  +" "+ nombre.split(",")[0]).trim()).replace("  ", " "));
                                 } else {
                                     asegurado.setNombre(nombre.trim());
                                 }
@@ -508,7 +513,8 @@ public class AxaSaludV2Model {
 
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
-                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");                            
+                                        + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");  
+                                    System.out.println( newcontenido.split("\n")[i]);             
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
@@ -731,6 +737,7 @@ public class AxaSaludV2Model {
 
             return modelo;
         } catch (Exception ex) {     
+            ex.printStackTrace();
             modelo.setError(
                     AxaSaludV2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
             return modelo;
@@ -763,8 +770,9 @@ public class AxaSaludV2Model {
         String [] posibles = {"M###", "F###"};
         for(String posible : posibles) {
             for(String x : parrafo.split("\n")) {
-                if(x.contains(posible)) {
-                    String cadena = x.substring(x.indexOf(posible), (x.indexOf(posible)+9));
+             
+                if( x.length() >15 && x.contains(posible)) {                   
+                    String cadena = x.substring(x.indexOf(posible), (x.indexOf(posible)+9));                  
                     if(fn.isNumeric(cadena.substring(8)) && cadena.substring(4, 9).contains("###")) {
                         ajuntar.add(x.substring(x.indexOf(posible), (x.indexOf(posible)+9)));                       
                     }

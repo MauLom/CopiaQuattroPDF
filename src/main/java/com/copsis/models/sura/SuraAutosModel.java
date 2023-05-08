@@ -83,6 +83,7 @@ public class SuraAutosModel {
 							cpEncontrado = true;
 						}
 					}
+                 
 					if (newcontenido.split("\n")[i].contains("Moneda")
 							&& newcontenido.split("\n")[i].contains("Emisión")) {
 						if (newcontenido.split("\n")[i + 1].contains("NACIONAL")
@@ -96,18 +97,26 @@ public class SuraAutosModel {
 									fn.formatDateMonthCadena(newcontenido.split("\n")[i + 1].split("###")[5]));
 						}
 					}
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.MONEDA)){					
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i + 1]));
+
+					}
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.FORMA_PAGO2)){					
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i + 1]));
+
+					}
 					if (newcontenido.split("\n")[i].contains("Vigencia desde")) {
 						modelo.setVigenciaDe(
 								fn.formatDateMonthCadena(newcontenido.split("Vigencia desde")[1].split("###")[1]));
 					}
-					if (newcontenido.split("\n")[i].contains("Hasta las")
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.HASTA_LAS)
 							&& newcontenido.split("\n")[i].contains("C.P.")) {
 				
 						modelo.setVigenciaA(
-								fn.formatDateMonthCadena(newcontenido.split("Hasta las")[1].split("###")[1]));
+								fn.formatDateMonthCadena(newcontenido.split(ConstantsValue.HASTA_LAS)[1].split("###")[1]));
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].split("###")[0].trim());
-					}else if(newcontenido.split("\n")[i].contains("Hasta las")) {
-						String texto = fn.gatos(newcontenido.split("\n")[i].split("Hasta las")[1]);
+					}else if(newcontenido.split("\n")[i].contains(ConstantsValue.HASTA_LAS)) {
+						String texto = fn.gatos(newcontenido.split("\n")[i].split(ConstantsValue.HASTA_LAS)[1]);
 						if(texto.split("###")[0].split("-").length == 3) {
 							modelo.setVigenciaA(fn.formatDateMonthCadena(texto.split("###")[0].trim()));
 						}
@@ -167,6 +176,9 @@ public class SuraAutosModel {
 			
 			if(modelo.getCp().length() == 4) {
 				modelo.setCp("0"+modelo.getCp());
+			}
+			if(!modelo.getVigenciaDe().isEmpty()){
+            modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
 			
 

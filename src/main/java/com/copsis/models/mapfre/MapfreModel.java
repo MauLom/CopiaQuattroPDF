@@ -32,7 +32,7 @@ public class MapfreModel {
 			
 			tipo =fn.tipoPoliza(contenido);
 
-			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES")) {
+			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES") || 	fn.caratula(2, 2, stripper, doc).contains("ACCIDENTES PERSONALES")) {
 				tipo =5;
 			}
 			
@@ -61,20 +61,21 @@ public class MapfreModel {
 				tipo =4;
 			}
 
-			if(tipo == 5 &&  (contenido.contains("UBICACIÓN DE RIESGOS")|| contenido.contains("RIESGOS CUBIERTOS "))) {
+			if(tipo == 5 &&  (contenido.contains("UBICACIÓN DE RIESGOS")|| contenido.contains("RIESGOS CUBIERTOS"))) {
 				tipo =4;
 			}
 			if( tipo == 0 &&contenido.contains("Gastos Hospitalarios")) {
 			    tipo =2;
 			}
-			 if( tipo == 1 &&contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")|| contenido.contains("PÓLIZA ESPECIFICA POR VIAJE")) {
+			if( tipo == 1 &&(contenido.contains("UBICACION Y DESCRIPCION DEL BIEN ASEGURADO")|| contenido.contains("PÓLIZA ESPECIFICA POR VIAJE")
+				|| contenido.contains("PRONOSTICO DE EMBARQUES") )) {
 	                tipo =4;
-	          }
-              boolean saludFt2=false;
-			  if(tipo ==0 && fn.caratula(1, 1, stripper, doc).contains("RECUPERACION MEDICA")){
+	        }
+            boolean saludFt2=false;
+			if(tipo ==0 && fn.caratula(1, 1, stripper, doc).contains("RECUPERACION MEDICA")){
                 tipo=2;
 				saludFt2=true;
-			  }
+			}
 
 
 			//PÓLIZA ESPECIFICA POR VIAJE
