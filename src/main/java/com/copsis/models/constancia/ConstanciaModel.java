@@ -32,15 +32,21 @@ public class ConstanciaModel {
 				final double res = 72;
 				PDFTableStripper stripper = new PDFTableStripper();
 				stripper.setSortByPosition(true);
-				stripper.setRegion(new Rectangle(30, (int) Math.round(1 * res),(int) Math.round(250 * res), (int) Math.round(250.0 * res)));
+				
+				stripper.setRegion(new Rectangle(9, (int) Math.round(1 * res),(int) Math.round(250 * res), (int) Math.round(250.0 * res)));
 					
 				for (int page = 0; page < 1; ++page) {				
 					PDPage pdPage = pdDoc.getPage(page);
 					stripper.extractTable(pdPage);
 					for(int c=0; c<stripper.getColumns(); ++c) {
 						for(int r=0; r<stripper.getRows(); ++r) {							
-							if(stripper.getText(r, c).contains("Razón Social")){            						
-							    constancia.setRazonSocial(stripper.getText(r, c).replace("Denominación/Razón Social:", "").replace("<\br>", "\n").replace("\n", " ").trim());
+							if(stripper.getText(r, c).contains("Razón Social")){      
+								if(constancia.getRazonSocial().equals(constancia.getNombreComercial())){
+
+								}else{
+									constancia.setRazonSocial(stripper.getText(r, c).replace("Denominación/Razón Social:", "").replace("<\br>", "\n").replace("\n", " ").trim());
+								}
+							 													    
 							}
 							if(stripper.getText(r, c).contains("Régimen") && stripper.getText(r, c).contains("Capital:")) {
 							   constancia.setRegimenDeCapital(stripper.getText(r, c).replace("Régimen Capital:", "").replace("<\br>", "\n").replace("\n", " ").replace("  ", " ").trim());	
