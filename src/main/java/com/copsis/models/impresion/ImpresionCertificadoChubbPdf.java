@@ -70,12 +70,15 @@ public class ImpresionCertificadoChubbPdf {
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 25, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 50,"No. de Póliza / Policy No.",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 19,"No. de Póliza / Policy No.",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
+                    communsPdf.setCell(baseRow, 31,certificadoProjection.getNumeroPoliza() ,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.red);
+                    communsPdf.setCell(baseRow, 26,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 24, certificadoProjection.getFechaEmision(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 28,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 72,"MMM/DD/YYYY 00:00hrs a MMM/DD/YYYY 00:00hrs",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
+			        communsPdf.setCell(baseRow, 27,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
+                    communsPdf.setCell(baseRow, 73,certificadoProjection.getFechaDesde() +" a "+certificadoProjection.getFechaHasta(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
                     table.draw();
+                  
                     PDPageContentStream content03 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                     communsPdf.drawBox(content03, Color.black, 35, yStart - 15, 548,0.2f);
                     content03.close();
@@ -94,31 +97,32 @@ public class ImpresionCertificadoChubbPdf {
                     yStart -= (table.getHeaderAndDataHeight() );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Nombre / Name:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Teléfono / Phone:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 15,"Nombre / Name:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 35,certificadoProjection.getNombreCompleto(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 15,"Teléfono / Phone:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 35,certificadoProjection.getTelefono(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     baseRow = communsPdf.setRow(table,11);
 			        communsPdf.setCell(baseRow, 50,"Fecha de Nac / DOB:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 50,"Sexo / Gender:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Domicilio / Address:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                 
-                    baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Nombre / Name:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Teléfono / Phone:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 17,"Domicilio / Address:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 83,certificadoProjection.getDomicilio(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                  
                     baseRow = communsPdf.setRow(table,11);
 			        communsPdf.setCell(baseRow, 50,"Ciudad / City:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Estado / State:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                 
+                    communsPdf.setCell(baseRow, 12,"Estado / State:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 38,certificadoProjection.getEstado(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"C.P. / Zip Code:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 13,"C.P. / Zip Code:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 37,certificadoProjection.getCp(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 50,"R.F.C. / Tax Payer ID:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                  
                     baseRow = communsPdf.setRow(table,11);
 			        communsPdf.setCell(baseRow, 50,"E-mail:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Forma de pago / Payment installments:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 31,"Forma de pago / Payment installments:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow,19,certificadoProjection.getFormaPago(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                  
                     baseRow = communsPdf.setRow(table,11);
 			        communsPdf.setCell(baseRow, 50,"Moneda / Currency:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
@@ -135,16 +139,21 @@ public class ImpresionCertificadoChubbPdf {
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
 					       
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 28,"Año / Year:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 36,"Marca / Make:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 30,"Modelo / Model:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    
+			        communsPdf.setCell(baseRow, 9,"Año / Year:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 20,certificadoProjection.getModelo(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 11,"Marca / Make:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 25,certificadoProjection.getMarca(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 13,"Modelo / Model:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 23,certificadoProjection.getDescripcion(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                                         
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 28,"Serie / VIN:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 36,"Placas / Plates:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 30,"Uso / Use:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-			        table.draw();
+			        communsPdf.setCell(baseRow, 9,"Serie / VIN:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 20,certificadoProjection.getSerie(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 12,"Placas / Plates:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 24,certificadoProjection.getPlacas(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 9,"Uso / Use:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 20,certificadoProjection.getUso(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +10 );
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
@@ -328,7 +337,7 @@ public class ImpresionCertificadoChubbPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                   // document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();

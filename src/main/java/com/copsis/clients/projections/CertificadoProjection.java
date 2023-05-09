@@ -10,9 +10,7 @@ public class CertificadoProjection {
 	private	String fechaEmision;
     private	String fechaDesde;
     private	String fechaHasta;
-    private	String nombre;
-    private	String app;
-    private	String apm;
+    private	String nombreCompleto;
     private	String telefono;
     private	String domicilio;
     private	String ciudad;
