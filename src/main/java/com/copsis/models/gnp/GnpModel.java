@@ -49,9 +49,11 @@ public class GnpModel {
 					}
 				}
 			} // termina el codigo de Autos
-			else if (contenido.contains("Póliza de Seguro Gastos Médicos")) {
+			else if (contenido.contains("Póliza de Seguro Gastos Médicos") || contenido.contains("Seguro Médico GNP Indemniza")) {
 				pagFin = fn.pagFinRango(stripper, doc, ConstantsValue.CLAVE2);
-				if (pagFin > 0) {
+				if( contenido.contains("Seguro Médico GNP Indemniza")){
+					modelo = new GnpSaludBModel().procesar(fn.caratula(1, pagFin, stripper, doc));
+				}else if (pagFin > 0) {
 					modelo = new GnpSaludModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
 							fn.textoBusqueda(stripper, doc, "Asegurado (s)", true)).procesar();
