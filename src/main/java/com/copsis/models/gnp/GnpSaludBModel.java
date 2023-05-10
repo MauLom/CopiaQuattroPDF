@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class GnpSaludBModel {
@@ -24,6 +25,7 @@ public class GnpSaludBModel {
             fin = contenido.indexOf("Descripción del Movimiento");
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+               
                 if(newcontenido.toString().split("\n")[i].contains("Póliza No.")){
                  modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza No.")[1].replace("###", ""));
                 }
@@ -62,6 +64,17 @@ public class GnpSaludBModel {
                     List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
                     modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));                 
                 }
+
+                if(newcontenido.toString().split("\n")[i].contains("Forma de pago")){
+                    modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+                }
+
+                if(newcontenido.toString().split("\n")[i].contains("Moneda")){
+                    modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
+                }
+                if(newcontenido.toString().split("\n")[i].contains("C.P")){
+                    modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].trim().substring(0, 5));
+                }
                                  
             }
 
@@ -75,11 +88,34 @@ public class GnpSaludBModel {
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                 EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                 if( newcontenido.toString().split("\n")[i].split("-").length > 2){
-                    asegurado.setNombre(newcontenido.toString().split("###")[1].trim());
+                    asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[1].trim());
                     List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
-                    System.out.println(newcontenido.toString().split("\n")[i]);
+                    asegurado.setAntiguedad(fn.formatDateMonthCadena(valores.get(0)));
+                    asegurados.add( asegurado);
                 }
             }
+            modelo.setAsegurados(asegurados);
+
+         
+            inicio = contenido.indexOf("Coberturas y Servicios");
+            fin = contenido.indexOf("Facturación");
+            newcontenido = new StringBuilder();
+            newcontenido.append(fn.extracted(inicio, fin, contenido));
+            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+                if(!newcontenido.toString().split("\n")[i].contains("Coberturas")){
+                   
+                    int x = newcontenido.toString().split("\n")[i].split("###").length;
+                    if(x == 5 ||x == 4 || x == 3 ){
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[2]);
+                        coberturas.add(cobertura);
+                    }
+                }
+            }
+            modelo.setCoberturas(coberturas);
+           
 
             return modelo;
         } catch (Exception e) {
