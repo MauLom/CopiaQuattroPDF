@@ -58,7 +58,7 @@ public class PlanSeguroSaludCModel {
                 modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().substring(0,5));
              }
 
-             if(newcontenido.toString().split("\n")[i].contains("Contratado") && newcontenido.toString().split("\n")[i].contains("Pago")){           
+            if(newcontenido.toString().split("\n")[i].contains("Contratado") && newcontenido.toString().split("\n")[i].contains("Pago")){           
                modelo.setPlan(newcontenido.toString().split("\n")[i+1]+" Óptimo");
                modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+2]));
             }
