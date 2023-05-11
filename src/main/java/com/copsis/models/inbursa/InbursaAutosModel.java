@@ -300,6 +300,7 @@ public class InbursaAutosModel {
 				}
 			}
 
+		
 			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS);
 			fin = limiteFinalCoberturas();
 
@@ -422,7 +423,8 @@ public class InbursaAutosModel {
 	
 	private int limiteFinalCoberturas() {
 		int indexTemporal = contenido.length();
-		List<String> listPalabras = Arrays.asList("En caso de Siniestro","AVISO IMPORTANTE","**AVISO ###IMPORTANTE","OPERAN COMO","* Para hacer válida");
+		List<String> listPalabras = Arrays.asList("En caso de Siniestro","AVISO IMPORTANTE",
+		"**AVISO ###IMPORTANTE","OPERAN COMO","* Para hacer válida","Página 1 de 2");
 		//Se toma el indice inmediato donde finaliza la sección de coberturas
 		for(String palabra:listPalabras) {
 			if(contenido.indexOf(palabra)>-1 && contenido.indexOf(palabra)<indexTemporal) {
