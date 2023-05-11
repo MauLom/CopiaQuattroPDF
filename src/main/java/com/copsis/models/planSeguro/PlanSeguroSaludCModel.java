@@ -37,7 +37,13 @@ public class PlanSeguroSaludCModel {
              if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante") && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
              &&newcontenido.toString().split("\n")[i+1].contains("RFC:")){
                 modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
-                modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());            
+               
+                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains("Teléfono:")){
+                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split("Teléfono:")[0].replace("###", "").trim());      
+                }else{
+                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
+                }
+                      
              }
              
              if(newcontenido.toString().split("\n")[i].contains("Dirección:")){
@@ -48,13 +54,17 @@ public class PlanSeguroSaludCModel {
              if(newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains("Teléfono:")){
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
              }
+             if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().substring(0,5));
+             }
 
-             if(newcontenido.toString().split("\n")[i].contains("Contratado") && newcontenido.toString().split("\n")[i].contains("Pago")){           
+            if(newcontenido.toString().split("\n")[i].contains("Contratado") && newcontenido.toString().split("\n")[i].contains("Pago")){           
                modelo.setPlan(newcontenido.toString().split("\n")[i+1]+" Óptimo");
                modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+2]));
             }
 
             }
+            modelo.setMoneda(1);
 
  
             inicio = contenido.indexOf("Lista de Asegurados");

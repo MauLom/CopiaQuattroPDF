@@ -39,6 +39,10 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 2;
 			}
+			if (tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("Póliza de Plan Seguro Intermedio")) {
+				tipo = 2;
+				modeloTipo = 3;
+			}
 
 			if (tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("Póliza de Plan Seguro Óptimo")) {
 				tipo = 2;
