@@ -226,7 +226,8 @@ public class MetlifeVidaModel {
 								}
 							}
 							
-							if(x.contains("VIDA PAGOS LIMITADOS 15")) {
+							if(x.contains("VIDA PAGOS LIMITADOS 15") || x.contains("VIDA PAGOS LIMITADOS 5")) {
+					
                                 if(x.split("###").length == 6) {
                                    
                                     if(x.split("###")[2].trim().split(" ").length == 3){
