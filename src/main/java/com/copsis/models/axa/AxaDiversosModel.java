@@ -26,52 +26,51 @@ public class AxaDiversosModel {
 		String textbusq = "";
 		int inicio = 0;
 		int fin = 0;
-		Boolean txtcon = false;
+		
 		String newcontenido = "";
+	
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("D omicilio:", ConstantsValue.DOMICILIO).replace("F RESNOS", "FRESNOS")
 				.replace("P r i m a T o t a l", ConstantsValue.PRIMA_TOTAL2).replace("Prima###neta:", "Prima Neta:").replace("Prima neta", "Prima Neta")
 				.replace("expedición", ConstantsValue.EXPEDICION3).replace("C .P:", "C.P:").replace("R .F.C: ", "R.F.C: ")
-				.replace("@@@I.V.A:", ConstantsValue.IVA).replace("I.V.A", ConstantsValue.IVA).replace("I.V.A..", ConstantsValue.IVA).replace("Prima###Total", ConstantsValue.PRIMA_TOTAL2).replace("financiamiento", ConstantsValue.FINANCIAMIENTO)
-				.replace("Datos del Contratante","Datos del contratante")
-				.replace("Costo del Seguro", "Costo del seguro")
+				.replace("@@@I.V.A:", ConstantsValue.IVA).replace("I.V.A", ConstantsValue.IVA).replace("I.V.A..", ConstantsValue.IVA)
+				.replace("Prima###Total", ConstantsValue.PRIMA_TOTAL2).replace("financiamiento", ConstantsValue.FINANCIAMIENTO)								
+				 .replace("Datos del asegurado", ConstantsValue.DATOS_ASEGURADO)
+				.replace("Costo del Seguro", ConstantsValue.COSTO_DEL_SEGURO)
 				.replace("R ###.F.C", ConstantsValue.RFC).replace("Forma de Pago", "Forma de pago");
 		
 		try {
 			modelo.setTipo(7);
 			modelo.setCia(20);
 
-			textbusq="Datos del contratante";
-			inicio = contenido.indexOf("Datos del contratante");
-			if(inicio == -1) {
-				textbusq="Datos###del###contratante";
-				inicio = contenido.indexOf("Datos###del###contratante");
-				if(inicio == -1) {
-					textbusq="Datos del asegurado###Póliza";
-					inicio = contenido.indexOf("Datos del asegurado###Póliza");//se usa para version 2
-				}
-			}
-			fin  = contenido.indexOf("Costo del seguro");
-			if(fin == -1) {
-				fin  = contenido.indexOf("Costo###del###seguro"); 
-				if(fin == -1) {
-					fin  = contenido.indexOf("Paquete contratado:");//se usa para version 2
-				}
-			}
 		
+			inicio = contenido.indexOf(ConstantsValue.POLIZA);
+			if(inicio == -1) {				
+				inicio = contenido.indexOf("Datos###del###contratante");
+				if(inicio == -1) {				
+					inicio = contenido.indexOf( ConstantsValue.DATOS_ASEGURADO);//se usa para version 2
+				}
+			}
+			fin  = contenido.indexOf(ConstantsValue.COSTO_DEL_SEGURO);
+			fin = fin == -1 ? contenido.indexOf("Costo###del###seguro") : fin; 
+			fin = fin == -1 ? contenido.indexOf(ConstantsValue.PAQUETE_CONTRATADO) : fin; 
+			fin = fin == -1 ? contenido.indexOf(ConstantsValue.PAQUETE_CONTRATADO) : fin; 
+			fin = fin == -1 ? contenido.indexOf(ConstantsValue.COBERTURAS) : fin; 
 			
+
 			if(inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio,fin);
 
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if((newcontenido.split("\n")[i].contains("Póliza") ||newcontenido.split("\n")[i].contains("PÓLIZA")) && newcontenido.split("\n")[i].contains(textbusq)) {
+				
+					if((newcontenido.split("\n")[i].contains("Póliza") ||newcontenido.split("\n")[i].contains("PÓLIZA")) && newcontenido.split("\n")[i+1].contains(ConstantsValue.NOMBRE2) ) {
 				
 						if(newcontenido.split("\n")[i+1].split("###").length > 1) {
-							String x = newcontenido.split("\n")[i+1].replace("Nombre:", "");
+							String x = newcontenido.split("\n")[i+1].replace(ConstantsValue.NOMBRE2, "");
 							modelo.setPoliza(x.split("###")[x.split("###").length -1].replace("\r", ""));
 							modelo.setCteNombre((x.split(modelo.getPoliza())[0].replace("###", " ")).trim());							
 						}else {							
-							String x = newcontenido.split("\n")[i+1].replace(" ", "###").replace("Nombre:", "");
+							String x = newcontenido.split("\n")[i+1].replace(" ", "###").replace(ConstantsValue.NOMBRE2, "");
 						
 							modelo.setPoliza(x.split("###")[x.split("###").length -1].replace("\r", ""));
 							modelo.setCteNombre((x.split(modelo.getPoliza())[0].replace("###", " ")).trim());
@@ -137,9 +136,9 @@ public class AxaDiversosModel {
 					if(newcontenido.split("\n")[i].contains("Hasta")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
-					if(newcontenido.split("\n")[i].contains("Emisión")) {
-						if(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "").split("-").length == 3) {
-							modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Emisión")[1].replace("\r", "").replace(" ", "").replace("###", "")));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EMISIÓN)) {
+						if(newcontenido.split("\n")[i].split(ConstantsValue.EMISIÓN)[1].replace("\r", "").replace(" ", "").replace("###", "").split("-").length == 3) {
+							modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.EMISIÓN)[1].replace("\r", "").replace(" ", "").replace("###", "")));
 						}
 						if(modelo.getFechaEmision().length() == 0){
 							String textoSiguienteRenglon = newcontenido.split("\n")[i+1].replace("\r", "");
@@ -203,7 +202,7 @@ public class AxaDiversosModel {
 				}
 			}
 			if(inicio == -1){
-				inicio = contenido.indexOf("Prima Neta");
+				inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
 			}
 			
 			
@@ -214,11 +213,11 @@ public class AxaDiversosModel {
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
 						modelo.setPrimaneta(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].replace(":", "").replace("###", "").replace("\r", ""))));
 					}
-					if(newcontenido.split("\n")[i].contains("Financiamiento")) {
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.FINANCIAMIENTO)) {
 						if(newcontenido.split("\n")[i].contains("Financiamiento 0.0%")) {
 							modelo.setDerecho(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento 0.0%")[1].replace("###", "").replace("\r", ""))));	
 						}else {							
-							modelo.setDerecho(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split("Financiamiento")[1].split("###")[1].replace("###", "").replace("\r", ""))));
+							modelo.setDerecho(fn.castBigDecimal( fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.FINANCIAMIENTO)[1].split("###")[1].replace("###", "").replace("\r", ""))));
 						}						
 					}					
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION3)) {
@@ -242,7 +241,7 @@ public class AxaDiversosModel {
 			
 			//Proceso para ubicaciones
 			inicio = contenido.indexOf("Descripción de la ");
-			fin = contenido.indexOf("Paquete contratado:");
+			fin = contenido.indexOf(ConstantsValue.PAQUETE_CONTRATADO);
 			if(inicio == -1) {
 				inicio = contenido.indexOf("Datos de la Ubicación");
 			}
@@ -307,8 +306,8 @@ public class AxaDiversosModel {
 
 
 //			/*Proceoso para las  coberturas*/
-			inicio = contenido.indexOf("Paquete contratado");
-			fin = contenido.indexOf("Prima Neta");
+			inicio = contenido.indexOf(ConstantsValue.PAQUETE_CONTRATADO);
+			fin = contenido.indexOf(ConstantsValue.PRIMA_NETA);
 			if(inicio == -1){
 				inicio = contenido.indexOf("Descripción de coberturas");
 				fin = contenido.indexOf("Límite Unico y Combinado.");
@@ -316,7 +315,7 @@ public class AxaDiversosModel {
 			
 			
 			if(inicio > fin ) {
-				fin = contenido.lastIndexOf("Prima Neta");
+				fin = contenido.lastIndexOf(ConstantsValue.PRIMA_NETA);
 			}
 						
 			if(inicio > 0 && fin > 0 && inicio < fin) {
@@ -434,8 +433,8 @@ public class AxaDiversosModel {
 	}
 	
 	private void obtenerPlan(String texto, EstructuraJsonModel model) {
-		if(texto.contains("Paquete contratado:")) {
-			model.setPlan(texto.split("Paquete contratado:")[1].split("\n")[0].replace("###", "").trim());
+		if(texto.contains(ConstantsValue.PAQUETE_CONTRATADO)) {
+			model.setPlan(texto.split(ConstantsValue.PAQUETE_CONTRATADO)[1].replace(":", "").split("\n")[0].replace("###", "").trim());
 		}else{
 			int inicioIndex = contenido.indexOf("CARÁTULA DE PÓLIZA");
 			int finIndex = contenido.indexOf("Datos del contratante");
