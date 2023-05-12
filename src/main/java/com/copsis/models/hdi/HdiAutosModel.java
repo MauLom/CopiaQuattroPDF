@@ -176,7 +176,7 @@ public class HdiAutosModel {
 						modelo.setPlan(newcontenido.split("\n")[i].split("Paquete:")[1].split("###")[0].trim());
 
 					}
-
+System.out.println(newcontenido.split("\n")[i]);
 					if (newcontenido.split("\n")[i].contains("ANUAL") || newcontenido.split("\n")[i].contains("12 MESES SIN INTERESES")) {
 						modelo.setFormaPago(1);
 					}
