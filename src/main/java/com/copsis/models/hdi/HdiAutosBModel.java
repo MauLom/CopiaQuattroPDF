@@ -20,6 +20,7 @@ public class HdiAutosBModel {
 		.replace("Descripción###Límite###de###Responsabilidad", "Descripción###Límite de Responsabilidad")
 		.replace("responsabilidad###máxima", "responsabilidad máxima.")
 		.replace("MESES###SIN###INTERESES", "MESES SIN INTERESES")
+		.replace("SEMESTRAL EFECTIVO", "SEMESTRAL")
 		.replace("Art.###25°###de###la###Ley", "Art.25° de la Ley")
 		.replace("Art. ###25° ###de ###la ###Ley", "Art.25° de la Ley");
 		
@@ -134,11 +135,14 @@ public class HdiAutosBModel {
 			.replace("Responsabilidad###Civil###por###daños###a###los###Ocupantes", "Responsabilidad Civil por daños a los Ocupantes")
 			.replace("Asistencia###Funeraria", "Asistencia Funeraria"));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+
+			modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString())  );
 					
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("Descripción")) {
-					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+					
+					
 					int sp =newcontenido.toString().split("\n")[i].split("###").length;
 					switch(sp) {
 					case  2:
