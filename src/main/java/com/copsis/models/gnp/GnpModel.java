@@ -6,9 +6,11 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.models.general.GeneralDiversosAModel;
 import com.copsis.models.gnp.autos.GnpAutos2Model;
 import com.copsis.models.gnp.autos.GnpAutos3Model;
 import com.copsis.models.gnp.autos.GnpAutosModel;
+
 
 public class GnpModel {
 	// Clases
@@ -96,6 +98,9 @@ public class GnpModel {
 			|| modelo.getTipo() == 0 && fn.caratula(1, 5, stripper, doc).contains("Especificaciones###del###Giro")
 			|| modelo.getTipo() == 0 && contenido.contains("ESPECIFICACIÓN DEL GIRO")) {	
 				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();			
+			}
+			if(fn.caratula(3,3, stripper, doc).contains("CARACTERÍSTICAS###DE###LA###MASCOTA")){
+				modelo = new GnpDiversosDModelo().procesar(fn.caratula(3,4, stripper, doc));
 			}
 			
 	
