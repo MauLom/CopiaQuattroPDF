@@ -1,8 +1,10 @@
 package com.copsis.models.gnp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class GnpDiversosDModelo {
@@ -82,6 +84,27 @@ public class GnpDiversosDModelo {
                   modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
                 }             
             }
+            inicio = contenido.indexOf("DETALLE###DE###COBERTURAS###Y###ASISTENCIAS");
+			fin = contenido.indexOf("@@@4-5");		
+            newcontenido =new StringBuilder();
+			newcontenido.append( fn.extracted(inicio, fin, contenido));
+            List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();                
+                if(!newcontenido.toString().split("\n")[i].contains("ASISTENCIAS") && 
+                !newcontenido.toString().split("\n")[i].contains("Coberturas") &&  !newcontenido.toString().split("\n")[i].contains("LP TRC")){                    
+                    switch(newcontenido.toString().split("\n")[i].split("###").length){
+                       case 3:
+                       cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                       cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                       cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[2]);
+                       coberturas.add(cobertura);
+                        break;
+                    }
+                }            
+            }
+
+            modelo.setCoberturas(coberturas);
             
             
             return modelo;
