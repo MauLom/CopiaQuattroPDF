@@ -102,6 +102,10 @@ public class PlanSeguroSaludModel {
 			
 			inicio = contenido.indexOf("Asegurados");
 			fin = contenido.indexOf("COBERTURA BASICA");
+			if(fin ==- 1){
+				fin = contenido.indexOf("COBERTURA BÁSICA");
+			}
+
 			
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
