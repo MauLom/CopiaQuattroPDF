@@ -61,21 +61,20 @@ public class AxaVida2Model {
 							&& resultado.toString().split("\n")[i + 1].contains(",")) {
 						modelo.setCteNombre((resultado.toString().split("\n")[i + 1].split("###")[1].split(",")[1] + " "
 								+ resultado.toString().split("\n")[i + 1].split("###")[1].split(",")[0]).trim());
-						modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
+						  modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
 					}
 
 					if (modelo.getPoliza().length() == 0 && modelo.getCteNombre().length() == 0 &&
 							resultado.toString().split("\n")[i].contains(ConstantsValue.CONTRATANTE2)
 							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {
-
-						modelo.setCteNombre(resultado.toString().split("\n")[i + 1].split("###")[1]);
-						modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
-
+						modelo.setCteNombre(resultado.toString().split("\n")[i + 1].split("###")[1]);						
+						if(!resultado.toString().split("\n")[i + 1].split("###")[2].contains("RFC:")){
+							modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
+						}						
 					}
 					if (modelo.getPoliza().length() == 0
-							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {
-
-						modelo.setPoliza(resultado.toString().split("\n")[i].split("###")[1]);
+							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {                 
+						 modelo.setPoliza(resultado.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].replace("###", "").replace(" ", "").trim());
 
 					}
 					if (modelo.getCteNombre().length() == 0
@@ -113,7 +112,7 @@ public class AxaVida2Model {
 						direccion.append(resultado.toString().split("\n")[i + 2].split("###")[0].replace("###", ""));
 
 						modelo.setCteDireccion(direccion.toString());
-						if (modelo.getCteDireccion().length() > 50) {
+						if (modelo.getCteDireccion().length() > 50) {						
 							modelo.setCp(fn.obtenerCPRegex2(direccion.toString()));
 						}
 
@@ -160,19 +159,22 @@ public class AxaVida2Model {
 					
 					if (resultado.toString().split("\n")[i].contains("Fecha de inicio")
 							&& resultado.toString().split("\n")[i].split("inicio")[1].length() > 10) {
+								
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 								resultado.toString().split("\n")[i].split("inicio")[1].replace("###", "").trim()));
+								
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 
-					if (resultado.toString().split("\n")[i].contains("Inicio de Vigencia")) {
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(
-								resultado.toString().split("\n")[i].split("Vigencia")[1].replace("###", "").trim()));
+					if (resultado.toString().split("\n")[i].contains("Inicio de Vigencia")) {						
+						List<String> valores = fn.obtenVigeCpl(resultado.toString().split("\n")[i]);						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
 					if (resultado.toString().split("\n")[i].contains("Fecha de fin")
 							&& resultado.toString().split("\n")[i].contains("R.F.C:")
 							&& resultado.toString().split("\n")[i].contains("Teléfono")) {
+								
 						modelo.setRfc(resultado.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0]
 								.replace("###", ""));
 						modelo.setVigenciaA(
@@ -205,8 +207,8 @@ public class AxaVida2Model {
 						
 
 					}
-					if (resultado.toString().split("\n")[i].contains("C.P")) {
-						modelo.setCp(resultado.toString().split("\n")[i].split("C.P.")[1].replace("###", "")
+					if (resultado.toString().split("\n")[i].contains("C.P")) {						
+						modelo.setCp(resultado.toString().split("\n")[i].split("C.P.")[1].trim().replace("###", "")
 								.substring(0, 5));
 					}
 
@@ -482,14 +484,16 @@ public class AxaVida2Model {
 				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 
 			}
-
+		
 			if (modelo.getVigenciaDe().length() > 0
 					&& fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {
-				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+						
+				//modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
 
 			return modelo;
 		} catch (Exception ex) {	
+			ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
