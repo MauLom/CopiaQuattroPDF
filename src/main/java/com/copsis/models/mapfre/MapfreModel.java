@@ -30,6 +30,7 @@ public class MapfreModel {
 
 		try {
 			
+			
 			tipo =fn.tipoPoliza(contenido);
 
 			if(fn.tipoPoliza(contenido) == 2 &&  contenido.contains("ACCIDENTES PERSONALES") || 	fn.caratula(2, 2, stripper, doc).contains("ACCIDENTES PERSONALES")) {
@@ -90,6 +91,12 @@ public class MapfreModel {
 					if (pagFin == 0) {
 						pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN ADICIONAL");
 					}
+
+					if (pagFin == 0) {
+						pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN###ADICIONAL");
+					}
+		
+					
 					modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "Serie de recibo:", false)).procesar();
 				} else {
