@@ -1436,6 +1436,18 @@ public class DataToolsModel {
 		return resultado;
 	}
 
+
+	public List<String> obtenVigeCpl(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_MESCPL).matcher(cadena.toUpperCase());
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
+
+	
+
 	public List<String> vigenciaUsa(String cadena) {
 		List<String> resultado = new ArrayList<>();
 		Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_USA).matcher(cadena);
