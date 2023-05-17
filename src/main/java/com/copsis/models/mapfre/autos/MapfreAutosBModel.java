@@ -102,8 +102,11 @@ public class MapfreAutosBModel {
 							modelo.setFechaEmision(fn.formatDateMonthCadena(texto));
 						}
 					}
-					if (newcontenido.split("\n")[i].contains("Forma de pago:")  && newcontenido.split("\n")[i].contains("Moneda")) {
+					if (newcontenido.split("\n")[i].contains("Forma de pago:")  && newcontenido.split("\n")[i].contains("Moneda")) {						
 						modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i+1].split("###")[1].trim()));
+						if(modelo.getFormaPago() == 0){
+							modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i+1].split("###")[1].trim()));
+						}
 						modelo.setMoneda(1);
 					}
 					if (newcontenido.split("\n")[i].contains("AGENTE") &&  !newcontenido.split("\n")[i].contains("CAMBIO AGENTE")) {
