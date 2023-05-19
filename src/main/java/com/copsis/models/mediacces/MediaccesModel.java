@@ -14,7 +14,7 @@ public class MediaccesModel {
 
     public EstructuraJsonModel procesar(PDFTextStripper stripper, PDDocument doc, String contenido) {
             try {      
-              
+             
                    
                 modelo = new MediaccesSaludModel().procesar(fn.caratula(1, 2, stripper, doc));
                 return modelo;

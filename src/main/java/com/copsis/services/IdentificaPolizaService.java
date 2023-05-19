@@ -500,8 +500,9 @@ public class IdentificaPolizaService {
 				encontro = true;  
 			}
 
+			
  			
-			if(!encontro && contenido.contains("@MEDI ACCESS SEGUROS")){
+			if(!encontro &&( contenido.contains("@MEDI ACCESS SEGUROS") || rangoSimple(1,2, pdfStripper, pdDoc).contains("www.segurosmediaccess.com.mx")) ){
 				
 				modelo   = new MediaccesModel().procesar(pdfStripper, pdDoc, contenido);
 				encontro = true;  
