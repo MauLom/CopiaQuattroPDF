@@ -36,7 +36,10 @@ public class ChubbVidaModel {
                 if(newcontenido.toString().split("\n")[i].contains("Asegurado:") && newcontenido.toString().split("\n")[i].contains("C.P:")){
                    modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Asegurado:")[1].split("C.P:")[0].replace("###", ""));
                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
-                   modelo.setCp(valores.get(0));
+                   if(valores.size() ==2){
+                    modelo.setCp(valores.get(1));
+                   }
+                   
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Domicilio:") && newcontenido.toString().split("\n")[i].contains("Teléfono:")){
                     direccion.append(newcontenido.toString().split("\n")[i].split("Domicilio")[1].split("Teléfono:")[0].replace("###", ""));
