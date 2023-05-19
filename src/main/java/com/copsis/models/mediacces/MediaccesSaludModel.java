@@ -58,7 +58,11 @@ public class MediaccesSaludModel {
                     modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
                 }
                 if (newcontenido.toString().split("\n")[i].contains("CP")) {
-                    modelo.setCp(newcontenido.toString().split("\n")[i].split("CP")[1].trim().substring(0, 5));
+                    
+                    if(newcontenido.toString().split("\n")[i].split("CP")[1].replace("###", "").trim().substring(0, 5).length() ==5){
+                        modelo.setCp(newcontenido.toString().split("\n")[i].split("CP")[1].replace("###", "").trim().substring(0, 5));
+                    }
+                    
                 }
                 if (newcontenido.toString().split("\n")[i].contains("FORMA PAGO:")) {
                     modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
@@ -119,6 +123,10 @@ public class MediaccesSaludModel {
 
             inicio = contenido.indexOf("PRIMA BASICA");
             fin = contenido.indexOf("En cumplimiento");
+            if(inicio > fin) {
+                fin = contenido.indexOf("Le sugerimos consultar las");
+            }
+       
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {              

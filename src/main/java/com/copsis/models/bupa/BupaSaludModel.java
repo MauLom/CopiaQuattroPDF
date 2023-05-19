@@ -42,8 +42,12 @@ public class BupaSaludModel {
 					    modelo.setCp(fn.obtenerCPRegex2(newcontenido.toString().split("\n")[i+2]));
 					}
 				}
+			
 				if(newcontenido.toString().split("\n")[i].contains("Número de Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim());
+				}
+				if(newcontenido.toString().split("\n")[i].contains("Número de")&& newcontenido.toString().split("\n")[i+1].contains("Póliza") ) {
+					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Número de")[1].replace("###", "").trim());
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Vigencia")  && newcontenido.toString().split("\n")[i].contains("Vigencia")) {
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
