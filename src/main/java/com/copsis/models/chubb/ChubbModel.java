@@ -29,11 +29,13 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
+			
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {			
+				System.out.println(contenido.contains(tipo) +"--> "+ tipo);
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
@@ -47,6 +49,7 @@ public class ChubbModel {
 					case "EMBARCACIONES":
 					case "TRANSPORTE DE MERCANCIAS":
 					case "Todo Riesgo Contratistas":	
+					
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
 
 						if (pagFin == 0) {
@@ -64,11 +67,15 @@ public class ChubbModel {
 					
 						if (pagFin > 0) {
 							contenido = "";
-							modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
+							if(!contenido.contains("SOBRE AUTOMÓVILES Y CAMIONES RESIDENTES")){
+								modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
 									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
 
+							}
+							
 						}
-						if(modelo.getVigenciaA().contains("-") && modelo.getVigenciaDe().contains("-") && modelo.getFormaPago() !=0 ) {
+						
+						else if(modelo.getVigenciaA().contains("-") && modelo.getVigenciaDe().contains("-") && modelo.getFormaPago() !=0 ) {
 							encontro = true;
 							break;
 						}
@@ -78,9 +85,10 @@ public class ChubbModel {
 							break;
 						}
 						
+						
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":
-					case "Placas:":
+					case "Placas:":		
 					case " AUTOMÓVILES Y CAMIONES RESIDENTES":
 						pagIni = fn.pagFinRango(pdfStripper, pdDoc, "CARÁTULA");
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO);
