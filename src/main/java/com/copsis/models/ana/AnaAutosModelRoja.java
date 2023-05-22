@@ -108,15 +108,21 @@ public class AnaAutosModelRoja {
 						}
 
 					}
-
+					
 					if ( cp && newcontenido.split("\n")[i].contains("C.P.")  ) {
+						
 						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i]);
 						
+					
+
 						if(valores.size()==4){
 							modelo.setCp(valores.get(1));
 						}
 						if(valores.size()==2 && valores.get(1).length()> 3){
 							modelo.setCp(valores.get(1));
+						}
+						if(valores.size()==3 && valores.get(2).length()> 3){
+							modelo.setCp(valores.get(2));
 						}
 						
 						cp =false;
