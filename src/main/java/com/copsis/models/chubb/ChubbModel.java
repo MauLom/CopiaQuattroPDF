@@ -34,8 +34,7 @@ public class ChubbModel {
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos"};
 			 boolean encontro = false;
-			for (String tipo : tipos) {			
-				System.out.println(contenido.contains(tipo) +"--> "+ tipo);
+			for (String tipo : tipos) {							
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
