@@ -65,10 +65,15 @@ public class QualitasModel {
 				}else {
 					
 					if (pagIni < pagFin) {
+					
 						if(fn.caratula(2, 2, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
 							QualitasAutosUsaModel datosQualitasAutos = new 	QualitasAutosUsaModel();
 								modelo = datosQualitasAutos.procesar(fn.caratula(2, 3, stripper, doc));
-						}else{
+						} else if(fn.caratula(1, 1, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
+							QualitasAutosUsaModel datosQualitasAutos = new 	QualitasAutosUsaModel();
+								modelo = datosQualitasAutos.procesar(fn.caratula(1, 2, stripper, doc));
+						}
+						else{
 							if(fn.caratula(3, 4, stripper, doc).contains("DESCRIPCIÓN DEL VEHÍCULO ASEGURADO")) {
 								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
 										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));

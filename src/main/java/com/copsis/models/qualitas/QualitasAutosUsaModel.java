@@ -26,6 +26,7 @@ public class QualitasAutosUsaModel {
           
             inicio = contenido.indexOf("PLAN:");
 			fin = contenido.indexOf("COBERTURAS CONTRATADAS");
+            
 			newcontenido.append(fn.extracted(inicio, fin, contenido).replace("las###12:00 P.M.", ""));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
               
@@ -36,7 +37,7 @@ public class QualitasAutosUsaModel {
                   modelo.setPlan(newcontenido.toString().split("\n")[i].split("PLAN:")[1].replace("###", ""));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("ASEGURADO")){
-                    modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[1]); 
+                    modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()); 
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Domicilio-Address:") && newcontenido.toString().split("\n")[i].contains("Número:")){
                     modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Domicilio-Address:")[1].split("Número")[0].replace("###", "").trim()); 
@@ -185,10 +186,8 @@ public class QualitasAutosUsaModel {
         }
         modelo.setRecibos(recibos);
 
-
-
             return modelo;
-        }catch (Exception ex){          
+        }catch (Exception ex){       
             modelo.setError(QualitasAutosUsaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
             return modelo;
         }
