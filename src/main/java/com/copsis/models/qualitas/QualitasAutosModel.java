@@ -510,8 +510,7 @@ public class QualitasAutosModel {
 						newcontenido = newcontenido.split("Forma de:")[1];
 					}
 					modelo.setFormaPago(fn.formaPago(newcontenido));
-				} else if (newcontenido.contains("Forma de:")) {
-
+				} else if (newcontenido.contains("Forma de:") && newcontenido.split("Forma d")[1].length() > 10) {
 					newcontenido = newcontenido.split("Forma de:")[1].replace("###", "").trim();
 
 					if (newcontenido.contains("Primer pago")) {
