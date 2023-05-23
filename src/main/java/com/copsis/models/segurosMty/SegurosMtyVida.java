@@ -136,18 +136,23 @@ public class SegurosMtyVida {
 
 				newcontenido = new StringBuilder();
 				
-				
-				if( fin < inicio) {
-					String contenidoxt = contenido.split("BENEFICIOS ###ASEGURADA")[1];
+			
+				if( fin < inicio &&  contenido.indexOf("BENEFICIOS ###ASEGURADA") > -1) {
+					String contenidoxt = contenido.split("BENEFICIOS ###ASEGURADA")[1];					
 					fin = contenidoxt.indexOf("ASEGURADO");
 					if(fin  > -1) {
 						newcontenido.append(contenidoxt.substring(0, fin).replace("NO FUMADOR ###C ###","NO FUMADOR C###").replace("@@@", ""));	
 					}					
 				}
-				else {
-					newcontenido.append(fn.extracted(inicio, fin, contenido).replace("NO FUMADOR ###C ###","NO FUMADOR C###"));
+				if(fin < inicio){
+					inicio = contenido.indexOf("BENEFICIOS ###SUMA ###ANEXO");
+					fin = contenido.indexOf("ESIGNACIÓN DE BENEFICIARIOS:");
+					newcontenido = new StringBuilder();
+					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", ""));	
 				}
-			
+
+				
+		
 		
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();	
 				  Double suma = 0.00;
@@ -155,16 +160,34 @@ public class SegurosMtyVida {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				
 					
-					if(!newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA") && !newcontenido.toString().split("\n")[i].contains("EFECTIVIDAD") 
-							&& !newcontenido.toString().split("\n")[i].contains("TITULAR")) {										
+					if(!newcontenido.toString().split("\n")[i].contains("SUMA ASEGURADA") && 
+					  !newcontenido.toString().split("\n")[i].contains("EFECTIVIDAD") 
+							&& !newcontenido.toString().split("\n")[i].contains("TITULAR")
+							&& !newcontenido.toString().split("\n")[i].contains("BENEFICIOS")
+							&& !newcontenido.toString().split("\n")[i].contains("ASEGURADA")
+						
+							&& !newcontenido.toString().split("\n")[i].contains("AÑOS")
+							&& newcontenido.toString().split("\n")[i].length() > 10
+							) {		
+												
 						int sp = newcontenido.toString().split("\n")[i].split("###").length;
+							
 						if(sp == 7 || sp == 8) {
-							if(fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]).size() > 0) {
+							if(newcontenido.toString().split("\n")[i].contains("NP 65")){
+								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+								
+								modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+								modelo.setPrimaTotal(modelo.getPrimaneta());
+							
+							}
+							if(modelo.getPrimaneta().intValue() == 0 && fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]).size() > 0) {
 							   Double dato = fn.castDouble( fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]).get(0));
 							   suma +=dato;					              
 							   modelo.setPrimaneta(new BigDecimal(suma).setScale(2, RoundingMode.HALF_UP));
 							   modelo.setPrimaTotal(modelo.getPrimaneta());
 							}
+						
+							
 							
 							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
 							if(!newcontenido.toString().split("\n")[i].split("###")[1].contains("---")) {
@@ -186,12 +209,13 @@ public class SegurosMtyVida {
 					}					
 				}
 
-				
+			
 				if( newcontenido.length() > 0) {
 					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
 						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();						
-						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") ) {							
+						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") ) {	
+								
 							if(newcontenido.toString().split("\n")[i+1].contains("%")) {
 							if(newcontenido.toString().split("\n")[i+1].contains("ESPOSO")) {
 								beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("ESPOSO")[0].replace("###", "").trim());

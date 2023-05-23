@@ -41,7 +41,7 @@ public class SegurosMtyModel {
 			&& fn.caratula(1, 3, stripper, doc).toUpperCase().contains("GASTOS MÉDICOS")  ){
 			tipo = 2;
 			}
-			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("VIDA INDIVIDUAL")) {
+			if(tipo == 0 && (fn.caratula(1, 2, stripper, doc).contains("VIDA INDIVIDUAL") || fn.caratula(1, 3, stripper, doc).contains("PÓLIZA DE SEGURO DE VIDA"))) {
 			    tipo = 5;
 			}
 			
