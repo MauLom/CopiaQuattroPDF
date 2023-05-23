@@ -123,9 +123,13 @@ public class MapfreModel {
 				modelo = new MapfreDiversosModel(fn.caratula(1, 10, stripper, doc),"","").procesar();
 				break;
 			case 5://vida
+	
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
 					 modelo = new MapfreVidaCModel(fn.caratula(1, 5, stripper, doc)).procesar();
-				}else {
+				} else if(contenido.contains("VIDA INDIVIDUAL TRADICIONAL")) {
+					modelo = new MapfreVidaDModel().procesar(fn.caratula(1, 5, stripper, doc));
+				}
+				else {
 					 modelo = new MapfreVidaBModel(fn.caratula(1, 5, stripper, doc)).procesar();
 				}
 				break;
