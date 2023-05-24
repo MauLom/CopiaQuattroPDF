@@ -39,7 +39,7 @@ public class AigModel {
 				tipo = 4;
 			}
 
-		
+	
 			
 			switch (tipo) {
 			case 1:// Autos
