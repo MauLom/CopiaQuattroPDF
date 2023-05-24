@@ -28,7 +28,7 @@ public class BanorteModel {
 		this.contenido = contenido.replace("GASTOS MEDICOS MAYORES", "GASTOS MÉDICOS MAYORES");
 	}
 	public EstructuraJsonModel procesar() {
-	System.out.println(contenido);
+	
 		try {
 			Integer pagIni =0;
 			Boolean autos =false;
@@ -56,8 +56,9 @@ public class BanorteModel {
 						modelo  = new BanorteAutosModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
 				      	autos = true;
 					}
-					if(autos ==false ){
-
+					pagIni = fn.pagFinRango(stripper, doc, "AUTO COMPLEMENTARIO BANORTE");
+					if(autos ==false && pagIni >-1){
+						modelo  = new BanorteAutosBModel().procesar(fn.caratula(1, 4, stripper, doc));
 					}					   
 				break;
 			case 2://Salud 

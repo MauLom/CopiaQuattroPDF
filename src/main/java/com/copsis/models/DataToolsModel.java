@@ -1121,7 +1121,7 @@ public class DataToolsModel {
 
 	public int formaPagoSring(String x) { /** FORMA DE PAGO **/
 		int dato = 0;
-		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA", "ANNUAL",
+		String[] tiposP = { "CONT", CONTADO, "PRIMAUNICA", "PAGOÚNICO","PAGO ÚNICO", "PAGOUNICO", "ANUA", "ANUAL", "ÚNICA", "ANNUAL",
 				"EFECTIVO", "ANUALMENTE", "ANUALEXTENDIDA", "SEME", "SEM.", SEMESTRAL, "SEMESTR", "SEMESTRALS/R",
 				"SEMESTRALS-R",
 				"TRIM ", "TRIMESTR", TRIMESTRAL, "Trimestral", "TRIMESTRALS/R", "TRIMESTRALS-R", "TRIMESTRALSRDERP",
@@ -1131,6 +1131,7 @@ public class DataToolsModel {
 				"MEN.S/REC.", "MENSUALS-R", "QUIN ", "QUICENAL", "QUINCENALDXNVITRO", "QUINCENAL DXN", "SEMA", SEMANAL,
 				"SEMANALVITRO", "" };
 		for (String tipo : tiposP) {
+		
 			if (x.toUpperCase().contains(tipo)) {
 				switch (tipo) {
 					case "CONT":
