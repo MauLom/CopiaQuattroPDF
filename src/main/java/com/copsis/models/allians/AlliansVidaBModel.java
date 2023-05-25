@@ -59,15 +59,19 @@
 					if(newcontenido.toString().split("\n")[i].contains("Inicio de Vigencia") 
 					&& newcontenido.toString().split("\n")[i].contains("Fin de Vigencia")
 					&& newcontenido.toString().split("\n")[i+1].contains("Día Mes")) { 					                              
+						
 					   if(newcontenido.toString().split("\n")[i+2].split("###").length == 4) {
 						   modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+2].split("###")[2].replace(" ", "-")));
 						   modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+2].split("###")[3].replace(" ", "-")));
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 					   }
-						
+					   
+					   if(newcontenido.toString().split("\n")[i+2].split("###").length == 5) {						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+2].split("###")[3].replace(" ", "-")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+2].split("###")[4].replace(" ", "-")));
+					 modelo.setFechaEmision(modelo.getVigenciaDe());
 					}
-					
-					
+					}										
 					if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
 					}
@@ -88,7 +92,7 @@
 				if(fin == -1){
 					fin  = contenido.indexOf("Coberturas Adicionales");	
 				}
-	
+
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido).trim());
 				if(newcontenido.length()> 50){
@@ -102,9 +106,15 @@
 						
 						if(newcontenido.toString().split("\n")[i].split("###")[0].trim().contains("Fallecimiento") || 
 						newcontenido.toString().split("\n")[i].split("###")[0].trim().contains("Accidental")){
-							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);	
-						
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);							
 							modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(valores.get(1))));
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(valores.get(1))));
+						}
+						
+						if(newcontenido.toString().split("\n")[i].trim().contains("Renta Variable Dólares") ){							
+							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i].replace(",", ""));							
+							modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString(valores.get(0))));
+							modelo.setPrimaTotal(modelo.getPrimaneta());
 						}
 						cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1].trim());
 						coberturas.add(cobertura);
