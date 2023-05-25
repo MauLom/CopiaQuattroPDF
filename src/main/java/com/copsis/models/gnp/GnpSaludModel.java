@@ -53,20 +53,14 @@ public class GnpSaludModel {
 
 		try {
 
-			// tipo
-			modelo.setTipo(3);
-			// cia
-			modelo.setCia(18);
-
-			// poliza
+			
+			modelo.setTipo(3);			
+			modelo.setCia(18);			
 			inicio = contenido.indexOf("Póliza No.");
 			if (inicio > -1) {
 				modelo.setPoliza(contenido.substring(inicio + 10, contenido.indexOf("\r\n", inicio + 10))
 						.replace("###", "").replace("-", "").trim());
 			}
-
-			// renovacion
-			// cte_nombre
 			donde = 0;
 			donde = fn.searchTwoTexts(contenido, ConstantsValue.RENOVACION, "Versión");
 			if (donde > 0) {
@@ -1148,8 +1142,28 @@ public class GnpSaludModel {
              modelo.setDeducible("");
 			}
 
+			if(modelo.getAsegurados().size() == 0 && txtasegurados.length() > 100){
+				inicio = txtasegurados.indexOf("Asegurado s");
+				fin = txtasegurados.indexOf("En caso de requerir mayor");				
+				newcontenido = new StringBuilder();
+				filtrado = txtasegurados.substring(inicio, fin).replace("@@@", "").trim();
+				if(filtrado.length() > 0){
+					for(int i = 0; i < filtrado.split("\n").length; i++){
+						EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+						if(filtrado.split("\n")[i].split("-").length > 2){
+                           asegurado.setNombre(filtrado.split("\n")[i].split("###")[1]);
+						   List<String> valores = fn.obtenVigePoliza(filtrado.toString().split("\n")[i]);
+						   asegurado.setAntiguedad(fn.formatDateMonthCadena(valores.get(0)));
+						   asegurados.add(asegurado);
+						}
+					}
+
+				}
+			}
+
 			return modelo;
-		} catch (Exception ex) {			
+		} catch (Exception ex) {		
+			ex.printStackTrace();	
 			modelo.setError(
 					GnpSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

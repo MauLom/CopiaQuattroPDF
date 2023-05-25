@@ -56,9 +56,13 @@ public class GnpModel {
 				if( contenido.contains("Seguro Médico GNP Indemniza")){
 					modelo = new GnpSaludBModel().procesar(fn.caratula(1, pagFin, stripper, doc));
 				}else if (pagFin > 0) {
+					
+					String x = fn.textoBusqueda(stripper, doc, "Asegurado (s)", true);
+					x = x.length() > 0 ? x :fn.textoBusqueda(stripper, doc, "Asegurado (s)", false);
+					System.out.println(x);
 					modelo = new GnpSaludModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
-							fn.textoBusqueda(stripper, doc, "Asegurado (s)", true)).procesar();
+							x).procesar();
 				}
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
