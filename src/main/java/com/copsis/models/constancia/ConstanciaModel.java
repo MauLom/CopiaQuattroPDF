@@ -39,11 +39,18 @@ public class ConstanciaModel {
 					PDPage pdPage = pdDoc.getPage(page);
 					stripper.extractTable(pdPage);
 					for(int c=0; c<stripper.getColumns(); ++c) {
-						for(int r=0; r<stripper.getRows(); ++r) {							
-							if(stripper.getText(r, c).contains("Razón Social")){      
-								if(constancia.getRazonSocial().equals(constancia.getNombreComercial())){
-
-								}else{
+					
+						for(int r=0; r<stripper.getRows(); ++r) {	
+						
+							if(stripper.getText(r, c).contains("Razón Social")){    
+								 int lineas = stripper.getText(r, c).replace("Denominación/Razón Social:", "").split("\n").length;
+						
+								if(constancia.getRazonSocial().equals(constancia.getNombreComercial())){                            
+							    
+								} else if(constancia.getRazonSocial().length() > 0 && constancia.getNombreComercial().length() == 0
+								&&  lineas == 1){								
+								}								
+								else{								
 									constancia.setRazonSocial(stripper.getText(r, c).replace("Denominación/Razón Social:", "").replace("<\br>", "\n").replace("\n", " ").trim());
 								}
 							 													    
