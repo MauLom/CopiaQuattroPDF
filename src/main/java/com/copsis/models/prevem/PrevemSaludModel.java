@@ -161,7 +161,6 @@ public class PrevemSaludModel {
 
     return modelo;   
    } catch (Exception ex) {
-    ex.printStackTrace();
     modelo.setError(PrevemSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
     return modelo;
    }
