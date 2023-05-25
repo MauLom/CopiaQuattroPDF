@@ -60,6 +60,8 @@ public class PrevemSaludModel {
           
             inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Prevem Seguros S.A. de C.V");	
+            fin = fin == -1 ? contenido.indexOf("Prevem Seguros S.A.") : fin;
+
             newcontenido = new StringBuilder();		
 			newcontenido.append( fn.extracted(inicio, fin, contenido));	
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {           
@@ -99,23 +101,21 @@ public class PrevemSaludModel {
 
             inicio = contenido.indexOf("COBERTURAS ADICIONALES");
 			fin = contenido.indexOf("Días de espera 3");	
+       
       
             newcontenido = new StringBuilder();		
 			newcontenido.append( fn.extracted(inicio, fin, contenido));	
 
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-                EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-             
+                EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();             
                 if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS")){
-
                     switch(newcontenido.toString().split("\n")[i].split("###").length){
                         case 2:
                         cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
                         cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
                         coberturas.add(cobertura);
                         break;
-
                         case 3:
                         cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
                         cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
@@ -127,6 +127,37 @@ public class PrevemSaludModel {
                 }
             }
             modelo.setCoberturas(coberturas);
+
+
+            if(modelo.getCoberturas().isEmpty()){
+                inicio = contenido.indexOf("COBERTURAS###ESCALA###SUMA ASEGURADA");
+                fin = contenido.indexOf("ENDOSOS EN ESTA PÓLIZA");	
+                newcontenido = new StringBuilder();		
+			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("###B### ", ""));	
+
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                    EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();             
+                    if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS")){
+                        
+                        switch(newcontenido.toString().split("\n")[i].split("###").length){
+                            case 3:
+                            cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);
+                            cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[2]);
+                            coberturas.add(cobertura);
+                            break;
+                            case 4:
+                            cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[1]);
+                            cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[2]);
+                            cobertura.setDeducible(newcontenido.toString().split("\n")[i].split("###")[3]);
+                            coberturas.add(cobertura);
+                            break;
+
+                        }
+
+                    }
+                }
+                modelo.setCoberturas(coberturas);
+            }
 
     return modelo;   
    } catch (Exception ex) {
