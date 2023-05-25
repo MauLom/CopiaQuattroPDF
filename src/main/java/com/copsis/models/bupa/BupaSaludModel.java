@@ -150,6 +150,11 @@ public class BupaSaludModel {
 					}
 				}
 			}
+
+			if(modelo.getMoneda() == 0 && modelo.getFormaPago() == 0){
+				modelo.setMoneda(1);
+				modelo.setFormaPago(1);
+			}
 			
 	
 			
