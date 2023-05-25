@@ -31,7 +31,7 @@ public class BanorteModel {
 	
 		try {
 			Integer pagIni =0;
-			
+			Boolean autos =false;
 			int tipo = fn.tipoPoliza(contenido);
 
 			if(tipo == 4 ) {
@@ -42,18 +42,23 @@ public class BanorteModel {
 			if(tipo == 1 && contenido.contains("DATOS DEL BIEN ASEGURADO")) {
 				tipo = 4;
 			}
-			
+		
 			switch (tipo) {
 			case 1://Autos
 
-				pagIni = fn.pagFinRango(stripper, doc, "PÓLIZA DE SEGURO DE");
-				 if(pagIni == 0) pagIni = fn.pagFinRango(stripper, doc, "DE SEGURO DE AUTOMÓVILES");
-				pagFin = fn.pagFinRango(stripper, doc, "DETALLES DE COBERTURAS");
-				  if(pagFin == 0)   pagFin = fn.pagFinRango(stripper, doc, "DETALLE COBERTURAS");
-				  pagFin = pagFin == 0? fn.pagFinRango(stripper, doc, "DETALLE DE COBERTURAS") : pagFin;
+					pagIni = fn.pagFinRango(stripper, doc, "PÓLIZA DE SEGURO DE");
+					if(pagIni == 0) pagIni = fn.pagFinRango(stripper, doc, "DE SEGURO DE AUTOMÓVILES");
+					pagFin = fn.pagFinRango(stripper, doc, "DETALLES DE COBERTURAS");
+					if(pagFin == 0)   pagFin = fn.pagFinRango(stripper, doc, "DETALLE COBERTURAS");
+					pagFin = pagFin == 0? fn.pagFinRango(stripper, doc, "DETALLE DE COBERTURAS") : pagFin;
 				  
 					if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
 						modelo  = new BanorteAutosModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
+				      	autos = true;
+					}
+					pagIni = fn.pagFinRango(stripper, doc, "AUTO COMPLEMENTARIO BANORTE");
+					if(autos ==false && pagIni >-1){
+						modelo  = new BanorteAutosBModel().procesar(fn.caratula(1, 4, stripper, doc));
 					}					   
 				break;
 			case 2://Salud 
