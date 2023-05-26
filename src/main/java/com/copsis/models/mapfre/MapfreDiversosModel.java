@@ -65,7 +65,8 @@ public class MapfreDiversosModel {
 				.replace("C . P . ", "C.P.").replace("C . P :", "C.P:")
 				.replace("T e l :", "Tel:").replace("VIGENCIA", "Vigencia")
 				.replace("HASTA###LAS###12:00", "hasta las 12:00").replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
-				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:");
+				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:")
+				.replace("Póliza Número :", "Póliza Número:");
 
 		try {
 
