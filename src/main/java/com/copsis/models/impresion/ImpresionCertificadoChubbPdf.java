@@ -235,7 +235,7 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);                               
                     table.draw();
                     
-                    Float  tb=455f;
+                    Float  tb=453f;
                     texto = new StringBuilder();
                     texto.append("Cualquier conductor mayor de 18 años con licencia vigente y");
        
@@ -253,7 +253,7 @@ public class ImpresionCertificadoChubbPdf {
                     texto.append("by the insured is covered by this Policy.");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
 
-                    tb =tb+20;
+                    tb =tb+16;
                     texto = new StringBuilder();
                     texto.append("La presente póliza de Auto de Responsabilidad Civil en E.U.A. y Canadá tendrá validez si la póliza de");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
@@ -299,7 +299,7 @@ public class ImpresionCertificadoChubbPdf {
 
                     tb =tb+65;
                     PDPageContentStream content05 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                    communsPdf.drawBox(content05, Color.black, 33, 155, 545,0.2f);
+                    communsPdf.drawBox(content05, Color.black, 33, 158, 545,0.2f);
                     content05.close();
                     texto = new StringBuilder();
                     texto.append("En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
@@ -316,17 +316,17 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 33,"Solicitar una grúa o asistencia:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),gray);
                     communsPdf.setCell(baseRow, 34,"Solicitar ID Card para Canadá:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),gray);
                     texto = new StringBuilder();
-                    texto.append("Llamando desde USA: 1-866-223-5677\n");
+                    texto.append("Llamando desde USA: 1-855-278-4082\n");
                     texto.append("Llamando desde México:\n");
-                    texto.append("001-883-223-5677");
+                    texto.append("001-503-747-1842");
 
                     baseRow = communsPdf.setRow(table,40);
                     baseRow.setLineSpacing(1.5f);
 			        communsPdf.setCell(baseRow, 33,Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,0f,3f,5f),Color.white);
                     texto = new StringBuilder();
-                    texto.append("Llamando desde USA: 1-877-730-8622\n");
+                    texto.append("Llamando desde USA: 1-855-278-4082\n");
                     texto.append("Llamando desde México:\n");
-                    texto.append("001-883-223-5677");
+                    texto.append("001-882-730-8622");
                     communsPdf.setCell(baseRow, 33,Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),Color.white);
                     texto = new StringBuilder();
                     texto.append("Llamando desde USA: 1-877-730-8622\n");
@@ -337,7 +337,7 @@ public class ImpresionCertificadoChubbPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                   // document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                 //   document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
