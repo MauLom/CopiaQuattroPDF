@@ -70,15 +70,17 @@ public class MapfreAutosBModel {
 							modelo.setPoliza(newcontenido.split("\n")[i].split("PÓLIZA NÚMERO:")[1].replace("###", ""));	
 						}
 						
-
 					}
 				
 					if (newcontenido.split("\n")[i].contains("CONTRATANTE:") && newcontenido.split("\n")[i].contains("R.F.C:")) {
                       modelo.setCteNombre(newcontenido.split("\n")[i].split("CONTRATANTE:")[1].split("R.F.C:")[0].replace("###", "").trim());
-                      if(newcontenido.split("\n")[i].contains("Sexo")) {
-                          modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0].replace("###", "").trim());
-                      }else {
-                          modelo.setRfc(contenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
+                    
+					  if(newcontenido.split("\n")[i].contains("Sexo")) {
+						
+							modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0].replace("###", "").trim());
+						                       						
+                      }else {						
+                          modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", "").trim());
                       }
                     
 					}
