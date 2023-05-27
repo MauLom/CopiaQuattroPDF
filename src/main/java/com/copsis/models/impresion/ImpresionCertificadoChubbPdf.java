@@ -324,7 +324,7 @@ public class ImpresionCertificadoChubbPdf {
                     baseRow.setLineSpacing(1.5f);
 			        communsPdf.setCell(baseRow, 33,Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,0f,3f,5f),Color.white);
                     texto = new StringBuilder();
-                    texto.append("Llamando desde USA: 1-855-278-4082\n");
+                    texto.append("Llamando desde USA: 1-855-278-4825\n");
                     texto.append("Llamando desde México:\n");
                     texto.append("001-882-730-8622");
                     communsPdf.setCell(baseRow, 33,Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),Color.white);
