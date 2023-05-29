@@ -48,6 +48,11 @@ public class LatinoSeguroAutoModel {
 				if(newcontenido.toString().split("\n")[i].contains("CONTRATANTE") && newcontenido.toString().split("\n")[i+1].contains("Nombre:")){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].trim());
 				}
+
+				if(modelo.getCteNombre().length() ==0 && newcontenido.toString().split("\n")[i].contains("Nombre del contratante:") ){
+                  modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("contratante:")[1].replace("###", "").trim());
+				}
+
 				if(newcontenido.toString().split("\n")[i].contains("Calle y número:")) {
 					direccion =  newcontenido.toString().split("\n")[i].split("Calle y número:")[1].replace("###", " ").trim();
 				}
@@ -102,7 +107,9 @@ public class LatinoSeguroAutoModel {
 			
 
 			inicio = contenido.indexOf("COBERTURA AMPLIA");
+			inicio = inicio == -1 ? contenido.indexOf("Coberturas Amparadas") : inicio;
 			fin = contenido.indexOf("PRIMA DEL SEGURO");
+		
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
         	List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

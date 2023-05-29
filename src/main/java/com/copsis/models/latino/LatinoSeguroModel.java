@@ -34,7 +34,7 @@ public class LatinoSeguroModel {
 			if (tipo == 0 && fn.caratula(4, 5, stripper, doc).contains("GM IND MEDICA")) {
 				tipo = 2;
 			}
-			System.out.println(fn.caratula(2, 3, stripper, doc));
+	
 			
 			switch (tipo) {
 				case 1:
@@ -42,7 +42,7 @@ public class LatinoSeguroModel {
 					break;
 
 				case 2:
-				System.out.println(salud);
+	
 				      if(salud==1){
 						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(2,3, stripper, doc));
 					  }else{
