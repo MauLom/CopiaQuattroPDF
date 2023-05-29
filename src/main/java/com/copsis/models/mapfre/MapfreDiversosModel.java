@@ -65,7 +65,9 @@ public class MapfreDiversosModel {
 				.replace("C . P . ", "C.P.").replace("C . P :", "C.P:")
 				.replace("T e l :", "Tel:").replace("VIGENCIA", "Vigencia")
 				.replace("HASTA###LAS###12:00", "hasta las 12:00").replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
-				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:");
+				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:")
+				.replace("Póliza Número :", "Póliza Número:")
+				.replace("Prima Neta:", "Prima neta:");
 
 		try {
 
@@ -307,6 +309,7 @@ public class MapfreDiversosModel {
 			inicio = contenido.indexOf("Prima neta:");
 			fin = contenido.indexOf("Mapfre Tepeyac");
 
+		
 			if (fin == -1) {
 				fin = contenido.indexOf("Mapfre México S.A. denominada");
 			}
@@ -316,6 +319,8 @@ public class MapfreDiversosModel {
 			if (fin == -1) {
                 fin = contenido.indexOf("MAPFRE MÉXICO, S.A., denominada");
             }
+
+			
 		
 
 			if (inicio > -1 && fin > inicio) {
