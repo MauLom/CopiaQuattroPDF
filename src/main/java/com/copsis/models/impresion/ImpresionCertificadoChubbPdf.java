@@ -57,7 +57,7 @@ public class ImpresionCertificadoChubbPdf {
 
 
                     PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                    communsPdf.drawBox(content02, Color.black, 30, yStart - 23, 550,0.2f);
+                    communsPdf.drawBox(content02, Color.black, 30, yStart - 23, 550,0.1f);
                     content02.close();
                     
                     
@@ -235,7 +235,7 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);                               
                     table.draw();
                     
-                    Float  tb=453f;
+                    Float  tb=450f;
                     texto = new StringBuilder();
                     texto.append("Cualquier conductor mayor de 18 años con licencia vigente y");
        
