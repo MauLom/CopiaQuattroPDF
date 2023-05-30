@@ -118,7 +118,6 @@ public class BerkleyDiversosModel {
             
             return modelo;
         } catch (Exception ex) {
-            ex.printStackTrace();
             modelo.setError(BerkleyDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
         }
