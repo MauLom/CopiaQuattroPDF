@@ -23,5 +23,6 @@ public class CertificadoProjection {
     private	String serie;
     private	String placas;
     private	String uso;
+    private Boolean pdfEncrypted;
     
 }

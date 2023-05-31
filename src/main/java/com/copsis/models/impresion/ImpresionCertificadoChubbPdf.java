@@ -338,13 +338,18 @@ public class ImpresionCertificadoChubbPdf {
 
                     output = new ByteArrayOutputStream();
                      AccessPermission accessPermission = new AccessPermission();
-                     if(!certificadoProjection.getSerie().isEmpty()){
-                        String password =certificadoProjection.getSerie().substring(certificadoProjection.getSerie().length()-4, certificadoProjection.getSerie().length());                   
-                        StandardProtectionPolicy spp = new StandardProtectionPolicy(password,password,accessPermission);
-                        spp.setEncryptionKeyLength(128);
-                        spp.setPermissions(accessPermission);
-                        document.protect(spp); 
-                     }
+                    
+                   
+                        if(!certificadoProjection.getSerie().isEmpty() && certificadoProjection.getPdfEncrypted() == null){
+                            System.out.println( certificadoProjection.getPdfEncrypted());
+                            String password =certificadoProjection.getSerie().substring(certificadoProjection.getSerie().length()-4, certificadoProjection.getSerie().length());                   
+                            StandardProtectionPolicy spp = new StandardProtectionPolicy(password,password,accessPermission);
+                            spp.setEncryptionKeyLength(128);
+                            spp.setPermissions(accessPermission);
+                            document.protect(spp); 
+                         }
+                     
+                    
                                  
                     document.save(output);
 
