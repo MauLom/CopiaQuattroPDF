@@ -21,6 +21,7 @@ import com.copsis.models.argos.ArgosModel;
 import com.copsis.models.atlas.AtlasModel;
 import com.copsis.models.axa.AxaModel;
 import com.copsis.models.banorte.BanorteModel;
+import com.copsis.models.berkley.BerkleyModel;
 import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
@@ -506,6 +507,11 @@ public class IdentificaPolizaService {
 				
 				modelo   = new MediaccesModel().procesar(pdfStripper, pdDoc, contenido);
 				encontro = true;  
+			}
+
+			if(!encontro && contenido.contains("Berkley International Seguros México")){
+				modelo = new BerkleyModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
 			}
           
 
