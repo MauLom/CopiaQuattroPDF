@@ -96,8 +96,10 @@ public class ChubbVidaModel {
             }    
 
             return modelo;
-        } catch (Exception e) {
-           return modelo;
+        } catch (Exception ex) {
+            modelo.setError(
+                ChubbVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+        return modelo;
         }
     }
 }
