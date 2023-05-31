@@ -61,19 +61,24 @@ public class AxaVida2Model {
 							&& resultado.toString().split("\n")[i + 1].contains(",")) {
 						modelo.setCteNombre((resultado.toString().split("\n")[i + 1].split("###")[1].split(",")[1] + " "
 								+ resultado.toString().split("\n")[i + 1].split("###")[1].split(",")[0]).trim());
+								
 						  modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
 					}
 
 					if (modelo.getPoliza().length() == 0 && modelo.getCteNombre().length() == 0 &&
 							resultado.toString().split("\n")[i].contains(ConstantsValue.CONTRATANTE2)
 							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {
-						modelo.setCteNombre(resultado.toString().split("\n")[i + 1].split("###")[1]);						
+						modelo.setCteNombre(resultado.toString().split("\n")[i + 1].split("###")[1]);	
+											
 						if(!resultado.toString().split("\n")[i + 1].split("###")[2].contains("RFC:")){
 							modelo.setPoliza(resultado.toString().split("\n")[i + 1].split("###")[2]);
 						}						
 					}
 					if (modelo.getPoliza().length() == 0
-							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {                 
+							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)
+							&& resultado.toString().split("\n")[i].split("Póliz")[1].length() > 10 
+							&& resultado.toString().split("\n")[i].split("Póliz")[1].length() < 20) {                 
+								
 						 modelo.setPoliza(resultado.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].replace("###", "").replace(" ", "").trim());
 
 					}
@@ -86,6 +91,10 @@ public class AxaVida2Model {
 						} else {
 							modelo.setCteNombre(nombre);
 						}
+						if(resultado.toString().split("\n")[i].split("###").length> 2){
+							modelo.setPoliza(resultado.toString().split("\n")[i].split("###")[2]);
+						}
+
 
 					}
 
@@ -486,13 +495,13 @@ public class AxaVida2Model {
 			}
 		
 			if (modelo.getVigenciaDe().length() > 0
-					&& fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {
-						
-				//modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+					&& fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 1) {						
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
 
 			return modelo;
 		} catch (Exception ex) {	
+			ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
