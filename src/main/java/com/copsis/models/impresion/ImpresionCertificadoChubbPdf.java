@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +11,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
@@ -336,8 +337,17 @@ public class ImpresionCertificadoChubbPdf {
                     table.draw();
 
                     output = new ByteArrayOutputStream();
+                     AccessPermission accessPermission = new AccessPermission();
+                     if(!certificadoProjection.getSerie().isEmpty()){
+                        String password =certificadoProjection.getSerie().substring(certificadoProjection.getSerie().length()-4, certificadoProjection.getSerie().length());                   
+                        StandardProtectionPolicy spp = new StandardProtectionPolicy(password,password,accessPermission);
+                        spp.setEncryptionKeyLength(128);
+                        spp.setPermissions(accessPermission);
+                        document.protect(spp); 
+                     }
+                                 
                     document.save(output);
-                 //   document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+
                     return output.toByteArray();
                 } finally {
                     document.close();
