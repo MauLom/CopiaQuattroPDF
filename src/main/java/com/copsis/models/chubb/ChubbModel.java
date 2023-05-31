@@ -65,18 +65,21 @@ public class ChubbModel {
 						if (pagFin == 0) {
 							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "ART. 25");
 						}
-					
+						
 						if (pagFin > 0) {
+						
 							contenido = "";
 							if(!contenido.contains("SOBRE AUTOMÓVILES Y CAMIONES RESIDENTES")){
+								
 								modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
 									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
+								
 
 							}
 							
 						}
 						
-						else if(modelo.getVigenciaA().contains("-") && modelo.getVigenciaDe().contains("-") && modelo.getFormaPago() !=0 ) {
+						else if( modelo.getVigenciaA().contains("-") && modelo.getVigenciaDe().contains("-") && modelo.getFormaPago() !=0 ) {
 							encontro = true;
 							break;
 						}
@@ -96,7 +99,11 @@ public class ChubbModel {
 						
 						if(contenido.contains("AUTOMÓVILES TURISTAS ") && contenido.contains("AUTO SOUTHBOUND")) {
 							modelo = new ChubbAutosBModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
-						}else {
+						}else if( fn.caratula(1, 1, pdfStripper, pdDoc).contains("PÓLIZA DE SEGURO TRANSPORTE DE CARGA ESPECIFICO")){
+							modelo = new ChubbDiversosModel(fn.caratula(1, 2, pdfStripper, pdDoc),
+							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
+						}
+						else {
 
 						if (pagFin > 0 && pagIni > 0) {
 							ChubbAutosModel chubbAutos = new ChubbAutosModel();
@@ -114,9 +121,15 @@ public class ChubbModel {
 						break;
 					case "Profesional para Médicos":
 					modelo = new ChubbSaludModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+					encontro = true;
 					break;	
 					case "PÓLIZA DE SEGURO VIDA":
-					  modelo = new ChubbVidaModel().procesar(fn.caratula(0, 3, pdfStripper, pdDoc));
+			
+					modelo = new ChubbVidaModel().procesar(fn.caratula(0, 3, pdfStripper, pdDoc));
+					
+
+					encontro = true;
+					  
 					break;
 					default:
 						break;
