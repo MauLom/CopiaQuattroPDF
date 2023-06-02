@@ -26,7 +26,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 public class ImpresionCertificadoChubbPdf {
     private final Color gray = new Color(236, 238, 238, 0);
     private final Color gray2 = new Color(193,197, 199, 0);
-    private float yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590;
+    private float yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590  ,ytexto = 0;
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
     public byte[] buildPDF(CertificadoProjection certificadoProjection) {
         ByteArrayOutputStream output;
@@ -139,15 +139,22 @@ public class ImpresionCertificadoChubbPdf {
 
                     yStart -= (table.getHeaderAndDataHeight()  );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
-					       
+					String  modelo =       certificadoProjection.getDescripcion(); 
                     baseRow = communsPdf.setRow(table,12);
 			        communsPdf.setCell(baseRow, 9,"Año / Year:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 20,certificadoProjection.getModelo(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 11,"Marca / Make:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 25,certificadoProjection.getMarca(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 13,"Modelo / Model:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 23,certificadoProjection.getDescripcion(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                                        
+                    communsPdf.setCell(baseRow, 23,(modelo.length() >21 ? modelo.substring(0, 21) : modelo),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    if(modelo.length() >21){
+                        baseRow = communsPdf.setRow(table,11);                    
+                        communsPdf.setCell(baseRow, 65,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white);
+                        communsPdf.setCell(baseRow, 35, modelo.substring(21, modelo.length()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white);
+                    }
+                    
+                    
+
                     baseRow = communsPdf.setRow(table,12);
 			        communsPdf.setCell(baseRow, 9,"Serie / VIN:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 20,certificadoProjection.getSerie(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
@@ -216,12 +223,12 @@ public class ImpresionCertificadoChubbPdf {
                     yStart -= (table.getHeaderAndDataHeight()+1 );                    
              
        
-                    
+                    ytexto= yStart-10;
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 285, 32, document, page, true, true);
                     baseRow = communsPdf.setRow(table,51);
 			        communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     table.draw();
-
+                  
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 266, 317, document, page, true, true);
                     baseRow = communsPdf.setRow(table,12);
 			        communsPdf.setCell(baseRow, 69,"Prima Neta / Net Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
@@ -236,8 +243,8 @@ public class ImpresionCertificadoChubbPdf {
 			        communsPdf.setCell(baseRow, 69,"Prima Total /Total Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);                               
                     table.draw();
-                    
-                    Float  tb=450f;
+                   
+                    Float  tb=page.getMediaBox().getHeight()-ytexto;
                     texto = new StringBuilder();
                     texto.append("Cualquier conductor mayor de 18 años con licencia vigente y");
        
@@ -300,9 +307,13 @@ public class ImpresionCertificadoChubbPdf {
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.3f * 9f), 1f,0.2f);
 
                     tb =tb+65;
+                    
+                    Float pste=page.getMediaBox().getHeight()-tb+12;
+                    
                     PDPageContentStream content05 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                    communsPdf.drawBox(content05, Color.black, 33, 158, 545,0.2f);
+                    communsPdf.drawBox(content05, Color.black, 33, pste, 545,0.2f);
                     content05.close();
+                    
                     texto = new StringBuilder();
                     texto.append("En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
                     texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas ");
