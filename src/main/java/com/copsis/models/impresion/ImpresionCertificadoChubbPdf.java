@@ -111,7 +111,8 @@ public class ImpresionCertificadoChubbPdf {
                     communsPdf.setCell(baseRow, 83,certificadoProjection.getDomicilio(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Ciudad / City:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 13,"Ciudad / City:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 37,certificadoProjection.getCiudad(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 12,"Estado / State:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 38,certificadoProjection.getEstado(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                 
