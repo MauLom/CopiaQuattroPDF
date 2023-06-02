@@ -62,12 +62,20 @@ public class PrimeroDiversosModel {
 	                	if(newcontenido.split("\n")[i].contains("Asegurado:")) {
 	                		modelo.setCteNombre(newcontenido.split("\n")[i].split("Asegurado:")[1].replace(":", "").replace("###", ""));
 	                	}
+						
 	                	if(newcontenido.split("\n")[i].contains("Domicilio:")) {
 	                		modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].replace(":", "").replace("###", ""));
 	                	}
-	                	if (newcontenido.split("\n")[i].contains("Cp.") && newcontenido.split("\n")[i].contains("Domicilio:")) {
-	                		
-							modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
+	                	if (newcontenido.split("\n")[i].contains("Cp.")  && newcontenido.split("\n")[i].contains("Domicilio:")) {
+							List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]);
+							if( modelo.getCp().length() == 0 && valores.size() > 0){
+                              modelo.setCp(valores.get(0));
+							}
+							if( modelo.getCp().length() ==0){
+								modelo.setCp(newcontenido.split("\n")[i].split("Cp.")[1].split(",")[0].trim());
+							}
+							
+						
 						}
 	                	if(newcontenido.split("\n")[i].contains("RFC:") || newcontenido.split("\n")[i].contains("Teléfono:")) {
 	                		modelo.setRfc(newcontenido.split("\n")[i].split("RFC:")[1].split("Teléfono:")[0].replace("###", ""));
