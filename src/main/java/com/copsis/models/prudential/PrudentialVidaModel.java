@@ -138,7 +138,8 @@ public class PrudentialVidaModel {
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+2]));
 				 modelo.setFormaPago(fn.formaPagoSring( newcontenido.toString().split("\n")[i+2]));
 				 }
-					if(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()).size() >1){
+				 
+					if(newcontenido.toString().split("\n")[i+1].split("###").length> 2 && fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()).size() >1){
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(
 							fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i+1].split("###")[2].trim()).get(0)));
 					}
@@ -215,6 +216,12 @@ public class PrudentialVidaModel {
 						
 						if(newcontenido.toString().split("\n")[i].split("###").length == 5){
 							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim() +" "+newcontenido.toString().split("\n")[i].split("###")[1].trim() +" "+ newcontenido.toString().split("\n")[i].split("###")[2].trim() );				
+						}
+						else if(newcontenido.toString().split("\n")[i].split("###").length == 6){
+							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim() +" "
+							+newcontenido.toString().split("\n")[i].split("###")[1].trim() +" "+ 
+							newcontenido.toString().split("\n")[i].split("###")[2].trim()
+							+" "+ newcontenido.toString().split("\n")[i].split("###")[3].trim() );				
 						}
 						else if(newcontenido.toString().split("\n")[i].split("###")[0].trim().length() >10){
 							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());				
