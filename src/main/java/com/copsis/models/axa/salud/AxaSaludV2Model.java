@@ -274,6 +274,7 @@ public class AxaSaludV2Model {
             List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
             inicio = contenido.indexOf("Relación###de###Asegurados");
             fin = contenido.indexOf("AXA###Seguros,###S.A.");
+            if (modelo.getAsegurados().isEmpty()) {
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = contenido.substring(inicio, fin);
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -293,6 +294,7 @@ public class AxaSaludV2Model {
                 }
                 modelo.setAsegurados(asegurados);
             }
+        }
 
             if (modelo.getAsegurados().isEmpty()) {
                 String nombre = "";
@@ -320,9 +322,11 @@ public class AxaSaludV2Model {
                           
                             .replace("H###e###r m###ano", "Hermano")
                             .replace("H ###ijo", "###Hijo###")
+                            .replace("N###i e###to#", "Nieto")
                             .replace(" ###", "")
                             .replace("###0###", "###0")
                             .replace("###-", "-");
+                            System.out.println(newcontenido);
                     
                     //begin fix parrafo listado de asegurados
                     List<String> palabras = this.palabraInicioyFinMayuscula(newcontenido);
@@ -514,7 +518,7 @@ public class AxaSaludV2Model {
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
                                         + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");  
-                                    System.out.println( newcontenido.split("\n")[i]);             
+                                
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));
@@ -558,13 +562,16 @@ public class AxaSaludV2Model {
                     .replace("T###i t u###l ar", "Titular")
                     .replace("###C###ó###n###y###u ###ge", "###Conyuge")
                     .replace("H###i j o", "Hijo")
-                    .replace("R ###odriguez", "Rodriguez");
+                    .replace("R ###odriguez", "Rodriguez")
+                    .replace("N###i e###to###0", "Nieto");
 
                     for (int i = 0; i < newcontenido.split("\n").length; i++) {
                         EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                         int x = newcontenido.split("\n")[i].split("###").length;
+                      
                         
                         if (newcontenido.split("\n")[i].split("-").length > 5) {
+                           
                             
                             if (x == 11) {
                                 nombre = newcontenido.split("\n")[i].split("###")[0].replace("@@@", "").trim();
