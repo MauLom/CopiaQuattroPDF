@@ -100,8 +100,12 @@ public class MapfreVidaBModel {
 			}
 			
 			
+			if(modelo.getMoneda() ==0){
+				modelo.setMoneda(1);
+			}
 				
 			if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 10){
+
 				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			  }
 		
