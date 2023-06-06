@@ -100,12 +100,17 @@ public class MapfreVidaBModel {
 			}
 			
 			
-			
+				
+			if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) > 10){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			  }
 		
 			leerCoberturas(inicio,fin);
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
 			buildRecibos();
+		
+		
 
 			return modelo;
 		} catch (Exception ex) {
