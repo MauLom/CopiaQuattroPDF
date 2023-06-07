@@ -216,16 +216,16 @@ public class MapfreDiversosModel {
 			// cve_agente
 			// vigencia_a
 			inicio = contenido.indexOf("Hasta las 12:00");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("hasta las 12:00");
-			}
+			inicio =  inicio == -1 ? inicio = contenido.indexOf("hasta las 12:00"): inicio;
+			
 			fin = contenido.indexOf("Fecha de emisión");
-			if (fin == -1) {
-				fin = contenido.indexOf("CLIENTE MAPFRE");
-			}
+		    fin = fin == -1  ? fin = contenido.indexOf("CLIENTE MAPFRE"):fin;
+			fin = fin == -1  ? fin = contenido.indexOf("Si Usted realiza el"):fin;
+	
 
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio + 15, fin).replace("@@@", "");
+
 				if (newcontenido.contains("de:")) {
 					newcontenido = fn.remplazaGrupoSpace(newcontenido.split("de:")[1].trim()).replace("######", "###");
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenerFecha(newcontenido)));
