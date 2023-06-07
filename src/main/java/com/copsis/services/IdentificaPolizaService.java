@@ -214,7 +214,8 @@ public class IdentificaPolizaService {
 						|| (contenido.contains("DATOS DEL CONTRATANTE (Sírvase escribir con letra de molde)")
 								&& contenido.contains("Datos del asegurado titular (Solicitante)")
 								&& contenido.contains("ASEGURADOS"))
-						|| (contenido.contains("SEGUROS BANORTE") || contenido.contains("BANORTE")))){
+						|| (contenido.contains("SEGUROS BANORTE") || contenido.contains("BANORTE"))
+						|| rangoSimple(1, 2, pdfStripper, pdDoc).contains("www.segurosbanorte.com.mx"))){
 							
 					if (contenido.contains("Estimado(a)") ) {
 							BanorteModel datosBanort;						
