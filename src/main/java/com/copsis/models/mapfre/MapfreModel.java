@@ -125,7 +125,7 @@ public class MapfreModel {
 			case 5://vida
 	
 				if(contenido.contains("ACCIDENTES PERSONALES")) {
-					 modelo = new MapfreVidaCModel(fn.caratula(1, 5, stripper, doc)).procesar();
+					 modelo = new MapfreSaluDModel(fn.caratula(1, 5, stripper, doc)).procesar();
 				} else if(contenido.contains("VIDA INDIVIDUAL TRADICIONAL")) {
 					modelo = new MapfreVidaDModel().procesar(fn.caratula(1, 5, stripper, doc));
 				}
