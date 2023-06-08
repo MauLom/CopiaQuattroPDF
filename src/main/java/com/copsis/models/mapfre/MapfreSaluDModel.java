@@ -10,13 +10,13 @@ import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
 
-public class MapfreVidaCModel {
+public class MapfreSaluDModel {
 	
 	private DataToolsModel fn = new DataToolsModel();
 	private EstructuraJsonModel modelo = new EstructuraJsonModel();
 	private String contenido = "";
 
-	public MapfreVidaCModel(String contenido) {
+	public MapfreSaluDModel(String contenido) {
 		this.contenido = contenido;
 	}
 	
@@ -33,6 +33,7 @@ public class MapfreVidaCModel {
 				.replace("Expedicion", "Expedición");
 		        
 		String newcontenido = "";
+		StringBuilder contenidoStr = new StringBuilder();
 		int inicio = 0;
 		int fin = 0;
 		try {
@@ -305,6 +306,28 @@ public class MapfreVidaCModel {
 							modelo.setBeneficiarios(beneficiarios);	
 					}
 						
+
+					inicio = contenido.indexOf("BENEFICIARIOS");
+					fin = contenido.indexOf("LA DOCUMENTACION");
+					fin = fin ==-1?contenido.indexOf("LA ###DOCUMENTACIÓN"): fin;
+					if(modelo.getBeneficiarios().isEmpty()){
+						contenidoStr = new StringBuilder();
+						contenidoStr.append( fn.extracted(inicio, fin, contenido).replace("OTROS", "###OTROS###").replace("HERMANO-A", "###HERMANO###"));
+						List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
+						for (int i = 0; i < contenidoStr.toString().split("\n").length; i++) {      
+							EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();            
+							if(!newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") && !contenidoStr.toString().split("\n")[i].contains("PORCENTAJE") ){                  
+								beneficiario.setNombre(contenidoStr.toString().split("\n")[i].split("###")[0].trim());                                       
+								beneficiario.setParentesco(fn.buscaParentesco(contenidoStr.toString().split("\n")[i].split("###")[1].trim()));
+								beneficiario.setPorcentaje(fn.castInteger(fn.obtenerListNumeros2(contenidoStr.toString().split("\n")[i] ).get(0)));
+								beneficiarios.add(beneficiario);
+							}    
+						}
+						modelo.setBeneficiarios(beneficiarios);
+					}
+					
+				
+
 			buildRecibos();
 			return modelo;
 		} catch (Exception e) {
