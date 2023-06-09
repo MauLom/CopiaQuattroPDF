@@ -4,8 +4,14 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -14,6 +20,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import com.copsis.clients.projections.CertificadoProjection;
@@ -26,22 +33,28 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 public class ImpresionCertificadoChubbPdf {
     private final Color gray = new Color(236, 238, 238, 0);
     private final Color gray2 = new Color(193,197, 199, 0);
+    private final Color gray3 = new Color(217,217, 217, 0);
     private float yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590  ,ytexto = 0;
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
     public byte[] buildPDF(CertificadoProjection certificadoProjection) {
+        DateFormatSymbols sym = DateFormatSymbols.getInstance(new Locale("es", "MX"));
+		sym.setMonths(new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug","Sep", "Oct", "Nov", "Dec" });
+		SimpleDateFormat formatter1 = new SimpleDateFormat("MMMM'/'dd'/'yyyy", sym);
+	//	SimpleDateFormat formatter = new SimpleDateFormat("dd 'de' MMMM 'del' yyyy hh:mm a", sym);
         ByteArrayOutputStream output;
         try {
             try (PDDocument document = new PDDocument()) {
                 try {
+                    
                     StringBuilder texto = new StringBuilder();
                     PDPage page = new PDPage();
                     document.addPage(page);
                     BaseTable table;
                     Row<PDPage> baseRow;
 
-                    // InputStream input = new URL("https://storage.googleapis.com/quattrocrm-importaciones-prod/poliza-pdf/R0dVcf+2JE1uasiEni&fraslWJ2hCWbfnaGBS9&fraslbOFkXeNZ4=.ttf").openStream();
+                    InputStream input = new URL("https://storage.googleapis.com/quattrocrm-copsis/BiiBiiC/arial.ttf").openStream();
                     
-                    // PDType0Font arial =  PDType0Font.load(document, input);
+                    PDType0Font arial =  PDType0Font.load(document, input);
                     
                  
                    table = new BaseTable(750, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
@@ -49,6 +62,10 @@ public class ImpresionCertificadoChubbPdf {
                    communsPdf.setCell(baseRow,96, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2304/Polizas/2304/7UEtSpacvIfhtgaJEaC7QHVWU4roWaw8a3gVGhmLtHQ9poX7Diywh2hkKKgea/texto.png"));
                    table.draw();
 
+                   table = new BaseTable( yStart, yStartNewPage, bottomMargin, 449, 25, document, page, true, true);
+                   baseRow = communsPdf.setRow(table,13);
+                   communsPdf.setCell(baseRow, 100,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray3);
+                   table.draw();
 
                     texto = new StringBuilder();
                     texto.append("COBERTURA OTORGADA POR / COVERAGE PROVIDED BY: CHUBB SEGUROS MÉXICO, S.A.");
@@ -68,16 +85,29 @@ public class ImpresionCertificadoChubbPdf {
                     table.draw();
 
                     yStart -= (table.getHeaderAndDataHeight() + 7);
-
+                    
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 25, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
 			        communsPdf.setCell(baseRow, 19,"No. de Póliza / Policy No.",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
                     communsPdf.setCell(baseRow, 31,certificadoProjection.getNumeroPoliza() ,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.red);
                     communsPdf.setCell(baseRow, 26,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 24, certificadoProjection.getFechaEmision(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    String vigfechaEmision="";
+                    if(certificadoProjection.getFechaEmision() !=""){
+                        Date fechaEmision=new SimpleDateFormat("dd/MM/yyyy").parse( certificadoProjection.getFechaEmision());  
+                        vigfechaEmision= formatter1.format(fechaEmision);
+                    } 
+                    communsPdf.setCell(baseRow, 24,vigfechaEmision,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);                   
+                    
                     baseRow = communsPdf.setRow(table);
+                    String vigenciaCompleta="";
+                    if(certificadoProjection.getFechaDesde() !="" && certificadoProjection.getFechaHasta() !=""){
+                        Date fechaDesde=new SimpleDateFormat("dd/MM/yyyy").parse( certificadoProjection.getFechaDesde());  
+                        Date fechaHasta=new SimpleDateFormat("dd/MM/yyyy").parse( certificadoProjection.getFechaHasta());  
+                        vigenciaCompleta = formatter1.format(fechaDesde) +" 12:00 hrs a " + formatter1.format(fechaHasta) +" 12:00 hrs";
+                    }
+
 			        communsPdf.setCell(baseRow, 27,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 73,certificadoProjection.getFechaDesde() +" a "+certificadoProjection.getFechaHasta(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
+                    communsPdf.setCell(baseRow, 73,vigenciaCompleta,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
                     table.draw();
                   
                     PDPageContentStream content03 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
@@ -173,17 +203,13 @@ public class ImpresionCertificadoChubbPdf {
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +2 );
 
-                 
-                     
-
-
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
 			        communsPdf.setCell(baseRow, 52,"RC Daños a Terceros / T.P.L. Bodily Injury & Property Damage",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
                     communsPdf.setCell(baseRow, 33,"$150,000 USD LUC/CSL",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,7f,5f),Color.white);
                     communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     baseRow = communsPdf.setRow(table,22);
-                    communsPdf.setCell(baseRow, 52,"Gastos Médicos Ocupantes por persona / por evento Medical Expenses Occupants per person / per event",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Gastos Médicos Ocupantes por persona / por evento Medical Expenses Occupants per person / per event",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arial);
                     communsPdf.setCell(baseRow, 33,"$5,000 USD / $25,000 USD",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,9f,5f),Color.white);
                     communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
                     baseRow = communsPdf.setRow(table,12);
@@ -364,6 +390,7 @@ public class ImpresionCertificadoChubbPdf {
                     
                                  
                     document.save(output);
+                    //document.save(new File("/home/aalbanil/Vídeos/certtificado.pdf"));
 
                     return output.toByteArray();
                 } finally {
