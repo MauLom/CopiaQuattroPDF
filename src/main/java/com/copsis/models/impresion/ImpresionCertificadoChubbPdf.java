@@ -26,6 +26,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf;
 public class ImpresionCertificadoChubbPdf {
     private final Color gray = new Color(236, 238, 238, 0);
     private final Color gray2 = new Color(193,197, 199, 0);
+    private final Color gray3 = new Color(217,217, 217, 0);
     private float yStartNewPage = 780, yStart = 690, bottomMargin = 170, fullWidth = 590  ,ytexto = 0;
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
     public byte[] buildPDF(CertificadoProjection certificadoProjection) {
@@ -49,6 +50,10 @@ public class ImpresionCertificadoChubbPdf {
                    communsPdf.setCell(baseRow,96, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2304/Polizas/2304/7UEtSpacvIfhtgaJEaC7QHVWU4roWaw8a3gVGhmLtHQ9poX7Diywh2hkKKgea/texto.png"));
                    table.draw();
 
+                   table = new BaseTable( yStart, yStartNewPage, bottomMargin, 449, 25, document, page, true, true);
+                   baseRow = communsPdf.setRow(table,13);
+                   communsPdf.setCell(baseRow, 100,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray3);
+                   table.draw();
 
                     texto = new StringBuilder();
                     texto.append("COBERTURA OTORGADA POR / COVERAGE PROVIDED BY: CHUBB SEGUROS MÉXICO, S.A.");
@@ -364,6 +369,7 @@ public class ImpresionCertificadoChubbPdf {
                     
                                  
                     document.save(output);
+                    document.save(new File("/home/aalbanil/Vídeos/certtificado.pdf"));
 
                     return output.toByteArray();
                 } finally {
