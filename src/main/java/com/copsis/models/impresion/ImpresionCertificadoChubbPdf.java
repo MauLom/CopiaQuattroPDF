@@ -52,9 +52,10 @@ public class ImpresionCertificadoChubbPdf {
                     BaseTable table;
                     Row<PDPage> baseRow;
 
-                    InputStream input = new URL("https://storage.googleapis.com/quattrocrm-copsis/BiiBiiC/arial.ttf").openStream();
-                    
-                    PDType0Font arial =  PDType0Font.load(document, input);
+                    InputStream arialNormal = new URL("https://storage.googleapis.com/quattrocrm-copsis/BiiBiiC/arial.ttf").openStream();
+                    InputStream arialBold = new URL("https://storage.googleapis.com/quattrocrm-copsis/BiiBiiC/arialbd.ttf").openStream();                    
+                    PDType0Font arialN =  PDType0Font.load(document, arialNormal);
+                    PDType0Font arialB =  PDType0Font.load(document, arialBold);
                     
                  
                    table = new BaseTable(750, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
@@ -70,7 +71,7 @@ public class ImpresionCertificadoChubbPdf {
                     texto = new StringBuilder();
                     texto.append("COBERTURA OTORGADA POR / COVERAGE PROVIDED BY: CHUBB SEGUROS MÉXICO, S.A.");
                     PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                    communsPdf.drawBox(content01, Color.black, 25, yStart - 13, 449, 1.6f);
+                    communsPdf.drawBox(content01, Color.black, 25, yStart - 15, 449, 1.6f);
                     content01.close();
 
 
@@ -81,22 +82,22 @@ public class ImpresionCertificadoChubbPdf {
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 25, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 100,texto.toString(),Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 100,texto.toString(),Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white).setFont(arialB);;
                     table.draw();
 
                     yStart -= (table.getHeaderAndDataHeight() + 7);
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 25, document, page, false, true);
 					baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 19,"No. de Póliza / Policy No.",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 31,certificadoProjection.getNumeroPoliza() ,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 26,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 21,"No. de Póliza / Policy No.",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red).setFont(arialB);
+                    communsPdf.setCell(baseRow, 29,certificadoProjection.getNumeroPoliza() ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.red).setFont(arialN);
+                    communsPdf.setCell(baseRow, 30,"Fecha de emisión / Issuance date:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white).setFont(arialB);
                     String vigfechaEmision="";
                     if(certificadoProjection.getFechaEmision() !=""){
                         Date fechaEmision=new SimpleDateFormat("dd/MM/yyyy").parse( certificadoProjection.getFechaEmision());  
                         vigfechaEmision= formatter1.format(fechaEmision);
                     } 
-                    communsPdf.setCell(baseRow, 24,vigfechaEmision,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);                   
+                    communsPdf.setCell(baseRow, 20,vigfechaEmision,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white).setFont(arialN);;                   
                     
                     baseRow = communsPdf.setRow(table);
                     String vigenciaCompleta="";
@@ -106,8 +107,8 @@ public class ImpresionCertificadoChubbPdf {
                         vigenciaCompleta = formatter1.format(fechaDesde) +" 12:00 hrs a " + formatter1.format(fechaHasta) +" 12:00 hrs";
                     }
 
-			        communsPdf.setCell(baseRow, 27,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);
-                    communsPdf.setCell(baseRow, 73,vigenciaCompleta,Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.red);                
+			        communsPdf.setCell(baseRow, 30,"Vigencia de la Póliza / Policy Period:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,1f,1f),Color.red).setFont(arialB);
+                    communsPdf.setCell(baseRow, 70,vigenciaCompleta,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,1f,1f),Color.red).setFont(arialN);                
                     table.draw();
                   
                     PDPageContentStream content03 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
@@ -122,120 +123,121 @@ public class ImpresionCertificadoChubbPdf {
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
 					baseRow = communsPdf.setRow(table,13);
-			        communsPdf.setCell(baseRow, 100,"Datos del Asegurado y datos generales de la póliza / Insured Information & policy general data",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+			        communsPdf.setCell(baseRow, 100,"Datos del Asegurado y datos generales de la póliza / Insured Information & policy general data",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),gray).setFont(arialB);
                     table.draw();
 
                     yStart -= (table.getHeaderAndDataHeight() );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 15,"Nombre / Name:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 35,certificadoProjection.getNombreCompleto(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"Teléfono / Phone:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 35,certificadoProjection.getTelefono(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 15,"Nombre / Name:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 35,certificadoProjection.getNombreCompleto(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 17,"Teléfono / Phone:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 33,certificadoProjection.getTelefono(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Fecha de Nac / DOB:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Sexo / Gender:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 50,"Fecha de Nac / DOB:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 50,"Sexo / Gender:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 17,"Domicilio / Address:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 83,certificadoProjection.getDomicilio(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 19,"Domicilio / Address:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 81,certificadoProjection.getDomicilio(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 13,"Ciudad / City:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 37,certificadoProjection.getCiudad(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 12,"Estado / State:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 38,certificadoProjection.getEstado(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 13,"Ciudad / City:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 37,certificadoProjection.getCiudad(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 13,"Estado / State:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 37,certificadoProjection.getEstado(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
                 
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 13,"C.P. / Zip Code:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 37,certificadoProjection.getCp(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"R.F.C. / Tax Payer ID:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 15,"C.P. / Zip Code:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 35,certificadoProjection.getCp(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 50,"R.F.C. / Tax Payer ID:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"E-mail:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 31,"Forma de pago / Payment installments:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow,19,certificadoProjection.getFormaPago(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 50,"E-mail:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 34,"Forma de pago / Payment installments:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow,15,certificadoProjection.getFormaPago(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
                  
                     baseRow = communsPdf.setRow(table,11);
-			        communsPdf.setCell(baseRow, 50,"Moneda / Currency:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 50,"Clave del Agente / Agent code:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 50,"Moneda / Currency:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 50,"Clave del Agente / Agent code:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight()+20 );
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
 					baseRow = communsPdf.setRow(table,13);
-			        communsPdf.setCell(baseRow, 100,"Descripción del Vehículo / Vehicle Description",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+			        communsPdf.setCell(baseRow, 100,"Descripción del Vehículo / Vehicle Description",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),gray).setFont(arialB);
                     table.draw();
 
                     yStart -= (table.getHeaderAndDataHeight()  );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, false, true);
 					String  modelo =       certificadoProjection.getDescripcion(); 
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 9,"Año / Year:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 20,certificadoProjection.getModelo(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 11,"Marca / Make:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 25,certificadoProjection.getMarca(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 13,"Modelo / Model:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 23,(modelo.length() >21 ? modelo.substring(0, 21) : modelo),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    if(modelo.length() >21){
+			        communsPdf.setCell(baseRow, 10,"Año / Year:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 19,certificadoProjection.getModelo(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 12,"Marca / Make:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 24,certificadoProjection.getMarca(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 14,"Modelo / Model:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                 
+                    communsPdf.setCell(baseRow, 22,(modelo.length() >18 ? modelo.substring(0, 18) : modelo),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    if(modelo.length() >18){
                         baseRow = communsPdf.setRow(table,11);                    
                         communsPdf.setCell(baseRow, 65,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white);
-                        communsPdf.setCell(baseRow, 35, modelo.substring(21, modelo.length()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white);
+                        communsPdf.setCell(baseRow, 35, modelo.substring(18, modelo.length()),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white);
                     }
                     
                     
 
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 9,"Serie / VIN:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 20,certificadoProjection.getSerie(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 12,"Placas / Plates:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 24,certificadoProjection.getPlacas(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 9,"Uso / Use:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 20,certificadoProjection.getUso(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
+			        communsPdf.setCell(baseRow, 10,"Serie / VIN:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 19,certificadoProjection.getSerie(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 14,"Placas / Plates:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 24,certificadoProjection.getPlacas(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 9,"Uso / Use:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
+                    communsPdf.setCell(baseRow, 20,certificadoProjection.getUso(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +10 );
                     
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
 					baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 52,"Coberturas sin deducible / Coverages without deductible",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
-                    communsPdf.setCell(baseRow, 33,"Suma Asegurada /Insured Amount",Color.BLACK,true, "C", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
-                    communsPdf.setCell(baseRow, 15,"Prima / Premium",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,3f,5f),gray);
+			        communsPdf.setCell(baseRow, 52,"Coberturas sin deducible / Coverages without deductible",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,0f,0f),gray).setFont(arialB);
+                    communsPdf.setCell(baseRow, 31,"Suma Asegurada /Insured Amount",Color.BLACK,true, "C", 10, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,0f,0f),gray).setFont(arialB);
+                    communsPdf.setCell(baseRow, 17,"Prima / Premium",Color.BLACK,true, "R", 10, communsPdf.setLineStyle(gray), "", communsPdf.setPadding2(0f,5f,0f,0f),gray).setFont(arialB);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +2 );
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 550, 32, document, page, true, true);
-                    baseRow = communsPdf.setRow(table);
-			        communsPdf.setCell(baseRow, 52,"RC Daños a Terceros / T.P.L. Bodily Injury & Property Damage",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"$150,000 USD LUC/CSL",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,7f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    baseRow = communsPdf.setRow(table,17);
+			        communsPdf.setCell(baseRow, 52,"RC Daños a Terceros / T.P.L. Bodily Injury & Property Damage",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,2f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"$150,000 USD LUC/CSL",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,2f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white).setFont(arialN);
                     baseRow = communsPdf.setRow(table,22);
-                    communsPdf.setCell(baseRow, 52,"Gastos Médicos Ocupantes por persona / por evento Medical Expenses Occupants per person / per event",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arial);
-                    communsPdf.setCell(baseRow, 33,"$5,000 USD / $25,000 USD",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,9f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,communsPdf.eliminaHtmlTags("Gastos Médicos Ocupantes por persona / por evento\nMedical Expenses Occupants per person / per event"),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"$5,000 USD / $25,000 USD",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,5f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white).setFont(arialN);
                     baseRow = communsPdf.setRow(table,12);
-                    communsPdf.setCell(baseRow, 52,"Extensión RC y G.M.O. / T.P.L. & M.E. Extension",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"AMPARADO/COVERED",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Extensión RC y G.M.O. / T.P.L. & M.E. Extension",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"AMPARADO/COVERED",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,5f,3f,5f),Color.white).setFont(arialN);
    
                        baseRow = communsPdf.setRow(table,12);
-                    communsPdf.setCell(baseRow, 52,"Indemnización por Muerte al Titular / Death Compensation",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"$5,000 USD",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Indemnización por Muerte al Titular / Death Compensation",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"$5,000 USD",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white).setFont(arialN);
                     
                     baseRow = communsPdf.setRow(table,10);
-                    communsPdf.setCell(baseRow, 52,"Servicios de Asistencia / Roadside Assistance",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Servicios de Asistencia / Roadside Assistance",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
                     
                     baseRow = communsPdf.setRow(table,10);
-                    communsPdf.setCell(baseRow, 52,"Asistencia Legal / Legal Assistance",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Asistencia Legal / Legal Assistance",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
                     
                     baseRow = communsPdf.setRow(table,10);
-                    communsPdf.setCell(baseRow, 52,"Beneficios en Viaje / Travel Benefits",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
-                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,3f,5f),Color.white);
+                    communsPdf.setCell(baseRow, 52,"Beneficios en Viaje / Travel Benefits",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,0f,5f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 33,"INCLUIDO/INCLUDED",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 15,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,5f,0f,5f),Color.white).setFont(arialN);
                     
 
 
@@ -244,7 +246,7 @@ public class ImpresionCertificadoChubbPdf {
                     yStart -= (table.getHeaderAndDataHeight()+7 );
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin,286, 32, document, page, true, true);
 					baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 100,"Conductores Adicionales / Aditional Drivers",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,2f,5f),gray);
+			        communsPdf.setCell(baseRow, 100,"Conductores Adicionales / Aditional Drivers",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,2f),gray).setFont(arialB);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight()+1 );                    
              
@@ -257,16 +259,16 @@ public class ImpresionCertificadoChubbPdf {
                   
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 266, 317, document, page, true, true);
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 69,"Prima Neta / Net Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
+			        communsPdf.setCell(baseRow, 69,"Prima Neta / Net Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(26f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);               
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 69,"Gastos de expedición / Policy Fee:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
+			        communsPdf.setCell(baseRow, 69,"Gastos de expedición / Policy Fee:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(26f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);               
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 69,"I.V.A. / Mex. Tax",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
+			        communsPdf.setCell(baseRow, 69,"I.V.A. / Mex. Tax",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(26f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(5f,0f,3f,5f),Color.white);               
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 69,"Prima Total /Total Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white).setLeftPadding(25);
+			        communsPdf.setCell(baseRow, 69,"Prima Total /Total Premium:",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(26f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 31,"",Color.BLACK,false, "C", 10, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(0f,0f,3f,5f),Color.white);                               
                     table.draw();
                    
@@ -274,63 +276,63 @@ public class ImpresionCertificadoChubbPdf {
                     texto = new StringBuilder();
                     texto.append("Cualquier conductor mayor de 18 años con licencia vigente y");
        
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.4f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, arialN, 9.5f, (-1.2f * 9f), 1f,0.4f);
                     texto = new StringBuilder();
                     texto.append("autorizado por el asegurado está amparado en esta póliza / Any");
                     tb =tb+12;
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("driver over 18 years old, with valid driver license and authorized");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);                   
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);                   
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("by the insured is covered by this Policy.");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 270, arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);
 
                     tb =tb+16;
                     texto = new StringBuilder();
                     texto.append("La presente póliza de Auto de Responsabilidad Civil en E.U.A. y Canadá tendrá validez si la póliza de");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);
                     texto = new StringBuilder();
                     texto.append("AXA Seguros S.A. de");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 482f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 482f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialB, 9.5f, (-1.2f * 9f), 1f,0.2f);
 
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("C.V.");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialB, 9.5f, (-1.2f * 9f), 1f,0.2f);
                     texto = new StringBuilder();
                     texto.append("de auto residente ligada a ésta se encuentra vigente, cubre sólo vehículos registrados en México y garantiza cubrir los");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 58f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.2f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 58f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550,arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);
                      
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("límites mínimos de Responsabilidad Civil por Daños a Terceros en sus Bienes y en sus Personas requeridos en los E.U.A y ");
                     texto.append("Canadá. / This Auto Third Party Liability policy will be in force if the related");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.3f * 9f), 1f,0.5f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550,arialN, 9.5f, (-1.3f * 9f), 1f,0.5f);
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("AXA Seguros, S.A. de C.V.");                    
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 386f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.4f * 9f), 1f,0.5f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 386f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialB, 9.5f, (-1.4f * 9f), 1f,0.5f);
                     texto = new StringBuilder();
                     texto.append("mexican auto");                    
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 522f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.3f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 522f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialN, 9.5f, (-1.3f * 9f), 1f,0.2f);
                 
                     tb =tb+12;
                     texto = new StringBuilder();
                     texto.append("insurance policy is in force, it covers only Mexican plated and registered vehicles and guarantees to cover the Minimum limits ");
                     texto.append("for Bodily Injury and Property Damage Liability, required in the USA and Canada.");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA, 9.5f, (-1.3f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialN, 9.5f, (-1.3f * 9f), 1f,0.2f);
                      
-                    tb =tb+29;
+                    tb =tb+24;
                     texto = new StringBuilder();
                     texto.append("Chubb Seguros México, S.A. está autorizado y reconocido en Estados Unidos de Norteamérica por la National ");
                     texto.append("Association of Insurance Commissioners (NAIC:AA2730007) y en Canadá por el Canadian Council of Insurance ");
                     texto.append("Regulators (CCIR)/Chubb Seguros México, S.A. is authorized and recognized in the United States of America by the ");
                     texto.append("National Association of Insurance Commissioners (NAIC:AA2730007) and in Canada by the Canadian Council of ");
                     texto.append("Insurance Regulators (CCIR).");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, PDType1Font.HELVETICA_BOLD, 9.5f, (-1.3f * 9f), 1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 550, arialB, 9.5f, (-1.3f * 9f), 1f,0.2f);
 
                     tb =tb+65;
                     
@@ -345,15 +347,15 @@ public class ImpresionCertificadoChubbPdf {
                     texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas ");
                     texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día 1 de Octubre de 2018, con el número ");
                     texto.append("CNSF-S0039-0490-2018 / CONDUSEF-003931-03.");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 11.2f, (-1.6f * 9f),1f,0.2f);
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, arialN, 11.2f, (-1.6f * 9f),1f,0.2f);
 
 
                   
                     table = new BaseTable(70, yStartNewPage, 0, 550, 32, document, page, true, true);
                     baseRow = communsPdf.setRow(table,12);
-			        communsPdf.setCell(baseRow, 33,"Reporte de siniestro:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,0f,3f,5f),gray);
-                    communsPdf.setCell(baseRow, 33,"Solicitar una grúa o asistencia:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),gray);
-                    communsPdf.setCell(baseRow, 34,"Solicitar ID Card para Canadá:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,3f,5f),gray);
+			        communsPdf.setCell(baseRow, 33,"Reporte de siniestro:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,0f,0f,5f),gray).setFont(arialB);
+                    communsPdf.setCell(baseRow, 33,"Solicitar una grúa o asistencia:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,0f,5f),gray).setFont(arialB);
+                    communsPdf.setCell(baseRow, 34,"Solicitar ID Card para Canadá:",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(gray2), "", communsPdf.setPadding2(2f,5f,0f,5f),gray).setFont(arialB);
                     texto = new StringBuilder();
                     texto.append("Llamando desde USA: 1-855-278-4082\n");
                     texto.append("Llamando desde México:\n");
@@ -379,7 +381,7 @@ public class ImpresionCertificadoChubbPdf {
                     
                    
                         if(!certificadoProjection.getSerie().isEmpty() && certificadoProjection.getPdfEncrypted() == null){
-                            System.out.println( certificadoProjection.getPdfEncrypted());
+                            
                             String password =certificadoProjection.getSerie().substring(certificadoProjection.getSerie().length()-4, certificadoProjection.getSerie().length());                   
                             StandardProtectionPolicy spp = new StandardProtectionPolicy(password,password,accessPermission);
                             spp.setEncryptionKeyLength(128);
@@ -390,7 +392,7 @@ public class ImpresionCertificadoChubbPdf {
                     
                                  
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/certtificado.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/cer.pdf"));
 
                     return output.toByteArray();
                 } finally {
