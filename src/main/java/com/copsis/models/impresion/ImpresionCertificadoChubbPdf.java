@@ -173,9 +173,9 @@ public class ImpresionCertificadoChubbPdf {
 					String  modelo =       certificadoProjection.getDescripcion(); 
                     baseRow = communsPdf.setRow(table,12);
 			        communsPdf.setCell(baseRow, 10,"Año / Year:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
-                    communsPdf.setCell(baseRow, 19,certificadoProjection.getModelo(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 22,certificadoProjection.getModelo(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 12,"Marca / Make:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
-                    communsPdf.setCell(baseRow, 24,certificadoProjection.getMarca(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 21,certificadoProjection.getMarca(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 14,"Modelo / Model:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
                  
                     communsPdf.setCell(baseRow, 22,(modelo.length() >18 ? modelo.substring(0, 18) : modelo),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,5f,0f,0f),Color.white).setFont(arialN);
@@ -189,11 +189,11 @@ public class ImpresionCertificadoChubbPdf {
 
                     baseRow = communsPdf.setRow(table,12);
 			        communsPdf.setCell(baseRow, 10,"Serie / VIN:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
-                    communsPdf.setCell(baseRow, 19,certificadoProjection.getSerie(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 22,certificadoProjection.getSerie(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 14,"Placas / Plates:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
-                    communsPdf.setCell(baseRow, 24,certificadoProjection.getPlacas(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 19,certificadoProjection.getPlacas(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
                     communsPdf.setCell(baseRow, 9,"Uso / Use:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialB);
-                    communsPdf.setCell(baseRow, 20,certificadoProjection.getUso(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
+                    communsPdf.setCell(baseRow, 22,certificadoProjection.getUso(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f,0f,0f,0f),Color.white).setFont(arialN);
                     table.draw();
                     yStart -= (table.getHeaderAndDataHeight() +10 );
                     
