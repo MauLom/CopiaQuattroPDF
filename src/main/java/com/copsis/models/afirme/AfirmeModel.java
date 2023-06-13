@@ -58,9 +58,13 @@ public class AfirmeModel {
 				case 1:
 				
 					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO") 
-					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")) {
+					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")
+					|| fn.caratula(1, 2, stripper, doc).contains("MOTOCICLETAS INDIVIDUALES")
+					|| (fn.caratula(1, 2, stripper, doc).contains("PICK UPS") && fn.caratula(1, 2, stripper, doc).contains("INDIVIDUAL"))) {
 						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");	
-						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;						
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "MOTOCICLETAS INDIVIDUALES") :pagIni;
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;										
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
 					}else {
 						pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
