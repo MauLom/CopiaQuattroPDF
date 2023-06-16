@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import com.copsis.clients.projections.AseguradosProjection;
 import com.copsis.clients.projections.BeneficiarioProjection;
 import com.copsis.clients.projections.CaractulaProjection ;
+import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.exceptions.GeneralServiceException ;
 import com.copsis.models.Tabla.BaseTable ;
@@ -45,7 +46,7 @@ public class ImpresionCaractulaPrudential {
                     BaseTable table;
                     Row<PDPage> baseRow;
                     StringBuilder texto = new StringBuilder();
-                    this.setFooter(document, page);
+                    this.setFooter(document, page,datos);
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
@@ -181,7 +182,7 @@ public class ImpresionCaractulaPrudential {
                 //     ///DESARRROLO DE PAGINA NUMERO 2
                     page = new PDPage();
                     document.addPage(page);
-                    this.setFooter(document, page);
+                    this.setFooter(document, page,datos);
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
@@ -385,7 +386,7 @@ public class ImpresionCaractulaPrudential {
                     /////////////////////////////////////////////////////PAGINA 3
                     page = new PDPage();
                     document.addPage(page);
-                    this.setFooter(document, page);
+                    this.setFooter(document, page,datos);
 
                     PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                     communsPdf.drawBox(content01, Color.black, 25, yStart-2, 552, 0.5f);
@@ -447,7 +448,7 @@ public class ImpresionCaractulaPrudential {
         }
     }
 
-    private void setFooter(PDDocument document, PDPage page) {
+    private void setFooter(PDDocument document, PDPage page,CaractulaProjection datos) {
         try ( PDPageContentStream content = new PDPageContentStream(document, page)) {
             BaseTable table;
             Row<PDPage> baseRow;
@@ -463,7 +464,12 @@ public class ImpresionCaractulaPrudential {
             baseRow = communsPdf.setRow(table);
             communsPdf.setCell(baseRow, 100, "PÓLIZA", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 0f, 3f, 5f), Color.white);
             baseRow = communsPdf.setRow(table);
-            communsPdf.setCell(baseRow, 100, "Seguro individual – Hospitalización", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);
+            if(datos.getTipo() ==0) {
+            	communsPdf.setCell(baseRow, 100, "Seguro individual – Hospitalización", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);	
+            }else {
+            	communsPdf.setCell(baseRow, 100, "Seguro individual – Muerte Accidental y Pérdidas Orgánicas", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);
+            }
+            
             table.draw();
             yStart -= table.getHeaderAndDataHeight() + 8;
 
