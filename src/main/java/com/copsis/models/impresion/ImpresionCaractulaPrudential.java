@@ -432,7 +432,7 @@ public class ImpresionCaractulaPrudential {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/caractula.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/caractula.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
