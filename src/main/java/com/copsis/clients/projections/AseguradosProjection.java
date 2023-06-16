@@ -18,5 +18,8 @@ public class AseguradosProjection {
     private String sa;
 	private String prima;
 	private String status;
+	private String rfc;
+	private String telefono;
+	private String sexo;
 	
 }

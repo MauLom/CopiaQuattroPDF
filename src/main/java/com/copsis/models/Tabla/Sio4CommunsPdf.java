@@ -12,9 +12,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
+import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.util.Matrix;
 import org.jsoup.Jsoup;
 
@@ -32,7 +39,7 @@ public class Sio4CommunsPdf {
     private LineStyle lineBlanco = new LineStyle(new Color(255, 255, 255), 0);//para la cotizacion inter 37;
     private LineStyle lineBlack = new LineStyle(new Color(0, 0, 0), 0);;
  
-
+    private final Color colorLink = new Color(5, 99, 193, 0);
     public Sio4CommunsPdf() {
     }
 
@@ -627,6 +634,60 @@ public class Sio4CommunsPdf {
         } else {
             return null;
         }
+    }
+
+
+    public final void getTextlink(PDPageContentStream contentStream, PDPage page,float upperRightX,float upperRightY,PDColor color,int fontsize,String texto,boolean areaNoMark,String textoNoMark,String textlink,boolean lineMark) throws IOException {
+   
+        PDFont font = PDType1Font.HELVETICA;
+     
+        contentStream.setNonStrokingColor(colorLink);
+        contentStream.beginText();
+        contentStream.setFont(font, fontsize);    
+        contentStream.newLineAtOffset(upperRightX,upperRightY-20);      
+        contentStream.showText(texto);
+        contentStream.endText();
+        contentStream.close();
+
+        PDAnnotationLink txtLink = new PDAnnotationLink();
+
+        if(lineMark){
+            PDBorderStyleDictionary underline = new PDBorderStyleDictionary();
+            underline.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
+            txtLink.setBorderStyle(underline);
+            txtLink.setColor(color);
+         
+            
+        }else{
+            txtLink.setColor(color);
+            txtLink.setHidden(true);
+        }
+
+       
+   
+
+        
+       
+        float offset = 0;
+        //float textWidth = (font.getStringWidth(texto) / 1000) * fontsize;
+  
+        if(areaNoMark){
+             offset = (font.getStringWidth(textoNoMark) / 1000) * fontsize;
+        }
+        PDRectangle position = new PDRectangle();
+        position.setLowerLeftX(offset+upperRightX);
+        position.setLowerLeftY(upperRightY - 22f);
+     
+        position.setUpperRightX(upperRightX);
+        position.setUpperRightY(upperRightY -10);
+        txtLink.setRectangle(position);
+
+        PDActionURI action = new PDActionURI();
+        action.setURI(textlink);
+        txtLink.setAction(action);
+        
+
+        page.getAnnotations().add(txtLink);
     }
 	
 }

@@ -18,13 +18,16 @@ public class CaractulaProjection {
     private	String fechaDesde;
     private	String fechaHasta;
     private	String mmoneda;
+    private	String formaPago;
     private	String nombre;
     private	String rfc;
     private	String telefono;
     private	String direccion;
-    private	String nacionalidad;
+    private	String colonia;
+    private	String población;
+    private	String Nacionalidad;        
     private	String cp;
-    private List<AseguradosProjection> asegurado;
+    private AseguradosProjection asegurado;
     private List<CoberturaProjection> coberturas;
     private	String  primaNeta;
     private	String  iva;
@@ -32,8 +35,4 @@ public class CaractulaProjection {
     private	String  recargo;
     private	String  primaTotal;
     private List<BeneficiarioProjection> beneficiarios;
-
-
-
-
 }
