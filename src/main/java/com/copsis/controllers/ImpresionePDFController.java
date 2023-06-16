@@ -2,8 +2,6 @@ package com.copsis.controllers;
 
 import java.util.stream.Collectors;
 
-import jakarta.validation.Valid;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.copsis.clients.projections.CaractulaProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
-import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
@@ -32,6 +30,7 @@ import com.copsis.models.CopsisResponse;
 import com.copsis.services.ImpresionService;
 import com.copsis.utils.ErrorCode;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -56,13 +55,13 @@ public class ImpresionePDFController {
 	}
 
 	@PostMapping(value = "amortizacion")
-	public ResponseEntity<CopsisResponse> impresionScotia (@Valid @RequestBody AmortizacionPdfForm impresionForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionScotia (@Valid @RequestBody CaractulaProjection caractulaProjection, BindingResult bindingResult) {
 		try {
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionAmortizacion(impresionForm)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaractulaPrudential(caractulaProjection)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
@@ -181,6 +180,22 @@ public class ImpresionePDFController {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.ImpresionCertificadoAutos(certificadoProjection)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+	@PostMapping(value = "caractulaPrudential")
+	public ResponseEntity<CopsisResponse> impresionCaractulaPrudential( @Valid @RequestBody CaractulaProjection  caractulaProjection, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaractulaPrudential(caractulaProjection)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
