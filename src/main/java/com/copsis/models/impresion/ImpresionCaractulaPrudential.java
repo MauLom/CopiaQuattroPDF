@@ -103,6 +103,7 @@ public class ImpresionCaractulaPrudential {
                     yStart -= table.getHeaderAndDataHeight() + 28;
 
                     AseguradosProjection asegurado = datos.getAsegurado();
+                    
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
@@ -112,17 +113,17 @@ public class ImpresionCaractulaPrudential {
                     communsPdf.setCell(baseRow, 23, "R.F.C.", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     communsPdf.setCell(baseRow, 27, "Teléfono (Incluyendo Lada)a", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 50, asegurado.getNombre(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                    communsPdf.setCell(baseRow, 23, asegurado.getRfc(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                    communsPdf.setCell(baseRow, 27, asegurado.getTelefono(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 50, asegurado.getNombre() !=null ? asegurado.getNombre():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 23, asegurado.getRfc() != null ? asegurado.getRfc():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 27, asegurado.getTelefono() !=null ? asegurado.getTelefono():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     baseRow = communsPdf.setRow(table);
                     communsPdf.setCell(baseRow, 38, "Fecha de Nacimiento", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     communsPdf.setCell(baseRow, 35, "Edad", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     communsPdf.setCell(baseRow, 27, "Sexo", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 38, asegurado.getFechNacimiento(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                    communsPdf.setCell(baseRow, 35, asegurado.getEdad(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                    communsPdf.setCell(baseRow, 27, asegurado.getSexo(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 38, asegurado.getFechNacimiento() !=null ? asegurado.getFechNacimiento():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 35, asegurado.getEdad() !=null? asegurado.getEdad() :"" , Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 27, asegurado.getSexo() !=null ? asegurado.getSexo():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     table.draw();
 
                     yStart -= table.getHeaderAndDataHeight() + 28;
@@ -135,14 +136,15 @@ public class ImpresionCaractulaPrudential {
                     communsPdf.setCell(baseRow, 63, "Suma Asegurada", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     table.draw();
                     List<CoberturaProjection>  cbo = datos.getCoberturas();
-                    if(!cbo.isEmpty()){                    
+                    if(cbo!=null && !cbo.isEmpty()){                    
                     yStart -= table.getHeaderAndDataHeight();
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     int ccb=0;
                     for (int i = 0; i < cbo.size();i++){ 
                         ccb++;
-                         if(ccb == cbo.size()) {
-                            baseRow = communsPdf.setRow(table);
+                      
+                         if(ccb == cbo.size()) {                           
+                            baseRow = communsPdf.setRow(table,25);
                             communsPdf.setCell(baseRow, 37, cbo.get(i).getNombres(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 63, cbo.get(i).getSa(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);                       
                          }else{
@@ -229,7 +231,7 @@ public class ImpresionCaractulaPrudential {
                     yStart -= table.getHeaderAndDataHeight();
                     
                     List<BeneficiarioProjection> bene =datos.getBeneficiarios();
-                    if(!bene.isEmpty()){
+                    if(bene !=null && !bene.isEmpty()){
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     int c = 0;
                     for (int i = 0; i < bene.size(); i++) {
@@ -239,7 +241,7 @@ public class ImpresionCaractulaPrudential {
                         communsPdf.setCell(baseRow, 31, bene.get(i).getNombres() !=null ?  bene.get(i).getNombres():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         communsPdf.setCell(baseRow, 18, bene.get(i).getFecNacimiento()!=null ? bene.get(i).getFecNacimiento():"", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         communsPdf.setCell(baseRow, 19, bene.get(i).getParentesco()!=null? bene.get(i).getParentesco():"" , Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
-                        communsPdf.setCell(baseRow, 19, bene.get(i).getPorcentaje().toString()!=null? bene.get(i).getPorcentaje().toString():"" , Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        communsPdf.setCell(baseRow, 19, bene.get(i).getPorcentaje().toString()!=null? bene.get(i).getPorcentaje().intValue() +" %":"" , Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                     }
                     table.draw();
                   }
