@@ -36,4 +36,5 @@ public class CaractulaProjection {
     private	String  primaTotal;
     private List<BeneficiarioProjection> beneficiarios;
     private int tipo=0;
+    private String nivelEscolar;
 }

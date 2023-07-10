@@ -52,6 +52,7 @@ public abstract class Table <T extends PDPage>  {
     private boolean remBordes;
     private boolean cellCallH;
     private float op;
+    private float cellCallHeight=0;
 
     /**
      * @deprecated Use one of the constructors that pass a {@link PageProvider}
@@ -607,7 +608,7 @@ public abstract class Table <T extends PDPage>  {
         }
         // Set Y position for next row
         if (cellCallH) {
-            yStart = yStart - row.getHeight();
+            yStart = yStart -( row.getHeight() );
         } else {
             yStart = yStart - (row.getHeight() + this.lineSpacing);
         }
@@ -883,6 +884,7 @@ public abstract class Table <T extends PDPage>  {
         }
 
         return height;
+
     }
 
     /**

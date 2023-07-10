@@ -140,6 +140,7 @@ public class ImpresionCaractulaPrudential {
                     yStart -= table.getHeaderAndDataHeight();
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     int ccb=0;
+                    
                     for (int i = 0; i < cbo.size();i++){ 
                         ccb++;
                       

@@ -21,5 +21,7 @@ public class AseguradosProjection {
 	private String rfc;
 	private String telefono;
 	private String sexo;
+	private String  nomina;
+
 	
 }

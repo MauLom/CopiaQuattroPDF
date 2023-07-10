@@ -19,6 +19,7 @@ import com.copsis.clients.projections.CaractulaProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
+import com.copsis.clients.projections.PolizaAutosProjection;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
@@ -196,6 +197,56 @@ public class ImpresionePDFController {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaractulaPrudential(caractulaProjection)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+
+	@PostMapping(value = "certificadoVida")
+	public ResponseEntity<CopsisResponse> impresionCertificadoVida( @Valid @RequestBody CaractulaProjection  caractulaProjection, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCertificadoVida(caractulaProjection)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+	@PostMapping(value = "certificadoArgos")
+	public ResponseEntity<CopsisResponse> impresionCertificadoArgos( @Valid @RequestBody CaractulaProjection  caractulaProjection, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCertificadoArgos(caractulaProjection)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+
+	@PostMapping(value = "polizaAutos")
+	public ResponseEntity<CopsisResponse> impresionPolizAutos(@Valid @RequestBody PolizaAutosProjection  polizaAutosProjection, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionPolizAutos(polizaAutosProjection)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {

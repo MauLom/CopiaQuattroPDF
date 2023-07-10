@@ -11,6 +11,7 @@ import com.copsis.clients.projections.CaractulaProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
+import com.copsis.clients.projections.PolizaAutosProjection;
 import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
@@ -23,9 +24,12 @@ import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCaractulaPrudential;
+import com.copsis.models.impresion.ImpresionCertificadoAfirme;
+import com.copsis.models.impresion.ImpresionCertificadoArgos;
 import com.copsis.models.impresion.ImpresionCertificadoChubbPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
+import com.copsis.models.impresion.ImpresionPolizaAutosInter;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresion.ImpresionVidaAxaPdf;
 import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
@@ -218,5 +222,45 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
+
+        public byte[] impresionCertificadoVida(CaractulaProjection  caractulaProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCertificadoAfirme().buildPDF(caractulaProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+      public byte[] impresionCertificadoArgos(CaractulaProjection  caractulaProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCertificadoArgos().buildPDF(caractulaProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+      public byte[] impresionPolizAutos(PolizaAutosProjection  polizaAutosProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionPolizaAutosInter().buildPDF(polizaAutosProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
 
 }

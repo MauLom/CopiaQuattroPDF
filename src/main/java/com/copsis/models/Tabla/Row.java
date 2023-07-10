@@ -46,7 +46,7 @@ public class Row<T extends PDPage>  {
 	        }
 	        setBorders(cell, cells.isEmpty());
 	        cell.setLineSpacing(lineSpacing);
-	        cell.setHorizontalFreeSpace(horizonSpace);
+	        //cell.setHorizontalFreeSpace(10f);
 	        cells.add(cell);
 	        return cell;
 	    }
