@@ -74,7 +74,9 @@ public class ChubbAutosModel {
 					.replace("I.V###.A###.", ConstantsValue.IVA)
 					.replace("H###E###C###H###O E###N","HECHO EN")
 					.replace("C###H###E###VR###OLE###T", "CHEVROLET")
-					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS");
+					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS")
+					.replace("Vigencia:###Del ", "Vigencia:###Del###")
+					.replace("horas al ", "horas al###");
 
 			// tipo
 			modelo.setTipo(1);
@@ -272,7 +274,7 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals(ConstantsValue.CLAVE_INTERNA_AGENTE)) {
 					inicio = inicio + 25;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150) : (inicio + 30);
-						newcontenido = fn.gatos(contenido.substring(inicio, fin)); 
+						newcontenido = fn.gatos(contenido.substring(inicio, fin).split("\n")[0]); 
 
                     	modelo.setCveAgente(newcontenido.contains("-")  ? newcontenido.split("-")[0].replace("###Conducto:###0", "").replace("###Conducto:###2 ", "").replace("###", "").trim()
     							: "");
@@ -309,11 +311,14 @@ public class ChubbAutosModel {
 
 			// VigenciaDe
 			conceptos = Arrays.asList("Vigencia:###Del###");
+
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
+		
 				if (inicio > -1 && x.equals("Vigencia:###Del###")) {
 					inicio = inicio + 18;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
+					
 					newcontenido = contenido.substring(inicio, fin);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
 					if(modelo.getVigenciaDe().length() >  15) {
