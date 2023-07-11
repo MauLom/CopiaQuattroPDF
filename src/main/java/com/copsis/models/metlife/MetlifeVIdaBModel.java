@@ -45,6 +45,8 @@ public class MetlifeVIdaBModel {
 				} 
 				if(newcontenido.toString().split("\n")[i].contains("Moneda")) {
 					modelo.setMoneda(1);
+					
+				
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
 					direccion.append(newcontenido.toString().split("\n")[i].split("###")[0]);
 					direccion.append(newcontenido.toString().split("\n")[i+1].split("###")[0]);
@@ -53,6 +55,11 @@ public class MetlifeVIdaBModel {
 					modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("AGENTE-1:")[1].split("Día")[0].replace("###", "").trim());
 				}
 			}
+
+			if(contenido.indexOf("EFECTIVO")>-1){
+              modelo.setFormaPago(1);
+			}
+
 			modelo.setCteDireccion(direccion.toString());
 			
 			if(modelo.getCteDireccion().length() > 0) {
@@ -118,16 +125,21 @@ public class MetlifeVIdaBModel {
 					.replace("HERMANO", "###HERMANO###")
 					.replace("HIJO", "###HIJO###")
 					.replace("HIJA", "###HIJA###")
+					.replace("CONYUGE", "###CONYUGE###")
 					);
 
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
 				if(!newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")) {
+					if(newcontenido.toString().split("\n")[i].contains("%")){
+						System.out.println(newcontenido.toString().split("\n")[i]);
 				beneficiario.setParentesco(fn.buscaParentesco(newcontenido.toString().split("\n")[i]));
 				beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
 				beneficiario.setPorcentaje(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].replace("%", "").trim()));
-				beneficiarios.add(beneficiario);				
+				beneficiarios.add(beneficiario);	
+					}
+										
 				}
 			}
 			
@@ -162,7 +174,7 @@ public class MetlifeVIdaBModel {
 
 			
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(MetlifeVIdaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
