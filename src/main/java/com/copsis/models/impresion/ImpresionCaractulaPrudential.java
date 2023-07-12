@@ -111,7 +111,7 @@ public class ImpresionCaractulaPrudential {
                     baseRow = communsPdf.setRow(table);
                     communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     communsPdf.setCell(baseRow, 23, "R.F.C.", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                    communsPdf.setCell(baseRow, 27, "Teléfono (Incluyendo Lada)a", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                    communsPdf.setCell(baseRow, 27, "Teléfono (Incluyendo Lada)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     baseRow = communsPdf.setRow(table);
                     communsPdf.setCell(baseRow, 50, asegurado.getNombre() !=null ? asegurado.getNombre():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                     communsPdf.setCell(baseRow, 23, asegurado.getRfc() != null ? asegurado.getRfc():"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
@@ -140,6 +140,7 @@ public class ImpresionCaractulaPrudential {
                     yStart -= table.getHeaderAndDataHeight();
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     int ccb=0;
+                    
                     for (int i = 0; i < cbo.size();i++){ 
                         ccb++;
                       
@@ -323,7 +324,7 @@ public class ImpresionCaractulaPrudential {
                         float[] components = new float[] {
                          colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
                          PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
-                         String txtlink="quejasyconsultas@prudential.com";
+                         String txtlink="consultasyquejas@prudential.com";
                          communsPdf.getTextlink(contentStream1, page,35f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
                      }
 
@@ -413,7 +414,7 @@ public class ImpresionCaractulaPrudential {
                     communsPdf.setCell(baseRow, 50, "Fecha de Emisión", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 50, "Firma de Funcionario", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 40);
-                    communsPdf.setCell(baseRow, 50, "", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 50, datos.getFechaEmision(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 50, "", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                                    
                     table.draw();
 

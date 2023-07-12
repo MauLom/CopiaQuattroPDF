@@ -637,10 +637,8 @@ public class Sio4CommunsPdf {
     }
 
 
-    public final void getTextlink(PDPageContentStream contentStream, PDPage page,float upperRightX,float upperRightY,PDColor color,int fontsize,String texto,boolean areaNoMark,String textoNoMark,String textlink,boolean lineMark) throws IOException {
-   
-        PDFont font = PDType1Font.HELVETICA;
-     
+    public final void getTextlink(PDPageContentStream contentStream, PDPage page,float upperRightX,float upperRightY,PDColor color,int fontsize,String texto,boolean areaNoMark,String textoNoMark,String textlink,boolean lineMark) throws IOException {   
+        PDFont font = PDType1Font.HELVETICA;     
         contentStream.setNonStrokingColor(colorLink);
         contentStream.beginText();
         contentStream.setFont(font, fontsize);    
@@ -662,14 +660,52 @@ public class Sio4CommunsPdf {
             txtLink.setColor(color);
             txtLink.setHidden(true);
         }
-
-       
-   
-
-        
-       
         float offset = 0;
-        //float textWidth = (font.getStringWidth(texto) / 1000) * fontsize;
+  
+        if(areaNoMark){
+             offset = (font.getStringWidth(textoNoMark) / 1000) * fontsize;
+        }
+        PDRectangle position = new PDRectangle();
+        position.setLowerLeftX(offset+upperRightX);
+        position.setLowerLeftY(upperRightY - 22f);
+     
+        position.setUpperRightX(upperRightX);
+        position.setUpperRightY(upperRightY -10);
+        txtLink.setRectangle(position);
+
+        PDActionURI action = new PDActionURI();
+        action.setURI(textlink);
+        txtLink.setAction(action);
+        
+
+        page.getAnnotations().add(txtLink);
+    }
+
+
+    public final void getTextlink(PDPageContentStream contentStream, PDPage page,float upperRightX,float upperRightY,PDColor color,int fontsize,String texto,boolean areaNoMark,String textoNoMark,String textlink,boolean lineMark,Color colorLink) throws IOException {   
+        PDFont font = PDType1Font.HELVETICA;     
+        contentStream.setNonStrokingColor(colorLink);
+        contentStream.beginText();
+        contentStream.setFont(font, fontsize);    
+        contentStream.newLineAtOffset(upperRightX,upperRightY-20);      
+        contentStream.showText(texto);
+        contentStream.endText();
+        contentStream.close();
+
+        PDAnnotationLink txtLink = new PDAnnotationLink();
+
+        if(lineMark){
+            PDBorderStyleDictionary underline = new PDBorderStyleDictionary();
+            underline.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
+            txtLink.setBorderStyle(underline);
+            txtLink.setColor(color);
+         
+            
+        }else{
+            txtLink.setColor(color);
+            txtLink.setHidden(true);
+        }
+        float offset = 0;
   
         if(areaNoMark){
              offset = (font.getStringWidth(textoNoMark) / 1000) * fontsize;
