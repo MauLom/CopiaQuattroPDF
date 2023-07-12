@@ -287,7 +287,7 @@ public class ImpresionCaractulaPrudential {
                     texto = new StringBuilder();
                     texto.append("Si el contenido de la póliza o sus modificaciones no concordaren con la oferta, el asegurado podrá pedir la ");                    
                     texto.append("rectificación correspondiente dentro de los treinta días que sigan al día en que reciba la póliza. Transcurrido este ");                    
-                    texto.append("plazo, se considerarán aceptadas las estipulaciones de la póliza o de sus modificaciones (Art.25 Ley Sobre el");
+                    texto.append("plazo, se considerarán aceptadas las estipulaciones de la póliza o de sus modificaciones (Art.25 Ley Sobre el ");
                     texto.append("Contrato de Seguro).");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 10f, (-1.3f * 9f), 1f, 0.2f);
                   
