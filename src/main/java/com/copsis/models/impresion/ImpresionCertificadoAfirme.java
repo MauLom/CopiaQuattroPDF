@@ -115,7 +115,7 @@ import com.copsis.exceptions.GeneralServiceException ;
                         communsPdf.setCell(baseRow, 50, "Vigencia del Certificado", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
 
                         baseRow = communsPdf.setRow(table, 11);
-                        communsPdf.setCell(baseRow, 50, asegurado.getCertificado(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 50, datos.getFechaDesdeCert() +" - "+datos.getFechaHastaCent(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
                         communsPdf.setCell(baseRow, 50, datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
 
                         baseRow = communsPdf.setRow(table, 11);
