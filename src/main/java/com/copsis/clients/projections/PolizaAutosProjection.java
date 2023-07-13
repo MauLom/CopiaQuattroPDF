@@ -13,5 +13,7 @@ public class PolizaAutosProjection {
     private String numeroPoliza;
 	private String endoso;
 	private String inciso;
-    private String movimiento;    
+    private String movimiento;
+    private	String fechaDesdeCert;
+    private	String fechaHastaCent;    
 }
