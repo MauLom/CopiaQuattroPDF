@@ -424,7 +424,7 @@ public class ImpresionCaractulaPrudential {
                     texto = new StringBuilder();
                     texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas,");
                     texto.append("la documentación contractual y la nota técnica que integran este producto de seguro, quedaron");
-                    texto.append("registradas ante la Comisión Nacional de Seguros y Fianzas, a partir del día xx de xxxx de xxxx, con el");
+                    texto.append("registradas ante la Comisión Nacional de Seguros y Fianzas, a partir del día xx de xxxx de xxxx, con el ");
                     texto.append("número xxxxxxx/xxxxxxx“.");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 12f, (-1.5f * 9f), 1f, 0.2f);
                   
