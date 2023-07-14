@@ -31,12 +31,17 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
-			
+			if(fn.caratula(1, 1, pdfStripper, pdDoc).contains("accidente vial o robo ")) {
+				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
+			}
+
+			;
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA"};
 			 boolean encontro = false;
-			for (String tipo : tipos) {							
+			for (String tipo : tipos) {	
+				//System.out.println(tipo +"-->"+ contenido.contains(tipo));						
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
