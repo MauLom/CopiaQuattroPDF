@@ -85,7 +85,7 @@ public class ImpresionCertificadoArgos {
                         communsPdf.setCell(baseRow, 50, "HASTA", Color.black, true, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), gray).setValign(VerticalAlignment.MIDDLE);
                         baseRow = communsPdf.setRow(table, 27);
                         communsPdf.setCell(baseRow, 50, datos.getFechaDesdeCert(), Color.black, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f),Color.white).setValign(VerticalAlignment.MIDDLE);
-                        communsPdf.setCell(baseRow, 50, datos.getFechaHastaCent(), Color.black, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f),Color.white).setValign(VerticalAlignment.MIDDLE);                   
+                        communsPdf.setCell(baseRow, 50, datos.getFechaHastaCert(), Color.black, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f),Color.white).setValign(VerticalAlignment.MIDDLE);                   
                         table.draw();
 
                         yStart -= table.getHeaderAndDataHeight()+9; 

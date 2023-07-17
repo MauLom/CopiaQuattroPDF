@@ -18,7 +18,7 @@ public class CaractulaProjection {
     private	String fechaDesde;
     private	String fechaHasta;
     private	String fechaDesdeCert;
-    private	String fechaHastaCent;
+    private	String fechaHastaCert;
     private	String mmoneda;
     private	String formaPago;
     private	String nombre;
