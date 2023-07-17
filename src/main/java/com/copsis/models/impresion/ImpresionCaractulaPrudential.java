@@ -3,6 +3,7 @@ import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
 import java.io.File ;
 import java.io.IOException ;
+import java.text.DecimalFormat;
 import java.util.ArrayList ;
 import java.util.List ;
 
@@ -140,18 +141,25 @@ public class ImpresionCaractulaPrudential {
                     yStart -= table.getHeaderAndDataHeight();
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     int ccb=0;
-                    
+                    String valorSa="";
+                    DecimalFormat df = new DecimalFormat("#,##0");
+                    if(!datos.getSumaAsegurada().isEmpty()){
+                    Double sa = Double.parseDouble(datos.getSumaAsegurada());
+                     valorSa = df.format(sa).toString();
+                    }
+                   
+                   
                     for (int i = 0; i < cbo.size();i++){ 
                         ccb++;
                       
                          if(ccb == cbo.size()) {                           
                             baseRow = communsPdf.setRow(table,25);
                             communsPdf.setCell(baseRow, 37, cbo.get(i).getNombres(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 63, cbo.get(i).getSa(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);                       
+                            communsPdf.setCell(baseRow, 63, ( datos.getPaquete() == 2 || datos.getPaquete() == 4  ? valorSa : cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);                       
                          }else{
                             baseRow = communsPdf.setRow(table);
                             communsPdf.setCell(baseRow, 37,cbo.get(i).getNombres() , Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 63, cbo.get(i).getSa(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 63,( datos.getPaquete() == 2 || datos.getPaquete() == 4  ? valorSa: cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                        
                          }                 
                           

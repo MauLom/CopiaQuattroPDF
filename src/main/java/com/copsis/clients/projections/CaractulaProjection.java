@@ -39,4 +39,6 @@ public class CaractulaProjection {
     private List<BeneficiarioProjection> beneficiarios;
     private int tipo=0;
     private String nivelEscolar;
+    private Long paquete;
+    private	String sumaAsegurada;
 }
