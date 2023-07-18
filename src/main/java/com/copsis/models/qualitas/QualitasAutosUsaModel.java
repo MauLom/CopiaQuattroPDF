@@ -40,6 +40,7 @@ public class QualitasAutosUsaModel {
                     modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[1].trim()); 
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Domicilio-Address:") && newcontenido.toString().split("\n")[i].contains("Número:")){
+                  
                     modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Domicilio-Address:")[1].split("Número")[0].replace("###", "").trim()); 
                 }
 
@@ -47,8 +48,12 @@ public class QualitasAutosUsaModel {
                     modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.-ZIP:")[1].replace("###", "").trim().substring(0,5)); 
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Clave, Marca,Descripción:")){
+                    
                     modelo.setClave(newcontenido.toString().split("\n")[i].split("###")[1]);
-                    modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("###")[2]);
+                    if(newcontenido.toString().split("\n")[i].split("###").length >2){
+                        modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("###")[2]);
+                    }
+                    
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Modelo-Year:") && newcontenido.toString().split("\n")[i].contains("Ocupantes")){
              
