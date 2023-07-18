@@ -135,6 +135,7 @@ public class BexmasSaludModel {
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			inicio = contenido.indexOf("Datos de los Asegurados");
 			fin = contenido.indexOf("Detalle del Seguro");
+
 	
 			if(inicio >  -1 && fin > -1  &&  inicio < fin) {
 				newcont = new StringBuilder();
@@ -145,24 +146,23 @@ public class BexmasSaludModel {
 					if(newcont.toString().split("\n")[i].split("-").length > 3) {
 				
 						
-					if(!newcont.toString().split("\n")[i].contains("Nacimiento")) {
-						
+					if(!newcont.toString().split("\n")[i].contains("Nacimiento")) {						
 						if(newcont.toString().split("\n")[i].split("###")[0].length() > 20) {
 							asegurado.setNombre(newcont.toString().split("\n")[i].split("###")[0].trim());
-						}else {
-					
+						}else {					
 							if(newcont.toString().split("\n")[i-1].contains("Nacimiento")) {
 								asegurado.setNombre( newcont.toString().split("\n")[i].split("###")[0].trim());
 							}else {
 								asegurado.setNombre((newcont.toString().split("\n")[i-1]  +" " +newcont.toString().split("\n")[i].split("###")[0]).trim());
-							}
-						
+							}						
 						}
 						asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[2]));
-						asegurado.setAntiguedad(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[3]));
-						asegurado.setParentesco(fn.parentesco(newcont.toString().split("\n")[i].split("###")[4]));	
-						asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i].split("###")[5].trim()));
-						asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i].split("###")[6])  ? 1 : 0);
+						if(newcont.toString().split("\n")[i].split("###")[3].split("-").length > 3){
+							asegurado.setAntiguedad(fn.formatDateMonthCadena(newcont.toString().split("\n")[i].split("###")[3]));
+							asegurado.setParentesco(fn.parentesco(newcont.toString().split("\n")[i].split("###")[4]));	
+							asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i].split("###")[5].trim()));
+							asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i].split("###")[6])  ? 1 : 0);
+						}						
 						asegurados.add(asegurado);
 					 }
 				   }								
@@ -261,6 +261,7 @@ public class BexmasSaludModel {
 		
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("La presente carátula");
+		
 			if(inicio >  -1 && fin > -1  &&  inicio < fin) {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
