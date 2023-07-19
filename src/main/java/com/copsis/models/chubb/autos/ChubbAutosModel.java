@@ -76,7 +76,8 @@ public class ChubbAutosModel {
 					.replace("C###H###E###VR###OLE###T", "CHEVROLET")
 					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS")
 					.replace("Vigencia:###Del ", "Vigencia:###Del###")
-					.replace("horas al ", "horas al###");
+					.replace("horas al ", "horas al###")
+					.replace("@@@Póliza:", "@@@Póliza:###");
 
 			// tipo
 			modelo.setTipo(1);
@@ -128,6 +129,7 @@ public class ChubbAutosModel {
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 			}
 
+			
 			// poliza
 			conceptos = Arrays.asList("Póliza:###");
 			for (String x : conceptos) {
@@ -135,8 +137,9 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Póliza:###")) {
 					inicio = inicio + 10;
 					newcontenido = contenido.substring(inicio, (inicio + 100));
+			
 					modelo.setPoliza(
-							newcontenido.split(separador)[0].trim() + "" + newcontenido.split(separador)[1].trim());
+							(newcontenido.split(separador)[0].trim() + "" + newcontenido.split(separador)[1].trim()).replace("Vigencia:", ""));
 				}
 			}
 
