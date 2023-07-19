@@ -37,7 +37,7 @@ public class MapfreSaluDModel {
 		int inicio = 0;
 		int fin = 0;
 		try {
-			modelo.setTipo(5);
+			modelo.setTipo(3);
 			modelo.setCia(22);
 
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
