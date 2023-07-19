@@ -321,17 +321,17 @@ public class ImpresionCertificadoArgos {
 
                         /**TABLA 1 */
                         
-                        yStart = yStart-190;
+                        yStart = yStart-180;
                         table = new BaseTable(yStart, yStartNewPage, 0, 200, margin , document, page, true, true);                                                
                         baseRow = communsPdf.setRow(table, 5);
-                        communsPdf.setCell(baseRow, 100, "", Color.black, true, "C", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                    
+                        communsPdf.setCell(baseRow, 100,datos.getFechaDesdeCert(), Color.black, false, "C", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                    
                         table.draw();
 
-                        table = new BaseTable(yStart, yStartNewPage, 0, 150, 250 , document, page, true, true);                                                
+                        table = new BaseTable(yStart-5, yStartNewPage, 0, 150, 250 , document, page, true, true);                                                
                         baseRow = communsPdf.setRow(table, 5);
                         communsPdf.setCell(baseRow, 100, "", Color.black, true, "C", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                    
                         table.draw();
-                        table = new BaseTable(yStart, yStartNewPage, 0, 150, 435 , document, page, true, true);                                                
+                        table = new BaseTable(yStart-5, yStartNewPage, 0, 150, 435 , document, page, true, true);                                                
                         baseRow = communsPdf.setRow(table, 5);
                         communsPdf.setCell(baseRow, 100, "", Color.black, true, "C", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                    
                         table.draw();
@@ -340,7 +340,7 @@ public class ImpresionCertificadoArgos {
                         /**TABLA 2 */
 
 
-                         yStart -= table.getHeaderAndDataHeight();
+                         yStart -= table.getHeaderAndDataHeight()+2;
                          table = new BaseTable(yStart, yStartNewPage, 0, 200, margin , document, page, false, true);                                                
                         baseRow = communsPdf.setRow(table, 18);
                         communsPdf.setCell(baseRow, 100, "LUGAR Y FECHA DE EMISIÓN", Color.black, false, "C", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                    
