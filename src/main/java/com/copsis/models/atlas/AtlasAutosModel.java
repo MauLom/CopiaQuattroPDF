@@ -30,13 +30,11 @@ public class AtlasAutosModel {
 		contenido = contenido.replace("las 12:00 Hrs.del", "").replace("POLIZA", "PÓLIZA")
 		.replace("Prima###Neta:", "Prima Neta:");
 		try {
-			// tipo
+	
 			modelo.setTipo(1);
-
-			// cia
+	
 			modelo.setCia(33);
-
-			// Datos del Contrantante
+	
 			inicio = contenido.indexOf("PÓLIZA");
 			fin = contenido.indexOf("Coberturas Contratadas");
 
@@ -49,7 +47,7 @@ public class AtlasAutosModel {
 								.replace("-", "").replace(" ", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
-						System.out.println(fn.obtenVigePoliza(newcontenido.split("\n")[i]));
+					
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
 						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(1)));
 						modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(2)));
@@ -107,8 +105,10 @@ public class AtlasAutosModel {
 					if (newcontenido.split("\n")[i].contains("Clave:")
 							|| newcontenido.split("\n")[i].contains(ConstantsValue.NO_MOTOR)) {
 						modelo.setClave(
-								newcontenido.split("\n")[i].split("Clave:")[1].split(ConstantsValue.NO_MOTOR)[0].replace("###", ""));
-						modelo.setMotor(newcontenido.split("\n")[i].split(ConstantsValue.NO_MOTOR)[1].replace("###", ""));
+								newcontenido.split("\n")[i].split("Clave:")[1].split(ConstantsValue.NO_MOTOR)[0].replace("###", ""));						
+								if(newcontenido.split("\n")[i].split("Moto")[1].length() > 5){
+									modelo.setMotor(newcontenido.split("\n")[i].split(ConstantsValue.NO_MOTOR)[1].replace("###", ""));
+						}					    					 	
 					}
 
 					if (newcontenido.split("\n")[i].contains("Descripción:")) {
