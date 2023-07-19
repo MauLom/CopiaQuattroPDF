@@ -133,7 +133,7 @@ import com.copsis.exceptions.GeneralServiceException ;
                         communsPdf.setCell(baseRow, 33, "Sexo", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(4f, 0f, 3f, 0f), Color.white);
                         baseRow = communsPdf.setRow(table, 21);
                         communsPdf.setCell(baseRow, 33, asegurado.getFechNacimiento(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(4f, 0f, 3f, 0f), Color.white);
-                        communsPdf.setCell(baseRow, 34, datos.getFechaDesde(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(4f, 0f, 3f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 34, datos.getFechaDesdeCert(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(4f, 0f, 3f, 0f), Color.white);
                         communsPdf.setCellImg(baseRow, 33, ImageUtils.readImage(this.urlMascu(asegurado.getSexo())).scale(300, 300), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(2f, 0f, 0f, 0f), "", "T");
                         baseRow = communsPdf.setRow(table, 13);
                         communsPdf.setCell(baseRow, 100, "Ocupación del Asegurado", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(4f, 0f, 3f, 0f), Color.white);
@@ -155,7 +155,7 @@ import com.copsis.exceptions.GeneralServiceException ;
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                         for (int i = 0; i < 3; i++) {
                             baseRow = communsPdf.setRow(table, 11);
-                            communsPdf.setCell(baseRow, 34, "" , Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, (i == 0 && datos.getTipo() ==2 ? "Fallecimiento" :"")  , Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 66,  (i== 0? cbo.get(0).getSa() :""), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
 
                         }
@@ -393,17 +393,17 @@ import com.copsis.exceptions.GeneralServiceException ;
 
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 320 , document, page, false, true);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCell(baseRow, 100,datos.getFechaHasta().split("/")[0], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 100,datos.getFechaDesdeCert().split("/")[0], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
                         table.draw();
 
                          table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 420 , document, page, false, true);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCell(baseRow, 100,datos.getFechaHasta().split("/")[1], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 100,datos.getFechaDesdeCert().split("/")[1], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
                         table.draw();
 
                          table = new BaseTable(yStart, yStartNewPage, bottomMargin, 100, 490 , document, page, false, true);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCell(baseRow, 100,datos.getFechaHasta().split("/")[2], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 100,datos.getFechaDesdeCert().split("/")[2], Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.white), "", communsPdf.setPadding2(4f, 0f, 2f, 0f), Color.white);
                         table.draw();
 
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin + 3, document, page, false, true);
