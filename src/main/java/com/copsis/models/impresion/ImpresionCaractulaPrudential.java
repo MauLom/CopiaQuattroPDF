@@ -214,13 +214,13 @@ public class ImpresionCaractulaPrudential {
 
                     texto = new StringBuilder();
                     texto.append("debe señalar a un mayor de edad como representante de los menores para efecto de que, en ");
-                    texto.append("su representación, cobre la indemnización. Lo anterior porque las legislaciones civiles");
-                    texto.append("previenen la forma en que deben designarse tutores, albaceas, representantes de herederos u");
-                    texto.append("otros cargos similares y no consideran al contrato de seguro como el instrumento adecuado");
-                    texto.append("para tales designaciones. La designación que se hiciera de un mayor de edad como");
-                    texto.append("representante de menores beneficiarios, durante la minoría de edad de ellos, legalmente puede");
-                    texto.append("implicar que se nombre beneficiario al mayor de edad, quien en todo caso sólo tendría una");
-                    texto.append("obligación moral, pues la designación que se hace de beneficiarios en un contrato de seguro");
+                    texto.append("su representación, cobre la indemnización. Lo anterior porque las legislaciones civiles ");
+                    texto.append("previenen la forma en que deben designarse tutores, albaceas, representantes de herederos u ");
+                    texto.append("otros cargos similares y no consideran al contrato de seguro como el instrumento adecuado ");
+                    texto.append("para tales designaciones. La designación que se hiciera de un mayor de edad como ");
+                    texto.append("representante de menores beneficiarios, durante la minoría de edad de ellos, legalmente puede ");
+                    texto.append("implicar que se nombre beneficiario al mayor de edad, quien en todo caso sólo tendría una ");
+                    texto.append("obligación moral, pues la designación que se hace de beneficiarios en un contrato de seguro ");
                     texto.append("le concede el derecho incondicionado de disponer de la suma asegurada.");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 9f), 1f, 0.2f);
                     tb = tb + 110;
@@ -471,16 +471,27 @@ public class ImpresionCaractulaPrudential {
                     0, 0, Color.black);
             table.draw();
 
+            String texto="";
+             switch (datos.getPaquete().intValue()) {
+                case 1:
+                    texto="Seguro individual – Producto Básico Gastos Médicos";
+                break;
+                case 2:
+                    texto="Seguro individual – Producto Básico Accidentes Personales";
+                break;
+                case 3:
+                    texto="Seguro individual – Hospitalización";
+                break;
+                case 4:
+                    texto= "Seguro individual – Muerte Accidental y Pérdidas Orgánicas";
+                break;
+             }
+
             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
             baseRow = communsPdf.setRow(table);
             communsPdf.setCell(baseRow, 100, "PÓLIZA", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 0f, 3f, 5f), Color.white);
-            baseRow = communsPdf.setRow(table);
-            if(datos.getTipo() ==0) {
-            	communsPdf.setCell(baseRow, 100, "Seguro individual – Hospitalización", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);	
-            }else {
-            	communsPdf.setCell(baseRow, 100, "Seguro individual – Muerte Accidental y Pérdidas Orgánicas", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);
-            }
-            
+            baseRow = communsPdf.setRow(table);         
+            communsPdf.setCell(baseRow, 100, texto, Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);                       
             table.draw();
             yStart -= table.getHeaderAndDataHeight() + 8;
 
