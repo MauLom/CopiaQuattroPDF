@@ -34,7 +34,7 @@ public class AtlasAutosModel {
 			modelo.setTipo(1);
 	
 			modelo.setCia(33);
-	
+
 			inicio = contenido.indexOf("PÓLIZA");
 			fin = contenido.indexOf("Coberturas Contratadas");
 
@@ -42,9 +42,8 @@ public class AtlasAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					if (newcontenido.split("\n")[i].contains("Póliza")) {
-						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace("###", ""));
-						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "")
-								.replace("-", "").replace(" ", ""));
+						modelo.setPolizaGuion(newcontenido.split("\n")[i].split("Póliza")[1].replace(":", "").replace("###", ""));
+						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].replace("###", "").replace(" ", ""));
 					}
 					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
 					
