@@ -109,14 +109,14 @@ import com.copsis.exceptions.GeneralServiceException ;
                         communsPdf.setCell(baseRow, 50, "Vigencias Póliza", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
                         baseRow = communsPdf.setRow(table, 11);
                         communsPdf.setCell(baseRow, 50, datos.getNumeroPoliza(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
-                        communsPdf.setCell(baseRow, 50, datos.getFechaDesde() + " al " + datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 50, datos.getFechaDesde() + "  - " + datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
                         baseRow = communsPdf.setRow(table, 11);
                         communsPdf.setCell(baseRow, 50, "Número de Certificado", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
                         communsPdf.setCell(baseRow, 50, "Vigencia del Certificado", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
 
                         baseRow = communsPdf.setRow(table, 11);
                         communsPdf.setCell(baseRow, 50,asegurado.getCertificado(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
-                        communsPdf.setCell(baseRow, 50,( datos.getFechaDesdeCert() != null ?  datos.getFechaDesdeCert():" " ) +" - "+(datos.getFechaHastaCert() !=null ? datos.getFechaHastaCert():""), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 50,( datos.getFechaDesdeCert() != null ?  datos.getFechaDesdeCert():" " ) +"  - "+(datos.getFechaHastaCert() !=null ? datos.getFechaHastaCert():""), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white);
 
                         baseRow = communsPdf.setRow(table, 11);
                         communsPdf.setCell(baseRow, 100, "Contratante o Razón Social", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(4f, 0f, 1f, 0f), Color.white);
@@ -547,7 +547,7 @@ import com.copsis.exceptions.GeneralServiceException ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                       //document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                      //  document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
                         return output.toByteArray();
 
                     } finally {
