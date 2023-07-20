@@ -566,10 +566,10 @@ import com.copsis.exceptions.GeneralServiceException ;
             String url = "";
             switch (tipo) {
                   case "Femenino":
-                    url = "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2306/1N7rQflDvq65bN1u4E4VKEo0UnOetTtvexg0vQfH4gFmQVNCX7KlJLx5wrxwN/Masc050.png";
+                    url = "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2306/1N7rQflDvq65bN1u4E4VKKw5ex35QQWiSbHKpAGIMldT4EFN0czC3L7ck53tsxyS/Fem05.png";
                     break;
                case "Masculino":
-                    url = "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2306/1N7rQflDvq65bN1u4E4VKKw5ex35QQWiSbHKpAGIMldT4EFN0czC3L7ck53tsxyS/Fem05.png";
+                    url = "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2306/1N7rQflDvq65bN1u4E4VKEo0UnOetTtvexg0vQfH4gFmQVNCX7KlJLx5wrxwN/Masc050.png";
                     break;
                 default:
                     url = "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2306/1N7rQflDvq65bN1u4E4VKPCR6Bj3pzHFIHNv4py6gV1hw4nL747RpnfsHsnwpEa/Fmv.png";
