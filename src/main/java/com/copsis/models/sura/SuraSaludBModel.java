@@ -79,7 +79,7 @@ public class SuraSaludBModel {
 						   List<String> valores = fn.obtenerListNumeros2(newCont.toString().split("\n")[i+1]);						   
 						   if(!valores.isEmpty()){
                                modelo.setCp(valores.get(0));
-						   }
+						}
 					}									
 				}
 				
