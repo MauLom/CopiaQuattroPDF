@@ -23,7 +23,12 @@ public class GnpDiversosDModelo {
             modelo.setTipo(7);			
 			modelo.setCia(18);
             inicio = contenido.indexOf("RESUMEN DE LA PÓLIZA");
-			fin = contenido.indexOf("Prima del movimiento");		
+			fin = contenido.indexOf("Prima del movimiento");
+            
+            if(contenido.split("\n")[0].length() < 20){
+              modelo.setPoliza(contenido.split("\n")[0].replace("\r", "").replace("@@@",""));
+            }
+        
            
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
@@ -39,7 +44,19 @@ public class GnpDiversosDModelo {
                     modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].toUpperCase()).get(0)));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("C.P") ){
-                 modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].trim().substring(0, 5));
+                  
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+                    if(!valores.isEmpty()){
+                        modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].trim().substring(0, 5));
+                    }
+
+                    if(valores.isEmpty()){
+                        valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]);
+                        modelo.setCp(valores.get(0));
+                      
+                    }
+         
+               
                 }
                 
             }
