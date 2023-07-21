@@ -33,6 +33,11 @@ public class SuraSaludBModel {
 		
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
+			if(inicio > fin){
+				inicio = contenido.indexOf("Seguro de gastos médicos mayores");
+				fin = contenido.indexOf(ConstantsValue.COBERTURAS_CONTRATADAS2);
+			}
+		
 
 			if(inicio > -1 && fin > -1   && inicio  < fin ) {
 				newCont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
@@ -69,7 +74,13 @@ public class SuraSaludBModel {
 					if(newCont.toString().split("\n")[i].contains("R.F.C.")) {
 						modelo.setRfc(newCont.toString().split("\n")[i].split("R.F.C.")[1].split("###")[0].trim());
 					}
-				
+					if(newCont.toString().split("\n")[i].contains("Día") && newCont.toString().split("\n")[i].contains("Mes") 
+					&& newCont.toString().split("\n")[i].contains("REC")) {
+						   List<String> valores = fn.obtenerListNumeros2(newCont.toString().split("\n")[i+1]);						   
+						   if(!valores.isEmpty()){
+                               modelo.setCp(valores.get(0));
+						   }
+					}									
 				}
 				
 				
