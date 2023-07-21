@@ -109,7 +109,9 @@ public class ChubbModel {
 							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
 						}
 						else {
-
+                        if(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc).contains("Características del riesgo")){
+                         encontro=false;
+						} else{					 
 						if (pagFin > 0 && pagIni > 0) {
 							ChubbAutosModel chubbAutos = new ChubbAutosModel();
 							chubbAutos.setContenido(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc));
@@ -120,7 +122,7 @@ public class ChubbModel {
 							chubbAutos.setContenido(fn.caratula(0, 3, pdfStripper, pdDoc));
 							modelo = chubbAutos.procesar();
 						}
-					
+						}
 					   }
 					encontro = true;
 						break;
