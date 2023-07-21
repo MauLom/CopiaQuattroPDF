@@ -29,16 +29,18 @@ public class QualitasModel {
 
 		try {
 			
+			
 			if(!contenido.contains("SEGURO DE AUTOMÓVILES") || !contenido.contains("POLIZA VEHICULOS ")) {
 				contenido = fn.textoBusqueda(stripper, doc, "Placas", false);
 			}
+			
 		
 			if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")
-			|| contenido.contains("TOURIST VEHICLE POLICY")) {
+			|| contenido.contains("TOURIST VEHICLE POLICY") ||  contenido.contains("Placas:")) {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
 	
-			
+	
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
 					if(doc.getPages().getCount() >= 3) {
 						if(fn.caratula(6, 7, stripper, doc).contains("Motocicletas")){
@@ -63,7 +65,7 @@ public class QualitasModel {
 					}
 					
 				}else {
-					
+							
 					if (pagIni < pagFin) {
 					
 						if(fn.caratula(2, 2, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
@@ -86,7 +88,7 @@ public class QualitasModel {
 							
 						}         
 					} else {
-						
+				
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")){
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(4, 5, stripper, doc),"","");
 						 modelo = datosQualitasAutos.procesar();
