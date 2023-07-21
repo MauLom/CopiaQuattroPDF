@@ -149,7 +149,7 @@ public class QualitasAutosModel {
 									}
 									
 								}else {
-									System.out.println(arrNewContenido.length);
+									
 									if(arrNewContenido.length == 2 && arrNewContenido[arrNewContenido.length-1].split("###").length > 3){
 
 								
@@ -159,12 +159,12 @@ public class QualitasAutosModel {
 										modelo.setInciso(
 												Integer.parseInt(arrNewContenido[arrNewContenido.length-1].split("###")[2].trim()));
 									}
-								  } 		System.out.println("---> "+arrNewContenido[arrNewContenido.length-2].split("###").length);
+								  } 	
 								  if(arrNewContenido.length == 3 && arrNewContenido[arrNewContenido.length-2].split("###").length  < 4){
 							
 								modelo.setPoliza(arrNewContenido[arrNewContenido.length-2].split("###")[0]);
 									modelo.setEndoso(arrNewContenido[arrNewContenido.length-2].split("###")[1]);
-									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-3].split("###")[2].trim())) {
+									if (fn.isNumeric(arrNewContenido[arrNewContenido.length-2].split("###")[2].trim())) {
 										modelo.setInciso(
 												Integer.parseInt(arrNewContenido[arrNewContenido.length-2].split("###")[2].trim()));
 									} 
