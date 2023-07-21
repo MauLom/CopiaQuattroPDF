@@ -34,13 +34,23 @@ public class AlliansDiversosModel {
 			EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+
 				if(newcontenido.toString().split("\n")[i].contains("NOMBRE") && newcontenido.toString().split("\n")[i].contains("DIRECCIÓN FISCAL")
 						&& newcontenido.toString().split("\n")[i+1].contains("ASEGURADO")	&&  newcontenido.toString().split("\n")[i+3].length() >20	) {
 				modelo.setCteNombre(newcontenido.toString().split("\n")[i+3].split("###")[0].replace("###", "").trim());
 				modelo.setCteDireccion(newcontenido.toString().split("\n")[i+5].split("###")[0].replace("###", "").trim()  +" "+newcontenido.toString().split("\n")[i+6].split("###")[0].replace("###", "").trim());
 				}
-				if(newcontenido.toString().split("\n")[i].contains("C.P.")) {
+
+				if(modelo.getCteNombre().isEmpty() && newcontenido.toString().split("\n")[i].contains("NOMBRE") && newcontenido.toString().split("\n")[i].contains("DIRECCIÓN FISCAL")
+						&& newcontenido.toString().split("\n")[i+1].contains("ASEGURADO")	 &&  newcontenido.toString().split("\n")[i+4].length() >20	) {
+							System.out.println(newcontenido.toString().split("\n")[i+3]);
+				modelo.setCteNombre(newcontenido.toString().split("\n")[i+2].split("###")[0].replace("###", "").trim());
+				modelo.setCteDireccion(newcontenido.toString().split("\n")[i+4].split("###")[0].replace("###", "").trim()  +" "+newcontenido.toString().split("\n")[i+6].split("###")[0].replace("###", "").trim());
+				}
+				
+
+				
+				if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P")[1].length() > 3) {
 					modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().substring(0,5));	
 				}
 				
