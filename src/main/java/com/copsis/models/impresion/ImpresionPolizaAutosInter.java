@@ -75,7 +75,7 @@ import com.copsis.models.Tabla.VerticalAlignment;
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth-5,margin+5, document, page, false, true);
                         baseRow = communsPdf.setRow(table, 50);
                         baseRow.setLineSpacing(1.5F);
-                        communsPdf.setCell(baseRow, 100, poliza.getMovimiento().replace("solicita el cambio de", "hace constar que se modificará el").toUpperCase(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 4f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        communsPdf.setCell(baseRow, 100, poliza.getMovimiento().replace("solicita el cambio de", "hace constar que se modificará ").toUpperCase(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 4f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         table.draw();
 
 
