@@ -49,9 +49,9 @@ import com.copsis.models.Tabla.VerticalAlignment;
                         communsPdf.setCell(baseRow, 33, "ENDOSO", Color.BLACK, false, "C", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         communsPdf.setCell(baseRow, 33, "INCISO", Color.BLACK, false, "C", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         baseRow = communsPdf.setRow(table, 10);
-                        communsPdf.setCell(baseRow, 34, poliza.getNumeroPoliza(), Color.BLACK, false, "C", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
-                        communsPdf.setCell(baseRow, 33, poliza.getEndoso(), Color.BLACK, false, "C", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
-                        communsPdf.setCell(baseRow, 33, poliza.getInciso(), Color.BLACK, false, "C", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                     
+                        communsPdf.setCell(baseRow, 34, poliza.getNumeroPoliza(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        communsPdf.setCell(baseRow, 33, poliza.getEndoso(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        communsPdf.setCell(baseRow, 33, poliza.getInciso(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 0f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);                     
                         table.draw();
 
                         yStart -=table.getHeaderAndDataHeight()+20;
@@ -72,9 +72,10 @@ import com.copsis.models.Tabla.VerticalAlignment;
                         communsPdf.setCell(baseRow, 100, "", Color.BLACK, false, "C", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 4f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         table.draw();
 
-                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth+5,margin, document, page, false, true);
-                        baseRow = communsPdf.setRow(table, 19);
-                        communsPdf.setCell(baseRow, 100, "POR MEDIO DEL PRESENTE SE HACE CONSTAR QUE SE MODIFICARA "+poliza.getMovimiento(), Color.BLACK, false, "L", 8, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 4f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth-5,margin+5, document, page, false, true);
+                        baseRow = communsPdf.setRow(table, 50);
+                        baseRow.setLineSpacing(1.5F);
+                        communsPdf.setCell(baseRow, 100, poliza.getMovimiento().replace("solicita el cambio de", "hace constar que se modificará ").toUpperCase(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 4f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         table.draw();
 
 
