@@ -382,7 +382,8 @@ public class AxaVida2Model {
 							.replace("CONYUGE", "###CONYUGE###").replace("@@@", "")
 							.replace("ESPOSA", "###ESPOSA###").replace("MADRE", "###MADRE###")
 							.replace("CONCUBINA", "###CONCUBINA###").replace("SOBRINO", "###SOBRINO###")
-							.replace("ESPOSO", "###ESPOSO###").replace("HIJA", "###HIJA###"));
+							.replace("ESPOSO", "###ESPOSO###").replace("HIJA", "###HIJA###")
+							.replace("PADRE", "###PADRE###"));
 				}
 			}
 
