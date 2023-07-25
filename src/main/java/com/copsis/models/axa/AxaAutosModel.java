@@ -747,10 +747,20 @@ public class AxaAutosModel {
 				}
 				String[] textoRenglones = textoNoCliente.split("\n");
 				if(textoRenglones.length >1) {
-					String textoRenglon = fn.gatos(textoRenglones[2].trim());
-					if(textoRenglon.contains("Forma de pago")) {
+					if(textoRenglones.length > 3){
+						String textoRenglon = fn.gatos(textoRenglones[2].trim());
+						if(textoRenglon.contains("Forma de pago")) {
 						modelo.setIdCliente(textoRenglon.split("###")[textoRenglon.split("###").length -1]);
+						}
 					}
+					if(textoRenglones.length == 2){
+						String textoRenglon = fn.gatos(textoRenglones[1].trim());					
+						if(textoRenglon.contains("OT agente:")) {
+						modelo.setIdCliente(textoRenglon.split("###")[textoRenglon.split("###").length -1]);
+						}
+					}
+					
+					
 				}
 			}
 			
