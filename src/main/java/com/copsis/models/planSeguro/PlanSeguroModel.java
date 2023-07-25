@@ -32,6 +32,10 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 1;
 			}
+			if( contenido.contains("Póliza de Golden Salud")){
+				tipo = 2;
+				modeloTipo = 3;
+			}
 			if (tipo == 0 && contenido.contains("PÓLIZA DE SALUD OPTIMA")) {
 				tipo = 2;
 			}
