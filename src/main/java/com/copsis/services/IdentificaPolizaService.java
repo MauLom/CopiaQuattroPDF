@@ -362,10 +362,11 @@ public class IdentificaPolizaService {
 			
 		
 
-	
+
 		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") ||
 		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
-		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")   )){		    			    		                
+		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
+					||  rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A")   )){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
                     encontro = true;                
