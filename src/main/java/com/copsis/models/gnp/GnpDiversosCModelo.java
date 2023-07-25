@@ -55,12 +55,21 @@ public class GnpDiversosCModelo {
 						}				   
 					}
 
-					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
-						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
-						if(modelo.getRfc().contains("Teléfono")) {
-							modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {		
+						if( newcontenido.toString().split("\n")[i+1].contains("Hasta") && newcontenido.toString().split("\n")[i+1].split("###").length > 1){
+                         modelo.setRfc( newcontenido.toString().split("\n")[i+1].split("###")[0]);
+						}				
+						if(newcontenido.toString().split("\n")[i+2].split("###").length == 3){
+							modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+							if(modelo.getRfc().contains("Teléfono")) {
+								modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+							}
+							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
 						}
-						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[1] +" "+ newcontenido.toString().split("\n")[i+3]);
+
+						if(newcontenido.toString().split("\n")[i+2].split("###").length == 1){
+							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[0]);
+						}					
 					}
 					
 						
