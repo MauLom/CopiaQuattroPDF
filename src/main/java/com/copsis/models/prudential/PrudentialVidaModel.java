@@ -54,8 +54,12 @@ public class PrudentialVidaModel {
 					if(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim().length() <15){
 						modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
 					}
-					if(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim().length() <15){
+
+					if(newcontenido.toString().split("\n")[i+1].split("###").length ==3 && newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim().length() <15){
 						modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim());
+					}
+					if(newcontenido.toString().split("\n")[i+1].split("###").length==2 && newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim().length() <15){
+						modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
 					}
 					
 					
