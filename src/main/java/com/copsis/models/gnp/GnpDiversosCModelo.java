@@ -69,9 +69,7 @@ public class GnpDiversosCModelo {
 
 						if(newcontenido.toString().split("\n")[i+2].split("###").length == 1){
 							modelo.setCteDireccion(newcontenido.toString().split("\n")[i+2].split("###")[0]);
-						}
-						System.out.println(newcontenido.toString().split("\n")[i+1]);
-						//
+						}					
 					}
 					
 						
