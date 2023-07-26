@@ -34,12 +34,16 @@ public class GnpVIdaModel2 {
 				.replace("Periodicidad de Pago", ConstantsValue.FORMA_PAGO2)
 				.replace("Importe a Pagar", "Importe a pagar")
 				.replace("C ###ontratante", "Contratante")
-				.replace("E ###ste documento no", "Este documento no");
+				.replace("E ###ste documento no", "Este documento no")
+				.replace("Desde las 12 hrs.", "Desde el")
+				.replace("Hasta las 12 hrs.", "Hasta el")
+				.replace("P ###óliza de Seguro","Póliza de Seguro");
 		        
 
 		try {
 			modelo.setTipo(5);
 			modelo.setCia(18);
+			
 		
 			
 			inicio =contenido.indexOf("Vigencia Versión");
@@ -47,6 +51,7 @@ public class GnpVIdaModel2 {
 			if(inicio == -1){
 				inicio =contenido.indexOf("Vigencia Póliza");
 			}
+			
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 		
@@ -60,14 +65,19 @@ public class GnpVIdaModel2 {
 					
 					if(newcontenido.toString().split("\n")[i].contains("Hasta el")) {					
                       modelo.setVigenciaA(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].split("Hasta el")[1]).trim().replace("###", "-")));				
-					}
+					}	
+
 				}
 			}
 
 			inicio = contenido.indexOf("Póliza de Seguro de Vida");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
-			if (inicio > -1 || fin > -1 || inicio < fin) {
+
+		
+			
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = new StringBuilder();
+	
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("−", "-"));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
@@ -98,9 +108,9 @@ public class GnpVIdaModel2 {
 					if (newcontenido.toString().split("\n")[i].contains("C.P")) {									
 						modelo.setCp(newcontenido.toString().split("\n")[i].replace("C.P", "C/P").split("C/P")[1].split("###")[0].replace(".", "").trim());
 						 if((newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", "").contains("R.F.C:")) {
-							 modelo.setCteDireccion(newcontenidodire +" "+newcontenido.toString().split("\n")[i].replace("C.P", "C/P").split("C/P")[0]);
+							 modelo.setCteDireccion(newcontenidodire +" "+newcontenido.toString().split("\n")[i].replace("C.P", "C/P").split("C/P")[0].replace("Vigencia Versión", ""));
 						 }else {
-							 modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", ""));	 
+							 modelo.setCteDireccion((newcontenido.toString().split("\n")[i].split("C.P")[0] + " "+ newcontenido.toString().split("\n")[i + 1].split("Día")[0]).replace("###", "").replace("Vigencia Versión", ""));	 
 						 }
 						 
 						 if(modelo.getCp().length() == 0 && fn.isvalidCp(newcontenido.toString().split("\n")[i+1].substring(0,5))) {
@@ -143,7 +153,12 @@ public class GnpVIdaModel2 {
 						modelo.setPrimaneta(fn.castBigDecimal(fn
 								.preparaPrimas(newcontenido.toString().split("\n")[i].split("Prima Neta")[1].replace("###", ""))));
 					}
-
+                    
+					if (newcontenido.toString().split("\n")[i].contains("fraccionado#")) {
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i].split("fraccionado")[1]);
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
+					}
+					
 					if (newcontenido.toString().split("\n")[i].contains("Fraccionado")) {
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(
 								newcontenido.toString().split("\n")[i].split("Fraccionado")[1].replace("###", ""))));
@@ -151,6 +166,11 @@ public class GnpVIdaModel2 {
 					if (newcontenido.toString().split("\n")[i].contains("Importe a pagar")) {
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(
 								newcontenido.toString().split("\n")[i].split("Importe a pagar")[1].replace("###", ""))));
+					}
+
+					if (newcontenido.toString().split("\n")[i].contains("Importe total ")) {
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
 
 				}
@@ -168,9 +188,11 @@ public class GnpVIdaModel2 {
 			inicio = contenido.lastIndexOf(ConstantsValue.AGENTE2);
 			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
 		
-			if (inicio > -1 || fin > -1 || inicio < fin) {
+		
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
+				
 				if (!newcontenido.toString().contains(ConstantsValue.AGENTE2) && !newcontenido.toString().contains(ConstantsValue.CLAVE2)) {
 					newcontenido = new StringBuilder();
 					inicio = contenido.indexOf("Especificaciones del Plan");
@@ -182,12 +204,21 @@ public class GnpVIdaModel2 {
 
 				}
 			}
+
+			inicio = contenido.indexOf("Nombre del Agente");
+			fin = contenido.indexOf("Para mayor información contáctenos:");
+			if(inicio == -1 && fin == -1){
+			inicio = contenido.lastIndexOf(ConstantsValue.AGENTE2);
+			fin = contenido.lastIndexOf("Para mayor información contáctenos:");
+			}
+
 			
 
-			if (inicio > -1 || fin > -1 || inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### ###",
 						"###"));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+				
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.AGENTE2)
 							&& newcontenido.toString().split("\n")[i].contains(ConstantsValue.CLAVE2)) {
 						modelo.setAgente(newcontenido.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1]
@@ -229,7 +260,7 @@ public class GnpVIdaModel2 {
 			inicio = contenido.indexOf("Asegurado s");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
 
-			if (inicio > -1 || fin > -1 || inicio < fin) {
+			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 
 				newcontenido = new StringBuilder();
@@ -458,8 +489,10 @@ public class GnpVIdaModel2 {
 				}
 
 			} else {
-				plazo = contenido.split("E specificaciones del Plan")[1].split("La###protección###Contratada")[0]
+				if(contenido.indexOf("pecificaciones del Plan") > -1){
+					plazo = contenido.split("E specificaciones del Plan")[1].split("La###protección###Contratada")[0]
 						.replace("@@@", "").substring(0, 28).trim();
+				}				
 			}
 
 			if (fn.isNumeric(plazo.replace("Plazo", "").replace("años", "").trim())
@@ -500,7 +533,7 @@ public class GnpVIdaModel2 {
 			
 			if(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Hasta el")[0].length() > 100) {
 				if(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].length()> 50) {
-					modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].substring(0,12).replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
+					modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].substring(0,12).replace("\r\n", "").replace("@@@", "").replace("###", "").replace(":", "").replace("#", "").trim());
 				}else{
 					modelo.setIdCliente(contenido.split(ConstantsValue.CODIGO_CLIENTE)[1].split("Prima del Movimiento")[0].replace("\r\n", "").replace("@@@", "").replace("###", "").trim());
 				}
@@ -644,27 +677,27 @@ public class GnpVIdaModel2 {
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
 			newcontenido = new StringBuilder();
-			inicio = -1;
-			fin = -1;
+		
 			inicio = contenido.indexOf("Coberturas");
 			fin = contenido.indexOf("@@@Agente");
-			if (fin == -1) {
-				fin = contenido.lastIndexOf("Agente");
-			}
 
-			if (inicio == -1 && fin == -1 || inicio > -1 && fin == -1 || inicio == -1 && fin > -1) {
-				inicio = -1;
-				fin = -1;
+			fin = fin == -1 ?contenido.indexOf("Nombre del Agente"): fin;
+			fin = fin == -1 ?contenido.lastIndexOf("Agente"): fin;
+						
+	
+			if (inicio == -1 && fin == -1 || inicio > -1 && fin == -1 || inicio == -1 && fin > -1) {	
 				inicio = contenido.indexOf("Coberturas");
 				fin = contenido.indexOf("@@@  \r\n" + "Agente");
 			}
 			if (inicio > -1 && fin > -1) {
 				for (String dato : contenido.substring(inicio, fin).trim().split("\r\n")) {
+					
 					if (dato.split("###").length >= 2) {
 
 						if (dato.split("###")[1].trim().equals("Amparada")) {
 							newcontenido.append("\r\n").append(dato.trim());
-						} else {
+						}
+						 else {
 		
 
 							if (fn.isNumeric(dato.split("###")[1].replace(".", "").replace(",", "").trim()) && Double.parseDouble(dato.split("###")[1].replace(".", "").replace(",", "").trim()) >= 0
@@ -681,6 +714,22 @@ public class GnpVIdaModel2 {
 						}
 					}
 				}
+
+				String coberturaE="";
+				if(newcontenido.isEmpty() && inicio >-1 && fin > -1){
+					newcontenido.append(fn.extracted(inicio, fin, contenido));
+					
+					for(int i=0; i < newcontenido.toString().split("\n").length; i++){						
+						if(newcontenido.toString().split("\n")[i].contains("PRINCIPAL")){								
+							coberturaE += "\r\n"+ newcontenido.toString().split("\n")[i];
+						}
+						
+					}
+					newcontenido = new StringBuilder();
+					newcontenido.append(coberturaE);
+				}
+				
+
 
 				if (newcontenido.length() > 0) {
 					for (String dato : newcontenido.toString().split("\n")) {
