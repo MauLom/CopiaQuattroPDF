@@ -34,6 +34,7 @@ public class SegurosMtyModel {
 			&&( fn.caratula(1, 2, stripper, doc).contains("GASTOS MÉDICOS")  
 			|| fn.caratula(1, 2, stripper, doc).contains( "GASTOS ###MÉDICOS"))
 			|| fn.caratula(3, 3, stripper, doc).contains( "GASTOS MÉDICOS")
+			|| fn.caratula(3, 3, stripper, doc).contains("GASTOS ###MÉDICOS")
 			) {
 			    tipo = 2;
 			}
