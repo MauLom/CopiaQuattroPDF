@@ -314,85 +314,91 @@ public class ImpresionCaractulaPrudential {
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 100, "UNIDAD ESPECIALIZADA DE ATENCIÓN DE CONSULTAS Y RECLAMACIONES (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                    communsPdf.setCell(baseRow, 100, "UNIDAD ESPECIALIZADA DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                     table.draw();
                     yStart -= table.getHeaderAndDataHeight();
 
 
                     tb = page.getMediaBox().getHeight() - yStart + 10;
                     texto = new StringBuilder();
-                    texto.append("Para cualquier aclaración o duda no resueltas en relación con su seguro, contacte a la Unidad Especializada de nuestra ");                    
-                    texto.append("Compañía a los teléfonos 55 1103 7000 y en el interior de la república al 800-000-54-33, y/o al correo electrónico ");                    
+                    texto.append("Para cualquier consulta, queja, aclaración o duda no resuelta en relación con su seguro y/o en el desafortunado caso ");
+                    texto.append("de un siniestro, estamos a sus órdenes en el correo electrónico: atencionaclientes.mex@prudential.com y/o teléfono de ");
+                    texto.append("atención (55) 11 03-70 00. En caso de inconformidad, contacte a nuestra Unidad Especializada de Atención a Usuarios ");
+                    texto.append("(UNE) al teléfono (55) 1103-7000, por correo electrónico: consultasyquejas@prudential.com o puede acudir a nuestra ");
+                    texto.append("oficina ubicada en: Avenida Santa Fe 428, Piso 7, DownTown Torre II, Col. Santa Fe Cuajimalpa, Cuajimalpa de Morelos, ");
+                    texto.append("Ciudad de México, C.P. 05348, de lunes a viernes de 8:00 a 17:00 hrs.");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
                   
                     
-                    tb = tb + 27;
+                    tb = tb + 65;
                     yStart = page.getMediaBox().getHeight() - tb;
-                    try (PDPageContentStream contentStream1 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
-                        float[] components = new float[] {
-                         colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
-                         PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
-                         String txtlink="consultasyquejas@prudential.com";
-                         communsPdf.getTextlink(contentStream1, page,35f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
-                     }
+                    // try (PDPageContentStream contentStream1 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                    //     float[] components = new float[] {
+                    //      colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                    //      PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                    //      String txtlink="consultasyquejas@prudential.com";
+                    //      communsPdf.getTextlink(contentStream1, page,35f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                    //  }
 
-                     try (PDPageContentStream contentStream2 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
-                        float[] components = new float[] {
-                         colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
-                         PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
-                         String txtlink="www.prudentialseguros.com.mx";
-                         communsPdf.getTextlink(contentStream2, page,230f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
-                     }
-                     texto = new StringBuilder();
-                     texto.append("o visite:");                                        
-                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 190f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10.2f, (-1.3f * 9f), 1f, 0.3f);
+                    //  try (PDPageContentStream contentStream2 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                    //     float[] components = new float[] {
+                    //      colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                    //      PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                    //      String txtlink="www.prudentialseguros.com.mx";
+                    //      communsPdf.getTextlink(contentStream2, page,230f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                    //  }
+                    //  texto = new StringBuilder();
+                    //  texto.append("o visite:");                                        
+                    //  this.parrafo(document, page, this.medidas(page.getMediaBox(), 190f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10.2f, (-1.3f * 9f), 1f, 0.3f);
                    
                      
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                    communsPdf.setCell(baseRow, 100, "Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                     table.draw();
                     yStart -= table.getHeaderAndDataHeight();
 
                     tb = page.getMediaBox().getHeight() - yStart + 10;
                     texto = new StringBuilder();
-                    texto.append("Av. Insurgentes Sur # 762, planta baja, Col. Del Valle, Alc. Benito Juárez, C.P.03100, México, Cd. de México");                                        
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+                    texto.append("Ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, ");
+                    texto.append("teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o ");
+                    texto.append("visite la página www. condusef. gob. mx. ");
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
                   
 
                     tb = tb+16;
                     yStart = page.getMediaBox().getHeight() - tb;
-                    texto = new StringBuilder();
-                    texto.append("Correo Electrónico:");                                        
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
-                    try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
-                        float[] components = new float[] {
-                         colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
-                         PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
-                         String txtlink="asesoria@condusef.gob.mx,";
-                         communsPdf.getTextlink(contentStream3, page,138f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
-                     }
+                    // texto = new StringBuilder();
+                    // texto.append("Correo Electrónico:");                                        
+                    // this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+                    // try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                    //     float[] components = new float[] {
+                    //      colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                    //      PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                    //      String txtlink="asesoria@condusef.gob.mx,";
+                    //      communsPdf.getTextlink(contentStream3, page,138f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                    //  }
 
-                    tb = tb+10;
-                    yStart = page.getMediaBox().getHeight() - tb;
-                    texto = new StringBuilder();
-                    texto.append("Página web:");
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);        
+                    // tb = tb+10;
+                    // yStart = page.getMediaBox().getHeight() - tb;
+                    // texto = new StringBuilder();
+                    // texto.append("Página web:");
+                    // this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);        
                     
-                    tb = page.getMediaBox().getHeight() - yStart + 8;
-                    try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
-                        float[] components = new float[] {
-                         colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
-                         PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
-                         String txtlink="http://www.condusef.gob.mx";
-                         communsPdf.getTextlink(contentStream3, page,107f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
-                     }
+                    // tb = page.getMediaBox().getHeight() - yStart + 8;
+                    // try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                    //     float[] components = new float[] {
+                    //      colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                    //      PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                    //      String txtlink="http://www.condusef.gob.mx";
+                    //      communsPdf.getTextlink(contentStream3, page,107f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                    //  }
 
-                     tb = tb+1;
-                    texto = new StringBuilder();
-                    texto.append("Teléfonos: 800 999 8080 o 55 5340 0999");                                        
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+                    //  tb = tb+1;
+                    // texto = new StringBuilder();
+                    // texto.append("Teléfonos: 800 999 8080 o 55 5340 0999");                                        
+                    // this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
                     
                     /////////////////////////////////////////////////////PAGINA 3
                     page = new PDPage();
@@ -444,7 +450,7 @@ public class ImpresionCaractulaPrudential {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/caractula.pdf"));
+                    // document.save(new File("/home/carlos/caratula.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -509,6 +515,7 @@ public class ImpresionCaractulaPrudential {
             table.draw();
 
         } catch (Exception e) {
+            System.out.println(e.fillInStackTrace());
             throw new GeneralServiceException("Error=>", e.getMessage());
         }
 
