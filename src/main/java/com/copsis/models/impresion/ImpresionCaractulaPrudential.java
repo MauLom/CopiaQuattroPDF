@@ -314,7 +314,7 @@ public class ImpresionCaractulaPrudential {
 
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 100, "UNIDAD ESPECIALIZADA DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                    communsPdf.setCell(baseRow, 100, "UNIDAD  ESPECIALIZADA  DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                     table.draw();
                     yStart -= table.getHeaderAndDataHeight();
 
