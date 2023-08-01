@@ -178,13 +178,22 @@ public class AtlasSaludModel {
 		
 				inicio = contenido.indexOf("Límites de cobertura");
 				fin = contenido.indexOf("Base de catálogo");
-				
+
+				fin = fin == -1 ? contenido.indexOf("Seguros Atlas, S.A"): fin;
+
+			
 				if(inicio > -1 && fin >  -1 && inicio < fin ) {	
 					List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 					 newcontenido =contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 					 for (int i = 0; i < newcontenido.split("\n").length; i++) {
 						 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						if(newcontenido.split("\n")[i].contains("Gastos médico")) {
+								cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("según anexo", "").trim());
+								coberturas.add(cobertura);
+														
+						}
+						if(newcontenido.split("\n")[i].contains("GASTOS MÉDICOS")) {
 								cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
 								cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("según anexo", "").trim());
 								coberturas.add(cobertura);
