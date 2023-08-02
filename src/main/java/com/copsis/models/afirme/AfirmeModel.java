@@ -58,10 +58,8 @@ public class AfirmeModel {
                 }
 
 
-		   System.out.println(tipo);
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
-				case 1:
-				
+				case 1:				
 					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO") 
 					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")					
 					|| fn.caratula(1, 2, stripper, doc).contains("MOTOCICLETAS INDIVIDUALES")
@@ -69,8 +67,7 @@ public class AfirmeModel {
 						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");	
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "MOTOCICLETAS INDIVIDUALES") :pagIni;
-						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;	
-													
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;														
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
 
 					}else {
