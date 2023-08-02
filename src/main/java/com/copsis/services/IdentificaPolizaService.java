@@ -25,6 +25,8 @@ import com.copsis.models.berkley.BerkleyModel;
 import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
+import com.copsis.models.continental.ContinentalAssitModel;
+import com.copsis.models.continental.ContinentalAssitSalud;
 import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
@@ -516,6 +518,11 @@ public class IdentificaPolizaService {
 				modelo = new BerkleyModel().procesar(pdfStripper, pdDoc, contenido);
 				encontro = true;   
 			}
+			if(!encontro && contenido.contains("continentalassist.com")){
+				modelo = new ContinentalAssitModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
+			}
+
           
 
          
