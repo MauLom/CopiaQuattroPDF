@@ -326,7 +326,6 @@ public class GnpDiversosCModelo {
 				
 
 				if(fn.diferenciaDias(modelo.getVigenciaDe(),modelo.getVigenciaA()) < 30){
-					System.out.println(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 					modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 				}
 	
