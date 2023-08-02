@@ -27,7 +27,7 @@ public class AfirmeModel {
 		
 			tipo =fn.tipoPoliza(contenido);
 			Integer pagIni = 0;
-	
+		
 				if( tipo == 4 && fn.caratula(1, 2, stripper, doc).contains("SEGURO PAQUETE EMPRESARIAL")){
 			
                     tipo=4;
@@ -53,19 +53,26 @@ public class AfirmeModel {
                     tipoV =0;  
                 }
 
-		   
+				if( tipo == 0 && fn.caratula(3, 4, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")){
+                    tipo=1;                    
+                }
+
+
+		   System.out.println(tipo);
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:
 				
 					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO") 
-					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")
+					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")					
 					|| fn.caratula(1, 2, stripper, doc).contains("MOTOCICLETAS INDIVIDUALES")
 					|| (fn.caratula(1, 2, stripper, doc).contains("PICK UPS") && fn.caratula(1, 2, stripper, doc).contains("INDIVIDUAL"))) {
 						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");	
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "MOTOCICLETAS INDIVIDUALES") :pagIni;
-						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;										
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;	
+													
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
+
 					}else {
 						pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
 						modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
