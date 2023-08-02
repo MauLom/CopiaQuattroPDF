@@ -24,7 +24,7 @@ public class PlanSeguroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-
+			
 			int modeloTipo = 0;
 
 			int tipo = fn.tipoPoliza(contenido);
@@ -38,6 +38,11 @@ public class PlanSeguroModel {
 			}
 			if (tipo == 0 && contenido.contains("PÓLIZA DE SALUD OPTIMA")) {
 				tipo = 2;
+			}
+
+			if (tipo == 0 &&  contenido.contains("PLAN SEGURO ÓPTIMO")) {
+				tipo = 2;
+				modeloTipo = 0;
 			}
 			if (tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SALUD OPTIMA / INDIVIDUAL") ) {
 				tipo = 2;
@@ -61,7 +66,7 @@ public class PlanSeguroModel {
 				modeloTipo = 3;
 			}
 	
-	
+
 
 
 			switch (tipo) {
