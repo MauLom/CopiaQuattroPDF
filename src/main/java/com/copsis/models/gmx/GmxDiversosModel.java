@@ -73,6 +73,12 @@ public class GmxDiversosModel {
 						modelo.setAgente(newcontenido.split("\n")[i].split("Agente")[1].split("-")[1].replace("###", ""));
 					
 					}
+         
+					if (modelo.getAgente().isEmpty() && newcontenido.split("\n")[i].contains("Agente") && newcontenido.split("\n")[i-1].contains("-") ) {
+						modelo.setCveAgente(newcontenido.split("\n")[i-1].split("-")[0].replace("###", ""));
+						modelo.setAgente(newcontenido.split("\n")[i-1].split("-")[1].replace("###", "").trim());
+					
+					}
 					
 					
 					if (newcontenido.split("\n")[i].contains("Desde") && newcontenido.split("\n")[i].contains("horas de la ")) {
