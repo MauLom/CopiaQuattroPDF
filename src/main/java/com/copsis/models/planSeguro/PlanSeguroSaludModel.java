@@ -28,12 +28,11 @@ public class PlanSeguroSaludModel {
 			modelo.setTipo(3);
 			modelo.setCia(25);
 			
-			inicio = contenido.indexOf("PÓLIZA DE SALUD");
-			if(inicio == -1) {
-				inicio = contenido.indexOf("SALUD INDIVIDUAL");
-			}
+			inicio = contenido.indexOf("PÓLIZA DE SALUD");	
+			inicio = inicio ==-1 ? contenido.indexOf("SALUD INDIVIDUAL"):inicio;
+			inicio = inicio ==-1 ? contenido.indexOf("PÓLIZA DE PLAN"):inicio;
 			fin = contenido.indexOf("Asegurados");
-	
+
 			
 			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("Póliza", "Poliza"));
 			
@@ -96,6 +95,13 @@ public class PlanSeguroSaludModel {
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+2]));
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+2]));
 					modelo.setPlan(newcontenido.toString().split("\n")[i+1]);
+				}
+				
+				if(modelo.getFormaPago() ==0 && newcontenido.toString().split("\n")[i].contains("Forma de Pago")){
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+				}
+				if(modelo.getMoneda() ==0 && newcontenido.toString().split("\n")[i].contains("Moneda")){
+					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
 				}
 				
 			}

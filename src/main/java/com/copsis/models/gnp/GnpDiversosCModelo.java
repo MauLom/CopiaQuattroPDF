@@ -167,7 +167,7 @@ public class GnpDiversosCModelo {
 
 				inicio = contenido.indexOf("DESGLOSE###DE###COBERTURAS");
 				fin = contenido.indexOf("El###monto###de#");
-
+				
 				
 				if(inicio == -1 && fin == -1) {
 					inicio = contenido.indexOf("SECCIONES###CONTRATADAS");
@@ -179,6 +179,9 @@ public class GnpDiversosCModelo {
 				}
 				if(fin == -1) {
 					fin = contenido.indexOf("Fecha retroactiva");
+				}
+				if(fin == -1) {
+					fin = contenido.indexOf("4-5");
 				}
 
 
@@ -312,15 +315,19 @@ public class GnpDiversosCModelo {
 				
 				}
 					if(newcontenido.length() > 0) {
-					ubicaciones.add(ubicacion);					
-					modelo.setUbicaciones(ubicaciones);					
+					ubicaciones.add(ubicacion);			
+					modelo.setUbicaciones(ubicaciones);		
 				}
 
 				if( modelo.getRfc().length() < 12){
                   modelo.setRfc("");
 				}
 				
-		
+				
+
+				if(fn.diferenciaDias(modelo.getVigenciaDe(),modelo.getVigenciaA()) < 30){
+					modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				}
 	
 			 return modelo;
 		} catch (Exception e) {	

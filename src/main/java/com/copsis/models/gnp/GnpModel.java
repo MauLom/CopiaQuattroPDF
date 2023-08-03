@@ -36,10 +36,15 @@ public class GnpModel {
 			if (contenido.contains("Motor") && contenido.contains("Placas") || fn.caratula(1, 1, stripper, doc).contains("#MOTOR INSURANCE") && contenido.contains("License Plate")) {
 		
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
-					pagFin = fn.pagFinRango(stripper, doc, "AGENTE");
+					
+					pagFin = fn.pagFinRango(stripper, doc, "Artículo 25");
+
+					pagFin = pagFin == -1 ? pagFin = fn.pagFinRango(stripper, doc, "AGENTE"):pagFin;
+			       
 					if (pagFin > 0) {
 						modelo = new GnpAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					}
+
 				}else if( fn.caratula(1, 1, stripper, doc).contains("MOTOR INSURANCE") && contenido.contains("License Plate")) {//Caractula en Ingles
 					modelo = new GnpAutos3Model(fn.caratula(1, 4, stripper, doc)).procesar();
 				}				
