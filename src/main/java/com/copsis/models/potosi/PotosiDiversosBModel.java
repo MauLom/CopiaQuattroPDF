@@ -59,12 +59,11 @@ public class PotosiDiversosBModel {
 							 +" " + newcontenido.toString().split("\n")[i+1].replace("###", "").trim());
 				}
 				
-				System.out.println(newcontenido.toString().split("\n")[i]);
+			
 				if(newcontenido.toString().split("\n")[i].contains("CP") ) {
 					modelo.setCp(newcontenido.toString().split("\n")[i].split("CP")[1].trim().substring(0, 5));
 				}
-				
-				
+
 				if(newcontenido.toString().split("\n")[i].contains("Ramo") ) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					cobertura.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
@@ -73,19 +72,36 @@ public class PotosiDiversosBModel {
 					coberturas.add(cobertura);
 					modelo.setCoberturas(coberturas);
 				}
-			}
+			  }
 				inicio = contenido.indexOf("DETALLE DEL MOVIMIENTO");
 				fin = contenido.indexOf("Seguros el Potosí, S.A.");	
+				fin = fin == fin ? contenido.indexOf("Seguros El Potosí, S.A."):fin;
+		
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));				
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
 					if(newcontenido.toString().split("\n")[i].contains("FRACCIONADO")) {
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castFloat(newcontenido.toString().split("\n")[i+1].split("###")[0])));
 						modelo.setRecargo(fn.castBigDecimal(fn.castFloat(newcontenido.toString().split("\n")[i+1].split("###")[1])));
 						modelo.setDerecho(fn.castBigDecimal(fn.castFloat(newcontenido.toString().split("\n")[i+1].split("###")[2])));
 						modelo.setIva(fn.castBigDecimal(fn.castFloat(newcontenido.toString().split("\n")[i+1].split("###")[4])));
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.castFloat(newcontenido.toString().split("\n")[i+1].split("###")[7])));
+					}
+				}
+
+				inicio = contenido.indexOf("Intermediario");
+				fin = contenido.indexOf("Registro:");	
+			
+				newcontenido = new StringBuilder();
+				newcontenido.append( fn.extracted(inicio, fin, contenido));	
+					
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+					if(newcontenido.toString().split("\n")[i].contains("Intermediario")){
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						modelo.setCveAgente(valores.get(0));
+						if(!modelo.getCveAgente().isEmpty()){
+							modelo.setAgente(newcontenido.toString().split("\n")[i].split(modelo.getCveAgente())[1].replace("###", "").trim());
+						}						
 					}
 				}
 			
