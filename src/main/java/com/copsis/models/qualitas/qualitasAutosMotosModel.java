@@ -46,7 +46,7 @@ public class qualitasAutosMotosModel {
 
 			inicio = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin  = contenido.indexOf("COBERTURAS CONTRATADAS");
-			System.out.println(inicio +"--> "+ fin);
+		
 			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
