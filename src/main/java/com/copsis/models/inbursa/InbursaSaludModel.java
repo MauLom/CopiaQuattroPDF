@@ -30,10 +30,8 @@ public class InbursaSaludModel {
 	
 	contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 	try {
-		 // tipo
-        modelo.setTipo(3);
-
-        // cia
+		 
+        modelo.setTipo(3); 
         modelo.setCia(38);
 
         
@@ -74,18 +72,24 @@ public class InbursaSaludModel {
         
         leerInformacionAgente(inicio);           	             
         leerAsegurados();      
+		
+		StringBuilder	x = new StringBuilder(); 
+		inicio  = contenido.indexOf("Cobertura básica");		
+		fin = contenido.indexOf("COBERTURAS ADICIONALES");				
+		x.append( fn.extracted(inicio, fin, contenido));
 
-		   inicio  = contenido.indexOf("Cobertura básica");
-			fin = contenido.indexOf("COBERTURAS ADICIONALES");
-			StringBuilder	x = new StringBuilder(); 
-			x.append( fn.extracted(inicio, fin, contenido));
+		int	ix  = contenido.indexOf("COBERTURAS ADICIONALES");	
+	    ix =ix ==-1? contenido.indexOf("Cobertura adicional"):ix;
 
-		int	ix  = contenido.indexOf("Cobertura adicional");
 		int	f = contenido.indexOf("Página 1 de 4");
+		f= f == -1 ? contenido.indexOf("Cuando ###la Compañía"):f;
+		
+		  
 
 		 if(ix > 0 && f > 0 && ix < f) {
 			x.append( fn.extracted(ix, f, contenido));
 		 }
+		
 		 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 		for (int i = 0; i < x.toString().split("\n").length; i++) {		
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -93,10 +97,21 @@ public class InbursaSaludModel {
 			if(!x.toString().split("\n")[i].contains("Cobertura básica") 
 			&& ! x.toString().split("\n")[i].contains("Accidente")
 			&& ! x.toString().split("\n")[i].contains("Cubierta")
-
+			&& ! x.toString().split("\n")[i].contains("Página")
+			&& ! x.toString().split("\n")[i].contains("CARÁTULA")
+			&& ! x.toString().split("\n")[i].contains("Cliente")
+			&& ! x.toString().split("\n")[i].contains("GASTOS")
+			&& ! x.toString().split("\n")[i].contains("Concepto")
+			&& ! x.toString().split("\n")[i].contains("De lo pagado por Seguros")
+			&& ! x.toString().split("\n")[i].contains("COBERTURAS ADICIONALES")
 			){
-
-				switch (newcontenido.toString().split("\n")[i].split("###").length) {
+					
+				switch ( x.toString().split("\n")[i].split("###").length) {
+					case 2:
+						cobertura.setNombre(x.toString().split("\n")[i].split("###")[0]);
+						cobertura.setCoaseguro(x.toString().split("\n")[i].split("###")[1]);
+						coberturas.add(cobertura);
+						break;
 					case 3:
 						cobertura.setNombre(x.toString().split("\n")[i].split("###")[0]);
 						cobertura.setSa(x.toString().split("\n")[i].split("###")[1]);
@@ -117,7 +132,7 @@ public class InbursaSaludModel {
 		modelo.setCoberturas(coberturas);
         
         return modelo;
-	} catch (Exception ex) {	
+	} catch (Exception ex) {			
 		modelo.setError(
 				InbursaSaludModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 		return modelo;
@@ -230,9 +245,15 @@ public class InbursaSaludModel {
 	}
 	
 	private void leerProducto(String[] arrNewContenido,String renglon, int i) {
-		 if(renglon.contains("PRODUCTO")){            			
+		if(renglon.contains("PRODUCTO") ){					
+			if(arrNewContenido[i+1].contains("MEMBRESÍA")){
+ 				modelo.setPlan(arrNewContenido[i+1].split("###")[0].split("MEMBR")[0].replace("###", "").trim());
+			}						
+		 } 
+		 if(modelo.getPlan().isEmpty() && renglon.contains("PRODUCTO")){			
 			 modelo.setPlan(arrNewContenido[i+1].split("###")[0].replace("###", "").trim());
 		 } 
+		  
 	}
 
 	private void leerInformacionAgente(int inicio) {
