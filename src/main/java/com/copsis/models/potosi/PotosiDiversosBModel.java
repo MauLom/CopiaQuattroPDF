@@ -28,7 +28,9 @@ public class PotosiDiversosBModel {
 			
    
 			inicio = contenido.indexOf("POLIZA DE SEGURO DE R ESPONSABILIDAD ");
+			inicio = inicio  == -1  ? contenido.indexOf("POLIZA DE SEGURO DE"):inicio;
 			fin = contenido.indexOf("DETALLE DEL MOVIMIENTO");
+			
 
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -66,16 +68,30 @@ public class PotosiDiversosBModel {
 
 				if(newcontenido.toString().split("\n")[i].contains("Ramo") ) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					cobertura.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
-					cobertura.setSa(newcontenido.toString().split("\n")[i+1].split("###")[1]);
-					cobertura.setDeducible(newcontenido.toString().split("\n")[i+1].split("###")[3].trim());
-					coberturas.add(cobertura);
-					modelo.setCoberturas(coberturas);
+					switch (newcontenido.toString().split("\n")[i+1].split("###").length ) {
+						case 3:
+							 cobertura.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					        cobertura.setSa(newcontenido.toString().split("\n")[i+1].split("###")[1]);
+							 coberturas.add(cobertura);
+							break;
+					   case 4:
+							 cobertura.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+					        cobertura.setSa(newcontenido.toString().split("\n")[i+1].split("###")[1]);
+							cobertura.setDeducible(newcontenido.toString().split("\n")[i+1].split("###")[2].trim());
+							coberturas.add(cobertura);
+							break;		
+					
+						default:
+							break;
+					}
+										
+					 modelo.setCoberturas(coberturas);
 				}
 			  }
 				inicio = contenido.indexOf("DETALLE DEL MOVIMIENTO");
 				fin = contenido.indexOf("Seguros el Potosí, S.A.");	
 				fin = fin == fin ? contenido.indexOf("Seguros El Potosí, S.A."):fin;
+			
 		
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));				
@@ -106,7 +122,7 @@ public class PotosiDiversosBModel {
 				}
 			
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {	
 			modelo.setError(PotosiDiversosBModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
