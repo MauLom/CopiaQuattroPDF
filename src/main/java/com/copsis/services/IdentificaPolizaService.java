@@ -76,7 +76,7 @@ public class IdentificaPolizaService {
 			String contenido = pdfStripper.getText(pdDoc);
 			String contenidoAux = "";		
 			boolean encontro = false;
-
+			
 
 			// CHUBB
 			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
@@ -460,7 +460,8 @@ public class IdentificaPolizaService {
             
                //ENTRADA PARA Latinoamericana
 
-               if(!encontro &&  (contenido.contains("Latinoamericana") || rangoSimple(4, 6, pdfStripper, pdDoc).contains("latinoseguros.com.mx") )) {
+               if(!encontro &&  (contenido.contains("Latinoamericana") || rangoSimple(4, 6, pdfStripper, pdDoc).contains("latinoseguros.com.mx") 			   
+			   || rangoSimple(7, 9, pdfStripper, pdDoc).contains("latinoseguros.com.mx")   )) {				
               	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
                    modelo = datosLatino.procesar();
                    encontro = true;  
