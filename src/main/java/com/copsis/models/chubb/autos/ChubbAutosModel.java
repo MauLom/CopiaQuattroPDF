@@ -79,19 +79,13 @@ public class ChubbAutosModel {
 					.replace("horas al ", "horas al###")
 					.replace("@@@Póliza:", "@@@Póliza:###");
 
-			// tipo
-			modelo.setTipo(1);
-			// aseguradora
+			
+			modelo.setTipo(1);			
 			modelo.setCia(1);
-
-			// Ramo
 			modelo.setRamo("Autos");
-
-			// Moneda
 			modelo.setMoneda(fn.moneda(
 					contenido.split("Moneda:")[1].split(ConstantsValue.FORMA_PAGO)[0].replace("###", "").trim()));
 
-			// Renovacion
 			conceptos = Arrays.asList("Póliza anterior:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
@@ -599,6 +593,32 @@ public class ChubbAutosModel {
 			}
 			modelo.setRecibos(recibosList);
 			modelo.setPolizaGuion(modelo.getPoliza());
+
+			String primerRecibo="";
+			//AVISO DE COBRO
+			for(int i=0;i< contenido.split("AVISO DE COBRO").length;i++){
+
+				if(contenido.split("AVISO DE COBRO")[i].contains("Serie del aviso 1-4")){
+					if(contenido.split("AVISO DE COBRO")[i].contains("IMPORTANTE")){
+					 primerRecibo =contenido.split("AVISO DE COBRO")[i].split("IMPORTANTE")[0];
+					}
+					
+				}				
+			}
+
+			if(!primerRecibo.isEmpty()){
+				for(int i=0;i< primerRecibo.split("\n").length;i++){
+				  if(primerRecibo.split("\n")[i].contains("Total a pagar:")){
+					List<String> valores = fn.obtenerListNumeros2(primerRecibo.split("\n")[i].replace(",", ""));
+				
+                    modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				  }
+				}
+			}
+
+		
+
+
 
 			return modelo;
 		} catch (Exception ex) {
