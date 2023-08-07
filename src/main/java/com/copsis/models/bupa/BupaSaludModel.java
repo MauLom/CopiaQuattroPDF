@@ -24,6 +24,8 @@ public class BupaSaludModel {
 		
 			inicio = contenido.indexOf("Contratante");
 			fin = contenido.indexOf("Advertencia");
+			fin = fin == -1 ? contenido.indexOf("Área de Cobertur"):fin;
+	
 			newcontenido.append( fn.extracted(inicio, fin, contenido).replace("día-mes-año: ", ""));
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
