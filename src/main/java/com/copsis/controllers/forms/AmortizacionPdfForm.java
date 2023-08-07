@@ -32,7 +32,7 @@ public class AmortizacionPdfForm {
 	private Double comisionApertura;
 	private Double certificadoRenovacion;
 	private Double garantiaExtendida;
-	private Double comisionAmperturaIva;
+	private Double comisionAperturaIva;
 	private String montoSeguroFinacimiento;
 	private Double montoSeguroVida;
 	private Double montoSeguroDesempleo;
@@ -43,7 +43,7 @@ public class AmortizacionPdfForm {
 	private Double valor;
 	private Double coberturasAdicionales;
 	private Double engache;
-	private Double mesualida;
+	private Double mensualida;
 	private String cliente;
 	private List<AmortizacionDTO> amortizacion;
 }
