@@ -370,7 +370,7 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,15, "Importe financiar", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMontoFinanciar()), black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,18, "Mensualidad:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMensualida()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMensualidad()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,20, "Tasa fija anual", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 			communsPdf.setCell(baseRow,11,  formatoDinero(impresionForm.getTasa()) +" %", black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
