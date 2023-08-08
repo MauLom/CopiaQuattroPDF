@@ -71,6 +71,9 @@ public class AfirmeDiversosBModel {
             
             inicio = contenido.indexOf("Prima Neta");
             fin =contenido.indexOf("En testimonio de lo cua");
+
+			fin = fin < inicio ? contenido.lastIndexOf("En testimonio de lo cual"):fin;
+			
             newcontenido = new StringBuilder();
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {          
@@ -87,17 +90,59 @@ public class AfirmeDiversosBModel {
             		modelo.setAgente(newcontenido.toString().split("\n")[i].split("Agente")[1].split("###")[2]);
             	}
             }
+			
      
-            inicio = contenido.indexOf("COBERTURAS INCISO1");
+            inicio = contenido.indexOf("COBERTURAS INCISO1");			
             fin =contenido.indexOf("De acuerdo al Art.");
+
+			String coberturasExt="";
+			String cbx="";
+
+			for( int i=0; i < contenido.split("Bienes y Riesgos").length;i++){				
+				if(i > 0){
+					coberturasExt +=contenido.split("Bienes y Riesgos")[i].split("En testimonio de")[0].replace("\r","").replace("@@@", "");
+				}			
+			}
+
+		
+
+
+			
+
+			
             newcontenido = new StringBuilder();
-            newcontenido.append(fn.extracted(inicio, fin, contenido));
+            if(coberturasExt.isEmpty()){
+				newcontenido.append(fn.extracted(inicio, fin, contenido));
+			}else{
+				newcontenido.append(coberturasExt);
+			}
+			
+
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {            	
             	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
             	if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada")
-            		&& !newcontenido.toString().split("\n")[i].contains("COBERTURAS INCISO")            		
-            			) {            
+            		&& !newcontenido.toString().split("\n")[i].contains("COBERTURAS INCISO")
+					&& !newcontenido.toString().split("\n")[i].contains("EDIFICIO")
+					&& !newcontenido.toString().split("\n")[i].contains("CONTENIDOS")
+					&& !newcontenido.toString().split("\n")[i].contains("RESPONSABILIDAD CIVIL")
+					&& !newcontenido.toString().split("\n")[i].contains("Prima")
+					&& !newcontenido.toString().split("\n")[i].contains("Concepto")
+					&& !newcontenido.toString().split("\n")[i].contains("Forma")
+					&& !newcontenido.toString().split("\n")[i].contains("Cláusula")
+					&& !newcontenido.toString().split("\n")[i].contains("CRISTALES")
+					&& !newcontenido.toString().split("\n")[i].contains("ROTURA DE MAQUINARIA")
+					&& !newcontenido.toString().split("\n")[i].contains("adjunta")
+					&& !newcontenido.toString().split("\n")[i].contains("CONSECUENCIALES")
+					&& !newcontenido.toString().split("\n")[i].contains("Hasta")
+					&& !newcontenido.toString().split("\n")[i].contains("Hasta 1 Mes")
+					&& !newcontenido.toString().split("\n")[i].contains("Período de")
+					&& !newcontenido.toString().split("\n")[i].contains("Actividades")
+					&& !newcontenido.toString().split("\n")[i].contains("Bardeado")
+					&& !newcontenido.toString().split("\n")[i].contains("Control")
+					&& !newcontenido.toString().split("\n")[i].contains("Número")
+            			) {       
+							
             		int sp  = newcontenido.toString().split("\n")[i].split("###").length;
             	   switch (sp) {
 				case 1:
