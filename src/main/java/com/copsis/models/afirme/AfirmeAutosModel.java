@@ -41,11 +41,15 @@ public class AfirmeAutosModel {
             //Datos Generales
             inicio = contenido.indexOf("PÓLIZA DE SEGURO");
             fin = contenido.indexOf("DESGLOSE DE COBERTURAS");
+			 fin = fin ==-1 ? contenido.indexOf("COBERTURAS"):fin;
+
+			
 
           
             if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {			
+				
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.POLIZA) && newcontenido.split("\n")[i].contains(ConstantsValue.INCISO)) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA)[1].split(ConstantsValue.INCISO)[0].replace("-", "").replace("###", "").trim());
 						modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA)[1].split(ConstantsValue.INCISO)[0].replace("###", "").trim());
@@ -56,17 +60,41 @@ public class AfirmeAutosModel {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[3].replace("###", "").trim()));
 						
 					}
+
+				
+					if(modelo.getVigenciaDe().isEmpty() && newcontenido.split("\n")[i].contains("desde:")){						
+						List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+						modelo.setFechaEmision(modelo.getVigenciaDe());
+					}
+
+					if(modelo.getVigenciaA().isEmpty() && newcontenido.split("\n")[i].contains("Hasta:")){						
+						List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+						modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));
+					}
 					if(newcontenido.split("\n")[i].contains("Marca") && newcontenido.split("\n")[i].contains(ConstantsValue.CLAVE)) {
 						modelo.setMarca( newcontenido.split("\n")[i].split(ConstantsValue.CLAVE)[1]);
 						modelo.setClave( fn.numTx(newcontenido.split("\n")[i].split(ConstantsValue.CLAVE)[1]));
 					}
+					if(newcontenido.split("\n")[i].contains("Marca:") &&  newcontenido.split("\n")[i].contains("Modelo")) {
+					 modelo.setMarca(newcontenido.split("\n")[i].split("Marca:")[1].split("Modelo")[0].replace("###", ""));
+					}
+
+						
 					if(newcontenido.split("\n")[i].contains("ASEGURADO") && newcontenido.split("\n")[i+2].contains("Y-O")){
 						modelo.setCteNombre(newcontenido.split("\n")[i+2].split("Y-O")[0].trim());							
 					}
+
+					
 					
 					if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Tipo y Clase:")) {		
-
 						modelo.setCteNombre( newcontenido.split("\n")[i].split("Tipo y Clase:")[0].replace("###", "").trim());
+					}
+					if(modelo.getCteNombre().isEmpty() && newcontenido.split("\n")[i].contains("Contratante:") && newcontenido.split("\n")[i].contains("C.P:")){
+						modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].split("C.P")[0].replace("###", ""));
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						modelo.setCp(valores.get(0));
+
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Modelo")){
@@ -75,7 +103,15 @@ public class AfirmeAutosModel {
 					}
 					if(newcontenido.split("\n")[i].contains("Motor")){
 						newdireccion.append(newcontenido.split("\n")[i].split("Motor")[0].replace("###", ""));
-						modelo.setCteDireccion(newdireccion.toString().trim());
+						if(!newdireccion.toString().contains("Marca:")){
+							modelo.setCteDireccion(newdireccion.toString().trim());
+						}						
+					}
+                        
+					if(modelo.getCteDireccion().isEmpty() &&  newcontenido.split("\n")[i].contains("Domicilio:")
+					&&  newcontenido.split("\n")[i].contains("R.F.C:")){
+                        modelo.setCteDireccion(newcontenido.split("\n")[i].split("Domicilio:")[1].split("R.F.C:")[0].replace("###", ""));
+						modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].replace("###", ""));
 					}
 					if(newcontenido.split("\n")[i].contains("Serie:")){
 						modelo.setSerie(newcontenido.split("\n")[i].split("Serie:")[1].replace("###", "").trim());
@@ -160,10 +196,10 @@ public class AfirmeAutosModel {
             //Primas
             inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA);
             fin = contenido.indexOf("Artículo 25 de");
-       
+    
             if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {
 						modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_NETA)[1].split("###")[1])));
 					}
@@ -172,13 +208,35 @@ public class AfirmeAutosModel {
 					}
 					
 					if (newcontenido.split("\n")[i].contains("Gastos Expedición")) {
-						modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Gastos Expedición")[1].split("###")[1])));
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}						
 					}
-					if (newcontenido.split("\n")[i].contains("I.V.A.")) {
-						modelo.setIva( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.")[1].split("###")[1])));
+
+					if (newcontenido.split("\n")[i].contains("Gastos de Expedición:")) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}						
+					}
+					if (newcontenido.split("\n")[i].contains("I.V.A")) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+						modelo.setIva( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
+						
 					}
 					if (newcontenido.split("\n")[i].contains("Prima total")) {
 						modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Prima total")[1].split("###")[1])));
+					}
+
+					if (newcontenido.split("\n")[i].contains("Prima Total")) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+						modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
+						
 					}
 					
 					if (newcontenido.split("\n")[i].contains("Moneda")) {
@@ -191,20 +249,27 @@ public class AfirmeAutosModel {
 					if(newcontenido.split("\n")[i].contains("Forma de pago") && modelo.getFormaPago() == 0) {					
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("Forma de pago")[1].split("###")[1] ));
 					}
+					if(newcontenido.split("\n")[i].contains("Forma de Pago") && modelo.getFormaPago() == 0) {					
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i]));
+					}
 				}
             }
             
-          
+
             //Coberturas
             inicio = contenido.indexOf("DESGLOSE DE COBERTURAS");
+			  inicio = inicio ==-1 ?  contenido.indexOf("COBERTURAS"):inicio;
             fin = contenido.indexOf(ConstantsValue.PRIMA_NETA);
+			
             if (inicio > 0 && fin > 0 && inicio < fin) {
             	  List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					int sp  = newcontenido.split("\n")[i].split("###").length;
-					if(!newcontenido.split("\n")[i].contains("Deducible")) {						
+					if(!newcontenido.split("\n")[i].contains("Deducible")
+					&& !newcontenido.split("\n")[i].contains("Hasta")
+					&& !newcontenido.split("\n")[i].contains("Número")) {						
 						switch (sp) {
 						case 4:
 							cobertura.setNombre(newcontenido.split("\n")[i].split("###")[1]);

@@ -71,7 +71,10 @@ public class AfirmeModel {
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
 
 					}else {
-						pagIni = fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS");		
+						pagIni = fn.pagFinRango(stripper, doc, "DATOS DEL VEHÍCULO");
+					
+						pagIni = pagIni == -1 ? fn.pagFinRango(stripper, doc, "DESGLOSE DE COBERTURAS"): pagIni;	
+							
 						modelo  = new AfirmeAutosModel(fn.caratula(pagIni, pagIni+2, stripper, doc)).procesar();	
 					}
 		
