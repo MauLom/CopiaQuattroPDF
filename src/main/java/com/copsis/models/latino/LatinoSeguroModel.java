@@ -23,31 +23,46 @@ public class LatinoSeguroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-	
 
+	
 			int tipo = fn.tipoPoliza(contenido);
-			int salud=0;
+			int salud = 0;
 			if (tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("GM IND MEDICA")) {
 				tipo = 2;
-				salud=1;
+				salud = 1;
 			}
 			if (tipo == 0 && fn.caratula(4, 5, stripper, doc).contains("GM IND MEDICA")) {
 				tipo = 2;
 			}
-	
-			
+
+			if (tipo == 0 && fn.caratula(7, 8, stripper, doc).contains("GM IND MEDICA")) {
+				tipo = 2;
+				salud = 2;
+			}
+
 			switch (tipo) {
 				case 1:
 					modelo = new LatinoSeguroAutoModel(fn.caratula(1, 2, stripper, doc)).procesar();
 					break;
 
 				case 2:
-	
-				      if(salud==1){
-						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(2,3, stripper, doc));
-					  }else{
-						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5,7, stripper, doc));
-					  }
+
+					switch (salud) {
+						case 1:
+							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(2, 3, stripper, doc));
+							break;
+						case 2:
+							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(7, 8, stripper, doc));
+							break;
+						default:
+							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5, 7, stripper, doc));
+
+					}
+					if (salud == 1) {
+						modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(2, 3, stripper, doc));
+					} else {
+
+					}
 					break;
 				default:
 					break;

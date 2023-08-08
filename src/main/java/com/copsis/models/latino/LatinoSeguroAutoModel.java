@@ -6,7 +6,6 @@ import java.util.List;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.planSeguro.PlanSeguroSaludModel;
 
 public class LatinoSeguroAutoModel {
 	private DataToolsModel fn = new DataToolsModel();
