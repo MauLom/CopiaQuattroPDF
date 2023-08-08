@@ -89,10 +89,6 @@ public class QualitasModel {
 						}         
 					} else {
 				
-						System.out.println(fn.caratula(3, 3, stripper, doc));
-						
-						System.out.println( fn.pagFinRango(stripper, doc, "PÓLIZA DE SEGURO DE AUTOMÓVILES"));
-
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")){
 						
 							if(fn.caratula(4, 5, stripper, doc).contains("Motor")){
