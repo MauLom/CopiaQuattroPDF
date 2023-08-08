@@ -702,6 +702,10 @@ public class GnpAutosModel {
 			}
 
 			modelo.setRecibos(recibos);
+			if(modelo.getFormaPago() ==0 && modelo.getMoneda() ==0 ){
+				modelo.setMoneda(1);
+				modelo.setFormaPago(1);
+			}
 		
 			newcontenido = new StringBuilder();
 			return modelo;

@@ -33,7 +33,8 @@ public class GnpModel {
 
 		try {
 
-			if (contenido.contains("Motor") && contenido.contains("Placas") || fn.caratula(1, 1, stripper, doc).contains("#MOTOR INSURANCE") && contenido.contains("License Plate")) {
+			if (contenido.contains("Motor") && contenido.contains("Placas") || fn.caratula(1, 1, stripper, doc).contains("#MOTOR INSURANCE") 			
+			&& contenido.contains("License Plate")) {
 		
 				if (contenido.contains("DESGLOSE DE COBERTURAS Y SERVICIOS")) { // AUTOS NARANJA AZUL
 					
@@ -64,7 +65,7 @@ public class GnpModel {
 					
 					String x = fn.textoBusqueda(stripper, doc, "Asegurado (s)", true);
 					x = x.length() > 0 ? x :fn.textoBusqueda(stripper, doc, "Asegurado (s)", false);
-					System.out.println(x);
+			
 					modelo = new GnpSaludModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
 							x).procesar();
@@ -118,6 +119,10 @@ public class GnpModel {
 			
 			if(modelo.getTipo() == 0 && (fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA") || fn.caratula(1, 2, stripper, doc).contains("SEGURIDAD EN VIDA"))) {
 				modelo = new GnpVidaModel4().procesar(fn.caratula(1, 12, stripper, doc));
+			}
+
+			if(modelo.getTipo() == 0 &&  fn.caratula(1, 1, stripper, doc).contains("VEHICULOS RESIDENTES") ){
+				modelo = new GnpAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
 			}
 			
 			
