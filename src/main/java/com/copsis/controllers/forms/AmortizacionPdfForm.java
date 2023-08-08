@@ -43,7 +43,7 @@ public class AmortizacionPdfForm {
 	private Double valor;
 	private Double coberturasAdicionales;
 	private Double engache;
-	private Double mensualida;
+	private Double mensualidad;
 	private String cliente;
 	private List<AmortizacionDTO> amortizacion;
 }
