@@ -34,7 +34,7 @@ public class HdiAutosModel {
 
 			// tipo
 			modelo.setTipo(1);
-			// cia
+			
 			modelo.setCia(14);
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO");
