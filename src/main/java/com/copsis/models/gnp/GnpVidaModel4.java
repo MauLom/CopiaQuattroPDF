@@ -8,7 +8,6 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.EstructuraRecibosModel;
-import com.copsis.panAmerican.PanAmericanSaludModel;
 
 public class GnpVidaModel4 {
 
@@ -26,7 +25,8 @@ public class GnpVidaModel4 {
 			modelo.setCia(18);
 
 			inicio = contenido.indexOf("Domicilio del Asegurado");
-			fin = contenido.indexOf("Beneficios");			
+			fin = contenido.indexOf("Beneficios");	
+				
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
