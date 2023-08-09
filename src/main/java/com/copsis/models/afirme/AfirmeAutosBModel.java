@@ -53,6 +53,8 @@ public class AfirmeAutosBModel {
                         modelo.setPoliza(newcontenido.split("\n")[i].split("###")[1].split(ConstantsValue.INCISO)[0]);
                         modelo.setInciso(Integer.parseInt(newcontenido.split("\n")[i].split(ConstantsValue.INCISO)[1].replace("###", "").trim()));
                     }
+
+                   
                     if (newcontenido.split("\n")[i].contains("desde")) {
                         modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.split("\n")[i]).get(0)));
                         if(modelo.getVigenciaDe().length() == 0) {
