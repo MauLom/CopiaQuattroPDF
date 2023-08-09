@@ -44,6 +44,12 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 0;
 			}
+		
+
+			if (tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Póliza de Salud Avanzado") ) {
+				tipo = 2;
+				modeloTipo = 2;
+			}
 			if (tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("SALUD OPTIMA / INDIVIDUAL") ) {
 				tipo = 2;
 				modeloTipo = 2;
