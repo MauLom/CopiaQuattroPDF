@@ -90,7 +90,17 @@ public class QualitasModel {
 					} else {
 				
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")){
-						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(4, 5, stripper, doc),"","");
+						
+							if(fn.caratula(4, 5, stripper, doc).contains("Motor")){
+								pagFin=4;
+							}
+							if(fn.caratula(3, 3, stripper, doc).contains("Motor")){
+								pagFin=3;
+							}
+							
+							
+
+						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(pagFin, pagFin+1, stripper, doc),"","");
 						 modelo = datosQualitasAutos.procesar();
 						}else{
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
