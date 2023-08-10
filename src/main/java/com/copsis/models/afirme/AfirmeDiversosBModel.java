@@ -56,12 +56,25 @@ public class AfirmeDiversosBModel {
             		ubicacion.setCalle(modelo.getCteDireccion());
             		
             	}
-            	if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].split("C.P.")[1].length() > 4 ) {            		
-            		modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim());
-            		ubicacion.setCp(modelo.getCp());
+				
+            	if(newcontenido.toString().split("\n")[i].contains("C.P.")  ) {     
+					
+					List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);  
+
+					 
+					if(valores.get(0).length() < 4 ){
+					  valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]);
+					   modelo.setCp(valores.get(0));
+            		   ubicacion.setCp(modelo.getCp());						
+					} else {
+						modelo.setCp(valores.get(0));
+						ubicacion.setCp(modelo.getCp());
+					}   		
+            		
             	}
             }
-            if(modelo.getVigenciaDe().length() > 0) {
+			
+            if(!modelo.getVigenciaDe().isEmpty()) {
             	modelo.setFechaEmision(modelo.getVigenciaDe());
             }
             
