@@ -77,7 +77,7 @@ public class GnpModel {
 				if(contenido.contains("Seguro de Vida")) {
 					modelo = new GnpVIdaModel2(fn.caratula(1, 5, stripper, doc)).procesar();	
 				}else {
-					modelo = new GnpVidaModel3(fn.caratula(1, 5, stripper, doc)).procesar();
+				modelo = new GnpVidaModel3(fn.caratula(1, 5, stripper, doc)).procesar();
 				}
 			 }
 			} // termina el codigo de vida
@@ -117,8 +117,13 @@ public class GnpModel {
 			
 	
 			
-			if(modelo.getTipo() == 0 && (fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA") || fn.caratula(1, 2, stripper, doc).contains("SEGURIDAD EN VIDA"))) {
-				modelo = new GnpVidaModel4().procesar(fn.caratula(1, 12, stripper, doc));
+			if(modelo.getTipo() == 0 && (fn.caratula(1, 2, stripper, doc).contains("SEGURO DE VIDA") || fn.caratula(1, 2, stripper, doc).contains("SEGURIDAD EN VIDA"))) {			
+				if(fn.caratula(1, 1, stripper, doc).contains("PROTECCIÓN POR FALLECIMIENTO")){
+				   modelo = new GnpVidaModel1().procesar(fn.caratula(1, 12, stripper, doc));
+				}else{
+				   modelo = new GnpVidaModel4().procesar(fn.caratula(1, 12, stripper, doc));
+				}
+				
 			}
 
 			if(modelo.getTipo() == 0 &&  fn.caratula(1, 1, stripper, doc).contains("VEHICULOS RESIDENTES") ){
