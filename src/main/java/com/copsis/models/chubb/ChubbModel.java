@@ -77,7 +77,7 @@ public class ChubbModel {
 							if(!contenido.contains("SOBRE AUTOMÓVILES Y CAMIONES RESIDENTES")){
 								
 								modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
-									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
+									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
 								
 
 							}
@@ -106,7 +106,7 @@ public class ChubbModel {
 							modelo = new ChubbAutosBModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
 						}else if( fn.caratula(1, 1, pdfStripper, pdDoc).contains("PÓLIZA DE SEGURO TRANSPORTE DE CARGA ESPECIFICO")){
 							modelo = new ChubbDiversosModel(fn.caratula(1, 2, pdfStripper, pdDoc),
-							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false)).procesar();
+							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
 						}
 						else {
                         if(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc).contains("Características del riesgo")){
