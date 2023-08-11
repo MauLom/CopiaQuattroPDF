@@ -43,7 +43,13 @@ public class AtlasModel {
 				modelo = new AtlasDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				break;
 			case 5:// Vida
-				modelo = new AtlasVidaModel(fn.caratula(1, 3, stripper, doc)).procesar();
+		
+				if(contenido.contains("No.Póliza/Endoso")){
+					modelo = new AtlasVida2Model().procesar(fn.caratula(1, 3, stripper, doc));
+				}else{
+					modelo = new AtlasVidaModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				}
+				
 				break;
 			default:
 				break;
