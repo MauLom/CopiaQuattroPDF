@@ -42,7 +42,10 @@ public class BanorteModel {
 			if(tipo == 1 && contenido.contains("DATOS DEL BIEN ASEGURADO")) {
 				tipo = 4;
 			}
-		
+			if(tipo == 1 && fn.caratula(2, 2, stripper, doc).contains("SEGURO DE DAÑOS")) {
+				tipo = 4;
+			}
+	
 			switch (tipo) {
 			case 1://Autos
 
