@@ -603,7 +603,13 @@ public class ChubbAutosModel {
 					 primerRecibo =contenido.split("AVISO DE COBRO")[i].split("IMPORTANTE")[0];
 					}
 					
-				}				
+				}	
+				if( modelo.getFormaPago() ==2 && contenido.split("AVISO DE COBRO")[i].contains("Serie del aviso 1-2")){
+					if(contenido.split("AVISO DE COBRO")[i].contains("IMPORTANTE")){
+					 primerRecibo =contenido.split("AVISO DE COBRO")[i].split("IMPORTANTE")[0];
+					}
+				}
+			 			
 			}
 
 			if(!primerRecibo.isEmpty()){
