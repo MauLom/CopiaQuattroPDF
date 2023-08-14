@@ -74,10 +74,15 @@ public class SuraModel {
 			break;
 			
 			case 4://Diversos
+
+			   
 				if( contenido.contains("Hogar Máster Total")) {
 					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				}else 	if( contenido.contains("Múltiple Empresarial Riesgos")) {
 					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				}
+				else if( contenido.contains("DAÑOS RESPONSABILIDAD")) {
+					modelo  = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
 				}
 				else {
 					modelo  = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
