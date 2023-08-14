@@ -72,11 +72,9 @@ public class BanorteModel {
 				if(pagFin == 0) pagFin = doc.getNumberOfPages();
 				if(pagFin <= pagIni) {
 			     pagFin = fn.pagFinRango(stripper, doc, "NOMBRE DEL ASEGURADO");
-				}
-			
+				}			
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {
-					pagFin = pagFin == 1 && doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() : pagFin;
-					
+					pagFin = pagFin == 1 && doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() : pagFin;					
 					modelo  = new BanorteSaludModel(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false),fn.coberturas(stripper, doc, "COBERTURAS###OPC###IONALES")).procesar();
 				}
 				break;
@@ -90,12 +88,10 @@ public class BanorteModel {
 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {					
 					if(fn.caratula(pagIni, pagFin, stripper, doc).contains("Prima Neta")) {
 						pagIni = fn.pagFinRango(stripper, doc, "Prima Neta");
-					}
-				
+					}				
 					modelo  = new BanorteDiversos(fn.caratula(pagIni, pagFin, stripper, doc),fn.textoBusqueda(stripper, doc, ConstantsValue.AVISO_COBRO, false)).procesar();
 				}				
 				break;
-
 			default:
 				break;
 			}
