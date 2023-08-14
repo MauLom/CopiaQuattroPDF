@@ -82,18 +82,12 @@ public class HdiDiversosModel {
 			}
 
 			inicio = contenido.indexOf("El asegurado es:");
-			fin = contenido.indexOf("Detalle de Cobertura:");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("Datos de la empresa:");
-			}
+			fin = contenido.indexOf("Detalle de Cobertura:");	
+			inicio = inicio == -1 ? contenido.indexOf("Datos de la empresa:"): inicio;					
+			fin = fin ==-1 ? contenido.indexOf("SUMA ASEGURADA"):fin;					
+			fin = fin == -1 ? contenido.indexOf("Datos de bienes"):fin;
+			fin = fin == -1 ? contenido.indexOf("Detalle del Endoso:"):fin;
 
-			if (fin == -1) {
-				fin = contenido.indexOf("SUMA ASEGURADA");
-			}
-			if (fin == -1) {
-				fin = contenido.indexOf("Datos de bienes");
-
-			}
 
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -208,8 +202,11 @@ public class HdiDiversosModel {
 
 			inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Desglose de Pagos:");
+			fin = fin ==-1? contenido.indexOf("Artículo"):fin;
+			
 			newcontenido = new StringBuilder();
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
+			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				if (newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
 
