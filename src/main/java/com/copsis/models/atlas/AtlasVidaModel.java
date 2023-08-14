@@ -47,7 +47,6 @@ public class AtlasVidaModel {
 				//Datos del Contrantante
 				inicio = contenido.indexOf("PÓLIZA");
 	            fin = contenido.indexOf("Coberturas y Primas");
-
 	            
 	            if(inicio > 0 && fin > 0 && inicio < fin) {
 	            	newcontenido = contenido.substring(inicio,  fin).replace("\r", "").replace("@@@", "").trim();
