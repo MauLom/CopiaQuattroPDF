@@ -154,16 +154,22 @@
 
                                         if (arrNewContenido.length == 3 && arrNewContenido[arrNewContenido.length - 2].split("###").length < 4) {
 
+                                            if(arrNewContenido[arrNewContenido.length - 2].split("###").length > 1){
                                             modelo.setPoliza(arrNewContenido[arrNewContenido.length - 2].split("###")[0]);
                                             modelo.setEndoso(arrNewContenido[arrNewContenido.length - 2].split("###")[1]);
+                                            }
+                                            
+                                            
                                         }
 
                                         if (arrNewContenido.length == 3 && arrNewContenido[arrNewContenido.length - 2].split("###").length < 4) {
+                                            if(arrNewContenido[arrNewContenido.length - 2].split("###").length > 1){
                                             modelo.setPoliza(arrNewContenido[arrNewContenido.length - 2].split("###")[0]);
                                             modelo.setEndoso(arrNewContenido[arrNewContenido.length - 2].split("###")[1]);
                                             if (fn.isNumeric(arrNewContenido[arrNewContenido.length - 2].split("###")[2].trim())) {
                                                 modelo.setInciso(Integer.parseInt(arrNewContenido[arrNewContenido.length - 2].split("###")[2].trim()));
                                             }
+                                          }
                                         }
 
                                         if (modelo.getPoliza().isEmpty() && arrNewContenido.length == 2 && arrNewContenido[arrNewContenido.length - 1].split("###").length < 4) {
