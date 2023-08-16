@@ -16,6 +16,7 @@ import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
+import com.copsis.controllers.forms.ImpresionCaractulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -38,6 +39,7 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
+import com.copsis.models.impresionCaractula.ImpresionCaractulaAutos;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -253,6 +255,20 @@ public class ImpresionService {
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionPolizaAutosInter().buildPDF(polizaAutosProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+
+     public byte[] impresionCaractulaAutos(ImpresionCaractulaForm  impresionCaractulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaractulaAutos().buildPDF(impresionCaractulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
