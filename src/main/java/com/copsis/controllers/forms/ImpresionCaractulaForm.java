@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
+import com.copsis.clients.projections.SocioDirecProjection;
 import com.copsis.clients.projections.VehiculoProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +17,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class ImpresionCaractulaForm {
     private String noPoliza;
-    private String polizaID;
-    private String calleSo;
-    private String coloniaSo;
-    private String estadoSo;
+    private String polizaID; 
     private String vigencia;
     private String fechaEmision;
     private String subramo;
@@ -40,6 +39,7 @@ public class ImpresionCaractulaForm {
     private List<InvolucradosProjection> involucrados;
     private List<CoberturaProjection> coberturas;
     private VehiculoProjection vehiculo;
+    private SocioDirecProjection socio;
     
 
 }

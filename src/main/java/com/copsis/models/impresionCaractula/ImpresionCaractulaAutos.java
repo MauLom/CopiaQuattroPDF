@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
+import com.copsis.clients.projections.SocioDirecProjection;
 import com.copsis.clients.projections.VehiculoProjection;
 import com.copsis.controllers.forms.ImpresionCaractulaForm;
 import com.copsis.exceptions.GeneralServiceException;
@@ -328,17 +329,18 @@ public class ImpresionCaractulaAutos {
             table.draw();
             yStart -=table.getHeaderAndDataHeight();
 
+            SocioDirecProjection socio = caratula.getSocio();
             table = new BaseTable(yStart, yStart, bottomMargin, 415, margin, document, page, false, true);
             baseRow = communsPdf.setRow(table,8);
-            communsPdf.setCell(baseRow, 100, caratula.getCalleSo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+            communsPdf.setCell(baseRow, 100, socio.getCalle(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
             baseRow = communsPdf.setRow(table,8);
-            communsPdf.setCell(baseRow, 100, caratula.getColoniaSo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+            communsPdf.setCell(baseRow, 100, socio.getColonia(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
             baseRow = communsPdf.setRow(table,8);
-            communsPdf.setCell(baseRow, 100, caratula.getEstadoSo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);         
+            communsPdf.setCell(baseRow, 100, socio.getEstado(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);         
             table.draw();
            yStart -=table.getHeaderAndDataHeight()+20;
 
-           this.setFooter(document, page,"Copsis");//quitar valor
+           this.setFooter(document, page,caratula.getFirma());//quitar valor
             
         } catch (Exception ex) {
          throw new GeneralServiceException("00001",
