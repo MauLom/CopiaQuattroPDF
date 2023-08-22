@@ -64,16 +64,16 @@ public class ImpresionCaractulaAutos {
                     communsPdf.setCell(baseRow, 14,"Forma de Pago:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 44,caractula.getContrantante().getFormaPago(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 9,"CURP", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                    communsPdf.setCell(baseRow, 30,caractula.getContrantante().getCurp(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 30,caractula.getClientExtra().getCurp(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 14,"Moneda:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 44,caractula.getContrantante().getMoneda(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 7,"Email:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 30,caractula.getContrantante().getCorreo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 30,caractula.getClientExtra().getEmail(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 58,"", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 10,"Teléfono:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 30,caractula.getContrantante().getTelefono(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                
+                    communsPdf.setCell(baseRow, 30,caractula.getClientExtra().getTelefono(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                
                     table.remoBordes(true, 1);
                     table.draw();
 
@@ -118,7 +118,7 @@ public class ImpresionCaractulaAutos {
                     communsPdf.setCell(baseRow, 8,"Motor:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 13,vehiculo.getMotor(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 10,"Color:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                    communsPdf.setCell(baseRow, 14,vehiculo.getMotor(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 14,vehiculo.getColor(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 10,"Conductor:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
@@ -171,7 +171,7 @@ public class ImpresionCaractulaAutos {
                     }
                      baseRow = communsPdf.setRow(table,13);
                     communsPdf.setCell(baseRow, 25,"Proceso:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                     if(!involucrados.isEmpty() && involucrados.size() == 4 && !involucrados.get(1).getIniciales().isEmpty() && !involucrados.get(1).getFechaCreacion().isEmpty() && !involucrados.get(1).getHoraCreacion().isEmpty()){
+                     if(!involucrados.isEmpty() && involucrados.size() == 4 && involucrados.get(1).getIniciales() !=null && involucrados.get(1).getFechaCreacion() !=null && involucrados.get(1).getHoraCreacion() !=null){
                        communsPdf.setCell(baseRow, 15,involucrados.get(1).getIniciales(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                        communsPdf.setCell(baseRow, 45,involucrados.get(1).getFechaCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
                        communsPdf.setCell(baseRow, 20,involucrados.get(1).getHoraCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
@@ -298,7 +298,7 @@ public class ImpresionCaractulaAutos {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOS.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOS.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -338,9 +338,8 @@ public class ImpresionCaractulaAutos {
             baseRow = communsPdf.setRow(table,8);
             communsPdf.setCell(baseRow, 100, socio.getEstado(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);         
             table.draw();
-           yStart -=table.getHeaderAndDataHeight()+20;
-
-           this.setFooter(document, page,caratula.getContrantante().getFirma());//quitar valor
+            yStart -=table.getHeaderAndDataHeight()+20;
+          this.setFooter(document, page,caratula.getInvolucrados().isEmpty() ?  " " : caratula.getInvolucrados().get(3).getFirma());//quitar valor
             
         } catch (Exception ex) {
          throw new GeneralServiceException("00001",

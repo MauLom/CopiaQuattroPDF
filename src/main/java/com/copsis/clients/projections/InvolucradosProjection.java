@@ -13,4 +13,5 @@ public class InvolucradosProjection {
     private String iniciales;	
 	private String fechaCreacion;
 	private String horaCreacion;
+	private String firma;
 }
