@@ -13,4 +13,6 @@ public class SocioDirecProjection {
     private String calle;
     private String colonia;
     private String estado;
+    private String avatar;
+    private String nombSocio;
 }
