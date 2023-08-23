@@ -47,7 +47,7 @@ public class ImpresionCaractulaAutos {
                     communsPdf.setCell(baseRow, 58, "Movimiento", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
                     communsPdf.setCell(baseRow, 42, "Contratante", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                
                     baseRow = communsPdf.setRow(table,15);
-                    communsPdf.setCell(baseRow, 58,"RENOVACIÓN A PÓLIZA 202210281603", blue, true, "L", 13,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 58,"RENOVACIÓN A PÓLIZA", blue, true, "L", 13,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 42,caractula.getContrantante().getContrantante(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 14,"Vigencia:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
