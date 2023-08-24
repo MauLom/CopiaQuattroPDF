@@ -1,6 +1,7 @@
 package com.copsis.models.planSeguro;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.copsis.models.DataToolsModel;
@@ -85,6 +86,8 @@ public class PlanSeguroSaludCModel {
          
             inicio = contenido.indexOf("Conceptos Económicos");
             fin = contenido.indexOf("Cobertura básica"); 
+            fin= fin ==-1  ?contenido.indexOf("Coberturas básicas"):fin;
+      
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             
@@ -97,18 +100,23 @@ public class PlanSeguroSaludCModel {
                         modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(5))));		       		  
                         modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(6))));   
                }
+              
             
             }
 
            
             inicio = contenido.indexOf("Cobertura básica");
+           
             fin = contenido.indexOf("Clave de Agente"); 
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+            if(!newcontenido.isEmpty()){
+
+            
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-                  if(!newcontenido.toString().split("\n")[i].contains("Cobertura básica")
+                  if(!newcontenido.toString().split("\n")[i].contains("Cobertura básica")                  
                   && !newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios")
                   && !newcontenido.toString().split("\n")[i].contains("condiciones generales")
                   && !newcontenido.toString().split("\n")[i].contains("Mensual")  ){                
@@ -128,6 +136,47 @@ public class PlanSeguroSaludCModel {
                   }
             }
             modelo.setCoberturas(coberturas);
+        }
+
+
+            if(modelo.getCoberturas().isEmpty()){
+                inicio= contenido.indexOf("Coberturas básicas");
+                fin = contenido.indexOf("Clave de Agente"); 
+              
+                newcontenido = new StringBuilder();       
+                newcontenido.append(fn.extracted(inicio, fin, contenido)
+                .replace("Cámara###hiperbárica", "Cámara###hiperbárica")
+                .replace("Rehabilitación###y###fisioterapia","Rehabilitación y fisioterapia")
+                .replace("Complicaciones###del###embarazo", "Complicaciones del embarazo")
+                .replace("Parto###o###cesárea","Parto o cesárea" )
+                .replace("Prótesis,###aparatos","Prótesis, aparatos" )
+                );
+               List<String> listParentescos = Arrays.asList("Ozonoterapia","Rehabilitación y fisioterapia","Cámara hiperbárica","Complicaciones del embarazo"
+               ,"Circuncisión","Prótesis, aparatos");
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+                    
+                    for (int x = 0; x < listParentescos.size(); x++) {
+                        if(newcontenido.toString().split("\n")[i].contains( listParentescos.get(x))){
+                          
+                            if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("UMAM")){
+                                    cobertura.setNombre(newcontenido.toString().split("\n")[i].split("Hasta")[0].replace("###", " ").trim());
+                                    cobertura.setSa("Hasta "+newcontenido.toString().split("\n")[i].split("Hasta")[1].replace("###", " ").trim());
+                                   coberturas.add(cobertura);
+                            }else{
+                                cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                                cobertura.setSa(newcontenido.toString().split("\n")[i].split(newcontenido.toString().split("\n")[i].split("###")[0])[1]
+                                .replace("###", " ").trim());
+                                coberturas.add(cobertura);
+                                
+                            }
+                        }
+                    }
+                  
+                  
+                }
+                 modelo.setCoberturas(coberturas);
+            }
 			
             
 

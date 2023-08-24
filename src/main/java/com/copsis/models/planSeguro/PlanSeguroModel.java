@@ -44,6 +44,11 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 0;
 			}
+
+			if (tipo == 0 &&  contenido.contains("Póliza de Plan Seguro Esencial")) {
+				tipo = 2;
+				modeloTipo = 3;
+			}
 		
 
 			if (tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Póliza de Salud Avanzado") ) {
