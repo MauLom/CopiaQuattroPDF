@@ -325,10 +325,10 @@ public class ImpresionCaractulaAutos {
             communsPdf.setCell(baseRow, 70, "Póliza", black, true, "C", 11,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
             communsPdf.setCell(baseRow, 30, "OT", black, true, "C", 11,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                            
             baseRow = communsPdf.setRow(table);
-            communsPdf.setCell(baseRow, 70,caratula.getContrantante().getNoPoliza(), black, false, "C", 12,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-            communsPdf.setCell(baseRow, 30, caratula.getContrantante().getPolizaID(), black, false, "C", 12,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                
+            communsPdf.setCell(baseRow, 70,caratula.getContrantante().getNoPoliza(), blue, false, "C", 12,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+            communsPdf.setCell(baseRow, 30, caratula.getContrantante().getPolizaID(), blue, false, "C", 12,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                
             table.draw();
-         SocioDirecProjection socio = caratula.getSocio();
+            SocioDirecProjection socio = caratula.getSocio();
             if(socio !=null){       
             yStart -=table.getHeaderAndDataHeight();
             table = new BaseTable(775, 775, bottomMargin, 150, 460, document, page, false, true);
