@@ -23,4 +23,6 @@ public class ContratanteCaraProjection {
     private String claveAngente;
     private String grupo;
     private String firmna;
+    private String tipoPoliza;
+    private String  nombreBeneficiario;
 }
