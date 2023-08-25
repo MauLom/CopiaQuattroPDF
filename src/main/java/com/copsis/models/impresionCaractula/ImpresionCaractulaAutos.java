@@ -47,7 +47,7 @@ public class ImpresionCaractulaAutos {
                     communsPdf.setCell(baseRow, 58, "Movimiento", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
                     communsPdf.setCell(baseRow, 42, "Contratante", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                
                     baseRow = communsPdf.setRow(table,15);
-                    communsPdf.setCell(baseRow, 58,"RENOVACIÓN A PÓLIZA", blue, true, "L", 13,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 58,caractula.getContrantante().getTipoPoliza(), blue, true, "L", 13,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 42,caractula.getContrantante().getContrantante(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 14,"Vigencia:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
@@ -64,7 +64,7 @@ public class ImpresionCaractulaAutos {
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 14,"Forma de Pago:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 44,caractula.getContrantante().getFormaPago(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 9,"CURP", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 9,"CURP:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 30, caractula.getClientExtra()!=null ?  caractula.getClientExtra().getCurp():"", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 14,"Moneda:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
@@ -101,15 +101,15 @@ public class ImpresionCaractulaAutos {
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 10,"Modelo:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 45,vehiculo.getModelo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 8,"Clave:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                    communsPdf.setCell(baseRow, 13,vehiculo.getClave(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 9,"Clave:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 12,vehiculo.getClave(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 10,"Circulación:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 14,vehiculo.getCirculacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 11,"Descripción:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     communsPdf.setCell(baseRow, 44,vehiculo.getDescripcion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 8,"Placas:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                    communsPdf.setCell(baseRow, 13,vehiculo.getPlacas(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 9,"Placas:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                    communsPdf.setCell(baseRow, 12,vehiculo.getPlacas(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 10,"Nómina", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     communsPdf.setCell(baseRow, 14,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                     
@@ -149,7 +149,7 @@ public class ImpresionCaractulaAutos {
                 
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 8,"Nombre:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                    communsPdf.setCell(baseRow, 45,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                    communsPdf.setCell(baseRow, 45,caractula.getContrantante().getNombreBeneficiario(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                     table.remoBordes(true, 1);
                     table.draw();
 
@@ -183,7 +183,7 @@ public class ImpresionCaractulaAutos {
 
                     baseRow = communsPdf.setRow(table,13);
                     communsPdf.setCell(baseRow, 25,"Registro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                     if(!involucrados.isEmpty() && involucrados.size() == 4 && !involucrados.get(2).getIniciales().isEmpty() && !involucrados.get(2).getFechaCreacion().isEmpty() && !involucrados.get(2).getHoraCreacion().isEmpty()){
+                     if(!involucrados.isEmpty() && involucrados.size() == 4 && involucrados.get(2).getIniciales() !=null && involucrados.get(2).getFechaCreacion()  !=null && involucrados.get(2).getHoraCreacion()  !=null){
                        communsPdf.setCell(baseRow, 15,involucrados.get(2).getIniciales(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                        communsPdf.setCell(baseRow, 45,involucrados.get(2).getFechaCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
                        communsPdf.setCell(baseRow, 20,involucrados.get(2).getHoraCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
@@ -194,7 +194,7 @@ public class ImpresionCaractulaAutos {
 
                     baseRow = communsPdf.setRow(table,13);
                     communsPdf.setCell(baseRow, 25,"Impresión:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                     if(!involucrados.isEmpty() && involucrados.size() == 4 && !involucrados.get(3).getIniciales().isEmpty() && !involucrados.get(3).getFechaCreacion().isEmpty() && !involucrados.get(3).getHoraCreacion().isEmpty()){
+                     if(!involucrados.isEmpty() && involucrados.size() == 4 && involucrados.get(3).getIniciales()  !=null && involucrados.get(3).getFechaCreacion()  !=null && involucrados.get(3).getHoraCreacion()  !=null){
                        communsPdf.setCell(baseRow, 15,involucrados.get(3).getIniciales(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                        communsPdf.setCell(baseRow, 45,involucrados.get(3).getFechaCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
                        communsPdf.setCell(baseRow, 20,involucrados.get(3).getHoraCreacion(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);   
@@ -299,7 +299,7 @@ public class ImpresionCaractulaAutos {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOS.pdf"));
+                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOSV2.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -366,7 +366,7 @@ public class ImpresionCaractulaAutos {
             table = new BaseTable(30, 30, 10, fullWidth, margin, document, page, false, true);
             baseRow = communsPdf.setRow(table,15);
             communsPdf.setCell(baseRow, 33,"",blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-            communsPdf.setCell(baseRow, 33,"Powered by <b>quattroCRM</b>",blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+            communsPdf.setCell(baseRow, 33,"Powered by <b>quattroCRM</b>",Color.black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
             communsPdf.setCell(baseRow, 33,"<b>FIRMA:</b> " + firma,blue, false, "R", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(0f), Color.white); 
             table.draw();
             
