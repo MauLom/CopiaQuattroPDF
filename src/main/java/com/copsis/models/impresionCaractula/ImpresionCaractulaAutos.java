@@ -299,7 +299,7 @@ public class ImpresionCaractulaAutos {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOSV2.pdf"));
+                   // document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/AUTOSV2.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
