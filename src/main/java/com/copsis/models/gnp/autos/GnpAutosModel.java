@@ -677,7 +677,10 @@ public class GnpAutosModel {
 
 			modelo.setCoberturas(coberturas);
 
-			modelo.setFechaEmision(modelo.getVigenciaA());
+			modelo.setFechaEmision(modelo.getVigenciaA());	
+			if(modelo.getFormaPago() == 4 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			  }
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
 
