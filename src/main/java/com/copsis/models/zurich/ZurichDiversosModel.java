@@ -201,7 +201,9 @@ public class ZurichDiversosModel {
 			if(inicio > -1) {
 				modelo.setFormaPago(fn.formaPagoSring(contenido.split("Forma de pago:")[1]));
 			}
-			
+			if(modelo.getFormaPago() == 1 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			  }
 			
 			inicio = contenido.indexOf("C.P.");
 			if(modelo.getCp().length() == 0 && inicio > 0) {			
