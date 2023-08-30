@@ -12,12 +12,9 @@ public class PrevemModel {
 
     public EstructuraJsonModel procesar(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
     	try {
-			switch (fn.tipoPoliza(contenido)) {
-			case 2:
+						
             modelo =new  PrevemSaludModel().procesar(fn.caratula(0, 7, pdfStripper, pdDoc));
-			
-				break;
-			}
+		
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(
