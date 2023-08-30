@@ -67,7 +67,13 @@ public class AfirmeModel {
 						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");	
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "MOTOCICLETAS INDIVIDUALES") :pagIni;
-						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;														
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;
+						Integer cbo= fn.pagFinRango(stripper, doc, "LIMITE MAXIMO DE");
+						
+						if(cbo > pagIni){
+							pagIni =  cbo;
+						}
+						
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
 
 					}else {
