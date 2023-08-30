@@ -34,6 +34,11 @@ public class PotosiModel {
 			if(tipo == 2 && contenido.contains("VIDA INDIVIDUAL")) {
 				tipo = 5;
 			}
+			if(tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("RANSPORTE  DE CARGA")){
+				tipo = 4;
+			}
+
+			System.out.println(fn.caratula(1, 2, stripper, doc));
 		      switch (tipo) {
 			case 1:
 				modelo = new PotosiAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();
