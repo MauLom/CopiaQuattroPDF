@@ -12,8 +12,7 @@ public class PrevemModel {
 
     public EstructuraJsonModel procesar(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
     	try {
-			System.out.println(contenido);
-			
+						
             modelo =new  PrevemSaludModel().procesar(fn.caratula(0, 7, pdfStripper, pdDoc));
 		
 			return modelo;
