@@ -652,6 +652,7 @@
                         newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
                         if (newcontenido.length() == 11) {
                             modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
+                          
                         }
                     } else {
                         newcontenido = !fn.obtenVigePoliza2(newcontenido).isEmpty() ? fn.obtenVigePoliza2(newcontenido).get(0) : "";
@@ -697,6 +698,11 @@
                         }
                     }
                 }
+
+             
+                            if(modelo.getFormaPago() == 4 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
+                              modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+                            }
                 // cp
                 inicio = contenido.lastIndexOf("C.P");
                 index = 3;

@@ -24,6 +24,7 @@ public class AlliansModel {
 		try {
 		Boolean  vida =false;
 			int op = fn.tipoPoliza(contenido);
+			int opdiv=0;
 			
 			if(contenido.contains("TEMPORAL 1 AÑO RENOV") || contenido.contains("TEMPORAL 25")  ){
 				op =5;
@@ -39,14 +40,20 @@ public class AlliansModel {
 			if(contenido.contains("B E N E F I C I A R I O S")) {
 				op=5;
 				vida=true;
-				}
-				
-	
-
+			}
+			           
 			if(contenido.contains("Muerte Accidental")) {
 				op=5;
 				vida=true;
 			}
+
+			if(fn.caratula(0, 2, stripper, doc).contains("DATOS DE LA EMBARCACIÓN")) {
+				op=4;
+				opdiv=1;
+			}
+
+
+			
 
 			switch (op) {
 				case 1:
@@ -64,12 +71,15 @@ public class AlliansModel {
 				
 				break;
 			case 4:
-				
+				if(opdiv ==1){
+					modelo = new AlliansDiversosCModel().procesar(fn.caratula(0, 7, stripper, doc));
+				}else{
 				if(fn.caratula(0, 4, stripper, doc).contains("Datos del Contratante")) {
 					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 7, stripper, doc));
 				}else {
 					modelo = new AlliansDiversosModel(fn.caratula(0, 4, stripper, doc)).procesar();
 				}
+		    }
 			
 				break;	
 			default:
