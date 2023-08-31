@@ -50,7 +50,7 @@ public class SegurosMtyModel {
 	
 			switch (tipo) {
 			case 2:// Salud
-				modelo  = new SegurosMtySalud(fn.caratula(1, 4, stripper, doc)).procesar();				
+				modelo  = new SegurosMtySalud(fn.caratula(1, 5, stripper, doc)).procesar();				
 				break;
 			case 5:// Vida
 				modelo  = new SegurosMtyVida(fn.caratula(1, 6, stripper, doc)).procesar();				
