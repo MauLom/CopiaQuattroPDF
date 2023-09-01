@@ -58,8 +58,7 @@ public class PlanSeguroSaludBModel {
 					
 					if(newcontenido.toString().split("\n")[i].split("-").length > 3 && modelo.getVigenciaDe().length() == 0 &&  modelo.getVigenciaA().length() == 0) {
 	
-						List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
-						System.out.println(valores.size());
+						List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);				
 						if(valores.size() ==2){
 							modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 							modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
@@ -98,8 +97,11 @@ public class PlanSeguroSaludBModel {
 				}
 				modelo.setCteDireccion(newdire.toString());
 
+				
 				inicio = contenido.indexOf("Coberturas");
 				fin = contenido.indexOf("Primas");
+				fin = fin == -1? contenido.indexOf("Clave de Agente"):fin;
+				
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
