@@ -196,7 +196,7 @@ public class ChubbAutosModel {
 						inicio = inicio + 7;
 						fin = (inicio + 100 )< contenido.length() ? (inicio + 100 ) : (inicio +50);
 						newcontenido = contenido.substring(inicio, (inicio + 100)).split(saltolinea)[0].replace("C###AS###C730528SX5","CASC730528SX5");
-						modelo.setRfc(newcontenido.split(separador)[0].replace("#", "").trim());
+						modelo.setRfc(newcontenido.split(separador)[0].replace("#", "").replace(" ", "").trim());
 						break;
 					default:
 						break;
