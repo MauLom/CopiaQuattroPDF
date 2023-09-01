@@ -96,6 +96,10 @@ public class PlanSeguroSaludBModel {
 							
 				}
 				modelo.setCteDireccion(newdire.toString());
+				if(modelo.getVigenciaDe().equals(modelo.getVigenciaA())){
+					modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				}
+				
 
 				
 				inicio = contenido.indexOf("Coberturas");
