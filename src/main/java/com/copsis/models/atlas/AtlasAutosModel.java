@@ -144,7 +144,7 @@ public class AtlasAutosModel {
 							&& !newcontenido.split("\n")[i].contains("Prima")
 							) {
 						int sp = newcontenido.split("\n")[i].split("###").length;
-						//System.out.println(newcontenido.split("\n")[i]);
+					
 
 						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
 						if (sp > 2) {
