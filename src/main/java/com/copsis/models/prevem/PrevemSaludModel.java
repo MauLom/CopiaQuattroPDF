@@ -125,9 +125,10 @@ public class PrevemSaludModel {
                 modelo.setAsegurados(asegurados);
             }
 
-
             inicio = contenido.indexOf("COBERTURAS ADICIONALES");
-			fin = contenido.indexOf("Días de espera 3");	
+			fin = contenido.indexOf("Días de espera 3");
+            fin = fin ==-1	? contenido.indexOf("ENDOSOS EN ESTA PÓLIZA") : fin;
+            
        
       
             newcontenido = new StringBuilder();		
