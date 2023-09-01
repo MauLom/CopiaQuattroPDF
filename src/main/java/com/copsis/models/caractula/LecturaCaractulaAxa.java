@@ -66,8 +66,9 @@ public class LecturaCaractulaAxa {
                         modelo.setMoneda(1);
                     }
                  } 
+                 
                  if(newcontenido.toString().split("\n")[i].contains("agente:") && newcontenido.toString().split("\n")[i].contains("Forma de pago:")){
-                  modelo.setAgente(newcontenido.toString().split("\n")[i].split("agente:")[1].split("Forma de")[0].replace("###", "").trim());
+                  modelo.setCveAgente(newcontenido.toString().split("\n")[i].split("agente:")[1].split("Forma de")[0].replace("###", "").trim());
                   modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
                  } 
                  if(newcontenido.toString().split("\n")[i].contains("Fecha de emisión:") ){
@@ -79,6 +80,12 @@ public class LecturaCaractulaAxa {
                     }                  
                    }            
                  }
+
+                   if(newcontenido.toString().split("\n")[i].contains("Nombre de") && newcontenido.toString().split("\n")[i+1].contains("agente:") ){
+                       modelo.setAgente(newcontenido.toString().split("\n")[i+1].split("agente:")[1].replace("###", "").trim());
+                   }
+
+
                  if(newcontenido.toString().split("\n")[i].contains("Vigencia de") && newcontenido.toString().split("\n")[i+1].contains("la póliza:")){
                    String vigencias = newcontenido.toString().split("\n")[i+1].split("póliza:")[1]
                    .replace(" ","").replace("###", "").replace("al", " ").trim();                   
@@ -131,12 +138,14 @@ public class LecturaCaractulaAxa {
             .replace("10 ###sesiones ###por ###cada", "10 sesiones por cada referencia médica###No aplica")
             .replace("Centro de Atención Médica", "Estudios de laboratorio en el Centro de Atención Médica")
             );
+           
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
             for(int i=0;i< newcontenido.toString().split("\n").length ;i++){ 
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
           
              if(!newcontenido.toString().split("\n")[i].contains("Suma contratada")){
                 if( newcontenido.toString().split("\n")[i].split("###").length == 3){
+                     System.out.println(newcontenido.toString().split("\n")[i]);
                 cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
                 cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1].trim());
                 cobertura.setCopago(newcontenido.toString().split("\n")[i].split("###")[2].trim());
