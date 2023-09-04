@@ -144,8 +144,7 @@ public class LecturaCaractulaAxa {
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
           
              if(!newcontenido.toString().split("\n")[i].contains("Suma contratada")){
-                if( newcontenido.toString().split("\n")[i].split("###").length == 3){
-                     System.out.println(newcontenido.toString().split("\n")[i]);
+                if( newcontenido.toString().split("\n")[i].split("###").length == 3){                   
                 cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
                 cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1].trim());
                 cobertura.setCopago(newcontenido.toString().split("\n")[i].split("###")[2].trim());
