@@ -283,12 +283,10 @@ public class ImpresionService {
      public byte[] impresionMovimiento(MovimientosForm movimientosForm) {
          try {
         	 ImpresionConsultaMovimientos impresionConsultaMovimientos = new ImpresionConsultaMovimientos();
-        	 System.out.println("antes de la creacion");
              return impresionConsultaMovimientos.buildPDF(movimientosForm);
          } catch (ValidationServiceException e) {
              throw e;
          } catch (Exception ex) {
-        	 ex.printStackTrace();
              throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
          }
      }

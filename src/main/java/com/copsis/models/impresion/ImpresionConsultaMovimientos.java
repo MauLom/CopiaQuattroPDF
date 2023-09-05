@@ -1,19 +1,28 @@
 package com.copsis.models.impresion;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.copsis.controllers.forms.MovimientosForm;
 import com.copsis.dto.AmortizacionDTO;
 import com.copsis.dto.MovimientosDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
+import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
@@ -34,8 +43,8 @@ public class ImpresionConsultaMovimientos {
 	
 	private List<Float> paddingBody = new ArrayList<>();
 	private List<Float> paddingBody2 = new ArrayList<>();
-	private float yStartNewPage = 760;
-	private float yStart = 770;
+	private float yStartNewPage = 720;
+	private float yStart = 730;
 	private float bottomMargin = 26;
 	private float fullWidth = 564;
 	float height = 0;
@@ -139,47 +148,39 @@ public class ImpresionConsultaMovimientos {
 					
 					// SALTO DE PAGINA
 					if(isEndOfPage(table)) {
-						System.out.println("entro a este pero??");
 						table.getRows().remove(table.getRows().size()-1);
 						table.draw();
 						// CRACION NUEVA PAGINA
 						page = new PDPage();
 						document.addPage(page);
-						
+						yStart = 730;
 						// ENCABEZADO TABLA//
 						getEncabezadoTabla(document, page);
-			
+						//marcaAgua
+						getMarcaAgua2(document, page);
 						acomula = false;
 						
 					}else {
+						if(x == 0) {
+							//marcaAgua
+							getMarcaAgua2(document, page);
+						}
 						table.draw();
 						yStart -= table.getHeaderAndDataHeight();
-						if(yStart < 26) {
-							page = new PDPage();
-							document.addPage(page);
-						}
-						//heightBorder = height -yStart;
 					}
 					
 					if(acomula) {								
 						x++;
 					} 
-					
-					if(x > 3000) {
-						break;
-					}
 				}
 				
 				output = new ByteArrayOutputStream();
 				document.save(output);
-				
-				document.save(new File("/home/mduque/Documentos/archivo.pdf"));
-				
+				//document.save(new File("/home/mduque/Documentos/archivo.pdf"));
 				return output.toByteArray();
 			}
 			
 		}catch (Exception ex) {
-			ex.printStackTrace();
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00001,ex.getMessage());
 		}
 	}
@@ -191,18 +192,14 @@ public class ImpresionConsultaMovimientos {
 			BaseTable table;
 			Row<PDPage> baseRow;
 			
-//			table = new BaseTable((yStart-20), yStartNewPage, 0, fullWidth, 20, document, page, false,true);
-//			baseRow = communsPdf.setRow(table, 20);
-			
 			table = new BaseTable((yStart-20), yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 20);
-
 			communsPdf.setCell(baseRow,12,"Póliza", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
 			communsPdf.setCell(baseRow,12,"Folio", black, true, "C", 8, cellStyle, "",paddingHead2, bgColor);
 			communsPdf.setCell(baseRow,12,"Endoso", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
 			communsPdf.setCell(baseRow,18,"Tipo", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
 			communsPdf.setCell(baseRow,14,"Solicitud", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,17,"Vígencia", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,17,"Vigencia", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
 			communsPdf.setCell(baseRow,15,"Estatus", black, true, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			
 			table.draw();
@@ -227,21 +224,16 @@ public class ImpresionConsultaMovimientos {
 				bgColorRow = new Color(246, 248, 253, 1);
 		    }
 			
-			
-			table = new BaseTable((yStart), yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-			baseRow = communsPdf.setRow(table, 25 );
-			communsPdf.setCell(baseRow,100, "", black, false, "C", 8, cellStyle, "", paddingBody, bgColor);
-			table.draw();
-			
-			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+		
+			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 25);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getPoliza().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getFolio().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getEndoso().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,18, movimientosDTO.getTipo().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,14, movimientosDTO.getSolicitud().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,17, movimientosDTO.getVigencia().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
-			communsPdf.setCell(baseRow,15, movimientosDTO.getEstatus().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColorRow);
+			communsPdf.setCell(baseRow,12, movimientosDTO.getPoliza().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,12, movimientosDTO.getFolio().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,12, movimientosDTO.getEndoso().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,18, movimientosDTO.getTipo().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,14, movimientosDTO.getSolicitud().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,17, movimientosDTO.getVigencia().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,15, movimientosDTO.getEstatus().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
 			
 			return table;
 			
@@ -251,9 +243,39 @@ public class ImpresionConsultaMovimientos {
 		}
 	}
 	
+	private BaseTable getMarcaAgua2(PDDocument document, PDPage page) {
+		try {
+			
+			BaseTable table;
+			Row<PDPage> baseRow;
+
+			table = new BaseTable(775, 775, bottomMargin, 460, 10, document, page, true, true);
+			baseRow = communsPdf.setRow(table, 600);
+			communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/biibiic/axa/fondo_axa_carta.png"));
+			table.draw();
+			
+			return table;
+		}catch (Exception e) {
+			throw new GeneralServiceException("Error=>", e.getMessage());
+		}
+	}
+	
+	private void getMarcaAgua(PDDocument document, PDPage page) {
+		try (PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND,false,false)) {
+
+			URL marcaAgua = new URL("https://storage.googleapis.com/quattrocrm-copsis/biibiic/axa/fondo_axa_carta.png");
+			BufferedImage imgMar = ImageIO.read(marcaAgua);
+			PDImageXObject pdImage2 = LosslessFactory.createFromImage(document, imgMar);
+			
+			content.drawImage(pdImage2, 0, 0, 612, 792);
+			
+		} catch (Exception e) {
+		throw new GeneralServiceException("Error:", e.getMessage());
+		}
+	}
+	
 	private boolean isEndOfPage(BaseTable table) {
         float currentY = yStart - table.getHeaderAndDataHeight();
-        System.out.println("currentY ==>"+currentY);
         return currentY <= bottomMargin;
     }
 	
