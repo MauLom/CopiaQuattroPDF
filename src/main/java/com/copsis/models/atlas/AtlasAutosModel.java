@@ -31,8 +31,7 @@ public class AtlasAutosModel {
 		.replace("Prima###Neta:", "Prima Neta:");
 		try {
 	
-			modelo.setTipo(1);
-	
+			modelo.setTipo(1);	
 			modelo.setCia(33);
 
 			inicio = contenido.indexOf("PÓLIZA");
@@ -141,10 +140,16 @@ public class AtlasAutosModel {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 
 					if (!newcontenido.split("\n")[i].contains("Coberturas")
-							&& !newcontenido.split("\n")[i].contains("Deducible")) {
+							&& !newcontenido.split("\n")[i].contains("Deducible")
+							&& !newcontenido.split("\n")[i].contains("Prima")
+							) {
 						int sp = newcontenido.split("\n")[i].split("###").length;
+					
+
 						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
+						if (sp > 2) {
 						cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].trim());
+						}
 						if (sp > 3) {
 							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[3].trim());
 						}
