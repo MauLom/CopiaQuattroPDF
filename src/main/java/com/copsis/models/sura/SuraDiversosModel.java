@@ -207,7 +207,6 @@ public class SuraDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {	
-			ex.printStackTrace();	
 			modelo.setError(
 					SuraDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
