@@ -70,8 +70,12 @@ public class SuraDiversosModel {
 				if (newcontenido.toString().split("\n")[i].contains("Hasta las")) {
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
+				
 				if (newcontenido.toString().split("\n")[i].contains("R.F.C.")) {
 					modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].trim());
+				}
+				if (newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Vigencia")) {
+					modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Vigencia")[0].replace("###", "").trim());
 				}
 			}
 
@@ -93,7 +97,14 @@ public class SuraDiversosModel {
 					ubicacion.setNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0]);
 				}
 				if (newcontenido.toString().split("\n")[i].contains("C.P.")) {
-					ubicacion.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].split("###")[0].trim());
+					List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+					if(valores.isEmpty()){
+						valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i+1]);
+					}
+					if(!valores.isEmpty()){
+						modelo.setCp(valores.get(0));
+					}
+					
 				}
 				if (newcontenido.toString().split("\n")[i].contains("CONSTRUCCIÓN")) {
 					ubicacion.setMuros(1);
@@ -195,7 +206,8 @@ public class SuraDiversosModel {
 			
 
 			return modelo;
-		} catch (Exception ex) {		
+		} catch (Exception ex) {	
+			ex.printStackTrace();	
 			modelo.setError(
 					SuraDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
