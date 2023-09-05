@@ -99,8 +99,36 @@ public class PrevemSaludModel {
             }
             modelo.setAsegurados(asegurados);
 
+
+            if (modelo.getAsegurados().isEmpty()) {
+                inicio = contenido.indexOf("LISTADO DE ASEGURADOS");
+                fin = contenido.indexOf("COBERTURAS###SUMA ASEGURADA");
+
+                newcontenido = new StringBuilder();
+                newcontenido.append(fn.extracted(inicio, fin, contenido));
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                    EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+                    if (!newcontenido.toString().split("\n")[i].contains("LISTADO DE ASEGURADOS")
+                            && !newcontenido.toString().split("\n")[i].contains("Nombres-Apellido")) {
+                        asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));
+                        asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i].split("###")[2]).booleanValue() ? 1 : 0);
+                        List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+                        if(!valores.isEmpty()){
+                         asegurado.setNacimiento(fn.formatDateMonthCadena(valores.get(0)));
+                        }
+                        asegurados.add(asegurado);
+
+                    }
+
+                }
+                modelo.setAsegurados(asegurados);
+            }
+
             inicio = contenido.indexOf("COBERTURAS ADICIONALES");
-			fin = contenido.indexOf("Días de espera 3");	
+			fin = contenido.indexOf("Días de espera 3");
+            fin = fin ==-1	? contenido.indexOf("ENDOSOS EN ESTA PÓLIZA") : fin;
+            
        
       
             newcontenido = new StringBuilder();		
