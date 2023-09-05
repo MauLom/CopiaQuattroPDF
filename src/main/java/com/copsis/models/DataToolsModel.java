@@ -869,6 +869,19 @@ public class DataToolsModel {
 		return valor;
 	}
 
+	public int pagPalabras(PDFTextStripper pdfStripper, PDDocument pdDoc,String[] palabras) throws IOException {
+		int valor = 0;
+		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+			pdfStripper.setStartPage(i);
+			pdfStripper.setEndPage(i);
+			if (pdfStripper.getText(pdDoc).contains(palabras[0]) && pdfStripper.getText(pdDoc).contains(palabras[1])) {
+				valor = i;
+				break;
+			}
+		}
+		return valor;
+	}
+
 	public String fixContenido(String contenido) {
 		String contFix = contenido.replace("\n", "\r\n");
 		String texto = "";
