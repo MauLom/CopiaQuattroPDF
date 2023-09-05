@@ -700,9 +700,7 @@
                 }
 
              
-                            if(modelo.getFormaPago() == 4 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
-                              modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
-                            }
+                            
                 // cp
                 inicio = contenido.lastIndexOf("C.P");
                 index = 3;
