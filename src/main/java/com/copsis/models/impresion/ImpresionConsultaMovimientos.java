@@ -157,13 +157,13 @@ public class ImpresionConsultaMovimientos {
 						// ENCABEZADO TABLA//
 						getEncabezadoTabla(document, page);
 						//marcaAgua
-						getMarcaAgua2(document, page);
+						getMarcaAgua(document, page);
 						acomula = false;
 						
 					}else {
 						if(x == 0) {
 							//marcaAgua
-							getMarcaAgua2(document, page);
+							getMarcaAgua(document, page);
 						}
 						table.draw();
 						yStart -= table.getHeaderAndDataHeight();
