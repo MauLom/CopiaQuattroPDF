@@ -26,6 +26,7 @@ import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionCaractulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.controllers.forms.MovimientosForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
@@ -273,5 +274,18 @@ public class ImpresionePDFController {
 		}		  
 	}
 	
-	
+	@PostMapping(value = "movimientos")
+	public ResponseEntity<CopsisResponse> movimientosBiibiic (@Valid @RequestBody MovimientosForm movimientosForm, BindingResult bindingResult) {
+		try {
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionMovimiento(movimientosForm)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
 }

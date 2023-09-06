@@ -19,6 +19,7 @@ import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionCaractulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
+import com.copsis.controllers.forms.MovimientosForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
 import com.copsis.exceptions.GeneralServiceException;
@@ -29,6 +30,7 @@ import com.copsis.models.impresion.ImpresionCertificadoAfirme;
 import com.copsis.models.impresion.ImpresionCertificadoArgos;
 import com.copsis.models.impresion.ImpresionCertificadoChubbPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
+import com.copsis.models.impresion.ImpresionConsultaMovimientos;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionPolizaAutosInter;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
@@ -278,5 +280,15 @@ public class ImpresionService {
         }
     }
 
+     public byte[] impresionMovimiento(MovimientosForm movimientosForm) {
+         try {
+        	 ImpresionConsultaMovimientos impresionConsultaMovimientos = new ImpresionConsultaMovimientos();
+             return impresionConsultaMovimientos.buildPDF(movimientosForm);
+         } catch (ValidationServiceException e) {
+             throw e;
+         } catch (Exception ex) {
+             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+         }
+     }
 
 }
