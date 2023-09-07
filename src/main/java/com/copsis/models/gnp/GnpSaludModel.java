@@ -362,8 +362,10 @@ public class GnpSaludModel {
 					     modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(
 	                                dato.split("Cesión de Comisión")[1].replace("0.00.", "00.").replace("−", "").replace("###", ""))));
 					 }else {
-					     modelo.setAjusteUno(fn.castBigDecimal(fn.preparaPrimas(
-	                                dato.split("Cesión de Comisión")[1].replace("−", "").replace("###", "")))); 
+						List<String> valores = fn.obtenerListNumeros( dato.split("Cesión de Comisión")[1].replace("−", "-").replace("###", ""));
+						if(!valores.isEmpty()){
+						  modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(valores.get(0))));                 
+						}
 					 }
 						
 					}
