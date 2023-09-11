@@ -256,7 +256,7 @@ public class ImpresionCaractulaAutos {
                     }
                     
                     yStart -=table.getHeaderAndDataHeight()+2;
-                    table = new BaseTable(yStart, yStart, bottomMargin, 290, margin, document, page, true, true);
+                    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 100,"Observaciones", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray); 
                     table.draw();

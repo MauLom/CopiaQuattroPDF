@@ -1,30 +1,30 @@
- package com.copsis.models.impresionCaractula ;
+package com.copsis.models.impresionCaractula ;
 
     import java.awt.Color ;
-import java.io.ByteArrayOutputStream ;
-import java.io.File ;
-import java.util.List ;
+    import java.io.ByteArrayOutputStream ;
+    import java.io.File ;
+    import java.util.List ;
 
-import org.apache.pdfbox.pdmodel.PDDocument ;
-import org.apache.pdfbox.pdmodel.PDPage ;
-import org.apache.pdfbox.pdmodel.PDPageContentStream ;
+    import org.apache.pdfbox.pdmodel.PDDocument ;
+    import org.apache.pdfbox.pdmodel.PDPage ;
+    import org.apache.pdfbox.pdmodel.PDPageContentStream ;
 
-import com.copsis.clients.projections.CoberturaProjection;
-import com.copsis.clients.projections.InvolucradosProjection ;
-import com.copsis.clients.projections.SocioDirecProjection ;
-import com.copsis.controllers.forms.ImpresionCaractulaForm ;
-import com.copsis.exceptions.GeneralServiceException ;
-import com.copsis.models.Tabla.BaseTable ;
-import com.copsis.models.Tabla.ImageUtils ;
-import com.copsis.models.Tabla.Row ;
-import com.copsis.models.Tabla.Sio4CommunsPdf ;
+    import com.copsis.clients.projections.CoberturaProjection ;
+    import com.copsis.clients.projections.InvolucradosProjection ;
+    import com.copsis.clients.projections.SocioDirecProjection ;
+    import com.copsis.controllers.forms.ImpresionCaractulaForm ;
+    import com.copsis.exceptions.GeneralServiceException ;
+    import com.copsis.models.Tabla.BaseTable ;
+    import com.copsis.models.Tabla.ImageUtils ;
+    import com.copsis.models.Tabla.Row ;
+    import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
     public class ImpresionCaractulaSalud {
 
         private Color blue = new Color(40, 76, 113);
         private Color black = new Color(0, 0, 0);
         private Color gray = new Color(229, 234, 237);
-        private float yStartNewPage = 780, yStart = 780, bottomMargin = 30, fullWidth = 590, margin = 10, ytexto = 0;
+        private float yStartNewPage = 780, yStart = 780, bottomMargin = 30, fullWidth = 590, margin = 10, posionY = 0, posionT = 0;
         private float pivote;
         private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
         private boolean drawLines = true;
@@ -148,68 +148,125 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         }
 
                         if (yStart < 130) {
-                             pivote = yStart;
+                            pivote = yStart;
                             this.setPrimas(document, page, caractula, 600f);
-                           
+
                         } else {
                             pivote = yStart;
-                            this.setPrimas(document, page, caractula, yStart);                           
+                            this.setPrimas(document, page, caractula, yStart);
                         }
 
-                        if (yStart < 210) {                          
-                            this.setPlan(document, page, caractula, 600f);                           
-                        } else {                           
-                            this.setPlan(document, page, caractula, yStart);                            
+                        if (yStart < 210) {
+                            this.setPlan(document, page, caractula, 600f);
+                        } else {
+                            this.setPlan(document, page, caractula, yStart);
                         }
 
+                        posionY = yStart;
                         yStart = pivote;
-                        if(yStart < 150){}else{
+                        if (yStart < 150) {
+                        } else {
                             table = new BaseTable(yStart, yStart, bottomMargin, 350, 240, document, page, true, true);
-                            baseRow = communsPdf.setRow(table,15);
-                            communsPdf.setCell(baseRow, 100,"Paquete: ", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);                 
-                            baseRow = communsPdf.setRow(table,15);
-                            communsPdf.setCell(baseRow, 40,"Coberturas", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                            communsPdf.setCell(baseRow, 27,"Suma Asegurada", blue, true, "R", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                            communsPdf.setCell(baseRow, 33,"Deducible", blue, true, "R", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                               
+                            baseRow = communsPdf.setRow(table, 15);
+                            communsPdf.setCell(baseRow, 100, "Paquete: ", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                            baseRow = communsPdf.setRow(table, 15);
+                            communsPdf.setCell(baseRow, 40, "Coberturas", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Suma Asegurada", blue, true, "R", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                            communsPdf.setCell(baseRow, 33, "Deducible", blue, true, "R", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                             table.draw();
-        
-                            yStart -=table.getHeaderAndDataHeight()+2;
 
-                               List<CoberturaProjection> cobertura = caractula.getCoberturas();
-                    int x=0;
-                     while( x < cobertura.size() ){
-                        acumula = true;
-                        table = new BaseTable(yStart, yStart, bottomMargin, 350, 240, document, page, true, true);
-                        if (x % 2 == 0) {
-                            drawLines = true;
+                            yStart -= table.getHeaderAndDataHeight() + 2;
+
+                            List<CoberturaProjection> cobertura = caractula.getCoberturas();
+                            if (!cobertura.isEmpty()) {
+                                int x = 0;
+                                while (x < cobertura.size()) {
+                                    acumula = true;
+                                    table = new BaseTable(yStart, yStart, bottomMargin, 350, 240, document, page, true, true);
+                                    if (x % 2 == 0) {
+                                        drawLines = true;
+                                    } else {
+                                        drawLines = false;
+                                    }
+                                    baseRow = communsPdf.setRow(table, 20);
+                                    communsPdf.setCell(baseRow, 40, cobertura.get(x).getNombres(), blue, false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), (drawLines ? gray : null));
+                                    communsPdf.setCell(baseRow, 27, cobertura.get(x).getSa(), blue, false, "R", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), (drawLines ? gray : null));
+                                    communsPdf.setCell(baseRow, 33, cobertura.get(x).getDeducible(), blue, false, "C", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), (drawLines ? gray : null));
+                                    if (isEndOfPage(table)) {
+                                        table.getRows().remove(table.getRows().size() - 1);
+                                        table.draw();
+                                        page = new PDPage();
+                                        document.addPage(page);
+                                        this.setEncabezado(document, page, caractula);
+                                        acumula = false;
+                                        rPagina = true;
+                                    } else {
+
+                                        table.draw();
+                                        yStart -= table.getHeaderAndDataHeight();
+                                    }
+                                    if (acumula) {
+                                        x++;
+                                    }
+                                    if (x > 80) {
+                                        table.draw();
+                                        break;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        System.out.println( rPagina +"--- "+ yStart +"--->" + posionY);
+                        if (rPagina) {
+                            yStart = yStart;
                         } else {
-                            drawLines = false;
+                            if (yStart < posionY) {
+                                yStart = yStart;
+                            } else {
+                                yStart = posionY;
+                            }
+    
                         }
-                        baseRow = communsPdf.setRow(table,20);
-                        communsPdf.setCell(baseRow, 40,cobertura.get(x).getNombres(), blue, false, "L", 8,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),  (drawLines ? gray : null)); 
-                        communsPdf.setCell(baseRow, 27,cobertura.get(x).getSa(), blue, false, "L", 8,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), (drawLines ? gray : null)); 
-                        communsPdf.setCell(baseRow, 33,cobertura.get(x).getDeducible(), blue, false, "C", 8,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),  (drawLines ? gray : null));                                    
-                        if (isEndOfPage(table)) {
-                            table.getRows().remove(table.getRows().size() - 1);
-                            table.draw();
-                            page = new PDPage();
-                            document.addPage(page);
-                            this.setEncabezado(document, page,caractula);
-                            acumula = false;
-                            rPagina = true;                        
-                        } else {
-                            
-                            table.draw();
-                            yStart -= table.getHeaderAndDataHeight();
-                        }
-                        if (acumula) {
-                            x++;
-                        }
-                        if (x > 80) {                           
-                            table.draw();
-                            break;
-                        }
-                    }
+
+                        yStart -= table.getHeaderAndDataHeight();
+                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table, 15);
+                        communsPdf.setCell(baseRow, 100, "Observaciones", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                        table.draw();
+
+                        if (caractula.getContrantante() != null && caractula.getContrantante().getDescripcion().length() > 0) {
+
+                            String dato = Sio4CommunsPdf.eliminaHtmlTags3(caractula.getContrantante().getDescripcion());
+                            String datos[] = dato.split("<br>|<br/>|</br>");
+
+                            int y = 0;
+                            while (y < datos.length) {
+                                acumula2 = true;
+                                table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                                baseRow = communsPdf.setRow(table, 13);
+                                communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(datos[y]), black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                                if (isEndOfPage(table)) {
+                                    table.getRows().remove(table.getRows().size() - 1);
+                                    table.draw();
+                                    page = new PDPage();
+                                    document.addPage(page);
+                                    this.setEncabezado(document, page, caractula);
+                                    acumula2 = false;
+                                } else {
+                                    table.remoBordes(true, 1);
+                                    table.draw();
+                                    yStart -= table.getHeaderAndDataHeight();
+                                }
+                                if (acumula2) {
+                                    y++;
+                                }
+                                if (y > 100) {
+                                    table.draw();
+                                    break;
+
+                                }
+                            }
                         }
 
                         output = new ByteArrayOutputStream();
@@ -409,8 +466,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                 table.remoBordes(true, 1);
                 table.draw();
 
-                ystart -=table.getHeaderAndDataHeight();
-
+                ystart -= table.getHeaderAndDataHeight();
             } catch (Exception ex) {
                 throw new GeneralServiceException("00001", "Ocurrio un error en el servicio setPrimas: " + ex.getMessage());
             }
