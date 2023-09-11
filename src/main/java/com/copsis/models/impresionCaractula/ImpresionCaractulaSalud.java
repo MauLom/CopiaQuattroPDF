@@ -217,7 +217,7 @@ package com.copsis.models.impresionCaractula ;
 
                         }
 
-                        System.out.println( rPagina +"--- "+ yStart +"--->" + posionY);
+                       
                         if (rPagina) {
                             yStart = yStart;
                         } else {
@@ -271,7 +271,7 @@ package com.copsis.models.impresionCaractula ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/SALUDV2.pdf"));
+                       // document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/SALUDV2.pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
