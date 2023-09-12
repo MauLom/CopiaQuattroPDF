@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.copsis.clients.projections.AseguradosProjection;
 import com.copsis.clients.projections.ClienteExtraCaratProjection;
+import com.copsis.clients.projections.CoberturaBasicaProjection;
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.ContratanteCaraProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
@@ -27,6 +28,7 @@ public class ImpresionCaractulaForm {
     private VehiculoProjection vehiculo;
     private SocioDirecProjection socio;
     private List<AseguradosProjection> asegurados;
+    private CoberturaBasicaProjection  coberturaBasica;
     
 
 }
