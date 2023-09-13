@@ -372,7 +372,7 @@ public class AxaSaludModel {
 								fechaNacimiento += siguienteSeccion;					
 							}
 						}
-						//System.out.println(fechaNacimiento);
+					
 						if(fechaNacimiento.split("-").length == 3) {
 							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento));
 						}
