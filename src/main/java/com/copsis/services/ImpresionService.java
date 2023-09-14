@@ -16,7 +16,7 @@ import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
-import com.copsis.controllers.forms.ImpresionCaractulaForm;
+import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.controllers.forms.MovimientosForm;
@@ -41,7 +41,8 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
-import com.copsis.models.impresionCaractula.ImpresionCaractulaAutos;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -267,10 +268,22 @@ public class ImpresionService {
     }
 
 
-     public byte[] impresionCaractulaAutos(ImpresionCaractulaForm  impresionCaractulaForm){
+     public byte[] impresionCaratulaAutos(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaractulaAutos().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaAutos().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+     public byte[] impresionCaratulaSalud(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaSalud().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
