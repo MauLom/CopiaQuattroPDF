@@ -23,7 +23,7 @@ import com.copsis.clients.projections.PolizaAutosProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
-import com.copsis.controllers.forms.ImpresionCaractulaForm;
+import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -258,7 +258,7 @@ public class ImpresionePDFController {
 	
 
 	@PostMapping(value = "caratulaAutos")
-	public ResponseEntity<CopsisResponse> impresionCaratulaAutos(@Valid @RequestBody ImpresionCaractulaForm  impresionCaratulaForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionCaratulaAutos(@Valid @RequestBody ImpresionCaratulaForm  impresionCaratulaForm, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {
@@ -274,7 +274,7 @@ public class ImpresionePDFController {
 	}
 
 	@PostMapping(value = "caratulaSalud")
-	public ResponseEntity<CopsisResponse> impresionCaratulaSalud(@Valid @RequestBody ImpresionCaractulaForm  impresionCaratulaForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionCaratulaSalud(@Valid @RequestBody ImpresionCaratulaForm  impresionCaratulaForm, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {

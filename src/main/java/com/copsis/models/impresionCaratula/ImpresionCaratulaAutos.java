@@ -13,7 +13,7 @@ import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
 import com.copsis.clients.projections.SocioDirecProjection;
 import com.copsis.clients.projections.VehiculoProjection;
-import com.copsis.controllers.forms.ImpresionCaractulaForm;
+import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
@@ -31,7 +31,7 @@ public class ImpresionCaratulaAutos {
     private boolean acumula2;
     private boolean rPagina = false;
 
-    public byte[] buildPDF(ImpresionCaractulaForm caractula) {
+    public byte[] buildPDF(ImpresionCaratulaForm caractula) {
         try {
             ByteArrayOutputStream output;
             try (PDDocument document = new PDDocument()) {
@@ -315,7 +315,7 @@ public class ImpresionCaratulaAutos {
 
     }
 
-    private void setEncabezado(PDDocument document, PDPage page,ImpresionCaractulaForm caratula) {
+    private void setEncabezado(PDDocument document, PDPage page,ImpresionCaratulaForm caratula) {
         try (PDPageContentStream conten = new PDPageContentStream(document,page)){
             yStart = 780;
             BaseTable table;

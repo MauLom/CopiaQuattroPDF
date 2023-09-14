@@ -12,7 +12,7 @@ package com.copsis.models.impresionCaratula ;
     import com.copsis.clients.projections.CoberturaProjection ;
     import com.copsis.clients.projections.InvolucradosProjection ;
     import com.copsis.clients.projections.SocioDirecProjection ;
-    import com.copsis.controllers.forms.ImpresionCaractulaForm ;
+    import com.copsis.controllers.forms.ImpresionCaratulaForm ;
     import com.copsis.exceptions.GeneralServiceException ;
     import com.copsis.models.Tabla.BaseTable ;
     import com.copsis.models.Tabla.ImageUtils ;
@@ -32,7 +32,7 @@ package com.copsis.models.impresionCaratula ;
         private boolean acumula2;
         private boolean rPagina = false;
 
-        public byte[] buildPDF(ImpresionCaractulaForm caractula) {
+        public byte[] buildPDF(ImpresionCaratulaForm caractula) {
             try {
                 ByteArrayOutputStream output;
                 try ( PDDocument document = new PDDocument()) {
@@ -289,7 +289,7 @@ package com.copsis.models.impresionCaratula ;
 
         }
 
-        private void setEncabezado(PDDocument document, PDPage page, ImpresionCaractulaForm caratula) {
+        private void setEncabezado(PDDocument document, PDPage page, ImpresionCaratulaForm caratula) {
             try ( PDPageContentStream conten = new PDPageContentStream(document, page)) {
                 yStart = 780;
                 BaseTable table;
@@ -347,7 +347,7 @@ package com.copsis.models.impresionCaratula ;
             }
         }
 
-        private float setPrimas(PDDocument document, PDPage page, ImpresionCaractulaForm caratula, Float ystart) {
+        private float setPrimas(PDDocument document, PDPage page, ImpresionCaratulaForm caratula, Float ystart) {
             try {
                 BaseTable table;
                 Row<PDPage> baseRow;
@@ -385,7 +385,7 @@ package com.copsis.models.impresionCaratula ;
 
         }
 
-        private float  setPlan(PDDocument document, PDPage page, ImpresionCaractulaForm caratula, Float ystart) {
+        private float  setPlan(PDDocument document, PDPage page, ImpresionCaratulaForm caratula, Float ystart) {
                
 
                 try {

@@ -16,7 +16,7 @@ import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
-import com.copsis.controllers.forms.ImpresionCaractulaForm;
+import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
@@ -266,10 +266,10 @@ public class ImpresionService {
     }
 
 
-     public byte[] impresionCaratulaAutos(ImpresionCaractulaForm  impresionCaractulaForm){
+     public byte[] impresionCaratulaAutos(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaratulaAutos().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaAutos().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
@@ -278,10 +278,10 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-     public byte[] impresionCaratulaSalud(ImpresionCaractulaForm  impresionCaractulaForm){
+     public byte[] impresionCaratulaSalud(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaratulaSalud().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaSalud().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
