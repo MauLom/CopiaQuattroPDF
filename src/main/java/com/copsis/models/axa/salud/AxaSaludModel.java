@@ -304,9 +304,13 @@ public class AxaSaludModel {
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
-				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###").replace("SOCORROTITULAR", "SOCORRRO TITULAR");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###")
+				.replace("SOCORROTITULAR", "SOCORRRO TITULAR").replace("M A Y -", "MAY-")
+				.replace("E N E-", "ENE-").replace("M A ###R-", "MAR-")
+				.replace("J U N ###-", "JUN-").replace("S E ###P-", "SEP-");
 				String[] arrContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrContenido.length; i++) {
+			
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				  if(arrContenido[i].contains("-")) {	
 					  if(arrContenido[i].split("###").length >2 && arrContenido[i].split("###").length<7) {
@@ -337,6 +341,7 @@ public class AxaSaludModel {
 						  }
 						  
 					  }
+					 
 			  switch (arrContenido[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((arrContenido[i].split("###")[0].split(",")[1] +" " + arrContenido[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
@@ -357,6 +362,7 @@ public class AxaSaludModel {
 						asegurado.setSexo(fn.sexo(arrContenido[i].split("###")[2].trim()).booleanValue() ? 1 : 0);
 
 						String fechaNacimiento = "";
+					
 						if(arrContenido[i].split("###")[3].replace(" ", "").split("-").length == 3) {
 							fechaNacimiento = arrContenido[i].split("###")[3].replace(" ", "");
 						}else if(arrContenido[i].split("###")[2].replace(" ", "").split("-").length == 3) {
@@ -366,6 +372,7 @@ public class AxaSaludModel {
 								fechaNacimiento += siguienteSeccion;					
 							}
 						}
+					
 						if(fechaNacimiento.split("-").length == 3) {
 							asegurado.setNacimiento(fn.formatDateMonthCadena(fechaNacimiento));
 						}
