@@ -305,7 +305,7 @@ public class ImpresionePDFController {
 		}		  
 	}
 
-	@PostMapping(value = "caractulaVida")
+	@PostMapping(value = "caratulaVida")
 	public ResponseEntity<CopsisResponse> impresionCaractulaVida(@Valid @RequestBody ImpresionCaratulaForm  impresionCaractulaForm, BindingResult bindingResult) {
 		try {
 			  

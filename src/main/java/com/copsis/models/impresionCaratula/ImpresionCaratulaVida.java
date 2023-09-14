@@ -32,7 +32,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
         private boolean acumula2;
         private boolean rPagina;
 
-        public byte[] buildPDF(ImpresionCaratulaForm caractula) {
+        public byte[] buildPDF(ImpresionCaratulaForm caratula) {
             try {
                 ByteArrayOutputStream output;
                 try ( PDDocument document = new PDDocument()) {
@@ -42,40 +42,40 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         BaseTable table;
                         Row<PDPage> baseRow;
 
-                        this.setEncabezado(document, page, caractula);
+                        this.setEncabezado(document, page, caratula);
                         table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table);
                         communsPdf.setCell(baseRow, 58, "Movimiento", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                         communsPdf.setCell(baseRow, 42, "Contratante", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCell(baseRow, 58, caractula.getContrantante().getTipoPoliza(), blue, true, "L", 13, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caractula.getContrantante().getContrantante(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 58, caratula.getContrantante().getTipoPoliza(), blue, true, "L", 13, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getContrantante(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Vigencia:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getVigencia(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caractula.getContrantante().getRfc(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getVigencia(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getRfc(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Emisión:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getFechaEmision(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caractula.getContrantante().getCteCalle(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getFechaEmision(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getCteCalle(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Subramo::", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getSubRamo(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caractula.getContrantante().getCteColonia(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getSubRamo(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getCteColonia(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Forma de Pago:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getFormaPago(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getFormaPago(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 9, "CURP:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 30, caractula.getClientExtra() != null ? caractula.getClientExtra().getCurp() : "", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 30, caratula.getClientExtra() != null ? caratula.getClientExtra().getCurp() : "", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Moneda:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getMoneda(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getMoneda(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 7, "Email:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 30, caractula.getClientExtra() != null ? caractula.getClientExtra().getEmail() : "", blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 30, caratula.getClientExtra() != null ? caratula.getClientExtra().getEmail() : "", blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 58, "", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 10, "Teléfono:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 30, caractula.getClientExtra() != null ? caractula.getClientExtra().getTelefono() : "", blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 30, caratula.getClientExtra() != null ? caratula.getClientExtra().getTelefono() : "", blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         table.remoBordes(true, 1);
                         table.draw();
 
@@ -86,11 +86,11 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 42, "Grupo:", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Aseguradora:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getAseguradora(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caractula.getContrantante().getGrupo(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getAseguradora(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getGrupo(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Clave:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 44, caractula.getContrantante().getClaveAngente(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 44, caratula.getContrantante().getClaveAngente(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         table.remoBordes(true, 1);
                         table.draw();
 
@@ -124,7 +124,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         table.remoBordes(true, 1);
                         table.draw();
                         yStart -= table.getHeaderAndDataHeight();
-                        List<BeneficiarioProjection> beneficiarios = caractula.getBeneficiarios();
+                        List<BeneficiarioProjection> beneficiarios = caratula.getBeneficiarios();
                         int x = 0;
                         while (x < beneficiarios.size()) {
                             acumula = true;
@@ -139,7 +139,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                                 table.draw();
                                 page = new PDPage();
                                 document.addPage(page);
-                                this.setEncabezado(document, page, caractula);
+                                this.setEncabezado(document, page, caratula);
                                 acumula = false;
                             } else {
                                 table.remoBordes(true, 1);
@@ -159,7 +159,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         
                         pivote = yStart;
-                        List<InvolucradosProjection> involucrados = caractula.getInvolucrados();
+                        List<InvolucradosProjection> involucrados = caratula.getInvolucrados();
 
                         table = new BaseTable(yStart, yStart, bottomMargin, 285, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table);
@@ -222,7 +222,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         } else {
                             table = new BaseTable(yStart, yStart, bottomMargin, 285, 315, document, page, true, true);
                             baseRow = communsPdf.setRow(table, 15);
-                            communsPdf.setCell(baseRow, 100, "Paquete:" + "", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                            communsPdf.setCell(baseRow, 100, "Paquete:"  + caratula.getContrantante().getPlan() , black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                             baseRow = communsPdf.setRow(table, 15);
                             communsPdf.setCell(baseRow, 67, "Coberturas", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                             communsPdf.setCell(baseRow, 33, "Suma Asegurada", blue, true, "R", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);                            
@@ -231,7 +231,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                             yStart -= table.getHeaderAndDataHeight() + 2;
                           
 
-                            List<CoberturaProjection> cobertura = caractula.getCoberturas();
+                            List<CoberturaProjection> cobertura = caratula.getCoberturas();
                             if (!cobertura.isEmpty()) {
                                 int y = 0;
                                 while (y < cobertura.size()) {
@@ -251,7 +251,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                                         table.draw();
                                         page = new PDPage();
                                         document.addPage(page);
-                                        this.setEncabezado(document, page, caractula);
+                                        this.setEncabezado(document, page, caratula);
                                         acumula = false;
                                         rPagina=true;
                                        
@@ -273,7 +273,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                             }
                         }
 
-                        System.out.println( yStart +" "+ vPosionY);
+             
                         if (rPagina) {
                             yStart = yStart;
                         } else {
@@ -290,9 +290,9 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 100, "Observaciones", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                         table.draw();
 
-                        if (caractula.getContrantante() != null && caractula.getContrantante().getDescripcion().length() > 0) {
+                        if (caratula.getContrantante() != null && caratula.getContrantante().getDescripcion().length() > 0) {
 
-                            String dato = Sio4CommunsPdf.eliminaHtmlTags3(caractula.getContrantante().getDescripcion());
+                            String dato = Sio4CommunsPdf.eliminaHtmlTags3(caratula.getContrantante().getDescripcion());
                             String datos[] = dato.split("<br>|<br/>|</br>");
 
                             int y = 0;
@@ -306,7 +306,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                                     table.draw();
                                     page = new PDPage();
                                     document.addPage(page);
-                                    this.setEncabezado(document, page, caractula);
+                                    this.setEncabezado(document, page, caratula);
                                     acumula2 = false;
                                 } else {
                                     table.remoBordes(true, 1);
@@ -326,7 +326,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/vida.pdf"));
+                        //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONcaratula/vida.pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
@@ -338,7 +338,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new GeneralServiceException("00001",
-                        "Ocurrio un error en el servicio ImpresionCaractulaAutos: " + ex.getMessage());
+                        "Ocurrio un error en el servicio ImpresioncaratulaAutos: " + ex.getMessage());
             }
         }
 
