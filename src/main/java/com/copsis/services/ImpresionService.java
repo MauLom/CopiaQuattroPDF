@@ -39,8 +39,8 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
-import com.copsis.models.impresionCaractula.ImpresionCaractulaAutos;
-import com.copsis.models.impresionCaractula.ImpresionCaractulaSalud;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -266,10 +266,10 @@ public class ImpresionService {
     }
 
 
-     public byte[] impresionCaractulaAutos(ImpresionCaractulaForm  impresionCaractulaForm){
+     public byte[] impresionCaratulaAutos(ImpresionCaractulaForm  impresionCaractulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaractulaAutos().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaAutos().buildPDF(impresionCaractulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
@@ -278,10 +278,10 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-     public byte[] impresionCaractulaSalud(ImpresionCaractulaForm  impresionCaractulaForm){
+     public byte[] impresionCaratulaSalud(ImpresionCaractulaForm  impresionCaractulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaractulaSalud().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaSalud().buildPDF(impresionCaractulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {

@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(Include.NON_NULL)
-public class ImpresionCaractulaForm {
+public class ImpresionCaratulaForm {
    
     private ContratanteCaraProjection contrantante;
     private ClienteExtraCaratProjection clientExtra;
