@@ -1,26 +1,26 @@
-package com.copsis.models.impresionCaractula ;
+package com.copsis.models.impresionCaratula ;
 
     import java.awt.Color ;
-    import java.io.ByteArrayOutputStream ;
-    import java.io.File ;
-    import java.util.List ;
+import java.io.ByteArrayOutputStream ;
+import java.io.File ;
+import java.util.List ;
 
-    import org.apache.pdfbox.pdmodel.PDDocument ;
-    import org.apache.pdfbox.pdmodel.PDPage ;
-    import org.apache.pdfbox.pdmodel.PDPageContentStream ;
+import org.apache.pdfbox.pdmodel.PDDocument ;
+import org.apache.pdfbox.pdmodel.PDPage ;
+import org.apache.pdfbox.pdmodel.PDPageContentStream ;
 
-    import com.copsis.clients.projections.BeneficiarioProjection ;
+import com.copsis.clients.projections.BeneficiarioProjection ;
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.InvolucradosProjection ;
-    import com.copsis.clients.projections.SocioDirecProjection ;
-    import com.copsis.controllers.forms.ImpresionCaractulaForm ;
-    import com.copsis.exceptions.GeneralServiceException ;
-    import com.copsis.models.Tabla.BaseTable ;
-    import com.copsis.models.Tabla.ImageUtils ;
-    import com.copsis.models.Tabla.Row ;
-    import com.copsis.models.Tabla.Sio4CommunsPdf ;
+import com.copsis.clients.projections.SocioDirecProjection ;
+import com.copsis.controllers.forms.ImpresionCaratulaForm ;
+import com.copsis.exceptions.GeneralServiceException ;
+import com.copsis.models.Tabla.BaseTable ;
+import com.copsis.models.Tabla.ImageUtils ;
+import com.copsis.models.Tabla.Row ;
+import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
-    public class ImpresionCaractulaVida {
+    public class ImpresionCaratulaVida {
 
         private Color blue = new Color(40, 76, 113);
         private Color black = new Color(0, 0, 0);
@@ -32,7 +32,7 @@ import com.copsis.clients.projections.InvolucradosProjection ;
         private boolean acumula2;
         private boolean rPagina;
 
-        public byte[] buildPDF(ImpresionCaractulaForm caractula) {
+        public byte[] buildPDF(ImpresionCaratulaForm caractula) {
             try {
                 ByteArrayOutputStream output;
                 try ( PDDocument document = new PDDocument()) {
@@ -342,7 +342,7 @@ import com.copsis.clients.projections.InvolucradosProjection ;
             }
         }
 
-        private void setEncabezado(PDDocument document, PDPage page, ImpresionCaractulaForm caratula) {
+        private void setEncabezado(PDDocument document, PDPage page, ImpresionCaratulaForm caratula) {
             try ( PDPageContentStream conten = new PDPageContentStream(document, page)) {
                 yStart = 780;
                 BaseTable table;

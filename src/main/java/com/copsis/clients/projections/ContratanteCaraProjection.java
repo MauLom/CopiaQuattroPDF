@@ -25,4 +25,10 @@ public class ContratanteCaraProjection {
     private String firmna;
     private String tipoPoliza;
     private String  nombreBeneficiario;
+    private String  plan;
+    private	String  primaNeta;
+    private	String  iva;
+    private	String  derecho;
+    private	String  recargo;
+    private	String  primaTotal;
 }

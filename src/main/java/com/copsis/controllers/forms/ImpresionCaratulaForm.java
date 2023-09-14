@@ -3,7 +3,9 @@ package com.copsis.controllers.forms;
 import java.util.List;
 
 import com.copsis.clients.projections.BeneficiarioProjection;
+import com.copsis.clients.projections.AseguradosProjection;
 import com.copsis.clients.projections.ClienteExtraCaratProjection;
+import com.copsis.clients.projections.CoberturaBasicaProjection;
 import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.ContratanteCaraProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
@@ -18,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(Include.NON_NULL)
-public class ImpresionCaractulaForm {
+public class ImpresionCaratulaForm {
    
     private ContratanteCaraProjection contrantante;
     private ClienteExtraCaratProjection clientExtra;
@@ -27,5 +29,7 @@ public class ImpresionCaractulaForm {
     private VehiculoProjection vehiculo;
     private SocioDirecProjection socio;
     private List<BeneficiarioProjection> beneficiarios;
+    private List<AseguradosProjection> asegurados;
+    private CoberturaBasicaProjection  coberturaBasica;
     
 }

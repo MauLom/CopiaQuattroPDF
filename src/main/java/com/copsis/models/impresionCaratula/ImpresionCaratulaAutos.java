@@ -1,4 +1,4 @@
-package com.copsis.models.impresionCaractula;
+package com.copsis.models.impresionCaratula;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -13,14 +13,14 @@ import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
 import com.copsis.clients.projections.SocioDirecProjection;
 import com.copsis.clients.projections.VehiculoProjection;
-import com.copsis.controllers.forms.ImpresionCaractulaForm;
+import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-public class ImpresionCaractulaAutos {
+public class ImpresionCaratulaAutos {
     private Color blue = new Color(40, 76, 113);
     private Color black = new Color(0, 0, 0);
     private Color gray = new Color(229, 234, 237);
@@ -31,7 +31,7 @@ public class ImpresionCaractulaAutos {
     private boolean acumula2;
     private boolean rPagina = false;
 
-    public byte[] buildPDF(ImpresionCaractulaForm caractula) {
+    public byte[] buildPDF(ImpresionCaratulaForm caractula) {
         try {
             ByteArrayOutputStream output;
             try (PDDocument document = new PDDocument()) {
@@ -256,7 +256,7 @@ public class ImpresionCaractulaAutos {
                     }
                     
                     yStart -=table.getHeaderAndDataHeight()+2;
-                    table = new BaseTable(yStart, yStart, bottomMargin, 290, margin, document, page, true, true);
+                    table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table,15);
                     communsPdf.setCell(baseRow, 100,"Observaciones", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray); 
                     table.draw();
@@ -315,7 +315,7 @@ public class ImpresionCaractulaAutos {
 
     }
 
-    private void setEncabezado(PDDocument document, PDPage page,ImpresionCaractulaForm caratula) {
+    private void setEncabezado(PDDocument document, PDPage page,ImpresionCaratulaForm caratula) {
         try (PDPageContentStream conten = new PDPageContentStream(document,page)){
             yStart = 780;
             BaseTable table;
