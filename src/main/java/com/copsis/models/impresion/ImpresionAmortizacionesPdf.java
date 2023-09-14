@@ -27,6 +27,7 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.LineStyle;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
+import com.copsis.models.cias.Catalogo;
 import com.copsis.utils.ErrorCode;
 import com.copsis.utils.FormatoFecha;
 
@@ -48,6 +49,7 @@ public class ImpresionAmortizacionesPdf {
 	private float yStart = 670;
 	private float bottomMargin = 26;
 	private float fullWidth = 564;
+    private float psoionY = 0;
 	float height = 0;
 	float heightBorder = 0;
 	private final Color bgColor = new Color(255, 255, 255, 0 );
@@ -128,6 +130,8 @@ public class ImpresionAmortizacionesPdf {
 						getEncabezadoPdf(document, page , impresionForm);
 						// ENCABEZADO TABLA//
 						yStart =	getEncabezadoTabla(document, page);
+				
+						psoionY =yStart-2;
 						
 						Integer x = 0;
 						boolean acomula = false;
@@ -159,8 +163,8 @@ public class ImpresionAmortizacionesPdf {
 								getEncabezadoTabla(document, page);
 							
 								// BORDE DEL CUERPO DE LA TABLA EN NUEVA PAGINA
-								table2 = new BaseTable(510, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-								baseRow2 = communsPdf.setRow(table2, 480);
+								table2 = new BaseTable(psoionY, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+								baseRow2 = communsPdf.setRow(table2, 460);
 								communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 								table2.draw();
 								//marcaAgua
@@ -171,8 +175,8 @@ public class ImpresionAmortizacionesPdf {
 							} else {
 								if(x == 0) {
 									// BORDE DEL CUERPO DE TABLA PRIMER PAGINA
-									table2 = new BaseTable(510, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
-									baseRow2 = communsPdf.setRow(table2, 480);
+									table2 = new BaseTable(psoionY, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);
+									baseRow2 = communsPdf.setRow(table2, 460);
 									communsPdf.setCell(baseRow2,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 									table2.draw();
 									//marcaAgua
@@ -211,7 +215,7 @@ public class ImpresionAmortizacionesPdf {
 						}
 						output = new ByteArrayOutputStream();
 						document.save(output);
-						// document.save(new File("/home/desarrollo1/Documents/PDF/AMORTIZACION/archivo.pdf"));
+					   // document.save(new File("/home/aalbanil/Vídeos/amortizacion.pdf"));
 						return output.toByteArray();
 				}				
 				
@@ -330,7 +334,7 @@ public class ImpresionAmortizacionesPdf {
 			dateString = dateNew[0] + " de " + dateNew[1] + " del " + dateNew[2];
 	  
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, true,true);			
-			baseRow = communsPdf.setRow(table, 185);
+			baseRow = communsPdf.setRow(table, 195);
 			communsPdf.setCell(baseRow,100, "", black, false, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			table.draw();
 			
@@ -348,21 +352,52 @@ public class ImpresionAmortizacionesPdf {
 			// communsPdf.setCell(baseRow,20, "Costo por Admon de Poliza de Seguros:", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 			// communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getDerecho()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 
+			Catalogo asegurdora = new Catalogo();
+
+
+
+			baseRow = communsPdf.setRow(table, 20);
+			communsPdf.setCell(baseRow,15, "Aseguradora:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,15, asegurdora.catalgo(impresionForm.getAseguradoraID()) , black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,21, "Deducible", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,12, impresionForm.getDeducible().isEmpty()  ?" ": impresionForm.getDeducible().replace("%", "") +" %" , black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,20, "Codigo Postal", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,11,impresionForm.getCp(), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
+
+
 			baseRow = communsPdf.setRow(table, 20);
 			communsPdf.setCell(baseRow,15, "Valor:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
 			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getValor()), black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,21, "Seguro daños y costo administración:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-			communsPdf.setCell(baseRow,12,  formatoDinero(impresionForm.getMontoSegurosDanos()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,20, "Seguro de vida con desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getMontoSeguroVida()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
-			
+	        communsPdf.setCell(baseRow,21, "% Enganche", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,12,  formatoDinero(impresionForm.getEngache()) +" %", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+		    communsPdf.setCell(baseRow,19, "Importe enganche:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,13,  formatoDinero(impresionForm.getMontoSeguroEngache()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			baseRow = communsPdf.setRow(table, 20);
-			communsPdf.setCell(baseRow,15, "%Enganche", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getEngache()) +" %", black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,18, "Importe enganche:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-			communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMontoSeguroEngache()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
-			communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,15, "Seguro daños:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,15, formatoDinero(impresionForm.getSeguroDanos()) , black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
+	        communsPdf.setCell(baseRow,21, "Costo administración:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			communsPdf.setCell(baseRow,12, formatoDinero(impresionForm.getDerecho()) , black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,1, "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,20, "Seguro de vida con desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+			 communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getMontoSeguroVida()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
+			
+
+			// baseRow = communsPdf.setRow(table, 20);
+			// communsPdf.setCell(baseRow,15, "Valor:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			// communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getValor()), black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,21, "Seguro daños y costo administración:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			// communsPdf.setCell(baseRow,12,  formatoDinero(impresionForm.getMontoSegurosDanos()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,20, "Seguro de vida con desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getMontoSeguroVida()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
+			
+			// baseRow = communsPdf.setRow(table, 20);
+			// communsPdf.setCell(baseRow,15, "%Enganche", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			// communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getEngache()) +" %", black, false, "C", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,18, "Importe enganche:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
+			// communsPdf.setCell(baseRow,15,  formatoDinero(impresionForm.getMontoSeguroEngache()), black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
+			// communsPdf.setCell(baseRow,1,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 //			communsPdf.setCell(baseRow,20, "Seguro desempleo", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 //			communsPdf.setCell(baseRow,11,  formatoDinero(impresionForm.getMontoSeguroDesempleo()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 		
@@ -401,9 +436,10 @@ public class ImpresionAmortizacionesPdf {
 			communsPdf.setCell(baseRow,66,  "", black, false, "R", 10, cellStyle, "", paddingHeadData, bgColor);
 			
 			table.draw();
-			yStart -= table.getHeaderAndDataHeight()+13;
+			yStart -= table.getHeaderAndDataHeight()+5;
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GeneralServiceException("Error => ", e.getMessage() );
 		}
 	}

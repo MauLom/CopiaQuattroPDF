@@ -46,4 +46,8 @@ public class AmortizacionPdfForm {
 	private Double mensualidad;
 	private String cliente;
 	private List<AmortizacionDTO> amortizacion;
+	private int aseguradoraID;
+	private String cp;
+	private String deducible;
+	private Double seguroDanos;
 }
