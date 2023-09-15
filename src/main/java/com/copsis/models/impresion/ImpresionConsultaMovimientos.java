@@ -46,7 +46,7 @@ public class ImpresionConsultaMovimientos {
 	private float yStartNewPage = 720;
 	private float yStart = 730;
 	private float bottomMargin = 26;
-	private float fullWidth = 564;
+	private float fullWidth = 570;
 	float height = 0;
 	float heightBorder = 0;
 	private final Color bgColor = new Color(255, 255, 255, 0 );
@@ -109,7 +109,7 @@ public class ImpresionConsultaMovimientos {
 		/** CUERPO **/
 		// Paddings son 4 L,R,T,B
 		paddingBody.add(0f);
-		paddingBody.add(7f);
+		paddingBody.add(5f);
 		paddingBody.add(7f);
 		paddingBody.add(0f);
 		
@@ -194,13 +194,15 @@ public class ImpresionConsultaMovimientos {
 			
 			table = new BaseTable((yStart-20), yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 20);
-			communsPdf.setCell(baseRow,12,"Póliza", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,12,"Folio", black, true, "C", 8, cellStyle, "",paddingHead2, bgColor);
-			communsPdf.setCell(baseRow,12,"Endoso", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,18,"Tipo", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,14,"Solicitud", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,17,"Vigencia", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
-			communsPdf.setCell(baseRow,15,"Estatus", black, true, "C", 8, cellStyle, "", paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,11,"Póliza", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,8,"Folio", black, true, "C", 8, cellStyle, "",paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,9,"Endoso", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,15,"Tipo", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,10,"Solicitud", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,10,"Vigencia", black, true, "C", 8, cellStyle, "", paddingHead2,bgColor);
+			communsPdf.setCell(baseRow,14,"Estatus", black, true, "C", 8, cellStyle, "", paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,9,"Fecha", black, true, "C", 8, cellStyle, "", paddingHead2, bgColor);
+			communsPdf.setCell(baseRow,14,"Usuario", black, true, "C", 8, cellStyle, "", paddingHead2, bgColor);
 			
 			table.draw();
 			
@@ -227,14 +229,15 @@ public class ImpresionConsultaMovimientos {
 		
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 20, document, page, false,true);
 			baseRow = communsPdf.setRow(table, 25);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getPoliza().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getFolio().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,12, movimientosDTO.getEndoso().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,18, movimientosDTO.getTipo().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,14, movimientosDTO.getSolicitud().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,17, movimientosDTO.getVigencia().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			communsPdf.setCell(baseRow,15, movimientosDTO.getEstatus().toString(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
-			
+			communsPdf.setCell(baseRow,11, movimientosDTO.getPoliza(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,8, movimientosDTO.getFolio(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,9, movimientosDTO.getEndoso(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,15, movimientosDTO.getTipo(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,10, movimientosDTO.getSolicitud(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,10, movimientosDTO.getVigencia(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,14, movimientosDTO.getEstatus(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,9, movimientosDTO.getFechaCreacion(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
+			communsPdf.setCell(baseRow,14, movimientosDTO.getUsuario(), black, false, "C", 8, cellStyle2, "", paddingBody, bgColor);
 			return table;
 			
 		} catch (Exception e) {

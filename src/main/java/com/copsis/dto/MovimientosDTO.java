@@ -13,4 +13,6 @@ public class MovimientosDTO {
 	private String solicitud;
 	private String vigencia;
 	private String estatus;
+	private String fechaCreacion;
+	private String usuario;
 }
