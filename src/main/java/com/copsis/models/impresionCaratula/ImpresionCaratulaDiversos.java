@@ -138,7 +138,7 @@ public class ImpresionCaratulaDiversos {
 
             tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getTipoConstrucion(), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Niveles:", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getNiveles(), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getNiviles()+"", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Sotano:", true, 10f, "L", blanco, "L", tablas, blanco, blue, 0f, Font.BOLD);
             tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getSotano()+"", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
