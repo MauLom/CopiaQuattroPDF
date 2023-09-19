@@ -1,34 +1,33 @@
 package com.copsis.models.impresionCaratula;
 
-import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
+import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.SocioDirecProjection;
+import com.copsis.clients.projections.UbicacionesProjection;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.exceptions.GeneralServiceException;
-import com.copsis.models.Tabla.BaseTable;
-import com.copsis.models.Tabla.ImageUtils;
-import com.copsis.models.Tabla.Row;
-import com.copsis.models.Tabla.Sio4CommunsPdf;
 import com.copsis.models.tabladi.tabla;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEventHelper;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.io.InputStream;
 
 public class ImpresionCaratulaDiversos {
 
@@ -69,38 +68,38 @@ public class ImpresionCaratulaDiversos {
             
             
 
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c17") ? jdatos.getJSONObject("t1").getString("c17") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 1f, Font.BOLD);
+            tabla.setTextCell( caratula.getContrantante().getContrantante(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 1f, Font.BOLD);
             document.add(tablas);
 
             tablas = tabla.setTable(3, 100, new float[]{20, 40, 40}, "L");
             tabla.setTextCell("Vigencia:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c7") ? jdatos.getJSONObject("t1").getString("c7") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c13") ? jdatos.getJSONObject("t1").getString("c13") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getVigencia(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getRfc(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Emisión:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c8") ? jdatos.getJSONObject("t1").getString("c8") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c14") ? jdatos.getJSONObject("t1").getString("c14") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getFechaEmision(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getCteCalle(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Subramo:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c9") ? jdatos.getJSONObject("t1").getString("c9") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c15") ? jdatos.getJSONObject("t1").getString("c15") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getSubRamo(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getCteColonia(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             document.add(tablas);
 
             tablas = tabla.setTable(4, 100, new float[]{20, 38, 9, 30}, "L");
             tabla.setTextCell("Forma de Pago:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c10") ? jdatos.getJSONObject("t1").getString("c10") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getFormaPago(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("CURP:", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((jdatos.getJSONObject("t1").has("curp") ? jdatos.getJSONObject("t1").getString("curp") : ""), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getClientExtra() != null ? caratula.getClientExtra().getCurp() : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Moneda:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c11") ? jdatos.getJSONObject("t1").getString("c11") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getMoneda(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Email:", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((jdatos.getJSONObject("t1").has("email") ? jdatos.getJSONObject("t1").getString("email") : ""), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL).setLeft(-10);
+            tabla.setTextCell(caratula.getClientExtra().getEmail(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL).setLeft(-10);
 
             tabla.setTextCell("", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
             tabla.setTextCell("", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Telefono:", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((jdatos.getJSONObject("t1").has("telefono") ? jdatos.getJSONObject("t1").getString("telefono") : ""), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getClientExtra().getTelefono(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
 
             document.add(tablas);
 
@@ -111,54 +110,45 @@ public class ImpresionCaratulaDiversos {
             tabla.setTextCell("Grupo:", true, 10f, "L", gray2, "M", tablas, gray2, black, 0f, Font.BOLD);
 
             tabla.setTextCell("Aseguradora:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c16") ? jdatos.getJSONObject("t1").getString("c16") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
-            tabla.setTextCell(jdatos.getJSONObject("g").has("c1") ? jdatos.getJSONObject("g").getString("c1") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getAseguradora(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getGrupo(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Clave:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell(jdatos.getJSONObject("t1").has("c19") ? jdatos.getJSONObject("t1").getString("c19") : "", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(caratula.getContrantante().getClaveAngente(), true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.NORMAL);
             document.add(tablas);
 
             /*CARATCTERISICAS*/
-            JSONArray jaDatosDireccion = jdatos.getJSONObject("t2").getJSONArray("c1");
-            Boolean respuesta = (jaDatosDireccion.length() > 0);
-            String dir1 = "";
-            String dir2 = "";
-            JSONObject joDatosDireccion = new JSONObject();
-            if (jaDatosDireccion.length() > 0) {
-                joDatosDireccion = jaDatosDireccion.getJSONObject(0);
-                dir1 = joDatosDireccion.getString("c2") + " " + joDatosDireccion.getString("c3");
-                dir1 += ((!"".equals(joDatosDireccion.getString("c4"))) ? " Int " + joDatosDireccion.getString("c4") : ", ") + joDatosDireccion.getString("c7") + ", CP: " + joDatosDireccion.getString("c6");
-                dir2 = joDatosDireccion.getString("c8") + ", " + joDatosDireccion.getString("c9") + ", " + joDatosDireccion.getString("c10");
 
-            }
+            List<UbicacionesProjection>  ubicaciones = caratula.getUbicaciones();
+            
 
             tablas = tabla.setTable(1, 100, new float[]{100}, "L");
             tablas.setSpacingBefore(10);
-            tabla.setTextCell("Características: " + (joDatosDireccion.has("c1") ? joDatosDireccion.getString("c1") : " "), true, 10f, "L", gray2, "M", tablas, gray2, black, 0f, Font.BOLD);
+            tabla.setTextCell("Características: " +  (ubicaciones == null ||  ubicaciones.isEmpty() ? "": ubicaciones.get(0).getNoUbicacion()), true, 10f, "L", gray2, "M", tablas, gray2, black, 0f, Font.BOLD);
             document.add(tablas);
 
             tablas = tabla.setTable(2, 100, new float[]{20, 80}, "L");
             tabla.setTextCell("Dirección:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 30f, Font.BOLD);
-            tabla.setTextCell(dir1 + "\n" + dir2, true, 10f, "L", blanco, "T", tablas, blanco, blue, 30f, Font.NORMAL);
+            tabla.setTextCell((ubicaciones == null ||  ubicaciones.isEmpty() ? "": caratula.getUbicaciones().get(0).getDireccion()), true, 10f, "L", blanco, "T", tablas, blanco, blue, 30f, Font.NORMAL);
             document.add(tablas);
 
             tablas = tabla.setTable(4, 100, new float[]{23, 37, 20, 20}, "L");
             tabla.setTextCell("Tipo Construcción:", true, 10f, "L", blanco, "L", tablas, blanco, blue, 0f, Font.BOLD);
 
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getString("c13") : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getTipoConstrucion(), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Niveles:", true, 10f, "L", blanco, "M", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getInt("c11") + "" : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getNiveles(), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("Sotano:", true, 10f, "L", blanco, "L", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getInt("c12") + "" : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getSotano()+"", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Techo:", true, 10f, "L", blanco, "L", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getString("c14") : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getTechos()+"", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
 
             tabla.setTextCell("ZonaHidrometeorológica:", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getString("c15") : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getSismo()+"", true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
             tabla.setTextCell("Zona Sísmica:", true, 10f, "L", blanco, "L", tablas, blanco, blue, 0f, Font.BOLD);
-            tabla.setTextCell((respuesta == true ? joDatosDireccion.getString("c16") : ""), true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
+            tabla.setTextCell(ubicaciones == null || ubicaciones.isEmpty() ? "": ubicaciones.get(0).getSismo()+"" , true, 10f, "L", blanco, "T", tablas, blanco, blue, 0f, Font.NORMAL);
             document.add(tablas);
 
             tablas = tabla.setTable(3, 100, new float[]{40, 30, 30}, "L");
@@ -173,24 +163,25 @@ public class ImpresionCaratulaDiversos {
             tabla.setTextCell("Deducible", true, 10f, "C", blanco, "M", tablas, gray2, blue, 0f, Font.BOLD);
             tablas.setHeaderRows(2);
 
-            JSONArray jArray = jdatos.getJSONObject("c").getJSONArray("c2");
-            for (int i = 0; i < jArray.length(); i++) {
+            List<CoberturaProjection> coberturas= caratula.getCoberturas();
+            if(!coberturas.isEmpty()){
+            for (int i = 0; i < coberturas.size(); i++) {
                 if (i % 2 == 0) {
                     drawLines = true;
                 } else {
                     drawLines = false;
                 }
-                tabla.setTextCell((jArray.getJSONObject(i).has("c1") ? jArray.getJSONObject(i).getString("c1") : ""), true, 10f, "L", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
-                tabla.setTextCell((jArray.getJSONObject(i).has("c2") ? jArray.getJSONObject(i).getString("c2") : ""), true, 10f, "R", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
-                tabla.setTextCell((jArray.getJSONObject(i).has("c3") ? jArray.getJSONObject(i).getString("c3") : ""), true, 10f, "L", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
+                tabla.setTextCell( coberturas.get(i).getNombres(), true, 10f, "L", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
+                tabla.setTextCell( coberturas.get(i).getSa(), true, 10f, "R", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
+                tabla.setTextCell(coberturas.get(i).getDeducible(), true, 10f, "L", drawLines ? gray2 : blanco, "M", tablas, gray2, blue, 17f, Font.NORMAL);
 
-            }
+            }}
             document.add(tablas);
-            if (jdatos.getJSONObject("t1").has("c26") && jdatos.getJSONObject("t1").getString("c26").length() > 0) {
+            if (caratula.getContrantante() != null && caratula.getContrantante().getDescripcion().length() > 0) {
                 tablas = tabla.setTable(1, 100, new float[]{100}, "L");
                 tablas.setSpacingBefore(10);
                 tabla.setTextCell("Observaciones", true, 10f, "L", gray2, "L", tablas, blanco, blue, 0f, Font.BOLD);
-                tabla.setTextCell(jdatos.getJSONObject("t1").has("c26") ? jdatos.getJSONObject("t1").getString("c26") : "HOLA", true, 10f, "L", blanco, "M", tablas, blanco, black, 1f, Font.NORMAL);
+                tabla.setTextCell(caratula.getContrantante().getDescripcion(), true, 10f, "L", blanco, "M", tablas, blanco, black, 1f, Font.NORMAL);
                 document.add(tablas);
             }
 
@@ -200,16 +191,22 @@ public class ImpresionCaratulaDiversos {
             document.add(tablas);
             StringBuilder htmlString = new StringBuilder();
             htmlString.append("<html><body>  ");
-            htmlString.append(jdatos.getJSONObject("t2").has("c0") ? jdatos.getJSONObject("t2").getString("c0").replaceAll("<colgroup/>", "</colgroup>").replace("<br>", "<br/>") : "");
+            htmlString.append(caratula.getContrantante().getDetalleSeguro() == null || caratula.getContrantante().getDetalleSeguro().isEmpty() ? "": caratula.getContrantante().getDetalleSeguro().replaceAll("<colgroup/>", "</colgroup>").replace("<br>", "<br/>"));
             htmlString.append("</body></html>");
             InputStream is = new ByteArrayInputStream(htmlString.toString().getBytes());
             XMLWorkerHelper.getInstance().parseXHtml(writer, document, is, Charset.forName("UTF-8"));
 
+            
             document.close();
-
+             //FileOutputStream fos =  new FileOutputStream(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/diversos.pdf"));
+              //output.writeTo(fos);
             return output.toByteArray();
+               
+            
+           
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresionCaratulaDiversos: " + ex.getMessage());
         }
@@ -229,8 +226,9 @@ public class ImpresionCaratulaDiversos {
         document.add(tablas);
 
          SocioDirecProjection socio = caratula.getSocio();
-        String direccion =  socio != null ? socio.getCalle() : ""+"\n"+ socio != null ? socio.getColonia() : ""
-        +"\n"+ socio != null ? socio.getEstado() : "";
+        String direccion =  (socio != null ? socio.getCalle() : "")+"\n"+ (socio != null ? socio.getColonia() : "")
+        +"\n"+ (socio != null ? socio.getEstado() : "");
+        System.out.println(direccion);
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
         table.setWidths(new int[]{2, 1});
