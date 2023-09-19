@@ -1,5 +1,7 @@
 package com.copsis.models.gnp;
 
+import java.io.IOException;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -66,9 +68,11 @@ public class GnpModel {
 					String x = fn.textoBusqueda(stripper, doc, "Asegurado (s)", true);
 					x = x.length() > 0 ? x :fn.textoBusqueda(stripper, doc, "Asegurado (s)", false);
 			
+					String fechAsegurados=this.getAsegurados(stripper, doc,"CERTIFICADO DE COBERTURA POR ASEGURADO","Sexo:");
+					
 					modelo = new GnpSaludModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "CERTIFICADO DE COBERTURA POR ASEGURADO", false),
-							x).procesar();
+							x,fechAsegurados).procesar();
 				}
 			} // termina el codigo de salud
 			else if (contenido.contains("Póliza de Seguro de Vida") || contenido.contains("Seguro de Vida") || contenido.contains("Seguro de Vida") ) {
@@ -140,4 +144,22 @@ public class GnpModel {
 		}
 	}
 
+	public  String getAsegurados(PDFTextStripper pdfStripper, PDDocument pdDoc, String palabra1,String palabra2)throws IOException{
+		StringBuilder x = new StringBuilder();
+		for (int i = 1; i <= pdDoc.getPages().getCount(); i++) {
+			pdfStripper.setStartPage(i);
+			pdfStripper.setEndPage(i);
+			if (pdfStripper.getText(pdDoc).contains(palabra1) && pdfStripper.getText(pdDoc).contains(palabra2)) {				
+					PDFTextStripper s = new PDFTextStripper();
+					s.setParagraphStart("###");
+					s.setSortByPosition(true);
+					s = pdfStripper;
+					x.append(s.getText(pdDoc));
+				
+			}
+		  }		
+		return x.toString();
+	}
+
+	
 }

@@ -19,17 +19,20 @@ public class GnpSaludModel {
 	private String contenido = "";
 	private String certificados = "";
 	private String txtasegurados = "";
+	private String fechAsegurados = "";
 
-	public GnpSaludModel(String contenido, String certificados, String asegurados) {
+	public GnpSaludModel(String contenido, String certificados, String asegurados, String fechAsegurados) {
 		this.contenido = contenido;
 		this.certificados = certificados;
 		this.txtasegurados = asegurados;
+		this.fechAsegurados=fechAsegurados;
 	}
 
 	public EstructuraJsonModel procesar() {
 
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("###−###", "");
 		txtasegurados = fn.remplazarMultiple(txtasegurados, fn.remplazosGenerales());
+		fechAsegurados = fn.remplazarMultiple(fechAsegurados, fn.remplazosGenerales());
 
 		StringBuilder newcontenido = new StringBuilder();
 
@@ -127,7 +130,7 @@ public class GnpSaludModel {
 								newcontenido.append(auxiliar);
 							}
 
-							if(fn.isvalidCp(dato.split("###")[0].split("C/P")[1].replace(":","").replace(".","").trim())) {
+							if(Boolean.TRUE.equals(fn.isvalidCp(dato.split("###")[0].split("C/P")[1].replace(":","").replace(".","").trim()))) {
 								modelo.setCp(dato.split("###")[0].split("C/P")[1].replace(":","").replace(".","").trim());
 							}
 							if (dato.split("###")[1].contains("hrs.")) {
@@ -587,7 +590,6 @@ public class GnpSaludModel {
 			modelo.setFechaEmision(a.split("###")[3] + "-" + a.split("###")[2] + "-" + a.split("###")[1]);
 
 
-			donde = 0;
 			donde = fn.recorreContenido(contenido, "segurado s");
 			dondeAux = fn.recorreContenido(contenido, "Coberturas###Suma");
 			if (dondeAux == 0) {
@@ -673,7 +675,7 @@ public class GnpSaludModel {
 								asegurado.setNombre(dato.split("###")[1]
 										.split(dato.split("###")[1].trim().split(" ")[longitudSplit])[0].trim());
 								asegurado.setSexo(1);
-								asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
+								asegurado.setParentesco(asegurados.isEmpty() ? 1 : 4);
 								asegurados.add(asegurado);
 
 							}
@@ -684,7 +686,7 @@ public class GnpSaludModel {
 									fn.formatDate(dato.split("###")[2].trim(), ConstantsValue.FORMATO_FECHA));
 							asegurado.setNombre(dato.split("###")[1].trim());
 							asegurado.setSexo(1);
-							asegurado.setParentesco(asegurados.size() == 0 ? 1 : 4);
+							asegurado.setParentesco(asegurados.isEmpty() ? 1 : 4);
 							asegurados.add(asegurado);
 							break;
 
@@ -698,7 +700,7 @@ public class GnpSaludModel {
 			modelo.setAsegurados(asegurados);
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			// coberturas{nombre sa deducible coaseguro}
+		
 			String[] coberturasTxt = {"Nacional","B ###ásica", "E mergencia de gastos médico s", "Emergencia de gastos médico s","E ###mergencia de gastos médico s",
 					"Emergencia en el Extranjero","− Extranjero", "E mergencia en el Extranjero", "Catastróficas Nacional",
 					"C atastróficas Nacional", "Enfermedades Catastróficas", "n el Extranjero", "Asistencia en Viajes",
@@ -706,7 +708,7 @@ public class GnpSaludModel {
 					"Cero Deducible por Accidente", "C ero Deducible por Accidente", "ero Deducible por Accidente",
 					"R espaldo por Fallecimiento", "Atención Hospitales", "Respaldo Hospitalario",
 					"Reducción de Deducible" };
-			donde = 0;
+			
 			donde = fn.recorreContenido(contenido, ConstantsValue.COASASEGURO);
 			dondeAux = fn.recorreContenido(contenido, ConstantsValue.AGENTE2);
 			String coberturasext="";
@@ -868,7 +870,7 @@ public class GnpSaludModel {
 								///////////////////////////////////////////////// SI LOS ULTIMOS 3 CARACTERES ES
 								///////////////////////////////////////////////// ### LOS QUITA
 
-								longitudTexto = 0;
+								//longitudTexto = 0;
 								longitudTexto = newcontenido1.length();
 								if (newcontenido1.substring(longitudTexto - 3, longitudTexto).equals("###")) {
 									newcontenido.append(newcontenido1.substring(0, longitudTexto - 3).trim()
@@ -882,7 +884,7 @@ public class GnpSaludModel {
 						}
 					}
 
-					StringBuilder datotexto = new StringBuilder();
+					StringBuilder datotexto;
 					for (String dato : newcontenido.toString().split("\r\n")) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						datotexto = new StringBuilder();
@@ -1020,7 +1022,7 @@ public class GnpSaludModel {
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("R.F.C:")){
 						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Hasta")[0].replace("###", "").trim());
-						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].toString().split("Hasta")[1]).replace("###", "-")));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(fn.elimgatos(newcontenido.toString().split("\n")[i].split("Hasta")[1]).replace("###", "-")));
 					} 
 				}
 		
@@ -1144,10 +1146,10 @@ public class GnpSaludModel {
              modelo.setDeducible("");
 			}
 
-			if(modelo.getAsegurados().size() == 0 && txtasegurados.length() > 100){
+			if(modelo.getAsegurados().isEmpty() && txtasegurados.length() > 100){
 				inicio = txtasegurados.indexOf("Asegurado s");
 				fin = txtasegurados.indexOf("En caso de requerir mayor");				
-				newcontenido = new StringBuilder();
+				
 				filtrado = txtasegurados.substring(inicio, fin).replace("@@@", "").trim();
 				if(filtrado.length() > 0){
 					for(int i = 0; i < filtrado.split("\n").length; i++){
@@ -1162,10 +1164,35 @@ public class GnpSaludModel {
 
 				}
 			}
+			StringBuilder fechas = new StringBuilder();
+			for(int i = 0; i < fechAsegurados.split("Fecha de Nacimiento").length; i++){
+
+				if( i > 0){
+                   fechas.append( fechAsegurados.split("Fecha de Nacimiento")[i].split("Importe Total")[0].replace("###", "-"));
+				}
+			}
+			if(!fechas.isEmpty() && fn.obtenVigePoliza(fechas.toString()).size() == modelo.getAsegurados().size() ){
+				List<EstructuraAseguradosModel> aseg = modelo.getAsegurados();
+				List<EstructuraAseguradosModel> aseguradosex =new ArrayList<>();
+              
+				for(int i = 0; i < aseg.size(); i++){
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					asegurado.setNombre( aseg.get(i).getNombre());
+					asegurado.setAntiguedad( aseg.get(i).getAntiguedad());
+					
+					asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(fechas.toString()).get(i)));
+					 aseguradosex.add(asegurado);
+
+				}
+			
+				modelo.setAsegurados(new ArrayList<>());
+				modelo.setAsegurados(aseguradosex);
+
+			}
+			
 
 			return modelo;
-		} catch (Exception ex) {		
-			ex.printStackTrace();	
+		} catch (Exception ex) {					
 			modelo.setError(
 					GnpSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
