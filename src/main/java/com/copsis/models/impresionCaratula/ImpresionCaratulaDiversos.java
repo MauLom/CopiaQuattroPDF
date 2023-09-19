@@ -228,7 +228,7 @@ public class ImpresionCaratulaDiversos {
          SocioDirecProjection socio = caratula.getSocio();
         String direccion =  (socio != null ? socio.getCalle() : "")+"\n"+ (socio != null ? socio.getColonia() : "")
         +"\n"+ (socio != null ? socio.getEstado() : "");
-        System.out.println(direccion);
+       ;
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
         table.setWidths(new int[]{2, 1});
