@@ -1,4 +1,4 @@
-package com.copsis.models.impresionCaratula ;
+package com.copsis.models.impresioncaratula ;
 
     import java.awt.Color ;
     import java.io.ByteArrayOutputStream ;
