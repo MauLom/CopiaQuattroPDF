@@ -35,6 +35,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_CONTRATADAS3 = "Coberturas Contratadas";
 	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
+    public static final String CODIGO_POSTAL ="CÓDIGO POSTAL";
 	public static final String EMISIÓN = "Emisión";
 	public static final String DOMICILIO_HASH = "Domicilio:###";
 	public static final String DOMICILIO = "Domicilio:";
@@ -53,9 +54,11 @@ public final class ConstantsValue {
 	public static final String DATOS_GENERALES_ASEGURADO = "Datos Generales del Asegurado";
 	public static final String DATOS_CONTRATANTE = "DATOS DEL CONTRATANTE";
 	public static final String DATOS_CONTRATANTEM = "Datos del Contratante";
+	public static final String DIRECCION = "DIRECCIÓN";
 	public static final String COSTO_DEL_SEGURO= "Costo del Seguro";
 	public static final String PAQUETE_CONTRATADO= "Paquete contratado";
-	
+	public static final String ENCUMPLIMIENTO = "En cumplimiento";
+	public static final String DESGLOSE_DE_RIESGOS ="DESGLOSE DE RIESGOS";
 	public static final String EXPEDICION = "expedición";
 	public static final String EXPEDICION2 = "Expedición:";
 	public static final String EXPEDICION3 = "Expedición";
@@ -114,6 +117,7 @@ public final class ConstantsValue {
 
 	public static final String NOMBRE = "Nombre";
 	public static final String NOMBRE2 = "Nombre:";
+	public static final String NOMBRE3 = "NOMBRE";
 	public static final String NO_CLIENTE = "No.Cliente:";
 	public static final String NO_MOTOR = "No. de Motor:";
 	public static final String NOMBRE_HASH = "Nombre:###";

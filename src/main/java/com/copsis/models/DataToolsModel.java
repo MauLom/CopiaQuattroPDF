@@ -1221,7 +1221,7 @@ public class DataToolsModel {
 		int resultado = 0;
 		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "MXN",
 				"PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP",
-				"PESO", "DÓLAR", "DÓLARES", "DOLARES", "DÓLAR AMERICANO", "DOLARES US", "USD",
+				"PESO", "DÓLAR","DOLAR", "DÓLARES", "DOLARES", "DÓLAR AMERICANO", "DOLARES US", "USD",
 				"DÓLARES SIN REVALUACIÓN", "U.S.DOLLAR", "UDIS", "UDI", "UVACS");
 
 		for (String moneda : listMonedas) {
@@ -1242,6 +1242,7 @@ public class DataToolsModel {
 						resultado = 1;
 						break;
 					case "DÓLAR":
+					case "DOLAR":
 					case "DÓLARES":
 					case "DOLARES":
 					case "DÓLAR AMERICANO":

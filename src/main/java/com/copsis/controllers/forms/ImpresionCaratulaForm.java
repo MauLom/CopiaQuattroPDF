@@ -10,6 +10,7 @@ import com.copsis.clients.projections.CoberturaProjection;
 import com.copsis.clients.projections.ContratanteCaraProjection;
 import com.copsis.clients.projections.InvolucradosProjection;
 import com.copsis.clients.projections.SocioDirecProjection;
+import com.copsis.clients.projections.UbicacionesProjection;
 import com.copsis.clients.projections.VehiculoProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -31,5 +32,6 @@ public class ImpresionCaratulaForm {
     private List<BeneficiarioProjection> beneficiarios;
     private List<AseguradosProjection> asegurados;
     private CoberturaBasicaProjection  coberturaBasica;
+    private List<UbicacionesProjection> ubicaciones;
     
 }

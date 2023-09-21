@@ -38,6 +38,9 @@ public class AigModel {
 			if(tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("NÚMERO DE UBICACIÓN")) {
 				tipo = 4;
 			}
+			if(fn.caratula(2, 3, stripper, doc).contains("TRANSPORTE COMBINADO")){
+				tipo=4;
+			}
 
 	
 			
