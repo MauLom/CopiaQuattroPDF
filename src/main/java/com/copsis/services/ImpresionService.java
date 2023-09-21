@@ -42,6 +42,7 @@ import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaVida;
 import com.copsis.utils.ErrorCode;
@@ -305,7 +306,8 @@ public class ImpresionService {
          }
      }
 
-      public byte[] impresionCaratulaVida( ImpresionCaratulaForm  impresionCaractulaForm  ){
+
+     public byte[] impresionCaratulaVida( ImpresionCaratulaForm  impresionCaractulaForm  ){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaVida().buildPDF(impresionCaractulaForm);
@@ -318,5 +320,16 @@ public class ImpresionService {
         }
     }
 
-
+ public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaDiversos().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
 }
