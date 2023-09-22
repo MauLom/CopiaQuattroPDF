@@ -41,10 +41,13 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
+
 import com.copsis.models.impresioncaratula.ImpresionCaractulaColectividasAutos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaAutos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaSalud;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaVida;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
+
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -306,7 +309,8 @@ public class ImpresionService {
          }
      }
 
-      public byte[] impresionCaratulaVida( ImpresionCaratulaForm  impresionCaractulaForm  ){
+
+     public byte[] impresionCaratulaVida( ImpresionCaratulaForm  impresionCaractulaForm  ){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaVida().buildPDF(impresionCaractulaForm);
@@ -318,8 +322,19 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-
-      public byte[] impresionCaratulaColeAutos( ImpresionCaratulaForm  impresionCaractulaForm  ){
+    public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaDiversos().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+   public byte[] impresionCaratulaColeAutos( ImpresionCaratulaForm  impresionCaractulaForm  ){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaractulaColectividasAutos().buildPDF(impresionCaractulaForm);
@@ -331,6 +346,4 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-
-
 }
