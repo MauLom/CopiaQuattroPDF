@@ -98,7 +98,7 @@ public class ImpresionCaractulaColectividasAutos {
                     table = new BaseTable(yStart, yStart, bottomMargin, 295, margin, document, page, false, true);
                     baseRow = communsPdf.setRow(table,12);
                     communsPdf.setCell(baseRow, 30, "Total de Incisos:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
-                    communsPdf.setCell(baseRow, 10, caractula.getContrantante().getTotalIncisos(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                    communsPdf.setCell(baseRow, 10, caractula.getContrantante().getTotalIncisos()+"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
                     communsPdf.setCell(baseRow, 30, "Prima Neta:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
                     communsPdf.setCell(baseRow, 30, caractula.getContrantante().getPrimaNeta(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
                     
@@ -180,6 +180,7 @@ public class ImpresionCaractulaColectividasAutos {
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresionCaractulaAutos: " + ex.getMessage());
         }

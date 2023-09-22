@@ -464,9 +464,9 @@ package com.copsis.models.impresioncaratula ;
                    }
 
                     baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 20, "Impresión", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white).setLeftPadding(0);;
+                    communsPdf.setCell(baseRow, 21, "Impresión", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white).setLeftPadding(0);
                     if (!involucrados.isEmpty() && involucrados.size() == 4 && involucrados.get(3).getIniciales() != null && involucrados.get(3).getFechaCreacion() != null && involucrados.get(3).getHoraCreacion() != null) {
-                       communsPdf.setCell(baseRow, 15,involucrados.get(3).getIniciales(), blue, false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f),Color.white);
+                       communsPdf.setCell(baseRow, 14,involucrados.get(3).getIniciales(), blue, false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f),Color.white);
                        communsPdf.setCell(baseRow, 45,involucrados.get(3).getFechaCreacion(), blue, false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f),Color.white).setLeftPadding(0);
                        communsPdf.setCell(baseRow, 20,involucrados.get(3).getHoraCreacion(), blue, false, "L", 8, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f),Color.white);
                     }else{
