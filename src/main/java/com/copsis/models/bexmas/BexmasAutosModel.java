@@ -65,9 +65,13 @@ public class BexmasAutosModel {
 					}
 				
 					
+					
 					if (newcont.toString().split("\n")[i].contains("Dirección:")) {
 						modelo.setCteDireccion(
 								newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0]);
+					  if(modelo.getCteDireccion().isEmpty()){
+						modelo.setCteDireccion(newcont.toString().split("\n")[i+1]);
+					  }			
 					}
 					if (newcont.toString().split("\n")[i].contains("Formas de Pago")) {
 						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 1]));
@@ -170,19 +174,26 @@ public class BexmasAutosModel {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					System.out.println(newcont.toString().split("\n")[i]);
+					
 					if(newcont.toString().split("\n")[i].contains("Prima neta:") || newcont.toString().split("\n")[i].contains("Prima neta")) {						
 						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
+						if(!valores.isEmpty()){
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
 				
 					if(newcont.toString().split("\n")[i].contains("Recargos:") || newcont.toString().split("\n")[i].contains("Recargos")) {					
 						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
+						if(!valores.isEmpty()){
 						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
 					if(newcont.toString().split("\n")[i].contains("Derechos:") || newcont.toString().split("\n")[i].contains("Derechos")){
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						}				
+							
 					}
 				
 					
