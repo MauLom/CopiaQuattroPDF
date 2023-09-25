@@ -150,10 +150,10 @@ public class ImpresionCaratulaSaludGruopo {
                         int termina = aseguradosGrupo.size() - 1;
                         while(i < aseguradosGrupo.size()){
                         acumula2= true;
-                            table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                            table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, false, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 12, aseguradosGrupo.get(i).getParentesco(), black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
-                            communsPdf.setCell(baseRow, 10, aseguradosGrupo.get(i).getTotalAsegurados()+"", black, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                            communsPdf.setCell(baseRow, 12, aseguradosGrupo.get(i).getParentesco()+":", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                            communsPdf.setCell(baseRow, 10, aseguradosGrupo.get(i).getTotalAsegurados()+"", blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
                             
                             if(termina == i){
                             baseRow = communsPdf.setRow(table);
@@ -186,7 +186,7 @@ public class ImpresionCaratulaSaludGruopo {
                         
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/grupo.pdf"));
+                   // document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/grupo.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
