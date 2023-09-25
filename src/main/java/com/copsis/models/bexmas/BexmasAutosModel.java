@@ -164,24 +164,24 @@ public class BexmasAutosModel {
 				inicio = contenido.indexOf("Prima neta");
 				fin = contenido.lastIndexOf("En testimonio de lo cual");
 			}
-	
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					
-					if(newcont.toString().split("\n")[i].contains("Prima neta:")) {
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+					System.out.println(newcont.toString().split("\n")[i]);
+					if(newcont.toString().split("\n")[i].contains("Prima neta:") || newcont.toString().split("\n")[i].contains("Prima neta")) {						
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
 				
-					if(newcont.toString().split("\n")[i].contains("Recargos:")) {					
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+					if(newcont.toString().split("\n")[i].contains("Recargos:") || newcont.toString().split("\n")[i].contains("Recargos")) {					
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
 						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
-					if(newcont.toString().split("\n")[i].contains("Derechos:")){
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+					if(newcont.toString().split("\n")[i].contains("Derechos:") || newcont.toString().split("\n")[i].contains("Derechos")){
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
 						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
 					}
 				
