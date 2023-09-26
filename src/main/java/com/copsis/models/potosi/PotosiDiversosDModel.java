@@ -94,6 +94,8 @@ public class PotosiDiversosDModel {
 		
 			inicio = contenido.indexOf("Información de Prima");
 			fin = contenido.indexOf("Seguros ###el ###Potosí");
+			fin = fin == -1 ? contenido.indexOf("Seguros ###El ###Potosí,"):fin;
+			
             newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {

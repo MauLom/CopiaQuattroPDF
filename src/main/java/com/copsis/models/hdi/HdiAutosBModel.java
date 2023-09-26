@@ -104,6 +104,12 @@ public class HdiAutosBModel {
 				if(newcontenido.toString().split("\n")[i].contains("Motor:") && newcontenido.toString().split("\n")[i].contains("Uso:")) {
 					modelo.setMotor(newcontenido.toString().split("\n")[i].split("Motor:")[1].split("Uso:")[0].replace("###", "").trim());
 				}
+				if(newcontenido.toString().split("\n")[i].contains("C.P.")){
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("C.P.")[1]);
+						if(!valores.isEmpty()){
+                               modelo.setCp(valores.get(0));
+                        }
+                }
 
 			}
 			
