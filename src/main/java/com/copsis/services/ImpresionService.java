@@ -44,7 +44,7 @@ import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaSaludGruopo;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaSaludGrupo;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaVida;
 import com.copsis.utils.ErrorCode;
 
@@ -337,7 +337,7 @@ public class ImpresionService {
      public byte[] impresionCaratulaSaludGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaratulaSaludGruopo().buildPDF(impresionCaratulaForm);
+            byteArrayPDF = new ImpresionCaratulaSaludGrupo().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {

@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/impresion-pdf")
 @RequiredArgsConstructor
-public class ImpresionePDFController {
+public class ImpresionPDFController {
 
 	private final ImpresionService impresionService;
 	
