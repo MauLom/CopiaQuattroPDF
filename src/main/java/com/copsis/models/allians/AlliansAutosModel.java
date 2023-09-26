@@ -21,13 +21,27 @@ public class AlliansAutosModel {
             modelo.setTipo(1);		
 			modelo.setCia(4);
 
+
+            inicio = contenido.indexOf("Razón Social");
+			fin = contenido.indexOf("Endoso");
+             newcontenido.append( fn.extracted(inicio, fin, contenido));
+
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+                  if(newcontenido.toString().split("\n")[i].contains("Razón Social")){
+                    modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Social")[1].replace("###", ""));
+                  }
+            }
+
+
           
 			inicio = contenido.indexOf("Endoso");
-			fin = contenido.indexOf("Suma Asegurada");		
+			fin = contenido.indexOf("Suma Asegurada");
+            fin = fin == -1 ?  contenido.indexOf("Cobertura###Suma") : fin;
+	        newcontenido = new StringBuilder();
             newcontenido.append( fn.extracted(inicio, fin, contenido));
 
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {    
-                    
+                   
                 if(newcontenido.toString().split("\n")[i].contains("emisión") &&newcontenido.toString().split("\n")[i].contains("Moneda") 
                 && newcontenido.toString().split("\n")[i].contains("pago")){                  
                     modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[0]);
@@ -36,6 +50,15 @@ public class AlliansAutosModel {
                     modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+2]).get(2)));
                     modelo.setFechaEmision(modelo.getVigenciaDe());                  
                     modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+2]));
+                }
+
+                if(modelo.getFormaPago() ==0  && newcontenido.toString().split("\n")[i].contains("horas del") ){ 
+                      modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[0]);
+                    modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+                    modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(1)));
+                    modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(2)));
+                    modelo.setFechaEmision(modelo.getVigenciaDe());                  
+                    modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Marca:") && newcontenido.toString().split("\n")[i].contains("Número")
                 && newcontenido.toString().split("\n")[i].contains("Motor:")){
@@ -62,9 +85,15 @@ public class AlliansAutosModel {
                 if(newcontenido.toString().split("\n")[i].contains("Municipio:")){
                     newDireccion.append( newcontenido.toString().split("\n")[i].split("Municipio:")[1].replace("###", ""));
                 }
-                if(newcontenido.toString().split("\n")[i].contains("Conductor") && newcontenido.toString().split("\n")[i].contains("habitual")
-              ){
+                if(newcontenido.toString().split("\n")[i].contains("Conductor") && newcontenido.toString().split("\n")[i].contains("habitual")){
                 modelo.setConductor(newcontenido.toString().split("\n")[i].split("habitual")[1].split("C.P:")[0].replace(":", "").replace("###", "").trim());
+                }
+
+                 if(newcontenido.toString().split("\n")[i].contains("C.P:")){
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+                               modelo.setCp(valores.get(0));
+                        }
                 }
               
             }
@@ -74,7 +103,9 @@ public class AlliansAutosModel {
            }
 
             inicio = contenido.indexOf("Suma Asegurada");
+            inicio = inicio == -1 ?  contenido.indexOf("Cobertura###Suma") : inicio;
 			fin = contenido.indexOf("financiamiento");
+        
           
             newcontenido = new StringBuilder();		
             newcontenido.append( fn.extracted(inicio, fin, contenido).replace("###-### ", "###"));
@@ -83,7 +114,8 @@ public class AlliansAutosModel {
               
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                 if(!newcontenido.toString().split("\n")[i].contains("Suma Asegurada") 
-                && !newcontenido.toString().split("\n")[i].contains("Tasa de")) {
+                && !newcontenido.toString().split("\n")[i].contains("Tasa de")
+                && !newcontenido.toString().split("\n")[i].contains("Deducible")) {
                     
 						int sp = newcontenido.toString().split("\n")[i].split("###").length;
                         if (sp == 3) {
