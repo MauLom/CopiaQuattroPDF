@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/impresion-pdf")
 @RequiredArgsConstructor
-public class ImpresionePDFController {
+public class ImpresionPDFController {
 
 	private final ImpresionService impresionService;
 	
@@ -331,6 +331,32 @@ public class ImpresionePDFController {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaDiversos(impresionCaratulaForm)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	@PostMapping(value = "caratulaSaludGrupo")
+	public ResponseEntity<CopsisResponse> impresionCaratulaSaludGrupo(@Valid @RequestBody ImpresionCaratulaForm  impresionCaratulaForm, BindingResult bindingResult) {
+		try {			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaSaludGrupo(impresionCaratulaForm)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
