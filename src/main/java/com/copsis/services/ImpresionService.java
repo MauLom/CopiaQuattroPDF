@@ -57,7 +57,7 @@ public class ImpresionService {
     private final QuattroUploadClient quattroUploadClient;
 
     public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
-        ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
+        ImpresionTipoService impresioneTipoService = new ImpresionTipoService(impresionForm);
         AdjuntoForm adjuntoForm = new AdjuntoForm();
 
         if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {
