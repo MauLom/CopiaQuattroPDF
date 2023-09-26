@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/impresion-pdf")
 @RequiredArgsConstructor
-public class ImpresionePDFController {
+public class ImpresionPDFController {
 
 	private final ImpresionService impresionService;
 	
@@ -321,35 +321,34 @@ public class ImpresionePDFController {
 		}		  
 	}
 
-@PostMapping(value = "caratulaDiversos")
-	public ResponseEntity<CopsisResponse> impresionCaratulaDiversos(@Valid @RequestBody ImpresionCaratulaForm  impresionCaratulaForm, BindingResult bindingResult) {
-		try {
-			  
-			if(bindingResult.hasErrors()) {
-				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
-				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
-			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaDiversos(impresionCaratulaForm)).build();
-		}catch(ValidationServiceException ex) {
-			throw ex;
-		}catch(Exception ex) {
-			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
-		}		  
-	}
+	@PostMapping(value = "caratulaColeAutos")
+    public ResponseEntity<CopsisResponse> impresionCaractulaColeAutos(@Valid @RequestBody ImpresionCaratulaForm impresionCaractulaForm, BindingResult bindingResult) {
+        try {
 
-@PostMapping(value = "caratulaColeAutos")
-	public ResponseEntity<CopsisResponse> impresionCaractulaColeAutos(@Valid @RequestBody ImpresionCaratulaForm  impresionCaractulaForm, BindingResult bindingResult) {
-		try {
-			  
-			if(bindingResult.hasErrors()) {
-				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
-				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
-			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaColeAutos(impresionCaractulaForm)).build();
-		}catch(ValidationServiceException ex) {
-			throw ex;
-		}catch(Exception ex) {
-			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
-		}		  
-	}
+            if (bindingResult.hasErrors()) {
+                String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+                throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
+            }
+            return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaColeAutos(impresionCaractulaForm)).build();
+        } catch (ValidationServiceException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+    @PostMapping(value = "caratulaSaludGrupo")
+    public ResponseEntity<CopsisResponse> impresionCaratulaSaludGrupo(@Valid @RequestBody ImpresionCaratulaForm impresionCaratulaForm, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+                throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
+            }
+            return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaSaludGrupo(impresionCaratulaForm)).build();
+        } catch (ValidationServiceException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
 }
