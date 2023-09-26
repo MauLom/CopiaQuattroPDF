@@ -11,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ImpresioneTipoService {
+public class ImpresionTipoService {
 	private byte[] byteArrayPDF;
 
 	public byte[] getByteArrayPDF() {
 		return this.byteArrayPDF;
 	}
 
-	public ImpresioneTipoService(ImpresionForm impresionForm) {
+	public ImpresionTipoService(ImpresionForm impresionForm) {
 		switch (impresionForm.getTipoImpresion()) {
 		case 100:
 			ImpresionConsolidadoModelPdf impresionConsolidao = new ImpresionConsolidadoModelPdf();
