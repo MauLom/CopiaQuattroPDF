@@ -191,10 +191,9 @@ public class ImpresionCaractulaVidaGrupo {
                 }
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {         
             throw new GeneralServiceException("00001",
-                    "Ocurrio un error en el servicio ImpresioncaratulaAutos: " + ex.getMessage());
+                    "Ocurrio un error en el servicio ImpresioncaratulVidaGrupo: " + ex.getMessage());
         }
 
     }
