@@ -44,6 +44,7 @@ import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
+import com.copsis.models.impresionCaratula.ImpresionCaratulaSaludGrupo;
 import com.copsis.models.impresionCaratula.ImpresionCaratulaVida;
 import com.copsis.utils.ErrorCode;
 
@@ -56,7 +57,7 @@ public class ImpresionService {
     private final QuattroUploadClient quattroUploadClient;
 
     public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
-        ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
+        ImpresionTipoService impresioneTipoService = new ImpresionTipoService(impresionForm);
         AdjuntoForm adjuntoForm = new AdjuntoForm();
 
         if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {
@@ -324,6 +325,19 @@ public class ImpresionService {
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaDiversos().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+     public byte[] impresionCaratulaSaludGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaSaludGrupo().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
