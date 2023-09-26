@@ -44,11 +44,10 @@ import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
 
 import com.copsis.models.impresioncaratula.ImpresionCaractulaColectividasAutos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaDiversos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaSalud;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaSaludGrupo;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaVida;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaSaludGrupo;
-
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
