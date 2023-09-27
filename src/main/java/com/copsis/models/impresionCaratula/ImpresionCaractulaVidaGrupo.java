@@ -1,5 +1,13 @@
 package com.copsis.models.impresionCaratula;
 
+import java.awt.Color;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+
 import com.copsis.clients.projections.AseguradosGrupoProjection;
 import com.copsis.clients.projections.SocioDirecProjection;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
@@ -8,13 +16,6 @@ import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public class ImpresionCaractulaVidaGrupo {
     
@@ -55,10 +56,10 @@ public class ImpresionCaractulaVidaGrupo {
                         communsPdf.setCell(baseRow, 14, "Emisión:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 44, caratula.getContrantante().getFechaEmision(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 42, caratula.getContrantante().getCteCalle(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        baseRow = communsPdf.setRow(table, 15);
+                        baseRow = communsPdf.setRow(table, 18);
                         communsPdf.setCell(baseRow, 14, "Subramo:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 44, caratula.getContrantante().getSubRamo(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
-                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getCteColonia(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 42, caratula.getContrantante().getCteColonia(), blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(0f), Color.white).setLeftPadding(3);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 14, "Forma de Pago:", blue, true, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 44, caratula.getContrantante().getFormaPago(), blue, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
@@ -183,7 +184,7 @@ public class ImpresionCaractulaVidaGrupo {
                         
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                   // document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/vidaGrupo.pdf"));
+                   //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/vidaGrupo.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
