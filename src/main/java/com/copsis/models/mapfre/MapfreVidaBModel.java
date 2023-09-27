@@ -115,8 +115,33 @@ public class MapfreVidaBModel {
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
 			buildRecibos();
-		
-		
+	
+			if(modelo.getAsegurados().isEmpty()){
+				inicio = contenido.indexOf("NOMBRE PARENTESCO FECHA NAC.");
+				fin  = contenido.lastIndexOf("COBERTURAS ASEGURADA");			
+				StringBuilder conteAsegurado = new StringBuilder();
+				if(inicio > -1 && fin > -1 && inicio < fin){
+				conteAsegurado.append(contenido.split("NOMBRE PARENTESCO FECHA NAC.")[1].split("SUMA PLAZO PRIMA")[0].replace("@@@", "").replace("TITULAR", "###TITULAR###"));
+				}
+			
+				if(!conteAsegurado.isEmpty()){
+				List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+			
+				for(	int x=0; x < conteAsegurado.toString().split("\n").length ; x++){
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					if(conteAsegurado.toString().split("\n")[x].contains("-") ){
+					asegurado.setNombre( conteAsegurado.toString().split("\n")[x].split("###")[0]);
+					List<String> valores = fn.obtenVigePoliza(conteAsegurado.toString().split("\n")[x]);
+					asegurado.setNacimiento(fn.formatDateMonthCadena(valores.get(0)));
+					asegurado.setParentesco(1);
+				    listAsegurados.add(asegurado);
+					}
+					
+				}
+				modelo.setAsegurados(listAsegurados);
+				}
+			
+				}
 
 			return modelo;
 		} catch (Exception ex) {
@@ -286,6 +311,9 @@ public class MapfreVidaBModel {
 
 			}
 			modelo.setCoberturas(coberturas);
+
+
+			
 		}
 	}
 	
@@ -326,6 +354,7 @@ public class MapfreVidaBModel {
 	
 	private void obtenerAsegurado(String[] arrContenido,int i) {
 		List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+	
 
 		if(arrContenido[i].contains("Asegurado") && arrContenido[i].contains("R.F.C") && arrContenido[i].contains("Nacimiento")) {
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
