@@ -25,8 +25,8 @@ public class PlanSeguroSaludModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("COBERTURA BÁSICA", "COBERTURA BASICA");
 		
 		try {
-			// modelo.setTipo(3);
-			// modelo.setCia(25);
+			modelo.setTipo(3);
+			modelo.setCia(25);
 			
 			inicio = contenido.indexOf("PÓLIZA DE SALUD");	
 			inicio = inicio ==-1 ? contenido.indexOf("SALUD INDIVIDUAL"):inicio;
