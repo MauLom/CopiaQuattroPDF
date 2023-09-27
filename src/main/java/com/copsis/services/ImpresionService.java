@@ -41,12 +41,14 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
+import com.copsis.models.impresioncaratula.ImpresionCaractulaColectividasAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaDiversos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaSalud;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaSaludGrupo;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaVida;
 import com.copsis.models.impresionCaratula.ImpresionCaractulaVidaGrupo;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaSaludGrupo;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaVida;
+
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -321,8 +323,7 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-
- public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
+    public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaDiversos().buildPDF(impresionCaratulaForm);
@@ -335,7 +336,21 @@ public class ImpresionService {
         }
     }
 
-     public byte[] impresionCaratulaSaludGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
+    public byte[] impresionCaratulaColeAutos( ImpresionCaratulaForm  impresionCaractulaForm  ){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaractulaColectividasAutos().buildPDF(impresionCaractulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+    
+    
+      public byte[] impresionCaratulaSaludGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaSaludGrupo().buildPDF(impresionCaratulaForm);
@@ -360,4 +375,5 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
+    
 }

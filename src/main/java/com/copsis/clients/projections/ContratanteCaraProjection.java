@@ -31,5 +31,6 @@ public class ContratanteCaraProjection {
     private	String  derecho;
     private	String  recargo;
     private	String  primaTotal;
+    private	int  totalIncisos;
     private	String  detalleSeguro;
 }

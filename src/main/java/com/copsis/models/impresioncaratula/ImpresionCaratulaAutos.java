@@ -1,8 +1,7 @@
-package com.copsis.models.impresionCaratula;
+package com.copsis.models.impresioncaratula;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -24,14 +23,15 @@ public class ImpresionCaratulaAutos {
     private Color blue = new Color(40, 76, 113);
     private Color black = new Color(0, 0, 0);
     private Color gray = new Color(229, 234, 237);
-    private float yStartNewPage = 780, yStart = 780, bottomMargin = 30, fullWidth = 590, margin = 10, ytexto = 0;
+    private float  yStart = 780, bottomMargin = 30, fullWidth = 590, margin = 10;
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
     private boolean drawLines = true;
     private boolean acumula;
     private boolean acumula2;
-    private boolean rPagina = false;
+  
 
     public byte[] buildPDF(ImpresionCaratulaForm caractula) {
+         boolean rPagina = false;
         try {
             ByteArrayOutputStream output;
             try (PDDocument document = new PDDocument()) {
@@ -306,8 +306,7 @@ public class ImpresionCaratulaAutos {
                 }
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {        
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresionCaractulaAutos: " + ex.getMessage());
 
