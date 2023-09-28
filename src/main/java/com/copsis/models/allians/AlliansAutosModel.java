@@ -159,6 +159,8 @@ public class AlliansAutosModel {
                     modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
                     modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));                    
                     modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+                    modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(5))));
+                    modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(6))));
                 }
             }
 
