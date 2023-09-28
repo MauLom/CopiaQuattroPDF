@@ -29,7 +29,7 @@ public class HdiModel {
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}
-			System.out.println(tipo);
+		
 			
 			switch (tipo) {
 			case 1:
@@ -48,7 +48,9 @@ public class HdiModel {
 										
 				}				
 				break;
-				
+			case 2:
+			    modelo=  new HdiSaludModel().procesar(fn.caratula(1, 3, stripper, doc));
+			break;					
 			case 4:
 				modelo = new HdiDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				break;	
