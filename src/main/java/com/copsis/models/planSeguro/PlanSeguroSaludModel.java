@@ -22,7 +22,7 @@ public class PlanSeguroSaludModel {
 		int inicio = 0;
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("COBERTURA BÁSICA", "COBERTURA BASICA");
 		
 		try {
 			modelo.setTipo(3);
@@ -77,6 +77,7 @@ public class PlanSeguroSaludModel {
 
 			inicio = contenido.indexOf("Condiciones de la Póliza");
 			fin = contenido.indexOf("COBERTURA BASICA");
+			
 
 			newcontenido = new StringBuilder();
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
@@ -99,6 +100,12 @@ public class PlanSeguroSaludModel {
 				
 				if(modelo.getFormaPago() ==0 && newcontenido.toString().split("\n")[i].contains("Forma de Pago")){
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+					
+				}
+				if(modelo.getFormaPago() ==0 && newcontenido.toString().split("\n")[i].contains("Golden Salud")){
+					modelo.setPlan("Golden Salud");
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
 				}
 				if(modelo.getMoneda() ==0 && newcontenido.toString().split("\n")[i].contains("Moneda")){
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
