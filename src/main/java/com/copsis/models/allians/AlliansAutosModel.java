@@ -65,12 +65,19 @@ public class AlliansAutosModel {
                    modelo.setMarca(newcontenido.toString().split("\n")[i].split("Marca:")[1].split("Número")[0].replace("###", "").trim());
                    modelo.setMotor(newcontenido.toString().split("\n")[i].split("Motor")[1].replace(":", "").replace("###", "").trim());
                 }
+
+                if(modelo.getMarca().isEmpty() && newcontenido.toString().split("\n")[i].contains("Marca:") && newcontenido.toString().split("\n")[i].contains("Número")
+               ){
+                   modelo.setMarca(newcontenido.toString().split("\n")[i].split("Marca:")[1].split("Número")[0].replace("###", "").trim());
+                   modelo.setSerie(newcontenido.toString().split("\n")[i].split("Número de")[1].replace(":", "").replace("###", "").trim());
+                }
                 if(newcontenido.toString().split("\n")[i].contains("Serie")){
                     modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie")[1].replace(":", "").replace("###", "").trim());
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Año") && !fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]).isEmpty()){
                  modelo.setModelo(fn.castInteger(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]).get(0)));
                 }
+             
 
                 if(newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Tipo")){
                   modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Tipo")[0].replace("###", ""));   
@@ -88,6 +95,9 @@ public class AlliansAutosModel {
                 if(newcontenido.toString().split("\n")[i].contains("Conductor") && newcontenido.toString().split("\n")[i].contains("habitual")){
                 modelo.setConductor(newcontenido.toString().split("\n")[i].split("habitual")[1].split("C.P:")[0].replace(":", "").replace("###", "").trim());
                 }
+                if(newcontenido.toString().split("\n")[i].contains("Conductor") && newcontenido.toString().split("\n")[i].contains("#C.P:")){
+                modelo.setConductor(newcontenido.toString().split("\n")[i].split("Conductor")[1].split("C.P:")[0].replace(":", "").replace("###", "").trim());
+                }
 
                  if(newcontenido.toString().split("\n")[i].contains("C.P:")){
                     List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
@@ -95,6 +105,8 @@ public class AlliansAutosModel {
                                modelo.setCp(valores.get(0));
                         }
                 }
+
+                  
               
             }
            modelo.setCteDireccion(newDireccion.toString());
