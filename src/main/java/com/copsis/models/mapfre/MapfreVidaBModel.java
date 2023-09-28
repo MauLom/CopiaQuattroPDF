@@ -24,6 +24,7 @@ public class MapfreVidaBModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", ConstantsValue.POLIZA_NUMERO)
+		.replace("P ól i za nú m ero :", ConstantsValue.POLIZA_NUMERO)
 				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
 				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
 				.replace("Prima Neta:", ConstantsValue.PRIMA_NETA4).replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
@@ -56,6 +57,7 @@ public class MapfreVidaBModel {
 			
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("### 00.00", "### 00.00###");
+			
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
 				
@@ -113,8 +115,33 @@ public class MapfreVidaBModel {
 			inicio = contenido.indexOf("DESIGNACION DE LOS BENEFICIARIOS");
 			leerBeneficiarios(inicio);
 			buildRecibos();
-		
-		
+	
+			if(modelo.getAsegurados().isEmpty()){
+				inicio = contenido.indexOf("NOMBRE PARENTESCO FECHA NAC.");
+				fin  = contenido.lastIndexOf("COBERTURAS ASEGURADA");			
+				StringBuilder conteAsegurado = new StringBuilder();
+				if(inicio > -1 && fin > -1 && inicio < fin){
+				conteAsegurado.append(contenido.split("NOMBRE PARENTESCO FECHA NAC.")[1].split("SUMA PLAZO PRIMA")[0].replace("@@@", "").replace("TITULAR", "###TITULAR###"));
+				}
+			
+				if(!conteAsegurado.isEmpty()){
+				List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+			
+				for(	int x=0; x < conteAsegurado.toString().split("\n").length ; x++){
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					if(conteAsegurado.toString().split("\n")[x].contains("-") ){
+					asegurado.setNombre( conteAsegurado.toString().split("\n")[x].split("###")[0]);
+					List<String> valores = fn.obtenVigePoliza(conteAsegurado.toString().split("\n")[x]);
+					asegurado.setNacimiento(fn.formatDateMonthCadena(valores.get(0)));
+					asegurado.setParentesco(1);
+				    listAsegurados.add(asegurado);
+					}
+					
+				}
+				modelo.setAsegurados(listAsegurados);
+				}
+			
+				}
 
 			return modelo;
 		} catch (Exception ex) {
@@ -151,8 +178,14 @@ public class MapfreVidaBModel {
 			modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
 			
 			if(arrNewContenido[i+1].split("-").length  == 3) {
-				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
-				modelo.setAgente(arrNewContenido[i + 1].split("###")[3].replace("###", "").replace(":","").trim());	
+				if(arrNewContenido[i + 1].split("###").length == 3){
+                   modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").replace(":","").trim());				
+				   modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());	
+				}else{
+					modelo.setCveAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());				
+				    modelo.setAgente(arrNewContenido[i + 1].split("###")[3].replace("###", "").replace(":","").trim());	
+				}
+				
 			}else {
 				modelo.setCveAgente(arrNewContenido[i + 1].split("###")[1].replace("###", "").replace(":","").trim());
 				modelo.setAgente(arrNewContenido[i + 1].split("###")[2].replace("###", "").replace(":","").trim());
@@ -173,14 +206,16 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerDatosDePago(String[] arrNewContenido, int i) {
-		if (arrNewContenido[i].contains("Fecha de Emisiòn:")
+		
+		if ((arrNewContenido[i].contains("Fecha de Emisiòn:") || arrNewContenido[i].contains("Fecha de emisiòn:"))
 				&& arrNewContenido[i].contains("Forma de Pago:")
 				&& arrNewContenido[i].contains("Moneda")) {
+						
 			modelo.setFechaEmision(fn.formatDateMonthCadena(
 					arrNewContenido[i + 1].split("###")[0].replace("###", "").replace(" ", ""))
 					.trim());
 			modelo.setFormaPago(fn
-					.formaPago(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim()));
+					.formaPagoSring(arrNewContenido[i + 1].split("###")[1].replace("###", "").trim()));
 			modelo.setMoneda(fn.buscaMonedaEnTexto(arrNewContenido[i + 1]));
 		}
 	}
@@ -237,6 +272,7 @@ public class MapfreVidaBModel {
 	}
 	
 	private void leerCoberturas(int inicio, int fin) {
+		
 		String newcontenido = "";
 		String[] arrNewContenido;
 		String renglon = "";
@@ -252,7 +288,10 @@ public class MapfreVidaBModel {
                     .replace("MUERTE###ACCIDENTAL###Y###PÉRDIDAS###ORGÁNICAS###COLECTIVA", "MUERTE ACCIDENTAL Y PÉRDIDAS ORGÁNICAS COLECTIVA")
                     .replace("SERVICIOS###FUNERARIOS","SERVICIOS FUNERARIOS")
                     .replace("Pago###de###suma###asegurada###por###invalidez###total###y###permanente###BIPA", "Pago de suma asegurada por invalidez total y permanente BIPA")
-                    .replace("Muerte###accidental###MA", "Muerte accidental MA");
+                    .replace("Muerte###accidental###MA", "Muerte accidental MA")
+					.replace("###PAGO###ADICIONAL###DE###SUMA###ASEGURADA###X###INVALIDEZ###TOTAL###Y###PERMANENTE", "###PAGO ADICIONAL DE SUMA ASEGURADA X INVALIDEZ TOTAL Y PERMANENTE")
+					.replace("EXENCION###POR###FALLECIMIENTO###AMPARADA", "EXENCION POR FALLECIMIENTO###AMPARADA");
+			
                     
 			
 		
@@ -272,6 +311,9 @@ public class MapfreVidaBModel {
 
 			}
 			modelo.setCoberturas(coberturas);
+
+
+			
 		}
 	}
 	
@@ -312,6 +354,7 @@ public class MapfreVidaBModel {
 	
 	private void obtenerAsegurado(String[] arrContenido,int i) {
 		List<EstructuraAseguradosModel> listAsegurados = new ArrayList<>();
+	
 
 		if(arrContenido[i].contains("Asegurado") && arrContenido[i].contains("R.F.C") && arrContenido[i].contains("Nacimiento")) {
 			EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
