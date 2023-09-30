@@ -148,8 +148,8 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         communsPdf.setCell(baseRow, 20, conceptos.get(i).getSumImporte(), black, true, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
                 
                         
-                        if (n == conceptos.size()) {
-                        }
+                          if (n == conceptos.size()) {
+                         }
                         }
                       
 
