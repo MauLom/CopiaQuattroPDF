@@ -23,4 +23,8 @@ public class SiniestroProjecion {
     private String  rfc;
     private String  padecimiento;
     private String  aseguradoraCuenta;
+    private String  totalReclamado;
+    private String  totalProcedente;
+    private String  usuario;
+    private String  usuarioFecha;
 }
