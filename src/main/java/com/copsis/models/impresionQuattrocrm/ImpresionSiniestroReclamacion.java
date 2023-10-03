@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream ;
 import com.copsis.clients.projections.ConceptoSiniestrosProjection;
 import com.copsis.clients.projections.DocumentoSiniestroProjection;
 import com.copsis.clients.projections.SocioDirecProjection ;
-import com.copsis.controllers.forms.ImpresionReclamacion;
+import com.copsis.controllers.forms.ImpresionReclamacionForm;
 import com.copsis.exceptions.GeneralServiceException ;
 import com.copsis.models.Tabla.BaseTable ;
 import com.copsis.models.Tabla.ImageUtils ;
@@ -32,7 +32,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
        
         
 
-        public byte[] buildPDF(ImpresionReclamacion reclamacion) {
+        public byte[] buildPDF(ImpresionReclamacionForm reclamacion) {
               float yStarpageNew=0;
               float ysposionfija;
               boolean acumula=false;
@@ -234,7 +234,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
         }
 
-        private float setEncabezado(PDDocument document, PDPage page, ImpresionReclamacion reclamacion,boolean headAdjuntos,
+        private float setEncabezado(PDDocument document, PDPage page, ImpresionReclamacionForm reclamacion,boolean headAdjuntos,
         boolean headerContiFacturas,boolean headeFactura,boolean headresult,boolean headerObservaciones ) {
             try ( PDPageContentStream conten = new PDPageContentStream(document, page)) {
                 yStart = 780;

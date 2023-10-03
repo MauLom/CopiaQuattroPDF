@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(Include.NON_NULL)
-public class ImpresionReclamacion { 
+public class ImpresionReclamacionForm { 
  private SiniestroProjecion siniestro;
  private SocioDirecProjection socio;
  private List<DocumentoSiniestroProjection> documentoSiniestro;

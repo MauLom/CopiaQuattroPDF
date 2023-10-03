@@ -26,7 +26,7 @@ import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
-import com.copsis.controllers.forms.ImpresionReclamacion;
+import com.copsis.controllers.forms.ImpresionReclamacionForm;
 import com.copsis.controllers.forms.MovimientosForm;
 import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.exceptions.GeneralServiceException;
@@ -372,7 +372,7 @@ public class ImpresionPDFController {
 	}
 
 	@PostMapping(value = "/siniestro/reclamacion")
-	public ResponseEntity<CopsisResponse> impresionReclamacion(@Valid @RequestBody ImpresionReclamacion  impresionReclamacion, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionReclamacion(@Valid @RequestBody ImpresionReclamacionForm  impresionReclamacion, BindingResult bindingResult) {
 		try {			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
