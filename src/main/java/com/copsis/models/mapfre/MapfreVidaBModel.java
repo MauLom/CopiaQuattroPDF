@@ -143,6 +143,13 @@ public class MapfreVidaBModel {
 			
 				}
 
+				if(!modelo.getVigenciaDe().isEmpty() && !modelo.getVigenciaA().isEmpty()){
+					if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) >1){
+						modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+					}
+
+				}
+
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(MapfreVidaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
