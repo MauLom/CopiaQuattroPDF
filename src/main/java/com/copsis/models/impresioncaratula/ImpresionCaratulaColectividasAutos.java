@@ -16,7 +16,7 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-public class ImpresionCaractulaColectividasAutos {
+public class ImpresionCaratulaColectividasAutos {
     private Color blue = new Color(40, 76, 113);
     private Color black = new Color(0, 0, 0);
     private Color gray = new Color(229, 234, 237);

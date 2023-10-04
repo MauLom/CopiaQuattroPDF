@@ -1,4 +1,4 @@
-package com.copsis.models.impresionCaratula;
+package com.copsis.models.impresioncaratula;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +17,7 @@ import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
 
-public class ImpresionCaractulaVidaGrupo {
+public class ImpresionCaratulaVidaGrupo {
     
     private Color blue = new Color(40, 76, 113);
         private Color black = new Color(0, 0, 0);

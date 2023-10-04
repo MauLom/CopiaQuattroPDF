@@ -41,14 +41,13 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
-import com.copsis.models.impresioncaratula.ImpresionCaractulaColectividasAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaColectividasAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaVidaGrupo;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaAutos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaDiversos;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaSalud;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaSaludGrupo;
 import com.copsis.models.impresioncaratula.ImpresionCaratulaVida;
-import com.copsis.models.impresionCaratula.ImpresionCaractulaVidaGrupo;
-
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -339,7 +338,7 @@ public class ImpresionService {
     public byte[] impresionCaratulaColeAutos( ImpresionCaratulaForm  impresionCaractulaForm  ){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaractulaColectividasAutos().buildPDF(impresionCaractulaForm);
+            byteArrayPDF = new ImpresionCaratulaColectividasAutos().buildPDF(impresionCaractulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
@@ -366,7 +365,7 @@ public class ImpresionService {
       public byte[] impresionCaratulaVidaGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionCaractulaVidaGrupo().buildPDF(impresionCaratulaForm);
+            byteArrayPDF = new ImpresionCaratulaVidaGrupo().buildPDF(impresionCaratulaForm);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
@@ -375,5 +374,7 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
+
+    
     
 }
