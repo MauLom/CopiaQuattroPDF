@@ -122,14 +122,22 @@ public class BupaSaludModel {
 			if(fin == -1) {
 			    fin = conteniext.indexOf("Hasta###Prima Neta");
 			}
+			if(fin == -1) {
+			    fin = conteniext.indexOf("Número de Recibo");
+			}
 		
 
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
 				
-				if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
+			if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
+				
+				  modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i] ));
+				}		
+				if(modelo.getFormaPago() == 0 && newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
 				  modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i+1] ));
 				}
+				
 				if(newcontenido.toString().split("\n")[i].contains("Moneda")) {
 					if(newcontenido.toString().split("\n")[i+1].contains("MXP")) {
 						modelo.setMoneda(1);
@@ -157,11 +165,15 @@ public class BupaSaludModel {
 				modelo.setMoneda(1);
 				modelo.setFormaPago(1);
 			}
+
+			if(modelo.getMoneda() == 0){
+				modelo.setMoneda(1);
+			}
 			
 	
 			
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(BupaSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}

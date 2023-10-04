@@ -26,7 +26,6 @@ import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.continental.ContinentalAssitModel;
-import com.copsis.models.continental.ContinentalAssitSalud;
 import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
@@ -314,8 +313,10 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA HDI
 			if (!encontro && contenido.contains("HDI Seguros, S.A. de C.V.")
 					|| contenido.contains("HDI Seguros, S.A. de C.V.")
+					|| contenido.contains("HDI SEGUROS, S.A. DE C.V.")
 					|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > -1
 					|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+						
 				HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
 				modelo = datosHdi.procesar();
 				encontro = true;
