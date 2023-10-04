@@ -10,5 +10,6 @@ public class ConceptoSiniestrosProjection {
     private String  fechFactura;
     private String  rfc;
     private String  concepto;
-    private String  sumImporte;           
+    private String  sumImporte;    
+    private String  procedente;    
 }

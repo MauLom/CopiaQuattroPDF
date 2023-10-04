@@ -1,10 +1,14 @@
 package com.copsis.clients.projections;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(Include.NON_NULL)
 public class SiniestroProjecion {
     private String fechaCaptura;
     private String folio;
@@ -13,7 +17,7 @@ public class SiniestroProjecion {
     private String  cveAgente;
     private String  asegurado;
     private String  fechaNacimiento;
-    private int  edad;
+    private String  edad;
     private String  noPoliza;
     private String  certificado;
     private String  parentesco;
@@ -23,8 +27,7 @@ public class SiniestroProjecion {
     private String  rfc;
     private String  padecimiento;
     private String  aseguradoraCuenta;
-    private String  totalReclamado;
-    private String  totalProcedente;
+    private String  totalReclamado;  
     private String  usuario;
     private String  usuarioFecha;
 }

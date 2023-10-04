@@ -45,6 +45,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                 ByteArrayOutputStream output;
                 try ( PDDocument document = new PDDocument()) {
                     try {
+                       
                         PDPage page = new PDPage();
                         document.addPage(page);
                         BaseTable table;
@@ -69,7 +70,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                     String logoCheckF="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2309/1N7rQflDvq65bN1u4E4VKJABXzJ2yq1vERpw1yBLqQEePZDsiojdQAwCgVMyke/icon.png";
                         
             
-                        while(x < documentoSiniestro.size()){
+                        while(x < documentoSiniestro.size()){                          
                             acumula=true;
                             if(x % 2 == 0){
                                 table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
@@ -94,6 +95,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                                 page = new PDPage();
                                 document.addPage(page);
                                 acumula=false;
+                                break;
                             }else {
                                 table.remoBordes(false,1);
                                 table.draw();
@@ -122,7 +124,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         if(yStart < 55){}else{        
                             yTexto=true;                
                         yStart = yStart-20;
-                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, false, true);
+                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
                         baseRow = communsPdf.setRow(table);
                         communsPdf.setCell(baseRow, 12, "FACTURA", black, true, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
                         communsPdf.setCell(baseRow, 8, "FECHA", black, true, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
@@ -142,9 +144,10 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                         int pt = 0;
                         List<ConceptoSiniestrosProjection> conceptos = reclamacion.getConceptoSiniestro();
 
-                        while(i < conceptos.size()){
+                        while(i < 5){
+                         
                           acumula2=true;
-                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, false, true);
+                        table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
                         baseRow = communsPdf.setRow(table);
                         communsPdf.setCell(baseRow, 12, conceptos.get(i).getFolio(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
                         communsPdf.setCell(baseRow, 8, conceptos.get(i).getFechFactura(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
@@ -166,15 +169,19 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                               baseRow = communsPdf.setRow(table);
                               communsPdf.setCell(baseRow, 60, "", black, true, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
                               communsPdf.setCell(baseRow, 20, "TOTAL PROCEDENTE:", black, true, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);
-                              communsPdf.setCell(baseRow, 20, reclamacion.getSiniestro().getTotalReclamado(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);                              
+                              communsPdf.setCell(baseRow, 20,conceptos.get(i).getProcedente(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white);                              
                             }
                           }
 
                            if( isEndOfPage(table)){
+                           
                             pt = i;
                             table.getRows().remove(table.getRows().size() - 1);
                             table.remoBordes(true,1);
                             table.draw();
+                            page = new PDPage();
+                            document.addPage(page);
+                            d++;
                             if (d == 1) {
                                 if (yTexto) {
                                     setEncabezado(document, page, reclamacion, false, true, true, false, false);
@@ -184,10 +191,10 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                             } else {
                                  setEncabezado(document, page, reclamacion, false, true, true, false, false);
                             }
-                            acumula = false;
+                            acumula2 = false;
                            }
 
-                           if (acumula) {
+                           if (acumula2) {
                             table.remoBordes(true,1);
                             table.draw();
                             yStart -= table.getHeaderAndDataHeight();
@@ -221,13 +228,13 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/reclamncion.pdf"));
+                        ///document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/reclamncion.pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
                     }
                 }
-            } catch (Exception ex) {
+            } catch (Exception ex) {          
                 throw new GeneralServiceException("00001",
                         "Ocurrio un error en el servicio ImpresioncaratulaAutos: " + ex.getMessage());
             }
@@ -249,7 +256,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
                     table.draw();
                 }
     
-                String direccion = socio.getNombSocio() +" "+ socio.getCalle()+" "+ socio.getColonia() +" "+ socio.getEstado();
+                String direccion =socio !=null ?  socio.getNombSocio() +" "+ socio.getCalle()+" "+ socio.getColonia() +" "+ socio.getEstado():"";
 
                 table = new BaseTable(yStart, yStart, bottomMargin, 245, 180, document, page, false, true);
                 baseRow = communsPdf.setRow(table);
@@ -399,6 +406,7 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
              return yStart;
             } catch (Exception ex) {
+               
                 throw new GeneralServiceException("00001",
                         "Ocurrio un error en el servicio setEncabezado: " + ex.getMessage());
             }
@@ -406,8 +414,11 @@ import com.copsis.models.Tabla.Sio4CommunsPdf ;
 
 
     private boolean isEndOfPage(BaseTable table) {
+      
         float currentY = yStart - table.getHeaderAndDataHeight();   
+     
         return  currentY <= bottomMargin;
     }
 
+    
     }
