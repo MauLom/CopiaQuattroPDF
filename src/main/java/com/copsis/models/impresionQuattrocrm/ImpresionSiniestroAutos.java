@@ -2,28 +2,31 @@ package com.copsis.models.impresionQuattrocrm;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
+import com.copsis.clients.projections.DocumentoSiniestroProjection;
+import com.copsis.clients.projections.SocioDirecProjection;
+import com.copsis.controllers.forms.ImpresienstroAutosForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
 import com.copsis.models.Tabla.Row;
 import com.copsis.models.Tabla.Sio4CommunsPdf;
-import com.copsis.clients.projections.SocioDirecProjection;
-import com.copsis.controllers.forms.ImpresionReclamacionForm;
 
 public class ImpresionSiniestroAutos {
 
     private Color black = new Color(0, 0, 0);
     private Color gray = new Color(229, 234, 237);
     private Sio4CommunsPdf communsPdf = new Sio4CommunsPdf();
-    private float yStart = 780, bottomMargin = 30, fullWidth = 590, yStartNewPage = 780, margin = 10;
+    private float yStart = 780, bottomMargin = 30, fullWidth = 582, yStartNewPage = 780, margin = 14;
     private Color grayCell = new Color(148, 166, 187);
+    private Color blue = new Color(40, 76, 113);
 
-    public byte[] buildPDF(ImpresionReclamacionForm reclamacion) {
+    public byte[] buildPDF(ImpresienstroAutosForm  sienstroAutos) {
         float yStarpageNew = 0;
         float ysposionfija;
         boolean acumula = false;
@@ -38,17 +41,173 @@ public class ImpresionSiniestroAutos {
                         document.addPage(page);
                         BaseTable table;
                         Row<PDPage> baseRow;
-                       yStart = this.setEncabezado(document, page, reclamacion, false, false, false, false, false);
+                        yStart = this.setEncabezado(document, page, sienstroAutos);
+
+                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 60, "Siniestro", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                        communsPdf.setCell(baseRow, 40, "Montos", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                                                           
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Descripción", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 12,"Reclamado:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 28,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Tipo de Siniestro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 12,"Procedente:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 28,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Tipo de Siniestro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 12,"Coaseguro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 28,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Fecha del Reporte:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 12,"Deducible:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 28,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Fecha del Registro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 12,"Pagado:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        communsPdf.setCell(baseRow, 28,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
+                        table.remoBordes(true, 1);
+                        table.draw();
+
+                        yStart -=table.getHeaderAndDataHeight()+10;
+
+                    
+                       yStart = this.setDatos(document, page, sienstroAutos,yStart);
+
+                     
+                
+                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 60, "Documentación", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                        table.remoBordes(true, 1);
+                        table.draw();
+
+
+                        yStart -= table.getHeaderAndDataHeight();
+                        ysposionfija = yStart;
+
+                        List<DocumentoSiniestroProjection> documentoSiniestro = sienstroAutos.getDocumentoSiniestro();
+
+                        int x=0;
+                        int co=1;
+                        int ct=0;
+                    String logoCheck="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2309/1N7rQflDvq65bN1u4E4VKFMSxdk5J1stSC7DxhViOGc7vz1H5gV6PXBNAlEmXhz/iconX.png";
+                    String logoCheckF="https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2309/1N7rQflDvq65bN1u4E4VKJABXzJ2yq1vERpw1yBLqQEePZDsiojdQAwCgVMyke/icon.png";
+                        
+                    if(!documentoSiniestro.isEmpty()){
+                        while(x < documentoSiniestro.size()){                          
+                            acumula=true;
+                            if(x % 2 == 0){
+                                table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
+                                baseRow = communsPdf.setRow(table);
+                                communsPdf.setCell(baseRow, 10, ImageUtils.readImage(documentoSiniestro.get(x).isStatus()  ? logoCheck: logoCheckF).scale(130, 130));
+                                communsPdf.setCell(baseRow, 90, documentoSiniestro.get(x).getNombre(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white).setTopPadding(12);
+                            }else{                                
+                                table = new BaseTable(ysposionfija, yStartNewPage, bottomMargin, 295, 295, document, page, false, true);
+                                baseRow = communsPdf.setRow(table);
+                                communsPdf.setCell(baseRow, 10, ImageUtils.readImage(documentoSiniestro.get(x).isStatus()  ? logoCheck: logoCheckF).scale(130, 130));
+                                communsPdf.setCell(baseRow, 90, documentoSiniestro.get(x).getNombre(), black, false, "L", 7, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(4f), Color.white).setTopPadding(12);
+                           
+                            }
+
+                            if (isEndOfPage(table)) {
+                                table.getRows().remove(table.getRows().size() - 1);
+                                table.remoBordes(false, 1);
+                                table.draw();
+                                this.setEncabezado(document, page, sienstroAutos);
+                                yStart = yStarpageNew;
+                                ysposionfija = yStarpageNew - 15;
+                                page = new PDPage();
+                                document.addPage(page);
+                                acumula=false;
+                                break;
+                            }else {
+                                table.remoBordes(false,1);
+                                table.draw();
+    
+                                if (x % 2 == 0) {
+                                    yStart -= table.getHeaderAndDataHeight();
+                                } else {
+                                    ysposionfija -= table.getHeaderAndDataHeight();
+                                }
+                            }
+                            ct++;
+    
+                            if (acumula) {
+                                x++;
+                                co++;
+                            }
+                            if (ct > 1000) {
+                                table.remoBordes(false,1);
+                                table.draw();
+                                break;
+                            }
+    
+                        }
+                    }
+
+                        yStart -=table.getHeaderAndDataHeight()+10;
+                        table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 60, "Descripción del Siniestro", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                        table.remoBordes(true, 1);
+                        table.draw();
+
+                        yStart -= table.getHeaderAndDataHeight();
+
+                        if (sienstroAutos.getContrantante() != null && sienstroAutos.getContrantante().getDescripcion().length() > 0) {
+
+                            String dato = Sio4CommunsPdf.eliminaHtmlTags3(sienstroAutos.getContrantante().getDescripcion());
+                            String datos[] = dato.split("<br>|<br/>|</br>");
+
+                            int y = 0;
+                            while (y < datos.length) {
+                                acumula = true;
+                                table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, false, true);
+                                baseRow = communsPdf.setRow(table, 13);
+                                communsPdf.setCell(baseRow, 100, Sio4CommunsPdf.eliminaHtmlTags3(datos[y]), black, false, "L", 9, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray);
+                                if (isEndOfPage(table)) {
+                                    table.getRows().remove(table.getRows().size() - 1);
+                                    table.draw();
+                                    page = new PDPage();
+                                    document.addPage(page);
+                                     this.setEncabezado(document, page, sienstroAutos);
+                                    acumula = false;
+                                } else {
+                                    table.remoBordes(true, 1);
+                                    table.draw();
+                                    yStart -= table.getHeaderAndDataHeight();
+                                }
+                                if (acumula) {
+                                    y++;
+                                }
+                                if (y > 100) {
+                                    table.draw();
+                                    break;
+
+                                }
+                            }
+                        }
+
+
+
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/reclamncion.pdf"));
+                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/siniestroauto.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresioncaratulaAutos: " + ex.getMessage());
         }
@@ -56,16 +215,15 @@ public class ImpresionSiniestroAutos {
     }
 
 
-    private float setEncabezado(PDDocument document, PDPage page, ImpresionReclamacionForm reclamacion,boolean headAdjuntos,
-        boolean headerContiFacturas,boolean headeFactura,boolean headresult,boolean headerObservaciones ) {
+    private float setEncabezado(PDDocument document, PDPage page, ImpresienstroAutosForm  siniestroAuto ) {
             try ( PDPageContentStream conten = new PDPageContentStream(document, page)) {
                 yStart = 780;
                 BaseTable table;
                 Row<PDPage> baseRow;
-                SocioDirecProjection socio = reclamacion.getSocio();
+                SocioDirecProjection socio = siniestroAuto.getSocio();
                 if (socio != null) {
 
-                    table = new BaseTable(775, 775, bottomMargin, 150, 10, document, page, false, true);
+                    table = new BaseTable(778, 778, bottomMargin, 150, 10, document, page, false, true);
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 100, ImageUtils.readImage(socio.getAvatar()).scale(130, 130));
                     table.draw();
@@ -79,69 +237,70 @@ public class ImpresionSiniestroAutos {
                 table.draw();
                
 
-                table = new BaseTable(yStart, yStart, bottomMargin, 155, 443, document, page, true, true);
-                baseRow = communsPdf.setRow(table,10);
-                communsPdf.setCell(baseRow, 60, "No.Siniestro", black, false, "L", 8, communsPdf.setLineStyle(grayCell), "", communsPdf.setPadding(3f), grayCell).setLeftPadding(10);                
-                communsPdf.setCell(baseRow, 40, reclamacion.getSiniestro().getFechaCaptura(), black, false, "C", 8, communsPdf.setLineStyle(grayCell), "", communsPdf.setPadding(3f), grayCell);
-                baseRow = communsPdf.setRow(table,10);
-                communsPdf.setCell(baseRow, 60, "Orden", black, false, "L", 8, communsPdf.setLineStyle(grayCell), "", communsPdf.setPadding(3f), grayCell).setLeftPadding(10);                
-                communsPdf.setCell(baseRow, 40, reclamacion.getSiniestro().getFechaCaptura(), black, false, "C", 8, communsPdf.setLineStyle(grayCell), "", communsPdf.setPadding(3f), grayCell);
+                table = new BaseTable(yStart, yStart, bottomMargin, 133, 462, document, page, true, true);
+                baseRow = communsPdf.setRow(table,12);
+                communsPdf.setCell(baseRow, 100, "No.Siniestro", black, false, "C",11, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray).setLeftPadding(10);                
+                 baseRow = communsPdf.setRow(table,12);
+                communsPdf.setCell(baseRow, 100,"" , black, false, "C", 11, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), Color.white);
+                baseRow = communsPdf.setRow(table,12);
+                communsPdf.setCell(baseRow, 100, "Orden", black, false, "C", 11, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f), gray).setLeftPadding(10);                
+                baseRow = communsPdf.setRow(table,12);
+                communsPdf.setCell(baseRow, 100, "", black, false, "C", 11, communsPdf.setLineStyle(gray), "", communsPdf.setPadding(3f),  Color.white);
+                table.setCellCallH(true);
                 table.draw();
 
                
 
-                 yStart -= table.getHeaderAndDataHeight()+15;
+                 yStart -= table.getHeaderAndDataHeight()+20;
 
                  table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
-                 baseRow = communsPdf.setRow(table);
-                 communsPdf.setCell(baseRow, 58, "Contratante", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
-                 communsPdf.setCell(baseRow, 42, "Movimiento", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 58,"",black, true, "L", 13,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 communsPdf.setCell(baseRow, 42,"",black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"Póliza", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 42,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Emisión:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 42,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Subramo::", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 42,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Forma de Pago:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 9,"CURP:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 communsPdf.setCell(baseRow, 30,"" , black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Moneda:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 7,"Email:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 30, "", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 58,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 10,"Teléfono:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 30,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42, "Contratante", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                 communsPdf.setCell(baseRow, 38, "Movimiento", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                            
+                 baseRow = communsPdf.setRow(table,16);
+                 communsPdf.setCell(baseRow, 42,siniestroAuto.getContrantante().getContrantante(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 14,"Póliza:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 58,siniestroAuto.getContrantante().getNoPoliza(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+                
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42,siniestroAuto.getContrantante().getRfc(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 14,"Vigencia:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 44,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+         
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42,siniestroAuto.getContrantante().getCteCalle(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 14,"Emisión:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getFechaEmision(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42,siniestroAuto.getContrantante().getCteColonia(), blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 14,"Subramo:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getSubRamo(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42,"", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);                  
+                 communsPdf.setCell(baseRow, 14,"Forma de Pago:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getFormaPago() , blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 42,"", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white); 
+                 communsPdf.setCell(baseRow, 14,"Moneda", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);                  
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getMoneda(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(4f), Color.white);                 
                  table.remoBordes(true, 1);
                  table.draw();
 
                  yStart -=table.getHeaderAndDataHeight()+10;
                  table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
-                 baseRow = communsPdf.setRow(table);
-                 communsPdf.setCell(baseRow, 58, "Agente:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
-                 communsPdf.setCell(baseRow, 42, "Grupo:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f),gray);                                
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Aseguradora:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 42,"", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
-                 baseRow = communsPdf.setRow(table,15);
-                 communsPdf.setCell(baseRow, 14,"Clave:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,"", black, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                   
+                 baseRow = communsPdf.setRow(table,14);
+                 communsPdf.setCell(baseRow, 100, "Agente:", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                 
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 14,"Aseguradora:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getAseguradora(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                  
+                 baseRow = communsPdf.setRow(table,12);
+                 communsPdf.setCell(baseRow, 14,"Clave:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getClaveAngente(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                   
                  table.remoBordes(true, 1);
-                 table.draw();
+                table.draw();
+                   yStart -=table.getHeaderAndDataHeight()+5;
+                
              return yStart;
             } catch (Exception ex) {
                
@@ -150,6 +309,52 @@ public class ImpresionSiniestroAutos {
             }
         }
 
+
+       private float setDatos(PDDocument document, PDPage page, ImpresienstroAutosForm  siniestroAuto ,Float yStartIn) {
+            try {
+                yStart= yStartIn;
+                  BaseTable table;
+                Row<PDPage> baseRow;
+                   System.out.println(yStartIn);
+               table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 60, "Datos de Contacto", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Asegurado:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Correo:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Celular:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Nombre en Cuenta:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Cuenta:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Banco:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Clave:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 17,"Referencia:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                    
+                        table.remoBordes(true, 1);
+                        table.draw();
+
+                    yStart -=table.getHeaderAndDataHeight()+10;
+                
+             return yStart;           
+            } catch (Exception ex) {
+              throw new GeneralServiceException("00001",
+                        "Ocurrio un error en el servicio setEncabezado: " + ex.getMessage());
+            }
+
+        }
 
     private boolean isEndOfPage(BaseTable table) {
       

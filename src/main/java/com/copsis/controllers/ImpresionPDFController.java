@@ -21,6 +21,7 @@ import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.clients.projections.PolizaAutosProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
+import com.copsis.controllers.forms.ImpresienstroAutosForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
@@ -385,5 +386,21 @@ public class ImpresionPDFController {
 			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
 		}		  
 	}
+
+   @PostMapping(value = "/siniestro/auto")
+	public ResponseEntity<CopsisResponse> impresionSiniestroAuto(@Valid @RequestBody ImpresienstroAutosForm  impresienstroAutosForm, BindingResult bindingResult) {
+		try {			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionQuattroService.impresionSiniestroAuto(impresienstroAutosForm)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+  
   
 }
