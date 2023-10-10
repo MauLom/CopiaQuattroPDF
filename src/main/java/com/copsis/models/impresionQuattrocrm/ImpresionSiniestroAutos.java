@@ -41,7 +41,7 @@ public class ImpresionSiniestroAutos {
                         document.addPage(page);
                         BaseTable table;
                         Row<PDPage> baseRow;
-                        yStart = this.setEncabezado(document, page, sienstroAutos);
+                        yStart = this.setEncabezado(document, page, sienstroAutos,false);
 
                         table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table,14);
@@ -55,7 +55,7 @@ public class ImpresionSiniestroAutos {
                         communsPdf.setCell(baseRow, 28,sienstroAutos.getSiniestroAProjection().getReclamado(), blue, false, "R", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table,14);
                         communsPdf.setCell(baseRow, 17,"Tipo de Siniestro:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                        communsPdf.setCell(baseRow, 43,"", blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
+                        communsPdf.setCell(baseRow, 43,tipoSiniestro(sienstroAutos.getSiniestroAProjection().getTipo()), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
                         communsPdf.setCell(baseRow, 12,"Procedente:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                         communsPdf.setCell(baseRow, 28,sienstroAutos.getSiniestroAProjection().getProcendente(), blue, false, "R", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);
                         baseRow = communsPdf.setRow(table,14);
@@ -152,7 +152,7 @@ public class ImpresionSiniestroAutos {
                                 table.getRows().remove(table.getRows().size() - 1);
                                 table.remoBordes(false, 1);
                                 table.draw();
-                                this.setEncabezado(document, page, sienstroAutos);
+                                this.setEncabezado(document, page, sienstroAutos,false);
                                 yStart = yStarpageNew;
                                 ysposionfija = yStarpageNew - 15;
                                 page = new PDPage();
@@ -209,7 +209,7 @@ public class ImpresionSiniestroAutos {
                                     table.draw();
                                     page = new PDPage();
                                     document.addPage(page);
-                                     this.setEncabezado(document, page, sienstroAutos);
+                                     this.setEncabezado(document, page, sienstroAutos,true);
                                     acumula = false;
                                 } else {
                                     table.remoBordes(true, 1);
@@ -232,7 +232,7 @@ public class ImpresionSiniestroAutos {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/siniestroauto.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/IMPRESIONCARACTULA/SINIESTRO.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -247,7 +247,7 @@ public class ImpresionSiniestroAutos {
     }
 
 
-    private float setEncabezado(PDDocument document, PDPage page, ImpresionSiniestroAForm  siniestroAuto ) {
+    private float setEncabezado(PDDocument document, PDPage page, ImpresionSiniestroAForm  siniestroAuto,boolean descripcion ) {
             try ( PDPageContentStream conten = new PDPageContentStream(document, page)) {
                 yStart = 780;
                 BaseTable table;
@@ -325,13 +325,22 @@ public class ImpresionSiniestroAutos {
                  
                  baseRow = communsPdf.setRow(table,12);
                  communsPdf.setCell(baseRow, 14,"Aseguradora:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getAseguradora(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                  
+                 communsPdf.setCell(baseRow, 80,siniestroAuto.getContrantante().getAseguradora(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                  
                  baseRow = communsPdf.setRow(table,12);
                  communsPdf.setCell(baseRow, 14,"Clave:", blue, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white); 
-                 communsPdf.setCell(baseRow, 44,siniestroAuto.getContrantante().getClaveAngente(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                   
+                 communsPdf.setCell(baseRow, 80,siniestroAuto.getContrantante().getClaveAngente(), blue, false, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), Color.white);                                   
                  table.remoBordes(true, 1);
                 table.draw();
                    yStart -=table.getHeaderAndDataHeight()+5;
+
+                   if(descripcion){
+                       table = new BaseTable(yStart, yStart, bottomMargin, fullWidth, margin, document, page, true, true);
+                        baseRow = communsPdf.setRow(table,14);
+                        communsPdf.setCell(baseRow, 60, "Descripción del Siniestro", black, true, "L", 9,communsPdf.setLineStyle(gray),"", communsPdf.setPadding(3f), gray);
+                        table.remoBordes(true, 1);
+                        table.draw();
+                        yStart -=table.getHeaderAndDataHeight()+5;
+                   }
                 
              return yStart;
             } catch (Exception ex) {
@@ -393,6 +402,100 @@ public class ImpresionSiniestroAutos {
         float currentY = yStart - table.getHeaderAndDataHeight();   
      
         return  currentY <= bottomMargin;
+    }
+
+    public String tipoSiniestro(Integer tipo) {
+        String result = "";
+        switch (tipo) {
+            case 18:
+                result = "ATROPELLAMIENTO";
+                break;
+            case 19:
+                result = "INTENTO DE ROBO";
+                break;
+            case 20:
+                result = "AJUSTE EXPRES";
+                break;
+            case 21:
+                result = "INUNDACIÓN";
+                break;
+            case 22:
+                result = "ROBO PARCIAL";
+                break;
+            case 23:
+                result = "CAIDA DE OBJETOS";
+                break;
+            case 24:
+                result = "ALCANCE (DAR)";
+                break;
+            case 25:
+                result = "VOLCADURA";
+                break;
+            case 26:
+                result = "AUTOPISTA";
+                break;
+            case 27:
+                result = "VUELTA INDEBIDA";
+                break;
+            case 28:
+                result = "FALTA DE PERICIA";
+                break;
+            case 29:
+                result = "COLISION CON OBJETO FIJO";
+                break;
+            case 50:
+                result = "ACCIDENTE";
+                break;
+            case 51:
+            case 10:
+                result = "COLISIÓN/VUELCO";
+                break;
+            case 52:
+            case 11:
+                result = "INCENDIO / RAYO / EXPLOSIÓN";
+                break;
+            case 53:
+            case 12:
+                result = "FHM";
+                break;
+            case 54:
+            case 13:
+                result = "TERREMOTO";
+                break;
+            case 55:
+            case 14:
+                result = "ROBO";
+                break;
+            case 56:
+            case 15:
+                result = "ASISTENCIA";
+                break;
+            case 58:
+            case 17:
+                result = "CRISTALES";
+                break;
+            case 59:
+                result = "EQUIPO ELECTRONICO";
+                break;
+            case 60:
+                result = "ROTURA DE MAQUINARIA";
+                break;
+            case 61:
+                result = "ANUNCIOS LUMINOSOS";
+                break;
+            case 62:
+                result = "DINERO Y VALORES";
+                break;
+            case 63:
+                result = "RESPONSABILIDAD CIVIL";
+                break;
+            case 67:
+            case 16:
+                result = "OTRO";
+                break;
+
+        }
+        return result;
     }
 
 
