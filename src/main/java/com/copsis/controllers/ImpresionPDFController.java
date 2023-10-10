@@ -21,7 +21,7 @@ import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
 import com.copsis.clients.projections.PolizaAutosProjection;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
-import com.copsis.controllers.forms.ImpresienstroAutosForm;
+import com.copsis.controllers.forms.ImpresionSiniestroAForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
@@ -388,7 +388,7 @@ public class ImpresionPDFController {
 	}
 
    @PostMapping(value = "/siniestro/auto")
-	public ResponseEntity<CopsisResponse> impresionSiniestroAuto(@Valid @RequestBody ImpresienstroAutosForm  impresienstroAutosForm, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionSiniestroAuto(@Valid @RequestBody ImpresionSiniestroAForm  impresienstroAutosForm, BindingResult bindingResult) {
 		try {			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
