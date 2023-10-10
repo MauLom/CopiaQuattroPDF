@@ -137,37 +137,52 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
+								
 						if(newcontenido.split("\n")[i + 1].length() > 50) {
-							vigencias = fn.gatos(newcontenido.split("\n")[i + 1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+							vigencias = fn.gatos(newcontenido.split("\n")[i +1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+			                
+							if(vigencias.split("###").length > 7 && vigencias.split("###")[6].trim().length() < 4){
+								vigencias = fn.gatos(newcontenido.split("\n")[i +2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+							}
 						}else {
 							vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 						}
-						
 
-						int to = 0;
+						
+					
+
+						
 						int sp = vigencias.split("###").length;
-						to = sp - 9;
+						int to  = sp - 9;
+						
+						
 
 						if (sp == 12) {
 							vigencias = fn.gatos(vigencias.split(vigencias.split("###")[2])[1]);
 							sp = vigencias.split("###").length;
-						} else {
-							if (sp > 9) {
-								vigencias = fn.gatos(
-										vigencias.split(vigencias.split("###")[to - 1])[1].replace(" ", "").trim());
-								sp = vigencias.split("###").length;
-							}
-
+						} 
+						if (sp > 9) {
+							vigencias = fn.gatos(vigencias.split(vigencias.split("###")[to - 1])[1].replace(" ", "").trim());
+							sp = vigencias.split("###").length;
 						}
+						
+					
+						
 
 						if (sp == 9) {
+							
+						
 							modelo.setVigenciaA((vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
 									+ vigencias.split("###")[6]).replace(" ", "").trim());
 							modelo.setVigenciaDe((vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
 									+ vigencias.split("###")[3]).replace(" ", "").trim());
-							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"
-									+ vigencias.split("###")[0]).replace(" ", "").trim());
+							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"+ vigencias.split("###")[0]).replace(" ", "").trim());
 						}
+						
+						
+					
+
+						
 					}
 
 					if (newcontenido.split("\n")[i].contains("Cobertura:")
