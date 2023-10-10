@@ -26,9 +26,8 @@ public class AxaAutos2Model {
 		int fin;
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
-			// tipo
-			modelo.setTipo(1);
-			// cia
+			
+			modelo.setTipo(1);			
 			modelo.setCia(20);
 
 

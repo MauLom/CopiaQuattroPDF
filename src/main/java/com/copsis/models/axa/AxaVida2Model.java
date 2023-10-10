@@ -55,7 +55,13 @@ public class AxaVida2Model {
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				resultado.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < resultado.toString().split("\n").length; i++) {
+				
 
+					if (resultado.toString().split("\n")[i].contains("Página") && resultado.toString().split("\n")[i+1].contains("PÓLIZA")){
+	                 modelo.setPoliza(resultado.toString().split("\n")[i+2].split("###")[1]);
+					
+					}
+					
 					if (resultado.toString().split("\n")[i].contains(ConstantsValue.CONTRATANTE2)
 							&& resultado.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)
 							&& resultado.toString().split("\n")[i + 1].contains(",")) {
@@ -91,9 +97,15 @@ public class AxaVida2Model {
 						} else {
 							modelo.setCteNombre(nombre);
 						}
-						if(resultado.toString().split("\n")[i].split("###").length> 2){
+					if(modelo.getPoliza().isEmpty()){
+						if(resultado.toString().split("\n")[i].split("###").length  == 4){
+							modelo.setPoliza(resultado.toString().split("\n")[i].split("###")[3]);
+						}	
+						if(modelo.getPoliza().isEmpty() && resultado.toString().split("\n")[i].split("###").length  > 2){
+						
 							modelo.setPoliza(resultado.toString().split("\n")[i].split("###")[2]);
 						}
+					}
 
 
 					}
@@ -129,7 +141,8 @@ public class AxaVida2Model {
 					if (modelo.getCteDireccion().length() == 0) {
 						if (resultado.toString().split("\n")[i].contains(ConstantsValue.DOMICILIO2)) {
 							StringBuilder direccion2 = new StringBuilder();
-							direccion2.append(resultado.toString().split("\n")[i].split("###")[0]);
+							
+							direccion2.append(resultado.toString().split("\n")[i].replace("###", " "));
 							direccion2.append(
 									" " + resultado.toString().split("\n")[i + 1].split("###")[0].replace("###", ""));
 							direccion2.append(
@@ -138,7 +151,7 @@ public class AxaVida2Model {
 							direccion2.append(
 									" " + resultado.toString().split("\n")[i + 3].split("###")[0].split("###")[0]
 											.replace("###", ""));
-							modelo.setCteDireccion(direccion2.toString().replace(ConstantsValue.DOMICILIO, "").trim());
+							modelo.setCteDireccion(direccion2.toString().replace(ConstantsValue.DOMICILIO, "").replace(" Fecha de emisión R.F.C:", "").trim());
 							if (modelo.getCteDireccion().length() > 50) {
 								modelo.setCp(fn.obtenerCPRegex2(direccion2.toString()));
 							}
@@ -176,9 +189,22 @@ public class AxaVida2Model {
 					}
 
 					if (resultado.toString().split("\n")[i].contains("Inicio de Vigencia")) {						
-						List<String> valores = fn.obtenVigeCpl(resultado.toString().split("\n")[i]);						
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
-						modelo.setFechaEmision(modelo.getVigenciaDe());
+						
+						List<String> valores = fn.obtenVigeCpl(resultado.toString().split("\n")[i]);	
+						
+						if(!valores.isEmpty()){
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+						    modelo.setFechaEmision(modelo.getVigenciaDe());
+						}
+						
+						
+
+						if(valores.isEmpty()){							
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(resultado.toString().split("\n")[i].split("###")[1]));
+						    modelo.setFechaEmision(modelo.getVigenciaDe());
+						}
+					
+					
 					}
 					if (resultado.toString().split("\n")[i].contains("Fecha de fin")
 							&& resultado.toString().split("\n")[i].contains("R.F.C:")
@@ -295,8 +321,9 @@ public class AxaVida2Model {
 					}
 					
 					if (asegurado.getNombre().length() == 0
-							&& resultado.toString().split("\n")[i].contains("Datos del asegurado")) {
+							&& resultado.toString().split("\n")[i].contains("Datos del asegurado") && resultado.toString().split("\n")[i+1].contains("Nombre") ) {
 
+					
 						String str = resultado.toString().split("\n")[i + 1].split("Nombre")[1].replace(":", "").replace("###", "")
 								.trim();
 								if(str.contains("de suma")){
@@ -502,7 +529,7 @@ public class AxaVida2Model {
 
 			return modelo;
 		} catch (Exception ex) {	
-			
+			ex.printStackTrace();
 			modelo.setError(AxaVida2Model.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
