@@ -33,4 +33,5 @@ public class ContratanteCaraProjection {
     private	String  primaTotal;
     private	int  totalIncisos;
     private	String  detalleSeguro;
+    private	 int  modelo;
 }
