@@ -119,6 +119,7 @@ public class BupaSaludModel {
 	
 			inicio = conteniext.indexOf("Forma de Pago");
 			fin = conteniext.indexOf("Vigencia###Prima Neta");
+			
 			if(fin == -1) {
 			    fin = conteniext.indexOf("Hasta###Prima Neta");
 			}
@@ -128,6 +129,7 @@ public class BupaSaludModel {
 		
 
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
+			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
 				
 			if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
@@ -149,9 +151,13 @@ public class BupaSaludModel {
 				inicio = recibo.indexOf("Forma de Pago");
 				fin = recibo.indexOf("Prima Neta");
 				newcontenido.append(fn.extracted(inicio, fin, recibo));
+				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					if (newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
+					}
+					if (newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Moneda")) {
 						if (newcontenido.toString().split("\n")[i + 1].contains("MXP")) {
