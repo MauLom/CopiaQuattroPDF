@@ -17,5 +17,8 @@ public class SiniestroAProjection {
     private String fechSiniestro;
     private String fechReporte;
     private String fechRegitro;
-    private int tipo;    
+    private int tipo;
+    private String fechaPromesa; 
+    private String fechaCierre;
+    private int siniestroID;     
 }

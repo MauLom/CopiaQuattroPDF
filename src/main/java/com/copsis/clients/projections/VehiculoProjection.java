@@ -27,5 +27,6 @@ public class VehiculoProjection {
     private String monto;
     private String especial;
     private String montoextra;
-
+    private Long vehiculoID;
+    private int inciso; 
 }
