@@ -411,12 +411,12 @@ public class ImpresionDetalleReclamacionPdf {
 						acomula4= true;
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
 						baseRow = communsPdf.setRow(table, 10);											
-						communsPdf.setCell(baseRow, 8, ImageUtils.readImage( detalle.getBitacora().get(i).getWebpath()), i, i, bgColor).setValign(VerticalAlignment.MIDDLE);
-						communsPdf.setCell(baseRow, 70, Sio4CommunsPdf.eliminaHtmlTags3( Sio4CommunsPdf.extractAllText(detalle.getBitacora().get(i).getTexto() )), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 8, ImageUtils.readImage( detalle.getBitacora().get(n).getWebpath()), i, i, bgColor).setValign(VerticalAlignment.MIDDLE);
+						communsPdf.setCell(baseRow, 70, Sio4CommunsPdf.eliminaHtmlTags3( Sio4CommunsPdf.extractAllText(detalle.getBitacora().get(n).getTexto() )), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);	
-						communsPdf.setCell(baseRow, 7, detalle.getBitacora().get(i).getIniciales(), black, false, "R", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 7, detalle.getBitacora().get(n).getIniciales(), black, false, "R", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 15);	
-						communsPdf.setCell(baseRow, 60, detalle.getBitacora().get(i).getFecha(), black, false, "R", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 60, detalle.getBitacora().get(n).getFecha(), black, false, "R", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						
 						if(isEndOfPage(table)) {
 			
