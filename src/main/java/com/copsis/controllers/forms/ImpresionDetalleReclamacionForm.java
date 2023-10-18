@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.copsis.clients.projections.AseguradoDetlleSiniestroProjection;
 import com.copsis.clients.projections.ContratanteCaraProjection;
+import com.copsis.clients.projections.CrmBitacoraProjection;
 import com.copsis.clients.projections.DetalleHistorialPasosProjection;
 import com.copsis.clients.projections.DocumentoSiniestroProjection;
 import com.copsis.clients.projections.FacturasProjection;
@@ -27,6 +28,7 @@ public class ImpresionDetalleReclamacionForm {
      private List<FacturasProjection> facturasProjection;
      private List<DetalleHistorialPasosProjection> historial;
      private List<ImagenesAdjuntosDetalleProjection>  imagenes;
+     private List<CrmBitacoraProjection> bitacora;
      private  SiniestroDireccionProjection direccion;     
      private AseguradoDetlleSiniestroProjection aseguradoDetalle; 
 }
