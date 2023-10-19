@@ -62,15 +62,18 @@ public class ImpresionDetalleReclamacionPdf {
 					
 					yStart -= table.getHeaderAndDataHeight()+3;
 			
-			VehiculoProjection vehiculo=detalle.getVehiculo();
+			        
 				
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 7, "Póliza:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					communsPdf.setCell(baseRow, 15,(contrantante.getNoPoliza() !=null ? contrantante.getNoPoliza()  :"") , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					
 					communsPdf.setCell(baseRow, 7, "Inciso:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 6, String.valueOf(vehiculo.getInciso()), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 6, (detalle.getVehiculo() !=null ? detalle.getVehiculo().getInciso()+"":detalle.getContrantante().getIncisoPoliza() +""), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					communsPdf.setCell(baseRow, 18, "", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					
+					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 12, "Contratante:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					communsPdf.setCell(baseRow, 60, contrantante.getContrantante() , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
@@ -79,13 +82,17 @@ public class ImpresionDetalleReclamacionPdf {
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 12, "Concepto:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 60, vehiculo.getDescripcion() +" "+ vehiculo.getModelo(), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
+					if(detalle.getContrantante().getModelo() == 1 || detalle.getContrantante().getModelo() == 2){
+					communsPdf.setCell(baseRow, 60,((detalle.getVehiculo() !=null ?detalle.getVehiculo().getDescripcion():" ") +" "+(detalle.getVehiculo() !=null ?detalle.getVehiculo().getModelo():" ") ), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
 					communsPdf.setCell(baseRow, 25, contrantante.getNombreSocio(), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					
+					}else{
+						communsPdf.setCell(baseRow, 60,detalle.getContrantante() !=null ?detalle.getContrantante().getConcepto():" ", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
+					communsPdf.setCell(baseRow, 25, contrantante.getNombreSocio(), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					}
 					
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 12, "Vigencia:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 60, "", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
+					communsPdf.setCell(baseRow, 60,((detalle.getContrantante() !=null ?detalle.getContrantante().getFecVigde():" ") +"-" + (detalle.getContrantante() !=null ?detalle.getContrantante().getFecViga():" ")) , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);					
 					communsPdf.setCell(baseRow, 15, "RESPONSABLE", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 72, "", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
@@ -102,65 +109,84 @@ public class ImpresionDetalleReclamacionPdf {
 					
 					
 					yStart -= table.getHeaderAndDataHeight() +5;
-					
-					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
-					baseRow = communsPdf.setRow(table, 15);
-					communsPdf.setCell(baseRow, 65,vehiculo.getVehiculoID() +" "+ vehiculo.getDescripcion() , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 14, "Captura:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 21,(!detalle.getSiniestroAProjection().getFechRegitro().isEmpty() ?  detalle.getSiniestroAProjection().getFechRegitro():"S/A" ) , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-				
-                    String dato;
+					  String dato;
+					    String nombre="";
                      if(modelo== 1  || modelo == 2){
-                      dato= vehiculo.getConductor();
+                      dato= detalle.getVehiculo().getConductor();
+					  nombre =detalle.getVehiculo().getVehiculoID() +" "+ detalle.getVehiculo().getDescripcion();
                      }else if(modelo== 7){
                        dato = detalle.getDireccion().getNombre();
                      }else{
-                      dato = detalle.getAseguradoDetalle().getCliente();
+                      dato = detalle.getAseguradoDetalle() !=null ? detalle.getAseguradoDetalle().getCliente():"";
+					  nombre = "("+ detalle.getSiniestroAProjection() !=null ? detalle.getSiniestroAProjection().getAseguradoID() +"": "" +") "+  detalle.getAseguradoDetalle() !=null ? detalle.getAseguradoDetalle().getCliente():"";
                      }
 					
+					
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
+					baseRow = communsPdf.setRow(table, 15);
+					communsPdf.setCell(baseRow, 65, nombre , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 14, "Captura:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 21,(!detalle.getSiniestroAProjection().getFechRegitro().isEmpty() ?  detalle.getSiniestroAProjection().getFechRegitro():"S/A" ) , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+				
+                  
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 15, (modelo == 1|| modelo == 2 ? "Conductor:" : modelo == 7 ? "Dirección" :"Contacto") , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					communsPdf.setCell(baseRow, 50,dato , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					communsPdf.setCell(baseRow, 14, "Siniestro:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 21,detalle.getSiniestroAProjection().getFechSiniestro(), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 21,!detalle.getSiniestroAProjection().getFechSiniestro().isEmpty() ?detalle.getSiniestroAProjection().getFechSiniestro() :"S/A", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					
 					baseRow = communsPdf.setRow(table, 15);
+
 					if(modelo == 1 || modelo == 2) {
 						communsPdf.setCell(baseRow, 15, "Modelo:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 21, detalle.getVehiculo() !=null ? detalle.getVehiculo().getModelo():"" , black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 10, "Nomina:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 19, detalle.getVehiculo() !=null ? detalle.getVehiculo().getNomina():"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					
-					}else {
+					}
+
+					if(modelo == 3 || modelo == 4 || modelo == 5 ) {
+
 						communsPdf.setCell(baseRow, 5, "CP:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 10, detalle.getDireccion() !=null? detalle.getDireccion().getCp() :"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 10, "Colonia:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 40, detalle.getDireccion() !=null? detalle.getDireccion().getColonia() :"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					
+					   communsPdf.setCell(baseRow, 14, "Reporte:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					    communsPdf.setCell(baseRow, 21,!detalle.getSiniestroAProjection().getFechReporte().isEmpty() ? detalle.getSiniestroAProjection().getFechReporte() :"S/A", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+				
+					}
+
+					if(modelo == 7) {
+
+						communsPdf.setCell(baseRow, 5, "CP:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 10, detalle.getDireccion() !=null? detalle.getDireccion().getCp() :"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 10, "Colonia:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 40, detalle.getDireccion() !=null? detalle.getDireccion().getColonia() :"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					   communsPdf.setCell(baseRow, 14, "Reporte:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					    communsPdf.setCell(baseRow, 21, !detalle.getSiniestroAProjection().getFechReporte().isEmpty() ?detalle.getSiniestroAProjection().getFechReporte() :"S/A", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+				
 					}
 				
 					
-					communsPdf.setCell(baseRow, 14, "Reporte:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 21,"", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-				
+					
 					
 
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 15, (modelo == 1 || modelo ==2 ? "No. de Serie:" : modelo == 7  ? "Municipio"  :"Celular:"), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					  String dato2;
                      if(modelo== 1  || modelo == 2){
-                      dato2= vehiculo.getSerie();
+                      dato2= detalle.getVehiculo().getSerie();
                      }else if(modelo== 7){
                        dato2 = detalle.getDireccion().getMunicipio();
                      }else{
-                      dato2 = detalle.getAseguradoDetalle().getCelular();
+                      dato2 =detalle.getAseguradoDetalle() !=null ? detalle.getAseguradoDetalle().getCelular(): "";
                      }
 					
 					communsPdf.setCell(baseRow, 50, dato2, black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					
 					
 					communsPdf.setCell(baseRow, 14, "Promesa Pago:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
-					communsPdf.setCell(baseRow, 21,  detalle.getSiniestroAProjection() !=null ?  detalle.getSiniestroAProjection().getFechaPromesa() :"S/A", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
+					communsPdf.setCell(baseRow, 21,  !detalle.getSiniestroAProjection().getFechaPromesa().isEmpty() ?  detalle.getSiniestroAProjection().getFechaPromesa() :"S/A", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					
 					if(modelo == 1 || modelo == 2) {
 					baseRow = communsPdf.setRow(table, 15);
@@ -238,7 +264,7 @@ public class ImpresionDetalleReclamacionPdf {
 					
 					yStart -= table.getHeaderAndDataHeight()+5;
 			
-					/* 
+					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
 					baseRow = communsPdf.setRow(table, 15);
 					communsPdf.setCell(baseRow, 100, "", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
@@ -270,28 +296,29 @@ public class ImpresionDetalleReclamacionPdf {
 					Double totalProcedente = 0.00;
 					int t =0;
 					int cf =0;
-					while(t < impresionReclamacionProjection.getC5().getDocumentos().size()) {	
+					if(detalle.getFacturasProjection() !=null && detalle.getFacturasProjection().getFacturasListProjection() !=null ){
+
+					
+					while(t <  detalle.getFacturasProjection().getFacturasListProjection().size()) {	
 						cf++;
 						acomula2= true;
 						table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
 						baseRow = communsPdf.setRow(table, 10);
-						 reclamado = Double.parseDouble( impresionReclamacionProjection.getC5().getDocumentos().get(t).getC9());
-						 procedente =Double.parseDouble( impresionReclamacionProjection.getC5().getDocumentos().get(t).getC13());
-						communsPdf.setCell(baseRow, 70, impresionReclamacionProjection.getC5().getDocumentos().get(t).getC3() +"   " + impresionReclamacionProjection.getC5().getDocumentos().get(t).getC5(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 15,formateador.format(reclamado) , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 15, impresionReclamacionProjection.getC5().getDocumentos().get(t).getC13(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+					
+						communsPdf.setCell(baseRow, 70,  detalle.getFacturasProjection().getFacturasListProjection().get(t).getEmisiorNombreFolio(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 15,detalle.getFacturasProjection().getFacturasListProjection().get(t).getTotalreclamado() , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 15, detalle.getFacturasProjection().getFacturasListProjection().get(t).getProcedente(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 10);
-						communsPdf.setCell(baseRow, 90, impresionReclamacionProjection.getC5().getDocumentos().get(t).getC12(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+						communsPdf.setCell(baseRow, 90, detalle.getFacturasProjection().getFacturasListProjection().get(t).getConcepto(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						
 				
-						totalreclamado  += reclamado;
-						totalProcedente  += procedente;
-						if(impresionReclamacionProjection.getC5().getDocumentos().size() == cf) {
+						
+						if( detalle.getFacturasProjection().getFacturasListProjection().size() == cf) {
 							baseRow = communsPdf.setRow(table, 15);
 							communsPdf.setCell(baseRow, 60,"" , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 							communsPdf.setCell(baseRow, 10,"Total:" , black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
-							communsPdf.setCell(baseRow, 15, formateador.format(totalreclamado) , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
-							communsPdf.setCell(baseRow, 15, formateador.format(totalProcedente) , black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+							communsPdf.setCell(baseRow, 15,  detalle.getFacturasProjection().getTotalreclamado() , black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
+							communsPdf.setCell(baseRow, 15,  detalle.getFacturasProjection().getTotalprocedente() , black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						
 						}
 						
@@ -315,6 +342,7 @@ public class ImpresionDetalleReclamacionPdf {
 						} 
 						
 					}
+				}
 					
 
 				
@@ -329,7 +357,7 @@ public class ImpresionDetalleReclamacionPdf {
 					
 					
 					
-					*/
+					
 				
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, false,true);
 					baseRow = communsPdf.setRow(table, 15);
@@ -338,6 +366,7 @@ public class ImpresionDetalleReclamacionPdf {
 					yStart -= table.getHeaderAndDataHeight()+7;
 					
 					int x =0;
+					if(detalle.getHistorial() !=null && !detalle.getHistorial().isEmpty()){
 					while(x <  detalle.getHistorial().size() ) {
 						acomula3 = true;
 					
@@ -352,7 +381,7 @@ public class ImpresionDetalleReclamacionPdf {
 						communsPdf.setCell(baseRow, 40,   Sio4CommunsPdf.eliminaHtmlTags3( Sio4CommunsPdf.extractAllText(detalle.getHistorial().get(x).getObservaciones())), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 						baseRow = communsPdf.setRow(table, 12);
 						communsPdf.setCell(baseRow, 6, "Folio:", black, true, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
-						communsPdf.setCell(baseRow, 40,"", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);											
+						communsPdf.setCell(baseRow, 40,detalle.getHistorial().get(x).getFolio(), black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);											
 						baseRow = communsPdf.setRow(table, 15);
 						communsPdf.setCell(baseRow, 100, "___________________________________________________________", black, false, "L", 10, communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), "", communsPdf.setPadding(2f),bgColor);
 								
@@ -380,6 +409,7 @@ public class ImpresionDetalleReclamacionPdf {
                         }
 						
 					}
+				}
 					
 					
 					
@@ -404,7 +434,7 @@ public class ImpresionDetalleReclamacionPdf {
 				
 					
 					int n =0;
-			
+			       if(detalle.getBitacora() !=null && !detalle.getBitacora().isEmpty()){
 					while(n < detalle.getBitacora().size()) {
 				
 						
@@ -438,7 +468,7 @@ public class ImpresionDetalleReclamacionPdf {
 						} 
 						
 					}
-					
+				}
 	
 					
 					table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, 30, document, page, true,true);
@@ -462,6 +492,7 @@ public class ImpresionDetalleReclamacionPdf {
 							   || detalle.getImagenes().get(j).getWebpath().indexOf(".PDF") > -1
 							   || detalle.getImagenes().get(j).getWebpath().indexOf(".Pdf") > -1
 									) {
+										
 								pahtpdf = detalle.getImagenes().get(j).getWebpath();
 								if(pahtpdf.contains(" ")) {
 									pahtpdf = pahtpdf.replace(" ", "%20");
@@ -504,7 +535,7 @@ public class ImpresionDetalleReclamacionPdf {
 					document.save(output);
 				
 			
-					document.save(new File("/home/aalbanil/Vídeos/detallerec.pdf"));
+					//document.save(new File("/home/aalbanil/Vídeos/RAMODIV.pdf"));
 
 					return output.toByteArray();
 					

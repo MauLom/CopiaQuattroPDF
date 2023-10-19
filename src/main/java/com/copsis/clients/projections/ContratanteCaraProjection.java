@@ -37,4 +37,8 @@ public class ContratanteCaraProjection {
     private Long aseguradoraID;
     private String logoM;
     private String nombreSocio;
+    private String fecVigde;
+    private String fecViga;
+    private String concepto;
+    private int incisoPoliza;    
 }

@@ -13,4 +13,5 @@ public class FacturasProjection {
     private String emisiorNombreFolio;
     private String totalreclamado;
     private String procedente;
+    private String concepto;
 }

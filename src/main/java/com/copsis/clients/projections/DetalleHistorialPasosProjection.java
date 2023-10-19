@@ -10,4 +10,5 @@ public class DetalleHistorialPasosProjection {
     private String iniciales;
     private String trammite;
     private String observaciones;
+    private String folio;
 }

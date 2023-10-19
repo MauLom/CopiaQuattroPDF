@@ -116,6 +116,7 @@ public class ImpresionReclamacionPdf {
 					communsPdf.setCell(baseRow, 21,(impresionReclamacionProjection.getContratantes().getDatosGenerale().c10 !=null ? impresionReclamacionProjection.getContratantes().getDatosGenerale().c10 :""), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 					
 					baseRow = communsPdf.setRow(table, 15);
+					
 					if(modelo == 1 || modelo == 2) {
 						communsPdf.setCell(baseRow, 15, "Modelo:", black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);
 						communsPdf.setCell(baseRow, 21, (String.valueOf(impresionReclamacionProjection.getContratantes().getDatosGenerale().c16) !=null ? String.valueOf(impresionReclamacionProjection.getContratantes().getDatosGenerale().c16 ):""), black, false, "L", 10, communsPdf.setLineStyle(black), "", communsPdf.setPadding(2f),bgColor);

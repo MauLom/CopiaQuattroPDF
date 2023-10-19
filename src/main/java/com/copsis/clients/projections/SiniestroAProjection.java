@@ -20,5 +20,6 @@ public class SiniestroAProjection {
     private int tipo;
     private String fechaPromesa; 
     private String fechaCierre;
-    private int siniestroID;     
+    private Long siniestroID;   
+    private int aseguradoID;  
 }
