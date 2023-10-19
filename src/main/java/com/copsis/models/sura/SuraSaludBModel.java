@@ -50,7 +50,7 @@ public class SuraSaludBModel {
 				modelo.setFormaPago(fn.formaPagoSring(newCont.toString()));
 				modelo.setMoneda(fn.buscaMonedaEnTexto(newCont.toString()));
 
-				for (int i = 0; i < newCont.toString().split("\n").length; i++) {
+				for (int i = 0; i < newCont.toString().split("\n").length; i++) {					
 					if(newCont.toString().split("\n")[i].contains("Póliza no.") && newCont.toString().split("\n")[i+1].split("###").length >2) {						
 						modelo.setPoliza(newCont.toString().split("\n")[i+1].split("###")[newCont.toString().split("\n")[i+1].split("###").length-1]);
 					}
@@ -65,6 +65,18 @@ public class SuraSaludBModel {
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newCont.toString().split("\n")[i].split("Vigencia")[1].split("Importes")[0].replace("desde", "").replace("###", "").trim()));
 					obtenerDireccion(newCont.toString().split("\n"),i);
 						
+					}
+
+					if(newCont.toString().split("\n")[i].contains("Vigencia") && newCont.toString().split("\n")[i].split("-").length > 2 ){
+						List<String> valores = fn.obtenVigePoliza(newCont.toString().split("\n")[i]);
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));	
+						modelo.setFechaEmision(modelo.getVigenciaDe());											
+					}
+
+
+					if(newCont.toString().split("\n")[i].contains("Hasta las") && newCont.toString().split("\n")[i].contains("1er. REC.") ){
+						List<String> valores = fn.obtenVigePoliza(newCont.toString().split("\n")[i]);
+						modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));												
 					}
 					if(newCont.toString().split("\n")[i].contains("Emisión") && (i+2)<newCont.toString().split("\n")[i].length() && modelo.getFechaEmision().length() == 0) {
 						if(newCont.toString().split("\n")[i+2].contains("###") && newCont.toString().split("\n")[i+2].contains("-")) {
