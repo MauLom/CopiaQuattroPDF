@@ -236,6 +236,10 @@ public final class ConstantsValue {
 	public static final String REGFEHCA_MESCPL ="([0-2][0-9]|3[0-1])(\\/|-)(ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|SEPTIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE)(\\/|-)(\\d{4})";
 	public static final String REGFECHUS ="((((0[13578]|(10|12)|(0[1-9]|[1-2][0-9]|3[0-1])))\\-(0[1-9]|[1-2][0-9]|3[0-1]))|(02\\/(0[1-9]|[1-2][0-9]))|((0[469]|11)\\/(0[1-9]|[1-2][0-9]|30)))\\-[0-9]{4}";	
 	public static final String REGFEHCA_USA ="(ENE|FEB|MAR|ABR|MAY|JUN|JUL|AGO|SEP|OCT|NOV|DIC)(\\/|-)([0-2][0-9]|3[0-1])(\\/|-)(\\d{4})";
+	public static final String SERVICIO="Servicio:";
+	public static final String IMPORTE_TOTAL="IMPORTE TOTAL";
+	public static final String RENUEVA ="RENUEVA";
+	public static final String MUNICIPIO ="Municipio"; 
 
 	private ConstantsValue() {
 
