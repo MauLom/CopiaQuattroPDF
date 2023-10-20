@@ -42,11 +42,11 @@
             StringBuilder newctx = new StringBuilder();
 
             contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
-            contenido = contenido.replace("IMPORTE TOTAL.", "IMPORTE TOTAL").replace("RREENNUUEEVVAA", "RENUEVA")
-                    .replace("MEsutnaidciop i:o:", "Municipio:").replace("Expedición.", "Expedición")
-                    .replace("Servic i o :", "Servicio:")
+            contenido = contenido.replace("IMPORTE TOTAL.", ConstantsValue.IMPORTE_TOTAL).replace("RREENNUUEEVVAA", ConstantsValue.RENUEVA)
+                    .replace("MEsutnaidciop i:o:", ConstantsValue.MUNICIPIO).replace("Expedición.", "Expedición")
+                    .replace("Servic i o :",ConstantsValue.SERVICIO)
                     .replace("Dom i c il i o ", "Domicilio")
-                    .replace("MOTOR:", "Motor:");
+                    .replace("MOTOR:", ConstantsValue.MOTOR);
 
             try {
 
@@ -55,7 +55,7 @@
                 modelo.setRamo("Autos");
 
                 // fecha_emision
-                inicio = contenido.indexOf("IMPORTE TOTAL");
+                inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                 fin = contenido.lastIndexOf("www.qualitas.com.mx");
                 if (inicio > -1 && fin > inicio) {
                     newcontenido = contenido.substring(inicio, fin);
@@ -80,7 +80,7 @@
                 }
 
                 if (modelo.getFechaEmision().length() == 0) {
-                    inicio = contenido.indexOf("IMPORTE TOTAL");
+                    inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                     fin = contenido.indexOf("Funcionario Autorizado");
 
                     if (inicio > -1 && inicio < fin) {
@@ -199,15 +199,15 @@
 
                 if (inicio > -1 && fin > inicio) {
                     newcontenido = contenido.substring(inicio + 13, fin);
-                    if (newcontenido.contains("RENUEVA")) {
-                        modelo.setCteNombre(newcontenido.split("RENUEVA")[0].replace("@@@", "").replace("###", "").trim());
+                    if (newcontenido.contains(ConstantsValue.RENUEVA)) {
+                        modelo.setCteNombre(newcontenido.split(ConstantsValue.RENUEVA)[0].replace("@@@", "").replace("###", "").trim());
                     } else {
                         if (newcontenido.split("\r\n")[1].length() > 0) {
                             modelo.setCteNombre(newcontenido.split("\r\n")[1].replace("@@@", "").replace("###", "").trim());
                         }
                     }
-                    if (newcontenido.contains("RENUEVA")) {
-                        modelo.setCteNomina(newcontenido.split("RENUEVA")[0].replace("@@@", ""));
+                    if (newcontenido.contains(ConstantsValue.RENUEVA)) {
+                        modelo.setCteNomina(newcontenido.split(ConstantsValue.RENUEVA)[0].replace("@@@", ""));
                     }
                 }
 
@@ -291,10 +291,9 @@
                                     .replace("###", "").trim();
                         }
 
-                        // municipio
                         for (String x : newcontenido.split("\r\n")) {
-                            if (x.contains("Municipio:")) {
-                                inicio = x.indexOf("Municipio:");
+                            if (x.contains(ConstantsValue.MUNICIPIO)) {
+                                inicio = x.indexOf(ConstantsValue.MUNICIPIO);
                                 index = 10;
                                 fin = x.indexOf("Estado:") > -1 ? x.indexOf("Estado:") : x.indexOf("Colonia");
                                 if (inicio > -1 && fin > inicio) {
@@ -424,7 +423,7 @@
                 }
 
                 // prima_total
-                inicio = contenido.indexOf("IMPORTE TOTAL");
+                inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 13, contenido.indexOf("\r\n", inicio + 13))
                             .replace("###", "").replace(",", "").trim();
@@ -467,7 +466,7 @@
                 }
                 if (modelo.getAgente().contains("ASEASOONR")) {
                     donde = 0;
-                    donde = fn.recorreContenido(contenido, "IMPORTE TOTAL");
+                    donde = fn.recorreContenido(contenido, ConstantsValue.IMPORTE_TOTAL);
                     if (donde > 0) {
                         for (String dato : contenido.split("@@@")[donde].split("\r\n")) {
                             if (dato.contains("Agente")) {
@@ -592,7 +591,7 @@
                 }
                 if (modelo.getFormaPago() == 0) {
                     inicio = contenido.indexOf("MONEDA");
-                    fin = contenido.indexOf("IMPORTE TOTAL");
+                    fin = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                     if (inicio > -1 && fin > -1) {
                         newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 
@@ -666,10 +665,10 @@
                 inicio = contenido.lastIndexOf("Desde las");
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
-                            .replace("del:", "del").replace("Servic  i o  :", "Servicio:").replace("Servic ###io:", "Servicio:");
+                            .replace("del:", "del").replace("Servic  i o  :", ConstantsValue.SERVICIO).replace("Servic ###io:",ConstantsValue.SERVICIO);
 
-                    if (newcontenido.contains("Servicio")) {
-                        newcontenido = fn.gatos(newcontenido.split("Servicio")[0].split("del")[1].trim());
+                    if (newcontenido.contains(ConstantsValue.SERVICIO)) {
+                        newcontenido = fn.gatos(newcontenido.split(ConstantsValue.SERVICIO)[0].split("del")[1].trim());
 
                         if (newcontenido.split("###").length == 2 || (newcontenido.split("###").length == 1 && newcontenido.contains("-"))) {
                             newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), ConstantsValue.FORMATO_FECHA);
@@ -708,8 +707,8 @@
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
                             .replace(".:", "").replace(".", "").replace(":", "");
 
-                    if (newcontenido.contains("Municipio")) {
-                        newcontenido = newcontenido.split("Municipio")[0].replace("###", "").trim();
+                    if (newcontenido.contains(ConstantsValue.MUNICIPIO)) {
+                        newcontenido = newcontenido.split(ConstantsValue.MUNICIPIO)[0].replace("###", "").trim();
                         modelo.setCp(newcontenido.length() < 5 ? "0" + newcontenido : newcontenido);
                     } else if (newcontenido.split("###").length > 2) {
                         newcontenido = fn.gatos(newcontenido);
@@ -783,7 +782,7 @@
 
                 // serie
                 inicio = contenido.indexOf("Serie:");
-                fin = contenido.indexOf("Motor:");
+                fin = contenido.indexOf(ConstantsValue.MOTOR);
 
                 if (inicio > 0 && fin > 0 && inicio < fin) {
                     newcontenido = contenido.substring(inicio, fin).split("Serie:")[1].replace("###", "").trim();
@@ -791,8 +790,8 @@
 
                 }
 
-                // motor
-                inicio = contenido.indexOf("Motor:");
+                
+                inicio = contenido.indexOf(ConstantsValue.MOTOR);
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 6, contenido.indexOf("\r\n", inicio + 6));
                     if (newcontenido.contains("Placas")) {
@@ -855,10 +854,10 @@
                         if (vehiculoDatos.toString().split("\n")[i].contains("Modelo:") && vehiculoDatos.toString().split("\n")[i].contains("Color")) {
                             modelo.setModelo(fn.castInteger(fn.obtenerListNumeros2(vehiculoDatos.toString().split("\n")[i].split("Modelo:")[1]).get(0)));
                         }
-                        if (vehiculoDatos.toString().split("\n")[i].contains("Serie:") && vehiculoDatos.toString().split("\n")[i].contains("Motor")
+                        if (vehiculoDatos.toString().split("\n")[i].contains("Serie:") && vehiculoDatos.toString().split("\n")[i].contains(ConstantsValue.MOTOR)
                                 && vehiculoDatos.toString().split("\n")[i].contains("Placas:")) {
-                            modelo.setSerie(vehiculoDatos.toString().split("\n")[i].split("Serie:")[1].split("Motor:")[0].trim());
-                            modelo.setMotor(vehiculoDatos.toString().split("\n")[i].split("Motor:")[1].split("Placas:")[0].trim().replace("###", ""));
+                            modelo.setSerie(vehiculoDatos.toString().split("\n")[i].split("Serie:")[1].split(ConstantsValue.MOTOR)[0].trim());
+                            modelo.setMotor(vehiculoDatos.toString().split("\n")[i].split(ConstantsValue.MOTOR)[1].split("Placas:")[0].trim().replace("###", ""));
                             if (vehiculoDatos.toString().split("\n")[i].split("Moto")[1].length() > 6 && vehiculoDatos.toString().split("\n")[i].split("Placa")[1].length() > 10) {
                                 modelo.setPlacas(vehiculoDatos.toString().split("\n")[i].split("Placas:")[1]);
                             }
@@ -1054,7 +1053,7 @@
                 modelo.setRecibos(recibos);
 
                 inicio = contenido.indexOf("MONEDA");
-                fin = contenido.indexOf("IMPORTE TOTAL");
+                fin = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
 
                 newcontenidotxt = new StringBuilder();
                 newcontenidotxt.append(fn.extracted(inicio, fin, contenido));
@@ -1068,6 +1067,10 @@
                 }
                 if (modelo.getFormaPago() == 0) {
                     modelo.setFormaPago(1);
+                }
+
+                if(modelo.getFechaEmision().isEmpty()){
+                    modelo.setVigenciaDe(modelo.getVigenciaA());
                 }
 
                 return modelo;
