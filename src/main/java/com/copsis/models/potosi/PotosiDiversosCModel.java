@@ -199,7 +199,6 @@ public class PotosiDiversosCModel {
 			
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(PotosiDiversosCModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
