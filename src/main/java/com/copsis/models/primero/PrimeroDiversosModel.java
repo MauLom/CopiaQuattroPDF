@@ -166,6 +166,11 @@ public class PrimeroDiversosModel {
 				      fin =contenido.lastIndexOf("Prima Neta");
 				  }
 
+				  
+				  if(fn.diferencia(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30 ){
+                    modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+				  }
+
 				
 				  if (inicio > -1 && fin > -1 && inicio < fin) {	
 					  String secciont="";
