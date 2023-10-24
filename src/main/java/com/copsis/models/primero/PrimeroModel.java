@@ -28,7 +28,7 @@ public class PrimeroModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
-			System.out.println(contenido);
+			
 			int tipo = fn.tipoPoliza(contenido);
 			if(tipo ==1 && fn.caratula(1, 3, stripper, doc).contains("PRODUCTO EMPRESARIAL")){
 				tipo=4;
