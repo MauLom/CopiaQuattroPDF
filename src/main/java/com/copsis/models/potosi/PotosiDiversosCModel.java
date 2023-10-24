@@ -28,23 +28,43 @@ public class PotosiDiversosCModel {
 			modelo.setTipo(7);
 			modelo.setCia(37);
 
-			inicio = contenido.indexOf("MONEDA");
+		
+			inicio = contenido.indexOf("NÚM. PÓLIZA:");
+
+			inicio = inicio == -1 ? contenido.indexOf("MONEDA"): inicio;
 			fin = contenido.indexOf("PRIMAS");
 
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 			for(int i =0; i <newcontenido.toString().split("\n").length ; i++) {
+				
+				if(newcontenido.toString().split("\n")[i].contains("NÚM. PÓLIZA:") && newcontenido.toString().split("\n")[i].contains("VIGENCIA DESDE")) {                				 
+                 modelo.setPoliza(newcontenido.toString().split("\n")[i].split("NÚM. PÓLIZA:")[1].split("###")[0].trim());
+				}
 				if(newcontenido.toString().split("\n")[i].contains("MONEDA:") && newcontenido.toString().split("\n")[i].contains("NÚM. PÓLIZA:")) {
-                 modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
+                
+				 modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
                  modelo.setPoliza(newcontenido.toString().split("\n")[i].split("NÚM. PÓLIZA:")[1].trim());
+				}
+
+				if(modelo.getMoneda() == 0 && newcontenido.toString().split("\n")[i].contains("SUCURSAL:") && newcontenido.toString().split("\n")[i].contains("MONEDA:")) {                				 
+                 modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("FORMA DE PAGO:")) {
 					  modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("VIGENCIA")) {
-				
-				 modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+									
+				 if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size() == 2){
+                 modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
+				 modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
+				 modelo.setFechaEmision(modelo.getVigenciaA());
+				 }else{
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				 modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
 				 modelo.setFechaEmision(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(2)));
+				 }
+
+				 
 				}
 				if(newcontenido.toString().split("\n")[i].contains("DATOS DEL ASEGURADO") && newcontenido.toString().split("\n")[i+1].contains("NOMBRE Y-O RAZÓN SOCIAL:")
 						&& newcontenido.toString().split("\n")[i+1].contains("RFC")		) {
@@ -179,6 +199,7 @@ public class PotosiDiversosCModel {
 			
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(PotosiDiversosCModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
