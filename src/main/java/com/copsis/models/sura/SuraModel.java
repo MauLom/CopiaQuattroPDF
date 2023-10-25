@@ -57,6 +57,10 @@ public class SuraModel {
 					tipo =4;
 				}
 
+				if(tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Seguro de Automóviles Residentes de Uso y Servicio")) {
+					tipo =1;
+				}
+
 				
 			
 
