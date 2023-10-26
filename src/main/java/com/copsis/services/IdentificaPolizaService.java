@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.Integral.IntegralSeguroModel;
@@ -78,11 +79,15 @@ public class IdentificaPolizaService {
 			
 
 			// CHUBB
-			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
-				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
-				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
-					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.") 
-					         ) {
+		
+			if (!encontro && (contenido.contains("Chubb")  || 
+			rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.")) 
+		     && (! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
+				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A.")
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.") )
+			) {
+			
 				    
 				ChubbModel datosChubb = new ChubbModel(); 
 				datosChubb.setPdfStripper(pdfStripper);
@@ -90,7 +95,7 @@ public class IdentificaPolizaService {
 				datosChubb.setContenido(contenido);
 				modelo = datosChubb.procesa();
 				encontro = true;
-				}
+				
 			}
 
 			// ENTRADA PARA QUALITAS
@@ -366,9 +371,9 @@ public class IdentificaPolizaService {
 		
 
 
-		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") ||
-		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
-		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
+		    if (!encontro && (contenido.contains(ConstantsValue.SEGUROSPOTOSISA) ||
+		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
+		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
 					||  rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A")   )){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
@@ -542,7 +547,7 @@ public class IdentificaPolizaService {
 			pdDoc.close();
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " - catch:" + ex.getMessage()
 					+ " | " + ex.getCause());
 			return modelo;

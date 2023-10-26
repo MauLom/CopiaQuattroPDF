@@ -42,6 +42,7 @@ public final class ConstantsValue {
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
 	public static final String DESDE = "Desde";
+	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
 	public static final String DATOS_ADICIONALES = "Datos adicionales";
 	public static final String DEDUCIBLE = "Deducible";
@@ -244,6 +245,9 @@ public final class ConstantsValue {
 	public static final String IMPORTE_TOTAL="IMPORTE TOTAL";
 	public static final String RENUEVA ="RENUEVA";
 	public static final String MUNICIPIO ="Municipio"; 
+    public static final String VEHICULOPT ="Vehículo:"; 
+	public static final String CONDICIONESDELASEGURAMIENTO ="CONDICIONES DEL ASEGURAMIENTO";
+	public static final String SEGUROSPOTOSISA ="Seguros el Potosí S.A"; 
 	public static final String EDAD ="Edad";
 	public static final String NACIMIENTO ="nacimiento:";
 	public static final String TOTALMN ="total";
