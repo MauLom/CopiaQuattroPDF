@@ -172,6 +172,9 @@ public final class ConstantsValue {
 	public static final String RFC = "R.F.C:";
 	public static final String RFC2 = "R.F.C";
 	public static final String RFC3 = "R.F.C.:";
+	public static final String RFC4 = "R.F.C.";
+	public static final String RFCMYCL = "RFC:";
+
 	public static final String RIESGOS_CUBIERTOS = "RIESGOS CUBIERTOS";
 	public static final String RECIBO_PRIMAS = "RECIBO DE PRIMAS";
 	public static final String RECARGO = "Recargo:";
@@ -192,6 +195,7 @@ public final class ConstantsValue {
 	public static final String RENOVACION_AUTOM = "RENOVACIÓN AUTOMÁTICA";
 	
 	public static final String TELEFONO = "Teléfono:";
+	public static final String TELEFONOSP = "Teléfono";
 	public static final String TOTAL = "Total:";
 	public static final String TOTAL2 = "Total";
 	public static final String TOTAL_MAYUS = "TOTAL";
@@ -240,6 +244,10 @@ public final class ConstantsValue {
 	public static final String IMPORTE_TOTAL="IMPORTE TOTAL";
 	public static final String RENUEVA ="RENUEVA";
 	public static final String MUNICIPIO ="Municipio"; 
+	public static final String EDAD ="Edad";
+	public static final String NACIMIENTO ="nacimiento:";
+	public static final String TOTALMN ="total";
+	public static final String FECHADEFIN  ="Fecha de fin";
 
 	private ConstantsValue() {
 
