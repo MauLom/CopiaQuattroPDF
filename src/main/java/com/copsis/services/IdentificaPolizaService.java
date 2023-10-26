@@ -547,8 +547,7 @@ public class IdentificaPolizaService {
 			pdDoc.close();
 
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {			
 			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " - catch:" + ex.getMessage()
 					+ " | " + ex.getCause());
 			return modelo;
