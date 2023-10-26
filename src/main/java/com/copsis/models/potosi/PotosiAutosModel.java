@@ -3,6 +3,7 @@ package com.copsis.models.potosi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -91,13 +92,13 @@ public class PotosiAutosModel {
 			}
 
 			inicio = contenido.indexOf("DATOS DEL RIESGO ASEGURADO");
-			fin = contenido.indexOf("CONDICIONES DEL ASEGURAMIENTO");
+			fin = contenido.indexOf(ConstantsValue.CONDICIONESDELASEGURAMIENTO);
 			if(inicio > -1 && fin > -1   && inicio  < fin ) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {							
-					if(newcontenido.toString().split("\n")[i].contains("Vehículo:") && newcontenido.toString().split("\n")[i].split("Vehículo:").length >1 && decVehiculo) {
-						modelo.setDescripcion( newcontenido.toString().split("\n")[i].split("Vehículo:")[1].trim());
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.VEHICULOPT) && newcontenido.toString().split("\n")[i].split(ConstantsValue.VEHICULOPT).length >1 && decVehiculo) {
+						modelo.setDescripcion( newcontenido.toString().split("\n")[i].split(ConstantsValue.VEHICULOPT)[1].trim());
 						decVehiculo = false;
 					}					
 					if(newcontenido.toString().split("\n")[i].contains("serie:") && newcontenido.toString().split("\n")[i].contains("No. de")) {
@@ -153,7 +154,7 @@ public class PotosiAutosModel {
 	            	}
 	            }
 	      
-	            inicio = contenido.indexOf("CONDICIONES DEL ASEGURAMIENTO");
+	            inicio = contenido.indexOf(ConstantsValue.CONDICIONESDELASEGURAMIENTO);
 	            fin = contenido.indexOf("1 de 2");
 	            if (fin == -1) {
 	                fin = contenido.indexOf("1 de 3");
@@ -172,7 +173,7 @@ public class PotosiAutosModel {
 	                  	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                    int sp = x.split("###").length;
 
-	                    if (!x.contains("CONDICIONES DEL ASEGURAMIENTO") &&  !x.contains("Cobertura###Suma Asegurada###Prima###Deducible")) {	                   
+	                    if (!x.contains(ConstantsValue.CONDICIONESDELASEGURAMIENTO) &&  !x.contains("Cobertura###Suma Asegurada###Prima###Deducible")) {	                   
 	                        if (sp == 3) {	      
 	                            cobertura.setNombre(x.split("###")[0].trim());
 	                            cobertura.setSa(x.split("###")[1].trim());

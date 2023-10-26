@@ -240,7 +240,9 @@ public final class ConstantsValue {
 	public static final String IMPORTE_TOTAL="IMPORTE TOTAL";
 	public static final String RENUEVA ="RENUEVA";
 	public static final String MUNICIPIO ="Municipio"; 
-
+    public static final String VEHICULOPT ="Vehículo:"; 
+	public static final String CONDICIONESDELASEGURAMIENTO ="CONDICIONES DEL ASEGURAMIENTO";
+	public static final String SEGUROSPOTOSISA ="Seguros el Potosí S.A"; 
 	private ConstantsValue() {
 
 	}
