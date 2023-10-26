@@ -165,7 +165,12 @@ public class SuraAutosModel {
 						}	
 					}
 					  if (newcontenido.split("\n")[i].contains("Cve. Vehículo:")) {
-                          modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].trim());
+						if(newcontenido.split("\n")[i].split("Vehículo:")[1].trim().split("###").length > 1){
+                           modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());
+						}else{
+							modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].trim());
+						}
+                          
                       }
 					if (newcontenido.split("\n")[i].contains("Cve") && modelo.getClave().length() == 0 ) {
 						modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());

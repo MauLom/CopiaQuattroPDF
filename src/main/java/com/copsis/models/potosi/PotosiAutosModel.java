@@ -37,8 +37,8 @@ public class PotosiAutosModel {
 					if(newcontenido.toString().split("\n")[i].contains("Póliza") && newcontenido.toString().split("\n")[i].contains("Certificado")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("Nombre")) {
-						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("Desde:")[1].split("Nombre")[0].replace("###", "").trim())));
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE) && newcontenido.toString().split("\n")[i].contains("Nombre")) {
+						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split(ConstantsValue.DESDECP)[1].split("Nombre")[0].replace("###", "").trim())));
 						if(newcontenido.toString().split("\n")[i+1].contains("Hasta")) {
 							modelo.setVigenciaA(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[1].trim())));
 							modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[2].trim());
@@ -58,13 +58,13 @@ public class PotosiAutosModel {
 						}
 					}
 					if(newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Teléfono")) {
-						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "").replace("-", "").trim());
+						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split(ConstantsValue.TELEFONOSP)[0].replace("###", "").replace("-", "").trim());
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Dirección:") && newcontenido.toString().split("\n")[i+1].contains("operación")) {						
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim());
 						if((i+2)< newcontenido.toString().split("\n").length) {
 							String textoOtroRenglon = newcontenido.toString().split("\n")[i+2];
-							if(!textoOtroRenglon.contains("R.F.C") && !textoOtroRenglon.contains("Teléfono")
+							if(!textoOtroRenglon.contains("R.F.C") && !textoOtroRenglon.contains(ConstantsValue.TELEFONOSP)
 									&& !textoOtroRenglon.contains("Sucursal") && textoOtroRenglon.contains("de Cliente")) {
 								String aux = newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim();
 								aux = aux+" " +textoOtroRenglon.split("###")[textoOtroRenglon.split("###").length -1].trim();

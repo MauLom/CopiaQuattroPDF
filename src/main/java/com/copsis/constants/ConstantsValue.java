@@ -42,6 +42,7 @@ public final class ConstantsValue {
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
 	public static final String DESDE = "Desde";
+	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
 	public static final String DATOS_ADICIONALES = "Datos adicionales";
 	public static final String DEDUCIBLE = "Deducible";
@@ -172,6 +173,9 @@ public final class ConstantsValue {
 	public static final String RFC = "R.F.C:";
 	public static final String RFC2 = "R.F.C";
 	public static final String RFC3 = "R.F.C.:";
+	public static final String RFC4 = "R.F.C.";
+	public static final String RFCMYCL = "RFC:";
+
 	public static final String RIESGOS_CUBIERTOS = "RIESGOS CUBIERTOS";
 	public static final String RECIBO_PRIMAS = "RECIBO DE PRIMAS";
 	public static final String RECARGO = "Recargo:";
@@ -192,6 +196,7 @@ public final class ConstantsValue {
 	public static final String RENOVACION_AUTOM = "RENOVACIÓN AUTOMÁTICA";
 	
 	public static final String TELEFONO = "Teléfono:";
+	public static final String TELEFONOSP = "Teléfono";
 	public static final String TOTAL = "Total:";
 	public static final String TOTAL2 = "Total";
 	public static final String TOTAL_MAYUS = "TOTAL";
@@ -243,6 +248,11 @@ public final class ConstantsValue {
     public static final String VEHICULOPT ="Vehículo:"; 
 	public static final String CONDICIONESDELASEGURAMIENTO ="CONDICIONES DEL ASEGURAMIENTO";
 	public static final String SEGUROSPOTOSISA ="Seguros el Potosí S.A"; 
+	public static final String EDAD ="Edad";
+	public static final String NACIMIENTO ="nacimiento:";
+	public static final String TOTALMN ="total";
+	public static final String FECHADEFIN  ="Fecha de fin";
+
 	private ConstantsValue() {
 
 	}
