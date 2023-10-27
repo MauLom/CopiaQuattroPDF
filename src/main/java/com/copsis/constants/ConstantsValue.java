@@ -252,6 +252,8 @@ public final class ConstantsValue {
 	public static final String NACIMIENTO ="nacimiento:";
 	public static final String TOTALMN ="total";
 	public static final String FECHADEFIN  ="Fecha de fin";
+	public static final String NUMERODE  ="Número de";
+    public static final String DIRECCIONMC  ="Dirección";
 
 	private ConstantsValue() {
 
