@@ -253,6 +253,11 @@ public final class ConstantsValue {
 	public static final String TOTALMN ="total";
 	public static final String FECHADEFIN  ="Fecha de fin";
 
+	public static final String CARACTERISTICASRIESGO  ="Características del riesgo";
+	public static final String  INCENDIOMYM ="Incendio:";
+	public static final String  INCENDIOMYMPT ="incendio:";
+
+
 	private ConstantsValue() {
 
 	}

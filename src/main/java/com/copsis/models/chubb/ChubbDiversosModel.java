@@ -52,7 +52,7 @@ public class ChubbDiversosModel {
 			modelo.setRamo("Daños");
 
 			inicio = contenido.indexOf("POLIZA DE SEGURO");
-			fin = contenido.indexOf("Características del riesgo");
+			fin = contenido.indexOf(ConstantsValue.CARACTERISTICASRIESGO);
 			
 			if(fin == -1) {
 				fin = contenido.indexOf("Desglose de coberturas");
@@ -213,33 +213,35 @@ public class ChubbDiversosModel {
 	List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 
 	      String contenidoUb="";
-		   for (int i = 0; i < ubicacionesExt.split("Características del riesgo").length; i++) {
+		   for (int i = 0; i < ubicacionesExt.split(ConstantsValue.CARACTERISTICASRIESGO).length; i++) {
 			  if(i >  0){
-  					contenidoUb += ubicacionesExt.split("Características del riesgo")[i].split("Coberturas")[0];
+  					contenidoUb += ubicacionesExt.split(ConstantsValue.CARACTERISTICASRIESGO)[i].split("Coberturas")[0];
 			  }            			
 		   }
-
+					System.out.println(contenidoUb.split("\n").length);
+					int tlineas =contenidoUb.split("\n").length;
 			for (int i = 0; i < contenidoUb.split("\n").length; i++) {
 				
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				if(contenidoUb.split("\n")[i].contains("Dirección")){
 					ubicacion.setCalle(contenidoUb.split("\n")[i].split("Dirección:")[1].replace("###", "").replace("\r", "").trim());
-					if(contenidoUb.split("\n")[i+3].contains("Giro")){
+					if(tlineas > 4 && contenidoUb.split("\n")[i+3].contains("Giro")){
 						ubicacion.setGiro(contenidoUb.split("\n")[i+3].split("Giro")[1]);
 					}
-					if (contenidoUb.split("\n")[i+4].contains(ConstantsValue.TECHOS)) {				
-						ubicacion.setTechos(fn.material(contenidoUb.split("\n")[i+4].split(ConstantsValue.TECHOS)[1].split("Incendio:")[1].toUpperCase().replace("###", "").trim()));						
+					if (tlineas > 5 && contenidoUb.split("\n")[i+4].contains(ConstantsValue.TECHOS)) {				
+						ubicacion.setTechos(fn.material(contenidoUb.split("\n")[i+4].split(ConstantsValue.TECHOS)[1].split( ConstantsValue.INCENDIOMYM )[1].toUpperCase().replace("###", "").trim()));						
 						ubicacion.setMuros(fn.material(contenidoUb.split("\n")[i+4].split(ConstantsValue.MUROS)[1].split(ConstantsValue.TECHOS)[0].toUpperCase().replace("###", "").trim()));
 					}
-					if (contenidoUb.split("\n")[i+5].contains(ConstantsValue.TECHOS)) {				
-						ubicacion.setTechos(fn.material(contenidoUb.split("\n")[i+5].split(ConstantsValue.TECHOS)[1].split("Incendio:")[1].toUpperCase().replace("###", "").trim()));						
+					if (tlineas > 6 && contenidoUb.split("\n")[i+5].contains(ConstantsValue.TECHOS)) {				
+						ubicacion.setTechos(fn.material(contenidoUb.split("\n")[i+5].split(ConstantsValue.TECHOS)[1].split(ConstantsValue.INCENDIOMYM)[1].toUpperCase().replace("###", "").trim()));						
 						ubicacion.setMuros(fn.material(contenidoUb.split("\n")[i+5].split(ConstantsValue.MUROS)[1].split(ConstantsValue.TECHOS)[0].toUpperCase().replace("###", "").trim()));
 					}
-					if (contenidoUb.split("\n")[i+5].contains("Núm. pisos incendio:")) {
-						ubicacion.setNiveles(Integer.parseInt(contenidoUb.split("\n")[i+5].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "").trim()));
+					if (tlineas > 6 && contenidoUb.split("\n")[i+5].contains("Núm. pisos incendio:")) {
+						ubicacion.setNiveles(Integer.parseInt(contenidoUb.split("\n")[i+5].split("Núm. pisos")[1].split(ConstantsValue.INCENDIOMYMPT)[1].replace("###", "").replace("\r", "").trim()));
 					}
-					if (contenidoUb.split("\n")[i+6].contains("Núm. pisos incendio:")) {
-						ubicacion.setNiveles(Integer.parseInt(contenidoUb.split("\n")[i+6].split("Núm. pisos")[1].split("incendio:")[1].replace("###", "").replace("\r", "").trim()));
+					
+					if (tlineas > 8 && contenidoUb.split("\n")[i+6].contains("Núm. pisos incendio:")) {
+						ubicacion.setNiveles(Integer.parseInt(contenidoUb.split("\n")[i+6].split("Núm. pisos")[1].split(ConstantsValue.INCENDIOMYMPT)[1].replace("###", "").replace("\r", "").trim()));
 					}
 					
 					
@@ -345,7 +347,7 @@ public class ChubbDiversosModel {
 			}	
 		    fin = contenido.indexOf("Prima Neta");
 		    
-
+System.out.println( inicio +"---" + fin);
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
 
@@ -398,7 +400,7 @@ public class ChubbDiversosModel {
 
 				if (resultado.toString().split("\r\n").length > 1) {
 					String seccion = "";
-					StringBuilder sumaAsegurada = new StringBuilder();
+					StringBuilder sumaAsegurada;
 					String coaseguro = "";
 					String auxiliar = "";
 					String[] arrResultado = resultado.toString().split("\r\n");
@@ -481,9 +483,9 @@ public class ChubbDiversosModel {
 								deducible = new StringBuilder();
 								coberturas.add(cobertura);
 
-							}else if(a.split("###").length == 2  && i+1<arrResultado.length ) {
-								if( fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")
-										&& nombresCoberturas.indexOf(a.split("###")[0].trim().toUpperCase()) > -1) {
+							}else if(a.split("###").length == 2  && i+1<arrResultado.length && fn.numTx(arrResultado[i+1].split("###")[0]).length() >1 && a.trim().endsWith("Sublímite")
+										&& nombresCoberturas.indexOf(a.split("###")[0].trim().toUpperCase()) > -1 ) {
+								
 									cobertura.setSeccion(seccion.replace("SECCION", "").trim());
 									cobertura.setNombre(a.split("###")[0].trim());
 									cobertura.setSa(a.split("###")[1]+" "+arrResultado[i+1].split("###")[0].trim());
@@ -492,7 +494,7 @@ public class ChubbDiversosModel {
 									}
 									coberturas.add(cobertura);
 									deducible = new StringBuilder();
-								}
+								
 							}
 
 						}
@@ -534,6 +536,7 @@ public class ChubbDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
@@ -589,14 +592,14 @@ public class ChubbDiversosModel {
 				}
 				break;
 			case ROBO_Y_O_ASALTO:
-				if(i+1 < arrTexto.length) {
-					if( arrTexto[i+1].contains("###")) {
-						if(arrTexto[i+1].split("###")[0].equals(FIJO_DENTRO_DEL_PREDIO) && arrTexto[i+1].split("###").length == 3 && !texto.contains(FIJO_DENTRO_DEL_PREDIO)) {
+				if(i+1 < arrTexto.length &&  arrTexto[i+1].contains("###") && arrTexto[i+1].split("###")[0].equals(FIJO_DENTRO_DEL_PREDIO) && arrTexto[i+1].split("###").length == 3 && !texto.contains(FIJO_DENTRO_DEL_PREDIO)) {
+					
+						
 							texto = texto.replace(ROBO_Y_O_ASALTO,"ROBO CON VIOLENCIA Y-O ASALTO DE EQUIPO FIJO DENTRO DEL PREDIO");
 							arrTexto[i+1] = arrTexto[i+1].replace("FIJO DENTRO DEL PREDIO###","" );
 						
-						}
-					}
+						
+					
 				}
 				break;
 			case "R.C. ARRENDATARIO SUB":
@@ -604,11 +607,14 @@ public class ChubbDiversosModel {
 				//linea actual nombre,suma linea siguiente complemento de suma asegurada, deducible,coaseguro
 				if(i+1 < arrTexto.length && texto.split("###").length == 2) {
 					texto = texto.replace("\r","").replace("\n", "");
-					if((texto.split("###")[1].equals("Sublimite de") || fn.numTx(texto.split("###")[1]).length() == 0) && arrTexto[i+1].contains("###")) {
-						if(fn.isNumeric(arrTexto[i+1].split("###")[0].replace(",", ""))) {
+					if((texto.split("###")[1].equals("Sublimite de") || fn.numTx(texto.split("###")[1]).length() == 0) && arrTexto[i+1].contains("###")
+					&& fn.isNumeric(arrTexto[i+1].split("###")[0].replace(",", ""))
+					
+					) {
+						
 							texto = texto.concat(" ").concat(arrTexto[i+1]).trim();
 							arrTexto[i+1] = "";
-						}
+						
 					}
 				}
 				break;
