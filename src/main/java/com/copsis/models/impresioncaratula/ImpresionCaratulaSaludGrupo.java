@@ -104,7 +104,7 @@ public class ImpresionCaratulaSaludGrupo {
                         if (caratula.getContrantante() != null && caratula.getContrantante().getDescripcion().length() > 0) {
 
                             String dato = Sio4CommunsPdf.eliminaHtmlTags3(caratula.getContrantante().getDescripcion());
-                            String datos[] = dato.split("<br>|<br/>|</br>");
+                            String[] datos = dato.split("<br>|<br/>|</br>");
 
                             int y = 0;
                             while (y < datos.length) {
