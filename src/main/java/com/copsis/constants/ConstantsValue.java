@@ -256,6 +256,13 @@ public final class ConstantsValue {
 	public static final String CARACTERISTICASRIESGO  ="Características del riesgo";
 	public static final String  INCENDIOMYM ="Incendio:";
 	public static final String  INCENDIOMYMPT ="incendio:";
+	public static final String NUMPISOSINCENDIO  ="Núm. pisos incendio:";
+	public static final String ENQUPISO = "En qué piso###En que piso";
+	public static final String NUMSOTANOS  ="No. Sótanos:###No. Sotanos:";
+	public static final String DIRECCION2  ="Dirección:###Direccion:###DIRECCION:###Dirección";
+	public static final String EMISION2="emisión";
+	public static final String FRACIONADO2 ="fraccionado";
+	public static final String TELEFONOAC ="Teléfono";
 
 
 	private ConstantsValue() {

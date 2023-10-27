@@ -1546,4 +1546,17 @@ public class DataToolsModel {
 
 	}
 
+	public String palabraRgx(String lineatxt, String patron){
+		String palbrasp="";
+		String[] palbrasAr = patron.split("###");			
+		for(int i=0; i < palbrasAr.length ; i++){			
+			Pattern pattern = Pattern.compile(palbrasAr[i], Pattern.CANON_EQ);
+			Matcher matcher = pattern.matcher(lineatxt);
+			if(matcher.find()){
+				palbrasp = palbrasAr[i];
+			}
+		}									
+	  return palbrasp;	    
+	}
+
 }
