@@ -3,6 +3,7 @@ package com.copsis.models.sura;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -42,12 +43,12 @@ public class SuraModel {
 				if(tipo == 2 && contenido.contains("Hogar Máster Total")) {
 					tipo =4;
 				}
-				if(tipo == 2 && contenido.contains("Múltiple Empresarial Riesgos")) {
+				if(tipo == 2 && contenido.contains(ConstantsValue.MUL_EMPRESARIA_DESCU )) {
 					tipo =4;
 				}
 
 				
-				if(tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("Múltiple Empresarial Riesgos")) {
+				if(tipo == 0 && fn.caratula(2, 3, stripper, doc).contains(ConstantsValue.MUL_EMPRESARIA_DESCU)) {
 					tipo =4;
 				}
 				if(tipo == 0 && fn.caratula(2, 3, stripper, doc).contains("Seguro de Accidentes  Personales Colectivo")) {
@@ -57,7 +58,12 @@ public class SuraModel {
 					tipo =4;
 				}
 
-				if(tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Seguro de Automóviles Residentes de Uso y Servicio")) {
+				if(tipo == 4 && fn.caratula(3, 3, stripper, doc).contains("Modelo")){
+                  tipo=1;
+				}
+
+				if(tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Seguro de Automóviles Residentes de Uso y Servicio")
+				) {
 					tipo =1;
 				}
 
@@ -86,7 +92,7 @@ public class SuraModel {
 			   
 				if( contenido.contains("Hogar Máster Total")) {
 					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-				}else 	if( contenido.contains("Múltiple Empresarial Riesgos")) {
+				}else 	if( contenido.contains(ConstantsValue.MUL_EMPRESARIA_DESCU)) {
 					modelo  = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 				}
 				else if( contenido.contains("DAÑOS RESPONSABILIDAD")) {

@@ -256,8 +256,8 @@ public final class ConstantsValue {
     public static final String DIRECCIONMC  ="Dirección";
 
 	public static final String CARACTERISTICASRIESGO  ="Características del riesgo";
-	public static final String  INCENDIOMYM ="Incendio:";
-	public static final String  INCENDIOMYMPT ="incendio:";
+	public static final String INCENDIOMYM ="Incendio:";
+	public static final String INCENDIOMYMPT ="incendio:";
 	public static final String NUMPISOSINCENDIO  ="Núm. pisos incendio:";
 	public static final String ENQUPISO = "En qué piso###En que piso";
 	public static final String NUMSOTANOS  ="No. Sótanos:###No. Sotanos:";
@@ -265,6 +265,10 @@ public final class ConstantsValue {
 	public static final String EMISION2="emisión";
 	public static final String FRACIONADO2 ="fraccionado";
 	public static final String TELEFONOAC ="Teléfono";
+	public static final String VEHICULO2 ="Vehículo##Vehiculo###Vehículo:";
+	public static final String COBERTURASCONTRATADAS ="Coberturas contratadas";
+	public static final String PRIMANETADESCUETOHASH ="Prima neta###Descuento";
+	public static final String MUL_EMPRESARIA_DESCU ="Múltiple Empresarial Riesgos";
 
 
 	private ConstantsValue() {
