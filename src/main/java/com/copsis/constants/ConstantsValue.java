@@ -1,5 +1,7 @@
 package com.copsis.constants;
 
+import javax.print.DocFlavor.STRING;
+
 public final class ConstantsValue {
 
 	public static final String ANUAL = "Anual";
@@ -125,6 +127,7 @@ public final class ConstantsValue {
 	public static final String NUMERO_AGENTE = "Número de Agente";
 	public static final String NACIONAL_MAYUS = "NACIONAL";
 	public static final String NUMERO = "Número";
+	public static final String NUMEROPM = "Número:";
 	public static final String NO_POLIZA = "No. Póliza";
 	public static final String NACIONAL = "− Nacional";
 	public static final String NUMERO2 = "Nú m er o     :";
@@ -265,6 +268,10 @@ public final class ConstantsValue {
 	public static final String EMISION2="emisión";
 	public static final String FRACIONADO2 ="fraccionado";
 	public static final String TELEFONOAC ="Teléfono";
+    public static final String PAQUETE ="PAQUETE";
+	public static final String DESCRIPCION ="Descripción";
+	 public static final String CALLE_NO ="Calle y No:";
+
 
 
 	private ConstantsValue() {
