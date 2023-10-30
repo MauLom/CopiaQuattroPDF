@@ -59,14 +59,11 @@ public class BanorteAutosModel {
 					.replace("T e l :", "Teléfono:");
 			this.recibosText =  fn.remplazarMultiple(this.recibosText,fn.remplazosGenerales());
 			try {
-				
-				 // tipo
-	            modelo.setTipo(1);
-
-	            // cia
+							
+	            modelo.setTipo(1);	        
 	            modelo.setCia(35);
 	            
-	            //Poliza
+	           
 	            inicio = contenido.indexOf("PÓLIZA DE SEGURO");
 	            fin = contenido.indexOf("DATOS DEL VEHÍCULO");
 	            if(inicio > 0 &&  fin >  0 && inicio < fin) {
