@@ -536,8 +536,7 @@ public class ChubbDiversosModel {
 			}
 
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {			
 			modelo.setError(
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
