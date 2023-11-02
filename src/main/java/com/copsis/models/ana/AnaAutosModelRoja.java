@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.copsis.constants.ConstantsValue;
+import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.utils.ErrorCode;
 
 public class AnaAutosModelRoja {
 
@@ -140,22 +142,16 @@ public class AnaAutosModelRoja {
 								
 						if(newcontenido.split("\n")[i + 1].length() > 50) {
 							vigencias = fn.gatos(newcontenido.split("\n")[i +1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
-			                
-							if(vigencias.split("###").length > 7 && vigencias.split("###")[6].trim().length() < 4){
+
+							if(vigencias.split("###").length > 7 && (vigencias.split("###")[6].trim().length() < 4 && vigencias.split("###")[6].trim().length() == 3)){
 								vigencias = fn.gatos(newcontenido.split("\n")[i +2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 							}
 						}else {
 							vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 						}
 
-						
-					
-
-						
 						int sp = vigencias.split("###").length;
 						int to  = sp - 9;
-						
-						
 
 						if (sp == 12) {
 							vigencias = fn.gatos(vigencias.split(vigencias.split("###")[2])[1]);
@@ -166,22 +162,13 @@ public class AnaAutosModelRoja {
 							sp = vigencias.split("###").length;
 						}
 						
-					
-						
-
-						if (sp == 9) {
-							
-						
+						if (sp == 9) {						
 							modelo.setVigenciaA((vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
 									+ vigencias.split("###")[6]).replace(" ", "").trim());
 							modelo.setVigenciaDe((vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
 									+ vigencias.split("###")[3]).replace(" ", "").trim());
 							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"+ vigencias.split("###")[0]).replace(" ", "").trim());
 						}
-						
-						
-					
-
 						
 					}
 
@@ -198,7 +185,7 @@ public class AnaAutosModelRoja {
 							&& newcontenido.split("\n")[i].contains("Gastos:")) {
 						    modelo.setDerecho(fn.castBigDecimal(
 							fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
-							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);								
+							List<String> valores = fn.obtenerListNumeros(newcontenido.split("\n")[i]);								
 						    modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 
 					}
@@ -214,9 +201,8 @@ public class AnaAutosModelRoja {
 						}				
 						modelo.setIva(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
-								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+								List<String> valores = fn.obtenerListNumeros(newcontenido.split("\n")[i]);
 								modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-
 							
 					}
 
@@ -253,9 +239,7 @@ public class AnaAutosModelRoja {
 						if (newcontenido.split("\n")[i].split("Placa")[1].length() > 7) {
 							modelo.setPlacas(newcontenido.split("\n")[i].split(ConstantsValue.PLACAS)[1].replace("###", "").trim());
 						}
-
 					}
-
 				}
 			}
 
@@ -292,15 +276,12 @@ public class AnaAutosModelRoja {
 							modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1]);
 							modelo.setAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[2]);
 						}
-
 					}
-
 				}
 			}
 
 			inicio = contenido.indexOf("Coberturas Amparada");
 			fin = contenido.indexOf("A.N.A. Compañía de Seguros");
-
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -358,7 +339,6 @@ public class AnaAutosModelRoja {
 					AnaAutosModelRoja.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
-
 	}
 	
 	private long calculaDiasVigencia(String vigenciaDe, String vigenciaA) {
@@ -372,7 +352,9 @@ public class AnaAutosModelRoja {
 
 			long diferenciaMilli = Math.abs(dateVigenciaA.getTime() - dateVigenciaDe.getTime());
 		     diferencia = TimeUnit.DAYS.convert(diferenciaMilli, TimeUnit.MILLISECONDS);
-		} catch (ParseException e) {}
+		} catch (ParseException e) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, e.getMessage());
+		}
 		return diferencia;
 	}
 	
