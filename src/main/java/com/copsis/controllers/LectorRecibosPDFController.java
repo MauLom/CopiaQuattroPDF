@@ -26,7 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/lector-recibos")
 @RequiredArgsConstructor
 public class LectorRecibosPDFController {
-    
+	private final   IdentificaReciboService  identificaReciboService;
+
 	@PostMapping(value = "/recibo", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CopsisResponse> lectorCaractulaAxa (@Valid @RequestBody PdfForm pdfForm, BindingResult bindingResult){
 		try {
@@ -34,7 +35,7 @@ public class LectorRecibosPDFController {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(IdentificaReciboService.identificaRecibo(pdfForm)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(identificaReciboService.identificaRecibo(pdfForm)).build();
 		}catch(ValidationServiceException e) {
 			throw e;
 		}catch(Exception ex) {
