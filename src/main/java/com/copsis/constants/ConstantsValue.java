@@ -280,6 +280,7 @@ public final class ConstantsValue {
 	public static final String NO_DE_CLIENTE ="No. de cliente";
  	public static final String PRECIO_TOTAL ="Precio Total";
  	public static final String NO_DE_POLIZAAC ="No. de Póliza";
+	public static final String OCUPANTES ="Ocupantes";
 	private ConstantsValue() {
 
 	}
