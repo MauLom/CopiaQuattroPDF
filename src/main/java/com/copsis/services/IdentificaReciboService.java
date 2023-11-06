@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructurarReciboModel;
 import com.copsis.models.recibos.ReciboCfeModel;
+import com.copsis.models.recibos.ReciboTotalPlModel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class IdentificaReciboService {
                    recibo = new ReciboCfeModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
                 }
                 if(this.getIndentificaReciboTotalPlay(contenido)){
-                   
+                    recibo = new ReciboTotalPlModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
                 }
 
                 return recibo;
