@@ -276,9 +276,10 @@ public final class ConstantsValue {
     public static final String PAQUETE ="PAQUETE";
 	public static final String DESCRIPCION ="Descripción";
 	public static final String CALLE_NO ="Calle y No:";
-
-
-
+	public static final String CONDUCTORES ="Conductores";
+	public static final String NO_DE_CLIENTE ="No. de cliente";
+ 	public static final String PRECIO_TOTAL ="Precio Total";
+ 	public static final String NO_DE_POLIZAAC ="No. de Póliza";
 	private ConstantsValue() {
 
 	}
