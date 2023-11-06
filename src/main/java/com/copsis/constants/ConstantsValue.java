@@ -114,6 +114,7 @@ public final class ConstantsValue {
 	public static final String MODELO2 = "Modelo";
 	public static final String MODELO_MAYUS = "MODELO:";
 	public static final String MOTOR = "Motor:";
+	public static final String MOTOR_HASH= "Motor:###";
 	public static final String MARCA = "Marca:";
 	public static final String MARCA2 = "Marca";
 	public static final String MUROS = "Muros";

@@ -55,14 +55,10 @@ public class AxaAutosModel {
 				.replace("COBERTURAS", "Coberturas");
 
 		
-		try {
-			// tipo
+		try {			
 			modelo.setTipo(1);
-			// cia
 			modelo.setCia(20);
 
-			// poliza
-			// cte_nombre
 			donde = 0;
 			donde = fn.recorreContenido(contenido, ConstantsValue.DATOS_ASEGURADO);
 			if (donde > 0) {
@@ -649,18 +645,18 @@ public class AxaAutosModel {
 			if(inicio > - 1 && inicio < fin) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(
-						contenido.substring(inicio + 18, fin).replace("\r", "").replace("Motor: ###", "Motor:###").replace("Modelo: ###", "Modelo:###"));
+						contenido.substring(inicio + 18, fin).replace("\r", "").replace("Motor: ###",ConstantsValue.MOTOR_HASH).replace("Modelo: ###", "Modelo:###"));
 				String[] arrContenido = newcontenido.toString().split("\n");
 				for (int i = 0; i < arrContenido.length; i++) {
-					if (arrContenido[i].contains("Vehículo:") && modelo.getDescripcion().length() == 0) {
+					if (arrContenido[i].contains(ConstantsValue.VEHICULOPT) && modelo.getDescripcion().length() == 0) {
 						modelo.setDescripcion(
-								fn.gatos(arrContenido[i].split("Vehículo:")[1].trim()).split("###")[0].trim());
+								fn.gatos(arrContenido[i].split(ConstantsValue.VEHICULOPT)[1].trim()).split("###")[0].trim());
 					}
-					if (arrContenido[i].contains("Motor:###") && modelo.getMotor().length() == 0) {
-						modelo.setMotor(arrContenido[i].split("Motor:###")[1].split("###")[0].trim());
+					if (arrContenido[i].contains(ConstantsValue.MOTOR_HASH) && modelo.getMotor().length() == 0) {
+						modelo.setMotor(arrContenido[i].split(ConstantsValue.MOTOR_HASH)[1].split("###")[0].trim());
 					}
-					if (arrContenido[i].contains("Modelo:###") && modelo.getModelo() == 0) {
-						modelo.setModelo(fn.castInteger(arrContenido[i].split("Modelo:###")[1].split("###")[0].trim()));
+					if (arrContenido[i].contains(ConstantsValue.MOTOR_HASH) && modelo.getModelo() == 0) {
+						modelo.setModelo(fn.castInteger(arrContenido[i].split(ConstantsValue.MOTOR_HASH)[1].split("###")[0].trim()));
 					}
 					if (arrContenido[i].contains(ConstantsValue.PLACAS)) {
 						modelo.setPlacas(
@@ -846,150 +842,6 @@ public class AxaAutosModel {
 		}
 	}
 
-	private ArrayList<EstructuraRecibosModel> recibosExtract() {
-		recibosText = fn.fixContenido(recibosText);
-		List<EstructuraRecibosModel> recibosLis = new ArrayList<>();
-
-		try {
-			int index = 0;
-			int totalRec = fn.getTotalRec(modelo.getFormaPago());
-			int recibosSerie = 1;
-			StringBuilder newcontenido = new StringBuilder();
-			StringBuilder resultado = new StringBuilder();
-
-			for (String a : recibosText.split("RECIBO PROVISIONAL DE PAGO")) {
-				EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-				if (index > 0) {
-					// serie
-					recibo.setSerie(recibosSerie + "/" + totalRec);
-
-					// recibo_id
-
-					inicio = a.indexOf("Identificador:");
-					fin = a.indexOf("Gastos por");
-					if (inicio > -1 && fin > inicio) {
-						newcontenido.append(fn.gatos(a.substring(inicio + 14, fin)).trim());
-						recibo.setReciboId(newcontenido.toString());
-					}
-
-					// vigencia_de
-
-					// vigencia_a
-
-					inicio = a.indexOf("Periodo cubierto:");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(a.substring(inicio + 17, inicio + 200));
-						if (newcontenido.toString().contains("Concepto")) {
-							String auxStr = newcontenido.toString();
-							newcontenido = new StringBuilder();
-							newcontenido.append(fn.gatos(auxStr.split("Concepto")[0].trim()).replace("\r\n", "")
-									.replace("al@@@", "").replace("Del###", "").replace("al###", "")
-									.replace(" de ", "/").replace("@@@", "").trim());
-
-							if (newcontenido.toString().split("###").length == 2) {
-								resultado.append(newcontenido.toString().split("###")[0].trim());
-								if (resultado.toString().split("/").length == 3)
-									recibo.setVigenciaDe(fn.formatDateMonthCadena(resultado.toString().replace("/", "-")));
-								resultado = new StringBuilder();
-								resultado.append(newcontenido.toString().split("###")[1].trim());
-								if (resultado.toString().split("/").length == 3 && resultado.length() > 10)
-									recibo.setVigenciaA(fn.formatDateMonthCadena(resultado.toString().replace("/", "-")));
-
-							}
-
-						}
-					}
-
-					// prima_total
-
-					inicio = a.indexOf("Total a Pagar");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(
-								fn.cleanString(fn.gatos(a.substring(inicio + 13, inicio + 60).split("\n")[0].trim())));
-						if (fn.isNumeric(newcontenido.toString())) {
-							recibo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
-							restoPrimaTotal = modelo.getPrimaTotal().subtract(recibo.getPrimaTotal());
-
-						}
-					}
-
-					// derecho
-
-					inicio = a.indexOf("por Expedición");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(fn.gatos(a.substring(inicio + 14, inicio + 100).split("\n")[0].trim()));
-					}
-					newcontenido.append(fn.cleanString(newcontenido.toString()));
-					if (fn.isNumeric(newcontenido.toString()))
-
-						recibo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
-					restoDerecho = modelo.getDerecho().subtract(recibo.getDerecho());
-
-					// iva
-
-					inicio = a.indexOf("I.V.A.");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(
-								fn.cleanString(fn.gatos(a.substring(inicio + 6, inicio + 100).split("\n")[0].trim())));
-
-						if (newcontenido.toString().split("###").length == 2) {
-							String auxStr = newcontenido.toString();
-							newcontenido = new StringBuilder();
-							newcontenido.append(auxStr.split("###")[1].trim());
-							if (fn.isNumeric(newcontenido.toString())) {
-								recibo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
-								restoIva = modelo.getIva().subtract(recibo.getIva());
-							}
-						}
-					}
-
-					// recargo
-
-					inicio = a.indexOf("de Financiamiento");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(fn.gatos(a.substring(inicio + 17, inicio + 100).split("\n")[0].trim()));
-					}
-					String auxStr = newcontenido.toString();
-					newcontenido = new StringBuilder();
-					newcontenido.append(fn.cleanString(auxStr));
-					if (fn.isNumeric(newcontenido.toString())) {
-						recibo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
-
-					}
-					restoRecargo = modelo.getRecargo().subtract(recibo.getRecargo());
-					// prima_neta
-					inicio = a.indexOf("Prima Neta");
-					if (inicio > -1) {
-						newcontenido = new StringBuilder();
-						newcontenido.append(fn.gatos(a.substring(inicio + 10, inicio + 100).split("\n")[0].trim()));
-					}
-					auxStr = newcontenido.toString();
-					newcontenido = new StringBuilder();
-					newcontenido.append(fn.cleanString(auxStr));
-					if (fn.isNumeric(newcontenido.toString())) {
-						recibo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString())));
-					}
-					restoPrimaNeta = modelo.getPrimaneta().subtract(recibo.getPrimaneta());
-					recibosLis.add(recibo);
-					recibosSerie++;
-
-				}
-				index++;
-
-			}
-
-			return (ArrayList<EstructuraRecibosModel>) recibosLis;
-		} catch (Exception ex) {
-			modelo.setError(
-					AxaAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-
-			return (ArrayList<EstructuraRecibosModel>) recibosLis;
-		}
-	}
+	
 
 }
