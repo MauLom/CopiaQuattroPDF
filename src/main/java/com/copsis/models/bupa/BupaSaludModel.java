@@ -83,11 +83,12 @@ public class BupaSaludModel {
 					  modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Cónyuge")) {					
+				if(newcontenido.toString().split("\n")[i].contains("Dependientes")) {					
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 					  modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					  
 				}
+				
 				
 				
 				if(newcontenido.toString().split("\n")[i].contains("based discount")) {					
@@ -146,7 +147,7 @@ public class BupaSaludModel {
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
-				
+			
 			if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO2) ) {
 				
 				  modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i] ));
@@ -166,6 +167,7 @@ public class BupaSaludModel {
 				inicio = recibo.indexOf(ConstantsValue.FORMA_PAGO2);
 				fin = recibo.indexOf("Prima Neta");
 				newcontenido.append(fn.extracted(inicio, fin, recibo));
+				System.out.println(recibo);
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO2)) {
