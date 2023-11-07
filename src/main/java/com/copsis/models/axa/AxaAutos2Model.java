@@ -24,7 +24,8 @@ public class AxaAutos2Model {
 		String newcontenido = "";
 		int inicio;
 		int fin;
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+		.replace("Datos del vehículo", ConstantsValue.DATOS_VEHICULO);
 		try {
 			
 			modelo.setTipo(1);			
@@ -51,7 +52,7 @@ public class AxaAutos2Model {
 			
 
 			inicio = contenido.indexOf("Datos del asegurado");
-			fin = contenido.indexOf("Datos del vehículo");
+			fin = contenido.indexOf(ConstantsValue.DATOS_VEHICULO);
 
 			
 			
@@ -79,14 +80,14 @@ public class AxaAutos2Model {
 				}
 			}
 
-			inicio = contenido.indexOf("Datos del vehículo");
+			inicio = contenido.indexOf(ConstantsValue.DATOS_VEHICULO);
 			fin = contenido.indexOf("Datos adicionales");
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-					if (newcontenido.split("\n")[i].contains("Vehículo")
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.DATOS_VEHICULO)
 							&& newcontenido.split("\n")[i].contains("Term")) {
-						modelo.setDescripcion(newcontenido.split("\n")[i].split("Vehículo")[1].split("Term:")[0]
+						modelo.setDescripcion(newcontenido.split("\n")[i].split(ConstantsValue.DATOS_VEHICULO)[1].split("Term:")[0]
 								.replace("###", "").trim());
 					}else if(newcontenido.split("\n")[i].contains("Vehicle")&& newcontenido.split("\n")[i].contains("Term") ) {
 						modelo.setDescripcion(newcontenido.split("\n")[i].split("Vehicle")[1].split("Term:")[0].replace(":", "").replace("###", " ").trim());
@@ -99,15 +100,15 @@ public class AxaAutos2Model {
 						modelo.setMoneda(2);
 					}
 					
-					if(newcontenido.split("\n")[i].contains("No. de Serie") &&  newcontenido.split("\n")[i].contains("Ocupantes") ) {						 
-				     	modelo.setSerie(newcontenido.split("\n")[i].split("de Serie")[1].split("Ocupantes")[0].replace("###", "").replace("-", "").trim());				     
+					if(newcontenido.split("\n")[i].contains("No. de Serie") &&  newcontenido.split("\n")[i].contains(ConstantsValue.OCUPANTES) ) {						 
+				     	modelo.setSerie(newcontenido.split("\n")[i].split("de Serie")[1].split(ConstantsValue.OCUPANTES)[0].replace("###", "").replace("-", "").trim());				     
 			     	}
 					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.VEHICLE_ID_NUMBER) && modelo.getSerie().length() == 0) {
 					
-						if (newcontenido.split("\n")[i].contains("Ocupantes")) {
+						if (newcontenido.split("\n")[i].contains(ConstantsValue.OCUPANTES)) {
 							modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.VEHICLE_ID_NUMBER)[1]
-									.split("Ocupantes")[0].replace("###", ""));
+									.split(ConstantsValue.OCUPANTES)[0].replace("###", ""));
 						} else {
 							modelo.setSerie(newcontenido.split("\n")[i].split(ConstantsValue.VEHICLE_ID_NUMBER)[1]
 									.replace("###", ""));
