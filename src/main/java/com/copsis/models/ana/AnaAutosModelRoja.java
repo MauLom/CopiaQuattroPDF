@@ -347,7 +347,6 @@ public class AnaAutosModelRoja {
 
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(
 					AnaAutosModelRoja.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
