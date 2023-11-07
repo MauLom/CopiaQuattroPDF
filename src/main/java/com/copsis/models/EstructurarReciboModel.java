@@ -8,6 +8,7 @@ import lombok.Setter;
 public class EstructurarReciboModel {
     private String nombre;
     private String cteDireccion;
+    private String calle;
     private String cp;
     private  String error;
 }

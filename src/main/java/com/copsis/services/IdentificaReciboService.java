@@ -10,6 +10,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructurarReciboModel;
+import com.copsis.models.recibos.ReciboAguaModel;
 import com.copsis.models.recibos.ReciboCfeModel;
 import com.copsis.models.recibos.ReciboTotalPlModel;
 
@@ -27,12 +28,20 @@ public class IdentificaReciboService {
                 pdfStripper.setStartPage(1);
                 pdfStripper.setEndPage(1);
                 String contenido = pdfStripper.getText(documentToBeParsed);
+                
                
                 if(this.getIndentificaReciboLuz(contenido)){
-                   recibo = new ReciboCfeModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
+                   recibo = new ReciboCfeModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));                   
                 }
                 if(this.getIndentificaReciboTotalPlay(contenido)){
                     recibo = new ReciboTotalPlModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
+                    
+                }
+                if(this.getIndentificaReciboAgua(contenido)){
+                     recibo = new ReciboAguaModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
+
+                     
+                     
                 }
 
                 return recibo;
@@ -53,7 +62,14 @@ public class IdentificaReciboService {
 
      public boolean getIndentificaReciboTotalPlay(String contenido) {     
         boolean encotro= false;
-        Set<String> diccionario = new HashSet<>(Arrays.asList("TOTAL PLAY", "mitotalplay", "TELECOMUNICACIONES", "telefónico"));
+        Set<String> diccionario = new HashSet<>(Arrays.asList("TOTAL PLAY", "mitotalplay", "TELECOMUNICACIONES", "telefónico"));     
+        encotro = getContadorCoincidencias(contenido, encotro, diccionario);
+        return encotro;
+    }
+
+ public boolean getIndentificaReciboAgua(String contenido) {     
+        boolean encotro= false;
+        Set<String> diccionario = new HashSet<>(Arrays.asList("CUOTA DE DRENAJE", "AGUA", "Servicios", "Drenaje"));
         encotro = getContadorCoincidencias(contenido, encotro, diccionario);
         return encotro;
     }

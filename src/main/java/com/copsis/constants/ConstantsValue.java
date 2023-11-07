@@ -275,6 +275,7 @@ public final class ConstantsValue {
     public static final String PAQUETE ="PAQUETE";
 	public static final String DESCRIPCION ="Descripción";
 	public static final String CALLE_NO ="Calle y No:";
+	 public static final String CODIGO_POSTALPT ="C.P.";
 
 
 
