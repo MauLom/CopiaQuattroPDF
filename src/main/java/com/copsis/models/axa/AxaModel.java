@@ -3,6 +3,7 @@ package com.copsis.models.axa;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.axa.salud.AxaSaludFaModel;
@@ -52,11 +53,11 @@ public class AxaModel {
 			else {
 	
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
-				"VIDA PROTGT","VIDA INDIVIDUAL",
-						"VIDA ACADÉMICO","ALIADOS+ KIDS",
+				ConstantsValue.VIDA_PROTGT ,ConstantsValue.VIDA_INDIVIDUAL,
+					ConstantsValue.VIDA_ACADEMICO,ConstantsValue.ALIADOS_KIDS,
 						"HOGAR INTEGRAL", "VEHICLE DESCRIPTION", "PROTECCIÓN A BIENES EMPRESARIALES",
-						"PLANPROTEGE / COMERCIO",
-						"RESPONSABILIDAD CIVIL, COMERCIO","PLANPROTEGE / COMERCIO","DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
+						ConstantsValue.PLANPROTEGE_COMERCIO,
+						"RESPONSABILIDAD CIVIL, COMERCIO",ConstantsValue.PLANPROTEGE_COMERCIO,"DAÑOS","PLANPROTEGE / CONSTRUCTORES", "RESPONSABILIDAD CIVIL, ERRORES"};
 				contenido = contenido.toUpperCase();
 
 				for (String tipo : tipos) {	
@@ -65,8 +66,8 @@ public class AxaModel {
 								
 						switch (tipo) {
 							
-						case "TRADICIONALES DE VIDA": case "VIDA PROTGT": case "VIDA INDIVIDUAL": case "VIDA ACADÉMICO": case "ALIADOS+ KIDS": // VIDA
-							if(tipo.equals("VIDA PROTGT") || tipo.equals("VIDA INDIVIDUAL") || tipo.equals("VIDA ACADÉMICO") || tipo.equals("ALIADOS+ KIDS")) {
+						case "TRADICIONALES DE VIDA": case ConstantsValue.VIDA_PROTGT: case ConstantsValue.VIDA_INDIVIDUAL: case ConstantsValue.VIDA_ACADEMICO: case ConstantsValue.ALIADOS_KIDS: // VIDA
+							if(tipo.equals(ConstantsValue.VIDA_PROTGT) || tipo.equals(ConstantsValue.VIDA_INDIVIDUAL) || tipo.equals(ConstantsValue.VIDA_ACADEMICO) || tipo.equals(ConstantsValue.ALIADOS_KIDS)) {
 								
 								AxaVida2Model datosAxaVida = new AxaVida2Model(fn.caratula(1, 4, stripper, doc));
 								modelo = datosAxaVida.procesar();
@@ -95,7 +96,7 @@ public class AxaModel {
 							break;
 						case "HOGAR INTEGRAL":
 						case "PLANPROTEGE / CONSTRUCTORES":
-						case "PLANPROTEGE / COMERCIO":
+						case ConstantsValue.PLANPROTEGE_COMERCIO:
 				
 						// HOGAR
 							 int pagFinal = doc.getNumberOfPages() > 5 ? doc.getNumberOfPages() :4;
@@ -114,11 +115,10 @@ public class AxaModel {
 						   case "DAÑOS":
 						   int pagFin = doc.getNumberOfPages() > 3 ? 6 :4;
 						 
-						   if(!fn.caratula(1, pagFin, stripper, doc).contains("Vehicle description")){
-						   	 if(!div0) {									
+						   if(!fn.caratula(1, pagFin, stripper, doc).contains("Vehicle description") && (!div0)) {									
 							 AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();
-							   }
+							   
 							}
 								break;
 							default: 
