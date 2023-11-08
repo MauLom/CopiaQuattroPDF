@@ -18,14 +18,14 @@ public class ReciboCfeModel {
         String nombre = "";
 
         for (int x = 0; x < lines.length; x++) {
-        
+
             if (x== 1 && lines[x].contains("TOTAL A PAGAR:") && lines[x].split("###").length < 2) {
                 nombre = lines[x - 1].replace("###", "").replace("@@@", "").trim();
             }
-            if (lines[x].contains("TOTAL A PAGAR:")) {
-                if (lines[x].split("###").length > 1) {
+            if (lines[x].contains("TOTAL A PAGAR:") && nombre.isEmpty()) {                
+              
                     nombre = lines[x].split(ConstantsValue.TOTAL_MAYUS)[0].replace("###", "").replace("@@@", "").trim();
-                }
+                
 
                 StringBuilder direccion = new StringBuilder();
                 recibo.setCalle(lines[x + 1].replace("###", "").replace("@@@", "").trim());
@@ -37,7 +37,7 @@ public class ReciboCfeModel {
                 }
 
                  recibo.setNombre(nombre);
-                 recibo.setCteDireccion(direccion.toString().replace("@@@", "").replace("\r", " "));
+                 recibo.setCteDireccion(direccion.toString().replace("@@@", "").replace("\r", " ").trim());
 
                 getCodigoPostal(recibo);
                

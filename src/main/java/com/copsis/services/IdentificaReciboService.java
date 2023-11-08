@@ -12,6 +12,7 @@ import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructurarReciboModel;
 import com.copsis.models.recibos.ReciboAguaModel;
 import com.copsis.models.recibos.ReciboCfeModel;
+import com.copsis.models.recibos.ReciboIzzyModel;
 import com.copsis.models.recibos.ReciboTotalPlModel;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class IdentificaReciboService {
                 pdfStripper.setEndPage(1);
                 String contenido = pdfStripper.getText(documentToBeParsed);
                 
-               
+              
                 if(this.getIndentificaReciboLuz(contenido)){
                    recibo = new ReciboCfeModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));                   
                 }
@@ -38,10 +39,10 @@ public class IdentificaReciboService {
                     
                 }
                 if(this.getIndentificaReciboAgua(contenido)){
-                     recibo = new ReciboAguaModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));
-
-                     
-                     
+                     recibo = new ReciboAguaModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));                                         
+                }
+                if(this.getIndentificaReciboIzzy(contenido)){
+                      recibo = new ReciboIzzyModel().procesar(this.recibo(1,2,pdfStripper,documentToBeParsed));        
                 }
 
                 return recibo;
@@ -70,6 +71,13 @@ public class IdentificaReciboService {
  public boolean getIndentificaReciboAgua(String contenido) {     
         boolean encotro= false;
         Set<String> diccionario = new HashSet<>(Arrays.asList("CUOTA DE DRENAJE", "AGUA", "Servicios", "Drenaje"));
+        encotro = getContadorCoincidencias(contenido, encotro, diccionario);
+        return encotro;
+    }
+
+     public boolean getIndentificaReciboIzzy(String contenido) {     
+        boolean encotro= false;
+        Set<String> diccionario = new HashSet<>(Arrays.asList("izzi.mx", "izzitv", "izzi", "Teléfono"));
         encotro = getContadorCoincidencias(contenido, encotro, diccionario);
         return encotro;
     }
