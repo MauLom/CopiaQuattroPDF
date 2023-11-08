@@ -43,6 +43,7 @@ public final class ConstantsValue {
 	public static final String DOMICILIO = "Domicilio:";
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
+	public static final String DATOS_ASEGURADOMY = "DATOS DEL ASEGURADO";
 	public static final String DESDE = "Desde";
 	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
@@ -283,6 +284,8 @@ public final class ConstantsValue {
  	public static final String PRECIO_TOTAL ="Precio Total";
  	public static final String NO_DE_POLIZAAC ="No. de Póliza";
 	public static final String OCUPANTES ="Ocupantes";
+	public static final String  AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
+	public static final String VERSIONPT ="Versión:";
 	private ConstantsValue() {
 
 	}
