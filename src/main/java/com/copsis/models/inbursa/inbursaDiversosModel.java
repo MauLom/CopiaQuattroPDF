@@ -40,7 +40,8 @@ public class inbursaDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
 			fin = contenido.indexOf("COBERTURAS");
-
+			fin =  fin == -1 ? contenido.indexOf("VIGENCIA DE LA PÓLIZA") : fin;
+	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 hrs. del", ""));
