@@ -81,7 +81,7 @@ public final class ConstantsValue {
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
 	public static final String FECHA_DE_NACIMIENTO = "Fecha de nacimiento:";
-
+	public static final String GASTOS_POR="Gastos por";
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
 	public static final String GASTOS = "Gastos";
@@ -150,6 +150,7 @@ public final class ConstantsValue {
 	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
+    public static final String PLACASPT = "Placas";
 	public static final String PLACAS_MAYUS = "PLACAS:";
 	public static final String PLAN = "Plan:";
 	public static final String PLAN_SEGURO = "PLAN DE SEGURO:";
@@ -286,6 +287,14 @@ public final class ConstantsValue {
 	public static final String VIDA_INDIVIDUAL ="VIDA INDIVIDUAL";
 	public static final String ALIADOS_KIDS ="ALIADOS+ KIDS";
 	public static final String PLANPROTEGE_COMERCIO ="PLANPROTEGE / COMERCIO";
+	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
+	public static final String ASVI_QUALITAS="Asistencia Vial Quálitas";
+	public static final String COLOR ="Color";
+	public static final String FORMA_DEPT ="Forma de:";
+	public static final String TASA_FINACIMIENTO ="Tasa Financiamiento";
+	public static final String ESTADPT  ="Estado:";
+	public static final String COLONIA="Colonia";
+    public static final String COLONIAPT="Colonia:";
 	private ConstantsValue() {
 
 	}
