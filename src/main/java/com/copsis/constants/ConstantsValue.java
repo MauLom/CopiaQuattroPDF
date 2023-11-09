@@ -1,7 +1,5 @@
 package com.copsis.constants;
 
-import javax.print.DocFlavor.STRING;
-
 public final class ConstantsValue {
 
 	public static final String ANUAL = "Anual";
@@ -84,7 +82,7 @@ public final class ConstantsValue {
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
 	public static final String FECHA_DE_NACIMIENTO = "Fecha de nacimiento:";
-
+	public static final String GASTOS_POR="Gastos por";
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
 	public static final String GASTOS = "Gastos";
@@ -153,6 +151,7 @@ public final class ConstantsValue {
 	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
+    public static final String PLACASPT = "Placas";
 	public static final String PLACAS_MAYUS = "PLACAS:";
 	public static final String PLAN = "Plan:";
 	public static final String PLAN_SEGURO = "PLAN DE SEGURO:";
@@ -284,8 +283,16 @@ public final class ConstantsValue {
  	public static final String PRECIO_TOTAL ="Precio Total";
  	public static final String NO_DE_POLIZAAC ="No. de Póliza";
 	public static final String OCUPANTES ="Ocupantes";
-	public static final String  AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
+	public static final String AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
 	public static final String VERSIONPT ="Versión:";
+	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
+	public static final String ASVI_QUALITAS="Asistencia Vial Quálitas";
+	public static final String COLOR ="Color";
+	public static final String FORMA_DEPT ="Forma de:";
+	public static final String TASA_FINACIMIENTO ="Tasa Financiamiento";
+	public static final String ESTADPT  ="Estado:";
+	public static final String COLONIA="Colonia";
+    public static final String COLONIAPT="Colonia:";
 	private ConstantsValue() {
 
 	}
