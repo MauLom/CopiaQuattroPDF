@@ -48,8 +48,8 @@ public class AxaAutosModel {
 		
 		
 		try {			
-			// modelo.setTipo(1);
-			// modelo.setCia(20);
+			modelo.setTipo(1);
+			modelo.setCia(20);
 
 			
 			donde = fn.recorreContenido(contenido, ConstantsValue.DATOS_ASEGURADO);

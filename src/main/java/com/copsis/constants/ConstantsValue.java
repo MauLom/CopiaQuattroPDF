@@ -284,6 +284,11 @@ public final class ConstantsValue {
  	public static final String PRECIO_TOTAL ="Precio Total";
  	public static final String NO_DE_POLIZAAC ="No. de Póliza";
 	public static final String OCUPANTES ="Ocupantes";
+	public static final String VIDA_PROTGT ="VIDA PROTGT";
+	public static final String VIDA_ACADEMICO ="VIDA ACADÉMICO";
+	public static final String VIDA_INDIVIDUAL ="VIDA INDIVIDUAL";
+	public static final String ALIADOS_KIDS ="ALIADOS+ KIDS";
+	public static final String PLANPROTEGE_COMERCIO ="PLANPROTEGE / COMERCIO";
 	public static final String AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
 	public static final String VERSIONPT ="Versión:";
 	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
