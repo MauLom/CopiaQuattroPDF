@@ -1442,9 +1442,9 @@ public class DataToolsModel {
 
 	}
 
-	public List<String> obtenVigePoliza2(String cadena) {
+	public List<String> obtenVigePoliza2(StringBuilder aux) {
 		List<String> resultado = new ArrayList<>();
-		Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_MES).matcher(cadena);
+		Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_MES).matcher(aux);
 		while (m.find()) {
 			resultado.add(m.group());
 		}
