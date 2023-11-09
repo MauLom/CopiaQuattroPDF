@@ -50,6 +50,7 @@ public final class ConstantsValue {
 	public static final String DANIOS = "Daños";
 	public static final String DESCRIPCION_MOVIMIENTO = "Descripción del Movimiento";
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
+	public static final String DERECHO_POLIZAMY = "DERECHO DE PÓLIZA";
 	public static final String DURACION = "Duración";
 	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
 	public static final String DATOS_GENERALES_ASEGURADO = "Datos Generales del Asegurado";
