@@ -41,6 +41,7 @@ public final class ConstantsValue {
 	public static final String DOMICILIO = "Domicilio:";
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
+	public static final String DATOS_ASEGURADOMY = "DATOS DEL ASEGURADO";
 	public static final String DESDE = "Desde";
 	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
@@ -50,6 +51,7 @@ public final class ConstantsValue {
 	public static final String DANIOS = "Daños";
 	public static final String DESCRIPCION_MOVIMIENTO = "Descripción del Movimiento";
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
+	public static final String DERECHO_POLIZAMY = "DERECHO DE PÓLIZA";
 	public static final String DURACION = "Duración";
 	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
 	public static final String DATOS_GENERALES_ASEGURADO = "Datos Generales del Asegurado";
@@ -287,6 +289,8 @@ public final class ConstantsValue {
 	public static final String VIDA_INDIVIDUAL ="VIDA INDIVIDUAL";
 	public static final String ALIADOS_KIDS ="ALIADOS+ KIDS";
 	public static final String PLANPROTEGE_COMERCIO ="PLANPROTEGE / COMERCIO";
+	public static final String AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
+	public static final String VERSIONPT ="Versión:";
 	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
 	public static final String ASVI_QUALITAS="Asistencia Vial Quálitas";
 	public static final String COLOR ="Color";

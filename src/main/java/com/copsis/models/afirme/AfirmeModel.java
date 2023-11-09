@@ -3,6 +3,7 @@ package com.copsis.models.afirme;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -14,8 +15,7 @@ public class AfirmeModel {
 	private PDFTextStripper stripper;
 	private PDDocument doc;
 	private String contenido;
-	private int tipo  = 0;
-	private int tipoV  = 0;
+	
 
 	public AfirmeModel(PDFTextStripper pdfStripper, PDDocument pdDoc, String contenido) {
 		this.stripper = pdfStripper;
@@ -23,6 +23,8 @@ public class AfirmeModel {
 		this.contenido = contenido;
 	}
 	public EstructuraJsonModel procesar() {	
+		 int tipo  = 0;
+	     int tipoV  = 0;
 		try {
 		
 			tipo =fn.tipoPoliza(contenido);
@@ -53,7 +55,8 @@ public class AfirmeModel {
                     tipoV =0;  
                 }
 
-				if( tipo == 0 && fn.caratula(3, 4, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")){
+				
+				if( tipo == 0 && fn.caratula(3, 4, stripper, doc).contains(ConstantsValue.AUTOMOVILES_INDIVIDUALES)){
                     tipo=1;                    
                 }
 
@@ -61,11 +64,13 @@ public class AfirmeModel {
 				switch (tipo == 0 ? fn.tipoPoliza(contenido) : tipo) {
 				case 1:				
 					if(contenido.contains("AUTOMÓVILES RESIDENTES") ||contenido.contains("AUTOMÓVILES SERVICIO PUBLICO") 
-					|| fn.caratula(1, 2, stripper, doc).contains("AUTOMOVILES INDIVIDUALES")					
+					|| fn.caratula(1, 2, stripper, doc).contains(ConstantsValue.AUTOMOVILES_INDIVIDUALES)					
 					|| fn.caratula(1, 2, stripper, doc).contains("MOTOCICLETAS INDIVIDUALES")
 					|| (fn.caratula(1, 2, stripper, doc).contains("PICK UPS") && fn.caratula(1, 2, stripper, doc).contains("INDIVIDUAL"))) {
 						pagIni = fn.pagFinRango(stripper, doc, "CARATULA");	
-						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "AUTOMOVILES INDIVIDUALES") :pagIni;
+						
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "SEGURO PARA PICK UPS") :pagIni;
+						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, ConstantsValue.AUTOMOVILES_INDIVIDUALES) :pagIni;
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "MOTOCICLETAS INDIVIDUALES") :pagIni;
 						pagIni = pagIni == 0 ? fn.pagFinRango(stripper, doc, "PICK UPS") :pagIni;
 						Integer cbo= fn.pagFinRango(stripper, doc, "LIMITE MAXIMO DE");
