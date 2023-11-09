@@ -40,12 +40,14 @@ public class inbursaDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
 			fin = contenido.indexOf("COBERTURAS");
-			fin =  fin == -1 ? contenido.indexOf("VIGENCIA DE LA PÓLIZA") : fin;
+			fin =  fin == -1 ? contenido.indexOf("Seguros ###Inbursa") : fin;
+		
 	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 hrs. del", ""));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					
 
 					if (newcontenido.toString().split("\n")[i].contains("PÓLIZA")
 							&& newcontenido.toString().split("\n")[i].contains("CIS")
@@ -360,11 +362,16 @@ public class inbursaDiversosModel {
 						}
 						
 					}
-
+					
+					if(!coberturas.isEmpty() && coberturas.size() > 1 ){
+ 					   modelo.setCoberturas(coberturas);
+					}
+                 
 				}
 
-				modelo.setCoberturas(coberturas);
+				
 			}
+		
 
 			return modelo;
 		} catch (Exception ex) {
