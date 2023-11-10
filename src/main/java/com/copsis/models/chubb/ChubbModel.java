@@ -37,9 +37,11 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
+
+
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA"};
+					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
 									
@@ -53,7 +55,7 @@ public class ChubbModel {
 					case "PYME SEGURA":
 					case "CONTRATISTA":
 					case "Sótanos":
-					case "EMBARCACIONES":
+					case ConstantsValue.EMBARCACIONES:
 					case "TRANSPORTE DE MERCANCIAS":
 					case "Todo Riesgo Contratistas":	
 					
@@ -77,12 +79,12 @@ public class ChubbModel {
 							break;
 						}
 
-						if(tipo.equals("EMBARCACIONES")) {
+						if(tipo.equals(ConstantsValue.EMBARCACIONES)) {
 							encontro = true;
 							break;
 						}
 						
-						
+						break;
 					case "AUTOMÓVILES":
 					case "TRANSPORTE":
 					case "Placas:":		
@@ -113,8 +115,14 @@ public class ChubbModel {
 					   }
 					encontro = true;
 						break;
-					case "Profesional para Médicos":
-					modelo = new ChubbSaludModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+					case "Profesional para Médicos",ConstantsValue.SEGURO_DE_VIAJE:
+				
+                      if(fn.caratula(1, 1, pdfStripper, pdDoc).contains(ConstantsValue.SEGURO_DE_VIAJE)){
+							modelo = new ChubbSalud2Model().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+					  }else{
+                         modelo = new ChubbSaludModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
+					  }
+					
 					encontro = true;
 					break;	
 					case "PÓLIZA DE SEGURO VIDA":
