@@ -30,24 +30,14 @@ public class SuraAutosModel {
 			modelo.setTipo(1);
 			modelo.setCia(88);
 		
-			inicio = contenido.indexOf("Seguro de Automóviles");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("SEGUROS AUTOS RESIDENTES");
+			inicio=-1;
+			String[] searchTerms = {"Seguro de Automóviles","SEGUROS AUTOS RESIDENTES", "SEGUROS MOTOR TECHNICAL", "Seguro de Movilidad", "Seguro de Auto", "Póliza no."};
+			for (String term : searchTerms) {
+				inicio = contenido.indexOf(term);
+				if (inicio != -1) {		
+					break;
+				}
 			}
-			if (inicio == -1) {
-				inicio = contenido.indexOf("SEGUROS MOTOR TECHNICAL");
-			}
-			
-			if(inicio == -1) {
-				inicio = contenido.indexOf("Seguro de Movilidad");
-			}
-			
-			if(inicio == -1) {
-				inicio = contenido.indexOf("Seguro de Auto");
-			}
-			if(inicio == -1) {
-                inicio = contenido.indexOf("Póliza no.");
-            }
 			fin = contenido.indexOf(ConstantsValue.COBERTURASCONTRATADAS);
 			if(fin < inicio){
 				inicio = contenido.indexOf("Ramo");
