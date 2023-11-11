@@ -1,7 +1,5 @@
 package com.copsis.constants;
 
-import javax.print.DocFlavor.STRING;
-
 public final class ConstantsValue {
 
 	public static final String ANUAL = "Anual";
@@ -43,6 +41,7 @@ public final class ConstantsValue {
 	public static final String DOMICILIO = "Domicilio:";
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
+	public static final String DATOS_ASEGURADOMY = "DATOS DEL ASEGURADO";
 	public static final String DESDE = "Desde";
 	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
@@ -52,6 +51,7 @@ public final class ConstantsValue {
 	public static final String DANIOS = "Daños";
 	public static final String DESCRIPCION_MOVIMIENTO = "Descripción del Movimiento";
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
+	public static final String DERECHO_POLIZAMY = "DERECHO DE PÓLIZA";
 	public static final String DURACION = "Duración";
 	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
 	public static final String DATOS_GENERALES_ASEGURADO = "Datos Generales del Asegurado";
@@ -78,11 +78,12 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO = "Forma de pago:";
 	public static final String FORMA_PAGO2 = "Forma de pago";
 	public static final String FORMA_PAGO3 = "Forma de Pago:";
+	
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
 	public static final String FECHA_DE_NACIMIENTO = "Fecha de nacimiento:";
-
+	public static final String GASTOS_POR="Gastos por";
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
 	public static final String GASTOS = "Gastos";
@@ -114,6 +115,7 @@ public final class ConstantsValue {
 	public static final String MODELO2 = "Modelo";
 	public static final String MODELO_MAYUS = "MODELO:";
 	public static final String MOTOR = "Motor:";
+	public static final String MOTOR_HASH= "Motor:###";
 	public static final String MARCA = "Marca:";
 	public static final String MARCA2 = "Marca";
 	public static final String MUROS = "Muros";
@@ -150,6 +152,7 @@ public final class ConstantsValue {
 	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
+    public static final String PLACASPT = "Placas";
 	public static final String PLACAS_MAYUS = "PLACAS:";
 	public static final String PLAN = "Plan:";
 	public static final String PLAN_SEGURO = "PLAN DE SEGURO:";
@@ -274,13 +277,31 @@ public final class ConstantsValue {
 	public static final String MUL_EMPRESARIA_DESCU ="Múltiple Empresarial Riesgos";
     public static final String PAQUETE ="PAQUETE";
 	public static final String DESCRIPCION ="Descripción";
+	public static final String DESCRIPCIONPT ="Descripción:";
 	public static final String CALLE_NO ="Calle y No:";
 	public static final String CODIGO_POSTALPT ="C.P.";
 	public static final String ENVIO ="ENVÍO";
 	public static final String  VENCIMIENTO ="VENCIMIENTO";
-
-
-
+	public static final String CONDUCTORES ="Conductores";
+	public static final String NO_DE_CLIENTE ="No. de cliente";
+ 	public static final String PRECIO_TOTAL ="Precio Total";
+ 	public static final String NO_DE_POLIZAAC ="No. de Póliza";
+	public static final String OCUPANTES ="Ocupantes";
+	public static final String VIDA_PROTGT ="VIDA PROTGT";
+	public static final String VIDA_ACADEMICO ="VIDA ACADÉMICO";
+	public static final String VIDA_INDIVIDUAL ="VIDA INDIVIDUAL";
+	public static final String ALIADOS_KIDS ="ALIADOS+ KIDS";
+	public static final String PLANPROTEGE_COMERCIO ="PLANPROTEGE / COMERCIO";
+	public static final String AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
+	public static final String VERSIONPT ="Versión:";
+	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
+	public static final String ASVI_QUALITAS="Asistencia Vial Quálitas";
+	public static final String COLOR ="Color";
+	public static final String FORMA_DEPT ="Forma de:";
+	public static final String TASA_FINACIMIENTO ="Tasa Financiamiento";
+	public static final String ESTADPT  ="Estado:";
+	public static final String COLONIA="Colonia";
+    public static final String COLONIAPT="Colonia:";
 	private ConstantsValue() {
 
 	}

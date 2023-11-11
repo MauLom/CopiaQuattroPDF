@@ -83,11 +83,12 @@ public class BupaSaludModel {
 					  modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 				}
 				
-				if(newcontenido.toString().split("\n")[i].contains("Cónyuge")) {					
+				if(newcontenido.toString().split("\n")[i].contains("Dependientes")) {					
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 					  modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					  
 				}
+				
 				
 				
 				if(newcontenido.toString().split("\n")[i].contains("based discount")) {					
@@ -146,7 +147,7 @@ public class BupaSaludModel {
 			newcontenido.append( fn.extracted(inicio, fin, conteniext));
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
-				
+			
 			if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO2) ) {
 				
 				  modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i] ));
@@ -163,15 +164,20 @@ public class BupaSaludModel {
 					
 			}
 			if(modelo.getFormaPago() == 0) {		
-				inicio = recibo.indexOf(ConstantsValue.FORMA_PAGO2);
+				recibo = recibo.replace("Forma de Pago", ConstantsValue.FORMA_PAGO_MAYUS);
+				inicio = recibo.indexOf(ConstantsValue.FORMA_PAGO_MAYUS);
+	
 				fin = recibo.indexOf("Prima Neta");
+	
+				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, recibo));
+			
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO2)) {
+					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO_MAYUS)) {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
 					}
-					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO2)) {
+					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO_MAYUS)) {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
 					}
 					if (newcontenido.toString().split("\n")[i].contains("Moneda") && newcontenido.toString().split("\n")[i + 1].contains("MXP")) {						

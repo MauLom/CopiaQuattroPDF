@@ -1,5 +1,7 @@
 package com.copsis.models.chubb;
 
+import java.io.IOException;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -35,13 +37,12 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
-			;
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos","EMBARCACIONES","Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
-				//System.out.println(tipo +"-->"+ contenido.contains(tipo));						
+									
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
@@ -56,20 +57,7 @@ public class ChubbModel {
 					case "TRANSPORTE DE MERCANCIAS":
 					case "Todo Riesgo Contratistas":	
 					
-						pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Notas del riesgo");
-
-						if (pagFin == 0) {
-							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "FACTURA");
-						}
-						if (pagFin == 0) {
-							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo 25");
-						}
-						if (pagFin == 0) {
-                            pagFin = fn.pagFinRango(pdfStripper, pdDoc, "Artículo###25");
-                        }
-						if (pagFin == 0) {
-							pagFin = fn.pagFinRango(pdfStripper, pdDoc, "ART. 25");
-						}
+							pagFin = getPageFin(fn);
 						
 						if (pagFin > 0) {
 						
@@ -108,10 +96,9 @@ public class ChubbModel {
 							modelo = new ChubbDiversosModel(fn.caratula(1, 2, pdfStripper, pdDoc),
 							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
 						}
+
 						else {
-                        if(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc).contains("Características del riesgo")){
-                         encontro=false;
-						} else{					 
+                 			 
 						if (pagFin > 0 && pagIni > 0) {
 							ChubbAutosModel chubbAutos = new ChubbAutosModel();
 							chubbAutos.setContenido(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc));
@@ -122,7 +109,7 @@ public class ChubbModel {
 							chubbAutos.setContenido(fn.caratula(0, 3, pdfStripper, pdDoc));
 							modelo = chubbAutos.procesar();
 						}
-						}
+						
 					   }
 					encontro = true;
 						break;
@@ -149,5 +136,18 @@ public class ChubbModel {
 					ChubbModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
+	}
+
+	private int getPageFin(DataToolsModel fn) throws IOException {
+		int pagFin=0;
+		String[] palabrasClave = {"Notas del riesgo", "FACTURA", "Artículo 25", "Artículo###25", "ART. 25"};
+
+			for (String palabraClave : palabrasClave) {
+				pagFin = fn.pagFinRango(pdfStripper, pdDoc, palabraClave);
+				if (pagFin != 0) {
+					break; // Salimos del bucle si encontramos una coincidencia
+				}
+			}
+		return pagFin;
 	}
 }

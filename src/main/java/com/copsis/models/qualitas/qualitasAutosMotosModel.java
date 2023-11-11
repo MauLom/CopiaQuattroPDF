@@ -1,8 +1,10 @@
 package com.copsis.models.qualitas;
 
+import java.lang.constant.Constable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -123,7 +125,11 @@ public class qualitasAutosMotosModel {
 					}
 					
 					if(newcontenido.split("\n")[i].contains("Hasta las 12:00")) {
-						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1]));
+						List<String> valores = fn.obtenVigePoliza2(newcontenido.split("\n")[i]);	
+						if(!valores.isEmpty()){
+                          modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));
+						}		
+						
 					}
 
 					
@@ -133,16 +139,16 @@ public class qualitasAutosMotosModel {
 		
 			modelo.setMoneda(1);
 			
-			inicio = agente.indexOf("Agente");
+			inicio = agente.indexOf(ConstantsValue.AGENTE2);
 			fin  = agente.indexOf("En###cumplimiento");
 			if(inicio >  -1 && fin > -1 && inicio < fin) {
 				newcontenido = agente.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 
-					if(newcontenido.split("\n")[i].split("Agente:")[1].split("###").length > 2) {
-						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split("###")[1].replace("###","").trim());
+					if(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###").length > 2) {
+						modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1].replace("###","").trim());
 					}else {
-						modelo.setCveAgente(newcontenido.split("\n")[i].split("Agente:")[1].split(" ")[0].replace("###","").trim());
+						modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split(" ")[0].replace("###","").trim());
 					}
 					
 					
@@ -165,7 +171,7 @@ public class qualitasAutosMotosModel {
 			}
 			
 			
-			newcontenido ="";
+			
 			
 			inicio = contenido.indexOf("MONEDA");
 			fin  = contenido.indexOf("Tarifa Aplicada");
@@ -185,8 +191,8 @@ public class qualitasAutosMotosModel {
 					if(newcontenido.split("\n")[i].contains("Financiamiento") && newcontenido.split("\n")[i].split("Financiamient")[1].length() > 5) {						
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Financiamiento")[1].replace("###", ""))));						
 					}
-					if(newcontenido.split("\n")[i].contains("Expedición")) {												 
-						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split("Expedición")[1].replace("###", "").trim())));						
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION)) {												 
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1].replace("###", "").trim())));						
 					}
 					if(newcontenido.split("\n")[i].contains("I.V.A.")) {	
 						arrNewContenido = newcontenido.split("\n")[i].split("I.V.A.")[1].split("###");
@@ -202,9 +208,7 @@ public class qualitasAutosMotosModel {
 
 			// coberturas
 			inicio = contenido.indexOf("PRIMAS");
-			if (inicio > -1) {
-
-			} else {
+			if (inicio ==-1) {			
 				inicio = contenido.indexOf("PRIMA");
 			}
 			fin = contenido.indexOf("MONEDA");
@@ -285,7 +289,8 @@ public class qualitasAutosMotosModel {
 			}
 			modelo.setRecibos(recibos);
 			return modelo;
-		} catch (Exception ex) {			
+		} catch (Exception ex) {	
+			ex.printStackTrace();		
 			modelo.setError(
 					qualitasAutosMotosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
