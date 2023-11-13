@@ -57,6 +57,8 @@ import com.copsis.constants.ConstantsValue ;
                 // fecha_emision
                 inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                 fin = contenido.lastIndexOf("www.qualitas.com.mx");
+              
+               System.out.println(contenido);
                 if (inicio > -1 && fin > inicio) {
                     newcontenido = contenido.substring(inicio, fin);
                     for (String x : newcontenido.split("\r\n")) {
@@ -1053,8 +1055,7 @@ import com.copsis.constants.ConstantsValue ;
                 }
 
                 return modelo;
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception ex) {       
                 modelo.setError(
                         QualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
                 return modelo;
