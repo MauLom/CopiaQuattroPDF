@@ -115,7 +115,6 @@ public class ChubbSaludModel {
 
             return modelo;
         } catch (Exception ex) {
-            ex.printStackTrace();
             modelo.setError(
                     ChubbSaludModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
             return modelo;
