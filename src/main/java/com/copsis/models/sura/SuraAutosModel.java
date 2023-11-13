@@ -59,19 +59,7 @@ public class SuraAutosModel {
                                     .replace(" ", "").trim());
                         }
 					    
-						if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
-							modelo.setPolizaGuion(newcontenido.split("\n")[i + 2].split("###")[3]);
-							modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
-									.replace(" ", "").trim());
-						}
-						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
-                            modelo.setCp(newcontenido.split("\n")[i + 1].split("C.P.")[1].split("###")[0].substring(0, 5).trim());
-                            cpEncontrado = true;
-                        }
-						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
-							modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
-							cpEncontrado = true;
-						}
+						cpEncontrado = getcp(newcontenido, cpEncontrado, i);
 					}
                  
 					if (newcontenido.split("\n")[i].contains("Moneda")
@@ -263,6 +251,24 @@ public class SuraAutosModel {
 					+ e.getCause());
 			return modelo;
 		}
+	}
+
+	private boolean getcp(String newcontenido, boolean cpEncontrado, int i) {
+		if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
+			modelo.setPolizaGuion(newcontenido.split("\n")[i + 2].split("###")[3]);
+			modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
+					.replace(" ", "").trim());
+					 cpEncontrado = true;
+		}
+		if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
+		    modelo.setCp(newcontenido.split("\n")[i + 1].split("C.P.")[1].split("###")[0].substring(0, 5).trim());
+		    cpEncontrado = true;
+		}
+		if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
+			modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
+			cpEncontrado = true;
+		}
+		return cpEncontrado;
 	}
 	
 	private void obtenerDatosAgente(String texto, EstructuraJsonModel model) {
