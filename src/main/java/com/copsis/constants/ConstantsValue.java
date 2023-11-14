@@ -302,6 +302,7 @@ public final class ConstantsValue {
 	public static final String ESTADPT  ="Estado:";
 	public static final String COLONIA="Colonia";
     public static final String COLONIAPT="Colonia:";
+	public static final String DIASAC="Días:";
 	public static final String EMBARCACIONES ="EMBARCACIONES";
 	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
 	private ConstantsValue() {

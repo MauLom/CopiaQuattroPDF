@@ -24,9 +24,11 @@ public class BexmasModel {
 	public EstructuraJsonModel procesar() {
 		try {
 			int tipo = fn.tipoPoliza(contenido);
-			if(tipo == 0 && fn.caratula(0, 3, stripper, doc).contains("ROBO DE MERCANCIAS")){
+			
+			if(tipo == 0 && (fn.caratula(0, 3, stripper, doc).contains("ROBO DE MERCANCIAS") || fn.caratula(0, 3, stripper, doc).contains("EMPRESA PROTEGIDA"))){
           		tipo=4;
 			}
+			
 
 			switch (tipo) {
 			case 1:
