@@ -1,13 +1,13 @@
  package com.copsis.models.qualitas ;
-    import java.util.ArrayList ;
-    import java.util.List ;
+import java.util.ArrayList ;
+import java.util.List ;
 import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue ;
-    import com.copsis.models.DataToolsModel ;
-    import com.copsis.models.EstructuraCoberturasModel ;
-    import com.copsis.models.EstructuraJsonModel ;
-    import com.copsis.models.EstructuraRecibosModel ;
+import com.copsis.models.DataToolsModel ;
+import com.copsis.models.EstructuraCoberturasModel ;
+import com.copsis.models.EstructuraJsonModel ;
+import com.copsis.models.EstructuraRecibosModel ;
 	public class QualitasAutosModel {
         private DataToolsModel fn = new DataToolsModel();
         private EstructuraJsonModel modelo = new EstructuraJsonModel();
@@ -57,14 +57,16 @@ import com.copsis.constants.ConstantsValue ;
                 // fecha_emision
                 inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                 fin = contenido.lastIndexOf("www.qualitas.com.mx");
+                
+            
                 if (inicio > -1 && fin > inicio) {
                     newcontenido = contenido.substring(inicio, fin);
+                   
                     for (String x : newcontenido.split("\r\n")) {
 
                         if (x.contains(" DE ") && x.split(" DE ").length == 3 && x.contains("A ")) {
-
                                     x = x.split("A ")[1];
-                                    x = x.replace(" DE ", "-");
+                                    x = x.replace(" DE ", "-");                      
                                     if (x.split("-").length > 2) {
                                         modelo.setFechaEmision(fn.formatDate(x, ConstantsValue.FORMATO_FECHA));
                                     }
@@ -79,7 +81,7 @@ import com.copsis.constants.ConstantsValue ;
                     fin = contenido.indexOf("Funcionario Autorizado");
 
                     if (inicio > -1 && inicio < fin) {
-                        newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+                        newcontenido = contenido.substring(inicio, fin).replace("-DA", "").replace("@@@", "").replace("\r", "");
                         for (String textoRenglon : newcontenido.split("\n")) {
                             if (textoRenglon.split(" DE ").length == 3 && textoRenglon.split("A ").length > 1) {
                                 String fecha = textoRenglon.split("A ")[1].replace(" DE ", "-").trim();
@@ -92,9 +94,7 @@ import com.copsis.constants.ConstantsValue ;
                     }
                 }
 
-                // poliza
-                // endoso
-                // inciso
+            
                 inicio = contenido.lastIndexOf("ENDOSO###INCISO");
                 fin = contenido.lastIndexOf("INFORMACIÓN DEL ASEGURADO");
                 fin = fin == -1 ? contenido.lastIndexOf("DEL ASEGURADO") : fin;
@@ -335,7 +335,8 @@ import com.copsis.constants.ConstantsValue ;
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
                             .replace("###", "").replace("-", "").trim();
-                    modelo.setRfc(newcontenido);
+                           
+                    modelo.setRfc(newcontenido.replace("##", ""));
                 }
 
                 if (modelo.getRfc().length() == 0) {
@@ -999,11 +1000,11 @@ import com.copsis.constants.ConstantsValue ;
 
                 List<EstructuraRecibosModel> recibos = new ArrayList<>();
 
-                EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+               
 
-                switch (modelo.getFormaPago()) {
-                    case 1:
-                        recibo.setReciboId("");
+                 if(modelo.getFormaPago()==1){
+                     EstructuraRecibosModel recibo = new EstructuraRecibosModel();
+                     recibo.setReciboId("");
                         recibo.setSerie("1/1");
                         recibo.setVigenciaDe(modelo.getVigenciaDe());
                         recibo.setVigenciaA(modelo.getVigenciaA());
@@ -1020,17 +1021,11 @@ import com.copsis.constants.ConstantsValue ;
                         recibo.setAjusteDos(modelo.getAjusteDos());
                         recibo.setCargoExtra(modelo.getCargoExtra());
                         recibos.add(recibo);
-                        break;
-                    case 2:
-                        break;
+                 }
+                       
+               
 
-                    case 3:
-                    case 4:
-                        break;
-                    default:
-                        break;
-
-                }
+                
                 modelo.setRecibos(recibos);
 
                 inicio = contenido.indexOf("MONEDA");
@@ -1053,8 +1048,7 @@ import com.copsis.constants.ConstantsValue ;
                 }
 
                 return modelo;
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception ex) {       
                 modelo.setError(
                         QualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
                 return modelo;
