@@ -279,6 +279,9 @@ public final class ConstantsValue {
 	public static final String DESCRIPCION ="Descripción";
 	public static final String DESCRIPCIONPT ="Descripción:";
 	public static final String CALLE_NO ="Calle y No:";
+	public static final String CODIGO_POSTALPT ="C.P.";
+	public static final String ENVIO ="ENVÍO";
+	public static final String  VENCIMIENTO ="VENCIMIENTO";
 	public static final String CONDUCTORES ="Conductores";
 	public static final String NO_DE_CLIENTE ="No. de cliente";
  	public static final String PRECIO_TOTAL ="Precio Total";
@@ -299,7 +302,9 @@ public final class ConstantsValue {
 	public static final String ESTADPT  ="Estado:";
 	public static final String COLONIA="Colonia";
     public static final String COLONIAPT="Colonia:";
-	 public static final String DIASAC="Días:";
+	public static final String DIASAC="Días:";
+	public static final String EMBARCACIONES ="EMBARCACIONES";
+	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
 	private ConstantsValue() {
 
 	}
