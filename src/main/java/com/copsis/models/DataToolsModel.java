@@ -1179,6 +1179,48 @@ public class DataToolsModel {
 		return dato;
 	}
 
+
+	public int moneda(String texto) {
+		int moneda = 0;
+		switch (texto.toUpperCase()) {
+			case "NACIONAL":
+			case "NAL.":
+			case "PESOS":
+			case "PESO MEXICANO":
+			case "M.N.":
+			case "PESOS CON REVALUACIÓN ANUAL":
+			case "PESOS SIN REVALUACIÓN":
+			case "M.NAC":
+			case "PRIMA EN MONEDA NACIONAL":
+			case "MXP":
+			case "PESO":
+				moneda = 1;
+				break;
+			case "DÓLARES":
+			case "DOLARES":
+			case "DÓLAR AMERICANO":
+			case "DOLARES US":
+			case "USD":
+			case "DÓLARES SIN REVALUACIÓN":
+			case "U.S.DOLLAR":
+				moneda = 2;
+				break;
+			case "UDIS":
+			case "UDI":
+				moneda = 3;
+				break;
+			case "UVACS":
+				moneda = 4;
+				break;
+			default:
+				moneda = 5;
+				break;
+
+		}
+
+		return moneda;
+	}
+
 	public int buscaMonedaEnTexto(String texto) {
 		int resultado = 0;
 		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "MXN",
