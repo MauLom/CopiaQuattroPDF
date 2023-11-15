@@ -34,7 +34,7 @@ public class DataToolsModel {
 	private static final String TRIMESTRAL = "TRIMESTRAL";
 	private static final String MENSUAL = "MENSUAL";
 	private static final String SEMANAL = "SEMANAL";
-	private static final String QUINCENAL = "QUINCENAL";
+
 
 	public boolean isNumeric(String value) {// validacion de si es numero
 		try {
@@ -415,47 +415,7 @@ public class DataToolsModel {
 				: "0" + (meses.indexOf(mes.toUpperCase()) + 1);
 	}
 
-	public int moneda(String texto) {
-		int moneda = 0;
-		switch (texto.toUpperCase()) {
-			case "NACIONAL":
-			case "NAL.":
-			case "PESOS":
-			case "PESO MEXICANO":
-			case "M.N.":
-			case "PESOS CON REVALUACIÓN ANUAL":
-			case "PESOS SIN REVALUACIÓN":
-			case "M.NAC":
-			case "PRIMA EN MONEDA NACIONAL":
-			case "MXP":
-			case "PESO":
-				moneda = 1;
-				break;
-			case "DÓLARES":
-			case "DOLARES":
-			case "DÓLAR AMERICANO":
-			case "DOLARES US":
-			case "USD":
-			case "DÓLARES SIN REVALUACIÓN":
-			case "U.S.DOLLAR":
-				moneda = 2;
-				break;
-			case "UDIS":
-			case "UDI":
-				moneda = 3;
-				break;
-			case "UVACS":
-				moneda = 4;
-				break;
-			default:
-				moneda = 5;
-				break;
-
-		}
-
-		return moneda;
-	}
-
+	
 	public int formaPago(String x) { // FORMA DE PAGO
 		int dato = 0;
 		switch (x.toUpperCase()) {
@@ -1065,10 +1025,9 @@ public class DataToolsModel {
 				newtexto = texto;
 			}
 			longText = newtexto.length();
-			if (newtexto.length() >= 3) {
-				if (newtexto.substring(0, 3).equals("###")) {
+			if (newtexto.length() >= 3 &&  (newtexto.substring(0, 3).equals("###"))) {
 					newtexto = newtexto.substring(3, longText);
-				}
+				
 			}
 		} else {
 			newtexto = texto;
@@ -1210,6 +1169,9 @@ public class DataToolsModel {
 					case "SEMANAL VITRO":
 						dato = 6;
 						break;
+					default:
+					    dato=0;
+						break;
 				}
 			}
 		}
@@ -1327,6 +1289,16 @@ public class DataToolsModel {
 		return resultado;
 	}
 
+	public List<String> obtenerListSimple(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile("\\d+(\\.\\d+)?").matcher(cadena.replace(",", ""));
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
+
+
 	public String formatDate(String formatear) {
 		{
 			String resul = "";
@@ -1397,6 +1369,8 @@ public class DataToolsModel {
 					case "ABUELO":
 					case "PADRE-MADRE":
 						tipoParentesco = 4;
+						break;
+						default:
 						break;
 
 				}

@@ -33,9 +33,13 @@ public class SuraModel {
 			}
 
 			int tipo = fn.tipoPoliza(contenido);
+			
 			tipo = getTipoInic(tipo);		
-			tipo= getTipo(fn.caratula(3, 3, stripper, doc), tipo);
+			tipo=   getTipo(fn.caratula(2, 2, stripper, doc), tipo);
+			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);
+			
 			tipo = getTipou(tipo);
+
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
 				case 1:// Autos
@@ -58,7 +62,10 @@ public class SuraModel {
 						modelo = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 					} else if (contenido.contains("DAÑOS RESPONSABILIDAD")) {
 						modelo = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
-					} else {
+					}else if (fn.caratula(2, 2, stripper, doc).contains("Hogar Total")) {
+						modelo = new SuraDiversos3Model().procesar(fn.caratula(2, 4, stripper, doc));
+					}
+					 else {
 						modelo = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 					}
 
@@ -106,7 +113,8 @@ public class SuraModel {
 
 	public int getTipo(String conten,int tipo){
 		int tipov= tipo;
-		String[] searchTerms = {"Hogar Máster Total",ConstantsValue.MUL_EMPRESARIA_DESCU,ConstantsValue.MUL_EMPRESARIA_DESCU
+	
+		String[] searchTerms = {"Hogar Total","Hogar Máster Total",ConstantsValue.MUL_EMPRESARIA_DESCU,ConstantsValue.MUL_EMPRESARIA_DESCU
 	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar"};
 	       int inicio=-1;
 	
