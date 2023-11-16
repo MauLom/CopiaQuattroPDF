@@ -45,7 +45,8 @@ public class AnaAutosModelRoja {
 				.replace("###8T0e0l", "Tel 800")
 				.replace("PÓLIZA###DE###SEGURO###AUTOMÓVILES", "PÓLIZA DE SEGURO AUTOMÓVILES")
 				.replace("Prima###Total:", ConstantsValue.PRIMA_TOTAL)
-				.replace("A.N.A.###Compañía###de###Seguros", "A.N.A. Compañía de Seguros");
+				.replace("A.N.A.###Compañía###de###Seguros", "A.N.A. Compañía de Seguros")
+				.replace("@@@Coberturas###Amparadas", ConstantsValue.COBERTURAS_AMPARADAS2);
 
 		try {
 			modelo.setTipo(1);
@@ -53,12 +54,13 @@ public class AnaAutosModelRoja {
 			modelo.setCia(7);
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO AUTOMÓVILES");
-			fin = contenido.indexOf("Coberturas Amparada");
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
+			
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
+                 
 					if (newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Inciso")
 							&& newcontenido.split("\n")[i].contains("Endoso")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Inciso")[0]
@@ -128,6 +130,9 @@ public class AnaAutosModelRoja {
 						}
 						if(valores.size()==3 && valores.get(2).length()> 3){
 							modelo.setCp(valores.get(2));
+						}
+						if(modelo.getCteDireccion().isEmpty() && !modelo.getCp().isEmpty() ){
+                          modelo.setCteDireccion(newcontenido.split("\n")[i].split("C.P.")[0].replace("###", " ").trim());
 						}
 						
 						cp =false;
@@ -282,7 +287,7 @@ public class AnaAutosModelRoja {
 				}
 			}
 
-			inicio = contenido.indexOf("Coberturas Amparada");
+			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 			fin = contenido.indexOf("A.N.A. Compañía de Seguros");
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
