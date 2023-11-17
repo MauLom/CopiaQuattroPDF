@@ -54,7 +54,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                 modelo.setTipo(1);
                 modelo.setRamo("Autos");
 
-                // fecha_emision
+                //fecha_emision
                 inicio = contenido.indexOf(ConstantsValue.IMPORTE_TOTAL);
                 fin = contenido.lastIndexOf("www.qualitas.com.mx");
                 
@@ -689,6 +689,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
                             .replace(".:", "").replace(".", "").replace(":", "");
+                            
 
                     if (newcontenido.contains(ConstantsValue.MUNICIPIO)) {
                         newcontenido = newcontenido.split(ConstantsValue.MUNICIPIO)[0].replace("###", "").trim();
@@ -703,7 +704,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                         modelo.setCp(newcontenido.length() < 5 ? "0" + newcontenido : newcontenido);
                     }
 
-                    if (modelo.getCp().length() > 0) {
+                    if (modelo.getCp().isEmpty()) {
 
                         List<String> valores = fn.obtenerListNumeros2(newcontenido);                                                  
                         if(!valores.isEmpty()){

@@ -78,6 +78,7 @@ public class IdentificaPolizaService {
 			boolean encontro = false;
 			
 
+			
 			// CHUBB
 		
 			if (!encontro && (contenido.contains("Chubb")  || 
@@ -332,10 +333,11 @@ public class IdentificaPolizaService {
 			if (!encontro && contenido.contains("Seguros SURA S.A.")
 					|| contenido.contains("Royal & SunAlliance Seguros")
 					|| contenido.contains("Seguros SURA S.A. de C.V.")
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros SURA S.A. de C.V.")
 					|| contenido.contains("Seguros SURA")
 					|| contenido.contains("@@@Seguros SURA S.A. de C.V.") || contenido.contains("SURA S.A.")) {
 				SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
-		
+
 				modelo = datosSura.procesar();
 				encontro = true;
 			}

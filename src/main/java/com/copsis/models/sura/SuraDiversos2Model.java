@@ -23,10 +23,10 @@ public class SuraDiversos2Model {
 
 			inicio = contenido.indexOf("Póliza no.");
 			fin = contenido.indexOf("Asegurado, bienes");			
-		
+     
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-             
+            
               if(newcontenido.toString().split("\n")[i].contains("Póliza no")){
                 modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[newcontenido.toString().split("\n")[i+1].split("###").length -1]);
               }
