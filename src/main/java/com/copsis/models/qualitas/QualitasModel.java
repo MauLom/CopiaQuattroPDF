@@ -65,7 +65,11 @@ public class QualitasModel {
 					}
 					
 				}else {
-							
+					if(fn.caratula(1, 1, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
+						pagIni = fn.pagFinRango(stripper, doc, "PLAN:");
+						pagFin = fn.pagFinRango(stripper, doc, "PLAN:")+1;
+					}
+					
 					if (pagIni < pagFin) {
 					
 						if(fn.caratula(2, 2, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
