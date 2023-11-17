@@ -326,7 +326,7 @@ public class AxaSaludV2Model {
                             .replace(" ###", "")
                             .replace("###0###", "###0")
                             .replace("###-", "-");
-                            System.out.println(newcontenido);
+                        
                     
                     //begin fix parrafo listado de asegurados
                     List<String> palabras = this.palabraInicioyFinMayuscula(newcontenido);

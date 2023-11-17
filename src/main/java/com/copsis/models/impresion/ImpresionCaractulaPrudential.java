@@ -514,8 +514,7 @@ public class ImpresionCaractulaPrudential {
             communsPdf.setCell(baseRow, 100, "| Cuajimalpa de Morelos | Ciudad de México | C.P.05348 | Tel.: (55) 1103-7000 | www.prudentialseguros.com.mx", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(9f, 0f, 3f, 0f), Color.white);
             table.draw();
 
-        } catch (Exception e) {
-            System.out.println(e.fillInStackTrace());
+        } catch (Exception e) {           
             throw new GeneralServiceException("Error=>", e.getMessage());
         }
 

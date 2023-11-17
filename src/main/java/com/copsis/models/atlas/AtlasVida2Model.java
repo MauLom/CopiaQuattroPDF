@@ -64,7 +64,7 @@ public class AtlasVida2Model {
 
                   if(newcontenido.toString().split("\n")[i].contains("Agente:")){
                      List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("Agente")[1]);
-                     System.out.println(valores);
+             
                     if(!valores.isEmpty()){
                       modelo.setAgente(valores.get(0));  
                     }

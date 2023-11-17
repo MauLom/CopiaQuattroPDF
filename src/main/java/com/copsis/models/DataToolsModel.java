@@ -1168,10 +1168,7 @@ public class DataToolsModel {
 					case SEMANAL:
 					case "SEMANAL VITRO":
 						dato = 6;
-						break;
-					default:
-					    dato=0;
-						break;
+						break;									
 				}
 			}
 		}
