@@ -489,8 +489,7 @@ public class ImpresionCertificadoPdf {
 	            communsPdf.setCell(baseRow,90, "Apoderado" ,Color.BLACK,false, "C",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            table.draw();
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {		
 			throw new GeneralServiceException("00001",
 					"Ocurrio un error en el servicio setEncabezado: " + ex.getMessage());
 		}
