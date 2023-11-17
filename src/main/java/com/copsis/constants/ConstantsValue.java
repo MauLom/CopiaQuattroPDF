@@ -12,6 +12,7 @@ public final class ConstantsValue {
 
 	public static final String BENEFICIOS_CUBIERTOS = "BENEFICIOS CUBIERTOS";
 	public static final String BENEFICIARIOS = "BENEFICIARIOS";
+	public static final String BENEFICIARIOSMN = "Beneficiarios";
 	public static final String BENEFICIARIOS_NOMBRE = "Beneficiarios Nombre";
 
 	public static final String COBERTURAS = "Coberturas";
