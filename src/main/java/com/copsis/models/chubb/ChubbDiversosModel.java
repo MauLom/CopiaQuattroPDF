@@ -119,8 +119,8 @@ public class ChubbDiversosModel {
 							&& newcontenido.split("\n")[i].contains("Descuento")) {
 						String x = newcontenido.split("\n")[i].split(ConstantsValue.EMISION2)[1].split("Descuento")[0]
 								.replace("###", "").trim().replace(" ", "###");
-						x = x.split("###")[0] + "-" + x.split("###")[1] + "-" + x.split("###")[2];
-						modelo.setFechaEmision(fn.formatDateMonthCadena(x));
+						x = x.split("###")[0] + "-" + x.split("###")[1] + "-" + x.split("###")[2];				
+						modelo.setFechaEmision(fn.formatDateMonthCadena(x.replace(":", "")));
 					}
 					
 					if(modelo.getFechaEmision().length() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.EMISION2)&& newcontenido.split("\n")[i].trim().split(ConstantsValue.EMISION2).length>1 && newcontenido.split("\n")[i].contains("Referencia")) {
@@ -129,7 +129,7 @@ public class ChubbDiversosModel {
 							if(x.contains("P/M")) {
 								x = x.split("P/M")[0].trim();
 								x = fn.elimgatos(x).substring(0,x.lastIndexOf(" ")).replace(" ", "-");
-								modelo.setFechaEmision(fn.formatDateMonthCadena(x));						
+								modelo.setFechaEmision(fn.formatDateMonthCadena(x.replace(":", "")));						
 							}
 						
 						
