@@ -59,10 +59,8 @@ public class MapfreVidaBModel {
 			
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
-				System.out.println(renglon);
 					renglon = arrNewContenido[i];
-					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {
-						
+					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {						
 						modelo.setPoliza(
 								renglon.split(ConstantsValue.POLIZA_NUMERO)[1].replace("###", "").replace(":","").trim());
 					}
