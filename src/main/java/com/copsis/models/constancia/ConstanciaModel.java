@@ -66,8 +66,7 @@ public class ConstanciaModel {
 			}
 
 			return constancia;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {		
 			try {
 				CardSettings cardSettings = CardSettings.builder()
 						.fileUrl(pdfForm.getUrl())

@@ -187,8 +187,7 @@ public class AlliansVidaModel {
 				 }
 				 
 			return modelo;
-		} catch (Exception ex) {	
-			ex.printStackTrace();
+		} catch (Exception ex) {			
 			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());
 			return modelo;
 		}

@@ -289,8 +289,7 @@ public class qualitasAutosMotosModel {
 			}
 			modelo.setRecibos(recibos);
 			return modelo;
-		} catch (Exception ex) {	
-			ex.printStackTrace();		
+		} catch (Exception ex) {				
 			modelo.setError(
 					qualitasAutosMotosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

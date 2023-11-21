@@ -255,8 +255,7 @@ public class PrudentialVidaModel {
 			modelo.setBeneficiarios(beneficiarios);
 
 			return modelo;
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception ex) {		
 			modelo.setError(PrudentialVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
 				return modelo;
 		}
