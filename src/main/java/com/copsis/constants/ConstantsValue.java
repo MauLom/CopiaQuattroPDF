@@ -306,6 +306,9 @@ public final class ConstantsValue {
 	public static final String DIASAC="Días:";
 	public static final String EMBARCACIONES ="EMBARCACIONES";
 	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
+	public static final String HASTA_TO ="Hasta - To";
+	public static final String DESDE_FROM="Desde-From";
+	public static final String TOURIST_VEHICLE_POLICY  ="TOURIST VEHICLE POLICY";
 	private ConstantsValue() {
 
 	}

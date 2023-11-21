@@ -3,6 +3,7 @@ package com.copsis.models.qualitas;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -22,11 +23,11 @@ public class QualitasModel {
 		this.contenido = contenido;
 	}
 
-	private int pagIni = 0;
-	private int pagFin = 0;
+
 
 	public EstructuraJsonModel procesa() {
-
+	 int pagIni = 0;
+	 int pagFin = 0;
 		try {
 			
 			
@@ -36,7 +37,7 @@ public class QualitasModel {
 			
 		
 			if (contenido.contains("SEGURO DE AUTOMÓVILES") || contenido.contains("POLIZA VEHICULOS ")
-			|| contenido.contains("TOURIST VEHICLE POLICY") ||  contenido.contains("Placas:")) {
+			|| contenido.contains(ConstantsValue.TOURIST_VEHICLE_POLICY) ||  contenido.contains("Placas:")) {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
 	
@@ -64,18 +65,18 @@ public class QualitasModel {
 						
 					}
 					
-				}else {
-					if(fn.caratula(1, 1, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
+				}else {				
+					if(fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.MODELO2) && fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.TOURIST_VEHICLE_POLICY)){
 						pagIni = fn.pagFinRango(stripper, doc, "PLAN:");
 						pagFin = fn.pagFinRango(stripper, doc, "PLAN:")+1;
 					}
 					
 					if (pagIni < pagFin) {
 					
-						if(fn.caratula(2, 2, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
+						if(fn.caratula(2, 2, stripper, doc).contains(ConstantsValue.MODELO2) && fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.TOURIST_VEHICLE_POLICY)){
 							QualitasAutosUsaModel datosQualitasAutos = new 	QualitasAutosUsaModel();
 								modelo = datosQualitasAutos.procesar(fn.caratula(2, 3, stripper, doc));
-						} else if(fn.caratula(1, 1, stripper, doc).contains("Modelo") && fn.caratula(1, 1, stripper, doc).contains("TOURIST VEHICLE POLICY")){
+						} else if(fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.MODELO2) && fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.TOURIST_VEHICLE_POLICY)){
 							QualitasAutosUsaModel datosQualitasAutos = new 	QualitasAutosUsaModel();
 								modelo = datosQualitasAutos.procesar(fn.caratula(1, 2, stripper, doc));
 						}
