@@ -19,18 +19,20 @@ public class QualitasAutosUsaModel {
 		int fin = 0;
 		StringBuilder newcontenido = new StringBuilder();
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
-        .replace("Hasta-To", ConstantsValue.HASTA_TO);
+        .replace("Hasta-To", ConstantsValue.HASTA_TO)
+        .replace("PLAN:", ConstantsValue.PLAN)
+        .replace("Clave, Marca, Descripción:", "Clave, Marca,Descripción:");
         try {
-            	
+          
 			modelo.setCia(29);			
 			modelo.setTipo(1);
           
             inicio = contenido.indexOf(ConstantsValue.PLAN);
 			fin = contenido.indexOf("COBERTURAS CONTRATADAS");
-            
+           
 			newcontenido.append(fn.extracted(inicio, fin, contenido).replace("las###12:00 P.M.", ""));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-            
+              
                if(newcontenido.toString().split("\n")[i].contains("TOURIST VEHICLE POLICY")){
                 if(newcontenido.toString().split("\n")[i+1].split("###").length> 1){
                 modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[0]);
@@ -62,7 +64,7 @@ public class QualitasAutosUsaModel {
                     
                     modelo.setClave(newcontenido.toString().split("\n")[i].split("###")[1]);
                     if(newcontenido.toString().split("\n")[i].split("###").length >2){
-                        modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("###")[2]);
+                        modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("###")[2].trim());
                     }
                     
                 }
