@@ -37,7 +37,8 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
     public static final String CODIGO_POSTAL ="CÓDIGO POSTAL";
-	public static final String EMISIÓN = "Emisión";
+	public static final String EMISION = "Emisión";
+	public static final String EMISION_MY_PT = "emisión:";
 	public static final String DOMICILIO_HASH = "Domicilio:###";
 	public static final String DOMICILIO = "Domicilio:";
 	public static final String DOMICILIO2 = "Domicilio";
@@ -224,6 +225,8 @@ public final class ConstantsValue {
 	public static final String SERIE_MAYUS = "SERIE:";
 	public static final String SOCIAL = "Social:";
 	public static final String SUMA_ASEGURADA = "Suma Asegurada";
+	public static final String SUMA_ASEGURADAMY = "SUMA ASEGURADA";
+	public static final String SUMA_ASEGURADAPM = "Suma Asegurada:";
 	public static final String SIN_LIMITE = "Sin Límite";
 	public static final String SEGURO_PARA_DANOS = "SEGURO PARA DAÑOS"; 
 
@@ -306,6 +309,7 @@ public final class ConstantsValue {
 	public static final String DIASAC="Días:";
 	public static final String EMBARCACIONES ="EMBARCACIONES";
 	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
+	public static final String TIPO_DE_POLIZAPT= "Tipo de Póliza:";
 	private ConstantsValue() {
 
 	}
