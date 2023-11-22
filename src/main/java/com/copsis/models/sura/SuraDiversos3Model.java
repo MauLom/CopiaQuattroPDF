@@ -32,24 +32,25 @@ public class SuraDiversos3Model {
 
             inicio = contenido.indexOf("Datos del asegurado");
             fin = contenido.indexOf("Beneficiario preferente");
-            newcontenido = new StringBuilder();
-            getVigencia(contenido, inicio, fin, newcontenido);
+          
+            getVigencia(contenido, inicio, fin);
 
             inicio = contenido.indexOf("Suma asegurada");
             fin = contenido.lastIndexOf("Oficina");
-            newcontenido = new StringBuilder();
-            getCoberturas(contenido, inicio, fin, newcontenido);
+          
+            getCoberturas(contenido, inicio, fin);
 
             inicio = contenido.indexOf("Prima neta");
-            fin = contenido.lastIndexOf("Pag. 2");
-            newcontenido = new StringBuilder();
-            getPrimas(contenido, inicio, fin, newcontenido);
+            fin = contenido.lastIndexOf("Pag. 1 de");
+         
+           
+            getPrimas(contenido, inicio, fin);
 
             inicio = contenido.indexOf("Agente:");
             fin = contenido.lastIndexOf("En cumplimiento");
           
-            newcontenido = new StringBuilder();
-            getAgente(contenido, inicio, fin, newcontenido);
+            
+            getAgente(contenido, inicio, fin);
 
             return modelo;
         } catch (Exception e) {
@@ -59,7 +60,8 @@ public class SuraDiversos3Model {
         }
     }
 
-    private void getAgente(String contenido, int inicio, int fin, StringBuilder newcontenido) {
+    private void getAgente(String contenido, int inicio, int fin) {
+        StringBuilder newcontenido = new StringBuilder();
         newcontenido.append(fn.extracted(inicio, fin, contenido));
         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {              
            if(newcontenido.toString().split("\n")[i].contains("Agente:")){
@@ -73,13 +75,15 @@ public class SuraDiversos3Model {
         }
     }
 
-    private void getPrimas(String contenido, int inicio, int fin, StringBuilder newcontenido) {
-        newcontenido.append(fn.extracted(inicio, fin, contenido));
+    private void getPrimas(String contenido, int inicio, int fin) {
+       StringBuilder newcontenido = new StringBuilder();
+         newcontenido.append(fn.extracted(inicio, fin, contenido));
+     
         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
             if (newcontenido.toString().split("\n")[i].contains("Prima neta")) {
                                
-                List<String> valores = fn.obtenerListSimple(newcontenido.toString().split("\n")[i]);
+                List<String> valores = fn.obtenerListSimple(newcontenido.toString().split("\n")[i+1]);
                 if (!valores.isEmpty()) {
                     modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
                     modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
@@ -92,9 +96,9 @@ public class SuraDiversos3Model {
         }
     }
 
-    private void getCoberturas(String contenido, int inicio, int fin, StringBuilder newcontenido) {
+    private void getCoberturas(String contenido, int inicio, int fin) {
+        StringBuilder newcontenido = new StringBuilder();
         newcontenido.append(fn.extracted(inicio, fin, contenido));
-
         List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
             EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -125,7 +129,8 @@ public class SuraDiversos3Model {
         modelo.setCoberturas(coberturas);
     }
 
-    private void getVigencia(String contenido, int inicio, int fin, StringBuilder newcontenido) {
+    private void getVigencia(String contenido, int inicio, int fin) {
+        StringBuilder newcontenido = new StringBuilder();
         newcontenido.append(fn.extracted(inicio, fin, contenido));
         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
             if (newcontenido.toString().split("\n")[i].contains("Hasta las")) {
