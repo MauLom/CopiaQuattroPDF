@@ -65,7 +65,7 @@ public class MapfreSaludCModel {
                     asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i] ).get(0)));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Dom:") && newcontenido.toString().split("\n")[i].contains("Edad")){
-                    asegurado.setEdad(fn.castInteger(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("Edad")[1]).get(0).toString()));
+                    asegurado.setEdad(fn.castInteger(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].split("Edad")[1]).get(0)));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Vigencia") 
                 && newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("Clave")){
@@ -108,7 +108,7 @@ public class MapfreSaludCModel {
 
           
             inicio = contenido.indexOf("COBERTURAS NUMERO"); 
-            fin = contenido.indexOf("BENEFICIARIOS");        
+            fin = contenido.indexOf(ConstantsValue.BENEFICIARIOS);        
     
 
             newcontenido = new StringBuilder();
@@ -153,7 +153,7 @@ public class MapfreSaludCModel {
             modelo.setCoberturas(coberturas);
         }
             
-            inicio = contenido.indexOf("BENEFICIARIOS");
+            inicio = contenido.indexOf(ConstantsValue.BENEFICIARIOS);
             fin = contenido.indexOf("LA DOCUMENTACION");
             getBeneficiarios(contenido, inicio, fin);
 
@@ -174,7 +174,7 @@ public class MapfreSaludCModel {
         List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
         for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {      
             EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();            
-            if(!newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") && !newcontenido.toString().split("\n")[i].contains("PORCENTAJE") ){                  
+            if(!newcontenido.toString().split("\n")[i].contains(ConstantsValue.BENEFICIARIOS) && !newcontenido.toString().split("\n")[i].contains("PORCENTAJE") ){                  
                 beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
                 beneficiario.setParentesco(fn.buscaParentesco(newcontenido.toString().split("\n")[i].split("###")[1].trim()));
                 beneficiario.setPorcentaje(fn.castInteger(fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i] ).get(0)));
