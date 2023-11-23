@@ -73,12 +73,17 @@ public class MapfreModel {
 	                tipo =4;
 	        }
             boolean saludFt2=false;
+		
 			if(tipo ==0 && fn.caratula(1, 1, stripper, doc).contains("RECUPERACION MEDICA")){
                 tipo=2;
 				saludFt2=true;
 			}
+            if(tipo ==2 && fn.caratula(1, 1, stripper, doc).contains("APC SIMPL. M")){
+                tipo=2;
+				saludFt2=true;
+			}
 
-
+   
 			//PÓLIZA ESPECIFICA POR VIAJE
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo )) {
