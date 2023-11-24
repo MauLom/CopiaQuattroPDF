@@ -23,10 +23,9 @@ public class SuraDiversos3Model {
             modelo.setTipo(7);
             modelo.setCia(88);
 
-         
-
             inicio = contenido.indexOf("Póliza No.");
-            fin = contenido.indexOf("Datos del asegurado");
+            fin = contenido.indexOf("Suma asegurada");
+            fin = fin == -1 ? contenido.indexOf("Datos del asegurado"):fin;
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             getContratante(newcontenido, newDireecion);
 
@@ -42,6 +41,8 @@ public class SuraDiversos3Model {
 
             inicio = contenido.indexOf("Prima neta");
             fin = contenido.lastIndexOf("Pag. 1 de");
+            fin  = inicio > fin ? contenido.lastIndexOf("Pag. 2 de"):fin;
+          
          
            
             getPrimas(contenido, inicio, fin);
@@ -162,10 +163,8 @@ public class SuraDiversos3Model {
                     newcontenido.toString().split("\n")[i].contains("emisión")) {
                 modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
             }
-            if (newcontenido.toString().split("\n")[i].contains("Vigencia desde")) {
-                List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
-                modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
-            }
+            
+            vigenciasPoliza(newcontenido, i);
         }
         if (!modelo.getVigenciaDe().isEmpty()) {
             modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -181,5 +180,16 @@ public class SuraDiversos3Model {
             }
         }
 
+    }
+
+    private void vigenciasPoliza(StringBuilder newcontenido, int i) {
+        if (newcontenido.toString().split("\n")[i].contains("Vigencia desde")) {
+            List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+            modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+        }
+          if (newcontenido.toString().split("\n")[i].contains("Hasta las")) {
+            List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+            modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));
+        }
     }
 }
