@@ -306,6 +306,7 @@ public final class ConstantsValue {
 	public static final String DIASAC="Días:";
 	public static final String EMBARCACIONES ="EMBARCACIONES";
 	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
+	public static final String PRODUCTOMN = "Producto";
 	private ConstantsValue() {
 
 	}
