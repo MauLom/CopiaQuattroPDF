@@ -136,9 +136,9 @@ public class AxaDiversosModel {
 					if(newcontenido.split("\n")[i].contains("Hasta")) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("Hasta")[1].replace("\r", "").replace(" ", "").replace("###", "")));
 					}
-					if(newcontenido.split("\n")[i].contains(ConstantsValue.EMISIÓN)) {
-						if(newcontenido.split("\n")[i].split(ConstantsValue.EMISIÓN)[1].replace("\r", "").replace(" ", "").replace("###", "").split("-").length == 3) {
-							modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.EMISIÓN)[1].replace("\r", "").replace(" ", "").replace("###", "")));
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EMISION)) {
+						if(newcontenido.split("\n")[i].split(ConstantsValue.EMISION)[1].replace("\r", "").replace(" ", "").replace("###", "").split("-").length == 3) {
+							modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.EMISION)[1].replace("\r", "").replace(" ", "").replace("###", "")));
 						}
 						if(modelo.getFechaEmision().length() == 0){
 							String textoSiguienteRenglon = newcontenido.split("\n")[i+1].replace("\r", "");

@@ -52,7 +52,7 @@ public class HdiModel {
 			    modelo=  new HdiSaludModel().procesar(fn.caratula(1, 3, stripper, doc));
 			break;					
 			case 4:
-				modelo = new HdiDiversosModel(fn.caratula(1, 4, stripper, doc)).procesar();
+				modelo = new HdiDiversosModel(fn.caratula(1, 6, stripper, doc)).procesar();
 				break;	
 
 			default:
