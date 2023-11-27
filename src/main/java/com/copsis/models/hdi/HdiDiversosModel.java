@@ -32,16 +32,11 @@ public class HdiDiversosModel {
 			modelo.setTipo(7);
 			modelo.setCia(14);
 
-			inicio = contenido.indexOf("SEGURO DE DAÑOS");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("Ramo: Daños");
-			}
+			inicio = contenido.indexOf("SEGURO DE DAÑOS");			
+		    inicio = inicio == -1 ? contenido.indexOf("Ramo: Daños"): inicio;
+			
 			fin = contenido.indexOf("El asegurado es:");
-
-			if (fin == -1) {
-				fin = contenido.indexOf("Datos de la empresa:");
-			}
-
+			fin =  fin == -1 ? contenido.indexOf("Datos de la empresa:"): fin;
 			newcontenido.append(fn.extracted(inicio, fin, contenido));
 
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
