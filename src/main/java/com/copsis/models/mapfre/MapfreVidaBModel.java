@@ -25,6 +25,7 @@ public class MapfreVidaBModel {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("las 12:00 hrs. de:", "").replace("P ól i za Nú m er o :", ConstantsValue.POLIZA_NUMERO)
 		.replace("P ól i za nú m ero :", ConstantsValue.POLIZA_NUMERO)
+		.replace("Póliza Número :",  ConstantsValue.POLIZA_NUMERO)
 				.replace("Mapfre México, S.A.", "Mapfre Tepeyac, S.A.")
 				.replace("Fecha de Emisión", "Fecha de Emisiòn:")
 				.replace("Prima Neta:", ConstantsValue.PRIMA_NETA4).replace("Plan de Seguro:", ConstantsValue.PLAN_SEGURO)
@@ -44,14 +45,12 @@ public class MapfreVidaBModel {
 			modelo.setTipo(5);
 			modelo.setCia(22);
 			inicio = contenido.indexOf("SEGURO DE VIDA");
-			if(inicio == -1) {
-				inicio = contenido.indexOf("PLAN SERVICIOS");
-			}
-			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");
 			
-			if(fin == -1) {
-				fin = contenido.indexOf("MAPFRE México, S.A.");
-			}
+			inicio = inicio == -1 ? contenido.indexOf("PLAN SERVICIOS"):inicio;
+			
+			fin = contenido.indexOf("Mapfre Tepeyac, S.A.");					
+			fin = fin == -1 ? contenido.indexOf("MAPFRE México, S.A.") :fin;
+			
 	
 
 			
@@ -60,10 +59,8 @@ public class MapfreVidaBModel {
 			
 				arrNewContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrNewContenido.length; i++) {
-				
 					renglon = arrNewContenido[i];
-					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {
-						
+					if (renglon.contains(ConstantsValue.POLIZA_NUMERO)) {						
 						modelo.setPoliza(
 								renglon.split(ConstantsValue.POLIZA_NUMERO)[1].replace("###", "").replace(":","").trim());
 					}
