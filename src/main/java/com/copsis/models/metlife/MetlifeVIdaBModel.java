@@ -78,7 +78,7 @@ public class MetlifeVIdaBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 				if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS") && !newcontenido.toString().split("\n")[i].contains("Asegurada")
-						&& !newcontenido.toString().split("\n")[i].contains("Prima anual")	) {
+						&& !newcontenido.toString().split("\n")[i].contains("Prima anual")&& newcontenido.toString().split("\n")[i].split("###").length	 > 1 ) {
 			
 					cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
 					cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
@@ -131,14 +131,13 @@ public class MetlifeVIdaBModel {
 			List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 				EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-				if(!newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")) {
-					if(newcontenido.toString().split("\n")[i].contains("%")){
-						System.out.println(newcontenido.toString().split("\n")[i]);
+				if(!newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") && (newcontenido.toString().split("\n")[i].contains("%"))){
+					
 				beneficiario.setParentesco(fn.buscaParentesco(newcontenido.toString().split("\n")[i]));
 				beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0].trim());
 				beneficiario.setPorcentaje(fn.castInteger(newcontenido.toString().split("\n")[i].split("###")[2].replace("%", "").trim()));
 				beneficiarios.add(beneficiario);	
-					}
+					
 										
 				}
 			}
@@ -146,9 +145,9 @@ public class MetlifeVIdaBModel {
 			modelo.setBeneficiarios(beneficiarios);
 			List<EstructuraRecibosModel> recibos = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
-			switch (modelo.getFormaPago()) {
-			case 1:
+          if(modelo.getFormaPago() ==1) {
 
+  
 				recibo.setReciboId("");
 				recibo.setSerie("1/1");
 				recibo.setVigenciaDe(modelo.getVigenciaDe());
@@ -166,15 +165,14 @@ public class MetlifeVIdaBModel {
 				recibo.setAjusteDos(fn.castBigDecimal(modelo.getAjusteDos(), 2));
 				recibo.setCargoExtra(fn.castBigDecimal(modelo.getCargoExtra(), 2));
 				recibos.add(recibo);
-
-			break;
-			}
+			
 			modelo.setRecibos(recibos);
+		  }
 			
 
 			
 			return modelo;
-		} catch (Exception ex) {			
+		} catch (Exception ex) {				
 			modelo.setError(MetlifeVIdaBModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
