@@ -24,6 +24,7 @@ public class AigSaludBModel {
 	public EstructuraJsonModel procesar() {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("CARÁTULA DE PÓLIZA", "CARÁTULA DE LA PÓLIZA");
+	
 
 		String newcontenido = "";
 
@@ -40,8 +41,8 @@ public class AigSaludBModel {
 			// Datos del Contractante
 
 			inicio = contenido.indexOf("CARÁTULA DE LA PÓLIZA");
-			fin = contenido.indexOf("BENEFICIOS CUBIERTOS ");
-
+			fin = contenido.indexOf("BENEFICIOS CUBIERTOS");
+     
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace(ConstantsValue.TIME,"");
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
@@ -70,7 +71,7 @@ public class AigSaludBModel {
 					}
 					if (newcontenido.split("\n")[i].contains("ESTADO:")) {
 						newdireccion.append(newcontenido.split("\n")[i].split("ESTADO:")[1].replace("###", ""));
-						modelo.setCteDireccion(newdireccion.toString().trim());
+						modelo.setCteDireccion(newdireccion.toString().replace("###", "").trim());
 					}
 
 					if (newcontenido.split("\n")[i].contains("C.P.")) {
@@ -84,10 +85,12 @@ public class AigSaludBModel {
 						modelo.setFechaEmision(modelo.getVigenciaDe());
 
 					}
+				
 					if (newcontenido.split("\n")[i].contains("PRIMA NETA")
 							&& newcontenido.split("\n")[i].contains("EXPEDICIÓN")
 							&& newcontenido.split("\n")[i].contains("PRIMA TOTAL")) {
 						int sp = newcontenido.split("\n")[i + 1].split("###").length;
+						
 						if (sp == 5) {
 							modelo.setPrimaneta(fn.castBigDecimal(
 									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[0].replace("###", ""))));
@@ -100,6 +103,15 @@ public class AigSaludBModel {
 							modelo.setPrimaTotal(fn.castBigDecimal(
 									fn.castDouble(newcontenido.split("\n")[i + 1].split("###")[4].replace("###", ""))));
 						}
+					}
+
+					if (newcontenido.split("\n")[i].contains("FRACCIONAD") && newcontenido.split("\n")[i+1].contains("I.V.A.")){
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+2]);
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+						modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(3))));                    
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
 					}
 
 				}
