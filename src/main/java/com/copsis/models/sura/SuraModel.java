@@ -37,11 +37,10 @@ public class SuraModel {
 			tipo = getTipoInic(tipo);		
 			tipo=   getTipo(fn.caratula(1, 1, stripper, doc), tipo);
 			tipo=   getTipo(fn.caratula(2, 2, stripper, doc), tipo);
-			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);
-			
+			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);		
 			tipo = getTipou(tipo);
 
-
+        
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
 				case 1:// Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
@@ -105,12 +104,15 @@ public class SuraModel {
 	}
 
 	private int getTipou(int tipo) throws IOException {
+		
+
 		if (tipo == 4 && fn.caratula(3, 3, stripper, doc).contains("Modelo")) {
 			tipo = 1;
 		}
 
-		if (tipo == 0 && fn.caratula(3, 3, stripper, doc)
-				.contains("Seguro de Automóviles Residentes de Uso y Servicio")) {
+		if (tipo == 0 &&( fn.caratula(3, 3, stripper, doc)
+				.contains("Seguro de Automóviles Residentes de Uso y Servicio") ||  fn.caratula(3, 3, stripper, doc)
+				.contains("Motor"))) {
 			tipo = 1;
 		}
 		return tipo;
