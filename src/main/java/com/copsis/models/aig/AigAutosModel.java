@@ -36,13 +36,12 @@ public class AigAutosModel {
 				.replace("ELIMINACION DE DEDUCIBLE POR", " ELIMINACION DE DEDUCIBLE POR###")
 				.replace("DEVOLUCION DE PRIMA POR P.T.", " DEVOLUCION DE PRIMA POR P.T.###");
 		try {
-			//tipo
+		
 			modelo.setTipo(1);
 
-			//cia
 			modelo.setCia(3);
 			
-			//Datos del contratante
+	
 			
 			inicio  = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin = contenido.indexOf("RIESGOS CUBIERTOS");
@@ -56,10 +55,10 @@ public class AigAutosModel {
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
-					if(newcontenido.toString().split("\n")[i].contains("PÓLIZA:")) {					
-						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("PÓLIZA")[1].split("-")[2].trim());
-					}else if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Cobertura")) {
-						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Cobertura")[0].replace("###",""));
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUSPT)) {					
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYUSPT)[1].split("-")[2].trim());
+					}else if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Cobertura")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Cobertura")[0].replace("###",""));
 					}
 					if(newcontenido.toString().split("\n")[i].contains("VIGENCIA DEL SEGURO")) {
 						
@@ -76,26 +75,29 @@ public class AigAutosModel {
 						}
 					}
 					
-					if(newcontenido.toString().split("\n")[i].contains("emisión:") && newcontenido.toString().split("\n")[i].contains("-") && newcontenido.toString().split("\n")[i].contains("Forma-pago")) {
-						String fecha = newcontenido.toString().split("\n")[i].split("emisión:")[1].split("Forma-pago")[0].replace("###","").trim();
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.EMISION_MY_PT) && newcontenido.toString().split("\n")[i].contains("-") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.FORMA_PAGO4)) {
+						String fecha = newcontenido.toString().split("\n")[i].split(ConstantsValue.EMISION_MY_PT)[1].split(ConstantsValue.FORMA_PAGO4)[0].replace("###","").trim();
 						if(fecha.split("-").length == 3) {
 							modelo.setFechaEmision(fn.formatDateMonthCadena(fecha));
 						}
 					}
-					if(modelo.getCteNombre().length() == 0 && newcontenido.toString().split("\n")[i].contains(ConstantsValue.DATOS_CONTRATANTE) && (i+1)<newcontenido.toString().split("\n").length) {
-						if(newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.NOMBRE2)) {
+					if(modelo.getCteNombre().length() == 0 && newcontenido.toString().split("\n")[i].contains(ConstantsValue.DATOS_CONTRATANTE) && (i+1)<newcontenido.toString().split("\n").length && (newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.NOMBRE2))) {
 							modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split(ConstantsValue.NOMBRE2)[1].replace("###", "").trim());
-						}
+						
 					}
 					
 					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.NOMBRE2) && newcontenido.toString().split("\n")[i].contains(ConstantsValue.RFC)) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i].split(ConstantsValue.NOMBRE2)[1].split(ConstantsValue.RFC)[0].replace("###", "").trim());
-						modelo.setRfc(newcontenido.toString().split("\n")[i].split(ConstantsValue.RFC)[1].replace("###", ""));						
+						
+						if(newcontenido.toString().split("\n")[i].split(ConstantsValue.RFC2)[1].replace("###", "").length() > 6){
+							modelo.setRfc(newcontenido.toString().split("\n")[i].split(ConstantsValue.RFC)[1].replace("###", ""));
+						}
+												
 					}else if( newcontenido.toString().split("\n")[i].contains("RFC") &&  newcontenido.toString().split("\n")[i].contains("Tipo")){
 						modelo.setRfc(newcontenido.toString().split("\n")[i].split("RFC")[1].split("Tipo")[0].replace(":","").replace("###", "").trim());
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Código Postal:")) {
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("Código Postal:")[1].replace("###", "").trim());
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.CODIGO_POSTALMY)) {
+						modelo.setCp(newcontenido.toString().split("\n")[i].split(ConstantsValue.CODIGO_POSTALMY)[1].replace("###", "").trim());
 					}else if(newcontenido.toString().split("\n")[i].contains("C/P") && newcontenido.toString().split("\n")[i].contains("###")) {
 						String cp = newcontenido.toString().split("\n")[i].split("C/P")[1].split("###")[0].replace(":", "").replace(".","").trim();
 						if(fn.isNumeric(cp)) {
@@ -139,35 +141,35 @@ public class AigAutosModel {
 						modelo.setMarca(marca.replace("###", "").trim());
 
 					}
-					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.MODELO) && newcontenido.toString().split("\n")[i].contains("Placa:")) {
+					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.MODELO) && newcontenido.toString().split("\n")[i].contains(ConstantsValue.PLACAPT)) {
 						
-						modelo.setModelo(fn.castInteger( newcontenido.toString().split("\n")[i].split(ConstantsValue.MODELO)[1].split("Placa:")[0].replace("###", "").trim()));
-						modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placa:")[1].replace("###", "").trim());
+						modelo.setModelo(fn.castInteger( newcontenido.toString().split("\n")[i].split(ConstantsValue.MODELO)[1].split(ConstantsValue.PLACAPT)[0].replace("###", "").trim()));
+						modelo.setPlacas(newcontenido.toString().split("\n")[i].split(ConstantsValue.PLACAPT)[1].replace("###", "").trim());
 
 					}
-					// if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.MODELO) && newcontenido.toString().split("\n")[i].contains("Tipo")) {
-					// 	modelo.setModelo(fn.castInteger( newcontenido.toString().split("\n")[i].split(ConstantsValue.MODELO)[1].split("Tipo")[0].replace("###", "").trim()));
-					// }
-					// if (newcontenido.toString().split("\n")[i].contains("Motor:")) {
-					// 	String texto = newcontenido.toString().split("\n")[i].split("Motor:")[1];
-					// 	if(texto.contains("###Placas")) {
-					// 		texto = texto.split("###Placas")[0];
-					// 	}
-                    //     modelo.setMotor(texto);
-					// }
-					// if (newcontenido.toString().split("\n")[i].contains("Serie:")) {
-					// 	String serie = newcontenido.toString().split("\n")[i].split("Serie:")[1];
-					// 	if(serie.contains("###Motor")) {
-					// 		serie = serie.split("###Motor")[0].trim();
-					// 	}
-				    //      modelo.setSerie(serie);
-					// }
-					// if(modelo.getPlacas().length() == 0 && newcontenido.toString().split("\n")[i].contains("Placas") && newcontenido.toString().split("\n")[i].contains("Clave")) {
-					// 	modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placas")[1].split("Clave")[0].replace("###","").replace(":","").trim());
-					// }
-					// if(newcontenido.toString().split("\n")[i].split("Descripción:").length> 1) {
-					// 	modelo.setDescripcion(fn.eliminaSpacios(newcontenido.toString().split("\n")[i].split("Descripción:")[1].trim()).split("####")[0]);
-					// }
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.MODELO) && newcontenido.toString().split("\n")[i].contains("Tipo")) {
+						modelo.setModelo(fn.castInteger( newcontenido.toString().split("\n")[i].split(ConstantsValue.MODELO)[1].split("Tipo")[0].replace("###", "").trim()));
+					}
+					if (newcontenido.toString().split("\n")[i].contains("Motor:")) {
+						String texto = newcontenido.toString().split("\n")[i].split("Motor:")[1];
+						if(texto.contains("###Placas")) {
+							texto = texto.split("###Placas")[0];
+						}
+                        modelo.setMotor(texto.replace("###", ""));
+					}
+					if (newcontenido.toString().split("\n")[i].contains("Serie:")) {
+						String serie = newcontenido.toString().split("\n")[i].split("Serie:")[1];
+						if(serie.contains("###Motor")) {
+							serie = serie.split("###Motor")[0].trim();
+						}
+				         modelo.setSerie(serie.replace("###", ""));
+					}
+					if(modelo.getPlacas().length() == 0 && newcontenido.toString().split("\n")[i].contains("Placas") && newcontenido.toString().split("\n")[i].contains("Clave")) {
+						modelo.setPlacas(newcontenido.toString().split("\n")[i].split("Placas")[1].split("Clave")[0].replace("###","").replace(":","").trim());
+					}
+					if(newcontenido.toString().split("\n")[i].split(ConstantsValue.DESCRIPCIONPT).length> 1) {
+						modelo.setDescripcion(fn.eliminaSpacios(newcontenido.toString().split("\n")[i].split(ConstantsValue.DESCRIPCIONPT)[1].trim()).split("####")[0]);
+					}
 				}				
 			}
 			
@@ -186,10 +188,14 @@ public class AigAutosModel {
 
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					if(newcontenido.toString().split("\n")[i].contains("Moneda:") && newcontenido.toString().split("\n")[i].contains("Prima Neta:")) {
-						modelo.setMoneda(fn.moneda(newcontenido.toString().split("\n")[i].split("Moneda:")[1].split("Total")[0].trim()));
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Neta:")[1])));
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i].trim()));
+						
+
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}else if(newcontenido.toString().split("\n")[i].contains("Prima Neta")) {
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(fn.gatos(newcontenido.toString().split("\n")[i].split("Neta")[1]))));
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
 					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.FRACCIONADO)) {
 						String aux = newcontenido.toString().split("\n")[i].split(ConstantsValue.FRACCIONADO)[1].replace(":","");
@@ -198,16 +204,22 @@ public class AigAutosModel {
 						}else {
 							aux = aux.replace("###","");
 						}
-						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(aux)));
+							List<String> valores = fn.obtenerListNumeros(aux);
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						
 					}
+				
 					if(newcontenido.toString().split("\n")[i].contains("Pago:") && newcontenido.toString().split("\n")[i].contains("Expedición:")) {
-						modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i].split("Pago:")[1].split("Gastos")[0].trim()));
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(newcontenido.toString().split("\n")[i].split("Expedición:")[1])));
+						modelo.setFormaPago( fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+					   List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					   modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 						
 					}else if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.EXPEDICION3)) {
 						String aux = newcontenido.toString().split("\n")[i].split(ConstantsValue.EXPEDICION3)[1].replace(":", "").replace("###", "");
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(aux)));
+						 List<String> valores = fn.obtenerListNumeros(aux);
+					   modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 					}
+					
 					if (newcontenido.toString().split("\n")[i].contains("IVA") && !newcontenido.toString().split("\n")[i].contains("PRIVACIDAD")) {
 						String aux = newcontenido.toString().split("\n")[i].split("IVA")[1].replace(":","");
 						if(aux.split("###").length > 1) {
@@ -215,18 +227,20 @@ public class AigAutosModel {
 						}else {
 							aux = aux.replace("###","");
 						}
-						modelo.setIva(fn.castBigDecimal(fn.castDouble(aux)));
+						 List<String> valores = fn.obtenerListNumeros(aux);
+					   modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
 					}
 
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL2)) {
 						String aux = newcontenido.toString().split("\n")[i].split(ConstantsValue.PRIMA_TOTAL2)[1].replace(":", "").replace("###", "");
-						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(aux)));
+						 List<String> valores = fn.obtenerListNumeros(aux);
+					   modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
 					}
 				}
 			}
 			//forma de pago
 			if(modelo.getFormaPago() == 0) {
-				inicio = contenido.indexOf("Forma-pago");
+				inicio = contenido.indexOf(ConstantsValue.FORMA_PAGO4);
 				fin = contenido.indexOf(ConstantsValue.DATOS_CONTRATANTE);
 				if(inicio > -1 && inicio < fin) {
 					modelo.setFormaPago(fn.formaPagoSring(contenido.substring(inicio,fin)));
@@ -236,6 +250,7 @@ public class AigAutosModel {
 			if(modelo.getMoneda() == 0) {
 				inicio = contenido.indexOf("Moneda");
 				fin = contenido.indexOf(ConstantsValue.DATOS_CONTRATANTE);
+			
 				modelo.setMoneda(fn.buscaMonedaEnTexto(contenido.substring(inicio, fin)));
 			}
 			//PROCESO PARA LAS COBERTURAS

@@ -37,6 +37,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
     public static final String CODIGO_POSTAL ="CÓDIGO POSTAL";
+	public static final String CODIGO_POSTALMY ="Código Postal:";
 	public static final String EMISION = "Emisión";
 	public static final String EMISION_MY_PT = "emisión:";
 	public static final String DOMICILIO_HASH = "Domicilio:###";
@@ -80,6 +81,7 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO = "Forma de pago:";
 	public static final String FORMA_PAGO2 = "Forma de pago";
 	public static final String FORMA_PAGO3 = "Forma de Pago:";
+	public static final String FORMA_PAGO4 = "Forma-pago";
 	
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
@@ -148,6 +150,7 @@ public final class ConstantsValue {
 	public static final String PRIMA_NETA4 = "Prima neta:";
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
+	public static final String POLIZA_MAYUSPT = "PÓLIZA;";
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
@@ -314,6 +317,7 @@ public final class ConstantsValue {
 	public static final String HASTA_TO ="Hasta - To";
 	public static final String DESDE_FROM="Desde-From";
 	public static final String TOURIST_VEHICLE_POLICY  ="TOURIST VEHICLE POLICY";
+	public static final String PLACAPT ="Placa:";
 	private ConstantsValue() {
 
 	}
