@@ -314,6 +314,7 @@ public final class ConstantsValue {
 	public static final String HASTA_TO ="Hasta - To";
 	public static final String DESDE_FROM="Desde-From";
 	public static final String TOURIST_VEHICLE_POLICY  ="TOURIST VEHICLE POLICY";
+	public static final String SEGURO_DE_AUTOMOVILES ="SEGURO DE AUTOMÓVILES";
 	private ConstantsValue() {
 
 	}
