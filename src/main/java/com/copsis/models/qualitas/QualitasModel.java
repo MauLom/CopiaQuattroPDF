@@ -43,27 +43,27 @@ public class QualitasModel {
 	
 	
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
-					if(doc.getPages().getCount() >= 3) {
-						if(fn.caratula(6, 7, stripper, doc).contains("Motocicletas")){
-							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
-								fn.caratula(6, 7, stripper, doc),fn.caratula(1, 2, stripper, doc));
-						modelo = datosQualitasMotosAutos.procesar();
-						}else{
-							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
-								fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
-						modelo = datosQualitasMotosAutos.procesar();
-						}
+					// if(doc.getPages().getCount() >= 3) {
+					// 	if(fn.caratula(6, 7, stripper, doc).contains("Motocicletas")){
+					// 		qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
+					// 			fn.caratula(6, 7, stripper, doc),fn.caratula(1, 2, stripper, doc));
+					// 	modelo = datosQualitasMotosAutos.procesar();
+					// 	}else{
+					// 		qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
+					// 			fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
+					// 	modelo = datosQualitasMotosAutos.procesar();
+					// 	}
 					
-					}else {						
-						if(fn.caratula(1, 1, stripper, doc).contains("COBERTURAS CONTRATADAS")) {
-							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
-							modelo = datosQualitasMotosAutos.procesar();	
-						}else {
-							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(2, 2, stripper, doc),fn.caratula(2, 2, stripper, doc));
-							modelo = datosQualitasMotosAutos.procesar();
-						}
+					// }else {						
+					// 	if(fn.caratula(1, 1, stripper, doc).contains("COBERTURAS CONTRATADAS")) {
+					// 		qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
+					// 		modelo = datosQualitasMotosAutos.procesar();	
+					// 	}else {
+					// 		qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(2, 2, stripper, doc),fn.caratula(2, 2, stripper, doc));
+					// 		modelo = datosQualitasMotosAutos.procesar();
+					// 	}
 						
-					}
+					// }
 					
 				}else {				
 					if(fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.MODELO2) && fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.TOURIST_VEHICLE_POLICY)){
@@ -96,7 +96,11 @@ public class QualitasModel {
 					} else {
 				
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")
-						|| fn.caratula(1, 1, stripper, doc).contains("ADVERTENCIA! POLIZA DE USO TURISTA")){					
+						|| fn.caratula(1, 1, stripper, doc).contains("ADVERTENCIA! POLIZA DE USO TURISTA")
+						|| fn.caratula(1, 1, stripper, doc).contains("ASEGURAMOS AUTOS | CUIDAMOS PERSONAS")){	
+							if(fn.caratula(8, 8, stripper, doc).contains("COBERTURAS CONTRATADAS")){
+								pagFin=8;
+							}				
 					     	if(fn.caratula(5, 5, stripper, doc).contains("COBERTURAS CONTRATADAS")){
 								pagFin=5;
 							}
@@ -105,7 +109,8 @@ public class QualitasModel {
 							}
 							if(fn.caratula(3, 3, stripper, doc).contains("Motor") && pagFin == 0){
 								pagFin=3;
-							}											
+							}
+					
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(pagFin, pagFin+1, stripper, doc),"","");
 						 modelo = datosQualitasAutos.procesar();
 						}else{
