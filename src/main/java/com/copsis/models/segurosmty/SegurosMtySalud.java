@@ -1,4 +1,4 @@
-package com.copsis.models.segurosMty;
+package com.copsis.models.segurosmty;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -44,7 +44,7 @@ import com.copsis.models.prevem.PrevemModel;
 import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
-import com.copsis.models.segurosMty.SegurosMtyModel;
+import com.copsis.models.segurosmty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
 import com.copsis.models.sura.SuraModel;
 import com.copsis.models.thona.ThonaModel;
