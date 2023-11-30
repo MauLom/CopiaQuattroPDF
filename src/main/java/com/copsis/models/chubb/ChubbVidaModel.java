@@ -1,7 +1,9 @@
 package com.copsis.models.chubb;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
 
@@ -22,9 +24,10 @@ public class ChubbVidaModel {
 			fin = contenido.indexOf("Coberturas###Suma asegurada");			
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                 
-                if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Vigencia:")){
-                 modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Vigencia")[0].replace("###", "").trim());
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {        
+                 
+                if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Vigencia:")){
+                 modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Vigencia")[0].replace("###", "").trim());
                  List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
                  if(valores.size() ==2){
                     modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
@@ -41,11 +44,12 @@ public class ChubbVidaModel {
                    }
                    
                 }
-                if(newcontenido.toString().split("\n")[i].contains("Domicilio:") && newcontenido.toString().split("\n")[i].contains("Teléfono:")){
-                    direccion.append(newcontenido.toString().split("\n")[i].split("Domicilio")[1].split("Teléfono:")[0].replace("###", ""));
+                if(newcontenido.toString().split("\n")[i].contains("Domicilio:") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.TELEFONO)){
+                    direccion.append(newcontenido.toString().split("\n")[i].split("Domicilio:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", ""));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("RFC:")){
-                    direccion.append(newcontenido.toString().split("\n")[i].split("RFC")[1].replace("###", ""));
+                    direccion.append(" "+newcontenido.toString().split("\n")[i].split("RFC")[0].replace("###", ""));
+                    modelo.setRfc(newcontenido.toString().split("\n")[i].split("RFC:")[1].replace("###", "").trim());
                 }
 
                 if(newcontenido.toString().split("\n")[i].contains("Moneda:") && newcontenido.toString().split("\n")[i].contains("Forma de pago:")){
@@ -54,7 +58,7 @@ public class ChubbVidaModel {
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Clave interna del agente:")){
                     List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
-                    if(valores.size()> 0){
+                    if(!valores.isEmpty()){
                        modelo.setCveAgente(valores.get(0));
                         modelo.setAgente(newcontenido.toString().split("\n")[i].split("agente:")[1].split(modelo.getCveAgente())[1].replace("###", "").trim());
                     }else{
@@ -62,8 +66,18 @@ public class ChubbVidaModel {
                     }
                
                 }
+
+                if(newcontenido.toString().split("\n")[i].contains("C.P:")){
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+                    if(!valores.isEmpty()){
+                        modelo.setCp(valores.stream()
+                            .filter(numero -> String.valueOf(numero).length() >= 4)
+                            .collect(Collectors.toList()).get(0));
+                    }
+                 }
             
             }
+            modelo.setCteDireccion(direccion.toString());
 
             inicio = contenido.indexOf("Prima Neta");
 			fin = contenido.indexOf("Artículo###25");
