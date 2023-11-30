@@ -204,8 +204,10 @@ import com.copsis.models.EstructuraRecibosModel ;
                 // cte_direccion
                 inicio = contenido.lastIndexOf("Domicilio:");
                 fin = contenido.lastIndexOf("DESCRIPCIÓN DEL VEHÍCULO");
+              
                 if (inicio > -1 && fin > inicio) {
                     newcontenido = contenido.substring(inicio, fin).trim();
+                
                     // calle
                     inicio = newcontenido.indexOf("Domicilio:");
                     inicioaux = newcontenido.indexOf("Número:");
@@ -317,6 +319,34 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
                 }
                 modelo.setCteDireccion(texto.toString().trim());
+
+                if(modelo.getCteDireccion().isEmpty()){
+                     inicio = contenido.indexOf("Domicilio:");
+                     fin = contenido.indexOf("DESCRIPCIÓN DEL VEHÍCULO");
+                     
+                     newcontenido = contenido.substring(inicio, fin).trim();
+
+                    for(int i=0; i < newcontenido.split("\n").length; i++){
+                     
+                     if(newcontenido.split("\n")[i].contains("Domicilio:") && newcontenido.split("\n")[i].contains("R.F.C:")){
+                        texto.append(newcontenido.split("\n")[i].split("Domicilio:")[1].split("R.F.C:")[0].replace("###", " "));
+
+                     }
+                     if(newcontenido.split("\n")[i].contains("C.P:") && newcontenido.split("\n")[i].contains("Colonia:")){
+                        texto.append(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", " ").replace("Municipio:", "")
+                        .replace("Estado:", "").replace("Colonia:", ""));
+                     }
+                    }
+                   modelo.setCteDireccion(texto.toString().trim());
+                   List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());
+                
+                    if(!valores.isEmpty()){
+           
+                        modelo.setCp(valores.stream()
+                            .filter(numero -> String.valueOf(numero).length() >= 4)
+                            .collect(Collectors.toList()).get(0));
+                    }
+                }
 
                 // rfc
                 inicio = contenido.indexOf(ConstantsValue.RFC);
@@ -693,15 +723,30 @@ import com.copsis.models.EstructuraRecibosModel ;
 
                     if (newcontenido.contains(ConstantsValue.MUNICIPIO)) {
                         newcontenido = newcontenido.split(ConstantsValue.MUNICIPIO)[0].replace("###", "").trim();
-                        modelo.setCp(newcontenido.length() < 5 ? "0" + newcontenido : newcontenido);
+                         List<String> valores = fn.obtenerListNumeros2(newcontenido);                                                  
+                        if(!valores.isEmpty()){
+                            modelo.setCp(valores.stream()
+                                .filter(numero -> String.valueOf(numero).length() >= 4)
+                                .collect(Collectors.toList()).get(0));
+                        }
                     } else if (newcontenido.split("###").length > 2) {
                         newcontenido = fn.gatos(newcontenido);
                         if (fn.isNumeric(newcontenido.split("###")[0].trim())) {
                             String cp = newcontenido.split("###")[0].trim();
-                            modelo.setCp(cp.length() < 5 ? "0" + cp : cp);
+                       List<String> valores = fn.obtenerListNumeros2(cp);                                                  
+                        if(!valores.isEmpty()){
+                            modelo.setCp(valores.stream()
+                                .filter(numero -> String.valueOf(numero).length() >= 4)
+                                .collect(Collectors.toList()).get(0));
+                        }
                         }
                     } else {
-                        modelo.setCp(newcontenido.length() < 5 ? "0" + newcontenido : newcontenido);
+                      List<String> valores = fn.obtenerListNumeros2(newcontenido);                                                  
+                        if(!valores.isEmpty()){
+                            modelo.setCp(valores.stream()
+                                .filter(numero -> String.valueOf(numero).length() >= 4)
+                                .collect(Collectors.toList()).get(0));
+                        }
                     }
 
                     if (modelo.getCp().isEmpty()) {
@@ -796,12 +841,13 @@ import com.copsis.models.EstructuraRecibosModel ;
                             .replace("-", "").replace(" ", "").trim();
                     modelo.setPlacas(newcontenido);
                 }
-
-                if (modelo.getCp().length() < 5) {
+               
+                if (modelo.getCp().trim().length() < 5) {
                     modelo.setCp("");
                 }
 
                 boolean cp = false;
+               
 
                 inicio = cotxtra.indexOf("RESTO DE LA HOJA EN BLANCO");
                 fin = cotxtra.indexOf("GESTIÓN  PRIMA");

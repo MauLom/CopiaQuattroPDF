@@ -112,7 +112,14 @@ public class QualitasModel {
 							}											
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(pagFin, pagFin+1, stripper, doc),"","");
 						 modelo = datosQualitasAutos.procesar();
-						}else{
+						}else if (fn.caratula(1, 1, stripper, doc).contains("ASEGURAMOS AUTOS | CUIDAMOS PERSONAS")){
+							if(fn.caratula(8, 8, stripper, doc).contains("COBERTURAS CONTRATADAS")){
+								 pagFin=8;
+							 }
+							  QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(pagFin, pagFin+1, stripper, doc),"","");
+							  modelo = datosQualitasAutos.procesar();
+						 }
+						else{
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(1, 2, stripper, doc),"","");
 						modelo = datosQualitasAutos.procesar();
 						}
