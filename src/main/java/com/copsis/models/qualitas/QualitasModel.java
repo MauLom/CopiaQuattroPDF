@@ -40,22 +40,26 @@ public class QualitasModel {
 			|| contenido.contains(ConstantsValue.TOURIST_VEHICLE_POLICY) ||  contenido.contains("Placas:")) {
 				pagIni = fn.pagFinRango(stripper, doc, "OFICINA DE");
 				pagFin = fn.pagFinRango(stripper, doc, "IMPORTE TOTAL");
-	
-	
 				if(fn.caratula(1, 2, stripper, doc).contains("Motocicletas")) {
 					if(doc.getPages().getCount() >= 3) {
+
 						if(fn.caratula(6, 7, stripper, doc).contains("Motocicletas")){
 							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
 								fn.caratula(6, 7, stripper, doc),fn.caratula(1, 2, stripper, doc));
 						modelo = datosQualitasMotosAutos.procesar();
-						}else{
-							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(
-								fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
-						modelo = datosQualitasMotosAutos.procesar();
+						} else if(fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.COBERTURAS_CONTRATADAS)) {
+							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
+							modelo = datosQualitasMotosAutos.procesar();	
+						}
+						else{
+							
+							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(2, 3, stripper, doc),fn.caratula(1, 2, stripper, doc));
+						    modelo = datosQualitasMotosAutos.procesar();
 						}
 					
-					}else {						
-						if(fn.caratula(1, 1, stripper, doc).contains("COBERTURAS CONTRATADAS")) {
+					}else {
+						
+						if(fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.COBERTURAS_CONTRATADAS)) {
 							qualitasAutosMotosModel datosQualitasMotosAutos = new qualitasAutosMotosModel(fn.caratula(1, 1, stripper, doc),fn.caratula(1, 2, stripper, doc));
 							modelo = datosQualitasMotosAutos.procesar();	
 						}else {
@@ -97,7 +101,7 @@ public class QualitasModel {
 				
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")
 						|| fn.caratula(1, 1, stripper, doc).contains("ADVERTENCIA! POLIZA DE USO TURISTA")){					
-					     	if(fn.caratula(5, 5, stripper, doc).contains("COBERTURAS CONTRATADAS")){
+					     	if(fn.caratula(5, 5, stripper, doc).contains(ConstantsValue.COBERTURAS_CONTRATADAS)){
 								pagFin=5;
 							}
 							if(fn.caratula(4, 5, stripper, doc).contains("Motor") && pagFin == 0){
