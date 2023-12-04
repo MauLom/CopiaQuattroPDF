@@ -130,7 +130,7 @@ public class SegurosMtyVida {
 						
 				fin = fin ==-1 ? contenido.indexOf(ConstantsValue.DESIGNACION_DE_BENEFICIARIOS): fin;
 				
-		
+
 
 				newcontenido = new StringBuilder();
 				
@@ -150,7 +150,7 @@ public class SegurosMtyVida {
 				}
 
 				
-		
+				newcontenido.append(contenido.substring(inicio, fin).replace("@@@", ""));	
 		
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();	
 				  Double suma = 0.00;
@@ -171,6 +171,7 @@ public class SegurosMtyVida {
 						int sp = newcontenido.toString().split("\n")[i].split("###").length;
 							
 						if(sp == 7 || sp == 8) {
+							System.out.println(newcontenido.toString().split("\n")[i]);
 							if(newcontenido.toString().split("\n")[i].contains("NP 65")){
 								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 								
