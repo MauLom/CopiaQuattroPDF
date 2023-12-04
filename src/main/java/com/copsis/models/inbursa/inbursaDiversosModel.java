@@ -47,8 +47,8 @@ public class inbursaDiversosModel {
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido.append(contenido.substring(inicio, fin).replace("\r", "").replace("@", "")
 						.replace("las 12:00 hrs. del", ""));
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-					
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
+ 				
 
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS)
 							&& newcontenido.toString().split("\n")[i].contains("CIS")
@@ -68,6 +68,8 @@ public class inbursaDiversosModel {
 							&& newcontenido.toString().split("\n")[i].contains("Cliente Inbursa")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYUS)[1].split("CIS")[0]
 								.replace("###", ""));
+					} else if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT) && newcontenido.toString().split("\n")[i].contains("CIS")){
+                          modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].split("CIS")[0].replace("###", "").trim());   
 					}
 					if (newcontenido.toString().split("\n")[i].contains("C.P.")
 							&& newcontenido.toString().split("\n")[i].contains("R.F.C")) {
@@ -107,30 +109,30 @@ public class inbursaDiversosModel {
 					// Datos de la direccion alternativa
 					if (newcontenido.toString().split("\n")[i].contains("DIRECCIÓN:")) {
 					
-						String A = "";
-						String B = "";
-						String C = "";
+						String a = "";
+						String b = "";
+						String c = "";
 						if (newcontenido.toString().split("\n")[i + 1].trim().contains(".00")) {
-							A = newcontenido.toString().split("\n")[i + 1].split("SUMA")[0].trim();
+							a = newcontenido.toString().split("\n")[i + 1].split("SUMA")[0].trim();
 						} else {
-							A = newcontenido.toString().split("\n")[i + 1].trim();
+							a = newcontenido.toString().split("\n")[i + 1].trim();
 						}
 						if (newcontenido.toString().split("\n")[i + 2].trim().contains(ConstantsValue.RFC)) {
-							B = newcontenido.toString().split("\n")[i + 2].split(ConstantsValue.RFC)[0].trim();
+							b = newcontenido.toString().split("\n")[i + 2].split(ConstantsValue.RFC)[0].trim();
 						} else {
-							B = newcontenido.toString().split("\n")[i + 2].trim();
+							b = newcontenido.toString().split("\n")[i + 2].trim();
 						}
 						if (newcontenido.toString().split("\n")[i + 3].trim().contains(".00")) {
 							if (newcontenido.toString().split("\n")[i + 3].split("###").length > 2) {
-								C = newcontenido.toString().split("\n")[i + 3].split("###")[0].trim();
+								c = newcontenido.toString().split("\n")[i + 3].split("###")[0].trim();
 							} else {
-								C = newcontenido.toString().split("\n")[i + 3].split("C.P.")[0].trim();
+								c = newcontenido.toString().split("\n")[i + 3].split("C.P.")[0].trim();
 							}
 
 						} else {
-							C = newcontenido.toString().split("\n")[i + 3].split("###")[0].trim();
+							c = newcontenido.toString().split("\n")[i + 3].split("###")[0].trim();
 						}
-						String x = A + " " + B + " " + C;
+						String x = a + " " + b + " " + c;
 						modelo.setCteDireccion(x.replace("###", "").replaceAll(modelo.getRfc(), ""));
 					}
 
@@ -388,20 +390,22 @@ public class inbursaDiversosModel {
 	private void obtenerDatosAgenteYFechaEmision(String textoContenido, EstructuraJsonModel model) {
 
 		int indexInicio = 0;
-		indexInicio = contenido.lastIndexOf("Cliente Inbursa");
-		if (indexInicio == -1) {
-			indexInicio = contenido.indexOf("Término máximo para el pago de segunda fracción");
-		}
+	
+		indexInicio = contenido.lastIndexOf("Cliente Inbursa");	
+		indexInicio =  indexInicio== -1 ? contenido.lastIndexOf("Término máximo para el pago de segunda fracción"):indexInicio;
+		
+		
 
 		int indexFin = contenido.indexOf("CLAVE Y NOMBRE DEL AGENTE");
-
+		StringBuilder aux = new StringBuilder();
 		if (indexInicio > -1 && indexFin > 0 && indexInicio < indexFin) {
 
 			String newcontenido = textoContenido.substring(indexInicio, indexFin);
-
+			
+			
 			newcontenido = newcontenido.replace("@@@", "").replace("\r", "");
 
-			StringBuilder aux = new StringBuilder();
+			
 			String[] arrContenido = newcontenido.split("\n");
 			String fecha = "";
 
@@ -434,6 +438,25 @@ public class inbursaDiversosModel {
 
 			}
 
+		}
+
+		if(modelo.getAgente().length() > 100){
+			modelo.setCveAgente("");
+			modelo.setAgente("");
+			 aux = new StringBuilder();		
+			indexInicio = contenido.lastIndexOf("Término máximo");
+			indexFin = contenido.indexOf("Página 3 de 5");
+			aux.append(contenido.substring(indexInicio,indexFin).replace("\r",""));
+			for(int i =0; i < aux.toString().split("\n").length;i++){
+					 if(aux.toString().split("\n")[i].contains("Término máximo")){
+						List<String> valores = fn.obtenerListNumeros2(aux.toString().split("\n")[i+1]);
+						if(!valores.isEmpty()){
+					      modelo.setCveAgente(valores.get(0).trim());
+						  modelo.setAgente(aux.toString().split("\n")[i+1].split(modelo.getCveAgente())[1].trim() );
+						}
+                                           
+					 }
+			}
 		}
 	}
 
