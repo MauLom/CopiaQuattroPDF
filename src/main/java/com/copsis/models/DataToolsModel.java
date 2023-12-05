@@ -546,7 +546,7 @@ public class DataToolsModel {
 	public Boolean sexo(String x) {
 		Boolean result = false;
 		String[] tiposP = { "MASCULINO", "HOMBRE", "H", "HIJO", "MLO", "MASC", "MAS", "M", "FEMENINO", "MUJER", "F",
-				"HIJA", "FEM." };
+				"HIJA", "FEM.","OTRO1" };
 		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (x.toUpperCase()) {
