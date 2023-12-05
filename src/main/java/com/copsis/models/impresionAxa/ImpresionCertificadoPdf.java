@@ -291,10 +291,9 @@ public class ImpresionCertificadoPdf {
 	            communsPdf.setCell(baseRow, 8,"Póliza:",Color.BLACK,true, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            communsPdf.setCell(baseRow, 12,impresionAxa.getNoPoliza(),Color.BLACK,true, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            baseRow = communsPdf.setRow(table, 12);
+				communsPdf.setCell(baseRow, 10,"Dirección",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
 				/*Se comenta ya que axa por el momento no cuenta con la dirección, por lo cual se pone vació */
-	            //communsPdf.setCell(baseRow, 10,"Dirección",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
-	            //communsPdf.setCell(baseRow, 70,impresionAxa.getCteDireccion(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-				communsPdf.setCell(baseRow, 10,"",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);	            
+				//communsPdf.setCell(baseRow, 70,impresionAxa.getCteDireccion(),Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            communsPdf.setCell(baseRow, 70,"",Color.BLACK,false, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	            if (impresionAxa.getRamo() == 10) {
 	            	communsPdf.setCell(baseRow, 20,"COPIA",Color.BLACK,false, "R", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
