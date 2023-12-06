@@ -92,6 +92,7 @@ public class ChubbModel {
 						pagIni = fn.pagFinRango(pdfStripper, pdDoc, "CARÁTULA");
 						pagFin = fn.pagFinRango(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO);
 						
+						
 						if(contenido.contains("AUTOMÓVILES TURISTAS ") && contenido.contains("AUTO SOUTHBOUND")) {
 							modelo = new ChubbAutosBModel().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
 						}else if( fn.caratula(1, 1, pdfStripper, pdDoc).contains("PÓLIZA DE SEGURO TRANSPORTE DE CARGA ESPECIFICO")){
@@ -100,10 +101,15 @@ public class ChubbModel {
 						}
 
 						else {
-                 			 
+                 			
 						if (pagFin > 0 && pagIni > 0) {
 							ChubbAutosModel chubbAutos = new ChubbAutosModel();
-							chubbAutos.setContenido(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc));
+							if(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc).contains("Motor:")){
+                               chubbAutos.setContenido(fn.caratula(pagIni, pagFin, pdfStripper, pdDoc));
+							}else{
+								chubbAutos.setContenido(fn.caratula(1, 1, pdfStripper, pdDoc));
+							}
+							
 							chubbAutos.setRecibos(fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false));
 							modelo = chubbAutos.procesar();
 						} else {
