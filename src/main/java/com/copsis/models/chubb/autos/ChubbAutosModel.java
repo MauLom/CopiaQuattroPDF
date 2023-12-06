@@ -83,6 +83,8 @@ public class ChubbAutosModel {
 			modelo.setTipo(1);			
 			modelo.setCia(1);
 			modelo.setRamo("Autos");
+
+
 			modelo.setMoneda(fn.moneda(
 					contenido.split("Moneda:")[1].split(ConstantsValue.FORMA_PAGO)[0].replace("###", "").trim()));
 
@@ -169,7 +171,8 @@ public class ChubbAutosModel {
 				if (inicio > -1 && x.equals("Datos del asegurado y-o propietario")) {
 					inicio = inicio + 35;
 					newcontenido = contenido.substring(inicio, (inicio + 150));
-					modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
+					System.out.println(newcontenido);
+					//modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
 				}
 			}
 
@@ -331,7 +334,14 @@ public class ChubbAutosModel {
 					inicio = inicio + 11;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
-					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
+		          
+					if(newcontenido.split(separador)[0].contains("-")){
+				      modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
+					}
+					if(newcontenido.split(separador)[1].contains("-")){
+				      modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[1].trim()));
+					}
+					
 				}
 			}
 			// Cp
@@ -628,6 +638,7 @@ public class ChubbAutosModel {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					ChubbAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
