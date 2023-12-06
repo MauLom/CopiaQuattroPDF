@@ -323,6 +323,7 @@ public final class ConstantsValue {
 	public static final String POBLACION ="POBLACIÓN:";
 	public static final String FECHA_DE_EXPEDICION ="FECHA DE EXPEDICIÓN";
 	public static final String LA_DATOS_PERSONALES ="Los datos personales serán";
+	public static final String CONDUCTO ="Conducto";
 	private ConstantsValue() {
 
 	}
