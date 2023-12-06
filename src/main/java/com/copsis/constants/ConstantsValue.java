@@ -29,6 +29,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_SUMAS_ASEGURADAS = "COBERTURAS Y SUMAS ASEGURADAS";
 	public static final String CERTIFICADO_INDIVIDUAL = "Certificado Individual";
 	public static final String CLAVE_DE_AGENTE = "Clave de Agente:";
+	public static final String CLAVE_DE_AGENTENM = "Clave de Agente";
 	public static final String CLAVE_INTERNA_AGENTE = "Clave interna del agente:";
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
@@ -61,6 +62,7 @@ public final class ConstantsValue {
 	public static final String DATOS_CONTRATANTE = "DATOS DEL CONTRATANTE";
 	public static final String DATOS_CONTRATANTEM = "Datos del Contratante";
 	public static final String DIRECCION = "DIRECCIÓN";
+	public static final String DIRECCIOMN = "Dirección:";
 	public static final String COSTO_DEL_SEGURO= "Costo del Seguro";
 	public static final String PAQUETE_CONTRATADO= "Paquete contratado";
 	public static final String ENCUMPLIMIENTO = "En cumplimiento";
