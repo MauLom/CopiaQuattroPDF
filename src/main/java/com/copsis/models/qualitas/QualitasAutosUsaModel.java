@@ -60,20 +60,33 @@ public class QualitasAutosUsaModel {
                 if(newcontenido.toString().split("\n")[i].contains("C.P-ZIP:")){
                     modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P-ZIP:")[1].replace("###", "").trim().substring(0,5)); 
                 }
-                if(newcontenido.toString().split("\n")[i].contains("Clave, Marca,Descripción:")){
-                    
+              
+                if(newcontenido.toString().split("\n")[i].contains("Clave, Marca,Descripción:") && newcontenido.toString().split("\n")[i].split("###").length >=2){                 
                     modelo.setClave(newcontenido.toString().split("\n")[i].split("###")[1]);
-                    if(newcontenido.toString().split("\n")[i].split("###").length >2){
+                   
                         modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("###")[2].trim());
-                    }
+                    
                     
                 }
+                if(newcontenido.toString().split("\n")[i].contains("Clave, Marca,Descripción:") 
+                   &&   newcontenido.toString().split("\n")[i].split("###").length ==1){
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+					 if(!valores.isEmpty()){
+                       modelo.setClave(valores.get(0));
+                        if( newcontenido.toString().split("\n")[i].split(modelo.getClave())[1].length() > -1){
+                            modelo.setDescripcion(newcontenido.toString().split("\n")[i].split(modelo.getClave())[1].trim());
+                        }
+                     
+                     }    
+                
+                }
+                
                 if(newcontenido.toString().split("\n")[i].contains("Modelo-Year:") && newcontenido.toString().split("\n")[i].contains("Ocupantes")){
              
                     modelo.setModelo(fn.castInteger(fn.obtenerListNumeros2( newcontenido.toString().split("\n")[i].split("Modelo-Year:")[1]).get(0)));
                 }
                 if(newcontenido.toString().split("\n")[i].contains("Serie-V.I.N:") && newcontenido.toString().split("\n")[i].contains("Motor:")){
-                    modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie-V.I.N:")[1].split("Motor:")[0].replace("###", ""));
+                    modelo.setSerie(newcontenido.toString().split("\n")[i].split("Serie-V.I.N:")[1].split("Motor:")[0].replace("###", "").trim());
                 }
               
                 if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE_FROM) 
@@ -158,7 +171,7 @@ public class QualitasAutosUsaModel {
          
 
             return modelo;
-        }catch (Exception ex){       
+        }catch (Exception ex){               
             modelo.setError(QualitasAutosUsaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "+ ex.getCause());
             return modelo;
         }
@@ -217,12 +230,16 @@ public class QualitasAutosUsaModel {
                 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
             }
             if(newcontenido.toString().split("\n")[i].contains("I.V.A")) {
-                List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
-                modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+                if(!valores.isEmpty() ){
+                        modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                }
+                
             }
             if(newcontenido.toString().split("\n")[i].contains("IMPORTE TOTA")) {
                 List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
                 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                
             }
         }
       }
