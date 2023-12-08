@@ -26,11 +26,18 @@ public class HdiModel {
 	
 
 			int tipo = fn.tipoPoliza(fn.caratula(1, 2, stripper, doc));
+
+			if(tipo==0&& fn.caratula(1, 2, stripper, doc).contains("AUTO TOURIST INSURANCE POLICY") 
+			&& fn.caratula(1, 2, stripper, doc).contains("Plates:")){
+                tipo=1;
+			}
+		
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}
 		
-			
+
+		
 			switch (tipo) {
 			case 1:
 			
@@ -38,7 +45,10 @@ public class HdiModel {
 				
 				   modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
 
-				}else {
+				} else if(fn.caratula(1, 2, stripper, doc).contains("AUTO TOURIST INSURANCE POLICY")){
+                      modelo = new HdiAutosUsaModel().procesar(fn.caratula(1, 1, stripper, doc));
+				}
+				else {
 					
 					if(fn.caratula(1, 1, stripper, doc).contains("FORMATO DE PAGO")) {
 						modelo = new HdiAutosModel(fn.caratula(2, 3, stripper, doc)).procesar();

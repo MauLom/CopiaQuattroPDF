@@ -9,7 +9,7 @@ public final class ConstantsValue {
 	public static final String AVISO_COBRO = "AVISO DE COBRO";
 	public static final String AMPARADA = "Amparada";
 	public static final String ASEGURADO = "Asegurado:";
-
+    public static final String BENEFICIOS ="BENEFICIOS";
 	public static final String BENEFICIOS_CUBIERTOS = "BENEFICIOS CUBIERTOS";
 	public static final String BENEFICIARIOS = "BENEFICIARIOS";
 	public static final String BENEFICIARIOSMN = "Beneficiarios";
@@ -29,6 +29,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_SUMAS_ASEGURADAS = "COBERTURAS Y SUMAS ASEGURADAS";
 	public static final String CERTIFICADO_INDIVIDUAL = "Certificado Individual";
 	public static final String CLAVE_DE_AGENTE = "Clave de Agente:";
+	public static final String CLAVE_DE_AGENTENM = "Clave de Agente";
 	public static final String CLAVE_INTERNA_AGENTE = "Clave interna del agente:";
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
@@ -61,6 +62,7 @@ public final class ConstantsValue {
 	public static final String DATOS_CONTRATANTE = "DATOS DEL CONTRATANTE";
 	public static final String DATOS_CONTRATANTEM = "Datos del Contratante";
 	public static final String DIRECCION = "DIRECCIÓN";
+	public static final String DIRECCIOMN = "Dirección:";
 	public static final String COSTO_DEL_SEGURO= "Costo del Seguro";
 	public static final String PAQUETE_CONTRATADO= "Paquete contratado";
 	public static final String ENCUMPLIMIENTO = "En cumplimiento";
@@ -151,6 +153,7 @@ public final class ConstantsValue {
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
 	public static final String POLIZA_MAYUSPT = "PÓLIZA;";
+	public static final String POLIZA_MAYAPT = "PÓLIZA:";
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
@@ -314,6 +317,7 @@ public final class ConstantsValue {
 	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
 	public static final String PRODUCTOMN = "Producto";
 	public static final String TIPO_DE_POLIZAPT= "Tipo de Póliza:";
+	public static final String TIPO_DE_POLIZAMY= "TIPO DE PÓLIZA";
 	public static final String HASTA_TO ="Hasta - To";
 	public static final String DESDE_FROM="Desde-From";
 	public static final String TOURIST_VEHICLE_POLICY  ="TOURIST VEHICLE POLICY";
@@ -323,6 +327,13 @@ public final class ConstantsValue {
 	public static final String POBLACION ="POBLACIÓN:";
 	public static final String FECHA_DE_EXPEDICION ="FECHA DE EXPEDICIÓN";
 	public static final String LA_DATOS_PERSONALES ="Los datos personales serán";
+	public static final String CONDUCTO ="Conducto";
+	public static final String PLAN_BASICO ="PLAN BÁSICO";
+	public static final String ASEGURADOMY ="ASEGURADO";
+	public static final String FECHA_DE_EMISION ="FECHA DE EMISIÓN";
+	public static final String DESIGNACION_DE_BENEFICIARIOS ="DESIGNACIÓN DE BENEFICIARIOS";
+	public static final String ESPOSO ="ESPOSO";
+	public static final String LA_CAMPANIA ="LA COMPAÑÍA";
 	private ConstantsValue() {
 
 	}

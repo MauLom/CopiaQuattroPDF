@@ -546,7 +546,7 @@ public class DataToolsModel {
 	public Boolean sexo(String x) {
 		Boolean result = false;
 		String[] tiposP = { "MASCULINO", "HOMBRE", "H", "HIJO", "MLO", "MASC", "MAS", "M", "FEMENINO", "MUJER", "F",
-				"HIJA", "FEM." };
+				"HIJA", "FEM.","OTRO1" };
 		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (x.toUpperCase()) {
@@ -1218,7 +1218,7 @@ public class DataToolsModel {
 		return moneda;
 	}
 
-	public int buscaMonedaEnTexto(String texto) {
+	public int buscaMonedaEnTexto(String texto) {	
 		int resultado = 0;
 		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "MXN",
 				"PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP",
