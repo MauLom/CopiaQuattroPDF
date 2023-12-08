@@ -256,6 +256,33 @@ public class GnpDiversosCModelo {
 					}
 				}
 				modelo.setCoberturas(coberturas);
+
+                if(modelo.getCoberturas().isEmpty()){			
+					inicio = contenido.indexOf("COBERTURAS###CONTRATADAS");
+				    fin = contenido.indexOf("La prima neta de cada");				
+					newcontenido = new StringBuilder();
+					newcontenido.append(fn.extracted(inicio, fin, contenido));
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+					 
+					 if(!newcontenido.toString().split("\n")[i].contains("COBERTURAS")){
+						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+						if(newcontenido.toString().split("\n")[i].split("###").length == 1){
+							cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							coberturas.add(cobertura);
+						}
+
+					 }
+					}
+                     
+                           
+				}
+
+
+
+
+
+
+
 				inicio = contenido.indexOf("CARACTERÍSTICAS###DEL###RIESGO");
 				fin = contenido.indexOf("indemnización");	
 				
