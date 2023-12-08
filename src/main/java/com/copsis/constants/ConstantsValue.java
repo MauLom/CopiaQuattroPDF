@@ -151,6 +151,7 @@ public final class ConstantsValue {
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
 	public static final String POLIZA_MAYUSPT = "PÓLIZA;";
+	public static final String POLIZA_MAYAPT = "PÓLIZA:";
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
