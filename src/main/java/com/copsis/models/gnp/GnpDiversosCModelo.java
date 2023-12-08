@@ -3,6 +3,7 @@ package com.copsis.models.gnp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -18,7 +19,6 @@ public class GnpDiversosCModelo {
 	
 	public GnpDiversosCModelo(String contenido) {
 		this.contenido = contenido;
-		//this.ubicaciociones = ubicaciociones;
 	}
 	
 	public  EstructuraJsonModel procesar (){
@@ -26,21 +26,21 @@ public class GnpDiversosCModelo {
 		 int fin = 0;
 		 
 		 StringBuilder newcontenido = new StringBuilder();
-		 contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("INFORMACIÓN###ADICIONAL", "INFORMACIÓN ADICIONAL");
+		 contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("INFORMACIÓN###ADICIONAL", ConstantsValue.INFORMACION_ADICIONAL);
 		 
 		 try {
 				modelo.setTipo(7);
 				modelo.setCia(18);
 
 				inicio = contenido.indexOf("CONTRATANTE");
-				fin = contenido.indexOf("INFORMACIÓN ADICIONAL");
+				fin = contenido.indexOf(ConstantsValue.INFORMACION_ADICIONAL);
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 
 					if(newcontenido.toString().split("\n")[i].contains("Cliente") && newcontenido.toString().split("\n")[i].contains("Nombre")) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[1].replace("###", "").trim());
 					}
-					if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {						
+					if(newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.HASTA2)) {						
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 						if(modelo.getRfc().contains("Teléfono")) {
 							modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("###")[0]);
@@ -55,8 +55,8 @@ public class GnpDiversosCModelo {
 						}				   
 					}
 
-					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains("Hasta")) {		
-						if( newcontenido.toString().split("\n")[i+1].contains("Hasta") && newcontenido.toString().split("\n")[i+1].split("###").length > 1){
+					if(newcontenido.toString().split("\n")[i].contains("RFC") && newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.HASTA2)) {		
+						if( newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.HASTA2) && newcontenido.toString().split("\n")[i+1].split("###").length > 1){
                          modelo.setRfc( newcontenido.toString().split("\n")[i+1].split("###")[0]);
 						}				
 						if(newcontenido.toString().split("\n")[i+2].split("###").length == 3){
@@ -87,8 +87,8 @@ public class GnpDiversosCModelo {
 					
 					}
 
-					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i+1].contains("Descripción") ) {
-						modelo.setCp(newcontenido.toString().split("\n")[i+1].split("Descripción")[0].replace("###", "").trim());
+					if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.DESCRIPCION) ) {
+						modelo.setCp(newcontenido.toString().split("\n")[i+1].split(ConstantsValue.DESCRIPCION)[0].replace("###", "").trim());
 					}
 					
 
@@ -96,34 +96,14 @@ public class GnpDiversosCModelo {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
 					
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("del") ) {
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA2) && newcontenido.toString().split("\n")[i].contains("del") ) {
 						modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("del")[1].replace("###", "").trim()));
 					}
 					
-					if(newcontenido.toString().split("\n")[i].contains("Prima###Neta") ) {	
-						modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Prima###Neta")[1].replace("###", "").trim())));
-					}
-					if(newcontenido.toString().split("\n")[i].contains("Fraccionado") ) {	
-						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Fraccionado")[1].replace("###", "").trim())));
-					}
+					getPrimas(newcontenido, i);
 					
-					if(newcontenido.toString().split("\n")[i].contains("Derecho") ) {	
-						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Póliza")[1].replace("###", "").trim())));
-					}
-
-					if(newcontenido.toString().split("\n")[i].contains("I.V.A.16%") ) {	
-						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("I.V.A.16%")[1].replace("###", "").trim())));
-					}
-					if(newcontenido.toString().split("\n")[i].contains("IVA 16%") ) {	
-						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("IVA 16%")[1].replace("###", "").trim())));
-					}
-					
-					if(newcontenido.toString().split("\n")[i].contains("Importe") &&  newcontenido.toString().split("\n")[i].contains("Pagar") ) {	
-						modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Pagar")[1].replace("###", "").trim())));
-					}
-					
-					if(modelo.getCp().length() == 0 & newcontenido.toString().split("\n")[i].contains("C.P.") ) {			
-						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().substring(0,5).toString());
+					if(modelo.getCp().length() == 0 && newcontenido.toString().split("\n")[i].contains("C.P.") ) {			
+						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].trim().substring(0,5));
 					}
 
 				}
@@ -134,11 +114,11 @@ public class GnpDiversosCModelo {
 				
 				
 				
-				if (contenido.split("RESUMEN###DE###LA###PÓLIZA")[0].length() > 0) {
-					modelo.setPoliza(contenido.split("RESUMEN###DE###LA###PÓLIZA")[0].split("\n")[0].replace("@@@","").replace("\r", ""));
+				if (contenido.split(ConstantsValue.RESUMEN_DE_LA_POLIZA_HASH)[0].length() > 0) {
+					modelo.setPoliza(contenido.split(ConstantsValue.POLIZA_MAYUS)[0].split("\n")[0].replace("@@@","").replace("\r", ""));
 				}
 				
-				inicio = contenido.indexOf("INFORMACIÓN ADICIONAL");
+				inicio = contenido.indexOf(ConstantsValue.INFORMACION_ADICIONAL);
 				fin = contenido.indexOf("ste documento no");
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -153,7 +133,7 @@ public class GnpDiversosCModelo {
 				
 
 				inicio = contenido.indexOf("Clave###Agente");
-				fin = contenido.lastIndexOf("RESUMEN###DE###LA###PÓLIZA");
+				fin = contenido.lastIndexOf(ConstantsValue.RESUMEN_DE_LA_POLIZA_HASH);
 				
 				newcontenido = new StringBuilder();									
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -251,8 +231,6 @@ public class GnpDiversosCModelo {
 						}
 						
 						
-					}else{
-						
 					}
 				}
 				modelo.setCoberturas(coberturas);
@@ -312,7 +290,7 @@ public class GnpDiversosCModelo {
 				if(modelo.getUbicaciones().isEmpty()){
 	
 					inicio = contenido.indexOf("Ubicación");
-					fin = contenido.lastIndexOf("INFORMACIÓN ADICIONAL");
+					fin = contenido.lastIndexOf(ConstantsValue.INFORMACION_ADICIONAL);
 
 					newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
@@ -362,6 +340,30 @@ public class GnpDiversosCModelo {
 			return modelo; 
 		}
 		
+	}
+
+	private void getPrimas(StringBuilder newcontenido, int i) {
+		if(newcontenido.toString().split("\n")[i].contains("Prima###Neta") ) {	
+			modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Prima###Neta")[1].replace("###", "").trim())));
+		}
+		if(newcontenido.toString().split("\n")[i].contains("Fraccionado") ) {	
+			modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Fraccionado")[1].replace("###", "").trim())));
+		}
+		
+		if(newcontenido.toString().split("\n")[i].contains("Derecho") ) {	
+			modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].replace("###", "").trim())));
+		}
+
+		if(newcontenido.toString().split("\n")[i].contains("I.V.A.16%") ) {	
+			modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("I.V.A.16%")[1].replace("###", "").trim())));
+		}
+		if(newcontenido.toString().split("\n")[i].contains("IVA 16%") ) {	
+			modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("IVA 16%")[1].replace("###", "").trim())));
+		}
+		
+		if(newcontenido.toString().split("\n")[i].contains("Importe") &&  newcontenido.toString().split("\n")[i].contains("Pagar") ) {	
+			modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Pagar")[1].replace("###", "").trim())));
+		}
 	}
 
 }
