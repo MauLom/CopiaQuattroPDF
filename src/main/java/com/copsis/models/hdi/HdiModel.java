@@ -35,8 +35,12 @@ public class HdiModel {
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}
+			
+			if(contenido.contains("Ramo: Daños")) {
+			    tipo=4;
+			}
 		
-
+;
 		
 			switch (tipo) {
 			case 1:
