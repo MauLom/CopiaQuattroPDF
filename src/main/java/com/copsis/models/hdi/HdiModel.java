@@ -36,9 +36,7 @@ public class HdiModel {
 			    tipo=4;
 			}
 			
-			if(contenido.contains("Ramo: Daños")) {
-			    tipo=4;
-			}
+		
 		
 ;
 		
