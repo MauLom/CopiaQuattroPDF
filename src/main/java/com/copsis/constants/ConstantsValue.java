@@ -325,6 +325,7 @@ public final class ConstantsValue {
 	public static final String POBLACION ="POBLACIÓN:";
 	public static final String FECHA_DE_EXPEDICION ="FECHA DE EXPEDICIÓN";
 	public static final String LA_DATOS_PERSONALES ="Los datos personales serán";
+	public static final String CONDUCTO ="Conducto";
 	public static final String PLAN_BASICO ="PLAN BÁSICO";
 	public static final String ASEGURADOMY ="ASEGURADO";
 	public static final String FECHA_DE_EMISION ="FECHA DE EMISIÓN";
