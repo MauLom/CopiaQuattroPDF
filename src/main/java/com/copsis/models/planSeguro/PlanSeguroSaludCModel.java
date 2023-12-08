@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -26,8 +27,7 @@ public class PlanSeguroSaludCModel {
             fin = contenido.indexOf("Lista de Asegurados");        
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
-           
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {             
              if(newcontenido.toString().split("\n")[i].contains("Número de Póliza") && newcontenido.toString().split("\n")[i+1].contains("Desde")){                            
                 modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
                 modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[0]);                  
@@ -39,25 +39,30 @@ public class PlanSeguroSaludCModel {
              &&newcontenido.toString().split("\n")[i+1].contains("RFC:")){
                 modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
                
-                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains("Teléfono:")){
-                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split("Teléfono:")[0].replace("###", "").trim());      
+                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
+                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
                 }else{
                     modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
-                }
-                      
+                }                      
              }
-             
-             if(newcontenido.toString().split("\n")[i].contains("Dirección:")){
-                modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("Dirección:")[1].replace("###", "").trim());
-             } 
 
-              
-             if(newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains("Teléfono:")){
+             if(newcontenido.toString().split("\n")[i].contains("Dirección:")){
+                modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split(fn.palabraRgx(newcontenido.toString().split("\n")[i], ConstantsValue.DIRECCION2))[1].replace(":", "").replace("###", " ").trim());
+             } 
+           
+
+
+        
+             if(modelo.getCteDireccion().isEmpty() &&  newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.TELEFONO)){
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
              }
              if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
                 modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().substring(0,5));
              }
+              if(newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
+             }
+            
 
             if(newcontenido.toString().split("\n")[i].contains("Contratado") && newcontenido.toString().split("\n")[i].contains("Pago")){                          
                modelo.setPlan((newcontenido.toString().split("\n")[i+1]+" Óptimo").replace("###", " "));
@@ -85,7 +90,7 @@ public class PlanSeguroSaludCModel {
             modelo.setAsegurados(asegurados);
          
             inicio = contenido.indexOf("Conceptos Económicos");
-            fin = contenido.indexOf("Cobertura básica"); 
+            fin = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA); 
             fin= fin ==-1  ?contenido.indexOf("Coberturas básicas"):fin;
       
             newcontenido = new StringBuilder();       
@@ -105,7 +110,7 @@ public class PlanSeguroSaludCModel {
             }
 
            
-            inicio = contenido.indexOf("Cobertura básica");
+            inicio = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA);
            
             fin = contenido.indexOf("Clave de Agente"); 
             newcontenido = new StringBuilder();       
@@ -116,7 +121,7 @@ public class PlanSeguroSaludCModel {
             
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-                  if(!newcontenido.toString().split("\n")[i].contains("Cobertura básica")                  
+                  if(!newcontenido.toString().split("\n")[i].contains(ConstantsValue.COBERTURAS_BASICA)                  
                   && !newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios")
                   && !newcontenido.toString().split("\n")[i].contains("condiciones generales")
                   && !newcontenido.toString().split("\n")[i].contains("Mensual")  ){                
@@ -159,9 +164,9 @@ public class PlanSeguroSaludCModel {
                     for (int x = 0; x < listParentescos.size(); x++) {
                         if(newcontenido.toString().split("\n")[i].contains( listParentescos.get(x))){
                           
-                            if(newcontenido.toString().split("\n")[i].contains("Hasta") && newcontenido.toString().split("\n")[i].contains("UMAM")){
-                                    cobertura.setNombre(newcontenido.toString().split("\n")[i].split("Hasta")[0].replace("###", " ").trim());
-                                    cobertura.setSa("Hasta "+newcontenido.toString().split("\n")[i].split("Hasta")[1].replace("###", " ").trim());
+                            if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.HASTA2) && newcontenido.toString().split("\n")[i].contains("UMAM")){
+                                    cobertura.setNombre(newcontenido.toString().split("\n")[i].split(ConstantsValue.HASTA2)[0].replace("###", " ").trim());
+                                    cobertura.setSa("Hasta "+newcontenido.toString().split("\n")[i].split(ConstantsValue.HASTA2)[1].replace("###", " ").trim());
                                    coberturas.add(cobertura);
                             }else{
                                 cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
