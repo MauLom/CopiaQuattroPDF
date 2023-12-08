@@ -36,10 +36,7 @@ public class HdiModel {
 			    tipo=4;
 			}
 			
-		
-		
-;
-		
+	
 			switch (tipo) {
 			case 1:
 			
