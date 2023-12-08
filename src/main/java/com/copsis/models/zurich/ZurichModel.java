@@ -38,9 +38,11 @@ public class ZurichModel {
 				tipo = 4;
 			}
 			if(tipo == 0 && (contenido.contains("Incendio Todo Riesgo Casa")|| contenido.contains("Transportes Mercancía:")
+			|| contenido.contains("TRANSPORTES DE MERCANCIA:")
 			|| contenido.contains("Trabajos eléctricos - Electricistas"))) {
 				tipo =4;
 			}
+		
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
