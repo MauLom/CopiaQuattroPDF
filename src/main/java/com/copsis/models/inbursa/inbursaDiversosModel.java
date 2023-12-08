@@ -42,6 +42,7 @@ public class inbursaDiversosModel {
 			inicio = contenido.indexOf("PÓLIZA DE SEGUROS");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS.toUpperCase());
 			fin =  fin == -1 ? contenido.indexOf("Seguros ###Inbursa") : fin;
+			
 		
 	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
@@ -49,7 +50,6 @@ public class inbursaDiversosModel {
 						.replace("las 12:00 hrs. del", ""));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					
-
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUS)
 							&& newcontenido.toString().split("\n")[i].contains("CIS")
 							&& newcontenido.toString().split("\n")[i].contains("ID CLIENTE")) {
@@ -68,7 +68,13 @@ public class inbursaDiversosModel {
 							&& newcontenido.toString().split("\n")[i].contains("Cliente Inbursa")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYUS)[1].split("CIS")[0]
 								.replace("###", ""));
+					} else if (newcontenido.toString().split("\n")[i].contains("Póliza")
+							&& newcontenido.toString().split("\n")[i].contains("CIS")
+							&& newcontenido.toString().split("\n")[i].contains("Cliente Inbursa")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza")[1].split("CIS")[0]
+								.replace("###", "").trim());
 					}
+					
 					if (newcontenido.toString().split("\n")[i].contains("C.P.")
 							&& newcontenido.toString().split("\n")[i].contains("R.F.C")) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].split("###")[0].trim());
