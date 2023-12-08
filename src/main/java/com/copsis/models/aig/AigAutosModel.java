@@ -55,9 +55,14 @@ public class AigAutosModel {
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 			
-					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUSPT)) {					
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUSPT)) {		
+						
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYUSPT)[1].split("-")[2].trim());
-					}else if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Cobertura")) {
+					}
+					else  if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYAPT)) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYAPT)[1].split("-")[2].trim());
+					}
+					else if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Cobertura")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Cobertura")[0].replace("###",""));
 					}
 					if(newcontenido.toString().split("\n")[i].contains("VIGENCIA DEL SEGURO")) {
@@ -128,7 +133,8 @@ public class AigAutosModel {
                     	}
                     }
                      
-                     if(newcontenido.toString().split("\n")[i].contains("Conductor Habitual:")) {
+                     if(newcontenido.toString().split("\n")[i].contains("Conductor Habitual:") 
+					 && newcontenido.toString().split("\n")[i].split("Conductor Habitual").length > 10) {						
                     	 modelo.setConductor(newcontenido.toString().split("\n")[i].split("Habitual:")[1].replace("###", "").trim());
                     	 
                      }
@@ -178,6 +184,7 @@ public class AigAutosModel {
 			if(fin == -1) {
 				fin = contenido.length();
 			}
+		
 
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido = new StringBuilder();
@@ -310,7 +317,7 @@ public class AigAutosModel {
 			return modelo;
 			
 		} catch (Exception ex) {
-		
+		  ex.printStackTrace();
 			modelo.setError(
 				AigAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 		return modelo;
