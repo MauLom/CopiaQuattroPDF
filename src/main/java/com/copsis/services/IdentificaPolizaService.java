@@ -90,12 +90,12 @@ public class IdentificaPolizaService {
 			) {
 			
 				    
-				ChubbModel datosChubb = new ChubbModel(); 
-				datosChubb.setPdfStripper(pdfStripper);
-				datosChubb.setPdDoc(pdDoc);
-				datosChubb.setContenido(contenido);
-				modelo = datosChubb.procesa();
-				encontro = true;
+				// ChubbModel datosChubb = new ChubbModel(); 
+				// datosChubb.setPdfStripper(pdfStripper);
+				// datosChubb.setPdDoc(pdDoc);
+				// datosChubb.setContenido(contenido);
+				// modelo = datosChubb.procesa();
+				// encontro = true;
 				
 			}
 
