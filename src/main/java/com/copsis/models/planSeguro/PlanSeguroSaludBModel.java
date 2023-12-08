@@ -3,6 +3,7 @@ package com.copsis.models.planSeguro;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -22,28 +23,33 @@ public class PlanSeguroSaludBModel {
 				modelo.setTipo(3);
 				modelo.setCia(25);
 
-				inicio = contenido.indexOf("Póliza");
-				fin = contenido.indexOf("Coberturas");
+				inicio = contenido.indexOf("Poliza:###");
+				inicio = inicio ==-1 ? contenido.indexOf("Póliza"):inicio;
+				fin = contenido.indexOf(ConstantsValue.COBERTURAS);
 				
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
 					
-					if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Certif")) {
-						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Certif")[0].replace("###", "").trim());
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Certif")) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Certif")[0].replace("###", "").trim());
 					}
 					if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains("Póliza") && newcontenido.toString().split("\n")[i].contains("Certif")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 					}
-					if(modelo.getPoliza().length() == 0 && newcontenido.toString().split("\n")[i].contains("Póliza:")) {
-						modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].replace("###", ""));
+					
+					if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2)) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].replace("###", ""));
+					}
+					if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA)) {
+						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA)[1].replace("###", ""));
 					}
 					
 					if(newcontenido.toString().split("\n")[i].contains("Nombre:") && newcontenido.toString().split("\n")[i].contains("Inicio")) {
 						modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Nombre:")[1].split("Inicio")[0].replace("###", "").trim());
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Dirección:")) {
-						newdire.append(newcontenido.toString().split("\n")[i].split("Dirección:")[1].split("###")[1] +" ");
+					if(newcontenido.toString().split("\n")[i].contains(fn.palabraRgx(newcontenido.toString().split("\n")[i], ConstantsValue.DIRECCION2))) {
+						newdire.append(newcontenido.toString().split("\n")[i].split(ConstantsValue.DIRECCIOMN)[1].split("###")[1] +" ");
 						newdire.append(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 						newdire.append(newcontenido.toString().split("\n")[i+2].split("###")[0]);
 					}
@@ -102,15 +108,15 @@ public class PlanSeguroSaludBModel {
 				
 
 				
-				inicio = contenido.indexOf("Coberturas");
+				inicio = contenido.indexOf(ConstantsValue.COBERTURAS);
 				fin = contenido.indexOf("Primas");
-				fin = fin == -1? contenido.indexOf("Clave de Agente"):fin;
+				fin = fin == -1? contenido.indexOf(ConstantsValue.CLAVE_DE_AGENTENM):fin;
 				
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {					
-					if(!newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios") && !newcontenido.toString().split("\n")[i].contains("Coberturas") && !newcontenido.toString().split("\n")[i].contains("COBERTURA BASICA") && !newcontenido.toString().split("\n")[i].contains("COBERTURAS ADICIONALES ")) {
+					if(!newcontenido.toString().split("\n")[i].contains("Tabla de Honorarios") && !newcontenido.toString().split("\n")[i].contains(ConstantsValue.COBERTURAS) && !newcontenido.toString().split("\n")[i].contains("COBERTURA BASICA") && !newcontenido.toString().split("\n")[i].contains("COBERTURAS ADICIONALES ")) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 					    int sp = newcontenido.toString().split("\n")[i].split("###").length;
 						if(sp >1) {							
@@ -124,18 +130,19 @@ public class PlanSeguroSaludBModel {
 				
 
 				inicio = contenido.indexOf("Primas");
-				inicio = inicio == -1 ?contenido.indexOf("Prima Neta"):fin;
-				fin = contenido.indexOf("Clave de Agente");
+				inicio = inicio == -1 ?contenido.indexOf(ConstantsValue.PRIMA_NETA):fin;
+				fin = contenido.indexOf(ConstantsValue.CLAVE_DE_AGENTENM);
 				 
 				
 				newcontenido = new StringBuilder();
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
-				List<String> valores= new ArrayList<>();
+			
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                   
-					if(newcontenido.toString().split("\n")[i].contains("Financiamiento") && newcontenido.toString().split("\n")[i].contains("Prima Neta") 
-					&& newcontenido.toString().split("\n")[i+1].contains("Expedición") ) {						
-						 valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+2]);
+					if(newcontenido.toString().split("\n")[i].contains("Financiamiento") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.PRIMA_NETA) 
+					&& newcontenido.toString().split("\n")[i+1].contains("Expedición") ) {
+											
+						 	List<String> valores  = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+2]);
 						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0).replace(",", ""))));
 						 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(3))));
 						 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(4))));
@@ -144,8 +151,9 @@ public class PlanSeguroSaludBModel {
 						
 					}
 				
-					if( newcontenido.toString().split("\n")[i].contains("Prima Neta")) {						
-						 valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);					
+					if( newcontenido.toString().split("\n")[i].contains(ConstantsValue.PRIMA_NETA)) {	
+									
+						List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);					
 						 if(!valores.isEmpty()){
  						 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0).replace(",", ""))));
 						 modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(3))));
@@ -158,7 +166,7 @@ public class PlanSeguroSaludBModel {
 				}
 				
 
-				inicio = contenido.indexOf("Clave de Agente");
+				inicio = contenido.indexOf(ConstantsValue.CLAVE_DE_AGENTENM);
 				fin = contenido.indexOf("En###cumplimiento");
 				if(fin == -1) {
 					fin = contenido.indexOf("En cumplimiento");
@@ -175,7 +183,7 @@ public class PlanSeguroSaludBModel {
 				
 				
 				inicio = contenido.indexOf("NOMBRE###SEXO");
-                fin = contenido.indexOf("Coberturas");
+                fin = contenido.indexOf(ConstantsValue.COBERTURAS);
                 newcontenido = new StringBuilder();
                 newcontenido.append( fn.extracted(inicio, fin, contenido));
                 List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
@@ -183,7 +191,7 @@ public class PlanSeguroSaludBModel {
                     EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                     if(newcontenido.toString().split("\n")[i].split("-").length > 3) {
                         asegurado.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-                        asegurado.setSexo(fn.sexo(newcontenido.toString().split("\n")[i].split("###")[1]) ? 1: 0);
+                        asegurado.setSexo(Boolean.TRUE.equals(fn.sexo(newcontenido.toString().split("\n")[i].split("###")[1])) ? 1: 0);
                         if(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).size() > 2) {
                             asegurado.setNacimiento(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
                             asegurado.setAntiguedad(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(1)));
