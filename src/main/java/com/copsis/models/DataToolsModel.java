@@ -1218,7 +1218,7 @@ public class DataToolsModel {
 		return moneda;
 	}
 
-	public int buscaMonedaEnTexto(String texto) {
+	public int buscaMonedaEnTexto(String texto) {	
 		int resultado = 0;
 		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "MXN",
 				"PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP",
