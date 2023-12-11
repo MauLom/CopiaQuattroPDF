@@ -92,8 +92,7 @@ public class AlliansDiversosEModel {
 			}
             
             return modelo;            
-        } catch (Exception ex) {
-          
+        } catch (Exception ex) {          
             modelo.setError(AlliansDiversosEModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
              return modelo;
         }
