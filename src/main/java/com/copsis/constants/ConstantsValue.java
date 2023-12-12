@@ -334,6 +334,7 @@ public final class ConstantsValue {
 	public static final String DESIGNACION_DE_BENEFICIARIOS ="DESIGNACIÓN DE BENEFICIARIOS";
 	public static final String ESPOSO ="ESPOSO";
 	public static final String LA_CAMPANIA ="LA COMPAÑÍA";
+	public static final String SEGUROS_MONTERREY_NEW  ="Seguros Monterrey New York Life";
 	private ConstantsValue() {
 
 	}

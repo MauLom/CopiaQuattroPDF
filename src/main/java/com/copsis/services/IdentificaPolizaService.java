@@ -138,13 +138,14 @@ public class IdentificaPolizaService {
 	
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
-			
+				
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
 						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")
-						|| contenido.contains("Seguros Monterrey New York Life")
-						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
-						|| rangoSimple(1, 3, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
+						|| contenido.contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(1, 3, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(7, 7, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
 						) {
 							
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
@@ -156,7 +157,7 @@ public class IdentificaPolizaService {
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
 							|| contenidoAux.contains("@@@Seguros a\n" + MONTERREY)
-							|| contenidoAux.contains("SEGUROS MONTERREY")|| contenidoAux.contains("SEGUROS MONTERREY NEW YORK LIFE")) {
+							|| contenidoAux.contains("SEGUROS MONTERREY")|| contenidoAux.contains(ConstantsValue.SEGUROS_MONTERREY_NEW)) {
 							
 						SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 						modelo = datosSegurosMty.procesa();

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -171,7 +172,7 @@ public class SegurosMtyVida {
 						int sp = newcontenido.toString().split("\n")[i].split("###").length;
 							
 						if(sp == 7 || sp == 8) {
-							System.out.println(newcontenido.toString().split("\n")[i]);
+							
 							if(newcontenido.toString().split("\n")[i].contains("NP 65")){
 								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
 								
@@ -200,6 +201,7 @@ public class SegurosMtyVida {
 				modelo.setCoberturas(coberturas);
 				
 				
+				newcontenido = new StringBuilder();
 				for (int i = 0; i < contenido.split(ConstantsValue.DESIGNACION_DE_BENEFICIARIOS).length; i++) {
 				
 					if(i> 0 && contenido.split(ConstantsValue.DESIGNACION_DE_BENEFICIARIOS)[i].contains(ConstantsValue.LA_CAMPANIA)) {	
@@ -208,37 +210,60 @@ public class SegurosMtyVida {
 					}					
 				}
 
-			
+		
 				if( newcontenido.length() > 0) {
 					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
-						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();						
-						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")  && (newcontenido.toString().split("\n")[i+1].contains("%"))) {
+						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();		
+									
+						if(newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS") 
+						 && (newcontenido.toString().split("\n")[i+1].contains("%"))
+						 && !newcontenido.toString().split("\n")[i].contains("NINGUNO")) {
+					
 							if(newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.ESPOSO)) {
 								beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split(ConstantsValue.ESPOSO)[0].replace("###", "").trim());
 							}else {
-								beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim());
+									
+								if(newcontenido.toString().split("\n")[i+1].split("###")[0].trim().length() > 25){
+									beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim());
+								}else{
+								
+										beneficiario.setNombre(newcontenido.toString().split("\n")[i+1].split("###")[0].trim()
+										+" "+newcontenido.toString().split("\n")[i+1].split("###")[1].trim()
+										+" "+ newcontenido.toString().split("\n")[i+1].split("###")[2].trim());
+									
+								
+								}
+								
 							}					
 								beneficiario.setPorcentaje(Integer.parseInt(newcontenido.toString().split("\n")[i+1].split("###")[newcontenido.toString().split("\n")[i+1].split("###").length -1].replace("%", "").trim()));
 												
 							if(newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.ESPOSO)) {
 								beneficiario.setParentesco(1);
 							}else {
-								beneficiario.setParentesco(2);	
+								beneficiario.setParentesco(fn.buscaParentesco(newcontenido.toString().split("\n")[i+1]));	
 							}
 					
 							beneficiarios.add(beneficiario);
-						
 						}
+						
+						
 					}
 					modelo.setBeneficiarios(beneficiarios);
 				}
 				
-				
 
+				 if(!modelo.getBeneficiarios().isEmpty()){
+                   List<EstructuraBeneficiariosModel> bene = modelo.getBeneficiarios();				 
+				  modelo.setBeneficiarios(bene.stream().filter(x -> !x.getNombre().contains("NINGUNO"))
+                            .collect(Collectors.toList()));
+				 }
+				
+				 
+				 
 				
 				return modelo;
-			} catch (Exception ex) {
+			} catch (Exception ex) {				
 				modelo.setError(SegurosMtyVida.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 				 return modelo;
 			}

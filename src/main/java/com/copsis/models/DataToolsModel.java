@@ -1364,7 +1364,7 @@ public class DataToolsModel {
 				"CÓNYUGE", "HIJO",
 				"HIJO", "HIJO A", "HIJA", "HIJO/A", "HIJO-A", "HIJO M", "HIJA F", "PADRE", "NIETO", "MADRE", "ESPOSA",
 				"ESPOSO", "", "ESPOSA F", "ASEGURADO", "DEPENDIENTES", "OTRO", "HERMANO/A", "PARENTESCOS",
-				"PERTENECIENTE", "HERMANA", "HERMANO", "ABUELO", "PADRE-MADRE");
+				"PERTENECIENTE", "HERMANA", "HERMANO", "ABUELO", "PADRE-MADRE","ABUELA","NIETA");
 
 		for (String parentesco : listParentescos) {
 
@@ -1392,6 +1392,7 @@ public class DataToolsModel {
 						break;
 					case "PADRE":
 					case "NIETO":
+					case "NIETA":
 					case "MADRE":
 					case "ESPOSA":
 					case "ESPOSO":
@@ -1406,6 +1407,7 @@ public class DataToolsModel {
 					case "HERMANO":
 					case "SUEGRA":
 					case "ABUELO":
+					case "ABUELA":
 					case "PADRE-MADRE":
 						tipoParentesco = 4;
 						break;
