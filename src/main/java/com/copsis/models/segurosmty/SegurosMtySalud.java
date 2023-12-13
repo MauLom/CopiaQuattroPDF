@@ -100,12 +100,22 @@ public class SegurosMtySalud {
 				   }
 				
 				}
+				System.out.println(newcontenido.split("\n")[i]);
 				if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].contains("C.P.") ) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
 					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].trim()));	
 					 modelo.setFechaEmision(modelo.getVigenciaDe());
 				}
+				if(modelo.getVigenciaDe().length() ==0 && newcontenido.split("\n")[i].contains("INICIA")){
+					List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+				}
+				if(modelo.getVigenciaA().length() ==0 && newcontenido.split("\n")[i].contains("TERMINA")){
+					List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+					modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));
+				}
+					
 				if( newcontenido.split("\n")[i].contains("C.P.")) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
 				}
