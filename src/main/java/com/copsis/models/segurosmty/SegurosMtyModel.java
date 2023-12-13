@@ -29,7 +29,7 @@ public class SegurosMtyModel {
 	
 	public EstructuraJsonModel procesa() {
 		try {
-			
+		
 			int tipo =0;
 			int tipoSalud =0;
 			if(fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL FLEX")) {
