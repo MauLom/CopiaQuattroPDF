@@ -35,9 +35,8 @@ public class HdiModel {
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}
-		
-
-		
+			
+	
 			switch (tipo) {
 			case 1:
 			
