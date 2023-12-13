@@ -100,7 +100,7 @@ public class SegurosMtySalud {
 				   }
 				
 				}
-				System.out.println(newcontenido.split("\n")[i]);
+			
 				if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].contains("C.P.") ) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
