@@ -24,8 +24,10 @@ public class SuraDiversos3Model {
             modelo.setCia(88);
 
             inicio = contenido.indexOf("Póliza No.");
+            inicio = inicio ==-1 ?contenido.indexOf("Póliza no."): inicio;
             fin = contenido.indexOf("Suma asegurada");
             fin = fin == -1 ? contenido.indexOf("Datos del asegurado"):fin;
+            
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             getContratante(newcontenido, newDireecion);
 
@@ -55,6 +57,7 @@ public class SuraDiversos3Model {
 
             return modelo;
         } catch (Exception e) {
+     
             modelo.setError(
                     SuraDiversos3Model.this.getClass().getTypeName() + " | " + e.getMessage() + " | " + e.getCause());
             return modelo;
@@ -152,16 +155,28 @@ public class SuraDiversos3Model {
                         .split("###")[newcontenido.toString().split("\n")[i + 1].split("###").length - 1]
                         .replace("###", ""));
             }
+            if (newcontenido.toString().split("\n")[i].contains("Póliza no.")) {
+                modelo.setPoliza(newcontenido.toString().split("\n")[i + 1]
+                        .split("###")[newcontenido.toString().split("\n")[i + 1].split("###").length - 1]
+                        .replace("###", ""));
+            }
             if (newcontenido.toString().split("\n")[i].contains("contratante")) {
                 modelo.setCteNombre(newcontenido.toString().split("\n")[i + 1].split("###")[0].replace("###", ""));
                 modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i + 1]));
+               if(modelo.getMoneda() ==0 ){
+                modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i + 2]));
+               }
                 newDireecion.append(newcontenido.toString().split("\n")[i + 2].split("###")[0]);
                 newDireecion.append(" " + newcontenido.toString().split("\n")[i + 3].split("###")[0]);
                 newDireecion.append(" " + newcontenido.toString().split("\n")[i + 4].split("###")[0]);
             }
+          
             if (newcontenido.toString().split("\n")[i].contains("Forma de pago") &&
                     newcontenido.toString().split("\n")[i].contains("emisión")) {
                 modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
+            }
+            if(modelo.getFormaPago() == 0 && newcontenido.toString().split("\n")[i].contains("Forma de pago") ){
+                  modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
             }
             
             vigenciasPoliza(newcontenido, i);
@@ -172,8 +187,10 @@ public class SuraDiversos3Model {
         modelo.setCteDireccion(newDireecion.toString());
 
         if (!modelo.getCteDireccion().isEmpty()) {
-            List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());
-            if (!valores.isEmpty()) {
+            List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());       
+            if (!valores.isEmpty() && !valores.stream()
+                        .filter(numero -> String.valueOf(numero).length() >= 4)
+                        .collect(Collectors.toList()).isEmpty()) {
                 modelo.setCp(valores.stream()
                         .filter(numero -> String.valueOf(numero).length() >= 4)
                         .collect(Collectors.toList()).get(0));

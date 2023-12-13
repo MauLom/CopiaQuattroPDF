@@ -69,6 +69,9 @@ public class SuraModel {
 					else if (fn.caratula(2, 2, stripper, doc).contains("Hogar Total")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(2, 4, stripper, doc));
 					}
+					else if (fn.caratula(1, 2, stripper, doc).contains("Plan Empresario Sura")) {
+						modelo = new SuraDiversos3Model().procesar(fn.caratula(1, 2, stripper, doc));
+					}
 					 else {
 						modelo = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 					}
