@@ -42,6 +42,7 @@ public class SegurosMtySalud {
 				.replace("ESTE DOCUMENTO ###NO ES VÁLIDO ###COMO RECIBO","ESTE DOCUMENTO NO ES VÁLIDO COMO RECIBO")
 				.replace("ASEGURA###DA", "ASEGURADA")
 				.replace("ASEGURA###DO ###FIGURA ###GÉNERO ###EDAD", "ASEGURADO ###FIGURA ###GÉNERO ###EDAD")
+				.replace("FORMA DE ###PAGO", "FORMA DE PAGO")
 				;
 			
 		try {
@@ -99,12 +100,22 @@ public class SegurosMtySalud {
 				   }
 				
 				}
+			
 				if(newcontenido.split("\n")[i].split("-").length >  3 && newcontenido.split("\n")[i].contains("C.P.") ) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[1].trim()));
 					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("###")[2].trim()));	
 					 modelo.setFechaEmision(modelo.getVigenciaDe());
 				}
+				if(modelo.getVigenciaDe().length() ==0 && newcontenido.split("\n")[i].contains("INICIA")){
+					List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+					modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+				}
+				if(modelo.getVigenciaA().length() ==0 && newcontenido.split("\n")[i].contains("TERMINA")){
+					List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+					modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(0)));
+				}
+					
 				if( newcontenido.split("\n")[i].contains("C.P.")) {
 					modelo.setCp(newcontenido.split("\n")[i].split("C.P.")[1].trim().split(" ")[0]);
 				}
@@ -162,14 +173,23 @@ public class SegurosMtySalud {
 	        		newcontenido = contenido.substring(inicio,fin).replace("\r", "").replace("@@@", "").trim().replaceAll("### ###", "###");
 	        		boolean encontroRecargo = false;
 	        		for (int i = 0; i < newcontenido.split("\n").length; i++) {
-	        		 
+	        		
 	        			if(newcontenido.split("\n")[i].contains("FORMA DE PAGO")) {	
-	        				modelo.setFormaPago(fn.formaPago(newcontenido.split("\n")[i].split("###")[1].trim()));
-	        				modelo.setPrimaneta(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("###")[3].trim())));	        				
+	        				modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("###")[1].trim()));
+						    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+							if(!valores.isEmpty()){
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							}
+	        		        				
 	        			}
 	        			if(newcontenido.split("\n")[i].contains("RECARGO POR PAGO") && newcontenido.split("\n")[i].contains("###")) {
-        					modelo.setRecargo(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("RECARGO POR PAGO")[1].split("###")[1].trim())));
-        					encontroRecargo = true;
+        					
+        					List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+							if(!valores.isEmpty()){
+								modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+							encontroRecargo = true;
+							}
+							
 	        			}
 	        			
 	        			if(newcontenido.split("\n")[i].contains("FRACCIONADO") && !encontroRecargo) {
@@ -230,12 +250,13 @@ public class SegurosMtySalud {
 	         }
 		
 
-		inicio = contenido.indexOf("ASEGURADO ###TIPO DE ###GÉNERO ###EDAD");
-		if(inicio == -1) {
-			inicio = contenido.indexOf("ASEGURADO ###FIGURA ###GÉNERO ###EDAD");
-		}
+		inicio = contenido.indexOf("ASEGURADO ###TIPO DE ###GÉNERO ###EDAD");	
+		inicio = inicio == -1 ?  contenido.indexOf("ASEGURADO ###FIGURA ###GÉNERO ###EDAD"):inicio;
+		
+	
 		fin = contenido.indexOf("COBERTURA BÁSICA");
 
+		
 		if(inicio > -1 && fin > -1 && inicio <fin) {
 			List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 			//[] agrupador
@@ -333,16 +354,30 @@ public class SegurosMtySalud {
          	}
          }	
 
+
+		
          if(newcontenido.length() ==  0 ||  newcontenido.length() < 20) {
         	 newcontenido ="";
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
              fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
+		
              newcontenido = getCoberturas (inicio,fin,contenido);
          }else if(newcontenido.length() > 19) {
         	 inicio = contenido.indexOf("COBERTURA BÁSICA");
              fin = contenido.indexOf("COBERTURAS OPCIONALES CON COSTO");  
              newcontenido += getCoberturas (inicio,fin,contenido);
-         }
+         } 
+		 
+		 if(newcontenido.length() ==  0){
+			
+			 newcontenido ="";
+        	 inicio = contenido.indexOf("SUMA ###ASEGURA###DO");			
+             fin = contenido.indexOf("COBERTURAS ###OPCIONALE");  
+			   newcontenido = getCoberturas (inicio,fin,contenido);
+		 }
+
+           
+	
 
          if(inicio > -1 && inicio < fin) {
         	 List<EstructuraCoberturasModel> coberturas = new ArrayList<>(); 
@@ -401,8 +436,7 @@ public class SegurosMtySalud {
          	modelo.setCoberturas(coberturas);
          }
 			return modelo;
-		} catch (Exception ex) {
-		
+		} catch (Exception ex) {		 
 			modelo.setError(
 					SegurosMtySalud.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
