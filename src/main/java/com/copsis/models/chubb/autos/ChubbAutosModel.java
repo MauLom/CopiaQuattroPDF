@@ -675,7 +675,7 @@ public class ChubbAutosModel {
 				}
 			}
 
-		 if(!modelo.getCteDireccion().isEmpty()){
+		 if(modelo.getCp().isEmpty() && !modelo.getCteDireccion().isEmpty()){
         List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());
                 if(!valores.isEmpty()){
                     modelo.setCp(valores.stream()
