@@ -41,28 +41,19 @@ public class MapfreSaluDModel {
 			modelo.setCia(22);
 
 			inicio = contenido.indexOf("GASTOS MÉDICOS MAYORES");
-			fin = contenido.indexOf("COBERTURAS SUMA ASEGURADA");
-			
-			if(inicio ==  -1) {
-				inicio = contenido.indexOf("PLAN SERVICIOS");
-			}
-			if( fin == -1) {
-				fin = contenido.indexOf("Plan de Seguro:");
-				
-			}
-		
+			fin = contenido.indexOf("COBERTURAS SUMA ASEGURADA");						
+			inicio = inicio ==  -1 ? contenido.indexOf("PLAN SERVICIOS"):fin;				
+			fin = fin == -1 ? contenido.indexOf("Plan de Seguro:"):fin;							
 			if(inicio  == -1  && fin == -1  ) {
 				inicio = contenido.indexOf("Tipo de Documento:");
 				fin = contenido.indexOf("PAQUETE");				
-			}
-			
-			if(inicio  == -1 ) {
-				inicio = contenido.indexOf("Tipo de Documento:");
-			}
+			}						
+			inicio = inicio  == -1  ? contenido.indexOf("Tipo de Documento:"):inicio;
+			fin = fin == -1 ? contenido.indexOf("apfre México, S.A. denominada"):fin;
 	
 				
 			
-
+System.out.println(inicio+"--->"+ fin);
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
