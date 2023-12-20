@@ -3,6 +3,7 @@ package com.copsis.models.chubb;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -52,17 +53,17 @@ public class ChubbDiversosModel {
 			modelo.setRamo("Daños");
 
 			inicio = contenido.indexOf("POLIZA DE SEGURO");
-			fin = contenido.indexOf(ConstantsValue.CARACTERISTICASRIESGO);
+			fin = contenido.indexOf(ConstantsValue.CARACTERISTICASRIESGO);				
+			fin = fin == -1 ? contenido.indexOf("Desglose de coberturas"):fin;
+			fin = fin ==-1? contenido.indexOf("Características del Riesgo"):fin;
 			
-			if(fin == -1) {
-				fin = contenido.indexOf("Desglose de coberturas");
-			}
+		
 			
 
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("C.P", "C/P");
 				obtenerEndoso(newcontenido);
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {				
 					if (newcontenido.split("\n")[i].contains("Póliza:")
 							&& newcontenido.split("\n")[i].contains("Vigencia")) {
 						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Vigencia:")[0]
@@ -75,12 +76,28 @@ public class ChubbDiversosModel {
 										.split(ConstantsValue.HORAS)[0].replace("###", "").replace("12:00", "")
 												.replace("al", "").trim()));
 					}
+					if (modelo.getPoliza().isEmpty() && newcontenido.split("\n")[i].contains("Póliza")
+							&& newcontenido.split("\n")[i].contains("Vigencia")) {
+								modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza")[1].split("Vigencia")[0]
+								.replace("###", "").trim());
+						List<String> valores = fn.obtenVigePoliza(newcontenido.split("\n")[i]);
+						if (valores.size() > 1) {
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+							modelo.setFechaEmision(modelo.getVigenciaDe());
+						}			
+
+					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.ASEGURADO)
 							&& newcontenido.split("\n")[i].contains("C.P:")) {
 						modelo.setCteNombre((newcontenido.split("\n")[i].split(ConstantsValue.ASEGURADO)[1].split("C.P:")[0]
 								.replace("###", " ")).trim());
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("\r", "").replace("###", ""));
 					}
+					if(modelo.getCteNombre().isEmpty() && newcontenido.split("\n")[i].contains("Contratante:")){
+                        modelo.setCteNombre(newcontenido.split("\n")[i].split("Contratante:")[1].replace("\r", "").trim());
+					}
+				
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.DOMICILIO )
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.TELEFONOAC)) {
 						modelo.setCteDireccion((newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO )[1].split(ConstantsValue.TELEFONOAC)[0]
@@ -101,7 +118,12 @@ public class ChubbDiversosModel {
 					}
 					
 					if(modelo.getCp().length() == 0 && newcontenido.split("\n")[i].contains("C/P:")) {
-						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("###", "").trim());
+					      List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());
+							if(!valores.isEmpty()){
+								modelo.setCp(valores.stream()
+									.filter(numero -> String.valueOf(numero).length() >= 4)
+									.collect(Collectors.toList()).get(0));
+							}
 					}
 					
 					if (newcontenido.split("\n")[i].contains("RFC:")) {
@@ -115,6 +137,17 @@ public class ChubbDiversosModel {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].split("pago:")[1].replace("\r", "")
 								.replace("###", "").trim()));
 					}
+
+					if(modelo.getMoneda() == 0 && newcontenido.split("\n")[i].contains("Moneda:") ){
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i]
+								.replace("###", "").trim()));
+					}
+
+					if(modelo.getFormaPago() == 0 && newcontenido.split("\n")[i].contains("Forma de pago:") ){
+						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i].replace("\r", "")
+								.replace("###", "").trim()));
+					 }
+
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.EMISION2)
 							&& newcontenido.split("\n")[i].contains("Descuento")) {
 						String x = newcontenido.split("\n")[i].split(ConstantsValue.EMISION2)[1].split("Descuento")[0]
@@ -166,9 +199,12 @@ public class ChubbDiversosModel {
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					
 					if (newcontenido.split("\n")[i].contains("Neta")) {
-						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Neta")[1]
-								.replace("###", "").replace("\r", "").replace(":", "").trim())));
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}							
 					}
 				
 					if (newcontenido.split("\n")[i].contains("Financiamiento")
@@ -182,26 +218,33 @@ public class ChubbDiversosModel {
 										.replace("###", "").replace("\r", "").replace(":", "").trim())));
 					}
 					
-					if(modelo.getRecargo().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.FRACIONADO2) ) {
-						modelo.setRecargo(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.FRACIONADO2)[1]
-										.replace("###", "").replace("\r", "").replace(":", "").trim())));
+					if(modelo.getRecargo() == null && modelo.getRecargo().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.FRACIONADO2) ) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}							
+					
 					}
 					
-					if(modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION) ) {
-						modelo.setDerecho(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1]
-										.replace("###", "").replace("\r", "").replace(":", "").trim())));
+					if(modelo.getDerecho() == null && modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION) ) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
 					
 					if (newcontenido.split("\n")[i].contains("I.V.A.")) {
-						modelo.setIva(fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("I.V.A.")[1]
-								.replace("###", "").replace("\r", "").replace(":", "").trim())));
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}							
+					
 					}
-					if (newcontenido.split("\n")[i].contains("Total:")) {
-						modelo.setPrimaTotal(
-								fn.castBigDecimal(fn.castDouble(newcontenido.split("\n")[i].split("Total:")[1]
-										.replace("###", "").replace("\r", "").trim())));
+					if ( newcontenido.split("\n")[i].contains("Total:") && newcontenido.split("\n")[i].contains("MXN")) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
 
 				}
@@ -348,7 +391,7 @@ public class ChubbDiversosModel {
 				inicio = contenido.indexOf("Cobertura");
 			}	
 		    fin = contenido.indexOf("Prima Neta");
-
+		
 			String nombre = "";
 			StringBuilder deducible = new StringBuilder();
 
@@ -504,6 +547,29 @@ public class ChubbDiversosModel {
 				}
 				modelo.setCoberturas(coberturas);
 			}
+      
+			if(modelo.getCoberturas().isEmpty()){
+				inicio = contenido.indexOf("Secciones###Suma asegurada ");
+				fin = contenido.indexOf("Prestador de Servicios");
+				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").trim();
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					if(!newcontenido.split("\n")[i].contains("horas cubiertas")
+					&& !newcontenido.split("\n")[i].contains("Otros")
+					&& !newcontenido.split("\n")[i].contains("CARÁTULA")
+					&& !newcontenido.split("\n")[i].contains("POLIZA DE SEGURO")
+					&& !newcontenido.split("\n")[i].contains("Civil")
+				
+					
+					&& !newcontenido.split("\n")[i].contains("Suma asegurada") && ( newcontenido.split("\n")[i] .split("###").length ==1)){
+						cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0]);
+						coberturas.add(cobertura);
+					}
+
+				}
+             modelo.setCoberturas(coberturas);
+          		 
+			}
 
 			List<EstructuraRecibosModel> recibosList = new ArrayList<>();
 			EstructuraRecibosModel recibo = new EstructuraRecibosModel();
@@ -531,12 +597,12 @@ public class ChubbDiversosModel {
 
 			modelo.setRecibos(recibosList);
 
-			if(fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30){
+			if(!modelo.getVigenciaDe().isEmpty() &&  fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30){
 				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
 
 			return modelo;
-		} catch (Exception ex) {			
+		} catch (Exception ex) {				
 			modelo.setError(
 					ChubbDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

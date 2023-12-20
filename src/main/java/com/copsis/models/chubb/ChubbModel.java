@@ -40,7 +40,7 @@ public class ChubbModel {
 
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
-			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
+			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "SEGURO DE VIAJE DE PLACER CHUBB","AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
@@ -56,8 +56,10 @@ public class ChubbModel {
 					case "CONTRATISTA":
 					case "Sótanos":
 					case ConstantsValue.EMBARCACIONES:
+					case "SEGURO DE VIAJE DE PLACER CHUBB":
 					case "TRANSPORTE DE MERCANCIAS":
-					case "Todo Riesgo Contratistas":	
+					case "Todo Riesgo Contratistas":
+						
 					
 							pagFin = getPageFin(fn);
 						
