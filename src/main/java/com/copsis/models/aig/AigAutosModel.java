@@ -45,16 +45,17 @@ public class AigAutosModel {
 			
 			inicio  = contenido.indexOf("SEGURO DE AUTOMÓVILES");
 			fin = contenido.indexOf("RIESGOS CUBIERTOS");
+			fin = fin == -1 ? contenido.indexOf("Coberturas"):fin;
+			fin = fin == -1 ? contenido.indexOf("Moneda:"):fin;
 			
-			if(fin == -1) {
-				fin = contenido.indexOf("Coberturas");
-			}
+		
+
 
 			if(inicio >  0 && fin > 0 && inicio < fin) {
 				newcontenido.append(contenido.substring( inicio, fin).replace("@@@", "").replace("\r", "").replace("C.P", "C/P").replace("######", "###"));
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+	
 					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_MAYUSPT)) {		
 						
 						modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_MAYUSPT)[1].split("-")[2].trim());
@@ -278,6 +279,10 @@ public class AigAutosModel {
 					newCobertura.append(contenido.substring(inicio, fin));
 				}
 			}
+			if(newCobertura.toString().contains("TIPO DE MOVIMIENTO")){
+				 newCobertura = new StringBuilder();
+			}
+			
 			
 			String auxStr = newCobertura.toString();
 			newCobertura = new StringBuilder();
