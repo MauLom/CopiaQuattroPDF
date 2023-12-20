@@ -466,11 +466,12 @@ public class IdentificaPolizaService {
                    modelo = datosAguila.procesar();
 				   encontro = true;  
                }
-            
+     
                //ENTRADA PARA Latinoamericana
 
                if(!encontro &&  (contenido.contains("Latinoamericana") || rangoSimple(4, 6, pdfStripper, pdDoc).contains("latinoseguros.com.mx") 			   
-			   || rangoSimple(7, 9, pdfStripper, pdDoc).contains("latinoseguros.com.mx")   )) {				
+			   || rangoSimple(7, 9, pdfStripper, pdDoc).contains("latinoseguros.com.mx")
+			    || rangoSimple(1, 1, pdfStripper, pdDoc).contains("latinoseguros.com.mx")   )) {				
               	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
                    modelo = datosLatino.procesar();
                    encontro = true;  
