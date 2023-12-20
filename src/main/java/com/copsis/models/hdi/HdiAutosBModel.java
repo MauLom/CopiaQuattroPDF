@@ -22,7 +22,8 @@ public class HdiAutosBModel {
 		.replace("MESES###SIN###INTERESES", "MESES SIN INTERESES")
 		.replace("SEMESTRAL EFECTIVO", "SEMESTRAL")
 		.replace("Art.###25°###de###la###Ley", "Art.25° de la Ley")
-		.replace("Art. ###25° ###de ###la ###Ley", "Art.25° de la Ley");
+		.replace("Art. ###25° ###de ###la ###Ley", "Art.25° de la Ley")
+		.replace("POólOiz a:", "Póliza:");
 		
 		try {
 			
@@ -35,7 +36,6 @@ public class HdiAutosBModel {
 			
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
-							
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
 					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
@@ -110,6 +110,17 @@ public class HdiAutosBModel {
                                modelo.setCp(valores.get(0));
                         }
                 }
+				if(modelo.getVigenciaDe().isBlank() && modelo.getVigenciaA().isEmpty() 
+				&& newcontenido.toString().split("\n")[i].contains("Vigencia:")
+				&& newcontenido.toString().split("\n")[i].contains("Desde")
+				&& newcontenido.toString().split("\n")[i].contains("Hasta") 
+				){
+					List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+                    if (valores.size() > 1) {
+                        modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+                        modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+                    }
+				}
 
 			}
 			
