@@ -100,7 +100,8 @@ public class qualitasAutosMotosModel {
 						}
 					
 					}
-					if(newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS) && newcontenido.split("\n")[i].split(ConstantsValue.PLACAS)[1].length()  > 3) {
+					
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.PLACAS) && newcontenido.split("\n")[i].split("Placa")[1].length()  > 3) {
 						
 					
 							modelo.setPlacas(newcontenido.split("\n")[i].split(ConstantsValue.PLACAS)[1].replace("###", "").trim());
