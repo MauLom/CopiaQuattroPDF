@@ -36,7 +36,6 @@ public class HdiAutosBModel {
 			
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
-							System.out.println(newcontenido.toString().split("\n")[i]);
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
 					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
