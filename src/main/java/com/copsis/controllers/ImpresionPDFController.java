@@ -420,14 +420,14 @@ public class ImpresionPDFController {
 	}
 
 		@PostMapping(value = "endoso")
-    public ResponseEntity<CopsisResponse> impresionCaractulaColeAutos(@Valid @RequestBody ImpresionCaratulaForm impresionCaractulaForm, BindingResult bindingResult) {
+    public ResponseEntity<CopsisResponse> impresionEndoso(@Valid @RequestBody ImpresionCaratulaForm impresionCaractulaForm, BindingResult bindingResult) {
         try {
 
             if (bindingResult.hasErrors()) {
                 String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
                 throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
             }
-            return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCaratulaColeAutos(impresionCaractulaForm)).build();
+            return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionEndoso(impresionCaractulaForm)).build();
         } catch (ValidationServiceException ex) {
             throw ex;
         } catch (Exception ex) {
