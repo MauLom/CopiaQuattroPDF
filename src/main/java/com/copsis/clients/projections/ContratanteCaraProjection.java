@@ -40,5 +40,6 @@ public class ContratanteCaraProjection {
     private String fecVigde;
     private String fecViga;
     private String concepto;
-    private int incisoPoliza;    
+    private int incisoPoliza;
+    private String noEndoso;    
 }
