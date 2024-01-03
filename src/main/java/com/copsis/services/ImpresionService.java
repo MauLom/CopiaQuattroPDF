@@ -56,46 +56,39 @@ public class ImpresionService {
     private final QuattroUploadClient quattroUploadClient;
 
     public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
-        try {
-            ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
-            AdjuntoForm adjuntoForm = new AdjuntoForm();
+        ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
+        AdjuntoForm adjuntoForm = new AdjuntoForm();
 
-            if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {
-                adjuntoForm.setEntidadID(impresionForm.getSiniestroDocumentoID());
-                adjuntoForm.setEntidadTipo(21);
-            }
-            byte[] byteArrayPDF = impresioneTipoService.getByteArrayPDF();
-
-            if (impresionForm.getTiporespuesta() == 1) {
-                Date date = new Date();
-
-                String nombrePdf = "";
-                if (impresionForm.getNombreOriginal() != null && !impresionForm.getNombreOriginal().equals("")) {
-                    nombrePdf = impresionForm.getNombreOriginal();
-                } else {
-                    nombrePdf = SiO4EncryptorAES.encrypt("Consolidado_" + date,
-                            com.copsis.encryptor.utils.Constants.ENCRYPTION_KEY);
-                }
-                adjuntoForm.setB64(Base64.encodeBase64String(byteArrayPDF));
-                adjuntoForm.setFolder(impresionForm.getFolder());
-                adjuntoForm.setBucket(impresionForm.getBucket());
-                adjuntoForm.setNombreOriginal(nombrePdf.length() > 50 ? nombrePdf.substring(0, 50) : nombrePdf);
-                adjuntoForm.setConcepto(nombrePdf.length() > 50 ? nombrePdf.substring(0, 50) : nombrePdf);
-                adjuntoForm.setD(impresionForm.getD());
-                quattroUploadClient.getUploadAndAdjuntoByteArray(adjuntoForm, headers).getResult();
-
-            } else {
-                impresionForm.setUrls(null);
-                impresionForm.setByteArrayPDF(byteArrayPDF);
-            }
-
-            return impresionForm;
-            
-        } catch (ValidationServiceException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {
+            adjuntoForm.setEntidadID(impresionForm.getSiniestroDocumentoID());
+            adjuntoForm.setEntidadTipo(21);
         }
+        byte[] byteArrayPDF = impresioneTipoService.getByteArrayPDF();
+
+        if (impresionForm.getTiporespuesta() == 1) {
+            Date date = new Date();
+
+            String nombrePdf = "";
+            if (impresionForm.getNombreOriginal() != null && !impresionForm.getNombreOriginal().equals("")) {
+                nombrePdf = impresionForm.getNombreOriginal();
+            } else {
+                nombrePdf = SiO4EncryptorAES.encrypt("Consolidado_" + date,
+                        com.copsis.encryptor.utils.Constants.ENCRYPTION_KEY);
+            }
+            adjuntoForm.setB64(Base64.encodeBase64String(byteArrayPDF));
+            adjuntoForm.setFolder(impresionForm.getFolder());
+            adjuntoForm.setBucket(impresionForm.getBucket());
+            adjuntoForm.setNombreOriginal(nombrePdf.length() > 50 ? nombrePdf.substring(0, 50) : nombrePdf);
+            adjuntoForm.setConcepto(nombrePdf.length() > 50 ? nombrePdf.substring(0, 50) : nombrePdf);
+            adjuntoForm.setD(impresionForm.getD());
+            quattroUploadClient.getUploadAndAdjuntoByteArray(adjuntoForm, headers).getResult();
+
+        } else {
+            impresionForm.setUrls(null);
+            impresionForm.setByteArrayPDF(byteArrayPDF);
+        }
+
+        return impresionForm;
     }
 
     public byte[] impresionAmortizacion(AmortizacionPdfForm amortizacionForm) {
