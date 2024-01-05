@@ -23,8 +23,10 @@ public class LatinoSeguroSaludModel {
             modelo.setTipo(3);
             modelo.setCia(21);
 
-            inicio = contenido.indexOf("DATOS DE LA PÓLIZA");
+            inicio = contenido.indexOf("DATOS DE LA PÓLIZA");       
             fin = contenido.indexOf("DATOS DEL ASEGURADO");
+            fin = fin == -1 ? contenido.indexOf("COBERTURAS Y-O BENEFICIOS ADICIONALES"):fin;
+          
 
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
