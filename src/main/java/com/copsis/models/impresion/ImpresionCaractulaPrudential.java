@@ -63,13 +63,19 @@
                             communsPdf.setCell(baseRow, 33, datos.getFechaEmision(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 34, datos.getMmoneda(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, "Forma de pago", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 33, "Fecha de inicio de vigencia:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, "Fecha de fin de vigencia:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 31, "Forma de pago", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 35, "Fecha de inicio de vigencia: Desde las", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, "Fecha de fin de vigencia: Hasta las", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, datos.getFormaPago(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 33, datos.getFechaDesde(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 31,  datos.getFormaPago(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 35,Sio4CommunsPdf.elimiDeducible("<b>12:00 horas del</b>") +" "+ datos.getFechaDesde(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34,Sio4CommunsPdf.elimiDeducible("<b>12:00 horas del</b>") +" "+ datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.white), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                     
+                           
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 31, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 35,"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34,"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             table.setCellCallH(true);
                             table.draw();
                             yStart -= table.getHeaderAndDataHeight();
@@ -388,7 +394,7 @@
                             baseRow = communsPdf.setRow(table,10);
                             communsPdf.setCell(baseRow, 100, "Prudential  Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table,10);
-                            communsPdf.setCell(baseRow, 100, "Funcionario autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "Funcionario  autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                      
                             table.draw();
 
@@ -665,7 +671,7 @@
                     }
                         
                 }
-
+                    if ( datos.getPaquete() == 3 ||datos.getPaquete() == 4) {
                         
                         int nume = document.getNumberOfPages();                                 
                         for (int v = 0; v < nume; v++) {
@@ -677,10 +683,11 @@
                                 communsPdf.drawText(content, true, 30, 30, numeF);
                             }
                         }
+                    }
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                       // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                        //document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
