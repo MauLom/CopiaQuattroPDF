@@ -53,26 +53,26 @@
                         if (datos.getPaquete() == 3 || datos.getPaquete() == 4) {
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "DATOS DE LA PÓLIZA", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "DATOS DE LA PÓLIZA", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, "Número de póliza", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 33, "Número de póliza", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 33, "Fecha de emisión", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, "Moneda", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, "Moneda", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, datos.getNumeroPoliza(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 33, datos.getNumeroPoliza(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 33, datos.getFechaEmision(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, datos.getMmoneda(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, datos.getMmoneda(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, "Forma de pago", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 33, "Forma de pago", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 33, "Fecha de inicio de vigencia:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, "Fecha de fin de vigencia:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, "Fecha de fin de vigencia:", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 33, datos.getFormaPago(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 33, datos.getFormaPago(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 33, datos.getFechaDesde(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 34, datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 34, datos.getFechaHasta(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             table.setCellCallH(true);
                             table.draw();
-                            yStart -= table.getHeaderAndDataHeight() + 25;
+                            yStart -= table.getHeaderAndDataHeight();
 
                         } else {
 
@@ -103,40 +103,40 @@
                         if (datos.getPaquete() == 3 || datos.getPaquete() == 4) {
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "DATOS DEL CONTRATANTE", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "DATOS DEL CONTRATANTE", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, "R.F.C.", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "CURP", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "CURP", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 50, datos.getNombre(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 50, datos.getNombre(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, datos.getRfc(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 73, "Domicilio (Calle, Número)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Colonia", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 73, "Domicilio (Calle, Número)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Colonia", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 73, datos.getDireccion(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, datos.getColonia(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 73, datos.getDireccion(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, datos.getColonia(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
 
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, "Municipio o Alcaldía", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, "Municipio o Alcaldía", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 35, "Estado", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Código Postal", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Código Postal", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 35, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, datos.getCp(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, datos.getPoblación(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 35, datos.getEstado(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, datos.getCp(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             table.setCellCallH(true);
                             table.draw();
 
-                            yStart -= table.getHeaderAndDataHeight() + 28;
+                            yStart -= table.getHeaderAndDataHeight();
 
                         } else {
 
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "DATOS DEL CONTRATANTE", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "DATOS DEL CONTRATANTE", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table);
                             communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, "R.F.C.", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
@@ -171,40 +171,41 @@
                         if (datos.getPaquete() == 3 || datos.getPaquete() == 4) {
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "DATOS DEL ASEGURADO", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "DATOS DEL ASEGURADO", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 50, "Nombre o Razón Social", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, "R.F.C.", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Teléfono (Incluyendo Lada)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Teléfono (Incluyendo Lada)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 50, asegurado.getNombre() != null ? asegurado.getNombre() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 50, asegurado.getNombre() != null ? asegurado.getNombre() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, asegurado.getRfc() != null ? asegurado.getRfc() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, asegurado.getTelefono() != null ? asegurado.getTelefono() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, asegurado.getTelefono() != null ? asegurado.getTelefono() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, "Fecha de Nacimiento", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 35, "Edad", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Género", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, "Fecha de Nacimiento", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 35, "Edad", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Género", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, asegurado.getFechNacimiento() != null ? asegurado.getFechNacimiento() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, asegurado.getFechNacimiento() != null ? asegurado.getFechNacimiento() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 35, asegurado.getEdad() != null ? asegurado.getEdad() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, asegurado.getSexo() != null ? asegurado.getSexo() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, asegurado.getSexo() != null ? asegurado.getSexo() : "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 73, "Domicilio (Calle, Número)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Colonia", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 73, "Domicilio (Calle, Número)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Colonia", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 73, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 73, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
 
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, "Municipio o Alcaldía", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, "Municipio o Alcaldía", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 35, "Estado", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "Código Postal", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "Código Postal", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 38, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 38, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 35, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             table.draw();
-                            yStart -= table.getHeaderAndDataHeight() + 8;
+                            table.setCellCallH(true);
+                            yStart -= table.getHeaderAndDataHeight() ;
 
                         } else {
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
@@ -235,9 +236,16 @@
                         communsPdf.setCell(baseRow, 100, "COBERTURAS AMPARADAS", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
 
                         baseRow = communsPdf.setRow(table);
+                        if (datos.getPaquete() == 3) {
                         communsPdf.setCell(baseRow, 37, "Cobertura", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                         communsPdf.setCell(baseRow, 63, "Suma Asegurada", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                        table.draw();
+               
+                        }else{
+                        communsPdf.setCell(baseRow, 37, "Nombre de la Cobertura", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                        communsPdf.setCell(baseRow, 63, "Suma Asegurada", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+               
+                        }
+                                table.draw();
                         List<CoberturaProjection> cbo = datos.getCoberturas();
                         if (cbo != null && !cbo.isEmpty()) {
                             yStart -= table.getHeaderAndDataHeight();
@@ -314,9 +322,9 @@
                             con1.close();
 
                         } else {
-                            yStart -= table.getHeaderAndDataHeight() + 60;
+                           
                             PDPageContentStream con1 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                            communsPdf.drawBox(con1, Color.black, 25, yStart - 40, 552, 0.5f);
+                            communsPdf.drawBox(con1, Color.black, 25, 80, 552, 0.5f);
                             con1.close();
                         }
 
@@ -378,18 +386,29 @@
                             yStart -= table.getHeaderAndDataHeight()-2;
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, margin+350, document, page, false, true);
                             baseRow = communsPdf.setRow(table,10);
-                            communsPdf.setCell(baseRow, 100, "Prudential Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "Prudential  Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             baseRow = communsPdf.setRow(table,10);
                             communsPdf.setCell(baseRow, 100, "Funcionario autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                      
                             table.draw();
 
                            yStart -= table.getHeaderAndDataHeight()+10;
-                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
-                        baseRow = communsPdf.setRow(table, 12);
-                        communsPdf.setCell(baseRow, 100, "El cumplimiento a lo dispuesto", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding2(4f, 0f, 1f, 0f), azulb).setValign(VerticalAlignment.MIDDLE);
-                       
-                        table.draw();
+                          if (datos.getPaquete() == 3) {
+                             table = new BaseTable((yStart+95), yStartNewPage, bottomMargin, 54, 463, document, page, false, true);
+                            baseRow = communsPdf.setRow(table, 15);
+                            communsPdf.setCell(baseRow, 100,
+                            ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKFAuYh5oSoXuoWD9JstitfBet2aMC1bKeugA2jtgz/firma.png"),
+                            0, 0, Color.black);
+                            table.draw();
+
+                            tb = page.getMediaBox().getHeight() - yStart + 40;
+                            texto = new StringBuilder();
+                            texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
+                            texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
+                            texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
+                            texto.append("______________________/CONDUSEF_________.”");
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
+                         }
                     
 
                         }
@@ -527,6 +546,7 @@
                         // texto.append("Teléfonos: 800 999 8080 o 55 5340 0999");                                        
                         // this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
                         /////////////////////////////////////////////////////PAGINA 3
+                    if(datos.getPaquete() !=3){
                         page = new PDPage();
                         document.addPage(page);
                         this.setFooter(document, page, datos);
@@ -534,6 +554,63 @@
                         PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                         communsPdf.drawBox(content01, Color.black, 25, yStart - 2, 552, 0.5f);
                         content01.close();
+
+                        if(datos.getPaquete()== 4){
+                                tb = page.getMediaBox().getHeight() - yStart + 10;
+                                texto = new StringBuilder();
+                                texto.append("No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, teléfonos (55) 5340-0999 y 800-999-80-80, por ");
+                                texto.append("correo electrónico: asesoria@condusef.gob.mx o visite la página www.condusef.gob.mx. ");                            
+                                this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0f);
+                                yStart = page.getMediaBox().getHeight() - tb-25;
+
+                                table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
+                                baseRow = communsPdf.setRow(table);
+                                communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                                table.draw();
+                                yStart -= table.getHeaderAndDataHeight();
+
+                                tb = page.getMediaBox().getHeight() - yStart + 10;
+                                texto = new StringBuilder();
+                                texto.append("Av. Insurgentes Sur # 762, planta baja, Col. Del Valle, Alc. Benito Juárez, C.P.03100, México, Cd. de México ");
+                                this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+
+                                tb = tb+15;
+
+                                  texto = new StringBuilder();
+                                         
+                        
+                        texto = new StringBuilder();
+                        texto.append("Correo Electrónico:");                                        
+                        this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+                         yStart = page.getMediaBox().getHeight() - tb;
+
+                        try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                            float[] components = new float[] {
+                             colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                             PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                             String txtlink="asesoria@condusef.gob.mx,";
+                             communsPdf.getTextlink(contentStream3, page,138f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                         }
+                        tb = tb+12;
+                        yStart = page.getMediaBox().getHeight() - tb;
+                        texto = new StringBuilder();
+                        texto.append("Página web:");
+                        this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb-5), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);        
+                        tb = page.getMediaBox().getHeight() - yStart + 8;
+                        try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                            float[] components = new float[] {
+                             colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                             PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                             String txtlink="http://www.condusef.gob.mx";
+                             communsPdf.getTextlink(contentStream3, page,107f ,(yStart+25), color, 10, txtlink, true, txtlink, txtlink, true);    
+                         }
+                         tb = tb+1;
+                        texto = new StringBuilder();
+                        texto.append("Teléfonos: 800 999 8080 o 55 5340 0999");                                        
+                        this.parrafo(document, page, this.medidas(page.getMediaBox(), 43f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+                
+
+                        }
 
                         PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                         communsPdf.drawBox(content02, Color.black, 25, yStart - 40, 552, 0.5f);
@@ -546,29 +623,64 @@
                         // table.setCellCallH(true);
                         // table.draw();
                         yStart -= table.getHeaderAndDataHeight() + 38;
+                       
+                       
 
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table, 13);
                         communsPdf.setCell(baseRow, 50, "Fecha de Emisión", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
-                        communsPdf.setCell(baseRow, 50, "Firma de Funcionario", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
+                        communsPdf.setCell(baseRow, 50, "Firma  de Funcionario", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         baseRow = communsPdf.setRow(table, 40);
                         communsPdf.setCell(baseRow, 50, datos.getFechaEmision(), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         communsPdf.setCell(baseRow, 50, "", Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white).setValign(VerticalAlignment.MIDDLE);
                         table.draw();
 
+
+                        if ( datos.getPaquete() == 4) {
+                            table = new BaseTable((yStart -2), yStartNewPage, bottomMargin, 54, 422, document, page, false, true);
+                            baseRow = communsPdf.setRow(table, 15);
+                            communsPdf.setCell(baseRow, 100,
+                            ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKFAuYh5oSoXuoWD9JstitfBet2aMC1bKeugA2jtgz/firma.png"),
+                            0, 0, Color.black);
+                            table.draw();
+                        }
+
+
                         yStart -= table.getHeaderAndDataHeight();
 
                         tb = page.getMediaBox().getHeight() - yStart + 30;
                         texto = new StringBuilder();
+                         if (datos.getPaquete() == 4) {
+                            texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
+                        texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
+                        texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
+                        texto.append("______________________/CONDUSEF_________.”");
+                        this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
+                         } else {
                         texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas,");
                         texto.append("la documentación contractual y la nota técnica que integran este producto de seguro, quedaron");
                         texto.append("registradas ante la Comisión Nacional de Seguros y Fianzas, a partir del día xx de xxxx de xxxx, con el ");
                         texto.append("número xxxxxxx/xxxxxxx“.");
-                        this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 12f, (-1.5f * 9f), 1f, 0.2f);
+                      this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 12f, (-1.5f * 9f), 1f, 0.2f);    
+                    }
+                        
+                }
+
+                        
+                        int nume = document.getNumberOfPages();                                 
+                        for (int v = 0; v < nume; v++) {
+                            PDPage page2 = document.getPage(v);
+                            try (PDPageContentStream content = new PDPageContentStream(document, page2, PDPageContentStream.AppendMode.PREPEND, true, true)) {
+                                int u = 1;
+                                u += v;
+                                String numeF = Integer.toString(u);
+                                communsPdf.drawText(content, true, 30, 30, numeF);
+                            }
+                        }
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                       // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
@@ -592,7 +704,12 @@
 
             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
             baseRow = communsPdf.setRow(table);
-            communsPdf.setCell(baseRow, 100, "UNIDAD  ESPECIALIZADA  DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+             if (datos.getPaquete() == 4) {
+                communsPdf.setCell(baseRow, 100, "UNIDAD ESPECIALIZADA DE ATENCIÓN DE CONSULTAS Y RECLAMACIONES (UNE):", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+             }else{
+                communsPdf.setCell(baseRow, 100, "UNIDAD  ESPECIALIZADA  DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);    
+             }
+            
             table.draw();
             yStart -= table.getHeaderAndDataHeight();
 
@@ -611,6 +728,10 @@
             } else  if (datos.getPaquete() == 4) {
                 texto.append("Ciudad de México, C.P. 05348, de lunes a viernes de 8:00 a 17:00 hrs.; o bien contacte a la Comisión Nacional para la ");
                 texto.append("Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) ubicada en Av.  Insurgentes Sur ");
+             yStart = page.getMediaBox().getHeight() - tb;
+                PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                        communsPdf.drawBox(content02, Color.black, 25, yStart-73, 552, 0.5f);
+                        content02.close();
             }
              else {
                 texto.append("Ciudad de México, C.P. 05348, de lunes a viernes de 8:00 a 17:00 hrs.");
@@ -719,7 +840,7 @@
                 }
 
                 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-                baseRow = communsPdf.setRow(table);
+                baseRow = communsPdf.setRow(table,12);
                 if (datos.getPaquete() == 3 || datos.getPaquete() == 4) {
                     communsPdf.setCell(baseRow, 100, "CARÁTULA DE PÓLIZA", Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 0f, 3f, 5f), Color.white);
                 } else {
@@ -727,7 +848,7 @@
                 }
 
                 baseRow = communsPdf.setRow(table);
-                communsPdf.setCell(baseRow, 100, texto, Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 3f, 5f), Color.white);
+                communsPdf.setCell(baseRow, 100, texto, Color.BLACK, true, "C", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding2(0f, 5f, 0f, 5f), Color.white);
                 table.draw();
                 yStart -= table.getHeaderAndDataHeight() + 8;
 
@@ -745,8 +866,16 @@
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 39f, tb), Sio4CommunsPdf.eliminaHtmlTags3(txtFooter.toString()), 547, PDType1Font.HELVETICA, 7f, (-1.6f * 9f), 1f, 0.2f);
                     txtFooter = new StringBuilder();
                     tb = 745.0f;
-                    txtFooter.append("C.P.05348 | Tel.: (55) 1103-7000 | www.prudentialseguros.com.mx");
+                    txtFooter.append("C.P.05348 | Tel.: (55) 1103-7000 |");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 200f, tb), Sio4CommunsPdf.eliminaHtmlTags3(txtFooter.toString()), 547, PDType1Font.HELVETICA, 7f, (-1.6f * 9f), 1f, 0.2f);
+                try (PDPageContentStream contentStream3 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {                
+                            float[] components = new float[] {
+                             colorLink.getRed() / 255f, colorLink.getGreen() / 255f, colorLink.getBlue() / 255f };
+                             PDColor color = new PDColor(components, PDDeviceRGB.INSTANCE);
+                             String txtlink="www.prudentialseguros.com.mx";
+                             communsPdf.getTextlink(contentStream3, page,320f ,(68), color, 7, txtlink, true, txtlink, txtlink, true);    
+                }
+                
                 } else {
                     table = new BaseTable(70, 30, 0, fullWidth, margin + 6, document, page, false, true);
                     baseRow = communsPdf.setRow(table, 5);
