@@ -25,7 +25,8 @@ public class BexmasModel {
 		try {
 			int tipo = fn.tipoPoliza(contenido);
 			
-			if(tipo == 0 && (fn.caratula(0, 3, stripper, doc).contains("ROBO DE MERCANCIAS") || fn.caratula(0, 3, stripper, doc).contains("EMPRESA PROTEGIDA"))){
+			if(tipo == 0 && (fn.caratula(0, 3, stripper, doc).contains("ROBO DE MERCANCIAS") || fn.caratula(0, 3, stripper, doc).contains("EMPRESA PROTEGIDA")
+			||  fn.caratula(0, 3, stripper, doc).contains("ROBO EN DOMICILIO"))){
           		tipo=4;
 			}
 			
