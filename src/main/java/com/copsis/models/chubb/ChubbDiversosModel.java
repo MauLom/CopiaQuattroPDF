@@ -46,7 +46,9 @@ public class ChubbDiversosModel {
 				.replace("Fraccionado", ConstantsValue.FRACIONADO2)
 				.replace("I.V.A:", "I.V.A.:");
 		recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
+
 		try {
+		
 
 			modelo.setTipo(7);
 			modelo.setCia(1);
@@ -88,8 +90,10 @@ public class ChubbDiversosModel {
 						}			
 
 					}
+					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.ASEGURADO)
 							&& newcontenido.split("\n")[i].contains("C.P:")) {
+								
 						modelo.setCteNombre((newcontenido.split("\n")[i].split(ConstantsValue.ASEGURADO)[1].split("C.P:")[0]
 								.replace("###", " ")).trim());
 						modelo.setCp(newcontenido.split("\n")[i].split("C.P:")[1].replace("\r", "").replace("###", ""));
@@ -599,6 +603,23 @@ public class ChubbDiversosModel {
 
 			if(!modelo.getVigenciaDe().isEmpty() &&  fn.diferenciaDias(modelo.getVigenciaDe(), modelo.getVigenciaA()) < 30){
 				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			}
+
+			if(!recibos.isEmpty()){
+              inicio = recibos.indexOf("AVISO DE COBRO");
+				fin = recibos.indexOf("El pago de la contraprestación");
+				
+				newcontenido = fn.extracted(inicio, fin, recibos);				
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                
+				 if (newcontenido.split("\n")[i].contains("Total a pagar:")) {
+					List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+					if(!valores.isEmpty()){
+						modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					}						
+				  }
+				}
+
 			}
 
 			return modelo;
