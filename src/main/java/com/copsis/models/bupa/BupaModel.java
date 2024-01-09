@@ -34,6 +34,13 @@ public class BupaModel {
 			     tipo = fn.tipoPoliza(fn.caratula(pagIni, pagFin, stripper, doc));
 			 }
 
+			String[] palabras2 ={"Carátula de la Póliza","Derecho"};
+             if(tipo ==0  && fn.pagPalabras(stripper, doc,palabras2) !=0){				
+				 pagIni = fn.pagPalabras(stripper, doc,palabras2) ;		
+				 pagFin=pagIni;		 						     
+			     tipo = fn.tipoPoliza(fn.caratula(pagIni, pagFin, stripper, doc));
+			 }
+
 
 		    if(tipo == 0 && pagIni ==0) {
 			   pagIni = fn.pagFinRango(stripper, doc, "Contratante");
@@ -45,7 +52,6 @@ public class BupaModel {
 			 }
 			 
 
-			
 		     if(tipo == 2){
  				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {		
 					
