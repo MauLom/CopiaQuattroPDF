@@ -5,7 +5,8 @@
     import java.io.IOException ;
     import java.text.DecimalFormat ;
     import java.util.ArrayList ;
-    import java.util.List ;
+import java.util.Date;
+import java.util.List ;
 
     import org.apache.pdfbox.pdmodel.PDDocument ;
     import org.apache.pdfbox.pdmodel.PDPage ;
@@ -27,7 +28,8 @@
     import com.copsis.models.Tabla.Row ;
     import com.copsis.models.Tabla.Sio4CommunsPdf ;
     import com.copsis.models.Tabla.VerticalAlignment ;
-    import com.fasterxml.jackson.databind.ObjectMapper ;
+import com.copsis.utils.FormatoFecha;
+import com.fasterxml.jackson.databind.ObjectMapper ;
 
     public class ImpresionCaractulaPrudential {
 
@@ -377,11 +379,26 @@
                             communsPdf.drawBox(content01, Color.black, 25, yStart - 48, 558, 0.5f);
                             content01.close();
 
+                        String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
+                        String[] dateNew = dateString.split("\\s+");
+
+                        dateString = dateNew[0] + "  de " + dateNew[1] + "  de " + dateNew[2];
+                      
+
                             yStart = page.getMediaBox().getHeight() - tb-60;
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "Lugar y Fecha de Expedición: Ciudad de México, a ___ de ______ de ____", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "Lugar y Fecha de Expedición:  Ciudad de México, a "+ 
+                             (Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[0]+"</b>") + "  de " +Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[1]+"</b>") + "  de " + Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[2]+"</b>")), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             table.draw();
+
+                           
+
+
+
+                            
+
+                            
 
                             yStart -= table.getHeaderAndDataHeight()+30;
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin+310, document, page, false, true);
@@ -642,7 +659,7 @@
                         table.draw();
 
 
-                        if ( datos.getPaquete() == 4) {
+                        if ( datos.getPaquete() == 1 || datos.getPaquete() == 2 || datos.getPaquete() == 4) {
                             table = new BaseTable((yStart -2), yStartNewPage, bottomMargin, 54, 422, document, page, false, true);
                             baseRow = communsPdf.setRow(table, 15);
                             communsPdf.setCell(baseRow, 100,
@@ -663,10 +680,10 @@
                         texto.append("______________________/CONDUSEF_________.”");
                         this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
                          } else {
-                        texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas,");
-                        texto.append("la documentación contractual y la nota técnica que integran este producto de seguro, quedaron");
-                        texto.append("registradas ante la Comisión Nacional de Seguros y Fianzas, a partir del día xx de xxxx de xxxx, con el ");
-                        texto.append("número xxxxxxx/xxxxxxx“.");
+                            texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
+                        texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
+                        texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
+                        texto.append("______________________/CONDUSEF_________.”");
                       this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 12f, (-1.5f * 9f), 1f, 0.2f);    
                     }
                         
@@ -687,7 +704,7 @@
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        //document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                       // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
