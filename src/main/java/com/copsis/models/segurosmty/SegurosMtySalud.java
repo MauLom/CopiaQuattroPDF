@@ -210,8 +210,15 @@ public class SegurosMtySalud {
 	        			if(newcontenido.split("\n")[i].contains("TOTAL")) {
 	        				modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString( newcontenido.split("\n")[i].split("TOTAL")[1].split("###")[1].trim())));
 	        			}
+						
 	        			if(newcontenido.split("\n")[i].contains("PRIMER RECIBO") && newcontenido.split("\n")[i].contains("RECARGO")) {
 	        				modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.cleanString(fn.gatos(newcontenido.split("\n")[i].split("RECARGO")[0].replaceAll("[A-Z]", "")))));
+	        			}
+						if(newcontenido.split("\n")[i].contains("PRIMER ###RECIBO") && newcontenido.split("\n")[i].contains("RECARGO")) {
+								List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+								if(!valores.isEmpty()){
+								modelo.setPrimerPrimatotal( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+								}	        				
 	        			}
 	        			if(newcontenido.split("\n")[i].contains("RECIBOS SUBSECUENTES") && newcontenido.split("\n")[i].contains("IVA")) {
 	        				modelo.setSubPrimatotal(fn.castBigDecimal(fn.cleanString(fn.gatos(newcontenido.split("\n")[i].split("IVA")[0].replaceAll("[A-Z]", "")))));
