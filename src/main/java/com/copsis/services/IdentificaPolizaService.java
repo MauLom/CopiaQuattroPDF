@@ -391,6 +391,7 @@ public class IdentificaPolizaService {
                         || contenido.contains("Seguros Ve Por Más")
                         || contenido.contains("www.vepormas.com")
                       )) {//Ve por Más 
+					
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;

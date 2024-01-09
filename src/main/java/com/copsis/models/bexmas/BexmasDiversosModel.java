@@ -43,6 +43,11 @@ public class BexmasDiversosModel {
 					modelo.setCveAgente(newcontenido.toString().split("\n")[i+1].split("###")[1]);					
 					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i+1]));
 				}
+
+				if(modelo.getCteNombre().length() < 8 && newcontenido.toString().split("\n")[i].contains("Agente") && newcontenido.toString().split("\n")[i].contains("Moneda")){
+					modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+				}
+
 	
 				if(newcontenido.toString().split("\n")[i].contains("Días de Vigencia") && newcontenido.toString().split("\n")[i].contains("pago")) {
 					newdirec.append(newcontenido.toString().split("\n")[i].split(ConstantsValue.DIASAC)[0]);
@@ -52,6 +57,13 @@ public class BexmasDiversosModel {
 					
 					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
 				}
+
+				if(modelo.getFormaPago() ==0  && newcontenido.toString().split("\n")[i].contains("Forma de pago") ){
+
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+
+				}
+
 				getVigencias(newcontenido, i);
 				if(newcontenido.toString().split("\n")[i].contains("Emisión") && newcontenido.toString().split("\n")[i].contains("R.F.C:")) {
 					
@@ -73,20 +85,29 @@ public class BexmasDiversosModel {
 			
 			
 
-			inicio = contenido.indexOf("DESGLOSE DE COBERTURAS");
+			inicio = contenido.indexOf("Sección###Coberturas amparadas");
+		
+			inicio = inicio == -1?  contenido.indexOf("DESGLOSE DE COBERTURAS"):inicio;
 			fin = contenido.indexOf("Prima Neta");
+            fin = fin == -1?  contenido.indexOf("Prima neta"):fin;
+
+	
+			
             getCoberturas(contenido, inicio, fin);
 			
 
 			inicio = contenido.indexOf("Prima Neta");
+			inicio = inicio == -1?  contenido.indexOf("Prima neta"):inicio;
 			fin = contenido.indexOf("En testimonio");
 	
             getPrimas(contenido, inicio, fin);
 			
 			return modelo;
 		} catch (Exception ex) {
+			
 			modelo.setError(
 					BexmasDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
+				
 			return modelo;
 		}
 		
@@ -97,10 +118,12 @@ public class BexmasDiversosModel {
 		   if(newcontenido.toString().split("\n")[i+1].split("-").length >2){
 			modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(0)));
 			modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+1]).get(1)));
+			modelo.setFechaEmision(modelo.getVigenciaDe());
 		   }
 		   if(newcontenido.toString().split("\n")[i+2].split("-").length >2){
 			modelo.setVigenciaDe(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+2]).get(0)));
 			modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+2]).get(1)));
+			modelo.setFechaEmision(modelo.getVigenciaDe());
 		   }
 		
 		}
@@ -113,6 +136,7 @@ public class BexmasDiversosModel {
 		
 		List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 		for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+			
 			EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 			if(!newcontenido.toString().split("\n")[i].contains("DESGLOSE") && !newcontenido.toString().split("\n")[i].contains("Observaciones")
 					&& !newcontenido.toString().split("\n")[i].contains("Sección")	) {			
@@ -131,21 +155,62 @@ public class BexmasDiversosModel {
 		newcontenido = new StringBuilder();
 		newcontenido.append( fn.extracted(inicio, fin, contenido));
 				
-		for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {			
+		for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+			
 			if(newcontenido.toString().split("\n")[i].contains("Prima Neta:")) {
 				modelo.setPrimaneta(fn.castBigDecimal( fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Prima Neta:")[1].replace("###", ""))));
 			}
+
+			if (newcontenido.toString().split("\n")[i].contains("Prima neta")) {
+				List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+				if(!valores.isEmpty()){
+				modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
+			}
+
 			if(newcontenido.toString().split("\n")[i].contains("Recargos:")) {
 				modelo.setRecargo(fn.castBigDecimal( fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Recargos:")[1].replace("###", ""))));					
 		    }
+			if (newcontenido.toString().split("\n")[i].contains("Recargos")) {
+				List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+				if(!valores.isEmpty()){
+				modelo.setRecargo( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
+			}
 			if(newcontenido.toString().split("\n")[i].contains("Derechos:")) {
 				modelo.setDerecho(fn.castBigDecimal( fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Derechos:")[1].replace("###", ""))));	
 			}
+			if (newcontenido.toString().split("\n")[i].contains("Derechos")) {
+				List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+				if(!valores.isEmpty()){
+				modelo.setDerecho( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
+			}
+
 			if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.IVA)) {
 				modelo.setIva(fn.castBigDecimal( fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("I.V.A.")[1].replace("###", ""))));	
 			}
+
+				if(newcontenido.toString().split("\n")[i].contains("IVA")) {
+				List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+				if(!valores.isEmpty()){
+				modelo.setIva( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
+			}
 			if(newcontenido.toString().split("\n")[i].contains("Prima Total:")) {
 				modelo.setPrimaTotal(fn.castBigDecimal( fn.preparaPrimas(newcontenido.toString().split("\n")[i].split("Prima Total:")[1].replace("###", ""))));	
+			}
+
+			if(newcontenido.toString().split("\n")[i].contains("Prima total")) {
+				List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+				if(!valores.isEmpty()){
+				modelo.setPrimaTotal( fn.castBigDecimal(fn.castDouble(valores.get(0))));
+				}
+				
 			}
 		}
 	}
