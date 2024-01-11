@@ -91,6 +91,12 @@ public class GnpVIdaModel2 {
 					}else if(newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+2].contains("Edad")){
 						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 1].split("Edad")[0].replace("###", "")).trim());
 					}
+
+					 if(modelo.getCteNombre().isEmpty() 
+					     && newcontenido.toString().split("\n")[i].contains("Vigencia Versión")  ){
+                        modelo.setCteNombre(newcontenido.toString().split("\n")[i].split("Vigencia")[0].replace("###", ""));
+					 }
+
 					if (newcontenido.toString().split("\n")[i].contains("Contratante") && newcontenido.toString().split("\n")[i+1].contains("Vigencia")) {
 						modelo.setCteNombre((newcontenido.toString().split("\n")[i + 1].split("Vigencia")[0].replace("###", "")).trim());
 						newcontenidodire.append(newcontenido.toString().split("\n")[i + 2].split("Día")[0].replace("###", ""));						
