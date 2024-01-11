@@ -678,13 +678,15 @@ public class GnpVIdaModel2 {
 
 			newcontenido = new StringBuilder();
 		
-			inicio = contenido.indexOf("Coberturas");
+			inicio = contenido.indexOf("Cober turas###Prote cción");
+			
+			inicio = inicio == -1 ?contenido.indexOf("Coberturas"): inicio;
 			fin = contenido.indexOf("@@@Agente");
 
 			fin = fin == -1 ?contenido.indexOf("Nombre del Agente"): fin;
+			fin = fin == -1 ?contenido.indexOf("Protección###Contratada"): fin;
 			fin = fin == -1 ?contenido.lastIndexOf("Agente"): fin;
-						
-	
+				
 			if (inicio == -1 && fin == -1 || inicio > -1 && fin == -1 || inicio == -1 && fin > -1) {	
 				inicio = contenido.indexOf("Coberturas");
 				fin = contenido.indexOf("@@@  \r\n" + "Agente");
