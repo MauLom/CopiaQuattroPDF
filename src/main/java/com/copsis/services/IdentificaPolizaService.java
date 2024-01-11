@@ -173,7 +173,8 @@ public class IdentificaPolizaService {
 					|| contenido.contains("AXA SEGUROS, S.A. DE C.V")
 					|| contenido.contains("AXA Seguros, S.A de C.V.")
 					|| contenido.contains("AXA Seguros S.A. de C.V.")
-					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("axa.com.mx")) {
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("axa.com.mx")
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("AXA Seguros, S.A. de C.V.")) {
 					
 				AxaModel datosAxa = new AxaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAxa.procesa();
