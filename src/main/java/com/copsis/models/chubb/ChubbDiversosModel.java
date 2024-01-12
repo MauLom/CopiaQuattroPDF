@@ -230,7 +230,7 @@ public class ChubbDiversosModel {
 					
 					}
 					
-					if(modelo.getDerecho() == null && modelo.getDerecho().intValue() == 0 && newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION) ) {
+					if((modelo.getDerecho() == null || modelo.getDerecho().intValue() == 0) && newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION) ) {
 						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
 						if(!valores.isEmpty()){
 							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
@@ -244,7 +244,14 @@ public class ChubbDiversosModel {
 						}							
 					
 					}
+		
 					if ( newcontenido.split("\n")[i].contains("Total:") && newcontenido.split("\n")[i].contains("MXN")) {
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
+						if(!valores.isEmpty()){
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
+					}
+					if (modelo.getPrimaTotal().intValue()== 0 && newcontenido.split("\n")[i].contains("Total:")) {
 						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i].replace(",", ""));
 						if(!valores.isEmpty()){
 							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
