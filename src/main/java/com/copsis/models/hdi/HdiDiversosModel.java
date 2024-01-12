@@ -44,8 +44,7 @@ public class HdiDiversosModel {
 				if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT2) && newcontenido.toString().split("\n")[i].contains("Inciso")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Inciso")[0].trim());
 				}
-				if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains("No. Póliza:")){
-					System.out.println(newcontenido.toString().split("\n")[i]);
+				if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains("No. Póliza:")){				
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].trim());
 				}
 				if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.EMISION_MY_PT)) {
