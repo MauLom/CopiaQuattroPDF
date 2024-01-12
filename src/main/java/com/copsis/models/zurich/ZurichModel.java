@@ -39,7 +39,8 @@ public class ZurichModel {
 			}
 			if(tipo == 0 && (contenido.contains("Incendio Todo Riesgo Casa")|| contenido.contains("Transportes Mercancía:")
 			|| contenido.contains("TRANSPORTES DE MERCANCIA:")
-			|| contenido.contains("Trabajos eléctricos - Electricistas"))) {
+			|| contenido.contains("Trabajos eléctricos - Electricistas")
+			|| fn.caratula(2, 2, stripper, doc).contains("Terremoto y Erupción Volcánica"))) {
 				tipo =4;
 			}
 		
