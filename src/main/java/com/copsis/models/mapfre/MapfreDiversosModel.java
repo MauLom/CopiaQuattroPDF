@@ -177,6 +177,7 @@ public class MapfreDiversosModel {
 				inicio = contenido.indexOf("C.P");
 				
 				String texto = contenido.substring(inicio).replace("C.P", "C/P");
+			
 				
 				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace(".", "").replace(",", "").replace("###", "").trim();
 				
@@ -184,10 +185,15 @@ public class MapfreDiversosModel {
 					modelo.setCp(texto);
 				}
 			}
-
+	
 			if(modelo.getCp().length() == 0 && newcontenido.indexOf("C.P") > -1) {
-			
+		
 			    modelo.setCp(newcontenido.split("C.P:")[1].trim().substring(0,5));
+			}
+			if(modelo.getCp().length() == 0 ){
+				String codepostal = contenido.split("Cliente MAPFRE")[1];
+				 modelo.setCp(codepostal.split("C.P:")[1].replace(" ", "").trim().substring(0,5));
+				
 			}
 
 			// cte_direccion
