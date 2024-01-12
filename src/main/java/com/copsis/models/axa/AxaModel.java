@@ -47,11 +47,14 @@ public class AxaModel {
 
 				modelo = new AxaSaludFaModel().procesar(fn.caratula(1, 3, stripper, doc));
 		
+			}else if(fn.caratula(1, 3, stripper, doc).contains("Gastos Médicos Mayores Individual")){
+			AxaSaludV2Model datosAxa2Salud = new AxaSaludV2Model(fn.caratula(1, 3, stripper, doc));
+								modelo = datosAxa2Salud.procesar();
 			}
 
 
 			else {
-	
+
 				String[] tipos = { "PAQUETE DE SEGURO EMPRESARIAL", "GASTOS M", "TRADICIONALES DE VIDA",
 				ConstantsValue.VIDA_PROTGT ,ConstantsValue.VIDA_INDIVIDUAL,
 					ConstantsValue.VIDA_ACADEMICO,ConstantsValue.ALIADOS_KIDS,
