@@ -119,7 +119,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                             baseRow = communsPdf.setRow(table);
                             communsPdf.setCell(baseRow, 50, datos.getNombre(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 23, datos.getRfc(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
-                            communsPdf.setCell(baseRow, 27, "", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                            communsPdf.setCell(baseRow, 27,datos.getCurpContratante() !=null ? datos.getCurpContratante() :"", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             baseRow = communsPdf.setRow(table);
                             communsPdf.setCell(baseRow, 73, "Domicilio (Calle, Número)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                             communsPdf.setCell(baseRow, 27, "Colonia", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.black, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
