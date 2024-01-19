@@ -43,6 +43,7 @@ public class MetlifeSaludModel {
 				.replace("ENFERMEDADES CATASTROFICAS EX", "ENFERMEDADES CATASTROFICAS EX###")
 				.replace("REDUCCION POR ACCIDENTE ", "REDUCCION POR ACCIDENTE###")
 				.replace("SEM.C-REC.", "SEM.")
+				.replace("TRI.S-REC.", "TRIM.S-REC")
 				.replace("HIJO", "###HIJO###");
 		         
 		try {
@@ -107,7 +108,8 @@ public class MetlifeSaludModel {
 
             if (inicio > -1  && fin > -1 && inicio < fin) {            	
             	newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("MEN.S", "Mensual").replace("SEM.S-REC.", "Semestral").replace("TRIM.S-REC", "Trimestral");
-            	modelo.setFormaPago(fn.formaPagoSring(newcontenido));
+
+				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     if (newcontenido.split("\n")[i].contains("Agente")) { 
                     	if(modelo.getFormaPago() == 0) {
