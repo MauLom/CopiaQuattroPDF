@@ -42,4 +42,5 @@ public class CaractulaProjection {
     private Long paquete;
     private	String sumaAsegurada;
     private	String estado;
+    private String curpContratante;
 }
