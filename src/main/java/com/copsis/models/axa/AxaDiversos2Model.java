@@ -33,6 +33,11 @@ public class AxaDiversos2Model {
         try {
             modelo.setTipo(7);
             modelo.setCia(20);
+System.out.println(contenido);
+
+            inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");
+            fin = contenido.indexOf("Datos del Contratante");
+            newcon.append(fn.extracted(inicio, fin, contenido));
 
             if (contenido.contains("Anterior:")) {
                 newcontenido = contenido.substring(contenido.indexOf("Anterior:") + 9, contenido.indexOf("Anterior:") + 100).trim();
