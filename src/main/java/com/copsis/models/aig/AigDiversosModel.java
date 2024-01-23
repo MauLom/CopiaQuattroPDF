@@ -46,6 +46,8 @@ public class AigDiversosModel {
 			// Datos del Contractante
 			inicio = contenido.indexOf("PAQUETE");
 			fin = contenido.indexOf(ConstantsValue.MONEDA_MAYUS);
+			
+			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("  ",
 						"###");
@@ -55,8 +57,14 @@ public class AigDiversosModel {
 						if(newcontenido.split("\n")[i + 1].split(separador).length < 2 && newcontenido.split("\n")[i + 1].split("###").length > 2) {
 							separador = "###";
 						}
-						modelo.setPoliza(newcontenido.split("\n")[i + 1].split(separador)[3].replace("###", "").trim());
+						
+						if(newcontenido.split("\n")[i + 1].split("###").length == 6){
+                            modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[3].replace("###", "").trim());
+						}else {
+                            modelo.setPoliza(newcontenido.split("\n")[i + 1].split(separador)[3].replace("###", "").trim());
+						}												
 					}
+					
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.NOMBRE3)
 							&& newcontenido.split("\n")[i].contains("R.F.C:")) {
 						modelo.setCteNombre(newcontenido.split("\n")[i].split(ConstantsValue.NOMBRE3)[1].replace(":", "").split("R.F.C:")[0].replace("###", "").trim());
@@ -209,6 +217,7 @@ public class AigDiversosModel {
 			obtenerDatosUbicacion(contenido,modelo);
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(AigDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
