@@ -82,7 +82,9 @@ public class IdentificaPolizaService {
 			// CHUBB
 		
 			if (!encontro && (contenido.contains("Chubb")  || 
-			rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.")) 
+			rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.")
+			|| rangoSimple(2, 5, pdfStripper, pdDoc).contains("www.chubb.com/mx")
+			) 
 		     && (! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
 				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
 					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A.")

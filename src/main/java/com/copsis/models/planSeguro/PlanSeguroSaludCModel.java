@@ -35,11 +35,10 @@ public class PlanSeguroSaludCModel {
                 modelo.setFechaEmision(modelo.getVigenciaDe());
             }
 
-             if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante") && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
+            if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante") && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
              &&newcontenido.toString().split("\n")[i+1].contains("RFC:")){
-                modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
-               
-                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
+             modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());               
+               if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
                     modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
                 }else{
                     modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
