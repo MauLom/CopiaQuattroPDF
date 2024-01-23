@@ -217,7 +217,6 @@ public class AigDiversosModel {
 			obtenerDatosUbicacion(contenido,modelo);
 			return modelo;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			modelo.setError(AigDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
