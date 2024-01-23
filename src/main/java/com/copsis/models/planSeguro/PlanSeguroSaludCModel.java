@@ -63,10 +63,10 @@ public class PlanSeguroSaludCModel {
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
              }
              if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
-                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().substring(0,5));
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace(".", "").replace("###", "").trim().substring(0,5));
              }
               if(newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
-                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].replace(".", "").replace("###", "").trim().substring(0,5));
              }
             
 
@@ -98,10 +98,12 @@ public class PlanSeguroSaludCModel {
             inicio = contenido.indexOf("Conceptos Económicos");
             fin = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA); 
             fin= fin ==-1  ?contenido.indexOf("Coberturas básicas"):fin;
+            fin= fin ==-1  ?contenido.indexOf("Cobertura básica"):fin;
+         
       
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
-            
+       
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
                 if(newcontenido.toString().split("\n")[i].contains("Expedición")) {
                     List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
@@ -117,8 +119,9 @@ public class PlanSeguroSaludCModel {
 
            
             inicio = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA);
+            inicio= inicio ==-1  ?contenido.indexOf("Cobertura básica"):inicio;
            
-            fin = contenido.indexOf("Clave de Agente"); 
+            fin = contenido.indexOf("Clave de Agente");          
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();

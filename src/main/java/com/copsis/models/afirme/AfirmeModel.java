@@ -80,7 +80,7 @@ public class AfirmeModel {
 						}
 						
 						modelo  = new AfirmeAutosBModel(fn.caratula(pagIni, pagIni+2, stripper, doc),fn.recibos(stripper, doc, "RECIBO DE PRIMAS")).procesar();
-
+                         
 					}else {
 						pagIni = fn.pagFinRango(stripper, doc, "DATOS DEL VEHÍCULO");
 					
