@@ -34,23 +34,23 @@ public class PlanSeguroSaludCModel {
                 modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+2]).get(0)));
                 modelo.setFechaEmision(modelo.getVigenciaDe());
             }
-         
-             if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante")
-             && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
-             &&newcontenido.toString().split("\n")[i+1].contains("RFC:")
-             ){
-               
-                modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
-               
-                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
-                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
-                }else{
-                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
-                }                      
-             }
-             if(modelo.getCteNombre().isEmpty() && newcontenido.toString().split("\n")[i].contains("Datos del Contratante")){
-                modelo.setCteNombre(newcontenido.toString().split("\n")[i+1]);
-             }
+
+            if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante")
+            && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
+            &&newcontenido.toString().split("\n")[i+1].contains("RFC:")
+            ){
+              
+               modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
+              
+               if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
+                   modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
+               }else{
+                   modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
+               }                      
+            }
+            if(modelo.getCteNombre().isEmpty() && newcontenido.toString().split("\n")[i].contains("Datos del Contratante")){
+               modelo.setCteNombre(newcontenido.toString().split("\n")[i+1]);
+            }
 
              if(newcontenido.toString().split("\n")[i].contains("Dirección:")){
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split(fn.palabraRgx(newcontenido.toString().split("\n")[i], ConstantsValue.DIRECCION2))[1].replace(":", "").replace("###", " ").trim());
