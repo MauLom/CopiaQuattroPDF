@@ -124,7 +124,7 @@ public class ChubbModel {
 					   }
 					encontro = true;
 						break;
-					case "Profesional para Médicos","RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS",ConstantsValue.SEGURO_DE_VIAJE:
+					case "Profesional para Médicos",ConstantsValue.SEGURO_DE_VIAJE:
 				
                       if(fn.caratula(1, 1, pdfStripper, pdDoc).contains(ConstantsValue.SEGURO_DE_VIAJE)){
 							modelo = new ChubbSalud2Model().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
@@ -138,9 +138,13 @@ public class ChubbModel {
 			
 					modelo = new ChubbVidaModel().procesar(fn.caratula(0, 3, pdfStripper, pdDoc));
 					
-
+                
 					encontro = true;
-					  
+					break;
+					case "RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS":
+					modelo = new ChubbDiversosModel(fn.caratula(1, 2, pdfStripper, pdDoc),
+							fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
+					encontro = true;
 					break;
 					default:
 						break;
