@@ -728,9 +728,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                          List<String> valores = fn.obtenerListNumeros2(newcontenido);
                                                                        
                         if(!valores.isEmpty()){
-                            System.out.println(valores.stream()
-                            .filter(numero -> String.valueOf(numero).length() >= 4)
-                            .collect(Collectors.toList()).get(0));
+                          
                             modelo.setCp(valores.stream()
                                 .filter(numero -> String.valueOf(numero).length() >= 4)
                                 .collect(Collectors.toList()).get(0));
