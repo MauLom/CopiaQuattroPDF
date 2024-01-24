@@ -87,7 +87,7 @@ public class ChubbDiversosModel {
 						}
 
 					}
-System.out.println(newcontenido.split("\n")[i]);
+
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.ASEGURADO)
 							&& newcontenido.split("\n")[i].contains("C.P:")) {
 
