@@ -711,20 +711,24 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
                 }
 
-             
+      
                             
                 // cp
                 inicio = contenido.lastIndexOf("C.P");
+              
                 index = 3;
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
                             .replace(".:", "").replace(".", "").replace(":", "");
-                            
+                           
 
                     if (newcontenido.contains(ConstantsValue.MUNICIPIO)) {
+                      
                         newcontenido = newcontenido.split(ConstantsValue.MUNICIPIO)[0].replace("###", "").trim();
-                         List<String> valores = fn.obtenerListNumeros2(newcontenido);                                                  
+                         List<String> valores = fn.obtenerListNumeros2(newcontenido);
+                                                                       
                         if(!valores.isEmpty()){
+                          
                             modelo.setCp(valores.stream()
                                 .filter(numero -> String.valueOf(numero).length() >= 4)
                                 .collect(Collectors.toList()).get(0));
@@ -842,7 +846,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                     modelo.setPlacas(newcontenido);
                 }
                
-                if (modelo.getCp().trim().length() < 5) {
+                if (modelo.getCp().trim().length() < 4) {
                     modelo.setCp("");
                 }
 
