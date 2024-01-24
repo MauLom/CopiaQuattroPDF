@@ -20,7 +20,8 @@ public class AxaDiversos2Model {
     public AxaDiversos2Model(String contenidox) {
         this.contenido = fn.remplazarMultiple(contenidox, fn.remplazosGenerales());
         contenido = contenido.replace("C o b e r t u r a s", "Coberturas")
-                .replace(" C O B E R T U R A S SUMA ASEGURADA", " COBERTURAS SUMA###ASEGURADA");
+                .replace(" C O B E R T U R A S SUMA ASEGURADA", " COBERTURAS SUMA###ASEGURADA")
+                .replace("D ###omicilio:", "Domicilio:");
     }
 
     public EstructuraJsonModel procesar() {
@@ -33,6 +34,20 @@ public class AxaDiversos2Model {
         try {
             modelo.setTipo(7);
             modelo.setCia(20);
+
+
+            inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");
+            fin = contenido.indexOf("Datos del Contratante");
+     
+            newcon.append(fn.extracted(inicio, fin, contenido));
+            
+            for (int i = 0; i < newcon.toString().split("\n").length; i++) {
+                if(newcon.toString().split("\n")[i].contains("CARÁTULA DE PÓLIZA")){
+                    modelo.setPlan(newcon.toString().split("\n")[i+1].split("###")[1]);
+
+                }
+               
+            }
 
             if (contenido.contains("Anterior:")) {
                 newcontenido = contenido.substring(contenido.indexOf("Anterior:") + 9, contenido.indexOf("Anterior:") + 100).trim();
@@ -52,6 +67,7 @@ public class AxaDiversos2Model {
                 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
          
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                  
                     if (newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i+1].contains("Nombre")) {
                         modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1]);
 
@@ -91,6 +107,7 @@ public class AxaDiversos2Model {
                         modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("Nombre")[1].split("RFC:")[0].replace(":", "").replace("###", "").trim());
                         modelo.setRfc(newcontenido.split("\n")[i + 1].split("RFC:")[1].trim());
                     }
+                  
                     if (newcontenido.split("\n")[i].contains(ConstantsValue.DOMICILIO2)) {
                         modelo.setCteDireccion(newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO2)[1].replace("###", "").replace(":", "").trim());
                         StringBuilder direccion = new StringBuilder();
@@ -112,6 +129,9 @@ public class AxaDiversos2Model {
 
                     if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Datos del Contratante")) {
                      modelo.setCteNombre(newcontenido.split("\n")[i+1].split("Nombre")[1].split("###")[1].trim());
+                    }
+                    if (newcontenido.split("\n")[i].contains("Moneda")){
+                        modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i]));
                     }
 
 
@@ -136,6 +156,10 @@ public class AxaDiversos2Model {
             }
             if (fin == -1) {
                 fin = contenido.indexOf("3### - 8");
+            }
+            if (fin == -1) {
+                inicio = contenido.indexOf("Datos Adicionales");
+                fin = contenido.indexOf("Prima Total:")+100;
             }
          
         
