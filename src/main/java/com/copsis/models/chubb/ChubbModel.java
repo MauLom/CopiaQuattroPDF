@@ -41,7 +41,8 @@ public class ChubbModel {
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "SEGURO DE VIAJE DE PLACER CHUBB","AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
-					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE};
+					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE
+				,"RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
 									
@@ -123,7 +124,7 @@ public class ChubbModel {
 					   }
 					encontro = true;
 						break;
-					case "Profesional para Médicos",ConstantsValue.SEGURO_DE_VIAJE:
+					case "Profesional para Médicos","RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS",ConstantsValue.SEGURO_DE_VIAJE:
 				
                       if(fn.caratula(1, 1, pdfStripper, pdDoc).contains(ConstantsValue.SEGURO_DE_VIAJE)){
 							modelo = new ChubbSalud2Model().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));

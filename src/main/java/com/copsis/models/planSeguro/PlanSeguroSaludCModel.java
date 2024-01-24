@@ -35,16 +35,22 @@ public class PlanSeguroSaludCModel {
                 modelo.setFechaEmision(modelo.getVigenciaDe());
             }
 
-             if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante") && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
-             &&newcontenido.toString().split("\n")[i+1].contains("RFC:")){
-                modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
-               
-                if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
-                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
-                }else{
-                    modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
-                }                      
-             }
+            if(newcontenido.toString().split("\n")[i].contains("Datos del Contratante")
+            && newcontenido.toString().split("\n")[i+1].contains("Nombre:")
+            &&newcontenido.toString().split("\n")[i+1].contains("RFC:")
+            ){
+              
+               modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("RFC:")[0].replace("###", "").trim());
+              
+               if(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].contains(ConstantsValue.TELEFONO)){
+                   modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].split(ConstantsValue.TELEFONO)[0].replace("###", "").trim());      
+               }else{
+                   modelo.setRfc(newcontenido.toString().split("\n")[i+1].split("RFC:")[1].replace("###", "").trim());      
+               }                      
+            }
+            if(modelo.getCteNombre().isEmpty() && newcontenido.toString().split("\n")[i].contains("Datos del Contratante")){
+               modelo.setCteNombre(newcontenido.toString().split("\n")[i+1]);
+            }
 
              if(newcontenido.toString().split("\n")[i].contains("Dirección:")){
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split(fn.palabraRgx(newcontenido.toString().split("\n")[i], ConstantsValue.DIRECCION2))[1].replace(":", "").replace("###", " ").trim());
@@ -57,10 +63,10 @@ public class PlanSeguroSaludCModel {
                 modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
              }
              if(newcontenido.toString().split("\n")[i].contains("C.P.") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
-                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().substring(0,5));
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace(".", "").replace("###", "").trim().substring(0,5));
              }
               if(newcontenido.toString().split("\n")[i].contains("C.P") && newcontenido.toString().split("\n")[i].contains("Correo electrónico:")){
-                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].replace("###", "").trim().substring(0,5));
+                modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P")[1].replace(".", "").replace("###", "").trim().substring(0,5));
              }
             
 
@@ -92,10 +98,12 @@ public class PlanSeguroSaludCModel {
             inicio = contenido.indexOf("Conceptos Económicos");
             fin = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA); 
             fin= fin ==-1  ?contenido.indexOf("Coberturas básicas"):fin;
+            fin= fin ==-1  ?contenido.indexOf("Cobertura básica"):fin;
+         
       
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
-            
+       
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
                 if(newcontenido.toString().split("\n")[i].contains("Expedición")) {
                     List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
@@ -111,8 +119,9 @@ public class PlanSeguroSaludCModel {
 
            
             inicio = contenido.indexOf(ConstantsValue.COBERTURAS_BASICA);
+            inicio= inicio ==-1  ?contenido.indexOf("Cobertura básica"):inicio;
            
-            fin = contenido.indexOf("Clave de Agente"); 
+            fin = contenido.indexOf("Clave de Agente");          
             newcontenido = new StringBuilder();       
             newcontenido.append(fn.extracted(inicio, fin, contenido));
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
