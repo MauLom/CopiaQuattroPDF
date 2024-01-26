@@ -39,15 +39,20 @@ public class AxaModel {
 			
 			}
 			else if (contenido.indexOf("Recibo provisional para pago de primas") > -1) {
-				AxaSaludModel datosAxaSalud = new AxaSaludModel(fn.caratula(1, 3, stripper, doc));
-				modelo = datosAxaSalud.procesar();
+				modelo = new AxaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 		
 			}
 			else if ( !contenido.contains("Gastos Médicos Mayores Individual") && (contenido.contains("familiar") && contenido.contains("póliza"))) {
 
 				modelo = new AxaSaludFaModel().procesar(fn.caratula(1, 3, stripper, doc));
 		
-			}else if(fn.caratula(1, 3, stripper, doc).contains("Gastos Médicos Mayores Individual")){
+			}else if ( fn.caratula(1, 3, stripper, doc).contains("Gastos Médicos Mayores")
+			 && fn.caratula(1, 3, stripper, doc).contains("Familiar")) {
+
+				modelo = new AxaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
+		
+			}
+			else if(fn.caratula(1, 3, stripper, doc).contains("Gastos Médicos Mayores Individual")){
 			AxaSaludV2Model datosAxa2Salud = new AxaSaludV2Model(fn.caratula(1, 3, stripper, doc));
 								modelo = datosAxa2Salud.procesar();
 			}
