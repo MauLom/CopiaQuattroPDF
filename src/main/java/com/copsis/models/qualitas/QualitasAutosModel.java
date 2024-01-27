@@ -656,33 +656,18 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
                 }
               
-                inicio = contenido.lastIndexOf(ConstantsValue.HASTA_LAS);
-                if (inicio > -1) {
-                    newcontenido = contenido.substring(inicio, contenido.indexOf("\r\n", inicio)).replace("del:", "del");
-
-                    if (newcontenido.contains("Plazo")) {
-                        newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
-                        if (newcontenido.length() == 11) {
-                            modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
-                          
-                        }
-                    } else {
-                        newcontenido = !fn.obtenVigePoliza2(newcontenido).isEmpty() ? fn.obtenVigePoliza2(newcontenido).get(0) : "";
-                        if (newcontenido.length() > 0) {
-                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido));
-                        }
-
-                    }
-                }
+              
           
                 inicio = contenido.lastIndexOf("Desde las");
+               
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 9, contenido.indexOf("\r\n", inicio + 9))
                             .replace("del:", "del").replace("Servic  i o  :", ConstantsValue.SERVICIO).replace("Servic ###io:",ConstantsValue.SERVICIO);
-
+                           
                     if (newcontenido.contains(ConstantsValue.SERVICIO)) {
                         newcontenido = fn.gatos(newcontenido.split(ConstantsValue.SERVICIO)[0].split("del")[1].trim());
-
+             
+                        
                         if (newcontenido.split("###").length == 2 || (newcontenido.split("###").length == 1 && newcontenido.contains("-"))) {
                             newcontenido = fn.formatDate(newcontenido.split("###")[0].trim(), ConstantsValue.FORMATO_FECHA);
 
@@ -690,9 +675,13 @@ import com.copsis.models.EstructuraRecibosModel ;
                                 modelo.setVigenciaDe(newcontenido);
                             }
                         }
+                       
+
+
                     } else {
                         if (newcontenido.contains(ConstantsValue.HASTA_LAS)) {
                             newcontenido = newcontenido.split(ConstantsValue.HASTA_LAS)[0].split("del")[1].replace("###", "").trim();
+                           
                             modelo.setVigenciaDe(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
 
                             if (modelo.getVigenciaA().isEmpty()) {
@@ -708,6 +697,25 @@ import com.copsis.models.EstructuraRecibosModel ;
                         } else if (newcontenido.contains("del") && newcontenido.split("###").length > 1) {
                             modelo.setVigenciaDe(fn.formatDate(newcontenido.split("###")[1].trim(), ConstantsValue.FORMATO_FECHA));
                         }
+                    }
+                }
+
+                  inicio = contenido.lastIndexOf(ConstantsValue.HASTA_LAS);
+                if (inicio > -1) {
+                    newcontenido = contenido.substring(inicio, contenido.indexOf("\r\n", inicio)).replace("del:", "del");
+
+                    if (newcontenido.contains("Plazo")) {
+                        newcontenido = newcontenido.split("Plazo")[0].split("del")[1].replace("###", "").trim();
+                        if (newcontenido.length() == 11) {
+                            modelo.setVigenciaA(fn.formatDate(newcontenido, ConstantsValue.FORMATO_FECHA));
+                          
+                        }
+                    } else {
+                        newcontenido = !fn.obtenVigePoliza2(newcontenido).isEmpty() ? fn.obtenVigePoliza2(newcontenido).get(0) : "";
+                        if (newcontenido.length() > 0) {
+                            modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido));
+                        }
+
                     }
                 }
 
@@ -1094,8 +1102,8 @@ import com.copsis.models.EstructuraRecibosModel ;
                     modelo.setFormaPago(1);
                 }
 
-                if(modelo.getFechaEmision().isEmpty()){
-                    modelo.setVigenciaDe(modelo.getVigenciaA());
+                if(modelo.getFechaEmision().isEmpty() && !modelo.getVigenciaDe().isEmpty()){
+                    modelo.setFechaEmision(modelo.getVigenciaDe());
                 }
 
                 return modelo;
