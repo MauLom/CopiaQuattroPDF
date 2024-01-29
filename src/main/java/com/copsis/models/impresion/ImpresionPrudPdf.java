@@ -51,15 +51,14 @@ public class ImpresionPrudPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getPaquete() + ".pdf"));
+                   // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getPaquete() + ".pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
                 }
 
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {         
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 
