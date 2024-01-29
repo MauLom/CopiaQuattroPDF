@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.CaractulaProjection;
+import com.copsis.clients.projections.CaractulaPrudentialProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
@@ -394,10 +395,10 @@ public class ImpresionService {
 
 
 
-    public byte[] impresionPru(CaractulaProjection  caractulaProjection){
+    public byte[] impresionSolicitudPrudential(CaractulaPrudentialProjection  caractulaPrudentialProjection){
         try {
             byte[] byteArrayPDF = null;
-            byteArrayPDF = new ImpresionPrudPdf().buildPDF(caractulaProjection);
+            byteArrayPDF = new ImpresionPrudPdf().buildPDF(caractulaPrudentialProjection);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.copsis.clients.projections.CaractulaProjection;
+import com.copsis.clients.projections.CaractulaPrudentialProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
@@ -435,15 +436,15 @@ public class ImpresionPDFController {
         }
     }
 
-	@PostMapping(value = "prude")
-	public ResponseEntity<CopsisResponse> impresionPru( @Valid @RequestBody CaractulaProjection  caractulaProjection, BindingResult bindingResult) {
+	@PostMapping(value = "solicitudPrudential")
+	public ResponseEntity<CopsisResponse> impresionSolicitudPrudential( @Valid @RequestBody CaractulaPrudentialProjection  caractulaPrudentialProjection, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionPru(caractulaProjection)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionSolicitudPrudential(caractulaPrudentialProjection)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
