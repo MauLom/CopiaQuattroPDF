@@ -1094,9 +1094,10 @@ import com.copsis.models.EstructuraRecibosModel ;
                     modelo.setFormaPago(1);
                 }
 
-                if(modelo.getFechaEmision().isEmpty()){
-                    modelo.setVigenciaDe(modelo.getVigenciaA());
+                if(modelo.getFechaEmision().isEmpty() && !modelo.getVigenciaDe().isEmpty()){
+                    modelo.setFechaEmision(modelo.getVigenciaDe());
                 }
+
 
                 return modelo;
             } catch (Exception ex) {       
