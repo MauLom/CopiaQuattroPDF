@@ -33,6 +33,7 @@ import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionConsultaMovimientos;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionPolizaAutosInter;
+import com.copsis.models.impresion.ImpresionPrudPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresion.ImpresionVidaAxaPdf;
 import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
@@ -382,6 +383,21 @@ public class ImpresionService {
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionEndoso().buildPDF(impresionCaractulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+
+
+    public byte[] impresionPru(CaractulaProjection  caractulaProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionPrudPdf().buildPDF(caractulaProjection);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {

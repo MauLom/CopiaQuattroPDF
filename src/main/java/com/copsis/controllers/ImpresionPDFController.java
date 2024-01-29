@@ -435,6 +435,22 @@ public class ImpresionPDFController {
         }
     }
 
+	@PostMapping(value = "prude")
+	public ResponseEntity<CopsisResponse> impresionPru( @Valid @RequestBody CaractulaProjection  caractulaProjection, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionPru(caractulaProjection)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
   
   
 }
