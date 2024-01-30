@@ -5,6 +5,7 @@ import java.io.File ;
 import java.io.IOException ;
 import java.text.DecimalFormat ;
 import java.util.ArrayList ;
+import java.util.Date;
 import java.util.List ;
 
 import org.apache.pdfbox.pdmodel.PDDocument ;
@@ -26,6 +27,7 @@ import com.copsis.models.Tabla.ImageUtils ;
 import com.copsis.models.Tabla.Row ;
 import com.copsis.models.Tabla.Sio4CommunsPdf ;
 import com.copsis.models.Tabla.VerticalAlignment ;
+import com.copsis.utils.FormatoFecha;
 
     public class ImpresionCaractulaPrudential {
 
@@ -609,20 +611,82 @@ import com.copsis.models.Tabla.VerticalAlignment ;
                     page = new PDPage();
                     document.addPage(page);
                     this.setFooter(document, page, datos);
-                    texto = new StringBuilder();
-    
-                    table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
-                    baseRow = communsPdf.setRow(table);
-                    communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                    table.draw();
-                    yStart -= table.getHeaderAndDataHeight();
-                    tb = page.getMediaBox().getHeight() - yStart +9;
-                    texto.append("Usted puede contactar a la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios ");
-                    texto.append("Financieros (CONDUSEF), ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, ");
-                    texto.append("Ciudad de México, teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o");  
-                    texto.append("visite la página www.condusef.gob.mx.");                            
-                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0f);
                    
+    
+                  table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+                            yStart -= table.getHeaderAndDataHeight();
+
+                            tb = page.getMediaBox().getHeight() - yStart + 10;
+                            texto = new StringBuilder();
+                            texto.append("Usted puede contactar a la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros ");
+                            texto.append("(CONDUSEF), ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, ");
+                            texto.append("teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o visite la página ");
+                            texto.append("www.condusef.gob.mx.");
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+
+                            PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                            communsPdf.drawBox(content01, Color.black, 25, yStart - 48, 558, 0.5f);
+                            content01.close();
+
+                        String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
+                        String[] dateNew = dateString.split("\\s+");
+
+                        dateString = dateNew[0] + "  de " + dateNew[1] + "  de " + dateNew[2];
+                      
+
+                            yStart = page.getMediaBox().getHeight() - tb-60;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "Lugar y Fecha de Expedición:  Ciudad de México, a "+ 
+                             (Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[0]+"</b>") + "  de " +Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[1]+"</b>") + "  de " + Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[2]+"</b>")), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+
+                           
+
+
+
+                            
+
+                            
+
+                            yStart -= table.getHeaderAndDataHeight()+30;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin+310, document, page, false, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "________________________________________", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+
+                            yStart -= table.getHeaderAndDataHeight()-2;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, margin+350, document, page, false, true);
+                            baseRow = communsPdf.setRow(table,10);
+                            communsPdf.setCell(baseRow, 100, "Prudential  Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            baseRow = communsPdf.setRow(table,10);
+                            communsPdf.setCell(baseRow, 100, "Funcionario  autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                     
+                            table.draw();
+
+
+                           yStart -= table.getHeaderAndDataHeight()+10;
+                           if (datos.getPaquete() == 3) {
+                              table = new BaseTable((yStart+95), yStartNewPage, bottomMargin, 54, 463, document, page, false, true);
+                             baseRow = communsPdf.setRow(table, 15);
+                             communsPdf.setCell(baseRow, 100,
+                             ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKFAuYh5oSoXuoWD9JstitfBet2aMC1bKeugA2jtgz/firma.png"),
+                             0, 0, Color.black);
+                             table.draw();
+ 
+                             tb = page.getMediaBox().getHeight() - yStart + 40;
+                             texto = new StringBuilder();
+                             texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
+                             texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
+                             texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
+                             texto.append("______________________/CONDUSEF_________.”");
+                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
+                          }
+
+
                    }
 
                     if ( datos.getPaquete() == 3 ||datos.getPaquete() == 4) {
@@ -807,8 +871,11 @@ import com.copsis.models.Tabla.VerticalAlignment ;
                         texto = "Seguro individual – Producto Básico Accidentes Personales";
                         break;
                     case 3:
-                        texto = "Seguro de Hospitalización";
-                        //texto="Seguro individual – Hospitalización";
+                    //texto="Seguro individual – Hospitalización";
+                        //texto = "Seguro de Hospitalización";
+                         texto ="RENTA DIARIA POR HOSPITALIZACION";
+                    
+                        
                         break;
                     case 4:
                         texto = "Seguro de Muerte Accidental";
