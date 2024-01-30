@@ -1,35 +1,31 @@
  package com.copsis.models.impresion ;
     import java.awt.Color ;
-    import java.io.ByteArrayOutputStream ;
-    import java.io.File ;
-    import java.io.IOException ;
-    import java.text.DecimalFormat ;
-    import java.util.ArrayList ;
-import java.util.Date;
+import java.io.ByteArrayOutputStream ;
+import java.io.File ;
+import java.io.IOException ;
+import java.text.DecimalFormat ;
+import java.util.ArrayList ;
 import java.util.List ;
 
-    import org.apache.pdfbox.pdmodel.PDDocument ;
-    import org.apache.pdfbox.pdmodel.PDPage ;
-    import org.apache.pdfbox.pdmodel.PDPageContentStream ;
-    import org.apache.pdfbox.pdmodel.common.PDRectangle ;
-    import org.apache.pdfbox.pdmodel.font.PDFont ;
-    import org.apache.pdfbox.pdmodel.font.PDType1Font ;
-    import org.apache.pdfbox.pdmodel.graphics.color.PDColor ;
-    import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB ;
+import org.apache.pdfbox.pdmodel.PDDocument ;
+import org.apache.pdfbox.pdmodel.PDPage ;
+import org.apache.pdfbox.pdmodel.PDPageContentStream ;
+import org.apache.pdfbox.pdmodel.common.PDRectangle ;
+import org.apache.pdfbox.pdmodel.font.PDFont ;
+import org.apache.pdfbox.pdmodel.font.PDType1Font ;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor ;
+import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB ;
 
-    import com.copsis.clients.projections.AseguradosProjection ;
-    import com.copsis.clients.projections.BeneficiarioProjection ;
-    import com.copsis.clients.projections.CaractulaProjection ;
-    import com.copsis.clients.projections.CertificadoProjection ;
-    import com.copsis.clients.projections.CoberturaProjection ;
-    import com.copsis.exceptions.GeneralServiceException ;
-    import com.copsis.models.Tabla.BaseTable ;
-    import com.copsis.models.Tabla.ImageUtils ;
-    import com.copsis.models.Tabla.Row ;
-    import com.copsis.models.Tabla.Sio4CommunsPdf ;
-    import com.copsis.models.Tabla.VerticalAlignment ;
-import com.copsis.utils.FormatoFecha;
-import com.fasterxml.jackson.databind.ObjectMapper ;
+import com.copsis.clients.projections.AseguradosProjection ;
+import com.copsis.clients.projections.BeneficiarioProjection ;
+import com.copsis.clients.projections.CaractulaProjection ;
+import com.copsis.clients.projections.CoberturaProjection ;
+import com.copsis.exceptions.GeneralServiceException ;
+import com.copsis.models.Tabla.BaseTable ;
+import com.copsis.models.Tabla.ImageUtils ;
+import com.copsis.models.Tabla.Row ;
+import com.copsis.models.Tabla.Sio4CommunsPdf ;
+import com.copsis.models.Tabla.VerticalAlignment ;
 
     public class ImpresionCaractulaPrudential {
 
@@ -304,7 +300,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                         if (datos.getPaquete() == 3 ) {
 
                             Float tb = 0.0f;
-                            tb = page.getMediaBox().getHeight() - yStart + 120;
+                            tb = page.getMediaBox().getHeight() - yStart + 130;
                             texto = new StringBuilder();
                             texto.append("“Advertencia: En este seguro de gastos médicos,  a partir  de que el asegurado alcance una");
                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 9f), 1f, 0.1f);
@@ -328,7 +324,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                             tb = tb + 14;
                             texto = new StringBuilder();
                             texto.append("edades, el pago de primas de este seguro podría representarle un esfuerzo financiero");
-                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 7f), 1f, 0f);
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 552, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 7f), 1f, 0.5f);
 
                             tb = tb + 14;
                             texto = new StringBuilder();
@@ -337,7 +333,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
 
 
 
-                            yStart -= table.getHeaderAndDataHeight() + 105;
+                            yStart -= table.getHeaderAndDataHeight() + 113;
                             PDPageContentStream con1 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                             communsPdf.drawBox(con1, Color.black, 25, yStart - 40, 552, 0.5f);
                             con1.close();
@@ -421,7 +417,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
 
                             getAvisoPrivacidad(document, page);
 
-                            tb = getInteresContratante(document, page);
+                            tb = getInteresContratante(document, page,datos);
 
                             getAtencion(document, page, tb, datos);
 
@@ -608,6 +604,21 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                     }
                         
                 }
+
+               if(datos.getPaquete() == 3){
+                page = new PDPage();
+                document.addPage(page);
+                this.setFooter(document, page, datos);
+
+                table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
+                baseRow = communsPdf.setRow(table);
+                communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                table.draw();
+                yStart -= table.getHeaderAndDataHeight();
+               }
+
+
+
                     if ( datos.getPaquete() == 3 ||datos.getPaquete() == 4) {
                         
                         int nume = document.getNumberOfPages();                                 
@@ -672,6 +683,11 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                 texto.append("Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) ubicada en Av.  Insurgentes Sur  No.  762 ");
                 texto.append("Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, teléfonos (55) 5340-0999 y 800-999-80-80, por correo ");
                 texto.append("electrónico: asesoria@condusef.gob.mx o visite la página www.condusef.gob.mx.");
+                yStart = page.getMediaBox().getHeight() - tb;
+                PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                communsPdf.drawBox(content02, Color.black, 25, yStart-97, 552, 0.5f);
+                content02.close();
+    
             } else  if (datos.getPaquete() == 4) {
                 texto.append("Ciudad de México, C.P. 05348, de lunes a viernes de 8:00 a 17:00 hrs.; o bien contacte a la Comisión Nacional para la ");
                 texto.append("Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) ubicada en Av.  Insurgentes Sur ");
@@ -697,7 +713,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
             yStart = page.getMediaBox().getHeight() - tb;
         }
 
-        private Float getInteresContratante(PDDocument document, PDPage page) throws IOException {
+        private Float getInteresContratante(PDDocument document, PDPage page, CaractulaProjection datos) throws IOException {
             BaseTable table;
             Row<PDPage> baseRow;
             StringBuilder texto;
@@ -714,8 +730,16 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
             texto.append("rectificación correspondiente dentro de los treinta días que sigan al día en que reciba la póliza. Transcurrido este ");
             texto.append("plazo, se considerarán aceptadas las estipulaciones de la póliza o de sus modificaciones (Art.25 Ley Sobre el ");
             texto.append("Contrato de Seguro).");
-            this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 10f, (-1.3f * 9f), 1f, 0.2f);
-
+            if(datos.getPaquete() == 3) {
+            
+                this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540,PDType1Font.HELVETICA , 11f, (-1.3f * 9f), 1f, 0.2f);
+    
+            }else{
+                this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547,PDType1Font.HELVETICA_BOLD , 10f, (-1.3f * 9f), 1f, 0.2f);
+    
+            }
+           
+           
             tb = tb + 60;
             texto = new StringBuilder();
             texto.append("Le recordamos que el producto contiene exclusiones y/o limitantes de cobertura, los cuales ");
