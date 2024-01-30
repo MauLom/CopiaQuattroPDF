@@ -50,6 +50,7 @@ public class BupaSaludModel {
 				if(newcontenido.toString().split("\n")[i].contains("Número de Póliza")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].replace("###", "").trim());
 				}
+			
 				if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.NUMERODE)&& newcontenido.toString().split("\n")[i+1].contains(ConstantsValue.POLIZA_ACENT) ) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.NUMERODE)[1].replace("###", "").trim());
 				}
@@ -196,6 +197,17 @@ public class BupaSaludModel {
 				modelo.setMoneda(1);
 			}
 			
+			for (int i = 0; i < recibo.split("\n").length; i++) {
+				
+				if(recibo.split("\n")[i].contains("Clave del Agente")){
+					List<String> valores = fn.obtenerListNumeros2(recibo.split("\n")[i]);
+					modelo.setCveAgente(valores.get(0));
+				}
+				if(recibo.split("\n")[i].contains("Número de Póliza") && recibo.split("\n")[i].contains("Plan")){
+					System.out.println(recibo.split("\n")[i]);
+                  modelo.setPlan(recibo.split("\n")[i].split("Plan")[1].replace("###", "").trim());
+				}
+			}
 	
 			
 			return modelo;
