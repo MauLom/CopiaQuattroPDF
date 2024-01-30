@@ -605,19 +605,25 @@ import com.copsis.models.Tabla.VerticalAlignment ;
                         
                 }
 
-               if(datos.getPaquete() == 3){
-                page = new PDPage();
-                document.addPage(page);
-                this.setFooter(document, page, datos);
-
-                table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
-                baseRow = communsPdf.setRow(table);
-                communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                table.draw();
-                yStart -= table.getHeaderAndDataHeight();
-               }
-
-
+                if(datos.getPaquete() == 3){
+                    page = new PDPage();
+                    document.addPage(page);
+                    this.setFooter(document, page, datos);
+                    texto = new StringBuilder();
+    
+                    table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
+                    baseRow = communsPdf.setRow(table);
+                    communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                    table.draw();
+                    yStart -= table.getHeaderAndDataHeight();
+                    tb = page.getMediaBox().getHeight() - yStart +9;
+                    texto.append("Usted puede contactar a la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios ");
+                    texto.append("Financieros (CONDUSEF), ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, ");
+                    texto.append("Ciudad de México, teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o");  
+                    texto.append("visite la página www.condusef.gob.mx.");                            
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0f);
+                   
+                   }
 
                     if ( datos.getPaquete() == 3 ||datos.getPaquete() == 4) {
                         
