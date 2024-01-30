@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CaractulaPrudentialProjection {
-    private	String  numeroPoliza;
+    private	String  noSolicitud;
     private Long paquete;
 }
