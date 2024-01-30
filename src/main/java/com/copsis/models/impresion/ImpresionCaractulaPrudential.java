@@ -705,7 +705,7 @@ import com.copsis.utils.FormatoFecha;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                        //document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
