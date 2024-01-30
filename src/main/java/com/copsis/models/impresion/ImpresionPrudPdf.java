@@ -2,9 +2,7 @@ package com.copsis.models.impresion ;
 
 import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.File ;
 import java.io.IOException ;
-import java.net.MalformedURLException;
 
 import org.apache.pdfbox.pdmodel.PDDocument ;
 import org.apache.pdfbox.pdmodel.PDPage ;
@@ -33,20 +31,20 @@ public class ImpresionPrudPdf {
                  
                     
                     if(datos.getPaquete() ==1){
-                        getAccidentesPersonales(document, page);
+                        getAccidentesPersonales(document, page,datos);
                     }
                    
 
                     if(datos.getPaquete() ==2){
-                    getHospitalizacion(document, page);
+                    getHospitalizacion(document, page,datos);
                      }
 
                      if(datos.getPaquete() ==3){
-                        getGastosMedicos(document, page);
+                        getGastosMedicos(document, page,datos);
                      }
 
                      if(datos.getPaquete() ==4){
-                     getSeguroHospitalizacion(document, page);
+                     getSeguroHospitalizacion(document, page,datos);
                     }
 
                     output = new ByteArrayOutputStream();
@@ -66,7 +64,7 @@ public class ImpresionPrudPdf {
 
     }
 
-    private void getSeguroHospitalizacion(PDDocument document, PDPage page) throws IOException {
+    private void getSeguroHospitalizacion(PDDocument document, PDPage page,CaractulaPrudentialProjection datos) throws IOException {
         BaseTable table;
         Row<PDPage> baseRow;
         table = new BaseTable(yStart, yStartNewPage, 0, fullWidth, 0, document, page, false, true);
@@ -77,7 +75,7 @@ public class ImpresionPrudPdf {
          table.remoBordes(true, bottomMargin);
          table.draw();
              
-         getEncabezadoTexto(document, page, 510f,133f);
+         getEncabezadoTexto(document, page, 510f,133f, datos);
          String[] imagenes = {
         "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKA4eUSpuyEvmTj7jpeR5y2mlPvg8f9ZCxJelFzfXAwx/02.png",
         "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKH60mAXoYt9rgqmsyiQUEvCNroeczBxGOLxYAtZ3sUfo/03.png",
@@ -100,11 +98,11 @@ public class ImpresionPrudPdf {
                     0, 0, Color.black);
             table.remoBordes(true, bottomMargin);
             table.draw();
-            getEncabezadoTexto(document, page, 742f,468f);
+            getEncabezadoTexto(document, page, 742f,468f,datos);
             }
     }
 
-    private void getGastosMedicos(PDDocument document, PDPage page) throws IOException {
+    private void getGastosMedicos(PDDocument document, PDPage page,CaractulaPrudentialProjection datos) throws IOException {
         BaseTable table;
         Row<PDPage> baseRow;
         table = new BaseTable(yStart, yStartNewPage, 0, fullWidth, 0, document, page, false, true);
@@ -115,7 +113,7 @@ public class ImpresionPrudPdf {
         table.remoBordes(true, bottomMargin);
         table.draw();
             
-        getEncabezadoTexto(document, page, 691f,416f);
+        getEncabezadoTexto(document, page, 691f,416f,datos);
 
         String[] imagenes = {
             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKGwKt8hUKUMAHQN0Bf0CjmvQirOLH25pL1zKJAXj3T/02.png",
@@ -135,12 +133,12 @@ public class ImpresionPrudPdf {
                     0, 0, Color.black);
             table.remoBordes(true, bottomMargin);
             table.draw();
-            getEncabezadoTexto(document, page, 691f,i ==0 ? 416f :412f);
+            getEncabezadoTexto(document, page, 691f,i ==0 ? 416f :412f,datos);
             i++;
             }
     }
 
-    private void getHospitalizacion(PDDocument document, PDPage page) throws IOException {
+    private void getHospitalizacion(PDDocument document, PDPage page,CaractulaPrudentialProjection datos) throws IOException {
         BaseTable table;
         Row<PDPage> baseRow;
         table = new BaseTable(yStart, yStartNewPage, 0, fullWidth, 0, document, page, false, true);
@@ -151,7 +149,7 @@ public class ImpresionPrudPdf {
         table.remoBordes(true, bottomMargin);
         table.draw();
          
-        getEncabezadoTexto(document, page, 510f,134f);
+        getEncabezadoTexto(document, page, 510f,134f,datos);
 
         String[] imagenes = {
             
@@ -179,11 +177,11 @@ public class ImpresionPrudPdf {
                 0, 0, Color.black);
         table.remoBordes(true, bottomMargin);
         table.draw();
-        getEncabezadoTexto(document, page, 742f,466f);
+        getEncabezadoTexto(document, page, 742f,466f,datos);
         }
     }
 
-    private void getAccidentesPersonales(PDDocument document, PDPage page) throws IOException {
+    private void getAccidentesPersonales(PDDocument document, PDPage page,CaractulaPrudentialProjection datos) throws IOException {
         
         BaseTable table;
         Row<PDPage> baseRow;
@@ -195,7 +193,7 @@ public class ImpresionPrudPdf {
         table.remoBordes(true, bottomMargin);
         table.draw();
 
-        getEncabezadoTexto(document, page, 681f,412f);
+        getEncabezadoTexto(document, page, 681f,412f,datos);
 
         page = new PDPage();
         document.addPage(page);
@@ -206,7 +204,7 @@ public class ImpresionPrudPdf {
                 0, 0, Color.black);
         table.remoBordes(true, bottomMargin);
         table.draw();
-        getEncabezadoTexto(document, page, 691f,412f);
+        getEncabezadoTexto(document, page, 691f,412f,datos);
 
         page = new PDPage();
         document.addPage(page);
@@ -217,15 +215,15 @@ public class ImpresionPrudPdf {
                 0, 0, Color.black);
         table.remoBordes(true, bottomMargin);
         table.draw();
-        getEncabezadoTexto(document, page, 691f,412f);
+        getEncabezadoTexto(document, page, 691f,412f,datos);
     }
 
-    private void getEncabezadoTexto(PDDocument document, PDPage page, Float yStart,Float marginx) throws IOException {
+    private void getEncabezadoTexto(PDDocument document, PDPage page, Float yStart,Float marginx,CaractulaPrudentialProjection datos) throws IOException {
         BaseTable table2;
         Row<PDPage> baseRow2;
         table2 = new BaseTable(yStart, 780, bottomMargin, 116, marginx, document, page, false, true);
         baseRow2 = communsPdf.setRow(table2);
-        communsPdf.setCell(baseRow2, 100, "10000", Color.black, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3f), Color.white);
+        communsPdf.setCell(baseRow2, 100, datos.getNoSolicitud(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3f), Color.white);
         table2.draw();
     }
 }
