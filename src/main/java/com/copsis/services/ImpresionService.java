@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.CaractulaProjection;
+import com.copsis.clients.projections.CaractulaPrudentialProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
@@ -33,6 +34,7 @@ import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionConsultaMovimientos;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionPolizaAutosInter;
+import com.copsis.models.impresion.ImpresionPrudPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresion.ImpresionVidaAxaPdf;
 import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
@@ -382,6 +384,21 @@ public class ImpresionService {
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionEndoso().buildPDF(impresionCaractulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+
+
+    public byte[] impresionSolicitudPrudential(CaractulaPrudentialProjection  caractulaPrudentialProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionPrudPdf().buildPDF(caractulaPrudentialProjection);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
