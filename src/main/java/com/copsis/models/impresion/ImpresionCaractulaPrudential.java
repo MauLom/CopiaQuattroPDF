@@ -1,35 +1,33 @@
  package com.copsis.models.impresion ;
     import java.awt.Color ;
-    import java.io.ByteArrayOutputStream ;
-    import java.io.File ;
-    import java.io.IOException ;
-    import java.text.DecimalFormat ;
-    import java.util.ArrayList ;
+import java.io.ByteArrayOutputStream ;
+import java.io.File ;
+import java.io.IOException ;
+import java.text.DecimalFormat ;
+import java.util.ArrayList ;
 import java.util.Date;
 import java.util.List ;
 
-    import org.apache.pdfbox.pdmodel.PDDocument ;
-    import org.apache.pdfbox.pdmodel.PDPage ;
-    import org.apache.pdfbox.pdmodel.PDPageContentStream ;
-    import org.apache.pdfbox.pdmodel.common.PDRectangle ;
-    import org.apache.pdfbox.pdmodel.font.PDFont ;
-    import org.apache.pdfbox.pdmodel.font.PDType1Font ;
-    import org.apache.pdfbox.pdmodel.graphics.color.PDColor ;
-    import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB ;
+import org.apache.pdfbox.pdmodel.PDDocument ;
+import org.apache.pdfbox.pdmodel.PDPage ;
+import org.apache.pdfbox.pdmodel.PDPageContentStream ;
+import org.apache.pdfbox.pdmodel.common.PDRectangle ;
+import org.apache.pdfbox.pdmodel.font.PDFont ;
+import org.apache.pdfbox.pdmodel.font.PDType1Font ;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColor ;
+import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB ;
 
-    import com.copsis.clients.projections.AseguradosProjection ;
-    import com.copsis.clients.projections.BeneficiarioProjection ;
-    import com.copsis.clients.projections.CaractulaProjection ;
-    import com.copsis.clients.projections.CertificadoProjection ;
-    import com.copsis.clients.projections.CoberturaProjection ;
-    import com.copsis.exceptions.GeneralServiceException ;
-    import com.copsis.models.Tabla.BaseTable ;
-    import com.copsis.models.Tabla.ImageUtils ;
-    import com.copsis.models.Tabla.Row ;
-    import com.copsis.models.Tabla.Sio4CommunsPdf ;
-    import com.copsis.models.Tabla.VerticalAlignment ;
+import com.copsis.clients.projections.AseguradosProjection ;
+import com.copsis.clients.projections.BeneficiarioProjection ;
+import com.copsis.clients.projections.CaractulaProjection ;
+import com.copsis.clients.projections.CoberturaProjection ;
+import com.copsis.exceptions.GeneralServiceException ;
+import com.copsis.models.Tabla.BaseTable ;
+import com.copsis.models.Tabla.ImageUtils ;
+import com.copsis.models.Tabla.Row ;
+import com.copsis.models.Tabla.Sio4CommunsPdf ;
+import com.copsis.models.Tabla.VerticalAlignment ;
 import com.copsis.utils.FormatoFecha;
-import com.fasterxml.jackson.databind.ObjectMapper ;
 
     public class ImpresionCaractulaPrudential {
 
@@ -304,7 +302,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                         if (datos.getPaquete() == 3 ) {
 
                             Float tb = 0.0f;
-                            tb = page.getMediaBox().getHeight() - yStart + 120;
+                            tb = page.getMediaBox().getHeight() - yStart + 130;
                             texto = new StringBuilder();
                             texto.append("“Advertencia: En este seguro de gastos médicos,  a partir  de que el asegurado alcance una");
                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 9f), 1f, 0.1f);
@@ -324,7 +322,20 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                             texto.append("edades se incrementa en forma importante. En este sentido, se advierte que, a partir de esas");
                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 7f), 1f, 0f);
 
-                            yStart -= table.getHeaderAndDataHeight() + 75;
+
+                            tb = tb + 14;
+                            texto = new StringBuilder();
+                            texto.append("edades, el pago de primas de este seguro podría representarle un esfuerzo financiero");
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 552, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 7f), 1f, 0.5f);
+
+                            tb = tb + 14;
+                            texto = new StringBuilder();
+                            texto.append("importante.”");
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 7f), 1f, 0f);
+
+
+
+                            yStart -= table.getHeaderAndDataHeight() + 113;
                             PDPageContentStream con1 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                             communsPdf.drawBox(con1, Color.black, 25, yStart - 40, 552, 0.5f);
                             con1.close();
@@ -342,100 +353,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                         this.setFooter(document, page, datos);
                         Float tb = 0.0f;
 
-                        if (datos.getPaquete() == 3 ) {
-                            tb = page.getMediaBox().getHeight() - yStart + 12;
-
-                            texto = new StringBuilder();
-                            texto.append("edades, el pago de primas de este seguro podría representarle un esfuerzo financiero");
-                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 9f), 1f, 0.6f);
-
-                            tb = tb + 14;
-                            texto = new StringBuilder();
-                            texto.append("importante.”");
-                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 12f, (-1.6f * 9f), 1f, 0.2f);
-
-                            yStart = page.getMediaBox().getHeight() - tb - 8;
-                            getAvisoPrivacidad(document, page);
-
-                            tb = getInteresContratante(document, page);
-
-                            getAtencion(document, page, tb, datos);
-
-                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
-                            baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                            table.draw();
-                            yStart -= table.getHeaderAndDataHeight();
-
-                            tb = page.getMediaBox().getHeight() - yStart + 10;
-                            texto = new StringBuilder();
-                            texto.append("Usted puede contactar a la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros ");
-                            texto.append("(CONDUSEF), ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, ");
-                            texto.append("teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o visite la página ");
-                            texto.append("www.condusef.gob.mx.");
-                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
-
-                            PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                            communsPdf.drawBox(content01, Color.black, 25, yStart - 48, 558, 0.5f);
-                            content01.close();
-
-                        String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
-                        String[] dateNew = dateString.split("\\s+");
-
-                        dateString = dateNew[0] + "  de " + dateNew[1] + "  de " + dateNew[2];
-                      
-
-                            yStart = page.getMediaBox().getHeight() - tb-60;
-                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-                            baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "Lugar y Fecha de Expedición:  Ciudad de México, a "+ 
-                             (Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[0]+"</b>") + "  de " +Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[1]+"</b>") + "  de " + Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[2]+"</b>")), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                            table.draw();
-
-                           
-
-
-
-                            
-
-                            
-
-                            yStart -= table.getHeaderAndDataHeight()+30;
-                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin+310, document, page, false, true);
-                            baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "________________________________________", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                            table.draw();
-
-                            yStart -= table.getHeaderAndDataHeight()-2;
-                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, margin+350, document, page, false, true);
-                            baseRow = communsPdf.setRow(table,10);
-                            communsPdf.setCell(baseRow, 100, "Prudential  Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                            baseRow = communsPdf.setRow(table,10);
-                            communsPdf.setCell(baseRow, 100, "Funcionario  autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-                     
-                            table.draw();
-
-                           yStart -= table.getHeaderAndDataHeight()+10;
-                          if (datos.getPaquete() == 3) {
-                             table = new BaseTable((yStart+95), yStartNewPage, bottomMargin, 54, 463, document, page, false, true);
-                            baseRow = communsPdf.setRow(table, 15);
-                            communsPdf.setCell(baseRow, 100,
-                            ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKFAuYh5oSoXuoWD9JstitfBet2aMC1bKeugA2jtgz/firma.png"),
-                            0, 0, Color.black);
-                            table.draw();
-
-                            tb = page.getMediaBox().getHeight() - yStart + 40;
-                            texto = new StringBuilder();
-                            texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
-                            texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
-                            texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
-                            texto.append("______________________/CONDUSEF_________.”");
-                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
-                         }
-                    
-
-                        }
-                        else {
+                        
 
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
@@ -501,15 +419,15 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
 
                             getAvisoPrivacidad(document, page);
 
-                            tb = getInteresContratante(document, page);
+                            tb = getInteresContratante(document, page,datos);
 
                             getAtencion(document, page, tb, datos);
 
-                            if(datos.getPaquete() !=4){
+                            if(datos.getPaquete() ==2 || datos.getPaquete() == 1){
 
                             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
                             baseRow = communsPdf.setRow(table);
-                            communsPdf.setCell(baseRow, 100, "Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            communsPdf.setCell(baseRow, 100, "Comisión  Nacional  para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
                             table.draw();
                             yStart -= table.getHeaderAndDataHeight();
 
@@ -520,7 +438,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                             texto.append("visite la página www. condusef. gob. mx. ");
                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
                             }
-                        }
+                        
                         tb = tb + 16;
                         yStart = page.getMediaBox().getHeight() - tb;
 
@@ -688,6 +606,89 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                     }
                         
                 }
+
+                if(datos.getPaquete() == 3){
+                    page = new PDPage();
+                    document.addPage(page);
+                    this.setFooter(document, page, datos);
+                   
+    
+                  table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, true, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "DATOS DE LA CONDUSEF", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+                            yStart -= table.getHeaderAndDataHeight();
+
+                            tb = page.getMediaBox().getHeight() - yStart + 10;
+                            texto = new StringBuilder();
+                            texto.append("Usted puede contactar a la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros ");
+                            texto.append("(CONDUSEF), ubicada en Av. Insurgentes Sur No. 762 Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, ");
+                            texto.append("teléfonos (55) 5340-0999 y 800-999-80-80, por correo electrónico: asesoria@condusef.gob.mx o visite la página ");
+                            texto.append("www.condusef.gob.mx.");
+                            this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, PDType1Font.HELVETICA, 10f, (-1.3f * 9f), 1f, 0.3f);
+
+                            PDPageContentStream content01 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                            communsPdf.drawBox(content01, Color.black, 25, yStart - 48, 558, 0.5f);
+                            content01.close();
+
+                        String dateString = new FormatoFecha().getStringFormat(new Date(), "dd MMMM yyyy");
+                        String[] dateNew = dateString.split("\\s+");
+
+                        dateString = dateNew[0] + "  de " + dateNew[1] + "  de " + dateNew[2];
+                      
+
+                            yStart = page.getMediaBox().getHeight() - tb-60;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "Lugar y Fecha de Expedición:  Ciudad de México, a "+ 
+                             (Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[0]+"</b>") + "  de " +Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[1]+"</b>") + "  de " + Sio4CommunsPdf.eliminaHtmlTags3("<b>" +dateNew[2]+"</b>")), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+
+                           
+
+
+
+                            
+
+                            
+
+                            yStart -= table.getHeaderAndDataHeight()+30;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin+310, document, page, false, true);
+                            baseRow = communsPdf.setRow(table);
+                            communsPdf.setCell(baseRow, 100, "________________________________________", Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            table.draw();
+
+                            yStart -= table.getHeaderAndDataHeight()-2;
+                            table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, margin+350, document, page, false, true);
+                            baseRow = communsPdf.setRow(table,10);
+                            communsPdf.setCell(baseRow, 100, "Prudential  Seguros México, S.A. de C.V.", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                            baseRow = communsPdf.setRow(table,10);
+                            communsPdf.setCell(baseRow, 100, "Funcionario  autorizado", Color.BLACK, false, "R", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+                     
+                            table.draw();
+
+
+                           yStart -= table.getHeaderAndDataHeight()+10;
+                           if (datos.getPaquete() == 3) {
+                              table = new BaseTable((yStart+95), yStartNewPage, bottomMargin, 54, 463, document, page, false, true);
+                             baseRow = communsPdf.setRow(table, 15);
+                             communsPdf.setCell(baseRow, 100,
+                             ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKFAuYh5oSoXuoWD9JstitfBet2aMC1bKeugA2jtgz/firma.png"),
+                             0, 0, Color.black);
+                             table.draw();
+ 
+                             tb = page.getMediaBox().getHeight() - yStart + 40;
+                             texto = new StringBuilder();
+                             texto.append("“En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la ");
+                             texto.append("documentación contractual y la nota técnica que integran este producto de seguro, quedaron registrada ");
+                             texto.append("ante la Comisión Nacional de Seguros y Fianzas, a partir del día __ de __________ de ____, con el número ");
+                             texto.append("______________________/CONDUSEF_________.”");
+                             this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_OBLIQUE, 11.1f, (-1.5f * 9f), 1f, 0f);
+                          }
+
+
+                   }
+
                     if ( datos.getPaquete() == 3 ||datos.getPaquete() == 4) {
                         
                         int nume = document.getNumberOfPages();                                 
@@ -704,7 +705,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                       // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                        //document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
@@ -730,7 +731,10 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
             baseRow = communsPdf.setRow(table);
              if (datos.getPaquete() == 4) {
                 communsPdf.setCell(baseRow, 100, "UNIDAD ESPECIALIZADA DE ATENCIÓN DE CONSULTAS Y RECLAMACIONES (UNE):", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
-             }else{
+             }else if (datos.getPaquete() == 3) {
+                communsPdf.setCell(baseRow, 100, "ATENCIÓN A CLIENTES Y UNIDAD ESPECIALIZADA DE ATENCIÓN A USUARIOS (UNE):", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);
+             }
+             else{
                 communsPdf.setCell(baseRow, 100, "UNIDAD  ESPECIALIZADA  DE ATENCION A USUARIOS (UNE)", Color.BLACK, true, "L", 10, communsPdf.setLineStyle(Color.white, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), azulb);    
              }
             
@@ -749,6 +753,11 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                 texto.append("Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) ubicada en Av.  Insurgentes Sur  No.  762 ");
                 texto.append("Col. Del Valle, Benito Juárez, C.P. 03100, Ciudad de México, teléfonos (55) 5340-0999 y 800-999-80-80, por correo ");
                 texto.append("electrónico: asesoria@condusef.gob.mx o visite la página www.condusef.gob.mx.");
+                yStart = page.getMediaBox().getHeight() - tb;
+                PDPageContentStream content02 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                communsPdf.drawBox(content02, Color.black, 25, yStart-97, 552, 0.5f);
+                content02.close();
+    
             } else  if (datos.getPaquete() == 4) {
                 texto.append("Ciudad de México, C.P. 05348, de lunes a viernes de 8:00 a 17:00 hrs.; o bien contacte a la Comisión Nacional para la ");
                 texto.append("Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) ubicada en Av.  Insurgentes Sur ");
@@ -774,7 +783,7 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
             yStart = page.getMediaBox().getHeight() - tb;
         }
 
-        private Float getInteresContratante(PDDocument document, PDPage page) throws IOException {
+        private Float getInteresContratante(PDDocument document, PDPage page, CaractulaProjection datos) throws IOException {
             BaseTable table;
             Row<PDPage> baseRow;
             StringBuilder texto;
@@ -791,8 +800,16 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
             texto.append("rectificación correspondiente dentro de los treinta días que sigan al día en que reciba la póliza. Transcurrido este ");
             texto.append("plazo, se considerarán aceptadas las estipulaciones de la póliza o de sus modificaciones (Art.25 Ley Sobre el ");
             texto.append("Contrato de Seguro).");
-            this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547, PDType1Font.HELVETICA_BOLD, 10f, (-1.3f * 9f), 1f, 0.2f);
-
+            if(datos.getPaquete() == 3) {
+            
+                this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540,PDType1Font.HELVETICA , 11f, (-1.3f * 9f), 1f, 0.2f);
+    
+            }else{
+                this.parrafo(document, page, this.medidas(page.getMediaBox(), 35f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 547,PDType1Font.HELVETICA_BOLD , 10f, (-1.3f * 9f), 1f, 0.2f);
+    
+            }
+           
+           
             tb = tb + 60;
             texto = new StringBuilder();
             texto.append("Le recordamos que el producto contiene exclusiones y/o limitantes de cobertura, los cuales ");
@@ -854,8 +871,11 @@ import com.fasterxml.jackson.databind.ObjectMapper ;
                         texto = "Seguro individual – Producto Básico Accidentes Personales";
                         break;
                     case 3:
-                        texto = "Seguro de Hospitalización";
-                        //texto="Seguro individual – Hospitalización";
+                    //texto="Seguro individual – Hospitalización";
+                        //texto = "Seguro de Hospitalización";
+                         texto ="RENTA DIARIA POR HOSPITALIZACION";
+                    
+                        
                         break;
                     case 4:
                         texto = "Seguro de Muerte Accidental";
