@@ -26,11 +26,10 @@ public class AigSaludModel {
 			int inicio = 0;
 			int fin = 0;
 
-			//tipo
-			modelo.setTipo(3);
-			//cia
+	
+			modelo.setTipo(3);		
 			modelo.setCia(3);
-			//Datos del Contractante
+		
 			
 			inicio = contenido.indexOf("CARÁTULA DE LA PÓLIZA");
 			fin = contenido.indexOf("Información de Asegurados Adicionales");
