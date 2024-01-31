@@ -2,7 +2,6 @@ package com.copsis.models.impresion ;
 
 import java.awt.Color ;
 import java.io.ByteArrayOutputStream ;
-import java.io.File;
 import java.io.IOException ;
 
 import org.apache.pdfbox.pdmodel.PDDocument ;
@@ -50,7 +49,7 @@ public class ImpresionPrudPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/prud" + datos.getPaquete() + ".pdf"));
+                   // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getPaquete() + ".pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();
@@ -145,24 +144,24 @@ public class ImpresionPrudPdf {
         table = new BaseTable(yStart, yStartNewPage, 0, fullWidth, 0, document, page, false, true);
         baseRow = communsPdf.setRow(table, 15);
         communsPdf.setCell(baseRow, 100,
-                ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKJTetcstexw1pEUbr5UCy5RT4EFN0czC3L7ck53tsxyS/01.png"),
+                ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKPvxirR6jb8tWEYHVyAY5zqNroeczBxGOLxYAtZ3sUfo/01.png"),
                 0, 0, Color.black);
         table.remoBordes(true, bottomMargin);
         table.draw();
          
-        getEncabezadoTexto(document, page, 510f,135f,datos);
+        getEncabezadoTexto(document, page, 510f,134f,datos);
 
         String[] imagenes = {
             
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKAWeKLbO7tZecMSpvUZzZsezoCUijshOblqoddYkMF/02.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKLW32In9zM8MR3SHa99JB1cNGeICVwQXmA4k6YCaS0/03.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKJq2pq39l4f4gsX3k401raItUyz1XrYzMi1ifeCmP5/04.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKGEJPS3ldoPKZgAsaSRt0SpVnZC9MfKxQk8CPuQv8C/05.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKPkBDyDEHaaewBTqyr9b21dzj1prD49eGE73D87jH5/06.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKHR4AqwU8gRyb7WkTIMbwVAf9BN9np8vrrC6GjXN2fNK/07.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKDts5uHuJs9O9HnOq13lb6c7vz1H5gV6PXBNAlEmXhz/08.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKMphoBMld2m4OUZKIwyErfMPGA9bhiXJiuifooWS99L7/09.png",
-             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKMEnFhGNG6MZbR7w1WUdHaItUyz1XrYzMi1ifeCmP5/10.png"
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKKLM68m6SMN4vC0k9eUnA1dzj1prD49eGE73D87jH5/02.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKCC66sZ2AFnlMHGxSCkFRzirmk2yhx00TLfhpFbUBcSR/03.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKBB0MIahgxPiV3wu85DYzfy1dzj1prD49eGE73D87jH5/04.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKGOX9YdCV8bLzDWLZKtPfDc5bDwxp7b5kpNlunxjRl0/05.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKPNHWMTDDC6fIiL1oiJIQIelPvg8f9ZCxJelFzfXAwx/06.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKEClz9EOGecUbC5cMXic2jpLRPTPKtgif9n2PqTnqk/07.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKIumQqDdf4jPmeGYibsPn3soZtoSSzcRuXaldAJU8lK/08.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKOkm0DvftwFgwap19mi7zMf9BN9np8vrrC6GjXN2fNK/09.png",
+             "https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2401/1N7rQflDvq65bN1u4E4VKP5CaSjCssuAU3FMAXq1XWMSOsNP5MwbOexTbvtPgfj/10.png"
         };
          
         // Acceder a las URLs de las imágenes en el arreglo
