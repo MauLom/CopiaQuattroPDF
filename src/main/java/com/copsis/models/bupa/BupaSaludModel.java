@@ -203,8 +203,7 @@ public class BupaSaludModel {
 					List<String> valores = fn.obtenerListNumeros2(recibo.split("\n")[i]);
 					modelo.setCveAgente(valores.get(0));
 				}
-				if(recibo.split("\n")[i].contains("Número de Póliza") && recibo.split("\n")[i].contains("Plan")){
-					System.out.println(recibo.split("\n")[i]);
+				if(recibo.split("\n")[i].contains("Número de Póliza") && recibo.split("\n")[i].contains("Plan")){				
                   modelo.setPlan(recibo.split("\n")[i].split("Plan")[1].replace("###", "").trim());
 				}
 			}
