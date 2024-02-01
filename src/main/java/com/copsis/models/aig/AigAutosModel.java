@@ -142,8 +142,11 @@ public class AigAutosModel {
 					
 					if (newcontenido.toString().split("\n")[i].contains("Marca:")) {
 						String marca = newcontenido.toString().split("\n")[i].split("Marca:")[1];
-						if(marca.contains("Modelo")) {
+						 if(marca.contains("Modelo")) {
 							marca = marca.split("Modelo")[0];
+						}
+						if(marca.contains("Tipo")) {
+							marca = marca.split("Tipo")[0];
 						}
 						modelo.setMarca(marca.replace("###", "").trim());
 
@@ -236,7 +239,10 @@ public class AigAutosModel {
 							aux = aux.replace("###","");
 						}
 						 List<String> valores = fn.obtenerListNumeros(aux);
-					   modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
+						 if(!valores.isEmpty()){
+						 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));				
+						 }
+					   		
 					}
 
 					if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.PRIMA_TOTAL2)) {
