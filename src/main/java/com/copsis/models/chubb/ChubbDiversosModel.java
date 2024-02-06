@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.print.DocFlavor.STRING;
+
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
@@ -346,6 +348,7 @@ public class ChubbDiversosModel {
 			// UBICACIONES
 			inicio = contenido.indexOf("Características del riesgo");
 			fin = contenido.indexOf("Prima");
+	
 
 			if (contenidoUb.toString().isEmpty() && inicio > -1 && fin > inicio) {
 				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
@@ -433,6 +436,42 @@ public class ChubbDiversosModel {
 				modelo.setUbicaciones(ubicaciones);
 
 			}
+
+			if(modelo.getUbicaciones().isEmpty()){
+				contenidoUb = new StringBuilder();
+				inicio = contenido.indexOf("Características del riesgo");
+			    fin = contenido.indexOf("Prima");
+				contenidoUb.append(contenido.substring(inicio, fin));
+				EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
+				for (int i = 0; i < contenidoUb.toString().split("\n").length; i++) {
+				
+					if(contenidoUb.toString().split("\n")[i].contains("Dirección:")){
+                     ubicacion.setCalle(contenidoUb.toString().split("\n")[i].split("Dirección")[1].replace("\r", ""));
+					}
+					if(contenidoUb.toString().split("\n")[i].contains("Tipo Techo:")
+					&& contenidoUb.toString().split("\n")[i].contains("Tipo Muro:")){						
+						ubicacion.setTechos(fn.material(contenidoUb.toString().split("\n")[i].split("Techo")[1].split("Tipo Muro:")[0]
+						.replace("###", "").trim()));
+						ubicacion.setMuros(fn.material(contenidoUb.toString().split("\n")[i].split("Tipo Muro:")[1]
+						.replace("###", "").trim()));
+						
+					}
+					if(contenidoUb.toString().split("\n")[i].contains("No. Sótanos")){
+					List<String> valores = fn.obtenerListNumeros2(contenidoUb.toString().split("\n")[i].split("No. Sótanos")[1]);						
+						ubicacion.setSotanos(Integer.parseInt( valores.get(0)));
+					}
+					if(contenidoUb.toString().split("\n")[i].contains("No. Niveles:")){
+						List<String> valores = fn.obtenerListNumeros2(contenidoUb.toString().split("\n")[i].split("No. Niveles:")[1]);						
+					   ubicacion.setNiveles(Integer.parseInt( valores.get(0)));
+					}
+
+				}
+
+			ubicaciones.add(ubicacion);
+			modelo.setUbicaciones(ubicaciones);
+			}
+			
+
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			// Cobertutas
