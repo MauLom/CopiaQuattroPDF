@@ -717,23 +717,7 @@ public class ChubbDiversosModel {
 				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
 
-			if (!recibos.isEmpty()) {
-				inicio = recibos.indexOf("AVISO DE COBRO");
-				fin = recibos.indexOf("El pago de la contraprestación");
-
-				newcontenido = fn.extracted(inicio, fin, recibos);
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
-					if (newcontenido.split("\n")[i].contains("Total a pagar:")) {
-						List<String> valores = fn
-								.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
-						if (!valores.isEmpty()) {
-							modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-						}
-					}
-				}
-
-			}
+		
 
 			return modelo;
 		} catch (Exception ex) {
