@@ -32,7 +32,7 @@ public class GeneralAutosModel {
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			
+			System.out.println(newcontenido.toString().split("\n")[i]);
 					 if(newcontenido.toString().split("\n")[i].contains("DATOS DEL ASEGURADO") && newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
 						 modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].split("Póliza")[0].replace("###", ""));
 					  modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
