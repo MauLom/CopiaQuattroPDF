@@ -27,7 +27,11 @@ public class GeneralModel {
 			if(contenido.contains("PAQUETE EMPRESARIAL")) {
 				tipo =4;
 			}
-			
+			if(fn.caratula(2, 2, pdfStripper, pdDoc).contains("PÓLIZA DE AUTOMÓVILES")){
+				tipo =1;
+
+			}
+
 			 switch (tipo) {
 			 case 1:
 				 modelo = new GeneralAutosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	
