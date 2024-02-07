@@ -31,7 +31,7 @@ public class GeneralModel {
 				tipo =1;
 
 			}
-			System.out.println(fn.caratula(2, 2, pdfStripper, pdDoc));
+
 			 switch (tipo) {
 			 case 1:
 				 modelo = new GeneralAutosModel().procesar(fn.caratula(1, 3, pdfStripper, pdDoc));	

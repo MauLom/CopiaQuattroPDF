@@ -3,6 +3,7 @@ package com.copsis.models.general;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -26,21 +27,22 @@ public class GeneralAutosModel {
 				modelo.setCia(16);
 
 				inicio = contenido.indexOf("DATOS DEL ASEGURADO");
-				fin = contenido.indexOf("COBERTURAS CONTRATADAS");
+				fin = contenido.indexOf(ConstantsValue.COBERTURASCONTRATADAS.toUpperCase());
+				
+				
 				
 				
 				newcontenido.append( fn.extracted(inicio, fin, contenido));
 				
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-			System.out.println(newcontenido.toString().split("\n")[i]);
-					 if(newcontenido.toString().split("\n")[i].contains("DATOS DEL ASEGURADO") && newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains("Póliza")) {
-						 modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].split("Póliza")[0].replace("###", ""));
+				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+					 if(newcontenido.toString().split("\n")[i].contains("DATOS DEL ASEGURADO") && newcontenido.toString().split("\n")[i].contains("R.F.C.") && newcontenido.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT)) {
+						 modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C.")[1].split(ConstantsValue.POLIZA_ACENT)[0].replace("###", ""));
 					  modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 					  modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[1]);
 					 }
-					 if(newcontenido.toString().split("\n")[i].contains("Desde") ) {
-						 newdireccion.append(newcontenido.toString().split("\n")[i].split("Desde")[0]);
-						 String vigencia =newcontenido.toString().split("\n")[i].split("Desde")[1].replace("###", "").trim().replace(" ", "-");					
+					 if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE) ) {
+						 newdireccion.append(newcontenido.toString().split("\n")[i].split(ConstantsValue.DESDE)[0]);
+						 String vigencia =newcontenido.toString().split("\n")[i].split(ConstantsValue.DESDE)[1].replace("###", "").trim().replace(" ", "-");					
 						 if(vigencia.split("-").length == 3) {					
 							 modelo.setVigenciaDe(fn.formatDateMonthCadena(vigencia));
 						 }					 			
@@ -59,18 +61,18 @@ public class GeneralAutosModel {
 						 }					
 					 }
 					 
-					 if(newcontenido.toString().split("\n")[i].contains("MARCA:")  && newcontenido.toString().split("\n")[i].contains("TIPO")) {
-						 modelo.setMarca(newcontenido.toString().split("\n")[i].split("MARCA:")[1].split("TIPO")[0].replace("###", "").trim());
+					 if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.MARCA.toUpperCase())  && newcontenido.toString().split("\n")[i].contains("TIPO")) {
+						 modelo.setMarca(newcontenido.toString().split("\n")[i].split(ConstantsValue.MARCA.toUpperCase())[1].split("TIPO")[0].replace("###", "").trim());
 					 }
-					 if(newcontenido.toString().split("\n")[i].contains("VERSIÓN:")  && newcontenido.toString().split("\n")[i].contains("No. de Cliente")) {
-						 modelo.setDescripcion(newcontenido.toString().split("\n")[i].split("VERSIÓN:")[1].split("No. de Cliente")[0].replace("###", "").trim());
+					 if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.VERSIONPT.toUpperCase())  && newcontenido.toString().split("\n")[i].contains("No. de Cliente")) {
+						 modelo.setDescripcion(newcontenido.toString().split("\n")[i].split(ConstantsValue.VERSIONPT.toUpperCase())[1].split("No. de Cliente")[0].replace("###", "").trim());
 					 }
 					 
-					 if(newcontenido.toString().split("\n")[i].contains("MODELO:")  && newcontenido.toString().split("\n")[i].contains("SERIE:")
-							 && newcontenido.toString().split("\n")[i].contains("MOTOR:")	 ) {
-						 modelo.setModelo(fn.castInteger(newcontenido.toString().split("\n")[i].split("MODELO:")[1].split("SERIE:")[0].replace("###", "").trim()));
-						 modelo.setSerie(newcontenido.toString().split("\n")[i].split("SERIE:")[1].split("MOTOR:")[0].replace("###", "").trim());
-						 modelo.setMotor(newcontenido.toString().split("\n")[i].split("MOTOR:")[1].split("###")[1].replace("###", "").trim());
+					 if(newcontenido.toString().split("\n")[i].contains("MODELO:")  && newcontenido.toString().split("\n")[i].contains(ConstantsValue.SERIE_MAYUS)
+							 && newcontenido.toString().split("\n")[i].contains(ConstantsValue.MOTOR.toUpperCase())	 ) {
+						 modelo.setModelo(fn.castInteger(newcontenido.toString().split("\n")[i].split("MODELO:")[1].split(ConstantsValue.SERIE_MAYUS)[0].replace("###", "").trim()));
+						 modelo.setSerie(newcontenido.toString().split("\n")[i].split(ConstantsValue.SERIE_MAYUS)[1].split(ConstantsValue.MOTOR.toUpperCase())[0].replace("###", "").trim());
+						 modelo.setMotor(newcontenido.toString().split("\n")[i].split(ConstantsValue.MOTOR.toUpperCase())[1].split("###")[1].replace("###", "").trim());
 					 }
 					 
 					 if(newcontenido.toString().split("\n")[i].contains("PLACAS:")  && newcontenido.toString().split("\n")[i].contains("Producto")) {
