@@ -45,9 +45,12 @@ public class SuraModel {
 				case 1:// Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
 
+					pagFin = fn.pagFinRango(stripper, doc, "Agente:");
+                      
 					if (pagFin == 0) {
 						pagFin = 3;
 					}
+					
 					modelo = new SuraAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
 					break;
 				case 2:// Salud
@@ -110,6 +113,9 @@ public class SuraModel {
 		
 
 		if (tipo == 4 && fn.caratula(3, 3, stripper, doc).contains("Modelo")) {
+			tipo = 1;
+		}
+		if (tipo == 0 && fn.caratula(4, 4, stripper, doc).contains("Modelo")) {
 			tipo = 1;
 		}
 
