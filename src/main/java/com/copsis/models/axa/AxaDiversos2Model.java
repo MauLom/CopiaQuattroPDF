@@ -36,12 +36,14 @@ public class AxaDiversos2Model {
             modelo.setCia(20);
 
 
-            inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");
+            inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");           
             fin = contenido.indexOf("Datos del Contratante");
-     
+           
+           
             newcon.append(fn.extracted(inicio, fin, contenido));
             
             for (int i = 0; i < newcon.toString().split("\n").length; i++) {
+               
                 if(newcon.toString().split("\n")[i].contains("CARÁTULA DE PÓLIZA")){
                     modelo.setPlan(newcon.toString().split("\n")[i+1].split("###")[1]);
 
