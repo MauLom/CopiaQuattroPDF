@@ -834,6 +834,10 @@ import com.copsis.models.EstructuraRecibosModel ;
                             newcontenido = newcontenido.split("REPUVE")[0];
                         }
                         newcontenido = newcontenido.split(ConstantsValue.PLACASPT)[0].replace("###", "").trim();
+                        if(newcontenido.contains("Color:")){
+                         newcontenido = newcontenido.split("Color")[0];
+                        } 
+                        
                         modelo.setMotor(newcontenido);
                     }
                 }
