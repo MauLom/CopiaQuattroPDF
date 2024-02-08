@@ -1,10 +1,11 @@
 package com.copsis.models.axa;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
+import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
 public class AxaDiversos4Model {
@@ -22,11 +23,10 @@ public class AxaDiversos4Model {
           
 
             inicio = contenido.indexOf("Carátula de póliza");
-            fin = contenido.indexOf("Costo del seguro");/// se usa para version 3
+            fin = contenido.indexOf("Costo del seguro");
             newcontenido.append(fn.extracted(inicio, fin, contenido));
 
-            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) { 
-                System.out.println(newcontenido.toString().split("\n")[i]);
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                
                 if(newcontenido.toString().split("\n")[i].contains("Datos del contratante") && newcontenido.toString().split("\n")[i].contains("Póliza")
                 && newcontenido.toString().split("\n")[i+1].contains("Nombre:")){
                     modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("Nombre:")[1].split("###")[1].trim());
@@ -69,7 +69,70 @@ public class AxaDiversos4Model {
 
 
             }
-            
+           
+
+
+            inicio = contenido.indexOf("Costo del seguro");
+            fin = contenido.indexOf("Datos del asegurado");
+            newcontenido = new StringBuilder();
+            newcontenido.append(fn.extracted(inicio, fin, contenido));
+
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
+               
+                if(newcontenido.toString().split("\n")[i].length() > 5){                   
+                if (newcontenido.toString().split("\n")[i].contains("Prima neta:")) {
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+                    if(!valores.isEmpty()){
+                        modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    }						
+                }
+                if (newcontenido.toString().split("\n")[i].contains("Gastos de expedición:")) {
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+                    if(!valores.isEmpty()){
+                        modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    }						
+                }
+
+                if (newcontenido.toString().split("\n")[i].contains("IVA:")) {
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+                    if(!valores.isEmpty()){
+                        modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    }						
+                }
+
+              
+                if (newcontenido.toString().split("\n")[i].contains("Prima total:")) {
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
+                    if(!valores.isEmpty()){
+                        modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+                    }						
+                }
+            }
+
+            }
+
+            inicio = contenido.indexOf("Suma asegurada");
+            fin = contenido.indexOf("Formas de aseguramiento");
+            newcontenido = new StringBuilder();
+            newcontenido.append(fn.extracted(inicio, fin, contenido));
+             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
+            for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {                       
+                if(!newcontenido.toString().split("\n")[i].contains("Suma asegurada")
+                   && !newcontenido.toString().split("\n")[i].contains("I. Daños Materiales")
+                   && !newcontenido.toString().split("\n")[i].contains("II. Responsabilidad")){
+                    EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
+					int sp  = newcontenido.toString().split("\n")[i].split("###").length;
+                   
+                    if(sp == 2 || sp == 3 || sp == 4){
+                        cobertura.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+                        cobertura.setSa(newcontenido.toString().split("\n")[i].split("###")[1]);
+                        coberturas.add(cobertura);
+                    }
+                   
+                 }
+            } 
+            modelo.setCoberturas(coberturas);       
+
             return modelo;
         } catch (Exception ex) {
             modelo.setError(AxaDiversos4Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
