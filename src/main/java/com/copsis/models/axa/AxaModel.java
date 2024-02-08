@@ -123,7 +123,12 @@ public class AxaModel {
 						   case "DAÑOS":
 						   int pagFin = doc.getNumberOfPages() > 3 ? 6 :4;
 						 
-						   if(!fn.caratula(1, pagFin, stripper, doc).contains("Vehicle description") && (!div0)) {									
+						   
+							if(fn.caratula(1, pagFin, stripper, doc).contains("Equipo de Contratistas y  Maquinaria")){
+								modelo  = new AxaDiversos4Model().procesar(fn.caratula(2, pagFin, stripper, doc));
+								
+
+							}else if(!fn.caratula(1, pagFin, stripper, doc).contains("Vehicle description") && (!div0)) {									
 							 AxaDiversos2Model datosAxaDive = new AxaDiversos2Model(fn.caratula(1, pagFin, stripper, doc));
 								modelo = datosAxaDive.procesar();
 							   
