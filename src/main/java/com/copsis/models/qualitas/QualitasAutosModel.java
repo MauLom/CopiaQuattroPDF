@@ -432,6 +432,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio, contenido.indexOf("\r\n", inicio));
                     if (newcontenido.contains("%")) {
+                       
                         newcontenido = newcontenido.split("%")[1].replace("###", "").replace(",", "").trim();
                         if (newcontenido.contains("Bitli")) {
                             newcontenido = newcontenido.split("Bitli")[0].trim();
@@ -519,6 +520,20 @@ import com.copsis.models.EstructuraRecibosModel ;
                         modelo.setPlan(cotxtra.substring(inicio, inicio + 10).replace("###", "").replace("\n", ""));
                     }
 
+                }
+                if(modelo.getCteDireccion().isEmpty()){
+                    
+                    
+                    for(int i=0; i < cotxtra.split("\n").length; i++){
+                     
+                        if(cotxtra.split("\n")[i].contains( ConstantsValue.DOMICILIO) && cotxtra.split("\n")[i].contains(ConstantsValue.RFC3)){
+                           texto.append(cotxtra.split("\n")[i].split( ConstantsValue.DOMICILIO)[1].split(ConstantsValue.RFC3)[0].replace("###", " "));
+   
+                        }
+                     
+                       }
+                      modelo.setCteDireccion(texto.toString().trim());
+                   
                 }
 
                 // renovacion
@@ -1104,7 +1119,7 @@ import com.copsis.models.EstructuraRecibosModel ;
 
 
                 return modelo;
-            } catch (Exception ex) {       
+            } catch (Exception ex) {                
                 modelo.setError(
                         QualitasAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
                 return modelo;
