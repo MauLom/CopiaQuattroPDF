@@ -112,7 +112,11 @@ public class qualitasAutosMotosModel {
 						if(newcontenido.split("\n")[i].split(ConstantsValue.MOTOR)[1].contains("REPUVE")) {
 							modelo.setMotor(newcontenido.split("\n")[i].split(ConstantsValue.MOTOR)[1].split("REPUVE")[0].replace("###", "").trim());
 						}else if(newcontenido.split("\n")[i].split(ConstantsValue.MOTOR)[1].contains(ConstantsValue.PLACAS)){
-							modelo.setMotor(newcontenido.split("\n")[i].split(ConstantsValue.MOTOR)[1].split(ConstantsValue.PLACAS)[0].replace("###", "").trim());
+							String con = newcontenido.split("\n")[i].split(ConstantsValue.MOTOR)[1].split(ConstantsValue.PLACAS)[0].replace("###", "").trim();
+							if(newcontenido.contains("Color:")){
+								con = con.split("Color")[0];
+							   } 
+							modelo.setMotor(con);
 						}
 						
 					}
