@@ -43,4 +43,5 @@ public class CaractulaProjection {
     private	String sumaAsegurada;
     private	String estado;
     private String curpContratante;
+    private String cobertura;
 }

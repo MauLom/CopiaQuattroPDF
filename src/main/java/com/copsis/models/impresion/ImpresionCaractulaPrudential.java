@@ -269,11 +269,11 @@ import com.copsis.utils.FormatoFecha;
 
                                 if (ccb == cbo.size()) {
                                     baseRow = communsPdf.setRow(table, 25);
-                                    communsPdf.setCell(baseRow, 37, cbo.get(i).getNombres(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                     communsPdf.setCell(baseRow, 63, (datos.getPaquete() == 2 || datos.getPaquete() == 3 || datos.getPaquete() == 4 ? valorSa : cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                 } else {
                                     baseRow = communsPdf.setRow(table);
-                                    communsPdf.setCell(baseRow, 37, cbo.get(i).getNombres(), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                     communsPdf.setCell(baseRow, 63, (datos.getPaquete() == 2 || datos.getPaquete() == 3 || datos.getPaquete() == 4 ? valorSa : cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
 
                                 }
@@ -878,7 +878,7 @@ import com.copsis.utils.FormatoFecha;
                         
                         break;
                     case 4:
-                        texto = "Seguro de Muerte Accidental";
+                        texto = "Muerte Accidental y Pérdidas Orgánicas";
                         //texto= "Seguro individual – Muerte Accidental y Pérdidas Orgánicas";
                         break;
                 }
