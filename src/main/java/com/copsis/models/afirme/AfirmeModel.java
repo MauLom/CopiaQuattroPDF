@@ -36,6 +36,13 @@ public class AfirmeModel {
                     tipoV =4;  
                 }
 
+				if( tipo == 1 && (fn.caratula(1, 2, stripper, doc).contains("SEGURO PAQUETE EMPRESARIAL")
+				||fn.caratula(1, 2, stripper, doc).contains("Incendio y/o Rayo") )){
+			
+                    tipo=4;
+                    tipoV =4;  
+                }
+
 				if( tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("SEGURO TRANSPORTES CARGA")){
 					tipo=4;
 					tipoV =1;
