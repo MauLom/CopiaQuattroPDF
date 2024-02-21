@@ -3,7 +3,9 @@ package com.copsis.models.ImpresionVitro;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.URL;
 
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -42,6 +44,7 @@ public class ImpresionVitrCBienvenida {
         try {
             ByteArrayOutputStream output;
             try (PDDocument document = new PDDocument()) {
+                PDFMergerUtility PDFmerger = new PDFMergerUtility();
                 try {
                     PDPage page = new PDPage();
                     document.addPage(page);
@@ -112,6 +115,7 @@ public class ImpresionVitrCBienvenida {
                     table.draw();
 
 
+                    yStart -= table.getHeaderAndDataHeight();
 
                     switch (impresion.getTipo()) {
                         case 1:
@@ -127,7 +131,7 @@ public class ImpresionVitrCBienvenida {
                                 baseRow = communsPdf.setRow(table, 12f);
 
                                 
-                                communsPdf.setCell(baseRow, 25,communsPdf.eliminaHtmlTags(datos[t]),  Color.decode("#444444"), true, "L", 11, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3.5f),gray);
+                                communsPdf.setCell(baseRow, 100,communsPdf.eliminaHtmlTags(datos[t]),  Color.decode("#444444"), false, "L", 11, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3.5f),gray);
 
                                 if (isEndOfPage(table)) {
                                     table.getRows().remove(table.getRows().size() - 1);
@@ -135,7 +139,7 @@ public class ImpresionVitrCBienvenida {
 
                                     page = new PDPage();
                                     document.addPage(page);
-                                    setEncabezado(joDatos, document, page, false);
+                                    setEncabezado(impresion, document, page, false);
                                     acumula2 = false;
 
                                 } else {
@@ -166,70 +170,134 @@ public class ImpresionVitrCBienvenida {
 
                         case 2:
 
-                            int t3 = 0;
-                            int c3 = 0;
-                            int n3 = 0;
-                            JSONArray jd = joDato.optJSONArray("c8");
-                            while (t3 < jd.length()) {
-                                acumula = true;
+                            // int t3 = 0;
+                            // int c3 = 0;
+                            // int n3 = 0;
+                            // JSONArray jd = joDato.optJSONArray("c8");
+                            // while (t3 < jd.length()) {
+                            //     acumula = true;
 
-                                n3++;
-                                JSONObject jodatos = jd.getJSONObject(t3);
+                            //     n3++;
+                            //     JSONObject jodatos = jd.getJSONObject(t3);
 
-                                table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-                                baseRow = communsPdf.setRow(table, 40);
-                                communsPdf.setCell(baseRow, 5, String.valueOf(n3).toString(), Color.white, null, true, 11).setRightPadding(0);
-                                communsPdf.setCell(baseRow, 18, "Recomendación:", Color.black, null, true, 12).setRightPadding(0);
-                                communsPdf.setCell(baseRow, 77, jodatos.getString("c1"), Color.black, null, false, 11).setLeftPadding(0);
+                            //     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
+                            //     baseRow = communsPdf.setRow(table, 40);
+                            //     communsPdf.setCell(baseRow, 5, String.valueOf(n3).toString(), Color.white, null, true, 11).setRightPadding(0);
+                            //     communsPdf.setCell(baseRow, 18, "Recomendación:", Color.black, null, true, 12).setRightPadding(0);
+                            //     communsPdf.setCell(baseRow, 77, jodatos.getString("c1"), Color.black, null, false, 11).setLeftPadding(0);
 
-                                if (isEndOfPage(table)) {
-                                    table.getRows().remove(table.getRows().size() - 1);
-                                    table.draw();
+                            //     if (isEndOfPage(table)) {
+                            //         table.getRows().remove(table.getRows().size() - 1);
+                            //         table.draw();
 
-                                    page = new PDPage();
-                                    document.addPage(page);
-                                    setEncabezado(joDatos, document, page, false);
-                                    acumula = false;
+                            //         page = new PDPage();
+                            //         document.addPage(page);
+                            //         setEncabezado(joDatos, document, page, false);
+                            //         acumula = false;
 
-                                } else {
-                                    PDPageContentStream content04 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                                    communsPdf.draWCircle(content04, Color.decode(joDato.getJSONObject("c6").getString("c1")), 19, (yStart - 7), 13, 0.5f);
-                                    content04.close();
-                                    table.draw();
-                                    yStart -= table.getHeaderAndDataHeight();
-                                    pivoresultado2 = yStart;
-                                    pivoresultado3 = pivoresultado1 - pivoresultado2;
-                                    PDPageContentStream contentgris2 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true);
-                                    communsPdf.drawBox(contentgris2, Color.decode("#F8F8F8"), 0, 400, 700, (pivoresultado3 + 40));
+                            //     } else {
+                            //         PDPageContentStream content04 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                            //         communsPdf.draWCircle(content04, Color.decode(joDato.getJSONObject("c6").getString("c1")), 19, (yStart - 7), 13, 0.5f);
+                            //         content04.close();
+                            //         table.draw();
+                            //         yStart -= table.getHeaderAndDataHeight();
+                            //         pivoresultado2 = yStart;
+                            //         pivoresultado3 = pivoresultado1 - pivoresultado2;
+                            //         PDPageContentStream contentgris2 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true);
+                            //         communsPdf.drawBox(contentgris2, Color.decode("#F8F8F8"), 0, 400, 700, (pivoresultado3 + 40));
 
-                                    contentgris2.close();
-                                }
-                                c3++;
+                            //         contentgris2.close();
+                            //     }
+                            //     c3++;
 
-                                if (acumula) {
+                            //     if (acumula) {
 
-                                    t3++;
+                            //         t3++;
 
-                                }
-                                if (c3 > 100) {
-                                    table.draw();
-                                    break;
+                            //     }
+                            //     if (c3 > 100) {
+                            //         table.draw();
+                            //         break;
 
-                                }
+                            //     }
 
-                            }
+                            // }
 
                             break;
 
                     }
 
+                    yStart = 395;
+                    table = new BaseTable(400, yStartNewPage, 0, 622, 0, document, page, false, true);
+                    baseRow = communsPdf.setRow(table, 190);
+                    communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresion.getImagen1()));
+                    table.draw();
+
+                    int t1 = 0;
+                    int c1 = 0;
+                    String dato1 = communsPdf.eliminaHtmlTags(impresion.getSeccion2());
+                    String datos1[] = dato1.split("<br>|<br/>|</br>");
+
+                    while (t1 < datos1.length) {
+                        acumula = true;
+
+                        table = new BaseTable(yStart, yStartNewPage, bottomMargin2, fullWidth, margin, document, page, false, true);
+
+                        baseRow = communsPdf.setRow(table, 13f);
+                        if (datos1[t1].contains("Números de atención") || datos1[t1].contains("Contacto directo con nosotros:")) {                                                  
+                            communsPdf.setCell(baseRow, 100,communsPdf.eliminaHtmlTags(datos1[t1]), black, false, "L", 12, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3.5f),gray);
+                        } else {                           
+                            communsPdf.setCell(baseRow, 100,communsPdf.eliminaHtmlTags(datos1[t1]), black, false, "L", 10, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(0f),gray).setLeftPadding(30f);
+                        }
+
+                        if (isEndOfPage2(table)) {
+                            table.getRows().remove(table.getRows().size() - 1);
+                            table.draw();
+
+                            page = new PDPage();
+                            document.addPage(page);
+                            setEncabezado(impresion, document, page, false);
+                            acumula = false;
+
+                        } else {
+
+                            table.draw();
+                            yStart -= table.getHeaderAndDataHeight();
+                        }
+                        c1++;
+
+                        if (acumula) {
+                            t1++;
+                        }
+                        if (c1 > 100) {
+                            table.draw();
+                            break;
+
+                        }
+
+                    }
+
+                   if (impresion.getImagen2() != null && !impresion.getImagen2().isEmpty()) {
+                    table = new BaseTable(700, yStartNewPage, 0, 612, 0, document, page, true, true);
+                    baseRow = communsPdf.setRow(table, 800);                    
+                    communsPdf.setCellImg(baseRow, 100, ImageUtils.readImage(impresion.getImagen3()), communsPdf.setLineStyle(Color.white), communsPdf.setPadding2(0f, 0f, 0f, 0f), "L", "");                    
+                    table.draw();
+
+                    }
+
+                    if (impresion.getWebpath() != null && !impresion.getWebpath().isEmpty()) {
+                        final URL scalaByExampleUrl = new URL(impresion.getWebpath());
+                    final PDDocument documentToBeParsed = PDDocument.load(scalaByExampleUrl.openStream());
+                    PDFmerger.appendDocument(document, documentToBeParsed);
+                    PDFmerger.mergeDocuments();
+                    }
 
 
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new
-                    File("/home/aalbanil/Documentos/caractula.pdf"));
+                    // document.save(new
+                    // File("/home/aalbanil/Documentos/caractula.pdf"));
                     return output.toByteArray();
                 } finally {
                     document.close();

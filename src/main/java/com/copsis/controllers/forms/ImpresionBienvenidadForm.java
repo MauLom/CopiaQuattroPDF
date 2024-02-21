@@ -26,6 +26,7 @@ public class ImpresionBienvenidadForm {
     private int  tipo;
     private String titulo;
     private String subtitulo;
-    private String colorDpoliza;    
+    private String colorDpoliza;   
+    private String webpath; 
     
 }
