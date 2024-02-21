@@ -199,6 +199,9 @@ public class qualitasAutosMotosModel {
 					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION)) {												 
 						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION)[1].replace("###", "").trim())));						
 					}
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.EXPEDICION3)) {												 
+						modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.EXPEDICION3)[1].replace("###", "").trim())));						
+					}
 					if(newcontenido.split("\n")[i].contains("I.V.A.")) {	
 						arrNewContenido = newcontenido.split("\n")[i].split("I.V.A.")[1].split("###");
 						modelo.setIva(fn.castBigDecimal(fn.preparaPrimas(arrNewContenido[arrNewContenido.length-1].replace("###", "").trim())));						
