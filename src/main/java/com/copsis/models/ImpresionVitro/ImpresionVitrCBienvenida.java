@@ -63,7 +63,10 @@ public class ImpresionVitrCBienvenida {
                     communsPdf.setCell(baseRow, 100,  impresion.getSubtitulo(), Color.black, false, "L", 14, communsPdf.setLineStyle(Color.black), "", communsPdf.setPadding(3f), Color.white);
 
                     baseRow = communsPdf.setRow(table, 18);
-                    communsPdf.setCell(baseRow, 50, ImageUtils.readImage(impresion.getAvataraseguradora()));
+                    if (impresion.getAvataraseguradora() != null && !impresion.getAvataraseguradora().isEmpty()) {
+                        communsPdf.setCell(baseRow, 50, ImageUtils.readImage(impresion.getAvataraseguradora()));
+                    }
+                   
                     table.draw();
 
 
