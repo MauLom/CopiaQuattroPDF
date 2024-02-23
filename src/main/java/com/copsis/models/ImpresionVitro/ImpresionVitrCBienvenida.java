@@ -120,8 +120,7 @@ public class ImpresionVitrCBienvenida {
 
                     yStart -= table.getHeaderAndDataHeight();
 
-                    switch (impresion.getTipo()) {
-                        case 1:
+                  if(impresion.getTipo() ==1){
                             int t = 0;
                             int c = 0;
                             String dato = communsPdf.eliminaHtmlTags(impresion.getSeccion1());
@@ -169,66 +168,7 @@ public class ImpresionVitrCBienvenida {
 
                             contentgris.close();
 
-                            break;
-
-                        case 2:
-
-                            // int t3 = 0;
-                            // int c3 = 0;
-                            // int n3 = 0;
-                            // JSONArray jd = joDato.optJSONArray("c8");
-                            // while (t3 < jd.length()) {
-                            //     acumula = true;
-
-                            //     n3++;
-                            //     JSONObject jodatos = jd.getJSONObject(t3);
-
-                            //     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-                            //     baseRow = communsPdf.setRow(table, 40);
-                            //     communsPdf.setCell(baseRow, 5, String.valueOf(n3).toString(), Color.white, null, true, 11).setRightPadding(0);
-                            //     communsPdf.setCell(baseRow, 18, "Recomendación:", Color.black, null, true, 12).setRightPadding(0);
-                            //     communsPdf.setCell(baseRow, 77, jodatos.getString("c1"), Color.black, null, false, 11).setLeftPadding(0);
-
-                            //     if (isEndOfPage(table)) {
-                            //         table.getRows().remove(table.getRows().size() - 1);
-                            //         table.draw();
-
-                            //         page = new PDPage();
-                            //         document.addPage(page);
-                            //         setEncabezado(joDatos, document, page, false);
-                            //         acumula = false;
-
-                            //     } else {
-                            //         PDPageContentStream content04 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-                            //         communsPdf.draWCircle(content04, Color.decode(joDato.getJSONObject("c6").getString("c1")), 19, (yStart - 7), 13, 0.5f);
-                            //         content04.close();
-                            //         table.draw();
-                            //         yStart -= table.getHeaderAndDataHeight();
-                            //         pivoresultado2 = yStart;
-                            //         pivoresultado3 = pivoresultado1 - pivoresultado2;
-                            //         PDPageContentStream contentgris2 = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.PREPEND, true);
-                            //         communsPdf.drawBox(contentgris2, Color.decode("#F8F8F8"), 0, 400, 700, (pivoresultado3 + 40));
-
-                            //         contentgris2.close();
-                            //     }
-                            //     c3++;
-
-                            //     if (acumula) {
-
-                            //         t3++;
-
-                            //     }
-                            //     if (c3 > 100) {
-                            //         table.draw();
-                            //         break;
-
-                            //     }
-
-                            // }
-
-                            break;
-
-                    }
+                        }
 
                     yStart = 395;
                     table = new BaseTable(400, yStartNewPage, 0, 622, 0, document, page, false, true);
