@@ -45,7 +45,7 @@ public class SuraModel {
 				case 1:// Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
 
-					pagFin = fn.pagFinRango(stripper, doc, "Agente:");
+					pagFin = pagFin == 0  ?fn.pagFinRango(stripper, doc, "Agente:"):pagFin;
                       
 					if (pagFin == 0) {
 						pagFin = 3;
@@ -68,6 +68,9 @@ public class SuraModel {
 					}
 					else if (fn.caratula(1, 1, stripper, doc).contains("Respaldo por Daños a Terceros")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(1, 2, stripper, doc));
+					}
+					else if (fn.caratula(3, 3, stripper, doc).contains("Respaldo por Daños a Terceros")) {
+						modelo = new SuraDiversos3Model().procesar(fn.caratula(3, 4, stripper, doc));
 					}
 					else if (fn.caratula(2, 2, stripper, doc).contains("Hogar Total")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(2, 4, stripper, doc));
