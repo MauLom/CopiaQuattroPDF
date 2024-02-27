@@ -170,14 +170,19 @@ public class SuraDiversos3Model {
                 newDireecion.append(" " + newcontenido.toString().split("\n")[i + 3].split("###")[0]);
                 newDireecion.append(" " + newcontenido.toString().split("\n")[i + 4].split("###")[0]);
             }
-          
+    
             if (newcontenido.toString().split("\n")[i].contains("Forma de pago") &&
                     newcontenido.toString().split("\n")[i].contains("emisión")) {
                 modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
             }
+            
             if(modelo.getFormaPago() == 0 && newcontenido.toString().split("\n")[i].contains("Forma de pago") ){
                   modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 1]));
             }
+            if(modelo.getFormaPago() == 0 && newcontenido.toString().split("\n")[i].contains("Forma de pago")
+            && newcontenido.toString().split("\n")[i+1].contains("PRIMA UNICA") ){
+                modelo.setFormaPago(1);
+          }
             
             vigenciasPoliza(newcontenido, i);
         }
