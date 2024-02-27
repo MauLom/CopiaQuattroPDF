@@ -46,6 +46,7 @@ import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
 import com.copsis.models.segurosmty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
+import com.copsis.models.sspins.SspInsModel;
 import com.copsis.models.sura.SuraModel;
 import com.copsis.models.thona.ThonaModel;
 import com.copsis.models.tokio.TokioModel;
@@ -540,6 +541,10 @@ public class IdentificaPolizaService {
 			}
 
           
+			if(!encontro && contenido.contains("SPP Institución de Seguros, S.A. de C.V.")){
+				modelo = new SspInsModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
+			}
 
          
 			if (!encontro) {
