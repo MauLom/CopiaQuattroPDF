@@ -34,6 +34,7 @@ public class HdiDiversosModel {
 
 			inicio = contenido.indexOf("SEGURO DE DAÑOS");			
 		    inicio = inicio == -1 ? contenido.indexOf("Ramo: Daños"): inicio;
+			inicio = inicio == -1 ? contenido.indexOf("Operación: Daños"): inicio;
 			
 			fin = contenido.indexOf("El asegurado es:");
 			fin =  fin == -1 ? contenido.indexOf("Datos de la empresa:"): fin;
@@ -45,7 +46,7 @@ public class HdiDiversosModel {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Inciso")[0].trim());
 				}
 				if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains("No. Póliza:")){				
-					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].trim());
+					modelo.setPoliza(newcontenido.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].trim());
 				}
 				if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.EMISION_MY_PT)) {
 					modelo.setFechaEmision(fn.formatDateMonthCadena((newcontenido.toString().split("\n")[i].split(ConstantsValue.EMISION_MY_PT)[1].trim())));
