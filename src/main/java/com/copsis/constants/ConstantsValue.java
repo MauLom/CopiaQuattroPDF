@@ -339,6 +339,8 @@ public final class ConstantsValue {
 	public static final String CLAVE_DEL_AGENTE ="Clave del Agente";
 	public static final String INFORMACION_ADICIONAL ="INFORMACIÓN ADICIONAL";
 	public static final String RESUMEN_DE_LA_POLIZA_HASH ="RESUMEN###DE###LA###PÓLIZA";
+	public static final String COBERTURAS_SUMA_ASEGURADA_HASH ="COBERTURAS SUMA###ASEGURADA";
+	public static final String MODULO_COBERTURA_GIM	="Módulo - Cobertura";
 	private ConstantsValue() {
 
 	}
