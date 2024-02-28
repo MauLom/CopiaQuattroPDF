@@ -28,13 +28,17 @@ public class InsigniaModel {
 		
 			tipo =fn.tipoPoliza(contenido);		
 
-			
+		
 		    if (tipo == 5) {
 				modelo = new InsigniaVidaModel(fn.caratula(1, 4, stripper, doc)).procesar();
 			}
 
 			if (tipo == 5 && fn.caratula(2, 2, stripper, doc).contains("PÓLIZA DE SEGURO DE VIDA INDIVIDUAL")) {
 				modelo = new InsigniaVidaBModel().procesar(fn.caratula(2, 3, stripper, doc));
+			}
+			
+			if (tipo == 5 && fn.caratula(2, 2, stripper, doc).contains("PÓLIZA DE SEGURO DE VIDA INDIVIDUAL") &&  fn.caratula(2, 2, stripper, doc).contains("Póliza:")) {
+				modelo = new InsigniaVidaModel(fn.caratula(2, 3, stripper, doc)).procesar();
 			}
 			
 			return modelo;
