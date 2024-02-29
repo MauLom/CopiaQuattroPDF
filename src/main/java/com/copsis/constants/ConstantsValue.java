@@ -121,11 +121,11 @@ public final class ConstantsValue {
 	public static final String MODELO2 = "Modelo";
 	public static final String MODELO_MAYUS = "MODELO:";
 	public static final String MOTOR = "Motor:";
+	public static final String MOTORNM = "Motor";
 	public static final String MOTOR_HASH= "Motor:###";
 	public static final String MARCA = "Marca:";
 	public static final String MARCA2 = "Marca";
 	public static final String MUROS = "Muros";
-
 	public static final String NOMBRE = "Nombre";
 	public static final String NOMBRE2 = "Nombre:";
 	public static final String NOMBRE3 = "NOMBRE";
@@ -341,6 +341,7 @@ public final class ConstantsValue {
 	public static final String RESUMEN_DE_LA_POLIZA_HASH ="RESUMEN###DE###LA###PÓLIZA";
 	public static final String COBERTURAS_SUMA_ASEGURADA_HASH ="COBERTURAS SUMA###ASEGURADA";
 	public static final String MODULO_COBERTURA_GIM	="Módulo - Cobertura";
+	public static final String DANOS_MATERIALES	="Daños Materiales";
 	private ConstantsValue() {
 
 	}
