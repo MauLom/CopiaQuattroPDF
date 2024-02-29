@@ -253,6 +253,7 @@ public class AxaAutos2Model {
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					AxaAutos2Model.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
