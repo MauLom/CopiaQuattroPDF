@@ -226,7 +226,7 @@ public class HdiAutosBModel {
 					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);		
 					if(!valores.isEmpty() && valores.size() != 4){						
 					 modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-				     modelo.setCargoExtra(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+				     modelo.setAjusteUno(fn.castBigDecimal(fn.castDouble(valores.get(1))));
 					 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(5))));
 					 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(6))));
 					 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(7))));
