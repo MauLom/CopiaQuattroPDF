@@ -92,10 +92,10 @@ public class QualitasModel {
 										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(3, 4, stripper, doc),fn.caratula(1, 8, stripper, doc));
 								modelo = datosQualitasAutos.procesar();
 							} 
-							else if(!fn.caratula(1, 1, stripper, doc).contains("Daños Materiales")){
-								pagIni = fn.pagFinRango(stripper, doc, "Daños Materiales");							
-								pagFin = fn.pagFinRango(stripper, doc, "Daños Materiales")+1;
-								if(fn.caratula(2, 2, stripper, doc).contains("Daños materiales")){
+							else if(!fn.caratula(1, 1, stripper, doc).contains(ConstantsValue.DANOS_MATERIALES)){
+								pagIni = fn.pagFinRango(stripper, doc, ConstantsValue.DANOS_MATERIALES);							
+								pagFin = fn.pagFinRango(stripper, doc, ConstantsValue.DANOS_MATERIALES)+1;
+								if(fn.caratula(2, 2, stripper, doc).contains(ConstantsValue.DANOS_MATERIALES)){
 									pagIni=2;
 									pagFin=3;
 								}
@@ -116,16 +116,22 @@ public class QualitasModel {
 							
 						}         
 					} else {
+					
 				
 						if(fn.caratula(1, 1, stripper, doc).contains("ACUSE DE ENTREGA DE DOCUMENTACIÓN CONTRACTUAL")
-						|| fn.caratula(1, 1, stripper, doc).contains("ADVERTENCIA! POLIZA DE USO TURISTA")){					
+						|| fn.caratula(1, 1, stripper, doc).contains("ADVERTENCIA! POLIZA DE USO TURISTA")
+						|| fn.caratula(1, 1, stripper, doc).contains("¡ADVERTENCIA! POLIZA PARA USO DE VIAJE TURISTA")){					
 					     	if(fn.caratula(5, 5, stripper, doc).contains(ConstantsValue.COBERTURAS_CONTRATADAS)){
 								pagFin=5;
 							}
-							if(fn.caratula(4, 5, stripper, doc).contains("Motor") && pagFin == 0){
+
+							if(fn.caratula(4, 5, stripper, doc).contains(ConstantsValue.MOTORNM) && pagFin == 0){
 								pagFin=4;
 							}
-							if(fn.caratula(3, 3, stripper, doc).contains("Motor") && pagFin == 0){
+							if(fn.caratula(3, 3, stripper, doc).contains(ConstantsValue.MOTORNM) && pagFin == 0){
+								pagFin=3;
+							}
+							if(fn.caratula(18, 19, stripper, doc).contains(ConstantsValue.MOTORNM) && pagFin == 0){
 								pagFin=3;
 							}											
 						 QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(fn.caratula(pagFin, pagFin+1, stripper, doc),"","");
