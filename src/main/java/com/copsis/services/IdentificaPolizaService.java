@@ -31,6 +31,7 @@ import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.hdi.HdiModel;
+import com.copsis.models.hir.HirModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.insignia.InsigniaModel;
 import com.copsis.models.latino.LatinoSeguroModel;
@@ -80,7 +81,7 @@ public class IdentificaPolizaService {
 			
 
 			
-			// CHUBB
+	
 		
 			if (!encontro && (contenido.contains("Chubb")  || 
 			rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.")
@@ -546,6 +547,10 @@ public class IdentificaPolizaService {
 				encontro = true;   
 			}
 
+			if(!encontro && contenido.contains("www.hirseguros.mx") ||   contenido.contains("SEGUHIR")){
+				modelo = new HirModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
+			}
          
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
