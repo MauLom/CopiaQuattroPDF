@@ -9,6 +9,7 @@ import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.axa.salud.AxaSaludFaModel;
 import com.copsis.models.axa.salud.AxaSaludModel;
 import com.copsis.models.axa.salud.AxaSaludV2Model;
+import com.copsis.models.axa.salud.AxaSaludtresModel;
 
 public class AxaModel {
 	// Clases
@@ -50,6 +51,9 @@ public class AxaModel {
 			 && fn.caratula(1, 3, stripper, doc).contains("Familiar")) {
 
 				modelo = new AxaSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
+				if(modelo.getVigenciaA().isEmpty() && modelo.getVigenciaDe().isEmpty() && modelo.getMoneda() ==0 && modelo.getFormaPago() ==0){
+					modelo = new AxaSaludtresModel().procesar(fn.caratula(1, 3, stripper, doc));
+				}
 		
 			}
 			else if(fn.caratula(1, 3, stripper, doc).contains("Gastos Médicos Mayores Individual")){
