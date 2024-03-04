@@ -52,6 +52,14 @@ public class AigSaludBModel {
 							modelo.setPoliza(newcontenido.split("\n")[i + 1].split("###")[4].replace("###", "").trim());
 						}
 					}
+					if(newcontenido.split("\n")[i].contains("C.P:")){
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setCp(valores.stream()
+								.filter(numero -> String.valueOf(numero).length() >= 4)
+								.collect(Collectors.toList()).get(0));
+						}
+					}
 
 					if (newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i].contains("SECUENCIA")) {
 						int sp = newcontenido.split("\n")[i + 1].split("###").length;						
@@ -70,10 +78,14 @@ public class AigSaludBModel {
 						newdireccion.append(newcontenido.split("\n")[i].split("CALLE:")[1]);
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.POBLACION)) {
-						newdireccion.append(newcontenido.split("\n")[i].split(ConstantsValue.POBLACION)[1].replace("###", ""));
+						newdireccion.append( newcontenido.split("\n")[i].split(ConstantsValue.POBLACION)[1].replace("COLONIA:", " ").replace("###", ""));
 					}
-					if (newcontenido.split("\n")[i].contains("ESTADO:")) {
-						newdireccion.append(newcontenido.split("\n")[i].split("ESTADO:")[1].replace("###", ""));
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.ESTADPTMY) && newcontenido.split("\n")[i].contains("CÓDIGO DE ASEGURADO:")) {
+						newdireccion.append(newcontenido.split("\n")[i].split(ConstantsValue.ESTADPTMY)[1].split("CÓDIGO")[0].replace("###", ""));
+						modelo.setCteDireccion(newdireccion.toString().replace("###", "").trim());
+					}
+					if (modelo.getCteDireccion().isEmpty() && newcontenido.split("\n")[i].contains(ConstantsValue.ESTADPTMY)) {
+						newdireccion.append(newcontenido.split("\n")[i].split(ConstantsValue.ESTADPTMY)[1].replace("###", ""));
 						modelo.setCteDireccion(newdireccion.toString().replace("###", "").trim());
 					}
 

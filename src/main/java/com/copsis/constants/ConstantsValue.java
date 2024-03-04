@@ -311,6 +311,7 @@ public final class ConstantsValue {
 	public static final String FORMA_DEPT ="Forma de:";
 	public static final String TASA_FINACIMIENTO ="Tasa Financiamiento";
 	public static final String ESTADPT  ="Estado:";
+	public static final String ESTADPTMY  ="ESTADO:";
 	public static final String COLONIA="Colonia";
     public static final String COLONIAPT="Colonia:";
 	public static final String DIASAC="Días:";
