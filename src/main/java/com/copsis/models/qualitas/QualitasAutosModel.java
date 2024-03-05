@@ -46,7 +46,9 @@ import com.copsis.models.EstructuraRecibosModel ;
                     .replace("MEsutnaidciop i:o:", ConstantsValue.MUNICIPIO).replace("Expedición.", "Expedición")
                     .replace("Servic i o :",ConstantsValue.SERVICIO)
                     .replace("Dom i c il i o ", "Domicilio")
-                    .replace("MOTOR:", ConstantsValue.MOTOR);
+                    .replace("MOTOR:", ConstantsValue.MOTOR)
+                    .replace("Hasta ###las", "Hasta las")
+                    .replace("ENDOSO ###INCISO", "ENDOSO###INCISO");
 
             try {
 
@@ -96,15 +98,19 @@ import com.copsis.models.EstructuraRecibosModel ;
 
             
                 inicio = contenido.lastIndexOf("ENDOSO###INCISO");
+       
                 fin = contenido.lastIndexOf("INFORMACIÓN DEL ASEGURADO");
                 fin = fin == -1 ? contenido.lastIndexOf("DEL ASEGURADO") : fin;
+             
 
                 if (inicio > 0 && fin > 0 && inicio < fin) {
                     newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 
                     arrNewContenido = newcontenido.split("\n");
                     for (int i = 0; i < arrNewContenido.length; i++) {
+                  
                         if (newcontenido.split("\n")[i].contains("AUTOMÓVILES") && modelo.getPoliza().length() == 0) {
+                        
                             if ((i + 1) == arrNewContenido.length) {
 
                                 modelo.setPoliza(arrNewContenido[i].split("###")[1]);
@@ -124,6 +130,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                             }
 
                         } else {
+                          
                             if (newcontenido.split("\n")[i].contains("ENDOSO") && newcontenido.split("\n")[i].contains("INCISO") &&  (arrNewContenido[arrNewContenido.length - 1].split("###").length < 4)) {
 
                                     if (arrNewContenido[arrNewContenido.length - 1].split("###")[0].contains("AUTOMÓVILES")) {
@@ -176,6 +183,18 @@ import com.copsis.models.EstructuraRecibosModel ;
 
                                 
 
+                            } 
+
+                            if (modelo.getPoliza().isEmpty() && modelo.getEndoso().length() ==0 && newcontenido.split("\n")[i].contains("ENDOSO") && newcontenido.split("\n")[i].contains("INCISO") &&  (arrNewContenido[arrNewContenido.length - 1].split("###").length <= 4)) {
+                              
+                                if (arrNewContenido.length == 2 && arrNewContenido[arrNewContenido.length - 1].split("###").length > 3) {
+                                    modelo.setPoliza(arrNewContenido[arrNewContenido.length - 1].split("###")[1]);
+                                    modelo.setEndoso(arrNewContenido[arrNewContenido.length - 1].split("###")[2]);
+                                    if (fn.isNumeric(arrNewContenido[arrNewContenido.length - 1].split("###")[3].trim())) {
+                                        modelo.setInciso(
+                                                Integer.parseInt(arrNewContenido[arrNewContenido.length - 1].split("###")[2].trim()));
+                                    }
+                                }
                             }
 
                         }
@@ -670,7 +689,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                         modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
                     }
                 }
-              
+           
                 inicio = contenido.lastIndexOf(ConstantsValue.HASTA_LAS);
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio, contenido.indexOf("\r\n", inicio)).replace("del:", "del");
