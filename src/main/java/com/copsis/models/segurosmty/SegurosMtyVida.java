@@ -81,6 +81,14 @@ public class SegurosMtyVida {
 					if(modelo.getCp().length() == 0 && newcontenido.toString().split("\n")[i].contains("C.P.")  && newcontenido.toString().split("\n")[i].split("###").length == 5 ) {						
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("###")[1].trim());
 					}
+					if(modelo.getCp().length() == 0 && newcontenido.toString().split("\n")[i].contains("C.P.")){
+						List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setCp(valores.stream()
+								.filter(numero -> String.valueOf(numero).length() >= 4)
+								.collect(Collectors.toList()).get(0));
+						}
+					}
 					if(newcontenido.toString().split("\n")[i].contains("RESIDENCIA")) {
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("RESIDENCIA")[1].split("FECHA")[0].replace("###","").trim());
 					}
@@ -143,9 +151,11 @@ public class SegurosMtyVida {
 						newcontenido.append(contenidoxt.substring(0, fin).replace("NO FUMADOR ###C ###","NO FUMADOR C###").replace("@@@", ""));	
 					}					
 				}
-				if(fin < inicio){
+				if(fin < inicio){					
 					inicio = contenido.indexOf("BENEFICIOS ###SUMA ###ANEXO");
+					inicio = inicio ==-1?contenido.indexOf("BENEFICIOS ###ASEGURADA ###ANEXO"):inicio;
 					fin = contenido.indexOf("ESIGNACIÓN DE BENEFICIARIOS:");
+					
 					newcontenido = new StringBuilder();
 					newcontenido.append(contenido.substring(inicio, fin).replace("@@@", ""));	
 				}
@@ -263,7 +273,8 @@ public class SegurosMtyVida {
 				 
 				
 				return modelo;
-			} catch (Exception ex) {				
+			} catch (Exception ex) {		
+				ex.printStackTrace();		
 				modelo.setError(SegurosMtyVida.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 				 return modelo;
 			}

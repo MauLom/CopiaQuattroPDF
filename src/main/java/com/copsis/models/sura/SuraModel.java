@@ -72,6 +72,9 @@ public class SuraModel {
 					else if (fn.caratula(3, 3, stripper, doc).contains("Respaldo por Daños a Terceros")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(3, 4, stripper, doc));
 					}
+					else if (fn.caratula(1, 1, stripper, doc).contains("Hogar Total")) {
+						modelo = new SuraDiversos3Model().procesar(fn.caratula(1, 2, stripper, doc));
+					}
 					else if (fn.caratula(2, 2, stripper, doc).contains("Hogar Total")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(2, 4, stripper, doc));
 					}

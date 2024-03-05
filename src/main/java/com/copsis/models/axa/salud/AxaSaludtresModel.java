@@ -217,7 +217,9 @@ public class AxaSaludtresModel {
                         .replace("C ###onversión Garantizada B ###ásica", "Conversión Garantizada Básica")
                         .replace("### ###","###"));
                 
+
                    modelo.setMoneda(1);
+
                 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                     if (!newcontenido.toString().split("\n")[i].contains("Coberturas-Servicios")
