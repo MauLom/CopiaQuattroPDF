@@ -32,17 +32,24 @@ public class PrimeroDiversosModel {
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO PARA DAÑOS");
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS);
+			fin = fin == -1 ? contenido.indexOf("Inciso###Unidades Riesgo"):fin;
+		
 
     
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
-	                for (int i = 0; i < newcontenido.split("\n").length; i++) {
+	             
+					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	               
 	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
-	                		if(newcontenido.split("\n")[i].contains("###")) {
+	                		if(newcontenido.split("\n")[i].contains("###") && !newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].contains("PÓLIZA")) {
 	                			modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i].split(ConstantsValue.SEGURO_PARA_DANOS)[1].split("###")[1]);
-	                		}else {
+	                		} else  if(newcontenido.split("\n")[i+1].contains("EQUIPO DE CONTRATISTA Y")){
+								modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[1].replace("-", "").trim());
+		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].split("###")[1].trim());	    
+							}
+							else {
 	                			modelo.setPoliza(newcontenido.split("\n")[i+1].replace("-", "").trim());
 		                		modelo.setPolizaGuion(newcontenido.split("\n")[i+1].trim());	                			
 	                		}	                		
@@ -85,6 +92,13 @@ public class PrimeroDiversosModel {
 	                			modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].trim()));
 	                			modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[4].trim()));	                		
 	                	}
+
+						if(modelo.getVigenciaA().isEmpty() && modelo.getVigenciaDe().isEmpty() && newcontenido.split("\n")[i].contains("Vigencia")  && newcontenido.split("\n")[i+1].split("-").length > 3 && newcontenido.split("\n")[i+1].split("###").length > 2) {	                	
+						
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[0].trim()));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split("\n")[i+1].split("###")[2].trim()));
+							modelo.setFechaEmision(modelo.getVigenciaDe());	                		
+					}
 	                }
 			   }
 			   
