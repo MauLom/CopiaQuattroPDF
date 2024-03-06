@@ -38,7 +38,7 @@ public class PrimeroDiversosModel {
     
 			   if (inicio > 0 && fin > 0 && inicio < fin) {
 	                newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("12:00", "").replace("12 Hrs", "");
-	                System.out.println(newcontenido);
+	             
 					for (int i = 0; i < newcontenido.split("\n").length; i++) {
 	               
 	                	if(newcontenido.split("\n")[i].contains(ConstantsValue.SEGURO_PARA_DANOS)) {	 
