@@ -16,4 +16,5 @@ public class BeneficiariosAxaProjection {
 	private String porcentaje = "";
 	private String pregunta1="";
 	private String infoAdicional="";
+	
 }

@@ -19,6 +19,7 @@ import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionBienvenidadForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
+import com.copsis.controllers.forms.ImpresionCertificadoAxa;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.controllers.forms.MovimientosForm;
@@ -31,6 +32,7 @@ import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCaractulaPrudential;
 import com.copsis.models.impresion.ImpresionCertificadoAfirme;
 import com.copsis.models.impresion.ImpresionCertificadoArgos;
+import com.copsis.models.impresion.ImpresionCertificadoAxaPdf;
 import com.copsis.models.impresion.ImpresionCertificadoChubbPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionConsultaMovimientos;
@@ -414,6 +416,19 @@ public class ImpresionService {
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionVitrCBienvenida().buildPDF(impresionBienvenidadForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+    public byte[] impresionCertificadoIndAxa(ImpresionCertificadoAxa  impresionCertificadoAxa){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCertificadoAxaPdf().buildPDF(impresionCertificadoAxa);
             return byteArrayPDF;
         }
         catch (ValidationServiceException e) {
