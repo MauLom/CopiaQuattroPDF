@@ -402,7 +402,7 @@ public class ImpresionCertificadoAxaPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
 
                     return output.toByteArray();
                 } finally {
