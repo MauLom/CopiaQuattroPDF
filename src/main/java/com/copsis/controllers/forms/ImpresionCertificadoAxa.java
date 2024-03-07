@@ -2,9 +2,7 @@ package com.copsis.controllers.forms;
 import java.util.List;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection;
-import com.copsis.clients.projections.CoberturaBasicaProjection;
 import com.copsis.clients.projections.CoberturaBenificiosProjection;
-import com.copsis.clients.projections.CoberturaProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -27,6 +25,7 @@ public class ImpresionCertificadoAxa {
     private	String fecNacimiento;
     private	String ocupacion;
     private	String regla;
+    private	String certificado;
     private List<CoberturaBenificiosProjection>  coberturas;
     private List<CoberturaBenificiosProjection>  beneficios;
     private List<BeneficiariosAxaProjection> beneficiarios;
