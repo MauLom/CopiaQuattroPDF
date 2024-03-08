@@ -16,8 +16,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
-import com.copsis.clients.projections.BeneficiariosAxaProjection;
-import com.copsis.clients.projections.CoberturaBenificiosProjection;
+import com.copsis.clients.projections.BeneficiarioProjection;
+import com.copsis.clients.projections.PaqueteCoberturaProjection;
 import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
@@ -68,7 +68,7 @@ public class ImpresionCertificadoAxaPdf {
          
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Fecha de inicio de vigencia", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 43, certificadoAxa.getVigenciaDe(), Color.black, false, "", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 43, certificadoAxa.getVigenciaDe(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Fecha de fin de vigencia", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 43, certificadoAxa.getVigenciaA(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
@@ -79,24 +79,24 @@ public class ImpresionCertificadoAxaPdf {
         
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Participación de la prima", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,Color.white,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 43,"", Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);                   
+                    communsPdf.setCell(baseRow, 43,"0%", Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);                   
                     baseRow = communsPdf.setRow(table, 15);
                     communsPdf.setCell(baseRow, 100, "Certificado", Color.white, true, "C", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
                     baseRow = communsPdf.setRow(table, 15);
-                    communsPdf.setCell(baseRow, 100, certificadoAxa.getCertificado(), Color.black, false, "C", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 100, certificadoAxa.getAsegurado().getCertificado(), Color.black, false, "C", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
     
                     
                     baseRow = communsPdf.setRow(table, 15);
                     communsPdf.setCell(baseRow, 100, "Datos del Certificado", Color.white, true, "C", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
                      baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Fecha de inicio de vigencia", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 43, certificadoAxa.getGrupo(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 43, certificadoAxa.getVigenciaDe(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Fecha de fin de vigencia", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 43, certificadoAxa.getGrupo(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 43, certificadoAxa.getVigenciaA(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 57, "Fecha de Ingreso  a la Póliza", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,Color.white,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 43,"0%", Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);                   
+                    communsPdf.setCell(baseRow, 43,certificadoAxa.getVigenciaDe(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);                   
          
                     table.draw();
 
@@ -124,18 +124,18 @@ public class ImpresionCertificadoAxaPdf {
                     
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 37, "Nombre:", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 5f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 63, certificadoAxa.getNombAsegurado(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 5f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 63, certificadoAxa.getAsegurado().getNombre(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 5f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 37, "Categoria:", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 63, certificadoAxa.getCategoria(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
         
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 37, "Numero de empleado:", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 63, certificadoAxa.getNoEmpleado(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 63, certificadoAxa.getAsegurado().getNomina(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
         
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 37, "Fecha de Nacimiento:", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
-                    communsPdf.setCell(baseRow, 63, certificadoAxa.getGrupo(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
+                    communsPdf.setCell(baseRow, 63, certificadoAxa.getAsegurado().getFechNacimiento(), Color.black, false, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
 
                     baseRow = communsPdf.setRow(table, 12);
                     communsPdf.setCell(baseRow, 37, "Ocupación:", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,Color.white,bgColorA,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
@@ -164,13 +164,14 @@ public class ImpresionCertificadoAxaPdf {
 
                     boolean acumula2 = true;
                     int  t=0;
-                    List<CoberturaBenificiosProjection>  coberturaBasica = certificadoAxa.getCoberturas();
+                    List<PaqueteCoberturaProjection>  coberturaBasica = certificadoAxa.getCoberturas();
+                    if(coberturaBasica !=null && !coberturaBasica.isEmpty()){
                     while (t < coberturaBasica.size()) {
 
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth+20, margin, document, page, true, true);
                          baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 50,coberturaBasica.get(t).getNombres(), Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,Color.white,bgColorA,t == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 50,coberturaBasica.get(t).getSa(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,t == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
+                        communsPdf.setCell(baseRow, 50,coberturaBasica.get(t).getCoberturaValor(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,t == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
                       
 
                         if (isEndOfPage(table)) {
@@ -195,6 +196,7 @@ public class ImpresionCertificadoAxaPdf {
                         }
 
                     }
+                }
 
 
                     yStart -= table.getHeaderAndDataHeight();
@@ -210,12 +212,13 @@ public class ImpresionCertificadoAxaPdf {
 
                     boolean acumula3 = true;
                     int  x=0;
-                    List<CoberturaBenificiosProjection>  beneficios= certificadoAxa.getBeneficios();
+                    List<PaqueteCoberturaProjection>  beneficios= certificadoAxa.getBeneficios();
+                    if(beneficios !=null && !beneficios.isEmpty()){
                     while (x < beneficios.size()) {
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth+20, margin, document, page, true, true);
                         baseRow = communsPdf.setRow(table, 15);
                         communsPdf.setCell(baseRow, 50,beneficios.get(x).getNombres(), Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 50,beneficios.get(x).getSa(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
+                        communsPdf.setCell(baseRow, 50,beneficios.get(x).getCoberturaValor(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
                       
 
                         if (isEndOfPage(table)) {
@@ -240,10 +243,11 @@ public class ImpresionCertificadoAxaPdf {
                         }
 
                     }
+                }
 
-                    boolean acumula4 = true;
+                 
                     int  c=0;
-                    List<BeneficiariosAxaProjection>  beneficiarios= certificadoAxa.getBeneficiarios();
+                    List<BeneficiarioProjection>  beneficiarios= certificadoAxa.getBeneficiarios();
                     yStart -= table.getHeaderAndDataHeight();
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth+20, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table, 15);
@@ -252,15 +256,17 @@ public class ImpresionCertificadoAxaPdf {
                     yStart -= table.getHeaderAndDataHeight();
 
                     yStartPosTb2 = yStart;
+                    if(beneficiarios !=null && !beneficiarios.isEmpty()){
+                        boolean acumula4 = true;
                     while (c < beneficiarios.size()) {
                         table2 = new BaseTable(yStartPosTb2, yStartNewPage, bottomMargin, fullWidth+20, margin, document, page, true, true);
                         baseRow2 = communsPdf.setRow(table2, 15);
-                        communsPdf.setCell(baseRow2, 100,"", Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
+                        communsPdf.setCell(baseRow2, 100,"", Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,c == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
                         table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth+20, margin, document, page, false, true);
                         baseRow = communsPdf.setRow(table, 15);
-                        communsPdf.setCell(baseRow, 34,beneficiarios.get(c).getNombres(), Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
-                        communsPdf.setCell(baseRow, 12,beneficiarios.get(c).getFechaNacimiento(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
-                        communsPdf.setCell(baseRow, 10,beneficiarios.get(c).getPorcentaje(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,x == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor); 
+                        communsPdf.setCell(baseRow, 28,beneficiarios.get(c).getNombres(), Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,c == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
+                        communsPdf.setCell(baseRow, 25,beneficiarios.get(c).getFecNacimiento(), Color.black, false, "C", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,c == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);               
+                        communsPdf.setCell(baseRow, 10,beneficiarios.get(c).getPorcentaje().toString() +" %", Color.black, false, "C", 10, communsPdf.setLineStyle(bgColorA,bgColorA,bgColorA,c == 0 ? bgColorA : Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor); 
 
                      
                         if (isEndOfPage(table)) {
@@ -281,7 +287,7 @@ public class ImpresionCertificadoAxaPdf {
                             yStartPosTb2 -= table2.getHeaderAndDataHeight();
                         }
 
-                        if (acumula3) {
+                        if (acumula4) {
                             c++;
                         }
                         if (c > 150) {
@@ -292,6 +298,7 @@ public class ImpresionCertificadoAxaPdf {
                         }
 
                     }
+                }
 
                     page = new PDPage();
                     document.addPage(page);
@@ -412,6 +419,7 @@ public class ImpresionCertificadoAxaPdf {
             }
 
         } catch (Exception ex) {
+          
             throw new GeneralServiceException("00001",
                     "Ocurrio un error en el servicio ImpresionCertificadoAxaPdf: " + ex.getMessage());
         }
@@ -478,13 +486,13 @@ public class ImpresionCertificadoAxaPdf {
     }
 
      public PDPageContentStream parrafo(PDDocument document, PDPage page, List<Float> lines, String tetxo, int i,
-            PDFont FONT, Float FONT_SIZE, Float LEADING, Float paddig,float SPACING) {
+            PDFont font, Float fontSize, Float leading, Float paddig,float spacio) {
         try {
             PDPageContentStream contentStream = new PDPageContentStream(document, page,
                     PDPageContentStream.AppendMode.APPEND, true);
             contentStream.beginText();
-            addParagraph(contentStream, i, lines.get(1) + paddig, lines.get(2), tetxo, true, FONT, FONT_SIZE,
-                    LEADING,SPACING);
+            addParagraph(contentStream, i, lines.get(1) + paddig, lines.get(2), tetxo, true, font, fontSize,
+                    leading,spacio);
             contentStream.endText();
             contentStream.close();
 
@@ -495,30 +503,29 @@ public class ImpresionCertificadoAxaPdf {
     }
 
     private static void addParagraph(PDPageContentStream contentStream, float width, float sx,
-    float sy, String text, boolean justify, PDFont FONT, Float FONT_SIZE, Float LEADING,Float SPACING) throws IOException {
-List<String> lines = parseLines(text, width, FONT, FONT_SIZE, LEADING);
-contentStream.setFont(FONT, FONT_SIZE);
+    float sy, String text, boolean justify, PDFont font, Float fontSize, Float leading,Float spacio) throws IOException {
+List<String> lines = parseLines(text, width, font, fontSize, leading);
+contentStream.setFont(font, fontSize);
 contentStream.newLineAtOffset(sx, sy);
 for (String line : lines) {
-    float charSpacing = SPACING;
-    if (justify) {
-        if (line.length() > 1) {
-            float size = FONT_SIZE * FONT.getStringWidth(line) / 1000;
+    float charSpacing = spacio;
+    if (justify &&  (line.length() > 1)) {
+            float size = fontSize * font.getStringWidth(line) / 1000;
             float free = width - size;
             if (free > 0 && !lines.get(lines.size() - 1).equals(line)) {
                 charSpacing = free / (line.length() - 1);
             }
-        }
+        
     }
     
     contentStream.setCharacterSpacing(charSpacing);
     contentStream.showText(line);
-    contentStream.newLineAtOffset(0, LEADING);
+    contentStream.newLineAtOffset(0, leading);
     
 }
 }
 
-private static List<String> parseLines(String text, float width, PDFont FONT, Float FONT_SIZE, Float LEADING)
+private static List<String> parseLines(String text, float width, PDFont font, Float fontSize, Float leading)
     throws IOException {
 List<String> lines = new ArrayList<String>();
 
@@ -529,7 +536,7 @@ while (text.length() > 0) {
         spaceIndex = text.length();
     }
     String subString = text.substring(0, spaceIndex);
-    float size = FONT_SIZE * FONT.getStringWidth(subString) / 1000;
+    float size = fontSize * font.getStringWidth(subString) / 1000;
     if (size > width) {
         if (lastSpace < 0) {
             lastSpace = spaceIndex;

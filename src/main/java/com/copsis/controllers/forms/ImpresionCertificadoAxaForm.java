@@ -1,8 +1,9 @@
 package com.copsis.controllers.forms;
 import java.util.List;
 
-import com.copsis.clients.projections.BeneficiariosAxaProjection;
-import com.copsis.clients.projections.CoberturaBenificiosProjection;
+import com.copsis.clients.projections.AseguradosProjection;
+import com.copsis.clients.projections.BeneficiarioProjection;
+import com.copsis.clients.projections.PaqueteCoberturaProjection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -19,14 +20,11 @@ public class ImpresionCertificadoAxaForm {
     private String vigenciaDe;
     private String vigenciaA;
 	private	String moneda;	
-    private	String nombAsegurado;
-    private	String categoria;
-    private	String noEmpleado;
-    private	String fecNacimiento;
+    private	String categoria;  
     private	String ocupacion;
-    private	String regla;
-    private	String certificado;
-    private List<CoberturaBenificiosProjection>  coberturas;
-    private List<CoberturaBenificiosProjection>  beneficios;
-    private List<BeneficiariosAxaProjection> beneficiarios;
+    private	String regla; 
+    private List<PaqueteCoberturaProjection>  coberturas;
+    private List<PaqueteCoberturaProjection>  beneficios;
+    private List<BeneficiarioProjection> beneficiarios;
+    private AseguradosProjection asegurado;
 }
