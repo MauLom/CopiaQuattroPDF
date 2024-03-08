@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(Include.NON_NULL)
-public class ImpresionCertificadoAxa {
+public class ImpresionCertificadoAxaForm {
     private	String grupo;
 	private	String contrantante;
 	private	String noPoliza;

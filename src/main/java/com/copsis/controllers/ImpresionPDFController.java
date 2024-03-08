@@ -27,7 +27,7 @@ import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionBienvenidadForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
-import com.copsis.controllers.forms.ImpresionCertificadoAxa;
+import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.controllers.forms.ImpresionDetalleReclamacionForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
@@ -471,7 +471,7 @@ public class ImpresionPDFController {
 	}
 
 	@PostMapping(value = "certificadoBiibiiAxa")
-	public ResponseEntity<CopsisResponse> impresionCertificadoIndAxa( @Valid @RequestBody ImpresionCertificadoAxa  impresionCertificadoAxa, BindingResult bindingResult) {
+	public ResponseEntity<CopsisResponse> impresionCertificadoIndAxa( @Valid @RequestBody ImpresionCertificadoAxaForm  impresionCertificadoAxa, BindingResult bindingResult) {
 		try {
 			  
 			if(bindingResult.hasErrors()) {

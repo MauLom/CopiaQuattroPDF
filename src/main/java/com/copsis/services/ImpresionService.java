@@ -19,7 +19,7 @@ import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionBienvenidadForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
-import com.copsis.controllers.forms.ImpresionCertificadoAxa;
+import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.controllers.forms.MovimientosForm;
@@ -425,7 +425,7 @@ public class ImpresionService {
         }
     }
 
-    public byte[] impresionCertificadoIndAxa(ImpresionCertificadoAxa  impresionCertificadoAxa){
+    public byte[] impresionCertificadoIndAxa(ImpresionCertificadoAxaForm  impresionCertificadoAxa){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCertificadoAxaPdf().buildPDF(impresionCertificadoAxa);

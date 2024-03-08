@@ -18,7 +18,7 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import com.copsis.clients.projections.BeneficiariosAxaProjection;
 import com.copsis.clients.projections.CoberturaBenificiosProjection;
-import com.copsis.controllers.forms.ImpresionCertificadoAxa;
+import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.Tabla.BaseTable;
 import com.copsis.models.Tabla.ImageUtils;
@@ -37,7 +37,7 @@ public class ImpresionCertificadoAxaPdf {
     private float fullWidth = 556;
    
 
-    public byte[] buildPDF(ImpresionCertificadoAxa certificadoAxa) {
+    public byte[] buildPDF(ImpresionCertificadoAxaForm certificadoAxa) {
          float yStartPos = 0;
          float yStartPosTb2 = 0;
         ByteArrayOutputStream output;
