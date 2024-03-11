@@ -27,6 +27,7 @@ import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
 import com.copsis.controllers.forms.ImpresionBienvenidadForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
+import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.controllers.forms.ImpresionDetalleReclamacionForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
@@ -462,6 +463,22 @@ public class ImpresionPDFController {
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
 			}
 			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionVitroCaractula(impresionBienvenidadForm)).build();
+		}catch(ValidationServiceException ex) {
+			throw ex;
+		}catch(Exception ex) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+		}		  
+	}
+
+	@PostMapping(value = "certificadoBiibiiAxa")
+	public ResponseEntity<CopsisResponse> impresionCertificadoIndAxa( @Valid @RequestBody ImpresionCertificadoAxaForm  impresionCertificadoAxa, BindingResult bindingResult) {
+		try {
+			  
+			if(bindingResult.hasErrors()) {
+				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
+				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000,errors);
+			}
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(impresionService.impresionCertificadoIndAxa(impresionCertificadoAxa)).build();
 		}catch(ValidationServiceException ex) {
 			throw ex;
 		}catch(Exception ex) {
