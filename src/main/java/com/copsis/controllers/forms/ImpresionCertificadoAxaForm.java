@@ -23,6 +23,7 @@ public class ImpresionCertificadoAxaForm {
     private	String categoria;  
     private	String ocupacion;
     private	String regla; 
+    private String titulo;
     private List<PaqueteCoberturaProjection>  coberturas;
     private List<PaqueteCoberturaProjection>  beneficios;
     private List<BeneficiarioProjection> beneficiarios;
