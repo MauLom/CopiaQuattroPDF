@@ -65,11 +65,11 @@ public class ImpresionCertificadoAxaPdf {
                     communsPdf.setCell(baseRow, 100, certificadoAxa.getNoPoliza(), Color.black, true, "C", 14, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 15);
                     communsPdf.setCell(baseRow, 100, "Datos de la Póliza", Color.white, true, "C", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.red,bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
-                    baseRow = communsPdf.setRow(table, 14);
+                    baseRow = communsPdf.setRow(table, 16);
                     communsPdf.setCell(baseRow, 50, "Inicio 12 hrs", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,Color.white,bgColorA,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 50, "Fin 12 hrs del dia", Color.black, true, "L", 10, communsPdf.setLineStyle(Color.white,bgColorA,bgColorA,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
           
-                    baseRow = communsPdf.setRow(table, 13);
+                    baseRow = communsPdf.setRow(table, 14);
                     communsPdf.setCell(baseRow, 67, "Fecha de inicio de vigencia", Color.black, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(0f, 0f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     communsPdf.setCell(baseRow, 33, certificadoAxa.getVigenciaDe(), Color.black, false, "R", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.white,Color.white), "", communsPdf.setPadding(4f, 1f, 4f, 4f), bgColor).setValign(VerticalAlignment.MIDDLE);
                     baseRow = communsPdf.setRow(table, 13);
@@ -484,7 +484,7 @@ public class ImpresionCertificadoAxaPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                   // document.save(new File("/home/aalbanil/Vídeos/certificado.pdf"));
+                    //document.save(new File("/home/aalbanil/Vídeos/certificado2.pdf"));
 
                     return output.toByteArray();
                 } finally {
