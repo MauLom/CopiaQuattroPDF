@@ -132,7 +132,7 @@ public class ImpresionCertificadoPdf {
 	                        }
 	                    }
 	                    
-	                    yStart -= (table.getHeaderAndDataHeight() + 2);
+	                  
 	                    
 	                    if (impresionAxa.getRamo() == 10) {
 	                    	  table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
@@ -147,8 +147,10 @@ public class ImpresionCertificadoPdf {
 	                    	  baseRow = communsPdf.setRow(table, 10);
 	                    	  communsPdf.setCell(baseRow, 25,"",Color.BLACK,false, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                     	  baseRow = communsPdf.setRow(table, 5);
-	                    	  communsPdf.setCell(baseRow, 25,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurado()),Color.BLACK,false, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                    	  communsPdf.setCell(baseRow, 100,Sio4CommunsPdf.eliminaHtmlTags3(impresionAxa.getAsegurado()),Color.BLACK,false, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                    	  table.draw();
+							  yStart -= table.getHeaderAndDataHeight()+20;
+							  
 	                    }else {
 	                  	 table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
 	                  	 baseRow = communsPdf.setRow(table, 5);
@@ -170,11 +172,13 @@ public class ImpresionCertificadoPdf {
 	                        } else {
 	                            //table.remoBordes(true);
 	                            table.draw();
+								yStart -= table.getHeaderAndDataHeight()+2;
+								
 	                        }
+							
 	                    }
-	                    
-	                    
-	                    yStart -= table.getHeaderAndDataHeight();
+						
+	                 
 	                    int t1 =0;
 	                    
 	                    if (impresionAxa.getAsegurados() != null) {
@@ -213,8 +217,7 @@ public class ImpresionCertificadoPdf {
 	                    }
 					
 	                    output = new ByteArrayOutputStream();
-						document.save(output);		
-						
+						document.save(output);								
 						return output.toByteArray();
 				} finally {
 					document.close();
