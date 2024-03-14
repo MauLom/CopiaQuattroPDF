@@ -169,7 +169,7 @@ public class ImpresionEndosoPdf {
             baseRow = communsPdf.setRow(table, 12);
             communsPdf.setCell(baseRow, 100,"Gastos Médicos Mayores",Color.BLACK,true, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
             baseRow = communsPdf.setRow(table, 12);
-            communsPdf.setCell(baseRow, 100,impresionAxa.getEtiquetaPlan(),Color.BLACK,true, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+            communsPdf.setCell(baseRow, 100,impresionAxa.getEtiquetaPlan(),Color.BLACK,false, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
             baseRow = communsPdf.setRow(table, 12);
             communsPdf.setCell(baseRow, 65,"Póliza",Color.BLACK,true, "R", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
             communsPdf.setCell(baseRow, 35,impresionAxa.getNoPoliza(),Color.BLACK,false, "R", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
