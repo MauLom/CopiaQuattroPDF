@@ -217,8 +217,7 @@ public class ImpresionCertificadoPdf {
 	                    }
 					
 	                    output = new ByteArrayOutputStream();
-						document.save(output);		
-						
+						document.save(output);								
 						return output.toByteArray();
 				} finally {
 					document.close();
