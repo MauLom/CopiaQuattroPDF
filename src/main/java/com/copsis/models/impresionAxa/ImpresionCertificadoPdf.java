@@ -143,7 +143,7 @@ public class ImpresionCertificadoPdf {
 		                    	  }
 	                    	  }
 	                    	  baseRow = communsPdf.setRow(table, 5);
-	                    	  communsPdf.setCell(baseRow, 25,"Beneficiarios",Color.BLACK,true, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                    	  communsPdf.setCell(baseRow, 25,"Beneficiarios",Color.BLACK,true, "L", 9, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                    	  baseRow = communsPdf.setRow(table, 10);
 	                    	  communsPdf.setCell(baseRow, 25,"",Color.BLACK,false, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                     	  baseRow = communsPdf.setRow(table, 5);
