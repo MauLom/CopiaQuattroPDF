@@ -40,7 +40,7 @@ public class ImpresionEndosoPdf {
 	                communsPdf.setCell(baseRow,100, "Por medio de este documento se hace constar que:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                baseRow = communsPdf.setRow(table, 15);
 	                if(impresionAxa.getTxtMovimiento() !=null) {
-	                	communsPdf.setCell(baseRow,100, impresionAxa.getTxtMovimiento() ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                	communsPdf.setCell(baseRow,100, impresionAxa.getTxtMovimiento()  +" y obligaciones estipulados en la póliza a las personas anotadas a continuación: " ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
 	                }
 	                table.draw();
 	                yStart -= (table.getHeaderAndDataHeight() + 25);
