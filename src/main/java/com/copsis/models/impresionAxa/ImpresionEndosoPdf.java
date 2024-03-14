@@ -137,8 +137,7 @@ public class ImpresionEndosoPdf {
                     
                     
 					output = new ByteArrayOutputStream();
-					document.save(output);
-	                document.save(new File("/home/aalbanil/Vídeos/cerficadoAxa.pdf"));
+					document.save(output);	                
 					return output.toByteArray();
 				} finally {
 					document.close();
