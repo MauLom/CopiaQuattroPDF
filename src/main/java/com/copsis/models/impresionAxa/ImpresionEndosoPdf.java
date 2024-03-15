@@ -35,12 +35,12 @@ public class ImpresionEndosoPdf {
 
 					setEncabezado(impresionAxa, document, page,false);
 					pPaginacion = 780 - 15;
-					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 400, margin, document, page, false, true);
+					table = new BaseTable(yStart, yStartNewPage, bottomMargin, 400, 8, document, page, true, true);
 	                baseRow = communsPdf.setRow(table, 15);
-	                communsPdf.setCell(baseRow,100, "Por medio de este documento se hace constar que:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                communsPdf.setCell(baseRow,100, "Por medio de este documento se hace constar que:",Color.BLACK,true, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,3f,3f),bgColor);
 	                baseRow = communsPdf.setRow(table, 15);
 	                if(impresionAxa.getTxtMovimiento() !=null) {
-	                	communsPdf.setCell(baseRow,100, impresionAxa.getTxtMovimiento()  +" y obligaciones estipulados en la póliza a las personas anotadas a continuación: " ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+	                	communsPdf.setCell(baseRow,100, impresionAxa.getTxtMovimiento()  +" y obligaciones estipulados en la póliza a las personas anotadas a continuación: " ,Color.BLACK,false, "L",10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,3f,3f),bgColor);
 	                }
 	                table.draw();
 	                yStart -= (table.getHeaderAndDataHeight() + 25);
@@ -137,7 +137,8 @@ public class ImpresionEndosoPdf {
                     
                     
 					output = new ByteArrayOutputStream();
-					document.save(output);	                
+					document.save(output);	      
+                    //document.save(new File("/home/aalbanil/Vídeos/EndosoBajaBII.pdf"));          
 					return output.toByteArray();
 				} finally {
 					document.close();
@@ -181,10 +182,10 @@ public class ImpresionEndosoPdf {
             yStart -= (table.getHeaderAndDataHeight() + 10);
 
             table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
-            baseRow = communsPdf.setRow(table, 12);
-            communsPdf.setCell(baseRow, 20,"CONTRATANTE",Color.BLACK,true, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
             baseRow = communsPdf.setRow(table);
-            communsPdf.setCell(baseRow, 20,"Nombre",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);	            
+            communsPdf.setCell(baseRow, 20,"CONTRATANTE",Color.BLACK,true, "L", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(4f),bgColor);
+            baseRow = communsPdf.setRow(table);
+            communsPdf.setCell(baseRow, 20,"Nombre",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(4f),bgColor);	            
             communsPdf.setCell(baseRow, 80,impresionAxa.getContrannte(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
             baseRow = communsPdf.setRow(table);
             communsPdf.setCell(baseRow, 20,"Fecha de Emisión:",Color.BLACK,true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);
@@ -212,7 +213,7 @@ public class ImpresionEndosoPdf {
             communsPdf.setCell(baseRow, 80,impresionAxa.getSubGrupo(),Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,4f,5f),bgColor);    
             table.draw();
             
-            yStart -= (table.getHeaderAndDataHeight() + 10);
+            yStart -= (table.getHeaderAndDataHeight() + 12);
             
             if(asegurados) {
             	table = new BaseTable(yStart, yStartNewPage, bottomMargin, fullWidth, margin, document, page, false, true);
