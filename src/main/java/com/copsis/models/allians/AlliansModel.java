@@ -22,7 +22,7 @@ public class AlliansModel {
 	
 	public EstructuraJsonModel procesar() {
 		try {
-		Boolean  vida =false;
+		boolean  vida =false;
 			int op = fn.tipoPoliza(contenido);
 			int opdiv=0;
 			
@@ -51,8 +51,12 @@ public class AlliansModel {
 				op=4;
 				opdiv=1;
 			}
+			if(fn.caratula(0, 2, stripper, doc).contains("Residencial") && fn.caratula(0, 2, stripper, doc).contains("Propietario")) {
+				op=4;
+				opdiv=2;
+			}
 
-
+          
 			
 
 			switch (op) {
@@ -73,7 +77,10 @@ public class AlliansModel {
 			case 4:
 				if(opdiv ==1){
 					modelo = new AlliansDiversosCModel().procesar(fn.caratula(0, 7, stripper, doc));
-				}else{
+				}else if(opdiv ==2){
+					modelo = new AlliansDiversosEModel().procesar(fn.caratula(0, 3, stripper, doc));
+				}
+				else{
 				if(fn.caratula(0, 4, stripper, doc).contains("Datos del Contratante")) {
 					modelo = new AllianasDiversosBModel().procesar(fn.caratula(0, 7, stripper, doc));
 				}else {

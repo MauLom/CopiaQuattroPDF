@@ -3,6 +3,7 @@ package com.copsis.models.allians;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraBeneficiariosModel;
@@ -70,7 +71,7 @@ public class AlliansVidaModel {
 						}
                         asegurado.setNacimiento(fn.formatDateMonthCadena(newcont.toString().split("\n")[i+1].split("###")[1]));
                         asegurado.setEdad(fn.castInteger(newcont.toString().split("\n")[i+1].split("###")[2]));
-                        asegurado.setSexo(fn.sexo(newcont.toString().split("\n")[i+1].split("###")[2] )? 1:0 );
+                        asegurado.setSexo(Boolean.TRUE.equals(fn.sexo(newcont.toString().split("\n")[i+1].split("###")[2] ))? 1:0 );
                         asegurados.add(asegurado);
 					 }
 				}
@@ -91,12 +92,11 @@ public class AlliansVidaModel {
 				
 				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {		
 					 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					 if(!newcont.toString().split("\n")[i].contains("Riesgos") && !newcont.toString().split("\n")[i].contains("Coberturas") ) {	
-						if(newcont.toString().split("\n")[i].split("###").length > 1) {
+					 if(!newcont.toString().split("\n")[i].contains("Riesgos") && !newcont.toString().split("\n")[i].contains("Coberturas")  && (newcont.toString().split("\n")[i].split("###").length > 1)) {
 						 cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
 						 cobertura.setSa(newcont.toString().split("\n")[i].split("###")[1]);
 						 coberturas.add(cobertura);
-						}
+						
 					 }
 				 }
 				 modelo.setCoberturas(coberturas);
@@ -105,7 +105,7 @@ public class AlliansVidaModel {
 
 			 
 			 inicio =  contenido.indexOf("Prima Neta");
-			 fin = contenido.indexOf("Beneficiarios");
+			 fin = contenido.indexOf(ConstantsValue.BENEFICIARIOSMN);
 			 
 			 if (inicio > -1 && fin > -1 && inicio < fin) {				
 				 newcont  = new StringBuilder();
@@ -113,20 +113,22 @@ public class AlliansVidaModel {
 				 newContenido = newContenido.replace("Prima Neta Anual###Derecho de Póliza###Recargo por Pago###Prima Total Anual###Importe Primer###Importe Recibos\n"
 				 		+ "Fraccionado###Recibo###Subsecuentes","Prima Neta Anual###Derecho de Póliza###Recargo por Pago Fraccionado###Prima Total Anual###Importe Primer Recibo###Importe Recibos Subsecuentes");
 				 newcont.append(newContenido);
+				boolean primas= true;
 				 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
+					
 					 if(newcont.toString().split("\n")[i].contains("Fraccionado")) {
-							modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[0].replace("###", ""))));
-							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[1].replace("###", ""))));
-							modelo.setRecargo(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[2].replace("###", ""))));
-							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[3].replace("###", ""))));
-							modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[4].replace("###", ""))));
-							modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(
-									newcont.toString().split("\n")[i+1].split("###")[5].replace("###", ""))));
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i+1]);
+						if(!valores.isEmpty()){
+								getPrimas(valores);
+								primas= false;
+						}
+						if(valores.isEmpty() && primas){
+							valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i+2]);
+							if(!valores.isEmpty()){
+								getPrimas(valores);
+							}
+						}
+    						
 					 }
 				 }
 			 }
@@ -135,7 +137,7 @@ public class AlliansVidaModel {
 				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
 				
 	
-				 inicio =  contenido.indexOf("Beneficiarios");
+				 inicio =  contenido.indexOf(ConstantsValue.BENEFICIARIOSMN);
 				 fin = contenido.indexOf("Nombre del Agente");
 				 
 				 if (inicio > -1 && fin > -1 && inicio < fin) {				
@@ -143,7 +145,7 @@ public class AlliansVidaModel {
 					 newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "").replace("Principal", "###Principal"));
 					 for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
 							EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-						 if(newcont.toString().split("\n")[i].contains("Beneficiarios")) {					
+						 if(newcont.toString().split("\n")[i].contains(ConstantsValue.BENEFICIARIOSMN)) {					
 							 int sp = newcont.toString().split("\n")[i+1].split("###").length;
 							 if(sp == 3 ) {
 								 beneficiario.setNombre(newcont.toString().split("\n")[i+1].split("###")[0].trim());
@@ -185,11 +187,19 @@ public class AlliansVidaModel {
 				 }
 				 
 			return modelo;
-		} catch (Exception ex) {	
+		} catch (Exception ex) {			
 			modelo.setError(AlliansVidaModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());
 			return modelo;
 		}
 		
 		
+	}
+	private void getPrimas(List<String> valores) {
+		modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+		modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(1))));
+		modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(2))));						           
+		modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+		modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+		modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(5))));
 	}	
 }

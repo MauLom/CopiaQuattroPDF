@@ -65,6 +65,9 @@ public class MapfreModel {
 			if(tipo == 5 &&  (contenido.contains("UBICACIÓN DE RIESGOS")|| contenido.contains("RIESGOS CUBIERTOS"))) {
 				tipo =4;
 			}
+			if(tipo == 0 &&  (contenido.contains("TRANSPORTES CARGA"))) {
+				tipo =4;
+			}
 			if( tipo == 0 &&contenido.contains("Gastos Hospitalarios")) {
 			    tipo =2;
 			}
@@ -73,11 +76,15 @@ public class MapfreModel {
 	                tipo =4;
 	        }
             boolean saludFt2=false;
+		
 			if(tipo ==0 && fn.caratula(1, 1, stripper, doc).contains("RECUPERACION MEDICA")){
                 tipo=2;
 				saludFt2=true;
 			}
-
+            if(tipo ==2 && fn.caratula(1, 1, stripper, doc).contains("APC SIMPL. M")){
+                tipo=2;
+				saludFt2=true;
+			}
 
 			//PÓLIZA ESPECIFICA POR VIAJE
 

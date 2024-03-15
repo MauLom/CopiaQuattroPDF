@@ -3,6 +3,7 @@ package com.copsis.models.zurich;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -35,8 +36,8 @@ public class ZurichDiversosModel {
 			  modelo.setTipo(7);
 			  modelo.setCia(44);
 			
-			inicio = contenido.indexOf("Producto");
-			fin = contenido.indexOf("Coberturas Amparadas");
+			inicio = contenido.indexOf(ConstantsValue.PRODUCTOMN);
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 
 			if(inicio  > -1 && fin > -1 && inicio < fin) {
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
@@ -44,17 +45,17 @@ public class ZurichDiversosModel {
 					if( newcont.toString().split("\n")[i].contains("Moneda")) {						
 						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i]));
 					}
-					if( newcont.toString().split("\n")[i].contains("Agente")) {	
+					if( newcont.toString().split("\n")[i].contains(ConstantsValue.AGENTE2)) {	
 						modelo.setAgente( newcont.toString().split("\n")[i].split("Agente###:")[1].trim());
 						agente=false;
 					}
-					if( newcont.toString().split("\n")[i].contains("Agente") && agente == true ) {	
-						modelo.setAgente( newcont.toString().split("\n")[i].split("Agente")[1].replace("###", "").replace(":", "").trim());
+					if( newcont.toString().split("\n")[i].contains(ConstantsValue.AGENTE2) && agente  ) {	
+						modelo.setAgente( newcont.toString().split("\n")[i].split(ConstantsValue.AGENTE2)[1].replace("###", "").replace(":", "").trim());
 						
 					}
 				
-					if( newcont.toString().split("\n")[i].contains("Póliza") && newcont.toString().split("\n")[i].contains("Documento")) {
-						modelo.setPoliza( newcont.toString().split("\n")[i].split("Póliza")[1].split("Documento")[0].replace("###", "").replace(":", "").trim());
+					if( newcont.toString().split("\n")[i].contains(ConstantsValue.POLIZA_ACENT) && newcont.toString().split("\n")[i].contains("Documento")) {
+						modelo.setPoliza( newcont.toString().split("\n")[i].split(ConstantsValue.POLIZA_ACENT)[1].split("Documento")[0].replace("###", "").replace(":", "").trim());
 					}
 					if( newcont.toString().split("\n")[i].contains("Vigencia")&& newcont.toString().split("\n")[i].contains("Desde") && newcont.toString().split("\n")[i].contains("Fecha")) {
 						modelo.setVigenciaDe(fn.formatDateMonthCadena( newcont.toString().split("\n")[i].split("Vigencia")[1].split("Desde")[1].split("Fecha")[0].replace("###", "").replace(":", "").replace("el", "").replace("de", "-").replace(" ", "").trim().toUpperCase()));
@@ -86,14 +87,14 @@ public class ZurichDiversosModel {
 						
 						modelo.setCteDireccion(direccion);
 					}
-					if( newcont.toString().split("\n")[i].contains("Producto")) {						
-						modelo.setPlan(newcont.toString().split("\n")[i].split("Producto")[1].replace("###", "").replace(":", "").trim());
+					if( newcont.toString().split("\n")[i].contains(ConstantsValue.PRODUCTOMN)) {						
+						modelo.setPlan(newcont.toString().split("\n")[i].split(ConstantsValue.PRODUCTOMN)[1].replace("###", "").replace(":", "").trim());
 					}	
 					
 				}
 			}
-			inicio = contenido.indexOf("Producto");
-			fin = contenido.indexOf("Coberturas Amparadas");
+			inicio = contenido.indexOf(ConstantsValue.PRODUCTOMN);
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 
 			if(inicio  > -1 && fin > -1 && inicio < fin) {
 				newcont = new StringBuilder();
@@ -122,8 +123,8 @@ public class ZurichDiversosModel {
 			}
 			
 
-			inicio = contenido.indexOf("Coberturas Amparadas");
-			fin = contenido.indexOf("Prima neta");
+			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
+			fin = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 
 			if(inicio  > -1 && fin > -1 && inicio < fin) {
 				newcont = new StringBuilder();
@@ -131,13 +132,12 @@ public class ZurichDiversosModel {
 				 List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(!newcont.toString().split("\n")[i].contains("Coberturas")) {
-						if(newcont.toString().split("\n")[i].split("###").length == 3 || newcont.toString().split("\n")[i].split("###").length == 2) {
+					if(!newcont.toString().split("\n")[i].contains("Coberturas") && (newcont.toString().split("\n")[i].split("###").length == 3 || newcont.toString().split("\n")[i].split("###").length == 2)) {
 							cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0]);
 							cobertura.setSa(newcont.toString().split("\n")[i].split("###")[1]);
 							coberturas.add(cobertura);
 						
-						}
+						
 						
 					}
 					
@@ -146,7 +146,7 @@ public class ZurichDiversosModel {
 			}
 			
 			if(modelo.getCoberturas().isEmpty()) {
-				inicio = contenido.indexOf("Coberturas Amparadas");
+				inicio = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 				fin = contenido.indexOf("Si el contenido de");
 				if(inicio > -1 && inicio < fin) {
 					newcont = new StringBuilder();
@@ -155,16 +155,15 @@ public class ZurichDiversosModel {
 					for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						if(!newcont.toString().split("\n")[i].contains("Coberturas") &&
-						   !newcont.toString().split("\n")[i].contains("Prima neta") &&
+						   !newcont.toString().split("\n")[i].contains(ConstantsValue.PRIMA_NETA2) &&
 						   !newcont.toString().split("\n")[i].contains("Gastos de expedición") &&
 						   !newcont.toString().split("\n")[i].contains("I. V. A") &&
-						   !newcont.toString().split("\n")[i].contains("C. I:")) {
-							if(newcont.toString().split("\n")[i].split("###").length == 3 || newcont.toString().split("\n")[i].split("###").length == 2) {
+						   !newcont.toString().split("\n")[i].contains("C. I:") && (newcont.toString().split("\n")[i].split("###").length == 3 || newcont.toString().split("\n")[i].split("###").length == 2)) {
 								cobertura.setNombre(newcont.toString().split("\n")[i].split("###")[0].trim());
 								cobertura.setSa(newcont.toString().split("\n")[i].split("###")[1].trim());
 								coberturas.add(cobertura);
 							
-							}
+							
 						}
 						
 					}
@@ -174,18 +173,18 @@ public class ZurichDiversosModel {
 			}
 	
 			
-			inicio = contenido.indexOf("Prima neta");
+			inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 			fin = contenido.indexOf("Si el contenido");
 
 			if(inicio  > -1 && fin > -1 && inicio < fin) {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", "").trim());
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
-					if(newcont.toString().split("\n")[i].contains("Prima neta") && newcont.toString().split("\n")[i].split("Prima neta").length == 2) {
+					if(newcont.toString().split("\n")[i].contains(ConstantsValue.PRIMA_NETA2) && newcont.toString().split("\n")[i].split(ConstantsValue.PRIMA_NETA2).length == 2) {
 						modelo.setPrimaneta( fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("neta")[1].replace("###", "").trim())));
 					 }
-					if(newcont.toString().split("\n")[i].contains("expedición")) {
-						modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("expedición")[1].replace("###", "").trim())));
+					if(newcont.toString().split("\n")[i].contains(ConstantsValue.EXPEDICION)) {
+						modelo.setDerecho( fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split(ConstantsValue.EXPEDICION)[1].replace("###", "").trim())));
 					 }
 					if(newcont.toString().split("\n")[i].contains("I. V. A.")) {
 						modelo.setIva( fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("I. V. A.")[1].replace("###", "").trim())));

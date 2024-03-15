@@ -44,12 +44,20 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 0;
 			}
+		
+			if (tipo == 0 &&  fn.caratula(3, 3, stripper, doc).contains("PLAN SEGURO ÓPTIMO")) {
+				tipo = 2;
+				modeloTipo = 2;
+			}
 
 			if (tipo == 0 &&  contenido.contains("Póliza de Plan Seguro Esencial")) {
 				tipo = 2;
 				modeloTipo = 3;
 			}
-		
+		     if (tipo == 0 && fn.caratula(1, 1, stripper, doc).contains("Póliza de Salud Avanzado") ) {
+				tipo = 2;
+				modeloTipo = 3;
+			}
 
 			if (tipo == 0 && fn.caratula(3, 3, stripper, doc).contains("Póliza de Salud Avanzado") ) {
 				tipo = 2;
@@ -72,6 +80,7 @@ public class PlanSeguroModel {
 				tipo = 2;
 				modeloTipo = 0;
 			}
+		
 			if (tipo == 0 &&  fn.caratula(1, 2, stripper, doc).contains("Póliza de Salud Avanzado")) {
 				tipo = 2;
 				modeloTipo = 3;
@@ -80,8 +89,8 @@ public class PlanSeguroModel {
 
 
 
-			switch (tipo) {
-				case 2:
+			if(tipo == 2){
+
 					switch (modeloTipo) {
 						case 0:
 							modelo = new PlanSeguroSaludModel(fn.caratula(1, 2, stripper, doc)).procesar();
@@ -95,12 +104,10 @@ public class PlanSeguroModel {
 						case 3:
 							modelo = new PlanSeguroSaludCModel().procesar(fn.caratula(1, 2, stripper, doc));
 							break;
+						default:
 					}
 
-					break;
-
-				default:
-					break;
+				
 			}
 			return modelo;
 		} catch (Exception ex) {

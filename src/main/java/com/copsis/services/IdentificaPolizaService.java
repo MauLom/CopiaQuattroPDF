@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.controllers.forms.PdfForm;
 import com.copsis.models.EstructuraJsonModel;
 import com.copsis.models.Integral.IntegralSeguroModel;
@@ -26,11 +27,11 @@ import com.copsis.models.bexmas.BexmasModel;
 import com.copsis.models.bupa.BupaModel;
 import com.copsis.models.chubb.ChubbModel;
 import com.copsis.models.continental.ContinentalAssitModel;
-import com.copsis.models.continental.ContinentalAssitSalud;
 import com.copsis.models.general.GeneralModel;
 import com.copsis.models.gmx.GmxModel;
 import com.copsis.models.gnp.GnpModel;
 import com.copsis.models.hdi.HdiModel;
+import com.copsis.models.hir.HirModel;
 import com.copsis.models.inbursa.InbursaModel;
 import com.copsis.models.insignia.InsigniaModel;
 import com.copsis.models.latino.LatinoSeguroModel;
@@ -44,8 +45,9 @@ import com.copsis.models.prevem.PrevemModel;
 import com.copsis.models.primero.PrimeroModel;
 import com.copsis.models.prudential.PrudentialModel;
 import com.copsis.models.qualitas.QualitasModel;
-import com.copsis.models.segurosMty.SegurosMtyModel;
+import com.copsis.models.segurosmty.SegurosMtyModel;
 import com.copsis.models.sisnova.SisnovaModel;
+import com.copsis.models.sspins.SspInsModel;
 import com.copsis.models.sura.SuraModel;
 import com.copsis.models.thona.ThonaModel;
 import com.copsis.models.tokio.TokioModel;
@@ -78,12 +80,19 @@ public class IdentificaPolizaService {
 			boolean encontro = false;
 			
 
-			// CHUBB
-			if (!encontro && (contenido.contains("Chubb")  || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.") )) {
-				if(! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
-				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
-					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.") 
-					         ) {
+			
+	
+		
+			if (!encontro && (contenido.contains("Chubb")  || 
+			rangoSimple(2, 5, pdfStripper, pdDoc).contains("Chubb Seguros México, S.A.")
+			|| rangoSimple(2, 5, pdfStripper, pdDoc).contains("www.chubb.com/mx")
+			) 
+		     && (! rangoSimple(2, 5, pdfStripper, pdDoc).contains("POR CHUBB SEGUROS1") && !rangoSimple(2, 5, pdfStripper, pdDoc).contains("afirmeseguros")
+				       &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A.")
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.") )
+			) {
+			
 				    
 				ChubbModel datosChubb = new ChubbModel(); 
 				datosChubb.setPdfStripper(pdfStripper);
@@ -91,7 +100,7 @@ public class IdentificaPolizaService {
 				datosChubb.setContenido(contenido);
 				modelo = datosChubb.procesa();
 				encontro = true;
-				}
+				
 			}
 
 			// ENTRADA PARA QUALITAS
@@ -122,9 +131,10 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA MAPFRE
 			if (!encontro && contenido.length() > 502 && contenido.indexOf("MAPFRE") > -1
 					|| contenido.contains("Mapfre Tepeyac") || contenido.contains("Mapfre México, S.A.")
+					|| contenido.contains("Mapfre México S.A.")
 					|| contenido.contains("MAPFRE MÉXICO") || rangoSimple(2, 2, pdfStripper, pdDoc).contains("Mapfre México, S.A."))  {	
 				contenidoAux = rangoSimple(1, 2, pdfStripper, pdDoc);
-			
+
 				MapfreModel datosmapfre = new MapfreModel(pdfStripper, pdDoc, contenidoAux);
 				modelo = datosmapfre.procesa();
 				encontro = true;
@@ -133,13 +143,14 @@ public class IdentificaPolizaService {
 	
 			// ENTRADA PARA SEGUROS MONTERREY
 			if (!encontro) {
-			
+				
 				if (contenido.contains("Seguros a\r\n" + MONTERREY) || contenido.contains("Seguros Monterrey")
 						|| contenido.contains("Seguros a Monterrey") || contenido.contains("@@@Seguros a\n" + MONTERREY)
 						|| contenido.contains("COLECTIVO EMPRESARIAL")|| contenido.contains("SEGUROS MONTERREY")
-						|| contenido.contains("Seguros Monterrey New York Life")
-						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
-						|| rangoSimple(1, 3, pdfStripper, pdDoc).contains("Seguros Monterrey New York Life")
+						|| contenido.contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(2, 2, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(1, 3, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
+						|| rangoSimple(7, 7, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROS_MONTERREY_NEW)
 						) {
 							
 					SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
@@ -151,7 +162,7 @@ public class IdentificaPolizaService {
 					if (contenidoAux.contains("Seguros a\r\n" + MONTERREY) || contenidoAux.contains("Seguros Monterrey")
 							|| contenidoAux.contains("Seguros a Monterrey")
 							|| contenidoAux.contains("@@@Seguros a\n" + MONTERREY)
-							|| contenidoAux.contains("SEGUROS MONTERREY")|| contenidoAux.contains("SEGUROS MONTERREY NEW YORK LIFE")) {
+							|| contenidoAux.contains("SEGUROS MONTERREY")|| contenidoAux.contains(ConstantsValue.SEGUROS_MONTERREY_NEW)) {
 							
 						SegurosMtyModel datosSegurosMty = new SegurosMtyModel(pdfStripper, pdDoc, contenido);
 						modelo = datosSegurosMty.procesa();
@@ -167,7 +178,8 @@ public class IdentificaPolizaService {
 					|| contenido.contains("AXA SEGUROS, S.A. DE C.V")
 					|| contenido.contains("AXA Seguros, S.A de C.V.")
 					|| contenido.contains("AXA Seguros S.A. de C.V.")
-					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("axa.com.mx")) {
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("axa.com.mx")
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("AXA Seguros, S.A. de C.V.")) {
 					
 				AxaModel datosAxa = new AxaModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAxa.procesa();
@@ -314,8 +326,10 @@ public class IdentificaPolizaService {
 			// ENTRADA PARA HDI
 			if (!encontro && contenido.contains("HDI Seguros, S.A. de C.V.")
 					|| contenido.contains("HDI Seguros, S.A. de C.V.")
+					|| contenido.contains("HDI SEGUROS, S.A. DE C.V.")
 					|| contenido.indexOf("@@@HDI Seguros, S.A de C.V.") > -1
 					|| contenido.contains("@@@HDI Seguros S.A. de C.V.,")) {
+						
 				HdiModel datosHdi = new HdiModel(pdfStripper, pdDoc, contenido);
 				modelo = datosHdi.procesar();
 				encontro = true;
@@ -326,10 +340,11 @@ public class IdentificaPolizaService {
 			if (!encontro && contenido.contains("Seguros SURA S.A.")
 					|| contenido.contains("Royal & SunAlliance Seguros")
 					|| contenido.contains("Seguros SURA S.A. de C.V.")
+					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros SURA S.A. de C.V.")
 					|| contenido.contains("Seguros SURA")
 					|| contenido.contains("@@@Seguros SURA S.A. de C.V.") || contenido.contains("SURA S.A.")) {
 				SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
-		
+
 				modelo = datosSura.procesar();
 				encontro = true;
 			}
@@ -365,9 +380,9 @@ public class IdentificaPolizaService {
 		
 
 
-		    if (!encontro && (contenido.contains("Seguros el Potosí S.A.") ||
-		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
-		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros el Potosí S.A")
+		    if (!encontro && (contenido.contains(ConstantsValue.SEGUROSPOTOSISA) ||
+		            contenido.contains("Seguros El Potosí, S.A.") || contenido.contains("www.elpotosi.com.mx") || rangoSimple(2, 3, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
+		            || rangoSimple(2, 5, pdfStripper, pdDoc).contains(ConstantsValue.SEGUROSPOTOSISA)
 					||  rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A")   )){		    			    		                
                 	PotosiModel datospotosi = new PotosiModel(pdfStripper, pdDoc, contenido);
                 	modelo = datospotosi.procesar();
@@ -382,6 +397,7 @@ public class IdentificaPolizaService {
                         || contenido.contains("Seguros Ve Por Más")
                         || contenido.contains("www.vepormas.com")
                       )) {//Ve por Más 
+					
             	BexmasModel datosVeporMas = new BexmasModel(pdfStripper, pdDoc, contenido);
                     modelo = datosVeporMas.procesar();
                     encontro = true;
@@ -457,11 +473,12 @@ public class IdentificaPolizaService {
                    modelo = datosAguila.procesar();
 				   encontro = true;  
                }
-            
+     
                //ENTRADA PARA Latinoamericana
 
                if(!encontro &&  (contenido.contains("Latinoamericana") || rangoSimple(4, 6, pdfStripper, pdDoc).contains("latinoseguros.com.mx") 			   
-			   || rangoSimple(7, 9, pdfStripper, pdDoc).contains("latinoseguros.com.mx")   )) {				
+			   || rangoSimple(7, 9, pdfStripper, pdDoc).contains("latinoseguros.com.mx")
+			    || rangoSimple(1, 1, pdfStripper, pdDoc).contains("latinoseguros.com.mx")   )) {				
               	 LatinoSeguroModel datosLatino = new LatinoSeguroModel(pdfStripper, pdDoc, contenido);
                    modelo = datosLatino.procesar();
                    encontro = true;  
@@ -525,7 +542,15 @@ public class IdentificaPolizaService {
 			}
 
           
+			if(!encontro && contenido.contains("SPP Institución de Seguros, S.A. de C.V.")){
+				modelo = new SspInsModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
+			}
 
+			if(!encontro && contenido.contains("www.hirseguros.mx") ||   contenido.contains("SEGUHIR")){
+				modelo = new HirModel().procesar(pdfStripper, pdDoc, contenido);
+				encontro = true;   
+			}
          
 			if (!encontro) {
 				// VALIDACION AL NO RECONOCER DE QUE CIA SE TRATA EL PDF
@@ -541,7 +566,7 @@ public class IdentificaPolizaService {
 			pdDoc.close();
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(IdentificaPolizaService.this.getClass().getTypeName() + " - catch:" + ex.getMessage()
 					+ " | " + ex.getCause());
 			return modelo;

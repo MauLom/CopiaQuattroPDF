@@ -39,6 +39,12 @@ public class LatinoSeguroModel {
 				tipo = 2;
 				salud = 2;
 			}
+		
+			if (tipo == 2 && fn.caratula(1, 1, stripper, doc).contains("ACCIDENTES PERSONALES COLECTIVO")) {
+				tipo = 2;
+				salud = 3;
+			}
+			
 
 			switch (tipo) {
 				case 1:
@@ -54,6 +60,9 @@ public class LatinoSeguroModel {
 						case 2:
 							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(7, 8, stripper, doc));
 							break;
+						case 3:
+							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(1, 1, stripper, doc));
+							break;	
 						default:
 							modelo = new LatinoSeguroSaludModel().procesar(fn.caratula(5, 7, stripper, doc));
 

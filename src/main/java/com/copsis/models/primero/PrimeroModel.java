@@ -34,6 +34,10 @@ public class PrimeroModel {
 				tipo=4;
 			}
 
+			if(tipo ==1 && fn.caratula(1, 3, stripper, doc).contains("PÓLIZA DE SEGURO PARA DAÑOS")){
+				tipo=4;
+			}
+
 			switch (tipo
 			) {
 			case 1:// Autos

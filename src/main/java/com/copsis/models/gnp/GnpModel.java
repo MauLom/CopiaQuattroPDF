@@ -8,7 +8,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraJsonModel;
-import com.copsis.models.general.GeneralDiversosAModel;
 import com.copsis.models.gnp.autos.GnpAutos2Model;
 import com.copsis.models.gnp.autos.GnpAutos3Model;
 import com.copsis.models.gnp.autos.GnpAutosModel;
@@ -42,7 +41,7 @@ public class GnpModel {
 					
 					pagFin = fn.pagFinRango(stripper, doc, "Artículo 25");
 
-					pagFin = pagFin == -1 ? pagFin = fn.pagFinRango(stripper, doc, "AGENTE"):pagFin;
+					pagFin = pagFin == -1 ? fn.pagFinRango(stripper, doc, "AGENTE"):pagFin;
 			       
 					if (pagFin > 0) {
 						modelo = new GnpAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
@@ -59,8 +58,10 @@ public class GnpModel {
 					}
 				}
 			} // termina el codigo de Autos
-			else if (contenido.contains("Póliza de Seguro Gastos Médicos") || contenido.contains("Seguro Médico GNP Indemniza")) {
+			else if (fn.caratula(1, 1, stripper, doc).contains("Póliza de Seguro Gastos Médicos") || contenido.contains("Póliza de Seguro Gastos Médicos") || contenido.contains("Seguro Médico GNP Indemniza")) {
+			
 				pagFin = fn.pagFinRango(stripper, doc, ConstantsValue.CLAVE2);
+			    pagFin = pagFin ==0 ?fn.pagFinRango(stripper, doc, ""):pagFin;
 				if( contenido.contains("Seguro Médico GNP Indemniza")){
 					modelo = new GnpSaludBModel().procesar(fn.caratula(1, pagFin, stripper, doc));
 				}else if (pagFin > 0) {

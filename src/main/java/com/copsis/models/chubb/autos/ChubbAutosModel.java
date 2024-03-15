@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -76,15 +77,26 @@ public class ChubbAutosModel {
 					.replace("C###H###E###VR###OLE###T", "CHEVROLET")
 					.replace("G###E###N###E###RAL MO###T###O###RS", "GENERAL MOTORS")
 					.replace("Vigencia:###Del ", "Vigencia:###Del###")
+					.replace("Vigencia: ###Del ###", "Vigencia:###Del###")
 					.replace("horas al ", "horas al###")
-					.replace("@@@Póliza:", "@@@Póliza:###");
+					.replace("Prima Neta ###", "Prima Neta###")
+					.replace("###Forma ###de ###pago:", "Forma de pago:");
+				
 
 			
 			modelo.setTipo(1);			
 			modelo.setCia(1);
 			modelo.setRamo("Autos");
+
+			
+
 			modelo.setMoneda(fn.moneda(
 					contenido.split("Moneda:")[1].split(ConstantsValue.FORMA_PAGO)[0].replace("###", "").trim()));
+			
+			if(modelo.getMoneda() == 5 || modelo.getMoneda() == 0){				
+				modelo.setMoneda(fn.buscaMonedaEnTexto(contenido.split("Moneda:")[1].split("\n")[0]));
+			}
+
 
 			conceptos = Arrays.asList("Póliza anterior:###");
 			for (String x : conceptos) {
@@ -123,15 +135,21 @@ public class ChubbAutosModel {
 				modelo.setFormaPago(fn.formaPagoSring(newcontenido));
 			}
 
-			
+		
 			// poliza
-			conceptos = Arrays.asList("Póliza:###");
+			conceptos = Arrays.asList("Póliza:###","Póliza:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Póliza:###")) {
 					inicio = inicio + 10;
 					newcontenido = fn.gatos( contenido.substring(inicio, (inicio + 100)));			
 					modelo.setPoliza((newcontenido.split(separador)[0].trim() + "" + newcontenido.split(separador)[1].trim()).replace("Vigencia:", ""));
+				}
+				if (inicio > -1 && x.equals("Póliza:")) {
+					inicio = inicio + 10;
+					newcontenido = fn.gatos( contenido.substring(inicio, (inicio + 100)));			
+					modelo.setPoliza((newcontenido.split(separador)[0].trim() + "" + newcontenido.split(separador)[1].trim()).replace("Vigencia:", ""));
+
 				}
 			}
 
@@ -168,19 +186,29 @@ public class ChubbAutosModel {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Datos del asegurado y-o propietario")) {
 					inicio = inicio + 35;
-					newcontenido = contenido.substring(inicio, (inicio + 150));
-					modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
+					newcontenido = contenido.substring(inicio, (inicio + 150)).replace("@@@", "");					
+					if(newcontenido.split(saltolinea)[1].split("###").length == 1 && newcontenido.split(saltolinea)[1].contains("Asegurado:")){
+                        modelo.setCteNombre(newcontenido.split(saltolinea)[1].split("Asegurado:")[1].trim());
+					}else{
+                      modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
+					}
+					
 				}
 			}
 
 			// CteDireccion
-			conceptos = Arrays.asList("Domicilio:###");
+			conceptos = Arrays.asList("Domicilio:###","Domicilio:");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Domicilio:###")) {
 					inicio = inicio + 13;
 					newcontenido = contenido.substring(inicio, (inicio + 100));
 					modelo.setCteDireccion(newcontenido.split(separador)[0].trim());
+				}
+				if (inicio > -1 && x.equals("Domicilio:")) {
+					inicio = inicio + 13;
+					newcontenido = contenido.substring(inicio, (inicio + 100));					
+					modelo.setCteDireccion(newcontenido.split("\n")[0].replace("###", "").trim());
 				}
 			}
 
@@ -285,8 +313,8 @@ public class ChubbAutosModel {
 				}
 			}
 			
-			if(modelo.getCveAgente().contains("Conducto") && modelo.getCveAgente().split("Conducto")[0].length()> 3){
- 				modelo.setCveAgente(modelo.getCveAgente().split("Conducto")[0].trim());
+			if(modelo.getCveAgente().contains(ConstantsValue.CONDUCTO) && modelo.getCveAgente().split(ConstantsValue.CONDUCTO)[0].length()> 3){
+ 				modelo.setCveAgente(modelo.getCveAgente().split(ConstantsValue.CONDUCTO)[0].trim());
 			}
 
 			// Agente
@@ -315,6 +343,7 @@ public class ChubbAutosModel {
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					
 					newcontenido = contenido.substring(inicio, fin);
+					
 					modelo.setVigenciaDe(fn.formatDateMonthCadena(newcontenido.split(separador)[0]));
 					if(modelo.getVigenciaDe().length() >  15) {
 						
@@ -331,7 +360,14 @@ public class ChubbAutosModel {
 					inicio = inicio + 11;
 					fin = (inicio + 150) < contenido.length() ? (inicio + 150): (inicio + 100);
 					newcontenido = contenido.substring(inicio, fin);
-					modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
+		          
+					if(newcontenido.split(separador)[0].contains("-")){
+				      modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[0].trim()));
+					}
+					if(newcontenido.split(separador)[1].contains("-")){
+				      modelo.setVigenciaA(fn.formatDateMonthCadena(newcontenido.split(separador)[1].trim()));
+					}
+					
 				}
 			}
 			// Cp
@@ -473,6 +509,18 @@ public class ChubbAutosModel {
 					
 				}
 			}
+			if(modelo.getFechaEmision().isEmpty()){
+				inicio=contenido.indexOf("Fecha de emisión:");
+                fin=contenido.indexOf("Referencia:");
+				if(inicio > -1 && fin > -1 ){
+                    newcontenido =contenido.substring(inicio,fin);
+					newcontenido = newcontenido.split("emisión:")[1].trim().replace("###", "").replace(" DE ", "-").replace(" ", "");
+					if(newcontenido.contains("-")) {
+						modelo.setFechaEmision(fn.formatDateMonthCadena(newcontenido));	
+					}			 	  
+				}
+			}
+			
 
 			// Marca
 			conceptos = Arrays.asList("Marca:");
@@ -518,13 +566,18 @@ public class ChubbAutosModel {
 
 			// coberturas
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
-			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima","Suma asegurada###Deducible###Coaseguro");
+			conceptos = Arrays.asList("Suma asegurada###Deducible###Prima","Suma asegurada###Deducible###Coaseguro",
+			"Coberturas amparadas ###Suma asegurada ###Deducible ###Prima");
 			conceptosFin = Arrays.asList("@@@Prima Neta###");
 			inicio = contenido.indexOf(conceptos.get(0));
 			if(inicio == -1) {
 				inicio = contenido.indexOf(conceptos.get(1));
 			}
+			if(inicio == -1) {
+				inicio = contenido.indexOf(conceptos.get(2));
+			}
 			fin = contenido.indexOf(conceptosFin.get(0));
+		
 	
 			if (inicio > -1 && fin > -1) {
 				inicio = inicio + 34;
@@ -549,7 +602,7 @@ public class ChubbAutosModel {
 						.replace("A###C###C###ID###E###NT###E###S P###E###RS###O###NALE###S", "ACCIDENTES PERSONALES");
 				int i = 0;
 				for (String dato : newcontenido.split("\n")) {
-					if (dato.split("###").length >= 3) {
+					if ( dato.split("###").length >= 3) {
 						// Clases
 						EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 						cobertura.setNombre(dato.split("###")[0].trim().replace("@@@", ""));
@@ -622,12 +675,20 @@ public class ChubbAutosModel {
 				}
 			}
 
-		
+		 if(modelo.getCp().isEmpty() && !modelo.getCteDireccion().isEmpty()){
+        List<String> valores = fn.obtenerListNumeros2(modelo.getCteDireccion());
+                if(!valores.isEmpty()){
+                    modelo.setCp(valores.stream()
+                        .filter(numero -> String.valueOf(numero).length() >= 4)
+                        .collect(Collectors.toList()).get(0));
+                }
+        }
 
 
 
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					ChubbAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

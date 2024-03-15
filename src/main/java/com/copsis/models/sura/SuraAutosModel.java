@@ -26,32 +26,22 @@ public class SuraAutosModel {
 			int fin;
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC)
-			        .replace("Prima Neta###Descuento", "Prima neta###Descuento");
+			        .replace("Prima Neta###Descuento", ConstantsValue.PRIMANETADESCUETOHASH);
 			modelo.setTipo(1);
 			modelo.setCia(88);
 		
-			inicio = contenido.indexOf("Seguro de Automóviles");
-			if (inicio == -1) {
-				inicio = contenido.indexOf("SEGUROS AUTOS RESIDENTES");
+			inicio=-1;
+			String[] searchTerms = {"Seguro de Automóviles","SEGUROS AUTOS RESIDENTES", "SEGUROS MOTOR TECHNICAL", "Seguro de Movilidad", "Seguro de Auto", "Póliza no."};
+			for (String term : searchTerms) {
+				inicio = contenido.indexOf(term);
+				if (inicio != -1) {		
+					break;
+				}
 			}
-			if (inicio == -1) {
-				inicio = contenido.indexOf("SEGUROS MOTOR TECHNICAL");
-			}
-			
-			if(inicio == -1) {
-				inicio = contenido.indexOf("Seguro de Movilidad");
-			}
-			
-			if(inicio == -1) {
-				inicio = contenido.indexOf("Seguro de Auto");
-			}
-			if(inicio == -1) {
-                inicio = contenido.indexOf("Póliza no.");
-            }
-			fin = contenido.indexOf("Coberturas contratadas");
+			fin = contenido.indexOf(ConstantsValue.COBERTURASCONTRATADAS);
 			if(fin < inicio){
 				inicio = contenido.indexOf("Ramo");
-				fin = contenido.indexOf("Coberturas contratadas");
+				fin = contenido.indexOf(ConstantsValue.COBERTURASCONTRATADAS);
 		
 			}
 			
@@ -69,19 +59,7 @@ public class SuraAutosModel {
                                     .replace(" ", "").trim());
                         }
 					    
-						if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
-							modelo.setPolizaGuion(newcontenido.split("\n")[i + 2].split("###")[3]);
-							modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
-									.replace(" ", "").trim());
-						}
-						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
-                            modelo.setCp(newcontenido.split("\n")[i + 1].split("C.P.")[1].split("###")[0].substring(0, 5).trim());
-                            cpEncontrado = true;
-                        }
-						if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
-							modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
-							cpEncontrado = true;
-						}
+						cpEncontrado = getcp(newcontenido, cpEncontrado, i);
 					}
                  
 					if (newcontenido.split("\n")[i].contains("Moneda")
@@ -165,10 +143,15 @@ public class SuraAutosModel {
 						}	
 					}
 					  if (newcontenido.split("\n")[i].contains("Cve. Vehículo:")) {
-                          modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].trim());
+						if(newcontenido.split("\n")[i].split(fn.palabraRgx(newcontenido.split("\n")[i], ConstantsValue.VEHICULO2))[1].trim().split("###").length > 1){
+                            modelo.setClave(newcontenido.split("\n")[i].split(fn.palabraRgx(newcontenido.split("\n")[i], ConstantsValue.VEHICULO2))[1].split("###")[0].trim());
+						}else{
+							 modelo.setClave(newcontenido.split("\n")[i].split(fn.palabraRgx(newcontenido.split("\n")[i], ConstantsValue.VEHICULO2))[1].trim());
+						}
+                          
                       }
 					if (newcontenido.split("\n")[i].contains("Cve") && modelo.getClave().length() == 0 ) {
-						modelo.setClave(newcontenido.split("\n")[i].split("Vehículo:")[1].split("###")[0].trim());
+						 modelo.setClave(newcontenido.split("\n")[i].split(fn.palabraRgx(newcontenido.split("\n")[i], ConstantsValue.VEHICULO2))[1].split("###")[0].trim());
 					}
 					 
 				}
@@ -182,15 +165,17 @@ public class SuraAutosModel {
 			}
 			
 
-			inicio = contenido.indexOf("Prima neta###Descuento");
+			inicio = contenido.indexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 			fin = contenido.indexOf("Pág. 1");
+			fin = inicio > fin ?  contenido.lastIndexOf("Pág. 1"):fin;
 
 		
-
+           
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-				for (int i = 0; i < newcontenido.split("\n").length; i++) {					
-					if(newcontenido.split("\n")[i].contains("Prima neta")) {
+				for (int i = 0; i < newcontenido.split("\n").length; i++) {			
+					
+					if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {
 						int sp = newcontenido.split("\n")[i+1].split("###").length;
 						if(sp== 6) {
                             modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
@@ -207,11 +192,11 @@ public class SuraAutosModel {
 
 			if(modelo.getPrimaneta().intValue() == 0){
 			
-					inicio = contenido.lastIndexOf("Prima neta###Descuento");
+					inicio = contenido.lastIndexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 				     fin = contenido.lastIndexOf("Pág. 1 de 4");
 					 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 					 for (int i = 0; i < newcontenido.split("\n").length; i++) {				
-						if(newcontenido.split("\n")[i].contains("Prima neta")) {
+						if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {
 							int sp = newcontenido.split("\n")[i+1].split("###").length;
 							if(sp== 6) {
 								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
@@ -226,11 +211,11 @@ public class SuraAutosModel {
 			}
 
 			
-			inicio = contenido.indexOf("Coberturas contratadas");
-			fin = contenido.indexOf("Prima neta###Descuento");
+			inicio = contenido.indexOf(ConstantsValue.COBERTURASCONTRATADAS);
+			fin = contenido.indexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 
-			int	in = contenido.lastIndexOf("Coberturas contratadas");
-			int fi = contenido.lastIndexOf("Prima neta###Descuento");
+			int	in = contenido.lastIndexOf(ConstantsValue.COBERTURASCONTRATADAS);
+			int fi = contenido.lastIndexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 			String xcon = "";
 			if (in > -1 && fi > -1 && in < fi) {
 				xcon=	contenido.substring(in, fi).replace("@@@", "").replace("\r", "");
@@ -241,7 +226,7 @@ public class SuraAutosModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "")+"" +xcon;
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
-					if(!newcontenido.split("\n")[i].contains("contratadas") || !newcontenido.split("\n")[i].contains("Prima neta")) {
+					if(!newcontenido.split("\n")[i].contains("contratadas") || !newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {
 						int sp = newcontenido.split("\n")[i].split("###").length;
 					
 						if(sp == 3 ) {
@@ -266,6 +251,24 @@ public class SuraAutosModel {
 					+ e.getCause());
 			return modelo;
 		}
+	}
+
+	private boolean getcp(String newcontenido, boolean cpEncontrado, int i) {
+		if (newcontenido.split("\n")[i + 2].contains("C.P.")) {
+			modelo.setPolizaGuion(newcontenido.split("\n")[i + 2].split("###")[3]);
+			modelo.setPoliza(newcontenido.split("\n")[i + 2].split("###")[3].replace("-", "")
+					.replace(" ", "").trim());
+					 cpEncontrado = true;
+		}
+		if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
+		    modelo.setCp(newcontenido.split("\n")[i + 1].split("C.P.")[1].split("###")[0].substring(0, 5).trim());
+		    cpEncontrado = true;
+		}
+		if (newcontenido.split("\n")[i + 1].contains("C.P.") && !cpEncontrado) {
+			modelo.setCp(newcontenido.split("\n")[i + 2].split("C.P.")[1].split("###")[0].trim());
+			cpEncontrado = true;
+		}
+		return cpEncontrado;
 	}
 	
 	private void obtenerDatosAgente(String texto, EstructuraJsonModel model) {

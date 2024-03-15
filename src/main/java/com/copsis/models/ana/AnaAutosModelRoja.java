@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.copsis.constants.ConstantsValue;
+import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
+import com.copsis.utils.ErrorCode;
 
 public class AnaAutosModelRoja {
 
@@ -35,14 +37,16 @@ public class AnaAutosModelRoja {
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		contenido = contenido.replace("Fecha de Exp.", "Fecha de Expedición")
 				.replace("Mens. prorrat", "Mensual")
-				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", "Forma de pago")
-                .replace("Forma de Pago:", "Forma de pago:")
+				.replace("Pagos Subsec", "Pagos Subsecuentes").replace("For. de Pago", ConstantsValue.FORMA_PAGO)
+                .replace("Forma de Pago:", ConstantsValue.FORMA_PAGO)
+				.replace("Forma###de###pago:", ConstantsValue.FORMA_PAGO)
 				.replace("Subsec:", ConstantsValue.SUBSECUENTE).replace("Prima Net a :",ConstantsValue.PRIMA_NETA3)
 				.replace("Prima Tota l:", ConstantsValue.PRIMA_TOTAL )
 				.replace("###8T0e0l", "Tel 800")
 				.replace("PÓLIZA###DE###SEGURO###AUTOMÓVILES", "PÓLIZA DE SEGURO AUTOMÓVILES")
 				.replace("Prima###Total:", ConstantsValue.PRIMA_TOTAL)
-				.replace("A.N.A.###Compañía###de###Seguros", "A.N.A. Compañía de Seguros");
+				.replace("A.N.A.###Compañía###de###Seguros", "A.N.A. Compañía de Seguros")
+				.replace("@@@Coberturas###Amparadas", ConstantsValue.COBERTURAS_AMPARADAS2);
 
 		try {
 			modelo.setTipo(1);
@@ -50,15 +54,16 @@ public class AnaAutosModelRoja {
 			modelo.setCia(7);
 
 			inicio = contenido.indexOf("PÓLIZA DE SEGURO AUTOMÓVILES");
-			fin = contenido.indexOf("Coberturas Amparada");
+			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
+			
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
-
+                 
 					if (newcontenido.split("\n")[i].contains("Póliza") && newcontenido.split("\n")[i].contains("Inciso")
 							&& newcontenido.split("\n")[i].contains("Endoso")) {
-						modelo.setPoliza(newcontenido.split("\n")[i].split("Póliza:")[1].split("Inciso")[0]
+						modelo.setPoliza(newcontenido.split("\n")[i].split(ConstantsValue.POLIZA_ACENT2)[1].split("Inciso")[0]
 								.replace("###", "").trim());
 						modelo.setEndoso(newcontenido.split("\n")[i].split("Endoso:")[1].replace("###", "").trim());
 					}
@@ -126,6 +131,9 @@ public class AnaAutosModelRoja {
 						if(valores.size()==3 && valores.get(2).length()> 3){
 							modelo.setCp(valores.get(2));
 						}
+						if(modelo.getCteDireccion().isEmpty() && !modelo.getCp().isEmpty() ){
+                          modelo.setCteDireccion(newcontenido.split("\n")[i].split("C.P.")[0].replace("###", " ").trim());
+						}
 						
 						cp =false;
 					}
@@ -137,37 +145,37 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
+								
 						if(newcontenido.split("\n")[i + 1].length() > 50) {
-							vigencias = fn.gatos(newcontenido.split("\n")[i + 1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+							vigencias = fn.gatos(newcontenido.split("\n")[i +1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+
+							if(vigencias.split("###").length > 7 && (vigencias.split("###")[6].trim().length() < 4 && vigencias.split("###")[6].trim().length() == 3)){
+								vigencias = fn.gatos(newcontenido.split("\n")[i +2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+							}
 						}else {
 							vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 						}
-						
 
-						int to = 0;
 						int sp = vigencias.split("###").length;
-						to = sp - 9;
+						int to  = sp - 9;
 
 						if (sp == 12) {
 							vigencias = fn.gatos(vigencias.split(vigencias.split("###")[2])[1]);
 							sp = vigencias.split("###").length;
-						} else {
-							if (sp > 9) {
-								vigencias = fn.gatos(
-										vigencias.split(vigencias.split("###")[to - 1])[1].replace(" ", "").trim());
-								sp = vigencias.split("###").length;
-							}
-
+						} 
+						if (sp > 9) {
+							vigencias = fn.gatos(vigencias.split(vigencias.split("###")[to - 1])[1].replace(" ", "").trim());
+							sp = vigencias.split("###").length;
 						}
-
-						if (sp == 9) {
+						
+						if (sp == 9) {						
 							modelo.setVigenciaA((vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
 									+ vigencias.split("###")[6]).replace(" ", "").trim());
 							modelo.setVigenciaDe((vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
 									+ vigencias.split("###")[3]).replace(" ", "").trim());
-							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"
-									+ vigencias.split("###")[0]).replace(" ", "").trim());
+							modelo.setFechaEmision((vigencias.split("###")[2] + "-" + vigencias.split("###")[1] + "-"+ vigencias.split("###")[0]).replace(" ", "").trim());
 						}
+						
 					}
 
 					if (newcontenido.split("\n")[i].contains("Cobertura:")
@@ -183,7 +191,7 @@ public class AnaAutosModelRoja {
 							&& newcontenido.split("\n")[i].contains("Gastos:")) {
 						    modelo.setDerecho(fn.castBigDecimal(
 							fn.preparaPrimas(newcontenido.split("\n")[i].split("Gastos:")[1].replace("###", ""))));
-							List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);								
+							List<String> valores = fn.obtenerListNumeros(newcontenido.split("\n")[i]);								
 						    modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 
 					}
@@ -191,17 +199,17 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("pago:")
 							&& newcontenido.split("\n")[i].contains(ConstantsValue.SUBSECUENTE)
 							&& newcontenido.split("\n")[i].contains("I.V.A:")) {								
+								
 						modelo.setFormaPago(fn
-								.formaPago(newcontenido.split("\n")[i].split("Forma de pago:")[1].split(ConstantsValue.SUBSECUENTE)[0]
+								.formaPago(newcontenido.split("\n")[i].split(ConstantsValue.FORMA_PAGO)[1].split(ConstantsValue.SUBSECUENTE)[0]
 										.replace("###", "").replace(".", "").trim()));
 						if(modelo.getFormaPago()==0){
                             modelo.setFormaPago( fn.formaPagoSring(newcontenido.split("\n")[i]));
 						}				
 						modelo.setIva(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split("I.V.A:")[1].replace("###", ""))));
-								List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+								List<String> valores = fn.obtenerListNumeros(newcontenido.split("\n")[i]);
 								modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-
 							
 					}
 
@@ -217,9 +225,9 @@ public class AnaAutosModelRoja {
 						modelo.setPrimaTotal(fn.castBigDecimal(
 								fn.preparaPrimas(newcontenido.split("\n")[i].split(ConstantsValue.PRIMA_TOTAL)[1].replace("###", ""))));
 					}
-					if (newcontenido.split("\n")[i].contains("Descripción:")) {
+					if (newcontenido.split("\n")[i].contains(ConstantsValue.DESCRIPCIONPT)) {
 						modelo.setDescripcion(
-								newcontenido.split("\n")[i].split("Descripción:")[1].replace("###", " ").trim());
+								newcontenido.split("\n")[i].split(ConstantsValue.DESCRIPCIONPT)[1].replace("###", " ").trim());
 					}
 					if (newcontenido.split("\n")[i].contains("No.Motor:")
 							&& newcontenido.split("\n")[i].contains("Capacidad:")
@@ -238,9 +246,7 @@ public class AnaAutosModelRoja {
 						if (newcontenido.split("\n")[i].split("Placa")[1].length() > 7) {
 							modelo.setPlacas(newcontenido.split("\n")[i].split(ConstantsValue.PLACAS)[1].replace("###", "").trim());
 						}
-
 					}
-
 				}
 			}
 
@@ -277,15 +283,12 @@ public class AnaAutosModelRoja {
 							modelo.setCveAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[1]);
 							modelo.setAgente(newcontenido.split("\n")[i].split(ConstantsValue.AGENTE)[1].split("###")[2]);
 						}
-
 					}
-
 				}
 			}
 
-			inicio = contenido.indexOf("Coberturas Amparada");
+			inicio = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 			fin = contenido.indexOf("A.N.A. Compañía de Seguros");
-
 
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
@@ -302,8 +305,11 @@ public class AnaAutosModelRoja {
 						.replace("27###Desbielamiento###por###Penetración###de###Agua###al###Motor", "Desbielamiento por Penetración de Agua al Motor")
 						.replace("31###Responsabilidad###Civil###Catastrófica###por###Muerte###a###Terceras###Daños ", "Responsabilidad Civil Catastrófica por Muerte a Terceras Daños")
 						.replace("a###Terceros en sus###Personas###", "a Terceros en sus Personas")
-						.replace("", "")
-						;
+						.replace("Extensión de###Responsabilidad###Civil", "Extensión de Responsabilidad Civil")
+						.replace("Responsabilidad###Civil###del###Hijo###Meno", "Responsabilidad Civil del Hijo Menor")
+						.replace("Responsabilidad###Civil###por###Remolque", "Responsabilidad Civil por Remolque")
+						.replace("Responsabilidad###Civil###Motociclista,###Ciclista###y-o###Conductor", 
+						"Responsabilidad Civil Motociclista,Ciclista y-o Conductor");
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
 					
 					EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
@@ -316,6 +322,7 @@ public class AnaAutosModelRoja {
 						!newcontenido.split("\n")[i].contains("Coberturas Amparadas")) {
 
 						int sp = newcontenido.split("\n")[i].split("###").length;
+						
 						switch (sp) {
 						case 2:case 3:
 							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[0]).trim());
@@ -328,6 +335,12 @@ public class AnaAutosModelRoja {
 							cobertura.setSa(newcontenido.split("\n")[i].split("###")[2].trim());
 							coberturas.add(cobertura);
 							break;
+						case 5:
+							cobertura.setNombre(eliminaNumeroDeNombreCobertura(newcontenido.split("\n")[i].split("###")[1]).trim());
+							cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].trim());
+							cobertura.setSa(newcontenido.split("\n")[i].split("###")[3].trim());
+							coberturas.add(cobertura);
+							break;	
 						default:
 							break;
 						}
@@ -343,7 +356,6 @@ public class AnaAutosModelRoja {
 					AnaAutosModelRoja.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
 		}
-
 	}
 	
 	private long calculaDiasVigencia(String vigenciaDe, String vigenciaA) {
@@ -357,7 +369,9 @@ public class AnaAutosModelRoja {
 
 			long diferenciaMilli = Math.abs(dateVigenciaA.getTime() - dateVigenciaDe.getTime());
 		     diferencia = TimeUnit.DAYS.convert(diferenciaMilli, TimeUnit.MILLISECONDS);
-		} catch (ParseException e) {}
+		} catch (ParseException e) {
+			throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, e.getMessage());
+		}
 		return diferencia;
 	}
 	

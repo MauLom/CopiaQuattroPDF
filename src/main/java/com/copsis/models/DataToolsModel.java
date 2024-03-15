@@ -34,7 +34,7 @@ public class DataToolsModel {
 	private static final String TRIMESTRAL = "TRIMESTRAL";
 	private static final String MENSUAL = "MENSUAL";
 	private static final String SEMANAL = "SEMANAL";
-	private static final String QUINCENAL = "QUINCENAL";
+
 
 	public boolean isNumeric(String value) {// validacion de si es numero
 		try {
@@ -415,47 +415,7 @@ public class DataToolsModel {
 				: "0" + (meses.indexOf(mes.toUpperCase()) + 1);
 	}
 
-	public int moneda(String texto) {
-		int moneda = 0;
-		switch (texto.toUpperCase()) {
-			case "NACIONAL":
-			case "NAL.":
-			case "PESOS":
-			case "PESO MEXICANO":
-			case "M.N.":
-			case "PESOS CON REVALUACIÓN ANUAL":
-			case "PESOS SIN REVALUACIÓN":
-			case "M.NAC":
-			case "PRIMA EN MONEDA NACIONAL":
-			case "MXP":
-			case "PESO":
-				moneda = 1;
-				break;
-			case "DÓLARES":
-			case "DOLARES":
-			case "DÓLAR AMERICANO":
-			case "DOLARES US":
-			case "USD":
-			case "DÓLARES SIN REVALUACIÓN":
-			case "U.S.DOLLAR":
-				moneda = 2;
-				break;
-			case "UDIS":
-			case "UDI":
-				moneda = 3;
-				break;
-			case "UVACS":
-				moneda = 4;
-				break;
-			default:
-				moneda = 5;
-				break;
-
-		}
-
-		return moneda;
-	}
-
+	
 	public int formaPago(String x) { // FORMA DE PAGO
 		int dato = 0;
 		switch (x.toUpperCase()) {
@@ -586,7 +546,7 @@ public class DataToolsModel {
 	public Boolean sexo(String x) {
 		Boolean result = false;
 		String[] tiposP = { "MASCULINO", "HOMBRE", "H", "HIJO", "MLO", "MASC", "MAS", "M", "FEMENINO", "MUJER", "F",
-				"HIJA", "FEM." };
+				"HIJA", "FEM.","OTRO1" };
 		for (String tipo : tiposP) {
 			if (x.toUpperCase().contains(tipo)) {
 				switch (x.toUpperCase()) {
@@ -1065,10 +1025,9 @@ public class DataToolsModel {
 				newtexto = texto;
 			}
 			longText = newtexto.length();
-			if (newtexto.length() >= 3) {
-				if (newtexto.substring(0, 3).equals("###")) {
+			if (newtexto.length() >= 3 &&  (newtexto.substring(0, 3).equals("###"))) {
 					newtexto = newtexto.substring(3, longText);
-				}
+				
 			}
 		} else {
 			newtexto = texto;
@@ -1209,7 +1168,7 @@ public class DataToolsModel {
 					case SEMANAL:
 					case "SEMANAL VITRO":
 						dato = 6;
-						break;
+						break;									
 				}
 			}
 		}
@@ -1217,11 +1176,53 @@ public class DataToolsModel {
 		return dato;
 	}
 
-	public int buscaMonedaEnTexto(String texto) {
+
+	public int moneda(String texto) {
+		int moneda = 0;
+		switch (texto.toUpperCase()) {
+			case "NACIONAL":
+			case "NAL.":
+			case "PESOS":
+			case "PESO MEXICANO":
+			case "M.N.":
+			case "PESOS CON REVALUACIÓN ANUAL":
+			case "PESOS SIN REVALUACIÓN":
+			case "M.NAC":
+			case "PRIMA EN MONEDA NACIONAL":
+			case "MXP":
+			case "PESO":
+				moneda = 1;
+				break;
+			case "DÓLARES":
+			case "DOLARES":
+			case "DÓLAR AMERICANO":
+			case "DOLARES US":
+			case "USD":
+			case "DÓLARES SIN REVALUACIÓN":
+			case "U.S.DOLLAR":
+				moneda = 2;
+				break;
+			case "UDIS":
+			case "UDI":
+				moneda = 3;
+				break;
+			case "UVACS":
+				moneda = 4;
+				break;
+			default:
+				moneda = 5;
+				break;
+
+		}
+
+		return moneda;
+	}
+
+	public int buscaMonedaEnTexto(String texto) {	
 		int resultado = 0;
 		List<String> listMonedas = Arrays.asList("NACIONAL", "NAL.", "PESOS", "PESO MEXICANO", "M.N.", "MXN",
 				"PESOS CON REVALUACIÓN ANUAL", "PESOS SIN REVALUACIÓN", "M.NAC", "PRIMA EN MONEDA NACIONAL", "MXP",
-				"PESO", "DÓLAR","DOLAR", "DÓLARES", "DOLARES", "DÓLAR AMERICANO", "DOLARES US", "USD",
+				"PESO", "DÓLAR","DOLAR", "DÓLARES", "DOLARES", "DÓLAR AMERICANO", "DOLARES US", "USD","US",
 				"DÓLARES SIN REVALUACIÓN", "U.S.DOLLAR", "UDIS", "UDI", "UVACS");
 
 		for (String moneda : listMonedas) {
@@ -1250,6 +1251,7 @@ public class DataToolsModel {
 					case "USD":
 					case "DÓLARES SIN REVALUACIÓN":
 					case "U.S.DOLLAR":
+					case "US":
 						resultado = 2;
 						break;
 					case "UDIS":
@@ -1326,6 +1328,16 @@ public class DataToolsModel {
 		return resultado;
 	}
 
+	public List<String> obtenerListSimple(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile("\\d+(\\.\\d+)?").matcher(cadena.replace(",", ""));
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
+
+
 	public String formatDate(String formatear) {
 		{
 			String resul = "";
@@ -1352,7 +1364,7 @@ public class DataToolsModel {
 				"CÓNYUGE", "HIJO",
 				"HIJO", "HIJO A", "HIJA", "HIJO/A", "HIJO-A", "HIJO M", "HIJA F", "PADRE", "NIETO", "MADRE", "ESPOSA",
 				"ESPOSO", "", "ESPOSA F", "ASEGURADO", "DEPENDIENTES", "OTRO", "HERMANO/A", "PARENTESCOS",
-				"PERTENECIENTE", "HERMANA", "HERMANO", "ABUELO", "PADRE-MADRE");
+				"PERTENECIENTE", "HERMANA", "HERMANO", "ABUELO", "PADRE-MADRE","ABUELA","NIETA");
 
 		for (String parentesco : listParentescos) {
 
@@ -1380,6 +1392,7 @@ public class DataToolsModel {
 						break;
 					case "PADRE":
 					case "NIETO":
+					case "NIETA":
 					case "MADRE":
 					case "ESPOSA":
 					case "ESPOSO":
@@ -1394,8 +1407,11 @@ public class DataToolsModel {
 					case "HERMANO":
 					case "SUEGRA":
 					case "ABUELO":
+					case "ABUELA":
 					case "PADRE-MADRE":
 						tipoParentesco = 4;
+						break;
+						default:
 						break;
 
 				}
@@ -1423,6 +1439,15 @@ public class DataToolsModel {
 		}
 		return resultado;
 	}
+	public List<String> obtenVigePolizaFmDE(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile(ConstantsValue.REGFEHCA_DE).matcher(cadena);
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
+
 
 	public List<String> obtenVigePolizaUS(String cadena) {
 
@@ -1544,6 +1569,19 @@ public class DataToolsModel {
 		dias = Math.abs(period.getYears());
 		return dias;
 
+	}
+
+	public String palabraRgx(String lineatxt, String patron){
+		String palbrasp="";
+		String[] palbrasAr = patron.split("###");			
+		for(int i=0; i < palbrasAr.length ; i++){			
+			Pattern pattern = Pattern.compile(palbrasAr[i], Pattern.CANON_EQ);
+			Matcher matcher = pattern.matcher(lineatxt);
+			if(matcher.find()){
+				palbrasp = palbrasAr[i];
+			}
+		}									
+	  return palbrasp;	    
 	}
 
 }

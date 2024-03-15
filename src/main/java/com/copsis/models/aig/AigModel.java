@@ -41,9 +41,12 @@ public class AigModel {
 			if(fn.caratula(2, 3, stripper, doc).contains("TRANSPORTE COMBINADO")){
 				tipo=4;
 			}
+			if(tipo == 0 && fn.caratula(1, 4, stripper, doc).contains("Seguro de Accidentes Personales Individual")) {
+				tipo = 2;
+			}
 
 	
-			
+		
 			switch (tipo) {
 			case 1:// Autos
 				modelo  = new AigAutosModel().procesar(fn.caratula(1, 4, stripper, doc));
@@ -52,7 +55,10 @@ public class AigModel {
 			
 				if(contenido.contains("Seguro de Accidentes Personales")) {
 					modelo  = new AigSaludBModel(fn.caratula(1, 4, stripper, doc)).procesar();
-				}else {
+				}else if(fn.caratula(2, 2, stripper, doc).contains("Seguro de Accidentes Personales Individual")) {
+					modelo  = new AigSaludBModel(fn.caratula(2, 2, stripper, doc)).procesar();
+				}
+				else {
 					modelo  = new AigSaludModel(fn.caratula(1, 4, stripper, doc)).procesar();
 				}
 				

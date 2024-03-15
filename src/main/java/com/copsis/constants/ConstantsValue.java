@@ -9,9 +9,10 @@ public final class ConstantsValue {
 	public static final String AVISO_COBRO = "AVISO DE COBRO";
 	public static final String AMPARADA = "Amparada";
 	public static final String ASEGURADO = "Asegurado:";
-
+    public static final String BENEFICIOS ="BENEFICIOS";
 	public static final String BENEFICIOS_CUBIERTOS = "BENEFICIOS CUBIERTOS";
 	public static final String BENEFICIARIOS = "BENEFICIARIOS";
+	public static final String BENEFICIARIOSMN = "Beneficiarios";
 	public static final String BENEFICIARIOS_NOMBRE = "Beneficiarios Nombre";
 
 	public static final String COBERTURAS = "Coberturas";
@@ -28,6 +29,7 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_SUMAS_ASEGURADAS = "COBERTURAS Y SUMAS ASEGURADAS";
 	public static final String CERTIFICADO_INDIVIDUAL = "Certificado Individual";
 	public static final String CLAVE_DE_AGENTE = "Clave de Agente:";
+	public static final String CLAVE_DE_AGENTENM = "Clave de Agente";
 	public static final String CLAVE_INTERNA_AGENTE = "Clave interna del agente:";
 	public static final String CARTERA_HASH = "###CARTERA";
 	public static final String COBERTURAS_CONTRATADAS = "COBERTURAS CONTRATADAS";
@@ -36,12 +38,16 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_BASICA = "Cobertura Básica";
 	public static final String CODIGO_CLIENTE = "Código Cliente";
     public static final String CODIGO_POSTAL ="CÓDIGO POSTAL";
-	public static final String EMISIÓN = "Emisión";
+	public static final String CODIGO_POSTALMY ="Código Postal:";
+	public static final String EMISION = "Emisión";
+	public static final String EMISION_MY_PT = "emisión:";
 	public static final String DOMICILIO_HASH = "Domicilio:###";
 	public static final String DOMICILIO = "Domicilio:";
 	public static final String DOMICILIO2 = "Domicilio";
 	public static final String DATOS_ASEGURADO = "Datos del asegurado";
+	public static final String DATOS_ASEGURADOMY = "DATOS DEL ASEGURADO";
 	public static final String DESDE = "Desde";
+	public static final String DESDECP = "Desde:";
 	public static final String DESDE_LAS = "Desde las";
 	public static final String DATOS_ADICIONALES = "Datos adicionales";
 	public static final String DEDUCIBLE = "Deducible";
@@ -49,12 +55,14 @@ public final class ConstantsValue {
 	public static final String DANIOS = "Daños";
 	public static final String DESCRIPCION_MOVIMIENTO = "Descripción del Movimiento";
 	public static final String DERECHO_POLIZA = "Derecho de Póliza";
+	public static final String DERECHO_POLIZAMY = "DERECHO DE PÓLIZA";
 	public static final String DURACION = "Duración";
 	public static final String DESCRIPCION_COBERTURAS = "DESCRIPCION DE COBERTURAS";
 	public static final String DATOS_GENERALES_ASEGURADO = "Datos Generales del Asegurado";
 	public static final String DATOS_CONTRATANTE = "DATOS DEL CONTRATANTE";
 	public static final String DATOS_CONTRATANTEM = "Datos del Contratante";
 	public static final String DIRECCION = "DIRECCIÓN";
+	public static final String DIRECCIOMN = "Dirección:";
 	public static final String COSTO_DEL_SEGURO= "Costo del Seguro";
 	public static final String PAQUETE_CONTRATADO= "Paquete contratado";
 	public static final String ENCUMPLIMIENTO = "En cumplimiento";
@@ -75,11 +83,13 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO = "Forma de pago:";
 	public static final String FORMA_PAGO2 = "Forma de pago";
 	public static final String FORMA_PAGO3 = "Forma de Pago:";
+	public static final String FORMA_PAGO4 = "Forma-pago";
+	
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
 	public static final String FECHA_DE_NACIMIENTO = "Fecha de nacimiento:";
-
+	public static final String GASTOS_POR="Gastos por";
 	public static final String GASTOS_POR_EXPEDICION = "Gastos por Expedición";
 	public static final String GASTOS_DE_EXPEDICION = "Gastos de expedición";
 	public static final String GASTOS = "Gastos";
@@ -111,10 +121,11 @@ public final class ConstantsValue {
 	public static final String MODELO2 = "Modelo";
 	public static final String MODELO_MAYUS = "MODELO:";
 	public static final String MOTOR = "Motor:";
+	public static final String MOTORNM = "Motor";
+	public static final String MOTOR_HASH= "Motor:###";
 	public static final String MARCA = "Marca:";
 	public static final String MARCA2 = "Marca";
 	public static final String MUROS = "Muros";
-
 	public static final String NOMBRE = "Nombre";
 	public static final String NOMBRE2 = "Nombre:";
 	public static final String NOMBRE3 = "NOMBRE";
@@ -124,6 +135,7 @@ public final class ConstantsValue {
 	public static final String NUMERO_AGENTE = "Número de Agente";
 	public static final String NACIONAL_MAYUS = "NACIONAL";
 	public static final String NUMERO = "Número";
+	public static final String NUMEROPM = "Número:";
 	public static final String NO_POLIZA = "No. Póliza";
 	public static final String NACIONAL = "− Nacional";
 	public static final String NUMERO2 = "Nú m er o     :";
@@ -140,12 +152,15 @@ public final class ConstantsValue {
 	public static final String PRIMA_NETA4 = "Prima neta:";
 	public static final String POLIZA = "Poliza:";
 	public static final String POLIZA_MAYUS = "PÓLIZA";
+	public static final String POLIZA_MAYUSPT = "PÓLIZA;";
+	public static final String POLIZA_MAYAPT = "PÓLIZA:";
 	public static final String POLIZA_ACENT = "Póliza";
 	public static final String POLIZA_ACENT2 = "Póliza:";
 	public static final String POLIZA_NUMERO = "Póliza Número:";
 	
 	public static final String PAGINA = "Página";
 	public static final String PLACAS = "Placas:";
+    public static final String PLACASPT = "Placas";
 	public static final String PLACAS_MAYUS = "PLACAS:";
 	public static final String PLAN = "Plan:";
 	public static final String PLAN_SEGURO = "PLAN DE SEGURO:";
@@ -172,6 +187,9 @@ public final class ConstantsValue {
 	public static final String RFC = "R.F.C:";
 	public static final String RFC2 = "R.F.C";
 	public static final String RFC3 = "R.F.C.:";
+	public static final String RFC4 = "R.F.C.";
+	public static final String RFCMYCL = "RFC:";
+
 	public static final String RIESGOS_CUBIERTOS = "RIESGOS CUBIERTOS";
 	public static final String RECIBO_PRIMAS = "RECIBO DE PRIMAS";
 	public static final String RECARGO = "Recargo:";
@@ -192,6 +210,7 @@ public final class ConstantsValue {
 	public static final String RENOVACION_AUTOM = "RENOVACIÓN AUTOMÁTICA";
 	
 	public static final String TELEFONO = "Teléfono:";
+	public static final String TELEFONOSP = "Teléfono";
 	public static final String TOTAL = "Total:";
 	public static final String TOTAL2 = "Total";
 	public static final String TOTAL_MAYUS = "TOTAL";
@@ -212,6 +231,8 @@ public final class ConstantsValue {
 	public static final String SERIE_MAYUS = "SERIE:";
 	public static final String SOCIAL = "Social:";
 	public static final String SUMA_ASEGURADA = "Suma Asegurada";
+	public static final String SUMA_ASEGURADAMY = "SUMA ASEGURADA";
+	public static final String SUMA_ASEGURADAPM = "Suma Asegurada:";
 	public static final String SIN_LIMITE = "Sin Límite";
 	public static final String SEGURO_PARA_DANOS = "SEGURO PARA DAÑOS"; 
 
@@ -236,7 +257,92 @@ public final class ConstantsValue {
 	public static final String REGFEHCA_MESCPL ="([0-2][0-9]|3[0-1])(\\/|-)(ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|SEPTIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE)(\\/|-)(\\d{4})";
 	public static final String REGFECHUS ="((((0[13578]|(10|12)|(0[1-9]|[1-2][0-9]|3[0-1])))\\-(0[1-9]|[1-2][0-9]|3[0-1]))|(02\\/(0[1-9]|[1-2][0-9]))|((0[469]|11)\\/(0[1-9]|[1-2][0-9]|30)))\\-[0-9]{4}";	
 	public static final String REGFEHCA_USA ="(ENE|FEB|MAR|ABR|MAY|JUN|JUL|AGO|SEP|OCT|NOV|DIC)(\\/|-)([0-2][0-9]|3[0-1])(\\/|-)(\\d{4})";
+	public static final String REGFEHCA_DE = "\\d{1,2} de [a-zA-Z]+ de \\d{4}";
+	public static final String SERVICIO="Servicio:";
+	public static final String IMPORTE_TOTAL="IMPORTE TOTAL";
+	public static final String RENUEVA ="RENUEVA";
+	public static final String MUNICIPIO ="Municipio"; 
+    public static final String VEHICULOPT ="Vehículo:"; 
+	public static final String CONDICIONESDELASEGURAMIENTO ="CONDICIONES DEL ASEGURAMIENTO";
+	public static final String SEGUROSPOTOSISA ="Seguros el Potosí S.A"; 
+	public static final String EDAD ="Edad";
+	public static final String NACIMIENTO ="nacimiento:";
+	public static final String TOTALMN ="total";
+	public static final String FECHADEFIN  ="Fecha de fin";
+	public static final String NUMERODE  ="Número de";
+    public static final String DIRECCIONMC  ="Dirección";
 
+	public static final String CARACTERISTICASRIESGO  ="Características del riesgo";
+	public static final String INCENDIOMYM ="Incendio:";
+	public static final String INCENDIOMYMPT ="incendio:";
+	public static final String NUMPISOSINCENDIO  ="Núm. pisos incendio:";
+	public static final String ENQUPISO = "En qué piso###En que piso";
+	public static final String NUMSOTANOS  ="No. Sótanos:###No. Sotanos:";
+	public static final String DIRECCION2  ="Dirección:###Direccion:###DIRECCION:###Dirección";
+	public static final String EMISION2="emisión";
+	public static final String FRACIONADO2 ="fraccionado";
+	public static final String TELEFONOAC ="Teléfono";
+	public static final String VEHICULO2 ="Vehículo##Vehiculo###Vehículo:";
+	public static final String COBERTURASCONTRATADAS ="Coberturas contratadas";
+	public static final String PRIMANETADESCUETOHASH ="Prima neta###Descuento";
+	public static final String MUL_EMPRESARIA_DESCU ="Múltiple Empresarial Riesgos";
+    public static final String PAQUETE ="PAQUETE";
+	public static final String DESCRIPCION ="Descripción";
+	public static final String DESCRIPCIONPT ="Descripción:";
+	public static final String CALLE_NO ="Calle y No:";
+	public static final String CODIGO_POSTALPT ="C.P.";
+	public static final String ENVIO ="ENVÍO";
+	public static final String  VENCIMIENTO ="VENCIMIENTO";
+	public static final String CONDUCTORES ="Conductores";
+	public static final String NO_DE_CLIENTE ="No. de cliente";
+ 	public static final String PRECIO_TOTAL ="Precio Total";
+ 	public static final String NO_DE_POLIZAAC ="No. de Póliza";
+	public static final String OCUPANTES ="Ocupantes";
+	public static final String VIDA_PROTGT ="VIDA PROTGT";
+	public static final String VIDA_ACADEMICO ="VIDA ACADÉMICO";
+	public static final String VIDA_INDIVIDUAL ="VIDA INDIVIDUAL";
+	public static final String ALIADOS_KIDS ="ALIADOS+ KIDS";
+	public static final String PLANPROTEGE_COMERCIO ="PLANPROTEGE / COMERCIO";
+	public static final String AUTOMOVILES_INDIVIDUALES="AUTOMOVILES INDIVIDUALES";
+	public static final String VERSIONPT ="Versión:";
+	public static final String VEHICULO_ASEGURADO ="VEHÍCULO ASEGURADO";
+	public static final String ASVI_QUALITAS="Asistencia Vial Quálitas";
+	public static final String COLOR ="Color";
+	public static final String FORMA_DEPT ="Forma de:";
+	public static final String TASA_FINACIMIENTO ="Tasa Financiamiento";
+	public static final String ESTADPT  ="Estado:";
+	public static final String ESTADPTMY  ="ESTADO:";
+	public static final String COLONIA="Colonia";
+    public static final String COLONIAPT="Colonia:";
+	public static final String DIASAC="Días:";
+	public static final String EMBARCACIONES ="EMBARCACIONES";
+	public static final String SEGURO_DE_VIAJE ="SEGURO DE VIAJE";
+	public static final String PRODUCTOMN = "Producto";
+	public static final String TIPO_DE_POLIZAPT= "Tipo de Póliza:";
+	public static final String TIPO_DE_POLIZAMY= "TIPO DE PÓLIZA";
+	public static final String HASTA_TO ="Hasta - To";
+	public static final String DESDE_FROM="Desde-From";
+	public static final String TOURIST_VEHICLE_POLICY  ="TOURIST VEHICLE POLICY";
+	public static final String PLACAPT ="Placa:";
+	public static final String SUMAS_ASEGURAS="SUMAS ASEGURADAS";
+	public static final String SEGURO_DE_AUTOMOVILES ="SEGURO DE AUTOMÓVILES";
+	public static final String POBLACION ="POBLACIÓN:";
+	public static final String FECHA_DE_EXPEDICION ="FECHA DE EXPEDICIÓN";
+	public static final String LA_DATOS_PERSONALES ="Los datos personales serán";
+	public static final String CONDUCTO ="Conducto";
+	public static final String PLAN_BASICO ="PLAN BÁSICO";
+	public static final String ASEGURADOMY ="ASEGURADO";
+	public static final String FECHA_DE_EMISION ="FECHA DE EMISIÓN";
+	public static final String DESIGNACION_DE_BENEFICIARIOS ="DESIGNACIÓN DE BENEFICIARIOS";
+	public static final String ESPOSO ="ESPOSO";
+	public static final String LA_CAMPANIA ="LA COMPAÑÍA";
+	public static final String SEGUROS_MONTERREY_NEW  ="Seguros Monterrey New York Life";
+	public static final String CLAVE_DEL_AGENTE ="Clave del Agente";
+	public static final String INFORMACION_ADICIONAL ="INFORMACIÓN ADICIONAL";
+	public static final String RESUMEN_DE_LA_POLIZA_HASH ="RESUMEN###DE###LA###PÓLIZA";
+	public static final String COBERTURAS_SUMA_ASEGURADA_HASH ="COBERTURAS SUMA###ASEGURADA";
+	public static final String MODULO_COBERTURA_GIM	="Módulo - Cobertura";
+	public static final String DANOS_MATERIALES	="Daños Materiales";
 	private ConstantsValue() {
 
 	}

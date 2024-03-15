@@ -24,7 +24,9 @@ public class BexmasAutosModel {
 		int fin = 0;
 		StringBuilder newcont = new StringBuilder();
 		String contenidocbo="";
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
+		.replace("Seguros ###Ve ###Por ###Mas", "Seguros Ve por Más")
+		.replace("Prima Neta", "Prima neta");
 
 		try {
 			modelo.setTipo(1);
@@ -64,17 +66,19 @@ public class BexmasAutosModel {
 						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i + 1]));
 					}
 				
+				
 					
 					if (newcont.toString().split("\n")[i].contains("Dirección:")) {
-						modelo.setCteDireccion(
-								newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0]);
+					
+						getCtedirecciones(newcont, i);		
 					}
+				
 					if (newcont.toString().split("\n")[i].contains("Formas de Pago")) {
 						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 1]));
 					}
 					
-					if (newcont.toString().split("\n")[i].contains("Forma de Pago")) {
-						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 1]));
+					if (modelo.getFormaPago() == 0 && newcont.toString().split("\n")[i].contains("Formas de Pago")) {
+						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 2]));
 					}
 					if (newcont.toString().split("\n")[i].contains("C.P:") && newcont.toString().split("\n")[i].split("C.P:")[1].split("###")[0].trim().length() > 3) {
 
@@ -103,13 +107,19 @@ public class BexmasAutosModel {
 					
 					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains("12:00 Horas")) {
 					
-						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(
+						List<String> valores = fn.obtenVigePoliza(newcont.toString().split("\n")[i]);
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+						modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+						modelo.setFechaEmision(modelo.getVigenciaDe());
+						if(modelo.getVigenciaDe().isEmpty() && modelo.getVigenciaA().isEmpty()){
+							modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(
 								newcont.toString().split("\n")[i].split("###")[0].replace("12:00 Horas", "").trim())));
 						modelo.setVigenciaA(fn.formatDate(fn.formatDateMonthCadena(
 								newcont.toString().split("\n")[i].split("###")[1].replace("12:00 Horas", "").trim())));
 						if (modelo.getVigenciaDe().length() > 0) {
 							modelo.setFechaEmision(modelo.getVigenciaDe());
-						}
+					   	}
+					  }						
 					}
 					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains("12 Hrs.") && fn.obtenVigePoliza(newcont.toString().split("\n")[i]).size() ==2) {
 					
@@ -160,29 +170,45 @@ public class BexmasAutosModel {
 
 			inicio = contenido.indexOf("Prima neta:");
 			fin = contenido.indexOf("En testimonio de lo cual la institución");
+			
 			if(inicio == -1 && fin ==-1) {
 				inicio = contenido.indexOf("Prima neta");
 				fin = contenido.lastIndexOf("En testimonio de lo cual");
 			}
-	
+
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					
-					if(newcont.toString().split("\n")[i].contains("Prima neta:")) {
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+					if(newcont.toString().split("\n")[i].contains("Prima neta:") || newcont.toString().split("\n")[i].contains("Prima neta")) {						
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
+						if(!valores.isEmpty()){
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
 				
-					if(newcont.toString().split("\n")[i].contains("Recargos:")) {					
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
+					if(newcont.toString().split("\n")[i].contains("Recargos:") || newcont.toString().split("\n")[i].contains("Recargos")) {					
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
+						if(!valores.isEmpty()){
 						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}
 					}
-					if(newcont.toString().split("\n")[i].contains("Derechos:")){
-						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i].toString());				
-						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));						
+				
+					if(newcont.toString().split("\n")[i].contains("Derechos:") || newcont.toString().split("\n")[i].contains("Derechos")){
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						}				
+							
+					}
+					if(modelo.getDerecho().intValue() == 0 && newcont.toString().split("\n")[i].contains("daños a terceros")) {
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						}				
+							
 					}
 				
 					
@@ -201,10 +227,20 @@ public class BexmasAutosModel {
 					}
 					
 					if(newcont.toString().split("\n")[i].contains("1er Recibo")){		
-						modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("1er Recibo")[1].replace("###", "").trim())));
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						}						
 					}
 					if(newcont.toString().split("\n")[i].contains("Subsecuentes:")){		
 						modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcont.toString().split("\n")[i].split("Subsecuentes:")[1].replace("###", "").trim())));
+					}
+
+					if(modelo.getPrimaTotal().intValue() == 0 && newcont.toString().split("\n")[i].contains("Prima Total:")) {
+						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);
+						if(!valores.isEmpty()){
+							modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						}				
 					}
 				}
 			}
@@ -271,6 +307,20 @@ public class BexmasAutosModel {
 			return modelo;
 		}
 
+	}
+
+	private void getCtedirecciones(StringBuilder newcont, int i) {
+		if (newcont.toString().split("\n")[i].split("Dirección:")[1].split("###").length > 1) {
+			modelo.setCteDireccion(
+					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[1]);
+		} else {
+			modelo.setCteDireccion(
+					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0]);
+		}
+
+		if (modelo.getCteDireccion().isEmpty()) {
+			modelo.setCteDireccion(newcont.toString().split("\n")[i + 1]);
+		}
 	}
 
 }

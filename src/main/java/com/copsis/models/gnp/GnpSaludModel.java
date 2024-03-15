@@ -512,6 +512,7 @@ public class GnpSaludModel {
 
 			int a1 = coaseguros.indexOf(ConstantsValue.NACIONAL);
 			int b2 = coaseguros.indexOf(ConstantsValue.EXTRANJERO);
+			
 
 			String dtcoberturas = " ";
 			if (b2 > 0 && a1 > 0) {
@@ -711,6 +712,8 @@ public class GnpSaludModel {
 			
 			donde = fn.recorreContenido(contenido, ConstantsValue.COASASEGURO);
 			dondeAux = fn.recorreContenido(contenido, ConstantsValue.AGENTE2);
+			dondeAux = dondeAux == 0 ? fn.recorreContenido(contenido, "En caso de requerir mayor"):dondeAux;
+			
 			String coberturasext="";
 
 			if (donde > 0 && dondeAux > 0) {

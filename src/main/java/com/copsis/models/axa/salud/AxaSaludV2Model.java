@@ -326,7 +326,7 @@ public class AxaSaludV2Model {
                             .replace(" ###", "")
                             .replace("###0###", "###0")
                             .replace("###-", "-");
-                            System.out.println(newcontenido);
+                        
                     
                     //begin fix parrafo listado de asegurados
                     List<String> palabras = this.palabraInicioyFinMayuscula(newcontenido);
@@ -343,7 +343,8 @@ public class AxaSaludV2Model {
                     newcontenido = newcontenido.replace("S###o###b###r ina", "Sobrina")
                     .replace("S###o###b###r ino#","Sobrino")
                     .replace("H###e###r m###ana", "Hermana")
-                    .replace("50 Titular", "50###Titular");
+                    .replace("50 Titular", "50###Titular")
+                    .replace("M###a###d###re", "Madre");
 
                     //end fix parrafo listado de asegurados
                     for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -518,7 +519,7 @@ public class AxaSaludV2Model {
                                 fechaN = newcontenido.split("\n")[i].split("###")[5] + ""
                                         + newcontenido.split("\n")[i].split("###")[6] + ""
                                         + newcontenido.split("\n")[i].split("###")[7].replace(" ", "");  
-                                
+                               
                                 asegurado.setNacimiento(fn.formatDateMonthCadena(fechaN).trim());
                                 fechaA = newcontenido.split("\n")[i].split("###")[8].replace(" ", "");
                                 asegurado.setAntiguedad(fn.formatDateMonthCadena(fechaA));

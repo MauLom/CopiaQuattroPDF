@@ -37,12 +37,14 @@ public class ZurichModel {
 			if(tipo == 5 && contenido.contains("Recolección de Residuos")) {
 				tipo = 4;
 			}
-			if(tipo == 0 && (contenido.contains("Incendio Todo Riesgo Casa")|| contenido.contains(" Transportes Mercancía:"))) {
+			if(tipo == 0 && (contenido.contains("Incendio Todo Riesgo Casa")|| contenido.contains("Transportes Mercancía:")
+			|| contenido.contains("TRANSPORTES DE MERCANCIA:")
+			|| contenido.contains("Trabajos eléctricos - Electricistas")
+			|| fn.caratula(2, 2, stripper, doc).contains("Terremoto y Erupción Volcánica"))) {
 				tipo =4;
 			}
+		
 
-
-			
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido ): tipo)) {
 			case 1:// Autos
 				modelo  = new ZurichAutosModel(fn.caratula(1, 2, stripper, doc)).procesar();				
@@ -55,10 +57,8 @@ public class ZurichModel {
 				String textoFormaPago = fn.textoBusqueda(stripper, doc, "Forma de pago", false);
 				modelo  = new ZurichDiversosModel(fn.caratula(1, 8, stripper, doc) + textoFormaPago).procesar();				
 				break;
-				default:
-			
-					break;
-			
+			default:
+				break;			
 			}
 			return modelo;
 		} catch (Exception ex) {

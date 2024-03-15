@@ -159,15 +159,25 @@ public class MetlifeVidaModel {
             inicio = contenido.indexOf("Prima anual total");
             fin = contenido.indexOf("Los siguientes");
             StringBuilder next = new StringBuilder();
-            next.append( fn.extracted(inicio, fin, contenido));
+            next.append( fn.extracted(inicio, fin, contenido).replace(",", ""));
             
             for (int i = 0; i < next.toString().split("\n").length; i++) {
                 if(next.toString().split("\n")[i].contains("Prima anual total")) {
                     List<String> valores = fn.obtenerListNumeros(next.toString().split("\n")[i+2]);
-                    modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
-                    modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
-                    modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));                                        
-                    modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+				
+					if(valores.size()== 4){
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));					
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));  
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));                                      
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(3))));
+					}
+                   
+					if(valores.size()== 5){
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(2))));
+						modelo.setRecargo(fn.castBigDecimal(fn.castDouble(valores.get(1))));                                        
+						modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(4))));
+					}
                }
             }
             
@@ -193,6 +203,7 @@ public class MetlifeVidaModel {
 			donde = 0;
 			newcontenido = "";
 			donde = fn.searchTwoTexts(contenido, "COBERTURAS", "Suma");
+		
 			if(donde > 0) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 				newcontenido = contenido.split("@@@")[donde + 1].trim();
@@ -226,8 +237,8 @@ public class MetlifeVidaModel {
 								}
 							}
 							
-							if(x.contains("VIDA PAGOS LIMITADOS 15") || x.contains("VIDA PAGOS LIMITADOS 5")) {
-					
+							if(x.contains("VIDA PAGOS LIMITADOS 15") || x.contains("VIDA PAGOS LIMITADOS 10") || x.contains("VIDA PAGOS LIMITADOS 5")) {
+				
                                 if(x.split("###").length == 6) {
                                    
                                     if(x.split("###")[2].trim().split(" ").length == 3){
@@ -354,6 +365,7 @@ public class MetlifeVidaModel {
 			
 			return modelo;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			modelo.setError(
 					MetlifeVidaModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | " + ex.getCause());
 			return modelo;

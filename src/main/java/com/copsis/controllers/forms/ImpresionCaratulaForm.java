@@ -2,8 +2,9 @@ package com.copsis.controllers.forms;
 
 import java.util.List;
 
-import com.copsis.clients.projections.BeneficiarioProjection;
+import com.copsis.clients.projections.AseguradosGrupoProjection;
 import com.copsis.clients.projections.AseguradosProjection;
+import com.copsis.clients.projections.BeneficiarioProjection;
 import com.copsis.clients.projections.ClienteExtraCaratProjection;
 import com.copsis.clients.projections.CoberturaBasicaProjection;
 import com.copsis.clients.projections.CoberturaProjection;
@@ -33,5 +34,6 @@ public class ImpresionCaratulaForm {
     private List<AseguradosProjection> asegurados;
     private CoberturaBasicaProjection  coberturaBasica;
     private List<UbicacionesProjection> ubicaciones;
+    private List<AseguradosGrupoProjection> aseguradosGrupo;
     
 }

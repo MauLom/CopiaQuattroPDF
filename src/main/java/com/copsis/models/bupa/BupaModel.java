@@ -34,6 +34,13 @@ public class BupaModel {
 			     tipo = fn.tipoPoliza(fn.caratula(pagIni, pagFin, stripper, doc));
 			 }
 
+			String[] palabras2 ={"Carátula de la Póliza","Derecho"};
+             if(tipo ==0  && fn.pagPalabras(stripper, doc,palabras2) !=0){				
+				 pagIni = fn.pagPalabras(stripper, doc,palabras2) ;		
+				 pagFin=pagIni;		 						     
+			     tipo = fn.tipoPoliza(fn.caratula(pagIni, pagFin, stripper, doc));
+			 }
+
 
 		    if(tipo == 0 && pagIni ==0) {
 			   pagIni = fn.pagFinRango(stripper, doc, "Contratante");
@@ -45,21 +52,17 @@ public class BupaModel {
 			 }
 			 
 
-			
-			switch (tipo) {
-			case 2:
-				 if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {		
+		     if(tipo == 2){
+ 				if(pagIni > 0 && pagFin > 0 && pagFin >= pagIni) {		
 					
 					 modelo =new  BupaSaludModel().procesar(fn.caratula(pagIni, pagIni+1, stripper, doc),fn.caratula(pagIni, pagIni+5, stripper, doc),fn.textoBusqueda(stripper, doc, "Recibo para Pago", false));
 				 }else {
 					 modelo =new  BupaSaludModel().procesar(fn.caratula(0, 3, stripper, doc),"","");
 				 }
+			 }
 				
-				break;
-
-			default:
-				break;
-			}
+				
+		
 			
 			return modelo;
 		} catch (Exception ex) {

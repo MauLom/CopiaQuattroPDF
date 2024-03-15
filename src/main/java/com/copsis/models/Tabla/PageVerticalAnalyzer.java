@@ -111,7 +111,7 @@ public class PageVerticalAnalyzer  extends PDFGraphicsStreamEngine {
 	        else
 	        {
 	            // shouldn't happen, please open issue in JIRA
-	            System.out.println("Unknown font class: " + font.getClass());
+	        
 	        }
 	        if (path == null)
 	        {

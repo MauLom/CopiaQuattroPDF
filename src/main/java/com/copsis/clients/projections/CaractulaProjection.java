@@ -41,4 +41,7 @@ public class CaractulaProjection {
     private String nivelEscolar;
     private Long paquete;
     private	String sumaAsegurada;
+    private	String estado;
+    private String curpContratante;
+    private String cobertura;
 }

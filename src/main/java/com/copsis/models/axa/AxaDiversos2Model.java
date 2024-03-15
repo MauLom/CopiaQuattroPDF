@@ -20,7 +20,8 @@ public class AxaDiversos2Model {
     public AxaDiversos2Model(String contenidox) {
         this.contenido = fn.remplazarMultiple(contenidox, fn.remplazosGenerales());
         contenido = contenido.replace("C o b e r t u r a s", "Coberturas")
-                .replace(" C O B E R T U R A S SUMA ASEGURADA", " COBERTURAS SUMA###ASEGURADA");
+                .replace(" C O B E R T U R A S SUMA ASEGURADA", " COBERTURAS SUMA###ASEGURADA")
+                .replace("D ###omicilio:", "Domicilio:");
     }
 
     public EstructuraJsonModel procesar() {
@@ -33,6 +34,22 @@ public class AxaDiversos2Model {
         try {
             modelo.setTipo(7);
             modelo.setCia(20);
+
+
+            inicio = contenido.indexOf("CARÁTULA DE PÓLIZA");           
+            fin = contenido.indexOf("Datos del Contratante");
+           
+           
+            newcon.append(fn.extracted(inicio, fin, contenido));
+            
+            for (int i = 0; i < newcon.toString().split("\n").length; i++) {
+               
+                if(newcon.toString().split("\n")[i].contains("CARÁTULA DE PÓLIZA")){
+                    modelo.setPlan(newcon.toString().split("\n")[i+1].split("###")[1]);
+
+                }
+               
+            }
 
             if (contenido.contains("Anterior:")) {
                 newcontenido = contenido.substring(contenido.indexOf("Anterior:") + 9, contenido.indexOf("Anterior:") + 100).trim();
@@ -52,6 +69,7 @@ public class AxaDiversos2Model {
                 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
          
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
+                  
                     if (newcontenido.split("\n")[i].contains("PÓLIZA") && newcontenido.split("\n")[i+1].contains("Nombre")) {
                         modelo.setPoliza(newcontenido.split("\n")[i+1].split("###")[newcontenido.split("\n")[i+1].split("###").length -1]);
 
@@ -68,8 +86,14 @@ public class AxaDiversos2Model {
                     if (newcontenido.split("\n")[i].contains("Vigencia")) {
                         String x = newcontenido.split("\n")[i + 1].replace("a las 12 Hrs.", "");//			
                         if (x.split("###")[1].trim().contains("-") && x.split("###")[3].trim().contains("-")) {
-                            modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[1].trim()));
-                            modelo.setVigenciaA(fn.formatDateMonthCadena(x.split("###")[3].trim()));
+                            List<String> valores = fn.obtenVigePoliza2(x);
+                            modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+                            if(valores.size() == 2){
+                                modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+                            }
+                          
+
+                            
                         }
                         if (x.split("###").length == 5 && x.split("###")[4].trim().contains("-")) {
                             modelo.setVigenciaDe(fn.formatDateMonthCadena(x.split("###")[4].trim()));
@@ -91,6 +115,7 @@ public class AxaDiversos2Model {
                         modelo.setCteNombre(newcontenido.split("\n")[i + 1].split("Nombre")[1].split("RFC:")[0].replace(":", "").replace("###", "").trim());
                         modelo.setRfc(newcontenido.split("\n")[i + 1].split("RFC:")[1].trim());
                     }
+                  
                     if (newcontenido.split("\n")[i].contains(ConstantsValue.DOMICILIO2)) {
                         modelo.setCteDireccion(newcontenido.split("\n")[i].split(ConstantsValue.DOMICILIO2)[1].replace("###", "").replace(":", "").trim());
                         StringBuilder direccion = new StringBuilder();
@@ -113,6 +138,9 @@ public class AxaDiversos2Model {
                     if(modelo.getCteNombre().length() == 0 && newcontenido.split("\n")[i].contains("Datos del Contratante")) {
                      modelo.setCteNombre(newcontenido.split("\n")[i+1].split("Nombre")[1].split("###")[1].trim());
                     }
+                    if (newcontenido.split("\n")[i].contains("Moneda")){
+                        modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split("\n")[i]));
+                    }
 
 
                 }
@@ -128,18 +156,20 @@ public class AxaDiversos2Model {
 
             inicio = contenido.indexOf("Datos Adicionales");
             fin = contenido.indexOf("Suma Asegurada Prima Neta");
+            fin = fin ==-1 ?  contenido.indexOf("AXA ###Seguros"):fin;
+            fin = fin ==-1 ?  contenido.indexOf("3### - 6"):fin;
+            fin = fin ==-1 ?  contenido.indexOf("3### - 8"):fin;
+            fin = fin ==-1 ?  contenido.indexOf("AXA ###Seguros"):fin;
+
             if (fin == -1) {
-                fin = contenido.indexOf("AXA ###Seguros");
+                inicio = contenido.indexOf("Datos Adicionales");
+                fin = contenido.indexOf("Prima Total:")+100;
             }
-            if (fin == -1) {
-                fin = contenido.indexOf("3### - 6");
-            }
-            if (fin == -1) {
-                fin = contenido.indexOf("3### - 8");
+            if (inicio > fin) {
+                fin = contenido.indexOf("Prima Total:")+100;
             }
          
-        
-         
+    
 
             if (inicio > -1 && fin > -1 && inicio < fin) {
 
@@ -196,34 +226,31 @@ public class AxaDiversos2Model {
             /*Proceoso para las  coberturas*/
             inicio = contenido.indexOf("Coberturas");
             fin = contenido.indexOf("Giro del Negocio");
+            inicio = fin  == -1 ?-1:inicio;
          
-            
-             if(fin ==-1) { 
-                 inicio =-1;
-             }
+          
 
             if (inicio == -1 || fin == -1) {
               
-                for (int i = 0; i < contenido.split("COBERTURAS SUMA###ASEGURADA").length; i++) {
+                for (int i = 0; i < contenido.split(ConstantsValue.COBERTURAS_SUMA_ASEGURADA_HASH).length; i++) {
                   
-                    if (i > 0) {
-                        if (contenido.split("COBERTURAS SUMA###ASEGURADA")[i].contains("La Suma Asegurada opera")) {
-                            newcon.append(contenido.split("COBERTURAS SUMA###ASEGURADA")[i].split("La Suma Asegurada opera")[0]);
+                    if (i > 0 &&  (contenido.split(ConstantsValue.COBERTURAS_SUMA_ASEGURADA_HASH)[i].contains("La Suma Asegurada opera"))) {
+                            newcon.append(contenido.split(ConstantsValue.COBERTURAS_SUMA_ASEGURADA_HASH)[i].split("La Suma Asegurada opera")[0]);
 
-                        }
+                        
                     }
                 }
-                
-                if(newcon.length() == 0) {
 
-                    for (int i = 0; i < contenido.split("Módulo - Cobertura").length; i++) {
+               
+              
+                if(newcon.length() == 0 || newcon.length() < 100 ) {
+
+                    for (int i = 0; i < contenido.split(ConstantsValue.MODULO_COBERTURA_GIM).length; i++) {
                      
-                        if (i > 0) {
-                           
-                            if (contenido.split("Módulo - Cobertura")[i].contains("Para las coberturas arriba")) {
-                                newcon.append(contenido.split("Módulo - Cobertura")[i].split("Para las coberturas arriba")[0].replace("@@@", ""));
+                        if (i > 0 &&  (contenido.split(ConstantsValue.MODULO_COBERTURA_GIM)[i].contains("Para las coberturas arriba"))) {
+                                newcon.append(contenido.split(ConstantsValue.MODULO_COBERTURA_GIM)[i].split("Para las coberturas arriba")[0].replace("@@@", ""));
 
-                            }
+                            
                         }
                     }
                 }
@@ -244,8 +271,7 @@ public class AxaDiversos2Model {
                 for (int i = 0; i < newcontenido.split("\n").length; i++) {
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                     int x = newcontenido.split("\n")[i].split("###").length;
-                    if(!newcontenido.split("\n")[i].contains("Asegurada")) {
-                    if (newcontenido.split("\n")[i].length() > 20) {
+                    if(!newcontenido.split("\n")[i].contains("Asegurada") &&  (newcontenido.split("\n")[i].length() > 20)) {
                         if (x == 2) {
                             cobertura.setNombre(newcontenido.split("\n")[i].split("###")[0].trim());
                             cobertura.setSa(newcontenido.split("\n")[i].split("###")[1].replace("\r", ""));
@@ -262,7 +288,7 @@ public class AxaDiversos2Model {
                             cobertura.setDeducible(newcontenido.split("\n")[i].split("###")[2].replace("\r", ""));
                             coberturas.add(cobertura);
                         }
-                    }
+                    
                   }
                 }
                 modelo.setCoberturas(coberturas);
@@ -311,7 +337,7 @@ public class AxaDiversos2Model {
     }
 
     private void obtenerDatosubicacion(String contenido, EstructuraJsonModel modelo) {
-        String texto = contenido.replace("Ubicación  ###Contratante", UBICACION)
+        String texto = contenido.replace("Ubicación\u00A0 ###Contratante", UBICACION)
         .replace("Coberturas Contratadas", ConstantsValue.COBERTURAS_CONTRATADAS2);
         int inicio = texto.indexOf(UBICACION);
 
@@ -338,27 +364,7 @@ public class AxaDiversos2Model {
 
                 for (int i = 0; i < arrNewContenido.length; i++) {
 
-                    if (arrNewContenido[i].contains(ConstantsValue.DOMICILIO) && (i + 1) < arrNewContenido.length) {
-                        StringBuilder direccion = new StringBuilder();
-                        direccion.append(arrNewContenido[i].split(ConstantsValue.DOMICILIO)[1].replace("###", "").trim());
-
-                        if (arrNewContenido[i + 1].contains("C/P")) {
-                            direccion.append(" ").append(arrNewContenido[i + 1].split("C/P")[0].replace("###", ""));
-                        }
-                        ubicacion.setCalle(direccion.toString().trim());
-                    }
-                    //CP
-                    if (arrNewContenido[i].contains("C/P") && arrNewContenido[i].contains("Tel")) {
-                        String aux = arrNewContenido[i].split("C/P")[1].split("Tel")[0].replace(":", "").replace(".", "").trim();
-                        if (fn.isvalidCp(aux)) {
-                            ubicacion.setCp(aux);
-                        }
-                    }
-                    //
-                    if (arrNewContenido[i].contains("Giro tarifa")) {
-                        ubicacion.setGiro(arrNewContenido[i].split("Giro tarifa")[1].replace("###", "").replace(".-", "").trim());
-                        ubicacion.setNombre(ubicacion.getNombre());
-                    }
+                    getDatos(arrNewContenido, ubicacion, i);
                 }
 
                 if (ubicacion.getCalle().length() > 0) {
@@ -367,6 +373,30 @@ public class AxaDiversos2Model {
                     modelo.setUbicaciones(ubicaciones);
                 }
             }
+        }
+    }
+
+    private void getDatos(String[] arrNewContenido, EstructuraUbicacionesModel ubicacion, int i) {
+        if (arrNewContenido[i].contains(ConstantsValue.DOMICILIO) && (i + 1) < arrNewContenido.length) {
+            StringBuilder direccion = new StringBuilder();
+            direccion.append(arrNewContenido[i].split(ConstantsValue.DOMICILIO)[1].replace("###", "").trim());
+
+            if (arrNewContenido[i + 1].contains("C/P")) {
+                direccion.append(" ").append(arrNewContenido[i + 1].split("C/P")[0].replace("###", ""));
+            }
+            ubicacion.setCalle(direccion.toString().trim());
+        }
+        //CP
+        if (arrNewContenido[i].contains("C/P") && arrNewContenido[i].contains("Tel")) {
+            String aux = arrNewContenido[i].split("C/P")[1].split("Tel")[0].replace(":", "").replace(".", "").trim();
+            if (fn.isvalidCp(aux)) {
+                ubicacion.setCp(aux);
+            }
+        }
+        //
+        if (arrNewContenido[i].contains("Giro tarifa")) {
+            ubicacion.setGiro(arrNewContenido[i].split("Giro tarifa")[1].replace("###", "").replace(".-", "").trim());
+            ubicacion.setNombre(ubicacion.getNombre());
         }
     }
 }

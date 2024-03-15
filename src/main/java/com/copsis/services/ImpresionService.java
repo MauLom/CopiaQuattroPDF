@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroUploadClient;
 import com.copsis.clients.projections.CaractulaProjection;
+import com.copsis.clients.projections.CaractulaPrudentialProjection;
 import com.copsis.clients.projections.CertificadoProjection;
 import com.copsis.clients.projections.CotizacionProjection;
 import com.copsis.clients.projections.ImpresionReclamacionProjection;
@@ -16,7 +17,9 @@ import com.copsis.controllers.forms.AdjuntoForm;
 import com.copsis.controllers.forms.AmortizacionPdfForm;
 import com.copsis.controllers.forms.ImpresionAxaForm;
 import com.copsis.controllers.forms.ImpresionAxaVidaForm;
+import com.copsis.controllers.forms.ImpresionBienvenidadForm;
 import com.copsis.controllers.forms.ImpresionCaratulaForm;
+import com.copsis.controllers.forms.ImpresionCertificadoAxaForm;
 import com.copsis.controllers.forms.ImpresionFiscalForm;
 import com.copsis.controllers.forms.ImpresionForm;
 import com.copsis.controllers.forms.MovimientosForm;
@@ -24,15 +27,18 @@ import com.copsis.dto.SURAImpresionEmsionDTO;
 import com.copsis.encryptor.SiO4EncryptorAES;
 import com.copsis.exceptions.GeneralServiceException;
 import com.copsis.exceptions.ValidationServiceException;
+import com.copsis.models.ImpresionVitro.ImpresionVitrCBienvenida;
 import com.copsis.models.impresion.ImpresionAmortizacionesPdf;
 import com.copsis.models.impresion.ImpresionCaractulaPrudential;
 import com.copsis.models.impresion.ImpresionCertificadoAfirme;
 import com.copsis.models.impresion.ImpresionCertificadoArgos;
+import com.copsis.models.impresion.ImpresionCertificadoAxaPdf;
 import com.copsis.models.impresion.ImpresionCertificadoChubbPdf;
 import com.copsis.models.impresion.ImpresionCertificadoHogarPdf;
 import com.copsis.models.impresion.ImpresionConsultaMovimientos;
 import com.copsis.models.impresion.ImpresionFiscalPdf;
 import com.copsis.models.impresion.ImpresionPolizaAutosInter;
+import com.copsis.models.impresion.ImpresionPrudPdf;
 import com.copsis.models.impresion.ImpresionReclamacionPdf;
 import com.copsis.models.impresion.ImpresionVidaAxaPdf;
 import com.copsis.models.impresionAxa.ImpresionCartaAntiguedad;
@@ -41,10 +47,14 @@ import com.copsis.models.impresionAxa.ImpresionConstanciaAntiguedad;
 import com.copsis.models.impresionAxa.ImpresionCotizacionVida;
 import com.copsis.models.impresionAxa.ImpresionCredencialPdf;
 import com.copsis.models.impresionAxa.ImpresionEndosoPdf;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaAutos;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaDiversos;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaSalud;
-import com.copsis.models.impresionCaratula.ImpresionCaratulaVida;
+import com.copsis.models.impresionEndoso.ImpresionEndoso;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaColectividasAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaVidaGrupo;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaAutos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaDiversos;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaSalud;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaSaludGrupo;
+import com.copsis.models.impresioncaratula.ImpresionCaratulaVida;
 import com.copsis.utils.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -56,7 +66,7 @@ public class ImpresionService {
     private final QuattroUploadClient quattroUploadClient;
 
     public ImpresionForm impresionServicePdf(ImpresionForm impresionForm, HttpHeaders headers) {
-        ImpresioneTipoService impresioneTipoService = new ImpresioneTipoService(impresionForm);
+        ImpresionTipoService impresioneTipoService = new ImpresionTipoService(impresionForm);
         AdjuntoForm adjuntoForm = new AdjuntoForm();
 
         if (impresionForm.getTipoImpresion() == 100 && impresionForm.getSiniestroDocumentoID() > 0) {
@@ -319,8 +329,7 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
-
- public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
+    public byte[] impresionCaratulaDiversos(ImpresionCaratulaForm  impresionCaratulaForm){
         try {
             byte[] byteArrayPDF = null;
             byteArrayPDF = new ImpresionCaratulaDiversos().buildPDF(impresionCaratulaForm);
@@ -332,4 +341,102 @@ public class ImpresionService {
             throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
         }
     }
+
+    public byte[] impresionCaratulaColeAutos( ImpresionCaratulaForm  impresionCaractulaForm  ){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaColectividasAutos().buildPDF(impresionCaractulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+    
+    
+      public byte[] impresionCaratulaSaludGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaSaludGrupo().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+      public byte[] impresionCaratulaVidaGrupo(ImpresionCaratulaForm  impresionCaratulaForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCaratulaVidaGrupo().buildPDF(impresionCaratulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+
+
+    public byte[] impresionEndoso( ImpresionCaratulaForm  impresionCaractulaForm  ){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionEndoso().buildPDF(impresionCaractulaForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+
+
+    public byte[] impresionSolicitudPrudential(CaractulaPrudentialProjection  caractulaPrudentialProjection){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionPrudPdf().buildPDF(caractulaPrudentialProjection);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+    public byte[] impresionVitroCaractula(ImpresionBienvenidadForm  impresionBienvenidadForm){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionVitrCBienvenida().buildPDF(impresionBienvenidadForm);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+
+    public byte[] impresionCertificadoIndAxa(ImpresionCertificadoAxaForm  impresionCertificadoAxa){
+        try {
+            byte[] byteArrayPDF = null;
+            byteArrayPDF = new ImpresionCertificadoAxaPdf().buildPDF(impresionCertificadoAxa);
+            return byteArrayPDF;
+        }
+        catch (ValidationServiceException e) {
+            throw e;
+        }  catch (Exception ex) {
+            throw new GeneralServiceException(ErrorCode.MSJ_ERROR_00000, ex.getMessage());
+        }
+    }
+    
+    
 }

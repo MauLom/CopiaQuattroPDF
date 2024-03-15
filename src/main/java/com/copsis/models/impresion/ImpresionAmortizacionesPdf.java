@@ -348,7 +348,7 @@ public class ImpresionAmortizacionesPdf {
 			
 			baseRow = communsPdf.setRow(table, 20);
 			communsPdf.setCell(baseRow,15, "Descripción:", black, true, "L", 10, cellStyle, "", paddingHeadData2, bgColor);
-			communsPdf.setCell(baseRow,80,  ellipsize(impresionForm.getDescripcion()+" "+impresionForm.getModelo(),85), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
+			communsPdf.setCell(baseRow,80,  ellipsize(impresionForm.getDescripcion()+" "+impresionForm.getModelo(),150), black, false, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 			// communsPdf.setCell(baseRow,20, "Costo por Admon de Poliza de Seguros:", black, true, "L", 10, cellStyle, "", paddingHeadData, bgColor);
 			// communsPdf.setCell(baseRow,11,formatoDinero(impresionForm.getDerecho()), black, false, "R", 10, cellStyle, "", paddingHeadData,bgColor);
 

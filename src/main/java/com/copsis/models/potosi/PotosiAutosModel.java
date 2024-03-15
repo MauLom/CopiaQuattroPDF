@@ -3,6 +3,7 @@ package com.copsis.models.potosi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -36,8 +37,8 @@ public class PotosiAutosModel {
 					if(newcontenido.toString().split("\n")[i].contains("Póliza") && newcontenido.toString().split("\n")[i].contains("Certificado")) {
 						modelo.setPoliza(newcontenido.toString().split("\n")[i+1].split("###")[0]);
 					}
-					if(newcontenido.toString().split("\n")[i].contains("Desde") && newcontenido.toString().split("\n")[i].contains("Nombre")) {
-						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split("Desde:")[1].split("Nombre")[0].replace("###", "").trim())));
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE) && newcontenido.toString().split("\n")[i].contains("Nombre")) {
+						modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i].split(ConstantsValue.DESDECP)[1].split("Nombre")[0].replace("###", "").trim())));
 						if(newcontenido.toString().split("\n")[i+1].contains("Hasta")) {
 							modelo.setVigenciaA(fn.formatDate(fn.formatDateMonthCadena(newcontenido.toString().split("\n")[i+1].split("###")[1].trim())));
 							modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("###")[2].trim());
@@ -57,13 +58,13 @@ public class PotosiAutosModel {
 						}
 					}
 					if(newcontenido.toString().split("\n")[i].contains("R.F.C:") && newcontenido.toString().split("\n")[i].contains("Teléfono")) {
-						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0].replace("###", "").replace("-", "").trim());
+						modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split(ConstantsValue.TELEFONOSP)[0].replace("###", "").replace("-", "").trim());
 					}
 					if(newcontenido.toString().split("\n")[i].contains("Dirección:") && newcontenido.toString().split("\n")[i+1].contains("operación")) {						
 						modelo.setCteDireccion(newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim());
 						if((i+2)< newcontenido.toString().split("\n").length) {
 							String textoOtroRenglon = newcontenido.toString().split("\n")[i+2];
-							if(!textoOtroRenglon.contains("R.F.C") && !textoOtroRenglon.contains("Teléfono")
+							if(!textoOtroRenglon.contains("R.F.C") && !textoOtroRenglon.contains(ConstantsValue.TELEFONOSP)
 									&& !textoOtroRenglon.contains("Sucursal") && textoOtroRenglon.contains("de Cliente")) {
 								String aux = newcontenido.toString().split("\n")[i+1].split("###")[2].replace("###", "").trim();
 								aux = aux+" " +textoOtroRenglon.split("###")[textoOtroRenglon.split("###").length -1].trim();
@@ -91,13 +92,13 @@ public class PotosiAutosModel {
 			}
 
 			inicio = contenido.indexOf("DATOS DEL RIESGO ASEGURADO");
-			fin = contenido.indexOf("CONDICIONES DEL ASEGURAMIENTO");
+			fin = contenido.indexOf(ConstantsValue.CONDICIONESDELASEGURAMIENTO);
 			if(inicio > -1 && fin > -1   && inicio  < fin ) {
 				newcontenido = new StringBuilder();
 				newcontenido.append(contenido.substring(inicio,fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {							
-					if(newcontenido.toString().split("\n")[i].contains("Vehículo:") && newcontenido.toString().split("\n")[i].split("Vehículo:").length >1 && decVehiculo) {
-						modelo.setDescripcion( newcontenido.toString().split("\n")[i].split("Vehículo:")[1].trim());
+					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.VEHICULOPT) && newcontenido.toString().split("\n")[i].split(ConstantsValue.VEHICULOPT).length >1 && decVehiculo) {
+						modelo.setDescripcion( newcontenido.toString().split("\n")[i].split(ConstantsValue.VEHICULOPT)[1].trim());
 						decVehiculo = false;
 					}					
 					if(newcontenido.toString().split("\n")[i].contains("serie:") && newcontenido.toString().split("\n")[i].contains("No. de")) {
@@ -153,7 +154,7 @@ public class PotosiAutosModel {
 	            	}
 	            }
 	      
-	            inicio = contenido.indexOf("CONDICIONES DEL ASEGURAMIENTO");
+	            inicio = contenido.indexOf(ConstantsValue.CONDICIONESDELASEGURAMIENTO);
 	            fin = contenido.indexOf("1 de 2");
 	            if (fin == -1) {
 	                fin = contenido.indexOf("1 de 3");
@@ -172,7 +173,7 @@ public class PotosiAutosModel {
 	                  	EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 	                    int sp = x.split("###").length;
 
-	                    if (!x.contains("CONDICIONES DEL ASEGURAMIENTO") &&  !x.contains("Cobertura###Suma Asegurada###Prima###Deducible")) {	                   
+	                    if (!x.contains(ConstantsValue.CONDICIONESDELASEGURAMIENTO) &&  !x.contains("Cobertura###Suma Asegurada###Prima###Deducible")) {	                   
 	                        if (sp == 3) {	      
 	                            cobertura.setNombre(x.split("###")[0].trim());
 	                            cobertura.setSa(x.split("###")[1].trim());

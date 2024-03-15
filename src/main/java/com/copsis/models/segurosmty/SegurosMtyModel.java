@@ -1,4 +1,8 @@
-package com.copsis.models.segurosMty;
+package com.copsis.models.segurosmty;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -25,9 +29,10 @@ public class SegurosMtyModel {
 	
 	public EstructuraJsonModel procesa() {
 		try {
-			
+		
 			int tipo =0;
-			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL FLEX")) {
+			int tipoSalud =0;
+			if(fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL FLEX")) {
 			    tipo = 2;
 			}
 			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("ALFA MEDICAL") 
@@ -45,16 +50,28 @@ public class SegurosMtyModel {
 			if(tipo == 0 && (fn.caratula(1, 2, stripper, doc).contains("VIDA INDIVIDUAL") || fn.caratula(1, 3, stripper, doc).contains("PÓLIZA DE SEGURO DE VIDA"))) {
 			    tipo = 5;
 			}
+		
+			if(tipo == 0 && fn.caratula(1, 2, stripper, doc).contains("ACCIDENTES PERSONALES")){
+				tipo=2;
+				tipoSalud=1;
+
+			}
 			
 			
 	
-			switch (tipo) {
+		switch (tipo) {
 			case 2:// Salud
-				modelo  = new SegurosMtySalud(fn.caratula(1, 5, stripper, doc)).procesar();				
+			    if(tipoSalud== 1){
+					modelo  = new SegurosMtySalud2().procesar(fn.caratula(1, 5, stripper, doc));	
+				}else{
+					modelo  = new SegurosMtySalud(fn.caratula(1, 5, stripper, doc)).procesar();	
+				}
+				
 				break;
 			case 5:// Vida
 				modelo  = new SegurosMtyVida(fn.caratula(1, 6, stripper, doc)).procesar();				
 				break;	
+				default:
 				
 			}
 			return modelo;
@@ -65,4 +82,6 @@ public class SegurosMtyModel {
 		}
 		
 	}
+
+	
 }
