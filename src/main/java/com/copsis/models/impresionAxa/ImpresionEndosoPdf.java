@@ -117,7 +117,7 @@ public class ImpresionEndosoPdf {
                     communsPdf.setCell(baseRow, 30,"TOTAL DE ENDOSO" ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                     communsPdf.setCell(baseRow, 20,"0000" ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
                     communsPdf.setCell(baseRow, 20,"MOVIMIENTO" ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-                    communsPdf.setCell(baseRow, 12,impresionAxa.getNoCertificado() ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,3f,0f),bgColor);
+                    communsPdf.setCell(baseRow, 12,impresionAxa.getEndosoId() ,Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(0f,0f,3f,0f),bgColor);
                     table.draw();
                     
                     
