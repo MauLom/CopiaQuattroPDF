@@ -269,16 +269,18 @@ import com.copsis.utils.FormatoFecha;
 
                                 if (ccb == cbo.size()) {
                                     baseRow = communsPdf.setRow(table, 25);
-                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                                    baseRow.setLineSpacing(1.3f);
+                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()+extracted(datos)), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                     communsPdf.setCell(baseRow, 63, (datos.getPaquete() == 2 || datos.getPaquete() == 3 || datos.getPaquete() == 4 ? valorSa : cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.black, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                 } else {
                                     baseRow = communsPdf.setRow(table);
-                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
+                                    communsPdf.setCell(baseRow, 37, (cbo.get(i).getNombres().contains("Orgánicas") ? datos.getCobertura() : cbo.get(i).getNombres()+extracted(datos)), Color.BLACK, false, "L", 10, communsPdf.setLineStyle(Color.white, Color.black, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
                                     communsPdf.setCell(baseRow, 63, (datos.getPaquete() == 2 || datos.getPaquete() == 3 || datos.getPaquete() == 4 ? valorSa : cbo.get(i).getSa()), Color.BLACK, false, "C", 10, communsPdf.setLineStyle(Color.black, Color.white, Color.white, Color.black), "", communsPdf.setPadding2(5f, 0f, 3f, 0f), Color.white);
 
                                 }
 
                             }
+                            
                             table.setCellCallH(true);
                             table.draw();
                         }
@@ -705,7 +707,7 @@ import com.copsis.utils.FormatoFecha;
 
                         output = new ByteArrayOutputStream();
                         document.save(output);
-                        //document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
+                       // document.save(new File("/home/aalbanil/Vídeos/prudential" + datos.getTipo() + ".pdf"));
                         return output.toByteArray();
                     } finally {
                         document.close();
@@ -718,6 +720,10 @@ import com.copsis.utils.FormatoFecha;
                 throw new GeneralServiceException("00001", "Ocurrio un error en el servicio ImpresionInter: " + ex.getMessage());
 
             }
+        }
+
+        private String extracted(CaractulaProjection datos) {
+            return datos.getPaquete().intValue() == 3 ? communsPdf.eliminaHtmlTags("\n"+datos.getReferencia()):"";
         }
 
         private void getAtencion(PDDocument document, PDPage page, Float tb, CaractulaProjection datos) throws IOException {
