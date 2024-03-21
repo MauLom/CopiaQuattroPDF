@@ -17,4 +17,5 @@ public class EstructuraUbicacionesModel {
 	private int sotanos = 0;
 	private int muros = 0;
 	private int techos = 0;
+	private int zonaSismica = 0;
 }
