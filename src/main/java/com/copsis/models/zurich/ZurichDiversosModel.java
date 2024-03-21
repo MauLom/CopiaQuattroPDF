@@ -103,9 +103,25 @@ public class ZurichDiversosModel {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				 EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
-		
+	
 					if(newcont.toString().split("\n")[i].contains("Ubicación del riesgo:")) {
 						ubicacion.setNombre(newcont.toString().split("\n")[i+1]);
+						List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1]);
+						
+						if(!valores.isEmpty()){
+							ubicacion.setNoExterno(valores.get(0));
+						}
+
+					}
+					if(newcont.toString().split("\n")[i].contains("Zona Sísmica")) {
+						List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i]);						
+						if(!valores.isEmpty()){
+							ubicacion.setNoExterno(valores.get(0));
+						}
+					}
+					if(newcont.toString().split("\n")[i].contains("Techumbre")) {
+						
+						ubicacion.setTechos(fn.material(newcont.toString().split("\n")[i]));
 					}
 
 					 if(newcont.toString().split("\n")[i].contains("Colonia")) {
