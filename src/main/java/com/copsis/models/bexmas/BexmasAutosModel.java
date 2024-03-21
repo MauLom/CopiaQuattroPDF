@@ -7,8 +7,6 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
-import lombok.val;
-
 
 public class BexmasAutosModel {
 
@@ -61,8 +59,7 @@ public class BexmasAutosModel {
 							&& newcont.toString().split("\n")[i].contains("Moneda")) {
 						modelo.setCteNombre(newcont.toString().split("\n")[i].split("Nombre:")[1].split("Agente")[0]
 								.replace("###", "").trim());
-						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i + 1]));
-						
+						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i + 1]));						
 						if(newcont.toString().split("\n")[i + 1].split("###").length == 4){
 							List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1].split("###")[1]);
 							if(!valores.isEmpty()){
