@@ -7,6 +7,8 @@ import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+import lombok.val;
+
 
 public class BexmasAutosModel {
 
@@ -60,6 +62,15 @@ public class BexmasAutosModel {
 						modelo.setCteNombre(newcont.toString().split("\n")[i].split("Nombre:")[1].split("Agente")[0]
 								.replace("###", "").trim());
 						modelo.setMoneda(fn.buscaMonedaEnTexto(newcont.toString().split("\n")[i + 1]));
+						
+						if(newcont.toString().split("\n")[i + 1].split("###").length == 4){
+							List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1].split("###")[1]);
+							if(!valores.isEmpty()){
+								modelo.setCveAgente(valores.get(0));
+							}
+							
+						}
+						
 					}
 					
 					if(modelo.getMoneda() ==0 && newcont.toString().split("\n")[i].contains("Moneda")) {
@@ -108,9 +119,12 @@ public class BexmasAutosModel {
 					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains("12:00 Horas")) {
 					
 						List<String> valores = fn.obtenVigePoliza(newcont.toString().split("\n")[i]);
-						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
-						modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
-						modelo.setFechaEmision(modelo.getVigenciaDe());
+						if(!valores.isEmpty() & valores.size() > 2){
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+							modelo.setFechaEmision(modelo.getVigenciaDe());
+						}
+			
 						if(modelo.getVigenciaDe().isEmpty() && modelo.getVigenciaA().isEmpty()){
 							modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(
 								newcont.toString().split("\n")[i].split("###")[0].replace("12:00 Horas", "").trim())));
@@ -310,16 +324,17 @@ public class BexmasAutosModel {
 	}
 
 	private void getCtedirecciones(StringBuilder newcont, int i) {
-		if (newcont.toString().split("\n")[i].split("Dirección:")[1].split("###").length > 1) {
+	
+		if (newcont.toString().split("\n")[i].split("Dirección:")[1].split("###").length > 15) {
 			modelo.setCteDireccion(
-					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[1]);
+					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[1].trim());
 		} else {
 			modelo.setCteDireccion(
-					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0]);
+					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0].trim());
 		}
 
 		if (modelo.getCteDireccion().isEmpty()) {
-			modelo.setCteDireccion(newcont.toString().split("\n")[i + 1]);
+			modelo.setCteDireccion(newcont.toString().split("\n")[i + 1].trim());
 		}
 	}
 

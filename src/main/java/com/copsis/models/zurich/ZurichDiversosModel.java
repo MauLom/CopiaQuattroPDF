@@ -116,7 +116,7 @@ public class ZurichDiversosModel {
 					if(newcont.toString().split("\n")[i].contains("Zona Sísmica")) {
 						List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i]);						
 						if(!valores.isEmpty()){
-							ubicacion.setNoExterno(valores.get(0));
+							ubicacion.setZonaSismica(fn.castInteger(valores.get(0)));
 						}
 					}
 					if(newcont.toString().split("\n")[i].contains("Techumbre")) {
