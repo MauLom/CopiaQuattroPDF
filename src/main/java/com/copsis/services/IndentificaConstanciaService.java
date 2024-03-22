@@ -108,12 +108,19 @@ public class IndentificaConstanciaService {
 			switch (pdfNegocioForm.getTipoValidacion()) {
 			case 1: // Valida datos CFDI y retorna si es posible, si hay error Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
-				
-				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, pdfForm, false);
+
+				// intentamos por leer pagina del SAT	
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
+				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
+
+				// Valida estructura
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, false);  //este seria false para no notificar
+
+				//Como ultima opcion leemos PDF
 				if (estructuraConstanciaSatModel.getError() != null) {
-					// intentamos por leer pagina del SAT
-					
-					estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
+					// vamos a leer PDF
+					estructuraConstanciaSatModel = indentificaConstancia(pdfForm);
+					//estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
