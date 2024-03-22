@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
@@ -33,12 +32,11 @@ public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;
 	private final WebhookService webhookService;
 
-	@Autowired
-	private QuattroUtileriasApiClient quattroUtileriasApiClient;
-	@Autowired
-	private QuattroExternalApiClient quattroExternalApiClient;
-	@Autowired
-	private RegimenFiscalService regimenFiscalService;
+	private final QuattroUtileriasApiClient quattroUtileriasApiClient;
+
+	private final QuattroExternalApiClient quattroExternalApiClient;
+
+	private final RegimenFiscalService regimenFiscalService;
 
 	public EstructuraConstanciaSatModel indentificaConstancia(PdfForm pdfForm) throws IOException {
 
@@ -64,17 +62,13 @@ public class IndentificaConstanciaService {
 
 			String errorMessage = "Documento de tipo no reconocido.";
 
-			//sendWebhookMessage(pdfForm, errorMessage);
-
 			constancia.setError(errorMessage);
 			return constancia;
 
 		} catch (IOException e) {
-			//sendWebhookMessage(pdfForm, e.getMessage());
 			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + e.getMessage() + " | " + e.getCause());
 			return constancia;
 		} catch (Exception ex) {
-			//sendWebhookMessage(pdfForm, ex.getMessage());
 			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
 		} finally {
@@ -120,7 +114,6 @@ public class IndentificaConstanciaService {
 				if (estructuraConstanciaSatModel.getError() != null) {
 					// vamos a leer PDF
 					estructuraConstanciaSatModel = indentificaConstancia(pdfForm);
-					//estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
