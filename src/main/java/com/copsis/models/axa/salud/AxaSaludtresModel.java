@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -60,10 +61,20 @@ public class AxaSaludtresModel {
                 if (newcontenido.toString().split("\n")[i].contains("Frecuencia de pago")) {
                     modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
                 }
+               
                 if (newcontenido.toString().split("\n")[i].contains("R.F.C:")
                         && newcontenido.toString().split("\n")[i].contains("Teléfono:")) {
-                    modelo.setRfc(newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0]
-                            .replace("###", "").trim());
+                    modelo.setRfc((newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0]
+                            .replace("###", "")).replace("\u00A0", "").trim());
+                           
+                }
+                if (newcontenido.toString().split("\n")[i].contains("C.P.")){
+                    List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i]);
+                        if(!valores.isEmpty()){
+                            modelo.setCp(valores.stream()
+                                .filter(numero -> String.valueOf(numero).length() >= 4)
+                                .collect(Collectors.toList()).get(0));
+                        }
                 }
 
             }
@@ -151,6 +162,7 @@ public class AxaSaludtresModel {
                     .replace("H i j o", "###Hijo###")
                     .replace("H i j a ", "###Hija##")
                     .replace(" T it u l ar", "###Titular###")
+                    .replace("C ó n y uge ", "###Cónyuge###")
                     .replace("###M", "###M###")
                     .replace("###F", "###F###")
                     .replace("0 ###1", "###01")
@@ -163,7 +175,15 @@ public class AxaSaludtresModel {
                     .replace("2 5-", "25-")
                     .replace("2 1-", "21-")
                     .replace("1 8-", "18-")
-                    .replace("L ###ozano", "Lozano"));
+                    .replace("26- 08-", "26-08-")
+                    .replace("1 3-01-", "###13-01-")
+                    .replace("1 ###3-01-", "###13-01-")
+                    .replace("3 1-03-2015", "###31-03-2015")
+                    .replace("3 ###1-03-", "###31-03-")
+                    .replace("2 1 ###-03", "21-03")
+                    .replace("L ###ozano", "Lozano")
+                    .replace("S ###anchez", "Sanchez"));
+                 
 
             if (modelo.getAsegurados().isEmpty() && (inicio > 0 && fin > 0 && inicio < fin)) {
 
@@ -173,8 +193,12 @@ public class AxaSaludtresModel {
                     if (newcontenido.toString().split("\n")[i].split("-").length > 5) {
                        
                         String x = newcontenido.toString().split("\n")[i].split("###")[0].replace("@@@", "").trim();
-                        asegurado.setNombre(x.split(",")[1] + " " + x.split(",")[0]);
+                        if(x.contains(",")){
+                            asegurado.setNombre((x.split(",")[1] + " " + x.split(",")[0]).trim());
+                        }
+                    
                         List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
+                       
                         if (!valores.isEmpty() && valores.size() == 5) {
 
                             asegurado.setNacimiento(
