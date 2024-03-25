@@ -40,7 +40,6 @@ public class SuraModel {
 			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);		
 			tipo = getTipou(tipo);
 
-        
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
 				case 1:// Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
@@ -61,9 +60,11 @@ public class SuraModel {
 					break;
 
 				case 4:// Diversos
+			
 					if (contenido.contains("Hogar Máster Total") || contenido.contains(ConstantsValue.MUL_EMPRESARIA_DESCU)) {
 						modelo = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
-					} else if (contenido.contains("DAÑOS RESPONSABILIDAD")) {
+					}
+					 else if (contenido.contains("DAÑOS RESPONSABILIDAD")) {
 						modelo = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
 					}
 					else if (fn.caratula(1, 1, stripper, doc).contains("Respaldo por Daños a Terceros")) {
@@ -80,6 +81,9 @@ public class SuraModel {
 					}
 					else if (fn.caratula(1, 2, stripper, doc).contains("Plan Empresario Sura")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(1, 2, stripper, doc));
+					}
+					else if (fn.caratula(3, 3, stripper, doc).contains("DAÑOS RESPONSABILIDAD")) {
+						modelo = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
 					}
 					 else {
 						modelo = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
@@ -135,9 +139,10 @@ public class SuraModel {
 
 	public int getTipo(String conten,int tipo){
 		int tipov= tipo;
+		
 	
 		String[] searchTerms = {"Hogar Total","Hogar Máster Total",ConstantsValue.MUL_EMPRESARIA_DESCU,ConstantsValue.MUL_EMPRESARIA_DESCU
-	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros"};
+	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros","PÓLIZA DE SEGUROS DE DAÑOS RESPONSABILIDAD"};
 	       int inicio=-1;
 	
 		
