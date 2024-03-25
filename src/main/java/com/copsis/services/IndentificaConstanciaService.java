@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
@@ -93,9 +94,9 @@ public class IndentificaConstanciaService {
 		}
 	}
 
-	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm) throws Exception {
+	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm, HttpHeaders httpHeaders) throws Exception {
 		
-		EstructuraConstanciaSatModel estructuraConstanciaSatModel = pdfNegocioForm.getEstructuraConstanciaSatModel();
+		EstructuraConstanciaSatModel estructuraConstanciaSatModel = new EstructuraConstanciaSatModel();
 		try {
 			PdfForm pdfForm = new PdfForm();
 			
@@ -104,12 +105,11 @@ public class IndentificaConstanciaService {
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
 
 				// intentamos por leer pagina del SAT	
-				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false, httpHeaders);
 				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 				// Valida estructura
-				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, false);  //este seria false para no notificar
-
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, false);
 				//Como ultima opcion leemos PDF
 				if (estructuraConstanciaSatModel.getError() != null) {
 					// vamos a leer PDF
@@ -124,7 +124,7 @@ public class IndentificaConstanciaService {
 			case 2://Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
 				
-				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, true);
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, true,httpHeaders);
 				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 				// Valida estructura
@@ -216,22 +216,27 @@ public class IndentificaConstanciaService {
 		}
 	}
 	
-	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm, boolean imagen){
+	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm, boolean imagen, HttpHeaders httpHeaders){
 		try {
 			//Llenamos Form
 			DatosSatForm datosSatForm = new DatosSatForm();
 			datosSatForm.setUrl(pdfNegocioForm.getUrl());
 			QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
-			
+			EstructuraConstanciaSatModel eCsf = new EstructuraConstanciaSatModel();
 			// extrae url de QR que esta en la constancia
 			try {
 				if(imagen) {
-					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrlImagenQr(datosSatForm);	
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrlImagenQr(datosSatForm, httpHeaders);	
 				}else {
-					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm, httpHeaders);
 				}
 			} catch (Exception ex) {
-				throw ex;
+				if(!imagen){
+					eCsf.setError("Error en Lectura QR");
+					return eCsf;
+				}else{
+					throw ex;
+				}
 			}
 			//Llenamos Form con la nueva info[URL SAT]
 			datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
@@ -239,7 +244,7 @@ public class IndentificaConstanciaService {
 			
 			try {
 				// Va a formar estructura con datos de pagina
-				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
+				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm,httpHeaders);
 			} catch (Exception ex) {
 				throw ex;
 			}

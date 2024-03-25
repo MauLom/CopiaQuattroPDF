@@ -2,6 +2,7 @@ package com.copsis.clients;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,11 +18,10 @@ public class QuattroExternalApiClient {
 	@Value("${serviceUrl.quattro-external-api.baseURL}")
 	private String quattroExternalApiProxy;
 
-	public QuattroExternalApiEstructuraFiscalesProjection extraeDatosPaginaSat(DatosSatForm datosSatForm) {
+	public QuattroExternalApiEstructuraFiscalesProjection extraeDatosPaginaSat(DatosSatForm datosSatForm, HttpHeaders httpHeaders) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm);
-			
+			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm,httpHeaders);
 			String url = quattroExternalApiProxy.concat("/external/linkCIF");
 			return restTemplate.exchange(url, HttpMethod.POST, httpEntity, QuattroExternalApiEstructuraFiscalesProjection.class).getBody();
 		} catch (Exception e) {
