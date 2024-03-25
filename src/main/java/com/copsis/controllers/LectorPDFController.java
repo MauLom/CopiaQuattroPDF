@@ -1,6 +1,7 @@
 package com.copsis.controllers;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -101,13 +103,13 @@ public class LectorPDFController   {
 
 
 	@PostMapping(value = "/negocio", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CopsisResponse> negocioValidacionJson (@Valid @RequestBody PdfNegocioForm pdfNegocioForm, BindingResult bindingResult){
+	public ResponseEntity<CopsisResponse> negocioValidacionJson (@Valid @RequestBody PdfNegocioForm pdfNegocioForm,@RequestHeader HttpHeaders httpHeaders, BindingResult bindingResult){
 		try {
 			if(bindingResult.hasErrors()) {
 				String errors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(", "));
 				throw new ValidationServiceException(ErrorCode.MSJ_ERROR_00000, errors);
 			}
-			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(indentificaConstanciaService.negocioValidaDatosFiscales(pdfNegocioForm)).build();
+			return new CopsisResponse.Builder().ok(true).status(HttpStatus.OK).result(indentificaConstanciaService.negocioValidaDatosFiscales(pdfNegocioForm, httpHeaders)).build();
 		}catch(ValidationServiceException e) {
 			throw e;
 		}catch(Exception ex) {
