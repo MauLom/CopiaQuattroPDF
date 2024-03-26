@@ -18,12 +18,11 @@ public class QuattroUtileriasApiClient {
 	@Value("${serviceUrl.quattro-utilerias-api.baseURL}")
 	private String quattroUtileriasApiProxy;
 
-	public QuattroUtileriasApiQrProjection getExtraeUrl(DatosSatForm datosSatForm) {
+	public QuattroUtileriasApiQrProjection getExtraeUrl(DatosSatForm datosSatForm, HttpHeaders httpHeaders) {
 		try {
-			
+
 			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders httpHeaders = new HttpHeaders();
-			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm,httpHeaders);			
+			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm, httpHeaders);			
 			String url = quattroUtileriasApiProxy.concat("/utilerias-api/lecturaQR");
 
 			return restTemplate.exchange(url, HttpMethod.POST, httpEntity, QuattroUtileriasApiQrProjection.class).getBody();
@@ -33,11 +32,10 @@ public class QuattroUtileriasApiClient {
 		}
 	}
 	
-	public QuattroUtileriasApiQrProjection getExtraeUrlImagenQr(DatosSatForm datosSatForm) {
+	public QuattroUtileriasApiQrProjection getExtraeUrlImagenQr(DatosSatForm datosSatForm, HttpHeaders httpHeaders) {
 		try {
 			
 			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders httpHeaders = new HttpHeaders();
 			HttpEntity<DatosSatForm> httpEntity = new HttpEntity<>(datosSatForm,httpHeaders);			
 			String url = quattroUtileriasApiProxy.concat("/utilerias-api/lecturaQRImagen");
 

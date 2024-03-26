@@ -2,6 +2,7 @@ package com.copsis.models.zurich;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -102,9 +103,29 @@ public class ZurichDiversosModel {
 				List<EstructuraUbicacionesModel> ubicaciones = new ArrayList<>();
 				 EstructuraUbicacionesModel ubicacion = new EstructuraUbicacionesModel();
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {	
-					
+	
+					if(newcont.toString().split("\n")[i].contains("Ubicación del riesgo:")) {
+						ubicacion.setNombre(newcont.toString().split("\n")[i+1]);
+						List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i+1]);
+						
+						if(!valores.isEmpty()){
+							ubicacion.setNoExterno(valores.get(0));
+						}
+
+					}
+					if(newcont.toString().split("\n")[i].contains("Zona Sísmica")) {
+						List<String> valores = fn.obtenerListNumeros2(newcont.toString().split("\n")[i]);						
+						if(!valores.isEmpty()){
+							ubicacion.setZonaSismica(fn.castInteger(valores.get(0)));
+						}
+					}
+					if(newcont.toString().split("\n")[i].contains("Techumbre")) {
+						
+						ubicacion.setTechos(fn.material(newcont.toString().split("\n")[i]));
+					}
 
 					 if(newcont.toString().split("\n")[i].contains("Colonia")) {
+						
 						 ubicacion.setColonia(newcont.toString().split("\n")[i]);
 					 }
 					 if(newcont.toString().split("\n")[i].contains("Pisos") && newcont.toString().split("\n")[i].contains("Estructura")) {
@@ -116,6 +137,14 @@ public class ZurichDiversosModel {
 					 if(newcont.toString().split("\n")[i].contains("Uso") && newcont.toString().split("\n")[i].contains("Zona Alfa")) {
 						 ubicacion.setGiro(newcont.toString().split("\n")[i].split("Uso")[1].split("Zona")[0].replace(":", "").replace("###", "").trim());
 					 }
+					 if(newcont.toString().split("\n")[i].contains("CP")){
+					  List<String> valores = fn.obtenerListNumeros2("CP");
+						if(!valores.isEmpty()){
+							ubicacion.setCp(valores.stream()
+								.filter(numero -> String.valueOf(numero).length() >= 4)
+								.collect(Collectors.toList()).get(0));
+						}
+						}
 					 
 				}
 				ubicaciones.add(ubicacion);

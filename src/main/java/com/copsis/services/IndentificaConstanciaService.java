@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.copsis.clients.QuattroExternalApiClient;
@@ -33,12 +33,11 @@ public class IndentificaConstanciaService {
 	private final ConstanciaModel constanciaModel;
 	private final WebhookService webhookService;
 
-	@Autowired
-	private QuattroUtileriasApiClient quattroUtileriasApiClient;
-	@Autowired
-	private QuattroExternalApiClient quattroExternalApiClient;
-	@Autowired
-	private RegimenFiscalService regimenFiscalService;
+	private final QuattroUtileriasApiClient quattroUtileriasApiClient;
+
+	private final QuattroExternalApiClient quattroExternalApiClient;
+
+	private final RegimenFiscalService regimenFiscalService;
 
 	public EstructuraConstanciaSatModel indentificaConstancia(PdfForm pdfForm) throws IOException {
 
@@ -64,17 +63,13 @@ public class IndentificaConstanciaService {
 
 			String errorMessage = "Documento de tipo no reconocido.";
 
-			//sendWebhookMessage(pdfForm, errorMessage);
-
 			constancia.setError(errorMessage);
 			return constancia;
 
 		} catch (IOException e) {
-			//sendWebhookMessage(pdfForm, e.getMessage());
 			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + e.getMessage() + " | " + e.getCause());
 			return constancia;
 		} catch (Exception ex) {
-			//sendWebhookMessage(pdfForm, ex.getMessage());
 			constancia.setError(IndentificaConstanciaService.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return constancia;
 		} finally {
@@ -99,21 +94,26 @@ public class IndentificaConstanciaService {
 		}
 	}
 
-	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm) throws Exception {
+	public EstructuraConstanciaSatModel negocioValidaDatosFiscales(PdfNegocioForm pdfNegocioForm, HttpHeaders httpHeaders) throws Exception {
 		
-		EstructuraConstanciaSatModel estructuraConstanciaSatModel = pdfNegocioForm.getEstructuraConstanciaSatModel();
+		EstructuraConstanciaSatModel estructuraConstanciaSatModel = new EstructuraConstanciaSatModel();
 		try {
 			PdfForm pdfForm = new PdfForm();
 			
 			switch (pdfNegocioForm.getTipoValidacion()) {
 			case 1: // Valida datos CFDI y retorna si es posible, si hay error Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
-				
-				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel, pdfForm, false);
+
+				// intentamos por leer pagina del SAT	
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false, httpHeaders);
+				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
+
+				// Valida estructura
+				estructuraConstanciaSatModel = validaciones(estructuraConstanciaSatModel,pdfForm, false);
+				//Como ultima opcion leemos PDF
 				if (estructuraConstanciaSatModel.getError() != null) {
-					// intentamos por leer pagina del SAT
-					
-					estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, false);
+					// vamos a leer PDF
+					estructuraConstanciaSatModel = indentificaConstancia(pdfForm);
 					estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 					// Valida estructura
@@ -124,7 +124,7 @@ public class IndentificaConstanciaService {
 			case 2://Lee Qr de imagen, Valida datos CFDI y retorna
 				pdfForm.setUrl(pdfNegocioForm.getUrl());
 				
-				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, true);
+				estructuraConstanciaSatModel = procesoObtenerJsonByImagenQR(pdfNegocioForm, true,httpHeaders);
 				estructuraConstanciaSatModel.setRegimenFiscal(regimenesAxa(estructuraConstanciaSatModel.getRegimenFiscal()));
 
 				// Valida estructura
@@ -216,22 +216,27 @@ public class IndentificaConstanciaService {
 		}
 	}
 	
-	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm, boolean imagen){
+	private EstructuraConstanciaSatModel procesoObtenerJsonByImagenQR(PdfNegocioForm pdfNegocioForm, boolean imagen, HttpHeaders httpHeaders){
 		try {
 			//Llenamos Form
 			DatosSatForm datosSatForm = new DatosSatForm();
 			datosSatForm.setUrl(pdfNegocioForm.getUrl());
 			QuattroUtileriasApiQrProjection quattroUtileriasApiQrProjection;
-			
+			EstructuraConstanciaSatModel eCsf = new EstructuraConstanciaSatModel();
 			// extrae url de QR que esta en la constancia
 			try {
 				if(imagen) {
-					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrlImagenQr(datosSatForm);	
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrlImagenQr(datosSatForm, httpHeaders);	
 				}else {
-					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm);
+					quattroUtileriasApiQrProjection = quattroUtileriasApiClient.getExtraeUrl(datosSatForm, httpHeaders);
 				}
 			} catch (Exception ex) {
-				throw ex;
+				if(!imagen){
+					eCsf.setError("Error en Lectura QR");
+					return eCsf;
+				}else{
+					throw ex;
+				}
 			}
 			//Llenamos Form con la nueva info[URL SAT]
 			datosSatForm.setUrl(quattroUtileriasApiQrProjection.getResult());
@@ -239,7 +244,7 @@ public class IndentificaConstanciaService {
 			
 			try {
 				// Va a formar estructura con datos de pagina
-				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm);
+				quattroExternalApiEstructuraFiscalesProjection = quattroExternalApiClient.extraeDatosPaginaSat(datosSatForm,httpHeaders);
 			} catch (Exception ex) {
 				throw ex;
 			}

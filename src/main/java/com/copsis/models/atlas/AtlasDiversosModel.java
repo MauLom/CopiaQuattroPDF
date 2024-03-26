@@ -37,7 +37,8 @@ public class AtlasDiversosModel {
 			// Datos del Contrantante
 			inicio = contenido.indexOf("PÓLIZA");
 			fin = contenido.indexOf(ConstantsValue.SECCIONES);
-
+			fin = fin ==-1 ? contenido.indexOf("ESPECIFICO O POR VIAJE"):fin;
+		
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("\r", "").replace("@@@", "").trim();
 				for (int i = 0; i < newcontenido.split("\n").length; i++) {
@@ -49,9 +50,9 @@ public class AtlasDiversosModel {
 					if (newcontenido.split("\n")[i].contains("desde:") && newcontenido.split("\n")[i].contains(ConstantsValue.HASTA)) {
 						modelo.setVigenciaDe(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
-										.replace("###", "").replace("las 00:00 Hrs.del", "").trim()));
+										.replace("###", "").replace("las 00:00 Hrs.del", "").replace("las 00:00 Hrs. del", "").trim()));
 										System.out.println(newcontenido.split("\n")[i].split("desde:")[1].split(ConstantsValue.HASTA)[0]
-										.replace("###", "").replace("las 00:00 Hrs.del", "").trim());
+										.replace("###", "").replace("las 00:00 Hrs.del", "").replace("las 00:00 Hrs. del", "").trim());
 						modelo.setVigenciaA(
 								fn.formatDateMonthCadena(newcontenido.split("\n")[i].split(ConstantsValue.HASTA)[1].split("Fecha")[0]
 										.replace("###", "").replace("las 24:00 Hrs.del", "").trim()));
@@ -131,7 +132,10 @@ public class AtlasDiversosModel {
 			 * Coberturas
 			 */
 			inicio = contenido.indexOf(ConstantsValue.SECCIONES);
+			inicio = inicio ==-1 ? contenido.indexOf("ESPECIFICO O POR VIAJE"):inicio;
 			fin = contenido.indexOf("Idaseg");
+
+		
 	
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
