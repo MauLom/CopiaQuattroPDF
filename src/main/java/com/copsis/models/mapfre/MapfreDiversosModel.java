@@ -67,7 +67,8 @@ public class MapfreDiversosModel {
 				.replace("HASTA###LAS###12:00", "hasta las 12:00").replace("CLIENTE###MAPFRE", "CLIENTE MAPFRE")
 				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:")
 				.replace("Póliza Número :", "Póliza Número:")
-				.replace("Prima Neta:", "Prima neta:");
+				.replace("Prima Neta:", "Prima neta:")
+				.replace("D O LARES U.S.A.", "DOLARES U.S.A.");
 
 		try {
 
@@ -181,14 +182,14 @@ public class MapfreDiversosModel {
 				
 				texto = texto.split("C/P")[1].split("\n")[0].replace(":", "").replace(".", "").replace(",", "").replace("###", "").trim();
 				
-				if (fn.isvalidCp(texto)) {
+				if (Boolean.TRUE.equals(fn.isvalidCp(texto))) {
 					modelo.setCp(texto);
 				}
 			}
 	
 			if(modelo.getCp().length() == 0 && newcontenido.indexOf("C.P") > -1) {
 		
-			    modelo.setCp(newcontenido.split("C.P:")[1].trim().substring(0,5));
+			    modelo.setCp(newcontenido.split("C.P:")[1].replace(" ", "").trim().substring(0,5));
 			}
 			if(modelo.getCp().length() == 0 ){
 				String codepostal = contenido.split("Cliente MAPFRE")[1];
@@ -261,19 +262,27 @@ public class MapfreDiversosModel {
 				inicio = contenido.indexOf("cobro:");
 			}
 			fin = contenido.indexOf("Prima neta:");
+		
 			if (inicio > -1 && fin > inicio) {
 				newcontenido = fn
 						.remplazaGrupoSpace(
 								contenido.substring(inicio + 6, fin).replace("@@@", "").trim().split("\r\n")[0])
 						.replace("#", "");
-
+						
 				if (newcontenido.split(" ").length == 5) {
 					modelo.setFormaPago(fn.formaPago(newcontenido.split(" ")[1].trim()));
 					modelo.setMoneda(fn.moneda(newcontenido.split(" ")[2].replace("$", "").trim()));
 				}
+				if(modelo.getFormaPago() == 0){
+					modelo.setFormaPago(fn.formaPagoSring(newcontenido.split(" ")[1].trim()));
+				}
+				if(modelo.getMoneda() == 0){
+					modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.split(" ")[2].replace("$", "").trim()));
+				}
 
 			}
 
+			
 			if (modelo.getFormaPago() == 0 && contenido.contains("FORMA DE PAGO:")) {
 				String aux = fn.gatos(contenido.split("FORMA DE PAGO:")[1].split("\n")[0]);
 				if (aux.contains("###")) {
