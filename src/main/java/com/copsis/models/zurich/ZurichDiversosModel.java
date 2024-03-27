@@ -94,6 +94,21 @@ public class ZurichDiversosModel {
 					
 				}
 			}
+			inicio =  contenido.indexOf("Forma de pago:");
+			if(inicio > -1) {
+				modelo.setFormaPago(fn.formaPagoSring(contenido.split("Forma de pago:")[1]));
+			}
+			if(modelo.getFormaPago() == 1 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
+				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
+			  }
+			
+			inicio = contenido.indexOf("C.P.");
+			if(modelo.getCp().length() == 0 && inicio > 0) {			
+			 modelo.setCp(contenido.split("C.P.")[1].trim().substring(0, 5));
+						
+			}
+			
+
 			inicio = contenido.indexOf(ConstantsValue.PRODUCTOMN);
 			fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
 
@@ -144,6 +159,9 @@ public class ZurichDiversosModel {
 								.filter(numero -> String.valueOf(numero).length() >= 4)
 								.collect(Collectors.toList()).get(0));
 						}
+						}
+						if(ubicacion.getCp().isEmpty()){
+                          ubicacion.setCp(modelo.getCp());
 						}
 					 
 				}
@@ -225,19 +243,6 @@ public class ZurichDiversosModel {
 				}
 			}
 
-			inicio =  contenido.indexOf("Forma de pago:");
-			if(inicio > -1) {
-				modelo.setFormaPago(fn.formaPagoSring(contenido.split("Forma de pago:")[1]));
-			}
-			if(modelo.getFormaPago() == 1 && fn.diferencia(modelo.getVigenciaDe(),modelo.getVigenciaA()) == 0){
-				modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
-			  }
-			
-			inicio = contenido.indexOf("C.P.");
-			if(modelo.getCp().length() == 0 && inicio > 0) {			
-			 modelo.setCp(contenido.split("C.P.")[1].trim().substring(0, 5));
-						
-			}
 			
 			return modelo;
 		} catch (Exception e) {
