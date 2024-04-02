@@ -703,8 +703,7 @@ import com.copsis.models.EstructuraRecibosModel ;
                         modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
                     }
                    
-                    if(modelo.getSubPrimatotal().intValue() == 0 ){
-                        System.out.println(newcontenido);
+                    if(modelo.getSubPrimatotal().intValue() == 0 ){          
                         List<String> valores = fn.obtenerListNumeros2(newcontenido.replace(",", ""));
                         if(!valores.isEmpty()){
 							modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
