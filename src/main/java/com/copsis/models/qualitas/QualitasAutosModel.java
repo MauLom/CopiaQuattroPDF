@@ -567,6 +567,17 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
 
                 }
+                if(modelo.getRenovacion().contains("AMPLIA")){
+                    inicio = contenido.indexOf("RENUEVA A:");
+                    fin = contenido.indexOf("PLAN:");
+                   
+                    if (inicio > -1 && fin > -1) {
+                        newcontenido = contenido.substring(inicio, fin).replace("RENUEVA A:", "").replace("###", "").trim();
+                        modelo.setRenovacion(newcontenido);
+
+                       
+                    }
+                }
 
                 // forma_pago
                 inicio = contenido.indexOf(ConstantsValue.TASA_FINACIMIENTO);
