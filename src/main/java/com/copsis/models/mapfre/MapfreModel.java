@@ -85,6 +85,10 @@ public class MapfreModel {
                 tipo=2;
 				saludFt2=true;
 			}
+			if(tipo ==1 && fn.caratula(1, 1, stripper, doc).contains("PROTECCION MEDICA A TU MEDIDA")){
+                tipo=2;
+				
+			}
 
 			//PÓLIZA ESPECIFICA POR VIAJE
 
@@ -102,8 +106,10 @@ public class MapfreModel {
 					if (pagFin == 0) {
 						pagFin = fn.pagFinRango(stripper, doc, "INFORMACIÓN###ADICIONAL");
 					}
-		
-					
+					if (pagFin == 0) {
+						pagFin = fn.pagFinRango(stripper, doc, "ENDOSO DEL FACTOR DE CONVERSIÓN");
+					}
+	
 					modelo = new MapfreAutosModel(fn.caratula(1, pagFin, stripper, doc),
 							fn.textoBusqueda(stripper, doc, "Serie de recibo:", false)).procesar();
 				} else {
@@ -118,8 +124,10 @@ public class MapfreModel {
                   else {
 					if(contenido.contains("INFORMACIÓN GENERAL") && (contenido.contains("COBERTURAS Y SERVICIOS") || contenido.contains("ASEGURADO TITULAR") )) {
 						pagFin = contenido.contains("COLECTIVIDAD ASEGURABLE")? 6: 5;
+						
 						modelo = new MapfreSaludRojoModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
-					}else {
+					}
+					else {
 						modelo = new MapfreSaludBModel(fn.caratula(1, 5, stripper, doc)).procesar();
 					}
 				  }
