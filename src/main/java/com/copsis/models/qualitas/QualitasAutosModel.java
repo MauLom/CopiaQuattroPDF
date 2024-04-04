@@ -662,12 +662,19 @@ import com.copsis.models.EstructuraRecibosModel ;
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + index))
                             .replace("###", "");
+                         
                     if (newcontenido.contains(ConstantsValue.TASA_FINACIMIENTO)) {
                         newcontenido = newcontenido.split(ConstantsValue.TASA_FINACIMIENTO)[0].replace(",", "").trim();
                     }
 
                     if (fn.isNumeric(newcontenido)) {
                         modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
+                    }
+                    if(modelo.getPrimerPrimatotal().intValue() == 0 ){
+                        List<String> valores = fn.obtenerListNumeros2(newcontenido.replace(",", ""));
+                        if(!valores.isEmpty()){
+							modelo.setPrimerPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}						
                     }
                 }
 
@@ -678,6 +685,13 @@ import com.copsis.models.EstructuraRecibosModel ;
                     inicio = contenido.indexOf("Pago(s) Subsecuente(s)");
                     index = 22;
                 }
+                if (inicio == -1) {
+                    inicio = contenido.indexOf("Pagos Subsecuentes");
+                    index = 20;
+                }
+                
+
+          
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + index, contenido.indexOf("\r\n", inicio + 19))
                             .replace("###", "");
@@ -687,6 +701,13 @@ import com.copsis.models.EstructuraRecibosModel ;
 
                     if (fn.isNumeric(newcontenido)) {
                         modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(newcontenido)));
+                    }
+                   
+                    if(modelo.getSubPrimatotal().intValue() == 0 ){          
+                        List<String> valores = fn.obtenerListNumeros2(newcontenido.replace(",", ""));
+                        if(!valores.isEmpty()){
+							modelo.setSubPrimatotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+						}						
                     }
                 }
            
@@ -837,14 +858,21 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
                 }
 
-                // modelo
+                // modelo         
                 inicio = contenido.indexOf(ConstantsValue.MODELO);
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 7, contenido.indexOf("\r\n", inicio + 7));
+              
                     if (newcontenido.contains(ConstantsValue.COLOR)) {
                         newcontenido = newcontenido.split(ConstantsValue.COLOR)[0].replace("###", "").trim();
                         if (fn.isNumeric(newcontenido)) {
                             modelo.setModelo(Integer.parseInt(newcontenido));
+                        }
+                    }
+                    if(modelo.getModelo() == 0){
+                        List<String> valores = fn.obtenerListNumeros2(newcontenido);
+						if(!valores.isEmpty()){
+                            modelo.setModelo( fn.castInteger( valores.get(0)));
                         }
                     }
                 }

@@ -246,7 +246,7 @@ public class ImpresionCertificadoPdf {
 	            
 	            table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
 	            baseRow = communsPdf.setRow(table, 12);
-	            communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));
+				communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s60tkk/2003/Avatar/1H6Dv8Dlqhwh3H4xljhslRKgmahhbbbrCzaI48sbCAU=.png"));
 	            table.draw();
 	            String valor = "";
 
