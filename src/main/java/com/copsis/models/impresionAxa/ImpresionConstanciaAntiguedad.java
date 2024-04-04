@@ -143,11 +143,11 @@ public class ImpresionConstanciaAntiguedad {
 
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 12);
-			if(impresionAxa.getLogoSuperior() != null) {
-				communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));	
-			}else {
-				communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-			}
+			// if(impresionAxa.getLogoSuperior() != null) {			
+				communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s60tkk/2003/Avatar/1H6Dv8Dlqhwh3H4xljhslRKgmahhbbbrCzaI48sbCAU=.png"));
+			// }else {
+			// 	communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+			// }
 			
 			table.draw();
 			yStart -= (table.getHeaderAndDataHeight() + 10);
