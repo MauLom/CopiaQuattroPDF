@@ -869,14 +869,21 @@ import com.copsis.models.EstructuraRecibosModel ;
                     }
                 }
 
-                // modelo
+                // modelo         
                 inicio = contenido.indexOf(ConstantsValue.MODELO);
                 if (inicio > -1) {
                     newcontenido = contenido.substring(inicio + 7, contenido.indexOf("\r\n", inicio + 7));
+              
                     if (newcontenido.contains(ConstantsValue.COLOR)) {
                         newcontenido = newcontenido.split(ConstantsValue.COLOR)[0].replace("###", "").trim();
                         if (fn.isNumeric(newcontenido)) {
                             modelo.setModelo(Integer.parseInt(newcontenido));
+                        }
+                    }
+                    if(modelo.getModelo() == 0){
+                        List<String> valores = fn.obtenerListNumeros2(newcontenido);
+						if(!valores.isEmpty()){
+                            modelo.setModelo( fn.castInteger( valores.get(0)));
                         }
                     }
                 }

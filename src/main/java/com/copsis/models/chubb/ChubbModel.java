@@ -37,15 +37,16 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
-		
+			
+	
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "SEGURO DE VIAJE DE PLACER CHUBB","AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE
-				,"RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS"};
+				,"RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS","PÓLIZA DE SEGURO OBRA CIVIL"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
-									
+								
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
@@ -60,6 +61,7 @@ public class ChubbModel {
 					case "SEGURO DE VIAJE DE PLACER CHUBB":
 					case "TRANSPORTE DE MERCANCIAS":
 					case "Todo Riesgo Contratistas":
+					case "PÓLIZA DE SEGURO OBRA CIVIL":
 						
 					
 							pagFin = getPageFin(fn);

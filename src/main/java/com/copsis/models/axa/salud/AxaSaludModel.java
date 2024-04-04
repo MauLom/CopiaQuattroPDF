@@ -364,7 +364,7 @@ public class AxaSaludModel {
 						String fechaNacimiento = "";
 					
 						if(arrContenido[i].split("###")[3].replace(" ", "").split("-").length == 3) {
-							fechaNacimiento = arrContenido[i].split("###")[3].replace(" ", "");
+							fechaNacimiento = arrContenido[i].split("###")[3].replace("-2004", "-2004###").replace(" ", "");							
 						}else if(arrContenido[i].split("###")[2].replace(" ", "").split("-").length == 3) {
 							fechaNacimiento = arrContenido[i].split("###")[2].replace(" ", "");
 							String siguienteSeccion = arrContenido[i].split("###")[3].trim();
