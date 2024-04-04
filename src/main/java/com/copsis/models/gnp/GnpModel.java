@@ -94,6 +94,7 @@ public class GnpModel {
 							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 1).procesar();
 				}
 			} else if (contenido.contains("Póliza de Seguro de Daños") || contenido.contains("Daños")
+			
 			) {
 
 				if(contenido.contains("Póliza Multiple")){
@@ -116,8 +117,13 @@ public class GnpModel {
 			|| modelo.getTipo() == 0 && contenido.contains("ESPECIFICACIÓN DEL GIRO")) {	
 				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();			
 			}
-			if(fn.caratula(3,3, stripper, doc).contains("CARACTERÍSTICAS###DE###LA###MASCOTA")){
-				modelo = new GnpDiversosDModelo().procesar(fn.caratula(3,4, stripper, doc));
+			if(fn.caratula(3,3, stripper, doc).contains("CARACTERÍSTICAS###DE###LA###MASCOTA") || contenido.contains("Detectores de humo")	){
+				if( contenido.contains("Detectores de humo")){
+					modelo = new GnpDiversosDModelo().procesar(fn.caratula(1,3, stripper, doc));
+				}else{
+					modelo = new GnpDiversosDModelo().procesar(fn.caratula(3,4, stripper, doc));
+				}
+				
 			}
 			
 	
