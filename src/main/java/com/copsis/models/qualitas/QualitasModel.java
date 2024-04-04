@@ -99,6 +99,11 @@ public class QualitasModel {
 									pagIni=2;
 									pagFin=3;
 								}
+
+								if(fn.caratula(2, 2, stripper, doc).contains("Proteccion para Danos sin Responsabilida")){
+									pagIni=2;
+									pagFin=3;
+								}
 								
 								
 							
