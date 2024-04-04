@@ -307,8 +307,7 @@ public class AxaSaludModel {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###")
 				.replace("SOCORROTITULAR", "SOCORRRO TITULAR").replace("M A Y -", "MAY-")
 				.replace("E N E-", "ENE-").replace("M A ###R-", "MAR-")
-				.replace("J U N ###-", "JUN-").replace("S E ###P-", "SEP-").replace("-2004", "-2004###");
-				System.out.println(newcontenido);
+				.replace("J U N ###-", "JUN-").replace("S E ###P-", "SEP-").replace("-2004", "-2004###");			
 				String[] arrContenido = newcontenido.split("\n");
 				for (int i = 0; i < arrContenido.length; i++) {
 			
