@@ -145,13 +145,17 @@ public class AnaAutosModelRoja {
 					if (newcontenido.split("\n")[i].contains("Expedición")
 							&& newcontenido.split("\n")[i].contains("Desde")
 							&& newcontenido.split("\n")[i].contains("Hasta")) {
-								
+							
+							
 						if(newcontenido.split("\n")[i + 1].length() > 50) {
 							vigencias = fn.gatos(newcontenido.split("\n")[i +1].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 
 							if(vigencias.split("###").length > 7 && (vigencias.split("###")[6].trim().length() < 4 && vigencias.split("###")[6].trim().length() == 3)){
 								vigencias = fn.gatos(newcontenido.split("\n")[i +2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 							}
+							if(vigencias.contains("C.P.")){
+								vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
+							}							
 						}else {
 							vigencias = fn.gatos(newcontenido.split("\n")[i + 2].replace("###", "").replace("D", "###").replace("M", "###").replace("A", "###"));	
 						}
@@ -168,7 +172,8 @@ public class AnaAutosModelRoja {
 							sp = vigencias.split("###").length;
 						}
 						
-						if (sp == 9) {						
+						if (sp == 9) {		
+									
 							modelo.setVigenciaA((vigencias.split("###")[8] + "-" + vigencias.split("###")[7] + "-"
 									+ vigencias.split("###")[6]).replace(" ", "").trim());
 							modelo.setVigenciaDe((vigencias.split("###")[5] + "-" + vigencias.split("###")[4] + "-"
