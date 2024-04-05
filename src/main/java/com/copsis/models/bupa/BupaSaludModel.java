@@ -6,6 +6,7 @@ import com.copsis.models.EstructuraAseguradosModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,10 @@ public class BupaSaludModel {
 	public EstructuraJsonModel procesar(String contenido,String conteniext,String recibo) {
 		int inicio = 0;
 		int fin = 0;
+	    BigDecimal primaConyuge = BigDecimal.ZERO;
+		BigDecimal primaDependientes = BigDecimal.ZERO;
+		
+
 		StringBuilder newcontenido = new StringBuilder();
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 		try {
@@ -60,13 +65,31 @@ public class BupaSaludModel {
 				if(newcontenido.toString().split("\n")[i].contains("Hasta")) {
 					modelo.setVigenciaA(fn.formatDateMonthCadena(fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]).get(0)));
 				}
+				if(newcontenido.toString().split("\n")[i].contains("Cónyuge")) {
+					List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					if(!valores.isEmpty()) {
+					primaConyuge = fn.castBigDecimal(fn.castDouble(valores.get(0)));
+				   }
+				   
+			  }
+			  if(newcontenido.toString().split("\n")[i].contains("Dependientes")) {
+				List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+				  if(!valores.isEmpty()) {
+					 primaDependientes = fn.castBigDecimal(fn.castDouble(valores.get(0)));
+				   }				
+		       }
 				if( newcontenido.toString().split("\n")[i].contains("Nacimiento") && newcontenido.toString().split("\n")[i].contains("Prima")) {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i+1]);
-					  modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					
+				
+						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+					  
+					  
 				}
 				
 				if(newcontenido.toString().split("\n")[i].contains("Derecho de Póliza")) {
 					  List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+					  
 					  modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
 				}
 				if(newcontenido.toString().split("\n")[i].contains("Fraccionado")) {
@@ -123,6 +146,18 @@ public class BupaSaludModel {
 			if(modelo.getVigenciaDe().length() > 0) {
 				modelo.setFechaEmision(modelo.getVigenciaDe());
 			}
+
+			if(primaConyuge !=BigDecimal.ZERO && primaDependientes != BigDecimal.ZERO){
+				BigDecimal  primaNetaTotal = modelo.getPrimaneta().add(primaConyuge);
+			
+			    primaNetaTotal =	primaNetaTotal.add(primaDependientes);
+				modelo.setPrimaneta(primaNetaTotal);
+				modelo.setAjusteUno(BigDecimal.ZERO);
+				modelo.setCargoExtra(BigDecimal.ZERO);
+
+			  }
+
+			
 			
 			
 			
