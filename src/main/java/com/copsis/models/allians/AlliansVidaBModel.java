@@ -56,6 +56,7 @@
 					   }
 						
 					}
+					
 					if(newcontenido.toString().split("\n")[i].contains("Inicio de Vigencia") 
 					&& newcontenido.toString().split("\n")[i].contains("Fin de Vigencia")
 					&& newcontenido.toString().split("\n")[i+1].contains("Día Mes")) { 					                              
@@ -74,6 +75,17 @@
 					}										
 					if(newcontenido.toString().split("\n")[i].contains("Forma de Pago")) {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i+1]));
+					}
+					if(newcontenido.toString().split("\n")[i].contains("Fecha Inicio de Vigencia") 
+					&& newcontenido.toString().split("\n")[i].contains("Fecha Fin de Vigencia")
+					&& newcontenido.toString().split("\n")[i+1].contains("Día Mes Año")) { 	
+						List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i+2].replace("###", "-"));						
+						if(!valores.isEmpty() && valores.size() == 3){
+							modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(1)));
+							modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(2)));
+							modelo.setFechaEmision(modelo.getVigenciaDe());
+						}
+						
 					}
 				}
 				
@@ -127,19 +139,23 @@
 				
 				inicio = contenido.indexOf("BENEFICIARIOS");
 				fin  = contenido.indexOf("Advertencias");	
+				fin  = fin == -1 ? contenido.indexOf("En cumplimiento a"):fin;	
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));
-				List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
-				for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
-					EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
-					if(!newcontenido.toString().split("\n")[i].contains("Nombre") && !newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")
-						&&	!newcontenido.toString().split("\n")[i].contains("Fallecimiento") 		) {						
-						beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
-						beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));						
-						beneficiarios.add(beneficiario);
+				if(newcontenido.length() > 0){
+					List<EstructuraBeneficiariosModel> beneficiarios = new ArrayList<>();
+					for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {	
+						EstructuraBeneficiariosModel beneficiario = new EstructuraBeneficiariosModel();
+						if(!newcontenido.toString().split("\n")[i].contains("Nombre") && !newcontenido.toString().split("\n")[i].contains("BENEFICIARIOS")
+							&&	!newcontenido.toString().split("\n")[i].contains("Fallecimiento") 		) {						
+							beneficiario.setNombre(newcontenido.toString().split("\n")[i].split("###")[0]);
+							beneficiario.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[1]));						
+							beneficiarios.add(beneficiario);
+						}
 					}
+					modelo.setBeneficiarios(beneficiarios);
 				}
-				modelo.setBeneficiarios(beneficiarios);
+			
 	
 				inicio = contenido.indexOf("Aportaciones Comprometidas");
 				fin  = contenido.indexOf("BENEFICIARIOS");	
@@ -152,10 +168,11 @@
 						modelo.setPrimaTotal(fn.castBigDecimal(fn.cleanString(valores.get(0))));
 					 }
 				}
-	
+			
 				
 				return modelo;
 			} catch (Exception ex) {
+			
 				modelo.setError(AlliansVidaBModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | "+ ex.getCause());
 				return modelo;
 			}
