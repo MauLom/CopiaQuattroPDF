@@ -351,7 +351,7 @@ public class AxaSaludModel {
 						  }
 						  
 					  }
-					 System.out.println(arrContenido[i]);
+					
 			  switch (arrContenido[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((arrContenido[i].split("###")[0].split(",")[1] +" " + arrContenido[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
