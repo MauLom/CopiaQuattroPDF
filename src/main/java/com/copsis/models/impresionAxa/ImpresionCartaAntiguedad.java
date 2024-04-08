@@ -118,7 +118,8 @@ public class ImpresionCartaAntiguedad {
                     }
 
 					output = new ByteArrayOutputStream();
-					document.save(output);					
+					document.save(output);
+					// document.save(new File("/home/aalbanil/Vídeos/CONSTACIA.pdf"));          					
 					return output.toByteArray();
 				} finally {
 					document.close();
@@ -139,11 +140,7 @@ public class ImpresionCartaAntiguedad {
 
 			table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
 			baseRow = communsPdf.setRow(table, 12);
-			if(impresionAxa.getLogoSuperior() != null) {
-				communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));	
-			}else {
-				communsPdf.setCell(baseRow, 100,"",Color.BLACK,false, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
-			}
+			communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s60tkk/2003/Avatar/1H6Dv8Dlqhwh3H4xljhslRKgmahhbbbrCzaI48sbCAU=.png"));
 			
 			table.draw();
 			yStart -= (table.getHeaderAndDataHeight() + 10);
