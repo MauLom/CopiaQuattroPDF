@@ -2,6 +2,7 @@ package com.copsis.models.sura;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
@@ -27,8 +28,8 @@ public class SuraDiversosModel {
 
 		try {
 
-			modelo.setTipo(7);
-			modelo.setCia(88);
+			// modelo.setTipo(7);
+			// modelo.setCia(88);
 
 			inicio = contenido.indexOf("Seguro Múltiple Familiar");
 			fin = contenido.indexOf("Ubicación de los bienes asegurados");
@@ -51,7 +52,17 @@ public class SuraDiversosModel {
 				}				
 				if (modelo.getPoliza().length() == 0 && newcontenido.toString().split("\n")[i].contains("Póliza no.")) {
 					modelo.setPoliza(newcontenido.toString().split("\n")[i + 2].split("###")[newcontenido.toString().split("\n")[i + 2].split("###").length - 1]);
-					modelo.setCp(newcontenido.toString().split("\n")[i + 2].split("C.P.")[1].trim().substring(0, 5));
+					
+
+				if(newcontenido.toString().split("\n")[i + 2].equals("C.P.")){
+					List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i + 2].split("C.P.")[1]);
+					if(!valores.isEmpty()){
+						modelo.setCp(valores.stream()
+							.filter(numero -> String.valueOf(numero).length() >= 4)
+							.collect(Collectors.toList()).get(0));
+					}
+				}
+					
 				}
 
 				if (newcontenido.toString().split("\n")[i].contains("Forma de pago")
@@ -207,6 +218,7 @@ public class SuraDiversosModel {
 
 			return modelo;
 		} catch (Exception ex) {	
+			ex.printStackTrace();
 			modelo.setError(
 					SuraDiversosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
