@@ -37,16 +37,16 @@ public class ChubbModel {
 				contenido = fn.caratula(2, 4, pdfStripper, pdDoc);
 			}
 
-			
+
 	
 
 			String[] tipos = { "RESPONSABILIDAD CIVIL VIAJERO","TRANSPORTE DE CARGA",
 			" AUTOMÓVILES Y CAMIONES RESIDENTES","HOGAR","TRANSPORTE DE MERCANCIAS", "SEGURO DE VIAJE DE PLACER CHUBB","AUTOMÓVILES", "Placas:", "EMPRESARIAL", "PYME SEGURA", "TRANSPORTE",
 					"SEGURO CONCRETA","TECHO","CONTRATISTA","Sótanos",ConstantsValue.EMBARCACIONES,"Todo Riesgo Contratistas" ,"Profesional para Médicos","PÓLIZA DE SEGURO VIDA",ConstantsValue.SEGURO_DE_VIAJE
-				,"RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS","PÓLIZA DE SEGURO OBRA CIVIL"};
+				,"RESPONSABILIDAD CIVIL PROFESIONAL MÉDICOS","PÓLIZA DE SEGURO OBRA CIVIL","Gastos Médicos por"};
 			 boolean encontro = false;
 			for (String tipo : tipos) {	
-								
+			
 				if (contenido.contains(tipo) && !encontro) {
 					switch (tipo) {
 					case "RESPONSABILIDAD CIVIL VIAJERO":
@@ -62,19 +62,25 @@ public class ChubbModel {
 					case "TRANSPORTE DE MERCANCIAS":
 					case "Todo Riesgo Contratistas":
 					case "PÓLIZA DE SEGURO OBRA CIVIL":
+					case "PÓLIZA DE SEGURO DE VIAJE DE PLACER":
 						
 					
 							pagFin = getPageFin(fn);
 						
 						if (pagFin > 0) {
-																						  
-							if(!contenido.contains("SOBRE AUTOMÓVILES Y CAMIONES RESIDENTES")){
-								
-								modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
-									fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
-								
+																					  
+                         
+							if (fn.caratula(1, 2, pdfStripper, pdDoc).contains("Gastos Médicos por") || contenido.contains("SOBRE AUTOMÓVILES Y CAMIONES RESIDENTES")) {
+						
+								encontro = false;						
 
+							}else{
+								modelo = new ChubbDiversosModel(fn.caratula(1, pagFin, pdfStripper, pdDoc),
+								fn.textoBusqueda(pdfStripper, pdDoc, ConstantsValue.AVISO_COBRO, false),fn.caratula(1, 7, pdfStripper, pdDoc)).procesar();
+								encontro = true;
 							}
+
+	
 							
 						}
 						
@@ -126,6 +132,8 @@ public class ChubbModel {
 					encontro = true;
 						break;
 					case "Profesional para Médicos",ConstantsValue.SEGURO_DE_VIAJE:
+					case "Gastos Médicos por":
+					
 				
                       if(fn.caratula(1, 1, pdfStripper, pdDoc).contains(ConstantsValue.SEGURO_DE_VIAJE)){
 							modelo = new ChubbSalud2Model().procesar(fn.caratula(0, 4, pdfStripper, pdDoc));
