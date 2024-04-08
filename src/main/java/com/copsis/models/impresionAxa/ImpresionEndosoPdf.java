@@ -2,7 +2,6 @@ package com.copsis.models.impresionAxa;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -160,7 +159,7 @@ public class ImpresionEndosoPdf {
 			Row<PDPage> baseRow;
 	        table = new BaseTable(yStart, yStartNewPage, bottomMargin, 295, margin, document, page, false, true);
             baseRow = communsPdf.setRow(table, 12);
-            communsPdf.setCell(baseRow, 100, ImageUtils.readImage(impresionAxa.getLogoSuperior()));
+            communsPdf.setCell(baseRow, 100, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s60tkk/2003/Avatar/1H6Dv8Dlqhwh3H4xljhslRKgmahhbbbrCzaI48sbCAU=.png"));
             table.draw();
             
             table = new BaseTable(yStart, yStartNewPage, bottomMargin, 200, (602 - 200), document, page, false, true);
