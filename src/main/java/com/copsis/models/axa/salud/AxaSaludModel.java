@@ -300,25 +300,35 @@ public class AxaSaludModel {
 			fin = contenido.indexOf("Prima Total Asegurados:");
 			int index = -1;
 			String texto;
-		
+	
 			
 			if (inicio > 0 && fin > 0 && inicio < fin) {
 				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("######", "###").replace("### ###", "###")
 				.replace("SOCORROTITULAR", "SOCORRRO TITULAR").replace("M A Y -", "MAY-")
 				.replace("E N E-", "ENE-").replace("M A ###R-", "MAR-")
-				.replace("J U N ###-", "JUN-").replace("S E ###P-", "SEP-").replace("-2004", "-2004###");			
+				.replace("J U N ###-", "JUN-").replace("S E ###P-", "SEP-").replace("-2004", "-2004###");	
+				for (int i = 0; i <  newcontenido.split("\n").length; i++) {
+                    if(newcontenido.split("\n")[i].length() > 10){
+						newcontenido +=newcontenido.split("\n")[i];
+					}
+				}
+			
+			
 				String[] arrContenido = newcontenido.split("\n");
+				
 				for (int i = 0; i < arrContenido.length; i++) {
 			
 					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
 				  if(arrContenido[i].contains("-")) {	
 					  if(arrContenido[i].split("###").length >2 && arrContenido[i].split("###").length<7) {
 						  String[] valores = arrContenido[i].split("###");
+					
 						  if(valores[0].split("-").length == 3) {
+						
 							  String aux = valores[0].split("-")[0];
 							  String diaNac = obtenerNumEntero(aux);
-							  
+							
 							  if(diaNac.length() > 0) {
 								  diaNac = diaNac.length() == 1 ? "0"+diaNac : diaNac;
 								  aux = aux.replace(obtenerNumEntero(aux), "###"+diaNac);
@@ -341,7 +351,7 @@ public class AxaSaludModel {
 						  }
 						  
 					  }
-					 
+					
 			  switch (arrContenido[i].split("###").length) {						 		
 			        case 7: case 8:	
 						asegurado.setNombre((arrContenido[i].split("###")[0].split(",")[1] +" " + arrContenido[i].split("###")[0].split(",")[0]).replace("  ", " ").trim());			
