@@ -28,8 +28,8 @@ public class SuraDiversosModel {
 
 		try {
 
-			// modelo.setTipo(7);
-			// modelo.setCia(88);
+			modelo.setTipo(7);
+			modelo.setCia(88);
 
 			inicio = contenido.indexOf("Seguro Múltiple Familiar");
 			fin = contenido.indexOf("Ubicación de los bienes asegurados");
