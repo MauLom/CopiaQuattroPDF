@@ -21,12 +21,14 @@ public class SuraAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		try {
+			
 			String newcontenido;
 			int inicio;
 			int fin;
 			contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
 			contenido = contenido.replace("R. F. C:", ConstantsValue.RFC)
 			        .replace("Prima Neta###Descuento", ConstantsValue.PRIMANETADESCUETOHASH);
+					
 			modelo.setTipo(1);
 			modelo.setCia(88);
 		
@@ -83,9 +85,14 @@ public class SuraAutosModel {
 						modelo.setFormaPago(fn.formaPagoSring(newcontenido.split("\n")[i + 1]));
 
 					}
+				
 					if (newcontenido.split("\n")[i].contains("Vigencia desde")) {
-						modelo.setVigenciaDe(
-								fn.formatDateMonthCadena(newcontenido.split("Vigencia desde")[1].split("###")[1]));
+						
+						List<String> valores = fn.obtenVigePoliza(newcontenido.split("\n")[i] );
+						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+
+					
 					}
 					if (newcontenido.split("\n")[i].contains(ConstantsValue.HASTA_LAS)
 							&& newcontenido.split("\n")[i].contains("C.P.")) {
@@ -168,8 +175,8 @@ public class SuraAutosModel {
 			inicio = contenido.indexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 			fin = contenido.indexOf("Pág. 1");
 			fin = inicio > fin ?  contenido.lastIndexOf("Pág. 1"):fin;
+			fin = inicio > fin ?  contenido.lastIndexOf("Pag. 1 de 3"):fin;
 
-		
            
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
@@ -194,20 +201,21 @@ public class SuraAutosModel {
 			
 					inicio = contenido.lastIndexOf(ConstantsValue.PRIMANETADESCUETOHASH);
 				     fin = contenido.lastIndexOf("Pág. 1 de 4");
-					 newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
-					 for (int i = 0; i < newcontenido.split("\n").length; i++) {				
-						if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {
-							int sp = newcontenido.split("\n")[i+1].split("###").length;
-							if(sp== 6) {
-								modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
-								modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[2])));
-								modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[3])));
-								modelo.setIva(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[4])));
-								modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[5])));
-							}
-						}
-					}
-				
+					 if(inicio >  -1&& fin >  -1){
+						newcontenido = contenido.substring(inicio, fin).replace("@@@", "").replace("\r", "");
+						for (int i = 0; i < newcontenido.split("\n").length; i++) {				
+						   if(newcontenido.split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {
+							   int sp = newcontenido.split("\n")[i+1].split("###").length;
+							   if(sp== 6) {
+								   modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[0])));
+								   modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[2])));
+								   modelo.setDerecho(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[3])));
+								   modelo.setIva(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[4])));
+								   modelo.setPrimaTotal(fn.castBigDecimal(fn.preparaPrimas( newcontenido.split("\n")[i+1].split("###")[5])));
+							   }
+						   }
+					   }
+				  }									
 			}
 
 			
@@ -247,6 +255,7 @@ public class SuraAutosModel {
 			obtenerDatosAgente(contenido, modelo);
 			return modelo;
 		} catch (Exception e) {
+			e.printStackTrace();
 			modelo.setError(SuraAutosModel.this.getClass().getTypeName() + " | " + e.getMessage() + " | "
 					+ e.getCause());
 			return modelo;

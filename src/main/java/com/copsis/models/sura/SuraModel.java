@@ -43,14 +43,20 @@ public class SuraModel {
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
 				case 1:// Autos
 					int pagFin = fn.pagFinRango(stripper, doc, "Nombre Agente");
+					int pagini = 0;
 
-					pagFin = pagFin == 0  ?fn.pagFinRango(stripper, doc, "Agente:"):pagFin;
+					if(fn.pagFinRango(stripper, doc, "ROBO TOTA") > 0){
+						pagini = fn.pagFinRango(stripper, doc, "ROBO TOTA");
+					}
+
+					pagFin = pagFin == 0  ?fn.pagFinRango(stripper, doc, "Agente:"): pagFin;
+					
                       
 					if (pagFin == 0) {
 						pagFin = 3;
 					}
 					
-					modelo = new SuraAutosModel(fn.caratula(1, pagFin, stripper, doc)).procesar();
+					modelo = new SuraAutosModel(fn.caratula(pagini, pagFin, stripper, doc)).procesar();
 					break;
 				case 2:// Salud
 					if (!fn.caratula(1, 1, stripper, doc).contains("Desde las")) {
