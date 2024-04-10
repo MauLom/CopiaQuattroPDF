@@ -558,7 +558,7 @@ public class ImpresionCertificadoAxaPdf {
 
 
 
-                    tbx = tbx+90;
+                    tbx = tbx+40;
                     txt2 = new StringBuilder();
                     txt2.append("La documentación contractual y la nota técnica que integran este producto están ");
                     txt2.append("registrados ante la Comisión Nacional de Seguros y Fianzas, de conformidad con lo ");
@@ -585,7 +585,7 @@ public class ImpresionCertificadoAxaPdf {
                     }
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    // document.save(new File("/home/aalbanil/Vídeos/certificadovida.pdf"));
+                    //  document.save(new File("/home/aalbanil/Vídeos/certificadovida.pdf"));
 
                     return output.toByteArray();
                 } finally {
