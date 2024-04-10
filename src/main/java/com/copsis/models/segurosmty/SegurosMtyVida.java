@@ -73,6 +73,10 @@ public class SegurosMtyVida {
 					}
 					if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.MONEDA_MAYUS)) {
 						modelo.setMoneda( fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i]));
+						if(modelo.getFormaPago() ==0){							
+							modelo.setFormaPago( 1);
+						}
+						
 					}
 					if(newcontenido.toString().split("\n")[i].contains("C.P.") &&  newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim().length() == 5) {
 						modelo.setCp(newcontenido.toString().split("\n")[i].split("C.P.")[1].replace("###", "").trim());
