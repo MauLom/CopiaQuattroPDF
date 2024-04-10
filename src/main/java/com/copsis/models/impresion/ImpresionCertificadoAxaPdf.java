@@ -186,7 +186,7 @@ public class ImpresionCertificadoAxaPdf {
                   
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 555, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table, 15);
-                    communsPdf.setCell(baseRow, 100, "Regla para determinar a la Suma Asegurada por el Fallecimiento y Endosos adicionales en su caso", Color.white, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.red,bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
+                    communsPdf.setCell(baseRow, 100, "Regla para determinar a la Suma Asegurada por el Fallecimiento y endosos adicionales en su caso", Color.white, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.red,bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
                     baseRow = communsPdf.setRow(table, 15);
                     communsPdf.setCell(baseRow, 100, regla, Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
         
@@ -595,7 +595,7 @@ public class ImpresionCertificadoAxaPdf {
 
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                      document.save(new File("/home/aalbanil/Vídeos/certificadovida.pdf"));
+                    // document.save(new File("/home/aalbanil/Vídeos/certificadovida.pdf"));
 
                     return output.toByteArray();
                 } finally {
