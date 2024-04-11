@@ -84,7 +84,7 @@ public final class ConstantsValue {
 	public static final String FORMA_PAGO2 = "Forma de pago";
 	public static final String FORMA_PAGO3 = "Forma de Pago:";
 	public static final String FORMA_PAGO4 = "Forma-pago";
-	
+	public static final String FORMAS_PAGO1 = "Formas de Pago";
 	public static final String FORMA_PAGO_MAYUS = "FORMA DE PAGO";
 	public static final String FORMATO_FECHA = "dd-MM-yy";
 	public static final String FORMA = "FORMA";
@@ -343,6 +343,8 @@ public final class ConstantsValue {
 	public static final String COBERTURAS_SUMA_ASEGURADA_HASH ="COBERTURAS SUMA###ASEGURADA";
 	public static final String MODULO_COBERTURA_GIM	="Módulo - Cobertura";
 	public static final String DANOS_MATERIALES	="Daños Materiales";
+	public static final String  DESGLOSE_DE_COBERTURAS ="DESGLOSE DE COBERTURAS";
+	public static final String  HORAS_FECHA = "12:00 Horas";
 	private ConstantsValue() {
 
 	}
