@@ -180,9 +180,15 @@ public class AxaSaludtresModel {
                     .replace("1 ###3-01-", "###13-01-")
                     .replace("3 1-03-2015", "###31-03-2015")
                     .replace("3 ###1-03-", "###31-03-")
+                    .replace("1 1 ###-01-1997", "11-01-1997###")
+                    .replace("04-2020", "04-2020###")
+                    .replace("1 ###3-04-2022", "13-04-2022###")
                     .replace("2 1 ###-03", "21-03")
                     .replace("L ###ozano", "Lozano")
-                    .replace("S ###anchez", "Sanchez"));
+                    .replace("S ###anchez", "Sanchez")
+                    .replace("######Titular###", "###Titular###")
+                    .replace("2022 13-04", "2022###13-04")
+                    );
                  
 
             if (modelo.getAsegurados().isEmpty() && (inicio > 0 && fin > 0 && inicio < fin)) {
@@ -198,7 +204,7 @@ public class AxaSaludtresModel {
                         }
                     
                         List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
-                       
+                    
                         if (!valores.isEmpty() && valores.size() == 5) {
 
                             asegurado.setNacimiento(
@@ -207,6 +213,15 @@ public class AxaSaludtresModel {
                                     fn.formatDateMonthCadena(valores.get(1)));
                                     asegurado.setFechaAlta(
                                         fn.formatDateMonthCadena(valores.get(4)));
+                        }
+                        if (!valores.isEmpty() && valores.size() == 4) {
+
+                            asegurado.setNacimiento(
+                                    fn.formatDateMonthCadena(valores.get(0)));
+                            asegurado.setAntiguedad(
+                                    fn.formatDateMonthCadena(valores.get(1)));
+                                    asegurado.setFechaAlta(
+                                        fn.formatDateMonthCadena(valores.get(3)));
                         }
 
                       
