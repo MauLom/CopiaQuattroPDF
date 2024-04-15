@@ -268,6 +268,7 @@ public class InbursaAutosModel {
 
 
 			inicio = contenido.indexOf("NOMBRE DEL AGENTE");
+			boolean valido= true;
 
 			int renglonesARetroceder = -1;
 			if (inicio > 0) {
@@ -278,22 +279,39 @@ public class InbursaAutosModel {
 					for (int j = 0; j < newcontenido.split("\n").length; j++) {
 
 						if (newcontenido.split("\n")[j].contains("CLAVE")) {
-							
-							if(!fn.numTx(newcontenido.split("\n")[j - 2]).contains("-")) {
+						
+							if(fn.numTx(newcontenido.split("\n")[j - 1]).contains("-")) {
+								renglonesARetroceder = 1;
+								valido =false;
+							}
+							else if(fn.numTx(newcontenido.split("\n")[j - 2]).contains("-") && valido ) {
 								renglonesARetroceder = 2;
-							}else if(fn.isNumeric(fn.numTx(newcontenido.split("\n")[j - 3]))){
+								valido =false;
+							}else if(fn.isNumeric(fn.numTx(newcontenido.split("\n")[j - 3])) && valido){
 								renglonesARetroceder = 3;
+								valido =false;
 							}
 
-							modelo.setCveAgente(fn.numTx(newcontenido.split("\n")[j - renglonesARetroceder]));
+							List<String> valores = fn.obtenerListNumeros2(newcontenido.split("\n")[j - renglonesARetroceder]);
+							if(!valores.isEmpty()){
+                             modelo.setCveAgente(fn.numTx(valores.get(0)));
+							}
+							
+							
 
-							if (modelo.getCveAgente().length() > 0) {
+							if (!modelo.getCveAgente().isEmpty() ) {
 								String a = newcontenido.split("\n")[j - 1].replace(" ", "###").split("###")[0].trim();
 								if (a.contains("@")) {
 									a = "";
 								}
-								modelo.setAgente(
+								if(!fn.eliminaSpacios(newcontenido.split("\n")[j-renglonesARetroceder].split(modelo.getCveAgente())[1]).isEmpty()){
+									modelo.setAgente(
+										(fn.eliminaSpacios(newcontenido.split("\n")[j-renglonesARetroceder].split(modelo.getCveAgente())[1].split("###")[0] )));
+								}else{
+									modelo.setAgente(
 										(fn.eliminaSpacios(newcontenido.split("\n")[j-renglonesARetroceder].split(modelo.getCveAgente())[1] + " " + a)));
+								}
+								
 							}
 						}
 					}
