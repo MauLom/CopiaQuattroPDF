@@ -186,7 +186,7 @@ public class ImpresionCertificadoAxaPdf {
                   
                     table = new BaseTable(yStart, yStartNewPage, bottomMargin, 555, margin, document, page, true, true);
                     baseRow = communsPdf.setRow(table, 15);
-                    communsPdf.setCell(baseRow, 100, "Regla para determinar a la Suma Asegurada por el Fallecimiento y Endosos adicionales en su caso", Color.white, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.red,bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
+                    communsPdf.setCell(baseRow, 100, "Regla para determinar a la Suma Asegurada por el Fallecimiento y endosos adicionales en su caso", Color.white, true, "L", 10, communsPdf.setLineStyle(bgColorA,bgColorA,Color.red,bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColorA);
                     baseRow = communsPdf.setRow(table, 15);
                     communsPdf.setCell(baseRow, 100, regla, Color.black, false, "L", 10, communsPdf.setLineStyle(bgColorA), "", communsPdf.setPadding(4f, 4f, 4f, 4f), bgColor);
         
@@ -416,7 +416,7 @@ public class ImpresionCertificadoAxaPdf {
 
                     Float  tb=150f;
                     texto = new StringBuilder();
-                    texto.append("AXA Seguros S.A. de C.V. cubre al Asegurado por las coberturas contratadas en los términos y condiciones de la Póliza");       
+                    texto.append("AXA Seguros S.A. de C.V. cubre al Asegurado por las coberturas contratadas en los términos y condiciones de la Póliza citada.");       
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 537, arialN, 9.5f, (-1.2f * 9f), 1f,0.3f);
 
                     tb = tb+30;
@@ -442,10 +442,14 @@ public class ImpresionCertificadoAxaPdf {
                     texto.append("Con independencia de lo previsto en el párrafo anterior, tratándose de personas que soliciten su ingreso al Grupo o ");    
                     texto.append("Colectividad asegurado con posterioridad a la celebración del contrato y que hayan dado su consentimiento después de los "); 
                     texto.append("30 días naturales siguientes a la fecha en que hubieran adquirido el derecho de formar parte del mismo, la  Compañía, dentro ");  
+                    texto.append("de los 30 días naturales siguientes a la fecha en que se le haya comunicado esa situación, podrá exigir requisitos médicos u ");
+                    texto.append("otros para asegurarlas, si no lo hacen quedarán aseguradas con las mismas condiciones en que fue contratada la Póliza. ");
+                    
+
                      
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, arialN, 9.5f, (-1.2f * 9f), 1f,0.2f);
 
-                    tb = tb+50;
+                    tb = tb+70;
                     texto = new StringBuilder();
                     texto.append("Cuando la aseguradora exija requisitos médicos u otros para asegurar a las personas a que se refiere el párrafo anterior, ");    
                     texto.append("contará con un plazo de 30 días naturales, contado a partir de la fecha en que se hayan cumplido dichos requisitos para "); 
@@ -465,10 +469,9 @@ public class ImpresionCertificadoAxaPdf {
          
                     tb = tb+10;
                     texto = new StringBuilder();
-                    texto.append("dejarán.Cuando la aseguradora exija requisitos médicos u otros para asegurar a las personas a que se refiere el párrafo anterior,");    
-                    texto.append("contará con un plazo de 30 días naturales, contado a partir de la fecha en que se hayan cumplido dichos requisitos para "); 
-                    texto.append("resolver sobre la aceptación o no de asegurar a la persona, de no hacerlo se entenderá que la acepta con las mismas ");  
-                    texto.append("condiciones en que fue contratada la Póliza.");
+                    texto.append("dejarán de estar aseguradas desde el momento de su separación, quedando sin validez alguna el Certificado Individual expedido.");    
+                    texto.append("En este caso, la Aseguradora restituirá la parte de la prima neta no devengada de dichos Integrantes calculada en día "); 
+                    texto.append("exactos, a quienes la hayan aportado, en la proporción correspondiente");  
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, arialN, 9.5f, (-1.4f * 9f), 3f,0.3f);
 
 
@@ -500,9 +503,83 @@ public class ImpresionCertificadoAxaPdf {
                     texto.append("establecidos en las notas técnicas registradas ante la Comisión. El solicitante deberá pagar a la Aseguradora la prima que");
                     texto.append("corresponda a la edad alcanzada y ocupación, en su caso, en la fecha de solicitud, según la tarifa en vigor. Las ");
                     texto.append("Aseguradoras que practiquen el Seguro de Grupo en la operación de vida deberán operar, cuando menos, un plan ordinario de vida.");               
-                    texto.append("AXA Seguros S.A. de C.V. cubre al Integrante por las coberturas contratadas en los términos y condiciones de la Póliza");
+                    // texto.append("AXA Seguros S.A. de C.V. cubre al Integrante por las coberturas contratadas en los términos y condiciones de la Póliza");
                     this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 540, arialN, 9.5f, (-1.4f * 9f), 3f,0.3f);
 
+                      tb=tb+140f;
+                    texto = new StringBuilder();
+                    texto.append("AXA Seguros S.A. de C.V. cubre al Asegurado por las coberturas contratadas en los términos y condiciones de la Póliza");       
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tb), Sio4CommunsPdf.eliminaHtmlTags3(texto.toString()), 537, arialN, 9.5f, (-1.2f * 9f), 1f,0.3f);
+
+
+                   
+                  
+                    
+                    page = new PDPage();
+                    document.addPage(page);
+                    this.setEncabezado(document, page,certificadoAxa.getTitulo());
+
+                    StringBuilder txt2 =  new StringBuilder();
+
+                    Float  tbx=135f;
+                    txt2 = new StringBuilder();
+                    txt2.append("citada.");       
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tbx), Sio4CommunsPdf.eliminaHtmlTags3(txt2.toString()), 537, arialN, 9.5f, (-1.2f * 9f), 1f,0.3f);
+
+
+                    tbx = tbx+32;
+                    txt2 = new StringBuilder();
+                    txt2.append("Como Contratante hago constar que me he enterado de las Condiciones Generales que rigen esta Póliza y expresamente ");
+                    txt2.append("declaro mi conformidad con ellas, las cuales me son entregadas a través del medio elegido. Para detalles de las coberturas ");
+                    txt2.append("contratadas, significado de las abreviaturas, exclusiones y restricciones, consulte las Condiciones Generales que se ");
+                    txt2.append("encuentran disponibles en axa.mx.");
+                    
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tbx), Sio4CommunsPdf.eliminaHtmlTags3(txt2.toString()), 537, arialN, 9.5f, (-1.3f * 9f), 1f,0.3f);
+
+
+                    tbx = tbx+62;
+                    txt2 = new StringBuilder();
+                    txt2.append("Para cualquier aclaración o duda no resuelta en relación con su seguro, contacte a la Unidad Especializada de nuestra ");
+                    txt2.append("compañía en la dirección indicada al pie de página. Tel 800 737 76 63 (opción 1) y desde la Cd. De México (55) 5169 2746 ");
+                    txt2.append("(opción 1) de lunes a jueves de 8:00 a 17:30 horas y viernes de 8:00 a 16:00 horas, o escríbanos a ");
+                    txt2.append("axasoluciones@axa.com.mx; o bien, comunicarse a Condusef: Av. Insurgentes Sur #762 Col. Del Valle, México, CDMX, ");
+                    txt2.append("C.P. 03100 - Tel. (55) 5340 0999 y (800) 999 80 80, asesoria@condusef.gob.mx. ");
+                    
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tbx), Sio4CommunsPdf.eliminaHtmlTags3(txt2.toString()), 537, arialN, 9.5f, (-1.3f * 9f), 1f,1f);
+
+
+                    tbx = tbx+90;
+                    txt2 = new StringBuilder();
+                    txt2.append("Esta Póliza se encuentra sujeta a las Condiciones Generales registradas ante la CNSF como se indica a continuación:");
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tbx), Sio4CommunsPdf.eliminaHtmlTags3(txt2.toString()), 500, arialN, 9.5f, (-1.2f * 9f), 1f,0.3f);
+
+
+
+                    tbx = tbx+40;
+                    txt2 = new StringBuilder();
+                    txt2.append("La documentación contractual y la nota técnica que integran este producto están ");
+                    txt2.append("registrados ante la Comisión Nacional de Seguros y Fianzas, de conformidad con lo ");
+                    txt2.append("dispuesto por los artículos 36, 36- A, 36-B y 36-D de la Ley General de Instituciones y ");
+                    txt2.append("Sociedades Mutualistas de Seguros, bajo el(los) registro(s) número 76 ");
+                    this.parrafo(document, page, this.medidas(page.getMediaBox(), 32f, tbx), Sio4CommunsPdf.eliminaHtmlTags3(txt2.toString()), 540, arialN, 14f, (-1.3f * 12f), 1f,0.3f);
+
+
+
+                    table = new BaseTable(80, 80, 0, 150, 470, document, page, true, true);
+                    baseRow = communsPdf.setRow(table, 9);	          
+                    communsPdf.setCell(baseRow, 80, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-copsis/s32tkk/2207/Polizas/2207/4Avwv9KqPKZ31lIeYtlac4IcQfxQb9bn7ywY43F1ufipY7UgiHHJe4Y6TI4OL/firmaApoderado.jpg").scale(60, 60),  communsPdf.setLineStyle(Color.white,Color.white,Color.black,Color.white), communsPdf.setPadding(0f,40f,-10f,40f), "L", "");
+                    baseRow = communsPdf.setRow(table, 9);	        
+                    communsPdf.setCell(baseRow,80, "Apoderado" ,Color.BLACK,true, "C",10, communsPdf.setLineStyle(Color.white,Color.white,Color.white,Color.black), "", communsPdf.setPadding(5f,5f,3f,5f),bgColor);
+                    table.draw();
+        
+
+                    for( int i=0 ;i < document.getNumberOfPages();i++){
+                        PDPage page2 = document.getPage(i);
+                        table = new BaseTable(90, 90, 10, 100, 10, document, page2, false, true);
+                        baseRow = communsPdf.setRow(table, 50);
+                        communsPdf.setCellImg(baseRow, 18, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2403/1N7rQflDvq65bN1u4E4VKEWrVJBAleuVH5Spyx40FA3EZ2gHNA72tlmFM5X1BkU/VGE10012.png"), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(4f, 0f, 2f, 0f), "L", "T");                     
+                        table.draw();
+                    }
 
                     int nume = document.getNumberOfPages();
                                         
@@ -516,17 +593,9 @@ public class ImpresionCertificadoAxaPdf {
                         }
                     }
 
-                    for( int i=0 ;i < document.getNumberOfPages();i++){
-                        PDPage page2 = document.getPage(i);
-                        table = new BaseTable(90, 90, 10, 100, 10, document, page2, false, true);
-                        baseRow = communsPdf.setRow(table, 50);
-                        communsPdf.setCellImg(baseRow, 18, ImageUtils.readImage("https://storage.googleapis.com/quattrocrm-prod/quattro-biibiic/2403/1N7rQflDvq65bN1u4E4VKEWrVJBAleuVH5Spyx40FA3EZ2gHNA72tlmFM5X1BkU/VGE10012.png"), communsPdf.setLineStyle(Color.black, Color.black, Color.black, Color.black), communsPdf.setPadding2(4f, 0f, 2f, 0f), "L", "T");                     
-                        table.draw();
-                    }
-
                     output = new ByteArrayOutputStream();
                     document.save(output);
-                    //document.save(new File("/home/aalbanil/Vídeos/certificado2.pdf"));
+                    // document.save(new File("/home/aalbanil/Vídeos/certificadovida.pdf"));
 
                     return output.toByteArray();
                 } finally {
@@ -558,7 +627,7 @@ public class ImpresionCertificadoAxaPdf {
             communsPdf.setCell(baseRow, 100, "Respaldo Empresarial EXPERIENCIA " + (!titulo.isEmpty() ? titulo :"PROPIA") +"  Nacional", Color.black, false, "R", 11, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
             table.draw();
 
-            table = new BaseTable(90, 90, 5, fullWidth, 20, document, page, true, true);
+            table = new BaseTable(90, 90, 5,490, 20, document, page, true, true);
             baseRow = communsPdf.setRow(table, 12);
             communsPdf.setCell(baseRow, 100, "AXA Seguros S.A. de C.V.", Color.black, true, "L", 10, communsPdf.setLineStyle(Color.white), "", communsPdf.setPadding(5f, 5f, 3f, 5f), bgColor);
             baseRow = communsPdf.setRow(table, 12);
@@ -578,6 +647,9 @@ public class ImpresionCertificadoAxaPdf {
             table.draw();
             yStart -= table.getHeaderAndDataHeight() + 38;
 
+
+    
+          
             return yStart;
 
         } catch (Exception ex) {
