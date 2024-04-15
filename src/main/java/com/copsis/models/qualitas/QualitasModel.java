@@ -100,13 +100,12 @@ public class QualitasModel {
 									pagFin=3;
 								}
 
-								if(fn.caratula(2, 2, stripper, doc).contains("Proteccion para Danos sin Responsabilida")){
+								if(fn.caratula(2, 2, stripper, doc).contains("Proteccion para Danos sin Responsabilida")
+								|| fn.caratula(2, 2, stripper, doc).contains("Responsabilidad Civil por Daños a Terceros")){
 									pagIni=2;
 									pagFin=3;
 								}
-								
-								
-							
+
 								QualitasAutosModel datosQualitasAutos = new QualitasAutosModel(
 										fn.caratula(pagIni, pagFin, stripper, doc),fn.caratula(5, 6, stripper, doc),fn.caratula(1, 8, stripper, doc));
 								modelo = datosQualitasAutos.procesar();
