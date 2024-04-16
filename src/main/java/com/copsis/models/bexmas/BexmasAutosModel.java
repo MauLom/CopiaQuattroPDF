@@ -32,6 +32,11 @@ public class BexmasAutosModel {
 			modelo.setTipo(1);
 			modelo.setCia(98);
 
+			String[] palabras = {"AUTOMÓVILES Y CAMIONES INDIVIDUAL"};
+
+			modelo.setPlan(!plan(palabras).isEmpty() ?plan(palabras):"");
+
+
 			inicio = contenido.indexOf("AUTOMÓVILES Y CAMIONES");
 			fin = contenido.indexOf("Seguros Ve por Más");
 
@@ -318,6 +323,17 @@ public class BexmasAutosModel {
 			return modelo;
 		}
 
+	}
+
+	private  String  plan (String[] palabras) {
+		String palabraEcontrada="";
+		for (String palabra : palabras) {
+			if (contenido.contains(palabra)){
+				 palabraEcontrada = palabra;
+			} 
+		}
+
+		return palabraEcontrada;
 	}
 
 	private void getCtedirecciones(StringBuilder newcont, int i) {
