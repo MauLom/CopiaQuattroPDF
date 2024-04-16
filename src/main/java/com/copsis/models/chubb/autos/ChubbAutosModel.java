@@ -168,31 +168,32 @@ public class ChubbAutosModel {
 
 				}
 			}
+			
+			// CteNombre y Contratante
+			conceptos = Arrays.asList("Datos del asegurado y-o propietario");
+			for (String x : conceptos) {
+				inicio = contenido.indexOf(x);
+				if (inicio > -1 && x.equals("Datos del asegurado y-o propietario")) {
+					inicio = inicio + 35;
+					newcontenido = contenido.substring(inicio, (inicio + 150)).replace("@@@", "");
+					if(newcontenido.split(saltolinea)[1].split("###").length == 1 && newcontenido.split(saltolinea)[1].contains("Asegurado:")){
+                        modelo.setCteNombre(newcontenido.split(saltolinea)[1].split("Asegurado:")[1].trim());
+					}else{
+                      modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
+					}
+					modelo.setContratante(modelo.getCteNombre());
+				}
+			}
 
-			// Contratante
+			// Conductor
 			conceptos = Arrays.asList("Propietario-Contratante:###");
 			for (String x : conceptos) {
 				inicio = contenido.indexOf(x);
 				if (inicio > -1 && x.equals("Propietario-Contratante:###")) {
 					inicio = inicio + 27;
 					newcontenido = contenido.substring(inicio, (inicio + 150));
-					modelo.setContratante(newcontenido.split(saltolinea)[0].trim());
-				}
-			}
-
-			// CteNombre
-			conceptos = Arrays.asList("Datos del asegurado y-o propietario");
-			for (String x : conceptos) {
-				inicio = contenido.indexOf(x);
-				if (inicio > -1 && x.equals("Datos del asegurado y-o propietario")) {
-					inicio = inicio + 35;
-					newcontenido = contenido.substring(inicio, (inicio + 150)).replace("@@@", "");					
-					if(newcontenido.split(saltolinea)[1].split("###").length == 1 && newcontenido.split(saltolinea)[1].contains("Asegurado:")){
-                        modelo.setCteNombre(newcontenido.split(saltolinea)[1].split("Asegurado:")[1].trim());
-					}else{
-                      modelo.setCteNombre(newcontenido.split(saltolinea)[1].split(separador)[1].trim());
-					}
-					
+					if (!modelo.getContratante().equals(newcontenido.split(saltolinea)[0].trim()))
+						modelo.setConductor(newcontenido.split(saltolinea)[0].trim());
 				}
 			}
 
