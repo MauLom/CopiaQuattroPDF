@@ -66,6 +66,7 @@ public class EstructuraJsonModel {
     private int aportacion = 0;
     private String subgrupo = "";
     private String categoria= "";
+    private int totalRecibos = 0;
   
     private List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
     private List<EstructuraRecibosModel> recibos = new ArrayList<>();

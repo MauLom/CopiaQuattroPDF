@@ -39,6 +39,7 @@ public class ChubbAutosModel {
 	private List<String> conceptos;
 	private String separador = "###";
 	private String saltolinea = "\r\n";
+	private String totalRecibos = "";
 
 	public EstructuraJsonModel procesar() {
 		try {
@@ -82,7 +83,6 @@ public class ChubbAutosModel {
 					.replace("Prima Neta ###", "Prima Neta###")
 					.replace("###Forma ###de ###pago:", "Forma de pago:");
 				
-
 			
 			modelo.setTipo(1);			
 			modelo.setCia(1);
@@ -684,6 +684,28 @@ public class ChubbAutosModel {
                         .collect(Collectors.toList()).get(0));
                 }
         }
+
+		for(int i=0;i< recibos.split("AVISO DE COBRO").length;i++){
+
+			if(recibos.split("AVISO DE COBRO")[i].contains("Serie del aviso") && (recibos.split("AVISO DE COBRO")[i].contains("IMPORTANTE"))){
+					totalRecibos=contenido.split("AVISO DE COBRO")[i].split("IMPORTANTE")[0];
+				
+				
+			}				
+		}
+
+		if(!totalRecibos.isEmpty()){
+			for(int i=0;i< totalRecibos.split("\n").length;i++){
+			  if(totalRecibos.split("\n")[i].contains("Serie del aviso") &&totalRecibos.split("\n")[i].contains("Endoso") ){			   
+				List<String> valores = fn.obtenerListRecibos(totalRecibos.split("\n")[i].split("aviso")[1].replace(",", ""));
+			    if(!valores.isEmpty() &&  fn.isNumeric(valores.get(0).split("-")[1]) ){
+                   modelo.setTotalRecibos(fn.castInteger(valores.get(0).split("-")[1] ));
+				}
+			
+			  }
+			}
+		}
+
 
 
 
