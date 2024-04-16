@@ -1327,6 +1327,14 @@ public class DataToolsModel {
 		}
 		return resultado;
 	}
+	public List<String> obtenerListRecibos(String cadena) {
+		List<String> resultado = new ArrayList<>();
+		Matcher m = Pattern.compile("1-[1-9]\\d*(?:\\.\\d+)?").matcher(cadena);
+		while (m.find()) {
+			resultado.add(m.group());
+		}
+		return resultado;
+	}
 
 	public List<String> obtenerListSimple(String cadena) {
 		List<String> resultado = new ArrayList<>();
