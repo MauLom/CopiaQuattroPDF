@@ -188,7 +188,7 @@ public class BexmasAutosModel {
 
 			inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 			fin = contenido.indexOf("En testimonio de lo cual la institución");
-			
+			fin = fin == -1 ? contenido.indexOf("En testimonio de lo cual"): fin;
 			if(inicio == -1 && fin ==-1) {
 				inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 				fin = contenido.lastIndexOf("En testimonio de lo cual");
