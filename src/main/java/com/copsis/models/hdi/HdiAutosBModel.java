@@ -37,7 +37,13 @@ public class HdiAutosBModel {
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
+				
+				if(newcontenido.toString().split("\n")[i+1].contains("-CONDUCTOR:") ){
+					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("-CONDUCTOR:")[0].trim().replace("###", " "));
+				}else{
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", " "));
+				}
+					
 					if(newcontenido.toString().split("\n")[i+2].contains("RFC:")){
 						modelo.setRfc(newcontenido.toString().split("\n")[i+2].split("RFC:")[1].replace("###", " ").trim());
 						if(newcontenido.toString().split("\n")[i+5].contains("C.P")){
