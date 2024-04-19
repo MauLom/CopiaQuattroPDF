@@ -3,6 +3,7 @@ package com.copsis.models.bexmas;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.copsis.constants.ConstantsValue;
 import com.copsis.models.DataToolsModel;
 import com.copsis.models.EstructuraCoberturasModel;
 import com.copsis.models.EstructuraJsonModel;
@@ -26,7 +27,9 @@ public class BexmasAutosModel {
 		String contenidocbo="";
 		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
 		.replace("Seguros ###Ve ###Por ###Mas", "Seguros Ve por Más")
-		.replace("Prima Neta", "Prima neta");
+		.replace("Prima Neta", ConstantsValue.PRIMA_NETA2)
+		.replace("Prima neta:", ConstantsValue.PRIMA_NETA2)
+		.replace("Forma de Pago", ConstantsValue.FORMAS_PAGO1);
 
 		try {
 			modelo.setTipo(1);
@@ -81,16 +84,16 @@ public class BexmasAutosModel {
 				
 				
 					
-					if (newcont.toString().split("\n")[i].contains("Dirección:")) {
+					if (newcont.toString().split("\n")[i].contains(ConstantsValue.DIRECCIOMN)) {
 					
 						getCtedirecciones(newcont, i);		
 					}
 				
-					if (newcont.toString().split("\n")[i].contains("Formas de Pago")) {
+					if (newcont.toString().split("\n")[i].contains(ConstantsValue.FORMAS_PAGO1)) {
 						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 1]));
 					}
 					
-					if (modelo.getFormaPago() == 0 && newcont.toString().split("\n")[i].contains("Formas de Pago")) {
+					if (modelo.getFormaPago() == 0 && newcont.toString().split("\n")[i].contains(ConstantsValue.FORMAS_PAGO1)) {
 						modelo.setFormaPago(fn.formaPagoSring(newcont.toString().split("\n")[i + 2]));
 					}
 					if (newcont.toString().split("\n")[i].contains("C.P:") && newcont.toString().split("\n")[i].split("C.P:")[1].split("###")[0].trim().length() > 3) {
@@ -106,22 +109,22 @@ public class BexmasAutosModel {
 						modelo.setCp(newcont.toString().split("\n")[i].split("C.P:")[1].trim().substring(0,5));
 					}
 
-					if (newcont.toString().split("\n")[i].contains("R.F.C:") && newcont.toString().split("\n")[i].split("R.F.C:")[1].split("###")[0].trim().length() > 0
-						&&  newcont.toString().split("\n")[i].split("R.F.C:")[1].split("###").length > 1	
+					if (newcont.toString().split("\n")[i].contains(ConstantsValue.RFC) && newcont.toString().split("\n")[i].split(ConstantsValue.RFC)[1].split("###")[0].trim().length() > 0
+						&&  newcont.toString().split("\n")[i].split(ConstantsValue.RFC)[1].split("###").length > 1	
 							) {
-						modelo.setRfc(newcont.toString().split("\n")[i].split("R.F.C:")[1].split("###")[0].trim());
+						modelo.setRfc(newcont.toString().split("\n")[i].split(ConstantsValue.RFC)[1].split("###")[0].trim());
 					}
 					
-					if (newcont.toString().split("\n")[i].contains("R.F.C:")
-						&&  newcont.toString().split("\n")[i].split("R.F.C:")[1].split("###").length == 1	) {
-						modelo.setRfc(newcont.toString().split("\n")[i].split("R.F.C:")[1].replace("-", "").trim());
+					if (newcont.toString().split("\n")[i].contains(ConstantsValue.RFC)
+						&&  newcont.toString().split("\n")[i].split(ConstantsValue.RFC)[1].split("###").length == 1	) {
+						modelo.setRfc(newcont.toString().split("\n")[i].split(ConstantsValue.RFC)[1].replace("-", "").trim());
 					}
 					
 					
-					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains("12:00 Horas")) {
+					if (newcont.toString().split("\n")[i].split("-").length > 3 && newcont.toString().split("\n")[i].contains(ConstantsValue.HORAS_FECHA)) {
 					
 						List<String> valores = fn.obtenVigePoliza(newcont.toString().split("\n")[i]);
-						if(!valores.isEmpty() & valores.size() > 2){
+						if(!valores.isEmpty() && valores.size() > 2){
 							modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
 							modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
 							modelo.setFechaEmision(modelo.getVigenciaDe());
@@ -129,9 +132,9 @@ public class BexmasAutosModel {
 			
 						if(modelo.getVigenciaDe().isEmpty() && modelo.getVigenciaA().isEmpty()){
 							modelo.setVigenciaDe(fn.formatDate(fn.formatDateMonthCadena(
-								newcont.toString().split("\n")[i].split("###")[0].replace("12:00 Horas", "").trim())));
+								newcont.toString().split("\n")[i].split("###")[0].replace(ConstantsValue.HORAS_FECHA, "").trim())));
 						modelo.setVigenciaA(fn.formatDate(fn.formatDateMonthCadena(
-								newcont.toString().split("\n")[i].split("###")[1].replace("12:00 Horas", "").trim())));
+								newcont.toString().split("\n")[i].split("###")[1].replace(ConstantsValue.HORAS_FECHA, "").trim())));
 						if (modelo.getVigenciaDe().length() > 0) {
 							modelo.setFechaEmision(modelo.getVigenciaDe());
 					   	}
@@ -150,26 +153,25 @@ public class BexmasAutosModel {
 			}
 
 			inicio = contenido.indexOf("DESCRIPCIÓN DEL VEHÍCULO");
-			fin = contenido.indexOf("DESGLOSE DE COBERTURAS");
+			fin = contenido.indexOf(ConstantsValue.DESGLOSE_DE_COBERTURAS);
 			if (inicio > -1 && fin > -1 && inicio < fin) {
 				newcont = new StringBuilder();
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 
 					if (newcont.toString().split("\n")[i].contains("Clave")
-							&& newcont.toString().split("\n")[i].contains("Marca")
-							&& newcont.toString().split("\n")[i].contains("Zona")) {
-						if (newcont.toString().split("\n")[i].split("Marca:")[1].split("Zona")[0].trim()
-								.replace("###", "").length() > 0) {
-							modelo.setMarca(newcont.toString().split("\n")[i].split("Marca:")[1].split("Zona")[0].trim()
+							&& newcont.toString().split("\n")[i].contains(ConstantsValue.MARCA)
+							&& newcont.toString().split("\n")[i].contains("Zona") &&  (newcont.toString().split("\n")[i].split(ConstantsValue.MARCA)[1].split("Zona")[0].trim()
+								.replace("###", "").length() > 0)) {
+							modelo.setMarca(newcont.toString().split("\n")[i].split(ConstantsValue.MARCA)[1].split("Zona")[0].trim()
 									.replace("###", "").split(" ")[1]);
-							modelo.setClave(newcont.toString().split("\n")[i].split("Marca:")[1].split("Zona")[0].trim()
+							modelo.setClave(newcont.toString().split("\n")[i].split(ConstantsValue.MARCA)[1].split("Zona")[0].trim()
 									.replace("###", "").split(" ")[0]);
-						}
+						
 					}
-					if (newcont.toString().split("\n")[i].contains("Descripción:")) {
+					if (newcont.toString().split("\n")[i].contains(ConstantsValue.DESCRIPCIONPT)) {
 						modelo.setDescripcion(
-								newcont.toString().split("\n")[i].split("Descripción:")[1].replace("###", "").trim());
+								newcont.toString().split("\n")[i].split(ConstantsValue.DESCRIPCIONPT)[1].replace("###", "").trim());
 					}
 					if (newcont.toString().split("\n")[i].contains("Placa:") && newcont.toString().split("\n")[i].contains("NCI:")) {
 						modelo.setPlacas(
@@ -184,11 +186,11 @@ public class BexmasAutosModel {
 			
 
 
-			inicio = contenido.indexOf("Prima neta:");
+			inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 			fin = contenido.indexOf("En testimonio de lo cual la institución");
 			
 			if(inicio == -1 && fin ==-1) {
-				inicio = contenido.indexOf("Prima neta");
+				inicio = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 				fin = contenido.lastIndexOf("En testimonio de lo cual");
 			}
 
@@ -198,7 +200,7 @@ public class BexmasAutosModel {
 				newcont.append(contenido.substring(inicio, fin).replace("@@@", "").replace("\r", ""));
 				for (int i = 0; i < newcont.toString().split("\n").length; i++) {
 					
-					if(newcont.toString().split("\n")[i].contains("Prima neta:") || newcont.toString().split("\n")[i].contains("Prima neta")) {						
+					if(newcont.toString().split("\n")[i].contains(ConstantsValue.PRIMA_NETA2)) {						
 						List<String> valores = fn.obtenerListNumeros(newcont.toString().split("\n")[i]);				
 						if(!valores.isEmpty()){
 						modelo.setPrimaneta(fn.castBigDecimal(fn.castDouble(valores.get(0))));
@@ -262,11 +264,11 @@ public class BexmasAutosModel {
 			}
 			
 			int conpos =0;
-			for(int i = 0; i < contenido.split("DESGLOSE DE COBERTURAS").length;i++) {
+			for(int i = 0; i < contenido.split(ConstantsValue.DESGLOSE_DE_COBERTURAS).length;i++) {
 				
 				if( i!=0) {
 					conpos++;
-					contenidocbo +=  contenido.split("DESGLOSE DE COBERTURAS")[i].split("Prima neta:")[0];
+					contenidocbo +=  contenido.split(ConstantsValue.DESGLOSE_DE_COBERTURAS)[i].split(ConstantsValue.PRIMA_NETA2)[0];
 				}
 			} 
 			
@@ -274,8 +276,8 @@ public class BexmasAutosModel {
 			
 		
 
-			inicio = contenido.indexOf("DESGLOSE DE COBERTURAS");
-			fin = contenido.indexOf("Prima neta:");
+			inicio = contenido.indexOf(ConstantsValue.DESGLOSE_DE_COBERTURAS);
+			fin = contenido.indexOf(ConstantsValue.PRIMA_NETA2);
 			if(fin == -1) {
 				fin = contenido.indexOf("En testimonio de lo cual la Institución firma");
 			}
@@ -338,12 +340,12 @@ public class BexmasAutosModel {
 
 	private void getCtedirecciones(StringBuilder newcont, int i) {
 	
-		if (newcont.toString().split("\n")[i].split("Dirección:")[1].split("###").length > 15) {
+		if (newcont.toString().split("\n")[i].split(ConstantsValue.DIRECCIOMN)[1].split("###").length > 15) {
 			modelo.setCteDireccion(
-					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[1].trim());
+					newcont.toString().split("\n")[i].split(ConstantsValue.DIRECCIOMN)[1].split("###")[1].trim());
 		} else {
 			modelo.setCteDireccion(
-					newcont.toString().split("\n")[i].split("Dirección:")[1].split("###")[0].trim());
+					newcont.toString().split("\n")[i].split(ConstantsValue.DIRECCIOMN)[1].split("###")[0].trim());
 		}
 
 		if (modelo.getCteDireccion().isEmpty()) {
