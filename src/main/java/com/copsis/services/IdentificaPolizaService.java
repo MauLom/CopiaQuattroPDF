@@ -93,9 +93,10 @@ public class IdentificaPolizaService {
 					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Seguros El Potosí S.A.")
 					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("Allianz México, S.A.")
 					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("www.inbursa.com")  
+					   &&  !rangoSimple(2, 5, pdfStripper, pdDoc).contains("HDI Seguros S.A. de C.V.")  
 					   )
 			) {
-			
+				
 				    
 				ChubbModel datosChubb = new ChubbModel(); 
 				datosChubb.setPdfStripper(pdfStripper);
