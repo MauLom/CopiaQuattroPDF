@@ -145,10 +145,11 @@ public class SuraModel {
 
 	public int getTipo(String conten,int tipo){
 		int tipov= tipo;
-		
+
 	
 		String[] searchTerms = {"Hogar Total","Hogar Máster Total",ConstantsValue.MUL_EMPRESARIA_DESCU,ConstantsValue.MUL_EMPRESARIA_DESCU
-	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros","PÓLIZA DE SEGUROS DE DAÑOS RESPONSABILIDAD"};
+	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros","PÓLIZA DE SEGUROS DE DAÑOS RESPONSABILIDAD"
+				,"FENOMENOS HIDROMETEOROLOGICOS"};
 	       int inicio=-1;
 	
 		
