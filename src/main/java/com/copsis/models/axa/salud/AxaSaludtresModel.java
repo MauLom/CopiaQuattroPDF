@@ -163,6 +163,7 @@ public class AxaSaludtresModel {
                     .replace("H i j a ", "###Hija##")
                     .replace(" T it u l ar", "###Titular###")
                     .replace("C ó n y uge ", "###Cónyuge###")
+                    .replace("### ###Hija", "###Hija")
                     .replace("###M", "###M###")
                     .replace("###F", "###F###")
                     .replace("0 ###1", "###01")
@@ -174,7 +175,9 @@ public class AxaSaludtresModel {
                     .replace("0 3-", "03-")
                     .replace("2 5-", "25-")
                     .replace("2 1-", "21-")
-                    .replace("1 8-", "18-")
+                    .replace("1 8-", "18-")                    
+                    .replace("0 ###9-01", "###0 ###9-01")
+                    .replace("0 ###9", " 0 9")
                     .replace("26- 08-", "26-08-")
                     .replace("1 3-01-", "###13-01-")
                     .replace("1 ###3-01-", "###13-01-")
@@ -183,28 +186,34 @@ public class AxaSaludtresModel {
                     .replace("1 1 ###-01-1997", "11-01-1997###")
                     .replace("04-2020", "04-2020###")
                     .replace("1 ###3-04-2022", "13-04-2022###")
+                    .replace("0 8-06-2018", "###08-06-2018")
                     .replace("2 1 ###-03", "21-03")
                     .replace("L ###ozano", "Lozano")
                     .replace("S ###anchez", "Sanchez")
+                    .replace("C ###antu Rivera", "Cantu Rivera")
                     .replace("######Titular###", "###Titular###")
                     .replace("2022 13-04", "2022###13-04")
+                    .replace("0 4 ###-08-1984", "04-08-1984")
+                    .replace("1 0-10-2019", "###10-10-2019")  
+                    .replace(" 09-01-2024 09-01-2024", "###09-01-2024###09-01-2024")
+                    .replace("Hija##1 8 -11-2021", "Hija###18 -11-2021###")
+
                     );
-                 
+         
 
             if (modelo.getAsegurados().isEmpty() && (inicio > 0 && fin > 0 && inicio < fin)) {
 
-                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-
+                for (int i = 0; i < newcontenido.toString().split("\n").length; i++) { 
+                                  
                     EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
                     if (newcontenido.toString().split("\n")[i].split("-").length > 5) {
-                       
+                     
                         String x = newcontenido.toString().split("\n")[i].split("###")[0].replace("@@@", "").trim();
                         if(x.contains(",")){
                             asegurado.setNombre((x.split(",")[1] + " " + x.split(",")[0]).trim());
-                        }
-                    
-                        List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]);
-                    
+                        }                    
+                        List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i]); 
+                                        
                         if (!valores.isEmpty() && valores.size() == 5) {
 
                             asegurado.setNacimiento(
@@ -223,6 +232,14 @@ public class AxaSaludtresModel {
                                     asegurado.setFechaAlta(
                                         fn.formatDateMonthCadena(valores.get(3)));
                         }
+                        if (!valores.isEmpty() && valores.size() == 3) {
+
+                            asegurado.setNacimiento(
+                                    fn.formatDateMonthCadena(valores.get(0)));
+                            asegurado.setAntiguedad(
+                                    fn.formatDateMonthCadena(valores.get(1)));
+                                    
+                        }
 
                       
                         asegurado.setParentesco(fn.parentesco(newcontenido.toString().split("\n")[i].split("###")[3]));
@@ -234,6 +251,7 @@ public class AxaSaludtresModel {
                 modelo.setAsegurados(asegurados);
 
             }
+        
 
             List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 
