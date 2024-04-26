@@ -37,7 +37,12 @@ public class AtlasModel {
 						fn.textoBusqueda(stripper, doc, "RECIBO DE PAGO DE SEGURO DE AUTOS", false)).procesar();
 				break;
 			case 2:// Salud
+			   if(fn.caratula(1, 3, stripper, doc).contains("Características###de###la###Póliza")){
+				modelo = new AtlasSaludBModel().procesar(fn.caratula(1, 3, stripper, doc));
+			   }else{
 				modelo = new AtlasSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
+			   }
+				
 				break;
 			case 4:// Diversos
 				modelo = new AtlasDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();

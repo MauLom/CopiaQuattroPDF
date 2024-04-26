@@ -278,7 +278,8 @@ public class IdentificaPolizaService {
 
 			// ENTRADA PARA ATLAS
 			if (!encontro && contenido.contains("Atlas") || contenido.contains("Atlas, S.A.")
-					|| contenido.contains("Seguros Atlas, S.A.")) {
+					|| contenido.contains("Seguros Atlas, S.A.")
+					|| contenido.contains("https://www.segurosatlas.com.mx")) {
 				AtlasModel datosAtlas = new AtlasModel(pdfStripper, pdDoc, contenido);
 				modelo = datosAtlas.procesar();
 				encontro = true;
