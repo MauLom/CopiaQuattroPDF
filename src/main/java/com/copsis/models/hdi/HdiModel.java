@@ -36,9 +36,10 @@ public class HdiModel {
 			    tipo=4;
 			}	
 			switch (tipo) {
-			case 1:			
+			case 1:				
 				if(contenido.contains("AUTOS TURISTAS") || contenido.contains("VEHICULOS RESIDENTES GLM PLUS")
-				|| contenido.contains("VEHÍCULOS RESIDENTES GLM PLUS ")) {				
+				|| contenido.contains("VEHÍCULOS RESIDENTES GLM PLUS")
+				|| contenido.contains("VEHÍCULOS RESIDENTES HDI Autos y Pick Up")) {				
 				   modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
 
 				} else if(fn.caratula(1, 2, stripper, doc).contains("AUTO TOURIST INSURANCE POLICY")){
