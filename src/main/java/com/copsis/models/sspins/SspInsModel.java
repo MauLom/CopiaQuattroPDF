@@ -13,7 +13,7 @@ public class SspInsModel {
 
     public EstructuraJsonModel procesar(PDFTextStripper stripper, PDDocument doc, String contenido) {
         try {
-            modelo = new SspInsDiversosModel().procesar(fn.caratula(1, 4, stripper, doc));
+            modelo = new SspInsDiversosModel().procesar(fn.caratula(1, 5, stripper, doc));
             return modelo;
         } catch (Exception ex) {
             modelo.setError(
