@@ -17,7 +17,8 @@ public class MapfreVidaDModel {
         contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales())
         .replace("FORMA###DE###PAGO:", "FORMA DE PAGO:")
         .replace("PRIMA###NETA:", "PRIMA NETA:")
-        .replace("PRIMA###TOTAL:", "PRIMA TOTAL:");
+        .replace("PRIMA###TOTAL:", "PRIMA TOTAL:")
+        .replace("PLAN###DE###SEGURO:","PLAN DE SEGURO:");
         StringBuilder newcontenido = new StringBuilder();
         try {
             modelo.setTipo(5);
@@ -28,7 +29,7 @@ public class MapfreVidaDModel {
 			fin = contenido.indexOf("MAPFRE###MÉXICO,###S.A");
 			newcontenido.append(fn.extracted(inicio, fin, contenido).replace("las###12:00 P.M.", ""));
             for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
-         
+       
                if(newcontenido.toString().split("\n")[i].contains("PÓLIZA-ENDOSO")){
                  modelo.setPoliza(newcontenido.toString().split("\n")[i].split("PÓLIZA-ENDOSO")[1].replace("###", ""));
                }
@@ -89,6 +90,12 @@ public class MapfreVidaDModel {
                if(newcontenido.toString().split("\n")[i].contains("PRIMA TOTAL:") ){
                 List<String> valores = fn.obtenerListNumeros2(newcontenido.toString().split("\n")[i].replace(",", ""));
                 modelo.setPrimaTotal(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+               }
+
+               if(newcontenido.toString().split("\n")[i].contains("PLAN DE SEGURO:") ){
+                 modelo.setPlan((newcontenido.toString().split("\n")[i].split("PLAN DE SEGURO:")[1]
+                 +" " + newcontenido.toString().split("\n")[i+1]).replace("###", "")
+                 );
                }
               
             }
