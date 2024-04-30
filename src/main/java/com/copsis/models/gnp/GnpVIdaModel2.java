@@ -769,6 +769,36 @@ public class GnpVIdaModel2 {
              modelo.setVigenciaDe(modelo.getFechaEmision());
 			 modelo.setVigenciaA(fn.calcvigenciaA(modelo.getVigenciaDe(), 12));
 			}
+			if(!modelo.getAsegurados().isEmpty()){
+				List<EstructuraAseguradosModel> asegurados = new ArrayList<>();
+				for (int i = 0; i < modelo.getAsegurados().size(); i++) {
+					EstructuraAseguradosModel asegurado = new EstructuraAseguradosModel();
+					asegurado.setNombre(modelo.getAsegurados().get(i).getNombre());					
+					asegurado.setNacimiento(modelo.getAsegurados().get(i).getNacimiento());
+					asegurado.setAntiguedad(modelo.getAsegurados().get(i).getAntiguedad());
+					asegurado.setSexo(modelo.getAsegurados().get(i).getSexo());
+					if(i == 0  && modelo.getAsegurados().get(i).getParentesco() == 0){
+						asegurado.setParentesco(1);
+					}else{
+						if(modelo.getAsegurados().get(i).getParentesco() == 0){
+							asegurado.setParentesco(4);	
+						}else{
+							asegurado.setParentesco(modelo.getAsegurados().get(i).getParentesco());	
+						}
+						
+					}
+					
+					asegurado.setFechaAlta(modelo.getAsegurados().get(i).getFechaAlta());
+					asegurado.setEdad(modelo.getAsegurados().get(i).getEdad());
+					asegurado.setPrimaneta(modelo.getAsegurados().get(i).getPrimaneta());
+					asegurado.setSa(modelo.getAsegurados().get(i).getSa());
+					asegurado.setCobertura(modelo.getAsegurados().get(i).getCobertura());
+					asegurado.setSubgrupo(modelo.getAsegurados().get(i).getSubgrupo());
+					asegurado.setCategoria(modelo.getAsegurados().get(i).getCategoria());
+					asegurados.add(asegurado);
+				}
+				modelo.setAsegurados(asegurados);
+			}
 
 			return modelo;
 		} catch (Exception ex) {
