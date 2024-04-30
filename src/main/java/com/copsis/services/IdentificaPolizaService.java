@@ -471,13 +471,16 @@ public class IdentificaPolizaService {
                }
 			
                //ENTRADA PARA Aguila
-               if(!encontro && ( contenido.contains("Aguila Compañía de Seguros") || 
-			   contenido.contains("Águila, Compañía de Seguros, S.A. de C.V.")) || contenido.contains("El Águila")) {
-			
-            	   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
+               if(!encontro && (( contenido.contains("Aguila Compañía de Seguros") || 
+			   contenido.contains("Águila, Compañía de Seguros, S.A. de C.V.")) || contenido.contains("El Águila") ) && !contenido.contains("www.greatamerican.com.mx")){
+				  
+				   AguilaModel datosAguila = new AguilaModel(pdfStripper, pdDoc, contenido);
                    modelo = datosAguila.procesar();
-				   encontro = true;  
-               }
+				   encontro = true; 
+				   }
+			
+            	    
+               
      
                //ENTRADA PARA Latinoamericana
 
