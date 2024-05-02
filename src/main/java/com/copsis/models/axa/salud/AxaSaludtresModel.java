@@ -2,8 +2,6 @@ package com.copsis.models.axa.salud;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.copsis.constants.ConstantsValue;
@@ -63,8 +61,8 @@ public class AxaSaludtresModel {
                 }
                
                 if (newcontenido.toString().split("\n")[i].contains("R.F.C:")
-                        && newcontenido.toString().split("\n")[i].contains("Teléfono:")) {
-                    modelo.setRfc((newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split("Teléfono")[0]
+                        && newcontenido.toString().split("\n")[i].contains(ConstantsValue.TELEFONO)) {
+                    modelo.setRfc((newcontenido.toString().split("\n")[i].split("R.F.C:")[1].split(ConstantsValue.TELEFONO)[0]
                             .replace("###", "")).replace("\u00A0", "").trim());
                            
                 }
@@ -80,9 +78,10 @@ public class AxaSaludtresModel {
             }
             inicio = contenido.indexOf("Condiciones Contratadas");
             fin = contenido.indexOf("Coberturas-Servicios ");
+            boolean coaseguro =true;
             if (inicio > 0 && fin > 0 && inicio < fin) {
                 newcontenido = new StringBuilder();
-                newcontenido.append(fn.extracted(inicio, fin, contenido));
+                newcontenido.append(fn.extracted(inicio, fin+100, contenido));
                 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
                     if (newcontenido.toString().split("\n")[i].contains("SumaAsegurada")) {
                         modelo.setSa(newcontenido.toString().split("\n")[i].split("SumaAsegurada")[1].replace("###", "")
@@ -90,13 +89,21 @@ public class AxaSaludtresModel {
                     }
                     if (newcontenido.toString().split("\n")[i].contains(ConstantsValue.DEDUCIBLE)) {
                         modelo.setDeducible(newcontenido.toString().split("\n")[i].split(ConstantsValue.DEDUCIBLE)[1]
-                                .replace("###", "").replace("\r", ""));
+                                .replace("###", "").replace("\r", "").trim());
                     }
-                    if (newcontenido.toString().split("\n")[i].contains("Coaseguro")) {
+                    if (coaseguro &&  newcontenido.toString().split("\n")[i].contains(ConstantsValue.COASASEGURO)) {
                         modelo.setCoaseguro(
-                                newcontenido.toString().split("\n")[i].split("Coaseguro")[1].replace("###", "")
+                                newcontenido.toString().split("\n")[i].split(ConstantsValue.COASASEGURO)[1].replace("###", "")
                                         .replace("\r", ""));
+                            coaseguro=false;            
                     }
+                    if (newcontenido.toString().split("\n")[i].contains("Tope de Coaseguro")) {                        
+                        modelo.setCoaseguroTope(
+                                (newcontenido.toString().split("\n")[i].split(ConstantsValue.COASASEGURO)[1].replace("###", "")
+                                        .replace("\r", "")).trim());
+                    }
+
+                   
                 }
             }
 
@@ -272,12 +279,22 @@ public class AxaSaludtresModel {
                         .replace("###D ###e Acuerdo a Condiciones", "###De Acuerdo a Condiciones")
                         .replace("M ###edicamentos fuera del hospital B ###ásica", "Medicamentos fuera del hospital###Básica")
                         .replace("C ###onversión Garantizada B ###ásica", "Conversión Garantizada Básica")
+                        .replace("P ###rotección Dental", "Protección Dental")
+                        .replace("C ###obertura Nacional", "Cobertura Nacional")
+                        .replace("###C ###osto Preferencial ", "###Costo Preferencial")
+                        .replace("Tu Médico 24 Hrs N-A", "Tu Médico 24 Hrs###N-A")
+                        .replace("Beneficio de Atn Médica N-A ", "Beneficio de Atn Médica###N-A")
+                        .replace("D ###educible Cero por Accidente N ###o Aplica", 
+                        "Deducible Cero por Accidente###No Aplica")
+                        .replace("Complicaciones de GMM no cubiertos D ###e acuerdo", "Complicaciones de GMM no cubiertos###De acuerdo")
+                        .replace("###N ###-A", "###N-A")
                         .replace("### ###","###"));
                 
 
                    modelo.setMoneda(1);
 
                 for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {
+                   
                     EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                     if (!newcontenido.toString().split("\n")[i].contains("Coberturas-Servicios")
                             && !newcontenido.toString().split("\n")[i].contains("Tope de Coaseguro")
@@ -323,7 +340,7 @@ public class AxaSaludtresModel {
             modelo.setError(
 
                     AxaSaludtresModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
-            ex.printStackTrace();
+        
             return modelo;
         }
     }
