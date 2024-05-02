@@ -153,17 +153,16 @@ public class GnpDiversosCModelo {
 					inicio = contenido.indexOf("SECCIONES###CONTRATADAS");
 					fin = contenido.indexOf("Este documento no acredita");
 				}
+			
+				inicio = inicio == -1 ? contenido.indexOf("RESUMEN###DE###SECCIONES###CONTRATADAS"):inicio;
+				if(inicio >  fin){
+					fin =contenido.indexOf("ESPECIFICACIÓN APLICABLE A LA VERSIÓN 0 DE LA PRESENTE");
+				}
 				
-				if(fin == -1) {
-					fin = contenido.indexOf("Fecha convencional");
-				}
-				if(fin == -1) {
-					fin = contenido.indexOf("Fecha retroactiva");
-				}
-				if(fin == -1) {
-					fin = contenido.indexOf("4-5");
-				}
-
+				fin = fin == -1 ? contenido.indexOf("Fecha retroactiva"):fin;
+				fin = fin == -1 ? contenido.indexOf("4-5"):fin;
+				
+			
 
 				newcontenido = new StringBuilder();
 				newcontenido.append(fn.extracted(inicio, fin, contenido));

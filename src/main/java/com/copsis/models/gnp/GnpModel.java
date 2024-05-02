@@ -103,8 +103,11 @@ public class GnpModel {
 							).procesar();
 
 				}else {
-					modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
-							fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
+					if(!contenido.contains("Todo Riesgo por Causas Externas")){
+						modelo = new GnpDiversosModel(fn.caratula(1, 8, stripper, doc),
+						fn.textoBusqueda(stripper, doc, "Características del Riesgo", false), 2).procesar();
+					}
+					
 
 				}
 				
@@ -117,8 +120,9 @@ public class GnpModel {
 			|| modelo.getTipo() == 0 && contenido.contains("ESPECIFICACIÓN DEL GIRO")) {	
 				modelo = new GnpDiversosCModelo(fn.caratula(1, 12, stripper, doc)).procesar();			
 			}
+			
 			if(fn.caratula(3,3, stripper, doc).contains("CARACTERÍSTICAS###DE###LA###MASCOTA") || contenido.contains("Detectores de humo")	){
-				if( contenido.contains("Detectores de humo")){
+				if( contenido.contains("Detectores de humo") ||contenido.contains("Todo Riesgo por Causas Externas") ){
 					modelo = new GnpDiversosDModelo().procesar(fn.caratula(1,3, stripper, doc));
 				}else{
 					modelo = new GnpDiversosDModelo().procesar(fn.caratula(3,4, stripper, doc));
