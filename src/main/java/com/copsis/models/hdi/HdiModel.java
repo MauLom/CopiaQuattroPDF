@@ -35,14 +35,17 @@ public class HdiModel {
 			if(contenido.contains("Giro:")) {
 			    tipo=4;
 			}	
+	
 			switch (tipo) {
 			case 1:				
 				if(contenido.contains("AUTOS TURISTAS") || contenido.contains("VEHICULOS RESIDENTES GLM PLUS")
 				|| contenido.contains("VEHÍCULOS RESIDENTES GLM PLUS")
-				|| contenido.contains("VEHÍCULOS RESIDENTES HDI Autos y Pick Up")) {				
+				|| contenido.contains("VEHÍCULOS RESIDENTES HDI Autos y Pick Up")
+				|| contenido.contains("Ramo: VEHÍCULOS RESIDENTES CAMIONES")) {				
 				   modelo = new HdiAutosBModel().procesar(fn.caratula(1, 3, stripper, doc));
 
-				} else if(fn.caratula(1, 2, stripper, doc).contains("AUTO TOURIST INSURANCE POLICY")){
+				}
+				 else if(fn.caratula(1, 2, stripper, doc).contains("AUTO TOURIST INSURANCE POLICY")){
                       modelo = new HdiAutosUsaModel().procesar(fn.caratula(1, 1, stripper, doc));
 				}
 				else {
