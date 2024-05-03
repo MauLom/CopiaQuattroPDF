@@ -249,6 +249,18 @@ public class inbursaDiversosModel {
 									.formatDateMonthCadena(newcontenido.toString().split("\n")[i + 1].split("###")[1]));
 						}
 					}
+					if (modelo.getVigenciaDe().length() == 0 
+					&& newcontenido.toString().split("\n")[i].contains(ConstantsValue.DESDE)){
+						List<String> valores = fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].toUpperCase());
+						
+						modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
+						modelo.setFechaEmision(modelo.getVigenciaDe());
+					}
+
+					if (modelo.getVigenciaA().length() == 0 && newcontenido.toString().split("\n")[i].contains("Hasta")){
+						List<String> valoresA = fn.obtenVigePoliza2(newcontenido.toString().split("\n")[i].toUpperCase());											
+						modelo.setVigenciaA(fn.formatDateMonthCadena(valoresA.get(0)));
+					}
 
 					if (newcontenido.toString().split("\n")[i].contains("PRODUCTO")
 							&& newcontenido.toString().split("\n")[i].contains("TIPO")) {
@@ -386,7 +398,7 @@ public class inbursaDiversosModel {
 		
 
 			return modelo;
-		} catch (Exception ex) {
+		} catch (Exception ex) {			
 			modelo.setError(inbursaDiversosModel.this.getClass().getTypeName() + " - catch:" + ex.getMessage() + " | "
 					+ ex.getCause());
 			return modelo;
@@ -452,6 +464,10 @@ public class inbursaDiversosModel {
 			 aux = new StringBuilder();		
 			indexInicio = contenido.lastIndexOf("Término máximo");
 			indexFin = contenido.indexOf("Página 3 de 5");
+		
+			indexFin = indexFin == -1 ?  contenido.indexOf("Página 3 de 6"): indexFin;
+			
+			if(indexInicio > -1 && indexFin > -1){			
 			aux.append(contenido.substring(indexInicio,indexFin).replace("\r",""));
 			for(int i =0; i < aux.toString().split("\n").length;i++){
 					 if(aux.toString().split("\n")[i].contains("Término máximo")){
@@ -462,7 +478,8 @@ public class inbursaDiversosModel {
 						}
                                            
 					 }
-			}
+			 }
+		  }
 		}
 	}
 
