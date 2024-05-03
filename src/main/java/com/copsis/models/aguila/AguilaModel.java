@@ -24,15 +24,15 @@ public class AguilaModel {
 	public EstructuraJsonModel procesar() {
 		try {
         
-		
-		if(fn.tipoPoliza(contenido) == 0 || contenido.contains("Incendio de los Contenidos")) {
+		if(fn.tipoPoliza(contenido) == 0 || contenido.contains("Incendio de los Contenidos") ||fn.tipoPoliza(contenido)  == 4) {
 			
 			modelo  = new AguilaDiversosModel().procesar(fn.caratula(1, 3, stripper, doc));
 		}
-			if(fn.tipoPoliza(contenido) == 1) {
-				modelo  = new AguilaAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();	
-			}
-			
+		
+		if(fn.tipoPoliza(contenido) == 1) {
+			modelo  = new AguilaAutosModel(fn.caratula(1, 3, stripper, doc)).procesar();	
+		}
+		
 			return modelo;
 		} catch (Exception ex) {
 			modelo.setError(

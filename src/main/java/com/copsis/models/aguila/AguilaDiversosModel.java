@@ -20,8 +20,8 @@ public class AguilaDiversosModel {
         StringBuilder newcontenido = new StringBuilder();
         contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales());
         try {
-            modelo.setTipo(1);
-            modelo.setCia(33);
+            modelo.setTipo(7);
+            modelo.setCia(13);
 
             inicio = contenido.indexOf("Domicilio del Asegurado");
             fin = contenido.indexOf(ConstantsValue.COBERTURAS_AMPARADAS2);
@@ -48,18 +48,31 @@ public class AguilaDiversosModel {
                             + newcontenido.toString().split("\n")[i + 1].split("###")[1].trim());
                     modelo.setRfc(newcontenido.toString().split("\n")[i + 1].split("R.F.C.")[1].split("###")[0].trim());
                 }
-
+                
                 if (newcontenido.toString().split("\n")[i].contains("Vigencia") &&
                         newcontenido.toString().split("\n")[i].contains("Forma de pago") &&
                         newcontenido.toString().split("\n")[i].contains("Moneda")) {
                     List<String> valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 1]);
+                    if(valores.isEmpty()){
+                        valores = fn.obtenVigePoliza(newcontenido.toString().split("\n")[i + 2]);
+                    }
+         
                     if (valores.size() > 1) {
                         modelo.setVigenciaDe(fn.formatDateMonthCadena(valores.get(0)));
                         modelo.setVigenciaA(fn.formatDateMonthCadena(valores.get(1)));
+                        modelo.setFechaEmision(modelo.getVigenciaDe());
                     }
-                    modelo.setFormaPago(4);
 
-                    modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i + 1]));
+                    modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i + 2]));
+                    if(modelo.getFormaPago() == 0){
+                      modelo.setFormaPago(4);
+                    }
+
+                
+                    if(modelo.getMoneda() == 0){
+                        modelo.setMoneda(fn.buscaMonedaEnTexto(newcontenido.toString().split("\n")[i + 2]));
+                    }
+
                 }
             }
 
