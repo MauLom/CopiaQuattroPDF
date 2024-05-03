@@ -24,8 +24,6 @@ public class AguilaModel {
 	public EstructuraJsonModel procesar() {
 		try {
         
-		System.out.println(fn.tipoPoliza(contenido));
-		System.out.println();
 		if(fn.tipoPoliza(contenido) == 0 || contenido.contains("Incendio de los Contenidos") ||fn.tipoPoliza(contenido)  == 4) {
 			
 			modelo  = new AguilaDiversosModel().procesar(fn.caratula(1, 3, stripper, doc));
