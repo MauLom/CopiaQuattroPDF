@@ -68,7 +68,8 @@ public class MapfreDiversosModel {
 				.replace("FORMA###DE###PAGO", "FORMA DE PAGO").replace("óliza número ###:", "óliza número:")
 				.replace("Póliza Número :", "Póliza Número:")
 				.replace("Prima Neta:", "Prima neta:")
-				.replace("D O LARES U.S.A.", "DOLARES U.S.A.");
+				.replace("D O LARES U.S.A.", "DOLARES U.S.A.")
+				.replace("BIENES###Y###RIESGOS###AMPARADOS", "BIENES Y RIESGOS AMPARADOS");
 
 		try {
 
@@ -412,6 +413,7 @@ public class MapfreDiversosModel {
 			if(inicio == -1) {
 			    inicio = inicontenido.indexOf("AMPARADAS");
 			}
+			
 			if(fin == -1) {
 			    fin = inicontenido.indexOf("VALOR PARA SEGURO");
 			}
@@ -420,7 +422,7 @@ public class MapfreDiversosModel {
 			    fin = inicontenido.indexOf("Las condiciones generales");
 			}
 			
-		
+	
 
 			List<EstructuraCoberturasModel> coberturas = new ArrayList<>();
 			if (inicio > -1 && fin > inicio) {
@@ -468,13 +470,14 @@ public class MapfreDiversosModel {
 				inicio = inicontenido.indexOf("SECCIÓN   BIENES Y RIESGOS");
 				fin = inicontenido.indexOf("ABREVIATURAS");
 
-				if (inicio == -1) {
-					inicio = inicontenido.indexOf("BIENES Y RIESGOS AMPARADOS");
+				if(inicio == -1) {
+					inicio = inicontenido.indexOf("AMPARADOS###SUMA###ASEGURADA");
 				}
+				
 				if (fin == -1) {
 					fin = inicontenido.indexOf("RENOVACION AUTOMATICA");
 				}
-
+            
 
 				if (inicio > -1 && fin > inicio) {
 					newcontenido = inicontenido.substring(inicio, fin).replace("@@@", "").trim();
@@ -490,6 +493,8 @@ public class MapfreDiversosModel {
 							EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
 							x = fn.gatos(x.replaceAll("  +", "###").trim());
 							x = x.replace("###$###", "###$ ");
+							x= x.replace("### ###","###");
+						
 							switch (x.split("###").length) {
 							case 2:
 								switch (x.split("###")[0].trim()) {
@@ -511,7 +516,7 @@ public class MapfreDiversosModel {
 									seccion = x.split("###")[0].trim();
 									break;
 								default:
-
+								
 									cobertura.setNombre(x.split("###")[0].trim());
 									cobertura.setSeccion(seccion);
 									cobertura.setSa(x.split("###")[1].trim());
@@ -536,18 +541,21 @@ public class MapfreDiversosModel {
 								case "XIII":
 								case "XIV":
 								case "XV":
-
+							
 									seccion = x.split("###")[0].trim();
 									cobertura.setSeccion(seccion);
 									cobertura.setNombre(x.split("###")[1].trim());
 									cobertura.setSa(x.split("###")[2].trim());
 									coberturas.add(cobertura);
 									break;
-								default:
+								default:						
+								  if(!x.contains("SUMA###ASEGURADA")){
 									cobertura.setSeccion(seccion);
 									cobertura.setNombre(x.split("###")[1].trim());
 									cobertura.setSa(x.split("###")[2].trim());
 									coberturas.add(cobertura);
+								  }
+									
 									break;
 								}
 								break;
