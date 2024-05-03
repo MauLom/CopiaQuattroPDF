@@ -113,7 +113,14 @@ public class BanorteAutosBModel {
                 List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
                 modelo.setDerecho(fn.castBigDecimal(fn.castDouble(valores.get(0))));
               }
+           
               if(newcontenido.toString().split("\n")[i].contains("Forma de pago:") && newcontenido.toString().split("\n")[i].contains("Impuesto")){             
+                modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
+                List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
+                modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
+               
+              }
+              if(newcontenido.toString().split("\n")[i].contains("Forma de pago:") && newcontenido.toString().split("\n")[i].contains("I.V.A:")){             
                 modelo.setFormaPago(fn.formaPagoSring(newcontenido.toString().split("\n")[i]));
                 List<String> valores = fn.obtenerListNumeros(newcontenido.toString().split("\n")[i]);
                 modelo.setIva(fn.castBigDecimal(fn.castDouble(valores.get(0))));
@@ -163,7 +170,7 @@ public class BanorteAutosBModel {
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {  
                 EstructuraCoberturasModel cobertura = new EstructuraCoberturasModel();
                 if(newcontenido.toString().split("\n")[i].contains(ConstantsValue.PAQUETE)){
-                 modelo.setPlan(newcontenido.toString().split("\n")[i].split(ConstantsValue.PAQUETE)[1].replace("###", "").trim());
+                 modelo.setPlan(newcontenido.toString().split("\n")[i].split(ConstantsValue.PAQUETE)[1].replace("###", "").replace(":", "").trim());
                 }
                 if(!newcontenido.toString().split("\n")[i].contains("PAQUETE:")
                 && !newcontenido.toString().split("\n")[i].contains("COBERTURAS")
