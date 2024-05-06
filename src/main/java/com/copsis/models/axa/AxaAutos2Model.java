@@ -41,6 +41,9 @@ public class AxaAutos2Model {
                      modelo.setPlan(newcontenido.split("\n")[i].split("###")[1].split("-")[1]);		
                      
 					}
+					if(newcontenido.split("\n")[i].contains("-") && newcontenido.split("\n")[i].split("###")[2].contains("-")) {
+						modelo.setPlan(newcontenido.split("\n")[i].split("###")[2].split("-")[1]);	
+					}
 					if(modelo.getPlan().length()  == 0 && newcontenido.split("\n")[i].length() == 2) {
 						
 							modelo.setPlan(newcontenido.split("\n")[i].split("###")[1]);
