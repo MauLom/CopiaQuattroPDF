@@ -31,13 +31,15 @@ public class HdiAutosBModel {
 			modelo.setCia(14);
 			inicio = contenido.indexOf("Ramo:");
 			fin = contenido.indexOf("Descripción###Límite de Responsabilidad");
+			
 	
 			newcontenido.append( fn.extracted(inicio, fin, contenido));
 			
 			
 			for (int i = 0; i < newcontenido.toString().split("\n").length; i++) {		
+		
 				if(newcontenido.toString().split("\n")[i].contains("responsabilidad máxima.")){
-				
+					
 				if(newcontenido.toString().split("\n")[i+1].contains("-CONDUCTOR:") ){
 					modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].split("-CONDUCTOR:")[0].trim().replace("###", " "));
 				}else{
@@ -64,6 +66,20 @@ public class HdiAutosBModel {
 						modelo.setCp(fn.obtenerListNumeros2(modelo.getCteDireccion()).get(5));
 					}
 				 }
+
+				 if(modelo.getPoliza().isEmpty() && newcontenido.toString().split("\n")[i].contains("Cotización:")
+				 && newcontenido.toString().split("\n")[i].contains("Vigencia")){
+                  modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Cotización:")[1]
+				  .split("Vigencia")[0].replace("###", "").trim());
+				 }
+				 if(modelo.getCteNombre().isEmpty() && newcontenido.toString().split("\n")[i].contains("Ramo:") ){
+                   modelo.setCteNombre(newcontenido.toString().split("\n")[i+1].replace("###", ""));
+				 }
+
+				 if(modelo.getCteDireccion().isEmpty() && newcontenido.toString().split("\n")[i].contains("C.P") ){
+                    modelo.setCteDireccion(newcontenido.toString().split("\n")[i].split("C.P")[0].trim());
+				 }
+
 				if(newcontenido.toString().split("\n")[i].contains("Póliza:") && newcontenido.toString().split("\n")[i].contains("Licencia:") && newcontenido.toString().split("\n")[i].contains("expedición de licencia")) {					
 					modelo.setPoliza(newcontenido.toString().split("\n")[i].split("Póliza:")[1].split("Licencia:")[0].replace("###", "").trim());
 				}
@@ -195,6 +211,7 @@ public class HdiAutosBModel {
 			if(fin == -1){
 				fin = contenido.indexOf("Art.25° de la Ley");
 			}
+			fin = fin == -1 ?  contenido.indexOf("Detalle de Cuotas") :fin;
 
 
 		
