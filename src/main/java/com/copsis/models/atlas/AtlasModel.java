@@ -39,7 +39,10 @@ public class AtlasModel {
 			case 2:// Salud
 			   if(fn.caratula(1, 3, stripper, doc).contains("Características###de###la###Póliza")){
 				modelo = new AtlasSaludBModel().procesar(fn.caratula(1, 3, stripper, doc));
-			   }else{
+			   }else if(fn.caratula(4, 5, stripper, doc).contains("Características###de###la###Póliza")){
+				modelo = new AtlasSaludBModel().procesar(fn.caratula(4, 4, stripper, doc));
+			   } 
+			   else{
 				modelo = new AtlasSaludModel(fn.caratula(1, 3, stripper, doc)).procesar();
 			   }
 				
