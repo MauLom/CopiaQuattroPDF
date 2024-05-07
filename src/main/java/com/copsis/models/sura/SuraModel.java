@@ -31,6 +31,9 @@ public class SuraModel {
 			if (contenido.contains("RECORDATORIO DE PAGO")) {
 				contenido = fn.caratula(2, 3, stripper, doc);
 			}
+			if (contenido.contains("Depto. Seguro de Personas")) {
+				contenido = fn.caratula(2, 3, stripper, doc);
+			}
 
 			int tipo = fn.tipoPoliza(contenido);
 			
@@ -39,6 +42,7 @@ public class SuraModel {
 			tipo=   getTipo(fn.caratula(2, 2, stripper, doc), tipo);
 			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);		
 			tipo = getTipou(tipo);
+			
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
 				case 1:// Autos
@@ -70,8 +74,8 @@ public class SuraModel {
 					if (contenido.contains("Hogar Máster Total") || contenido.contains(ConstantsValue.MUL_EMPRESARIA_DESCU)) {
 						modelo = new SuraDiversosModel(fn.caratula(1, 3, stripper, doc)).procesar();
 					}
-					 else if (contenido.contains("DAÑOS RESPONSABILIDAD")) {
-						modelo = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
+					 else if (contenido.contains("DAÑOS RESPONSABILIDAD") ) {
+						modelo = new SuraDiversos2Model().procesar(fn.caratula(2, 3, stripper, doc));
 					}
 					else if (fn.caratula(1, 1, stripper, doc).contains("Respaldo por Daños a Terceros")) {
 						modelo = new SuraDiversos3Model().procesar(fn.caratula(1, 2, stripper, doc));
@@ -115,8 +119,13 @@ public class SuraModel {
 	}
 
 	private int getTipoInic(int tipo) {
+		
+		
 		if (tipo == 5 && contenido.contains("Grupo Experiencia Global Sin Dividendos")) {
 			tipo = 5;
+		}
+		if(tipo == 0  && contenido.contains("Seguro Múltiple Familiar Todo Riesgo Hogar")){
+			tipo = 2;
 		}
 
 		if (tipo == 1 && contenido.contains("MEDIC ")) {
@@ -148,7 +157,7 @@ public class SuraModel {
 
 	
 		String[] searchTerms = {"Hogar Total","Hogar Máster Total",ConstantsValue.MUL_EMPRESARIA_DESCU,ConstantsValue.MUL_EMPRESARIA_DESCU
-	              ,"Seguro de Accidentes  Personales Colectivo","Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros","PÓLIZA DE SEGUROS DE DAÑOS RESPONSABILIDAD"
+	              ,"Seguro Múltiple Familiar Todo Riesgo Hogar","Respaldo por Daños a Terceros","PÓLIZA DE SEGUROS DE DAÑOS RESPONSABILIDAD"
 				,"FENOMENOS HIDROMETEOROLOGICOS"};
 	       int inicio=-1;
 	
