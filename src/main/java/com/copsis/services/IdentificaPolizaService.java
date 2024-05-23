@@ -342,10 +342,10 @@ public class IdentificaPolizaService {
 
 			
 			// ENTRADA PARA SURA
-			if (!encontro && contenido.contains("Seguros SURA S.A.")
+			if (!encontro && contenido.contains("Seguros SURA, S.A. de C.V.")
 					|| contenido.contains("Royal & SunAlliance Seguros")
 					|| contenido.contains("Seguros SURA S.A. de C.V.")
-					|| rangoSimple(2, 3, pdfStripper, pdDoc).contains("Seguros SURA S.A. de C.V.")
+					|| rangoSimple(1, 10, pdfStripper, pdDoc).contains("Seguros SURA S.A. de C.V.")
 					|| contenido.contains("Seguros SURA")
 					|| contenido.contains("@@@Seguros SURA S.A. de C.V.") || contenido.contains("SURA S.A.")) {
 				SuraModel datosSura = new SuraModel(pdfStripper, pdDoc, contenido);
@@ -353,6 +353,7 @@ public class IdentificaPolizaService {
 				modelo = datosSura.procesar();
 				encontro = true;
 			}
+			
 
 			// ENTRADA PARA PRIMERO SEGUROS
 			if (!encontro && contenido.contains("PRIMERO SEGUROS S.A. de C.V.") || contenido.contains("PRIMERO SEGUROS S.A. de C.V.")
@@ -566,7 +567,8 @@ public class IdentificaPolizaService {
 						+ "No se logró identificar el PDF.");
 			}
 
-		
+		  
+
 			pdDoc.close();
 
 			documentToBeParsed.close();

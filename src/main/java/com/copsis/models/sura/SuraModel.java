@@ -42,6 +42,8 @@ public class SuraModel {
 			tipo=   getTipo(fn.caratula(2, 2, stripper, doc), tipo);
 			tipo=   getTipo(fn.caratula(3, 3, stripper, doc), tipo);		
 			tipo = getTipou(tipo);
+
+		
 			
 
 			switch ((tipo == 0 ? fn.tipoPoliza(contenido) : tipo)) {
@@ -96,9 +98,11 @@ public class SuraModel {
 						modelo = new SuraDiversos2Model().procesar(fn.caratula(3, 3, stripper, doc));
 					}
 					 else {
+						
 						modelo = new SuraDiversosModel(fn.caratula(2, 3, stripper, doc)).procesar();
 					}
-
+					
+ 
 					break;
 
 				case 5:
