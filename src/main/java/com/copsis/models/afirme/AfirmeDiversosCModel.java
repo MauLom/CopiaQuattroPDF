@@ -126,7 +126,7 @@ public class AfirmeDiversosCModel {
                 recibo.setPrimaneta(fn.castBigDecimal(modelo.getPrimaneta(), 2));
                 recibo.setDerecho(fn.castBigDecimal(modelo.getDerecho(), 2));
                 recibo.setRecargo(fn.castBigDecimal(modelo.getRecargo(), 2));
-                recibo.setIva(fn.castBigDecimal(modelo.getDerecho(), 2));
+                recibo.setIva(fn.castBigDecimal(modelo.getIva(), 2));
 
                 recibo.setPrimaTotal(fn.castBigDecimal(modelo.getPrimaTotal(), 2));
                 recibo.setAjusteUno(fn.castBigDecimal(modelo.getAjusteUno(), 2));
