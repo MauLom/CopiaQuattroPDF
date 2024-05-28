@@ -37,6 +37,9 @@ public class PotosiModel {
 			if(tipo == 1 && fn.caratula(1, 2, stripper, doc).contains("RANSPORTE  DE CARGA")){
 				tipo = 4;
 			}
+			if(tipo == 4 && fn.caratula(0, 1, stripper, doc).contains("SEGUROS DE RESPONSABILIDAD CIVIL GENERAL")){
+				tipo = 7;
+			}
 		
 		      switch (tipo) {
 			case 1:
@@ -61,6 +64,8 @@ public class PotosiModel {
 			case 5:
 				modelo = new PotosiVidaModel().procesar(fn.caratula(1, 3, stripper, doc));
 				break;
+			case 7:
+				modelo = new PotosiDiversosDModel().procesar(fn.caratula(0, 1, stripper, doc));	
 			default:
 				break;
 			}
