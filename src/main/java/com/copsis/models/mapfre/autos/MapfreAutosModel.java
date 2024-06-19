@@ -49,6 +49,7 @@ public class MapfreAutosModel {
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(22);
+			System.out.println("cntenido:" + contenido);
 
 			// Poliza-Endoso
 			inicio = contenido.indexOf("PÓLIZA-ENDOSO");
@@ -319,6 +320,16 @@ public class MapfreAutosModel {
 						modelo.setAgente(txt.split("###")[2].trim());
 						modelo.setCveAgente(txt.split("###")[1].trim());
 					}
+					// if (contenido.indexOf("FECHA DE EMISIÓN:") > 0) {
+					// 	// fecha_de_emision
+					// 	inicio = contenido.indexOf("FECHA DE EMISIÓN:");
+					// 	if (inicio > -1) {
+					// 		// Ajustar el índice según la longitud de la cadena y el formato esperado
+					// 		txt = fn.gatos(contenido.substring(inicio + 18, inicio + 38).split("\r\n")[0].split(" ")[0]);
+					// 		modelo.setFechaEmision(fn.formatDate(txt, "dd/MM/yyyy"));
+					// 	}
+					// }
+					
 				}
 
 			} else {// aplica para version2 pdf
@@ -540,6 +551,30 @@ public class MapfreAutosModel {
 
 			// fecha_emision
 			modelo.setFechaEmision(modelo.getVigenciaDe());
+			// fecha_emision
+// Limpiar el contenido de caracteres especiales y espacios adicionales
+String contenidoLimpio = contenido.replaceAll("[@#]", "").replaceAll(" +", " ");
+
+// Verificar la existencia de la cadena "FECHA DE EMISIÓN"
+if (contenidoLimpio.indexOf("FECHA DE EMISIÓN") > 0) {
+    int inicio = contenidoLimpio.indexOf("FECHA DE EMISIÓN");
+    System.out.println("Posición de 'FECHA DE EMISIÓN': " + inicio);
+    if (inicio > -1) {
+        // Ajustar el índice según la longitud de la cadena y el formato esperado
+        String txt = contenidoLimpio.substring(inicio + 16, inicio + 26).trim();
+        System.out.println("Texto extraído: " + txt);
+        txt = fn.gatos(txt);
+        System.out.println("Texto procesado por fn.gatos: " + txt);
+        modelo.setFechaEmision(fn.formatDate(txt, "dd-MM-yyyy"));
+        System.out.println("Fecha de emisión formateada: " + modelo.getFechaEmision());
+    }
+} else {
+    System.out.println("La cadena 'FECHA DE EMISIÓN' no se encontró en el contenido limpio.");
+}
+
+
+
+
 			// COBERTURAS
 
 			inicio = contenido.indexOf("###DEDUCIBLE");
