@@ -24,7 +24,7 @@ public class MapfreAutosModel {
 	private int inicio = 0;
 	private int fin = 0;
 	private int index;
-	private BigDecimal restoPrimaTotal =  BigDecimal.ZERO;
+	private BigDecimal restoPrimaTotal = BigDecimal.ZERO;
 	private BigDecimal restoDerecho = BigDecimal.ZERO;
 	private BigDecimal restoIva = BigDecimal.ZERO;
 	private BigDecimal restoRecargo = BigDecimal.ZERO;
@@ -41,15 +41,16 @@ public class MapfreAutosModel {
 
 	public EstructuraJsonModel procesar() {
 		inicontenido = fn.fixContenido(contenido);
-		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C.:", "R.F.C:").replace("R.F.C:###", "R.F.C:")
-		        .replace("###HASTA###LAS###12:00###HRS.###DEL:###", "@@@HASTA###LAS###12:00###HRS.###DEL:###");;
+		contenido = fn.remplazarMultiple(contenido, fn.remplazosGenerales()).replace("R.F.C.:", "R.F.C:")
+				.replace("R.F.C:###", "R.F.C:")
+				.replace("###HASTA###LAS###12:00###HRS.###DEL:###", "@@@HASTA###LAS###12:00###HRS.###DEL:###");
+		;
 		this.recibos = fn.remplazarMultiple(recibos, fn.remplazosGenerales());
 		try {
 			// tipo
 			modelo.setTipo(1);
 			// cia
 			modelo.setCia(22);
-			System.out.println("cntenido:" + contenido);
 
 			// Poliza-Endoso
 			inicio = contenido.indexOf("PÓLIZA-ENDOSO");
@@ -75,7 +76,7 @@ public class MapfreAutosModel {
 				}
 			}
 
-//            cte_nombre
+			// cte_nombre
 			inicio = contenido.indexOf("CONTRATANTE:");
 			fin = contenido.indexOf("DOMICILIO:");
 
@@ -108,7 +109,7 @@ public class MapfreAutosModel {
 					modelo.setCteNombre(newcontenido.replace("###", "").replace("#", "").trim());
 				}
 			}
-			
+
 			// cte_direccion
 			inicio = contenido.indexOf("DOMICILIO:");
 			fin = contenido.indexOf("FOLIO");
@@ -148,7 +149,7 @@ public class MapfreAutosModel {
 			inicio = contenido.indexOf("Prima total:");
 			if (inicio > -1) {
 				txt = contenido.substring(inicio + 12, inicio + 200).trim().split("\r\n")[0].replace("@@@", "").trim();
-				
+
 				if (txt.split("###").length == 6) {
 					modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[0])));
 					modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(txt.split("###")[2])));
@@ -159,9 +160,9 @@ public class MapfreAutosModel {
 				// rfc
 				inicio = contenido.indexOf("R.F.C:");
 				if (inicio > -1) {
-					modelo.setRfc(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].replace("###", "").replace("#", "").trim());
+					modelo.setRfc(contenido.substring(inicio + 7, inicio + 150).split("\r\n")[0].replace("###", "")
+							.replace("#", "").trim());
 				}
-
 
 				if (modelo.getCteNombre().length() == 0 && modelo.getRfc().length() == 0) {
 					inicio = contenido.indexOf("Contratante");
@@ -181,7 +182,7 @@ public class MapfreAutosModel {
 													.split(",")[0].trim());
 								}
 								modelo.setRfc(newcontenido.split("\n")[i].split("R.F.C:")[1].split("Sexo")[0]
-								        .replace("###", "").replace("#", "").trim());
+										.replace("###", "").replace("#", "").trim());
 							}
 
 						}
@@ -209,19 +210,18 @@ public class MapfreAutosModel {
 					}
 				}
 
-			} else {				
+			} else {
 				// rfc
 				if (contenido.indexOf("R.F.C:") > -1) {
 					inicio = contenido.indexOf("R.F.C:") + 6;
-					modelo.setRfc(contenido.substring(inicio, inicio + 14).trim().replace("-", "").replace("###", "").replace("#", ""));
-				} 
-     
-				
+					modelo.setRfc(contenido.substring(inicio, inicio + 14).trim().replace("-", "").replace("###", "")
+							.replace("#", ""));
+				}
 
 				// prima neta
 				inicio = contenido.indexOf("###PRIMA###NETA:###") + 19;
 				newcontenido = contenido.substring(inicio, inicio + 20).split("\r\n")[0];
-				if (fn.isNumeric(fn.cleanString( newcontenido))) {
+				if (fn.isNumeric(fn.cleanString(newcontenido))) {
 					modelo.setPrimaneta(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 				}
 
@@ -250,7 +250,8 @@ public class MapfreAutosModel {
 
 				if (inicio > -1) {
 					newcontenido = fn
-							.gatos(contenido.substring(inicio + 29, inicio + 150).split("\r\n")[0].split("PRIMA")[0]).trim();
+							.gatos(contenido.substring(inicio + 29, inicio + 150).split("\r\n")[0].split("PRIMA")[0])
+							.trim();
 					if (fn.isNumeric(newcontenido)) {
 						modelo.setRecargo(fn.castBigDecimal(fn.preparaPrimas(newcontenido)));
 					}
@@ -276,17 +277,17 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("@@@AGENTE:") + 11;
 				newcontenido = contenido.substring(inicio, inicio + 90).split("\r\n")[0];
 			}
-			if(newcontenido.contains(",")) {
-		
-				modelo.setAgente(newcontenido.split(",")[1].trim() +" " + newcontenido.split(",")[0].trim());	
-			}else {
+			if (newcontenido.contains(",")) {
+
+				modelo.setAgente(newcontenido.split(",")[1].trim() + " " + newcontenido.split(",")[0].trim());
+			} else {
 				modelo.setAgente(newcontenido.replace("###", "").replace("#", "").trim().trim());
 			}
-		
-			if(modelo.getCteNombre().length() > 0 && modelo.getCteNombre().contains(",")) {
-				modelo.setCteNombre((modelo.getCteNombre().split(",")[1] +" " + modelo.getCteNombre().split(",")[0]).replace(".", "").trim());
+
+			if (modelo.getCteNombre().length() > 0 && modelo.getCteNombre().contains(",")) {
+				modelo.setCteNombre((modelo.getCteNombre().split(",")[1] + " " + modelo.getCteNombre().split(",")[0])
+						.replace(".", "").trim());
 			}
-			
 
 			// cve_agente
 			int inicioagente = contenido.indexOf("CLAVE DE AGENTE: ");
@@ -310,7 +311,7 @@ public class MapfreAutosModel {
 				inicio = contenido.indexOf("ta las 12:00 hrs. de:");
 				if (inicio > -1) {
 					txt = fn.gatos(contenido.substring(inicio + 21, inicio + 150).split("\r\n")[0]);
-//					modelo.setVigenciaA(fn.formatDate(txt.substring(0, 10), "dd-MM-yy"));
+					// modelo.setVigenciaA(fn.formatDate(txt.substring(0, 10), "dd-MM-yy"));
 				}
 
 				inicio = contenido.indexOf("ta las 12:00 hrs. de:");
@@ -320,16 +321,6 @@ public class MapfreAutosModel {
 						modelo.setAgente(txt.split("###")[2].trim());
 						modelo.setCveAgente(txt.split("###")[1].trim());
 					}
-					// if (contenido.indexOf("FECHA DE EMISIÓN:") > 0) {
-					// 	// fecha_de_emision
-					// 	inicio = contenido.indexOf("FECHA DE EMISIÓN:");
-					// 	if (inicio > -1) {
-					// 		// Ajustar el índice según la longitud de la cadena y el formato esperado
-					// 		txt = fn.gatos(contenido.substring(inicio + 18, inicio + 38).split("\r\n")[0].split(" ")[0]);
-					// 		modelo.setFechaEmision(fn.formatDate(txt, "dd/MM/yyyy"));
-					// 	}
-					// }
-					
 				}
 
 			} else {// aplica para version2 pdf
@@ -338,17 +329,14 @@ public class MapfreAutosModel {
 				newcontenido = contenido.substring(inicio, inicio + 10);
 				modelo.setVigenciaDe(fn.formatDate(newcontenido, "dd-MM-yy"));
 
+				if (contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") > 0) {
 
-				
-			
-				if(contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") > 0) {
-				                      
-				inicio = contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") + 39;
-				newcontenido = contenido.substring(inicio, inicio + 10);
-			
-				if(newcontenido.contains("-")) {
-				    modelo.setVigenciaA(fn.formatDate(newcontenido, "dd-MM-yy"));
-				}
+					inicio = contenido.indexOf("@@@HASTA###LAS###12:00###HRS.###DEL:###") + 39;
+					newcontenido = contenido.substring(inicio, inicio + 10);
+
+					if (newcontenido.contains("-")) {
+						modelo.setVigenciaA(fn.formatDate(newcontenido, "dd-MM-yy"));
+					}
 				}
 			}
 
@@ -551,29 +539,19 @@ public class MapfreAutosModel {
 
 			// fecha_emision
 			modelo.setFechaEmision(modelo.getVigenciaDe());
+		
 			// fecha_emision
-// Limpiar el contenido de caracteres especiales y espacios adicionales
-String contenidoLimpio = contenido.replaceAll("[@#]", "").replaceAll(" +", " ");
+			String contenidoLimpio = contenido.replaceAll("[@#]", "").replaceAll(" +", " ");
 
-// Verificar la existencia de la cadena "FECHA DE EMISIÓN"
-if (contenidoLimpio.indexOf("FECHA DE EMISIÓN") > 0) {
-    int inicio = contenidoLimpio.indexOf("FECHA DE EMISIÓN");
-    System.out.println("Posición de 'FECHA DE EMISIÓN': " + inicio);
-    if (inicio > -1) {
-        // Ajustar el índice según la longitud de la cadena y el formato esperado
-        String txt = contenidoLimpio.substring(inicio + 16, inicio + 26).trim();
-        System.out.println("Texto extraído: " + txt);
-        txt = fn.gatos(txt);
-        System.out.println("Texto procesado por fn.gatos: " + txt);
-        modelo.setFechaEmision(fn.formatDate(txt, "dd-MM-yyyy"));
-        System.out.println("Fecha de emisión formateada: " + modelo.getFechaEmision());
-    }
-} else {
-    System.out.println("La cadena 'FECHA DE EMISIÓN' no se encontró en el contenido limpio.");
-}
-
-
-
+			if (contenidoLimpio.indexOf("FECHA DE EMISIÓN") > 0) {
+				int inicio = contenidoLimpio.indexOf("FECHA DE EMISIÓN");
+				if (inicio > -1) {
+					String txt = contenidoLimpio.substring(inicio + 16, inicio + 26).trim();					
+					txt = fn.gatos(txt);					
+					modelo.setFechaEmision(fn.formatDate(txt, "dd-MM-yyyy"));
+				}
+			} 
+			
 
 			// COBERTURAS
 
@@ -639,48 +617,48 @@ if (contenidoLimpio.indexOf("FECHA DE EMISIÓN") > 0) {
 			}
 
 			switch (modelo.getFormaPago()) {
-			case 1:
-				recibo.setReciboId("");
-				recibo.setSerie("1/1");
-				recibo.setVigenciaDe(modelo.getVigenciaDe());
-				recibo.setVigenciaA(modelo.getVigenciaA());
-				if (recibo.getVigenciaDe().length() > 0) {
-					recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
-				}
-				recibo.setPrimaneta(modelo.getPrimaneta());
-				recibo.setDerecho(modelo.getDerecho());
-				recibo.setRecargo(modelo.getRecargo());
-				recibo.setIva(modelo.getDerecho());
-				recibo.setPrimaTotal(modelo.getPrimaTotal());
-				recibo.setAjusteUno(modelo.getAjusteUno());
-				recibo.setAjusteDos(modelo.getAjusteDos());
-				recibo.setCargoExtra(modelo.getCargoExtra());
-				recibosList.add(recibo);
-				break;
-			case 2:
-				if (recibosList.size() == 1) {
-					recibo.setSerie("2/2");
-					recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
+				case 1:
+					recibo.setReciboId("");
+					recibo.setSerie("1/1");
+					recibo.setVigenciaDe(modelo.getVigenciaDe());
 					recibo.setVigenciaA(modelo.getVigenciaA());
-					recibo.setVencimiento("");
-					recibo.setPrimaneta(restoPrimaNeta);
-					recibo.setPrimaTotal(restoPrimaTotal);
-					recibo.setRecargo(restoRecargo);
-					recibo.setDerecho(restoDerecho);
-					recibo.setIva(restoIva);
-					recibo.setAjusteUno(restoAjusteUno);
-					recibo.setAjusteDos(restoAjusteDos);
-					recibo.setCargoExtra(restoCargoExtra);
+					if (recibo.getVigenciaDe().length() > 0) {
+						recibo.setVencimiento(fn.dateAdd(recibo.getVigenciaDe(), 30, 1));
+					}
+					recibo.setPrimaneta(modelo.getPrimaneta());
+					recibo.setDerecho(modelo.getDerecho());
+					recibo.setRecargo(modelo.getRecargo());
+					recibo.setIva(modelo.getDerecho());
+					recibo.setPrimaTotal(modelo.getPrimaTotal());
+					recibo.setAjusteUno(modelo.getAjusteUno());
+					recibo.setAjusteDos(modelo.getAjusteDos());
+					recibo.setCargoExtra(modelo.getCargoExtra());
 					recibosList.add(recibo);
+					break;
+				case 2:
+					if (recibosList.size() == 1) {
+						recibo.setSerie("2/2");
+						recibo.setVigenciaDe(recibosList.get(0).getVigenciaA());
+						recibo.setVigenciaA(modelo.getVigenciaA());
+						recibo.setVencimiento("");
+						recibo.setPrimaneta(restoPrimaNeta);
+						recibo.setPrimaTotal(restoPrimaTotal);
+						recibo.setRecargo(restoRecargo);
+						recibo.setDerecho(restoDerecho);
+						recibo.setIva(restoIva);
+						recibo.setAjusteUno(restoAjusteUno);
+						recibo.setAjusteDos(restoAjusteDos);
+						recibo.setCargoExtra(restoCargoExtra);
+						recibosList.add(recibo);
 
-				}
-				break;
+					}
+					break;
 			}
 			modelo.setRecibos(recibosList);
 
 			return modelo;
 		} catch (Exception ex) {
-		    ex.printStackTrace();
+			ex.printStackTrace();
 			modelo.setError(
 					MapfreAutosModel.this.getClass().getTypeName() + " | " + ex.getMessage() + " | " + ex.getCause());
 			return modelo;
