@@ -296,6 +296,7 @@ public final class ConstantsValue {
 	public static final String CONDUCTORES ="Conductores";
 	public static final String NO_DE_CLIENTE ="No. de cliente";
  	public static final String PRECIO_TOTAL ="Precio Total";
+	 public static final String PRECIO_TOTAL2 ="Precio total";
  	public static final String NO_DE_POLIZAAC ="No. de Póliza";
 	public static final String OCUPANTES ="Ocupantes";
 	public static final String VIDA_PROTGT ="VIDA PROTGT";

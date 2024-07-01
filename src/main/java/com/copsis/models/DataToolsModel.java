@@ -1,3 +1,4 @@
+
 package com.copsis.models;
 
 import java.io.IOException;
@@ -533,15 +534,17 @@ public class DataToolsModel {
 	}
 
 	public int recorreContenido(String texto, String search) {
-		int result = 0;
-		for (int i = 1; i < texto.trim().split("@@@").length; i++) {
-			if (texto.trim().split("@@@")[i].contains(search)) {
-				result = i;
-				break;
-			}
-		}
-		return result;
-	}
+    int result = 0;
+    String[] partes = texto.trim().split("@@@");
+    for (int i = 1; i < partes.length; i++) {
+        if (partes[i].contains(search)) {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+
 
 	public Boolean sexo(String x) {
 		Boolean result = false;
